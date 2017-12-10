@@ -5,13 +5,15 @@ import java.awt.image.BufferedImage;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import ambit2.core.data.MoleculeTools;
 import ambit2.rendering.CompoundImageTools;
 import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.tautomers.processor.StructureStandardizer;
 
-public class DepictionReporterStandardize extends DepictionReporter {
+public class DepictionReporterStandardize extends DepictionReporter<DepictQueryStandardize> {
 	protected CompoundImageTools depict = new CompoundImageTools();
 	/**
 	 * 
@@ -20,7 +22,7 @@ public class DepictionReporterStandardize extends DepictionReporter {
 
 	
 	@Override
-	public void processItem(DepictQuery q, BufferedImage output) {
+	public void processItem(DepictQueryStandardize q, BufferedImage output) {
 		try {
 			IAtomContainer mol = null;
 			if (q.getqType() != null && QueryType.mol.equals(q.getqType())) {
@@ -31,13 +33,10 @@ public class DepictionReporterStandardize extends DepictionReporter {
 					mol = new SmilesParser(SilentChemObjectBuilder.getInstance()).parseSmiles(smiles);
 				}
 			}
-			StructureStandardizer std = new StructureStandardizer();
-			std.setNeutralise(true);
-			std.setImplicitHydrogens(true);
-			std.setClearIsotopes(true);
-			std.setSplitFragments(true);
-			std.setGenerateTautomers(true);
-			IAtomContainer stdmol = std.process(mol);
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			
+			IAtomContainer stdmol =  q.getStandardizer().process(mol);
+
 			setOutput(depict.getImage(stdmol, null, true, false, false));
 		} catch (Exception x) {
 			try {

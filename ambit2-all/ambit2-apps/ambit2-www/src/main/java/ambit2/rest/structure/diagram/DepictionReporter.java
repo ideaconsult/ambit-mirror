@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import ambit2.base.processors.batch.ListReporter;
 
-public abstract  class DepictionReporter extends ListReporter<DepictQuery, BufferedImage> {
+public abstract class DepictionReporter<DQ extends DepictQuery> extends ListReporter<DQ, BufferedImage> {
 
 	/**
 	 * 
@@ -15,24 +15,22 @@ public abstract  class DepictionReporter extends ListReporter<DepictQuery, Buffe
 	private static final long serialVersionUID = -3367225662813130216L;
 
 	@Override
-	public void header(BufferedImage output, Iterator<DepictQuery> query) {
-		
+	public void header(BufferedImage output, Iterator<DQ> query) {
+
 	}
 
 	@Override
-	public void footer(BufferedImage output, Iterator<DepictQuery> query) {
-		
+	public void footer(BufferedImage output, Iterator<DQ> query) {
+
 	}
 
 	protected BufferedImage createDefaultImage(int w, int h) {
-		BufferedImage buffer = new BufferedImage(w, h,
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g = buffer.createGraphics();
 		g.setColor(new Color(0x00fffffe, true));// white transparent);
 		g.fillRect(0, 0, w, h);
 		return buffer;
 	}
-
 
 }

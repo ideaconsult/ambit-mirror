@@ -3,6 +3,7 @@ package ambit2.rest.structure.diagram;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,12 +11,8 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.restnet.c.RepresentationConvertor;
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -23,23 +20,25 @@ import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Status;
-import org.restlet.engine.util.Base64;
 import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.rest.algorithm.CatalogResource;
-import ambit2.rest.query.QueryResource;
-import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.rest.structure.diagram.DepictQuery.depict_type;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.RepresentationConvertor;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
 
-public class DepictionResource extends CatalogResource<DepictQuery> {
+public class DepictionResource<DQ extends DepictQuery> extends CatalogResource<DQ> {
 	public static final String resource = "/depict";
 	public static final String resourceKey = "option";
 
 	protected Form params;
-	protected DepictQuery query;
+	protected DQ query;
 
 	public DepictionResource() {
 		super();
@@ -49,8 +48,7 @@ public class DepictionResource extends CatalogResource<DepictQuery> {
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] { MediaType.IMAGE_PNG,
-				MediaType.TEXT_HTML });
+		customizeVariants(new MediaType[] { MediaType.IMAGE_PNG, MediaType.TEXT_HTML });
 	}
 
 	@Override
@@ -59,33 +57,29 @@ public class DepictionResource extends CatalogResource<DepictQuery> {
 	}
 
 	@Override
-	protected Iterator<DepictQuery> createQuery(Context context,
-			Request request, Response response) throws ResourceException {
+	protected Iterator<DQ> createQuery(Context context, Request request, Response response) throws ResourceException {
 		depict_type depictType;
 		try {
-			depictType = depict_type.valueOf(getRequest().getAttributes()
-					.get(resourceKey).toString());
+			depictType = depict_type.valueOf(getRequest().getAttributes().get(resourceKey).toString());
 		} catch (Exception x) {
 			depictType = depict_type.all;
 		}
 
-		query = depictType.createQuery();
+		query = (DQ) depictType.createQuery();
 		query.parseQuery(getParams());
-		List<DepictQuery> t = new ArrayList<DepictQuery>();
+		List<DQ> t = new ArrayList<DQ>();
 		t.add(query);
 		return t.iterator();
 	}
 
 	@Override
-	public IProcessor<Iterator<DepictQuery>, Representation> createConvertor(
-			Variant variant) throws AmbitException, ResourceException {
+	public IProcessor<Iterator<DQ>, Representation> createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
 		if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
-			return new ImageConvertor<DepictQuery, Iterator<DepictQuery>, DepictionReporter>(
-					query.getDepictType().getReporter(), MediaType.IMAGE_PNG,
-					"png");
+			return new ImageConvertor<DQ, Iterator<DQ>, DepictionReporter<DQ>>(query.getDepictType().getReporter(),
+					MediaType.IMAGE_PNG, "png");
 		} else
-			throw new ResourceException(
-					Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+			throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
 
 	protected Form getParams() {
@@ -100,18 +94,17 @@ public class DepictionResource extends CatalogResource<DepictQuery> {
 	}
 
 	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			IFreeMarkerApplication app) {
+	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
 		super.configureTemplateMap(map, request, app);
 		if (query != null) {
 			map.put("depict_option", query.getDepictType());
-			if (query.getSmiles()!=null && query.getSmiles()[0]!=null)
+			if (query.getSmiles() != null && query.getSmiles()[0] != null)
 				map.put("depict_smiles", query.getSmiles()[0]);
-			if (query.getSmarts()!=null)
+			if (query.getSmarts() != null)
 				map.put("depict_smarts", query.getSmarts());
-			else 
+			else
 				map.put("depict_smarts", "");
-		}	
+		}
 	}
 }
 
@@ -142,8 +135,7 @@ class ImageConvertor<Item, Content, R extends Reporter<Content, BufferedImage>>
 		return r;
 	};
 
-	public Representation processDoc(final BufferedImage image)
-			throws AmbitException {
+	public Representation processDoc(final BufferedImage image) throws AmbitException {
 		return new OutputRepresentation(mediaType) {
 			@Override
 			public void write(OutputStream stream) throws IOException {

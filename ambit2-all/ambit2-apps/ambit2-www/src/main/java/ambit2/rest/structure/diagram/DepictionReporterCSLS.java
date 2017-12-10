@@ -8,7 +8,7 @@ import org.restlet.resource.ResourceException;
 import ambit2.base.exceptions.HttpException;
 import ambit2.search.csls.CSLSImageRequest;
 
-public class DepictionReporterCSLS extends DepictionReporter {
+public class DepictionReporterCSLS extends DepictionReporter<DepictQuery> {
 
 	/**
 	 * 

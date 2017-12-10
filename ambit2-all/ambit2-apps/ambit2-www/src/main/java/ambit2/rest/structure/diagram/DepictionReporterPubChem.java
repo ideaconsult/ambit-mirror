@@ -7,7 +7,7 @@ import ambit2.pubchem.rest.PUGRestImageRequest.IMAGE_SIZE;
 import ambit2.pubchem.rest.PUGRestImageRequest.RECORD_TYPE;
 import ambit2.pubchem.rest.PUGRestRequest.COMPOUND_DOMAIN_INPUT;
 
-public class DepictionReporterPubChem extends DepictionReporter {
+public class DepictionReporterPubChem extends DepictionReporter<DepictQuery> {
 	protected PUGRestImageRequest depict = new PUGRestImageRequest();
 	/**
 	 * 
