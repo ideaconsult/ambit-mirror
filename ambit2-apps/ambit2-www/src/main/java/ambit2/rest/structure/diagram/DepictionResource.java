@@ -69,63 +69,8 @@ public class DepictionResource extends CatalogResource<DepictQuery> {
 			depictType = depict_type.all;
 		}
 
-		query = new DepictQuery(depictType);
-		try {
-
-			Form form = getParams();
-
-			try {
-				query.setW(Integer.parseInt(form.getFirstValue("w")));
-			} catch (Exception x) {
-				query.setW(400);
-			}
-			try {
-				query.setH(Integer.parseInt(form.getFirstValue("h")));
-			} catch (Exception x) {
-				query.setH(200);
-			}
-			try {
-				query.setRecordType(form.getFirstValue("record_type"));
-			} catch (Exception x) {
-				query.setRecordType("2d");
-			}
-			try {
-				query.setqType(QueryType.valueOf(form.getFirstValue("type")));
-			} catch (Exception x) {
-				query.setqType(QueryType.smiles);
-			}
-			switch (query.getqType()) {
-			case mol: { // base64 encoded mol files
-				query.setSmiles(form
-						.getValuesArray(QueryResource.b64search_param));
-				if (query.getSmiles() != null)
-					for (int i = 0; i < query.getSmiles().length; i++)
-						query.getSmiles()[i] = new String(Base64.decode(query
-								.getSmiles()[i]));
-				break;
-			}
-			default: {
-				query.setSmiles(form.getValuesArray(QueryResource.search_param));
-				if ((query.getSmiles() == null)
-						|| (query.getSmiles().length < 1))
-					query.setSmiles(new String[] { null });
-				else
-					query.getSmiles()[0] = query.getSmiles()[0] == null ? ""
-							: query.getSmiles()[0].trim();
-			}
-			}
-
-			query.setSmarts(form.getFirstValue("smarts"));
-			query.setSmirks(null);
-			String[] smirks_patterns = form.getValuesArray("smirks");
-			for (String sm : smirks_patterns)
-				if (sm != null) {
-					query.setSmirks(sm);
-					break;
-				}
-		} catch (Exception x) {
-
-		}
+		query = depictType.createQuery();
+		query.parseQuery(getParams());
 		List<DepictQuery> t = new ArrayList<DepictQuery>();
 		t.add(query);
 		return t.iterator();
