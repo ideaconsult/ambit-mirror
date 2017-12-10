@@ -2,7 +2,11 @@ package ambit2.rest.structure.diagram;
 
 import java.io.Serializable;
 
+import org.restlet.data.Form;
+import org.restlet.engine.util.Base64;
+
 import ambit2.rendering.CompoundImageTools.Mode2D;
+import ambit2.rest.query.QueryResource;
 import ambit2.rest.query.StructureQueryResource.QueryType;
 
 /**
@@ -13,9 +17,7 @@ import ambit2.rest.query.StructureQueryResource.QueryType;
  */
 public class DepictQuery implements Serializable {
 	public enum depict_type {
-		all,
-		cdk, 
-		obabel {
+		all, cdk, obabel {
 			@Override
 			public DepictionReporter getReporter() {
 				return new DepictionReporterOBabel();
@@ -26,28 +28,90 @@ public class DepictQuery implements Serializable {
 			public DepictionReporter getReporter() {
 				return new DepictionReporterCSLS();
 			}
-		}, 
+		},
 		pubchem {
 			@Override
 			public DepictionReporter getReporter() {
 				return new DepictionReporterPubChem();
 			}
 		},
-		tautomer, 
-		reaction
-		;
+		tautomer, reaction, standardize {
+			@Override
+			public DepictionReporter getReporter() {
+				return new DepictionReporterStandardize();
+			}
+
+		};
 
 		public DepictionReporter getReporter() {
 			return new DepictionReporterCDK();
 		}
 
+		public DepictQuery createQuery() {
+			return new DepictQuery(this);
+		}
 	}
 
 	public DepictQuery(depict_type type) {
 		this.depictType = type;
 	}
 
+	public void parseQuery(Form form) {
+		try {
+
+			try {
+				setW(Integer.parseInt(form.getFirstValue("w")));
+			} catch (Exception x) {
+				setW(400);
+			}
+			try {
+				setH(Integer.parseInt(form.getFirstValue("h")));
+			} catch (Exception x) {
+				setH(200);
+			}
+			try {
+				setRecordType(form.getFirstValue("record_type"));
+			} catch (Exception x) {
+				setRecordType("2d");
+			}
+			try {
+				setqType(QueryType.valueOf(form.getFirstValue("type")));
+			} catch (Exception x) {
+				setqType(QueryType.smiles);
+			}
+			switch (getqType()) {
+			case mol: { // base64 encoded mol files
+				setSmiles(form.getValuesArray(QueryResource.b64search_param));
+				if (getSmiles() != null)
+					for (int i = 0; i < getSmiles().length; i++)
+						getSmiles()[i] = new String(Base64.decode(getSmiles()[i]));
+				break;
+			}
+			default: {
+				setSmiles(form.getValuesArray(QueryResource.search_param));
+				if ((getSmiles() == null) || (getSmiles().length < 1))
+					setSmiles(new String[] { null });
+				else
+					getSmiles()[0] = getSmiles()[0] == null ? "" : getSmiles()[0].trim();
+			}
+			}
+
+			setSmarts(form.getFirstValue("smarts"));
+			setSmirks(null);
+			String[] smirks_patterns = form.getValuesArray("smirks");
+			for (String sm : smirks_patterns)
+				if (sm != null) {
+					setSmirks(sm);
+					break;
+				}
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+
+	}
+
 	protected depict_type depictType = depict_type.cdk;
+
 	public depict_type getDepictType() {
 		return depictType;
 	}
