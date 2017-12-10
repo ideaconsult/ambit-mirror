@@ -1,5 +1,6 @@
 package ambit2.tautomers.processor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +51,10 @@ public class TautomerProcessor extends DefaultAmbitProcessor<IAtomContainer, IAt
 		
 		tautomerManager.tautomerRegion.setExcludeAzideGroups(true);
 		// the best tautomers is most likely the aromatic one (lowest energy)
-		tautomerManager.tautomerRegion.setExcludeAromaticSystems(true); 
+		tautomerManager.tautomerRegion.setExcludeAromaticSystems(true);
+		List<String> custom = new ArrayList<String>();
+		custom.add("*=[N;R]=O");
+		tautomerManager.tautomerRegion.setCustomExcludeRegionsSmarts(custom);
 	}
 
 	public TautomerManager getTautomerManager() {
