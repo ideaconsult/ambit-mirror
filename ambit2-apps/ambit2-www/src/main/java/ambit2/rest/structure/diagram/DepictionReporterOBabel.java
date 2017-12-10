@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import ambit2.core.smiles.OpenBabelDepiction;
 
-public class DepictionReporterOBabel extends DepictionReporter {
+public class DepictionReporterOBabel extends DepictionReporter<DepictQuery> {
 	protected static String obabel_home;
 	/**
 	 * 

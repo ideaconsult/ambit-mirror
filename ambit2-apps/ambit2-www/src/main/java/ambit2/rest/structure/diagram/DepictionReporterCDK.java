@@ -18,7 +18,7 @@ import ambit2.rest.query.StructureQueryResource.QueryType;
 import ambit2.smarts.query.ISmartsPattern;
 import ambit2.smarts.query.SmartsPatternAmbit;
 
-public class DepictionReporterCDK extends DepictionReporter {
+public class DepictionReporterCDK extends DepictionReporter<DepictQuery> {
 
 	/**
 	 * 

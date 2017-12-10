@@ -40,6 +40,10 @@ public class DepictQuery implements Serializable {
 			public DepictionReporter getReporter() {
 				return new DepictionReporterStandardize();
 			}
+			@Override
+			public DepictQuery createQuery() {
+				return new DepictQueryStandardize();
+			}
 
 		};
 
@@ -88,11 +92,13 @@ public class DepictQuery implements Serializable {
 				break;
 			}
 			default: {
-				setSmiles(form.getValuesArray(QueryResource.search_param));
-				if ((getSmiles() == null) || (getSmiles().length < 1))
+				String[] smi = form.getValuesArray(QueryResource.search_param);
+				setSmiles(smi);
+				smi=getSmiles();
+				if ((smi == null) || (smi.length < 1))
 					setSmiles(new String[] { null });
 				else
-					getSmiles()[0] = getSmiles()[0] == null ? "" : getSmiles()[0].trim();
+					setSmiles(new String[] { smi[0] == null ? "" : smi[0].trim()});
 			}
 			}
 
