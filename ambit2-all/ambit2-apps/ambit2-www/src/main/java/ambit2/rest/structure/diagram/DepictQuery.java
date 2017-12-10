@@ -71,7 +71,7 @@ public class DepictQuery implements Serializable {
 			try {
 				setH(Integer.parseInt(form.getFirstValue("h")));
 			} catch (Exception x) {
-				setH(200);
+				setH(400);
 			}
 			try {
 				setRecordType(form.getFirstValue("record_type"));
