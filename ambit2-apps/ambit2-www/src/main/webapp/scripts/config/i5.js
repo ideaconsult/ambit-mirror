@@ -694,6 +694,16 @@ var config_i5 = {
 			"sex" : {
 				"iOrder" : -4,
 				"bVisible" : true
+			},
+			"criticaleffectsobserved" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle": "Critical Effects Observed"
+			},
+			"organ" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle" : "Target organ"
 			}
 		},
 		"effects" : {
@@ -764,6 +774,16 @@ var config_i5 = {
 			"sex" : {
 				"iOrder" : -4,
 				"bVisible" : true
+			},
+			"organ" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle" : "Target organ"
+			},
+			"criticaleffectsobserved" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle": "Critical Effects Observed"
 			}
 		},
 		"effects" : {
@@ -838,6 +858,17 @@ var config_i5 = {
 			"sex" : {
 				"iOrder" : -4,
 				"bVisible" : true
+			}
+			,
+			"organ" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle" : "Target organ"
+			},
+			"criticaleffectsobserved" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle": "Critical Effects Observed"
 			}
 		},
 		"effects" : {
@@ -940,9 +971,9 @@ var config_i5 = {
 		"interpretation" : {
 			"result" : {
 				"sTitle" : "Interpretation of the result",
-				"bVisible" : true,
+				"bVisible" : false,
 				"iOrder" : -2,
-				"inMatrix" : true
+				"inMatrix" : false
 			},
 			"criteria" : {
 				"bVisible" : false
@@ -1018,9 +1049,9 @@ var config_i5 = {
 		"interpretation" : {
 			"result" : {
 				"sTitle" : "Interpretation of the result",
-				"bVisible" : true,
+				"bVisible" : false,
 				"iOrder" : -2,
-				"inMatrix" : true
+				"inMatrix" : false
 			},
 			"criteria" : {
 				"bVisible" : false
@@ -1070,6 +1101,17 @@ var config_i5 = {
 			"toxicity" : {
 				"bVisible" : false
 			}
+			,
+			"organ" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle" : "Target organ"
+			},
+			"criticaleffectsobserved" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle": "Critical Effects Observed"
+			}
 		},
 		"effects" : {
 			"endpoint" : {
@@ -1107,45 +1149,56 @@ var config_i5 = {
 			"bVisible" : false,
 			"species" : {
 				"comment" : "copied to conditions",
-				"iOrder" : -10,
+				"iOrder" : -15,
 				"inMatrix" : false,
 				"bVisible" : false
 			},
 			"route of administration" : {
-				"iOrder" : -9,
+				"iOrder" : -14,
 				"bVisible" : true
 			},
 			"doses/concentrations" : {
 				"sTitle" : "Dose/concentrations",
-				"iOrder" : -8,
+				"iOrder" : -13,
 				"bVisible" : true
 			}
 		},
 		"conditions" : {
 			"bVisible" : false,
 			"species" : {
-				"iOrder" : -10,
+				"iOrder" : -15,
 				"inMatrix" : true,
 				"bVisible" : true
 			},
 			"generation" : {
-				"iOrder" : -7,
+				"iOrder" : -12,
 				"inMatrix" : true,
 				"bVisible" : true
 			},
 			"sex" : {
-				"iOrder" : -4,
+				"iOrder" : -8,
 				"bVisible" : true
+			},
+			
+			"reproductiveeffectsobserved" : {
+				"iOrder" : -7,
+				"bVisible" : true,
+				"sTitle" : "Reproductive Effects Observed" 
+			},
+			"relationtoothertoxiceffects" : {
+				"iOrder" : -6,
+				"bVisible" : true,
+				"sTitle" : "Relation To Other Toxic Effects"
 			}
 		},
 		"effects" : {
 			"endpoint" : {
-				"iOrder" : -6,
+				"iOrder" : -10,
 				"inMatrix" : true
 			},
 			"result" : {
 				"sTitle" : "Value",
-				"iOrder" : -5,
+				"iOrder" : -9,
 				"inMatrix" : true
 			}
 		},
@@ -1199,7 +1252,17 @@ var config_i5 = {
 				"iOrder" : -7,
 				"inMatrix" : true,
 				"bVisible" : true
-			}
+			},
+			"developmentaleffectsobserved" : {
+				"iOrder" : -7,
+				"bVisible" : true,
+				"sTitle" : "Developmental Effects Observed" 
+			},
+			"relationtoothertoxiceffects" : {
+				"iOrder" : -6,
+				"bVisible" : true,
+				"sTitle" : "Relation To Other Toxic Effects"
+			}			
 		},
 		"effects" : {
 			"endpoint" : {
@@ -1250,12 +1313,12 @@ var config_i5 = {
 		},
 		"effects" : {
 			"endpoint" : {
-				"bVisible" : false
+				"bVisible" : true,
+				"iOrder" : -7
 			},
 			"result" : {
-				"sTitle" : "DT50",
 				"inMatrix" : true,
-				"iOrder" : -7
+				"iOrder" : -6
 			}
 		},
 		"interpretation" : {
@@ -1264,6 +1327,43 @@ var config_i5 = {
 			}
 		}
 	},
+	"TO_PHOTOTRANS_SOIL_SECTION" : {
+		"parameters" : {
+			"bVisible" : false,
+			"reactant" : {
+				"comment" : "copied to conditions",
+				"iOrder" : -9,
+				"inMatrix" : false,
+				"bVisible" : false
+			}
+		},
+		"conditions" : {
+			"bVisible" : false,
+			"reactant" : {
+				"iOrder" : -9,
+				"inMatrix" : true
+			},
+			"test condition" : {
+				"iOrder" : -8,
+				"inMatrix" : true
+			}
+		},
+		"effects" : {
+			"endpoint" : {
+				"bVisible" : true,
+				"iOrder" : -7
+			},
+			"result" : {
+				"inMatrix" : true,
+				"iOrder" : -6
+			}
+		},
+		"interpretation" : {
+			"result" : {
+				"bVisible" : false
+			}
+		}
+	},	
 	"TO_HYDROLYSIS_SECTION" : {
 		"parameters" : {
 			"bVisible" : false
@@ -1371,16 +1471,18 @@ var config_i5 = {
 				"iOrder" : -6,
 				"bVisible" : true
 			},
+			"test type" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
 			"compartment" : {
 				"iOrder" : -5,
 				"bVisible" : true
 			}
 		},
 		"effects" : {
-			"test type" : {
-				"iOrder" : -9,
-				"inMatrix" : true
-			},
+			
 			"endpoint" : {
 				"sTitle" : "Half-life",
 				"inMatrix" : true,
@@ -1400,6 +1502,8 @@ var config_i5 = {
 	},
 	"EN_STABILITY_IN_SOIL_SECTION" : {
 		"parameters" : {
+			"bVisible" : false,
+		
 			"test type" : {
 				"comment" : "copied to conditions",
 				"iOrder" : -9,
@@ -1408,20 +1512,25 @@ var config_i5 = {
 			}
 		},
 		"conditions" : {
+			"bVisible" : false,
+		
 			"test type" : {
 				"iOrder" : -9,
 				"inMatrix" : true,
 				"bVisible" : true
 			},
 			"soil no." : {
-				"iOrder" : -8
+				"iOrder" : -8,
+				"bVisible" : true
 			},
 			"soil type" : {
-				"iOrder" : -7
+				"iOrder" : -7,
+				"bVisible" : true
 			},
 			"oc content" : {
 				"sTitle" : "OC content",
-				"iOrder" : -6
+				"iOrder" : -6,
+				"bVisible" : true
 			}
 		},
 		"effects" : {
@@ -2102,6 +2211,8 @@ var config_i5 = {
 	},
 	"EC_HONEYBEESTOX_SECTION" : {
 		"parameters" : {
+			"bVisible" : false,
+		
 			"test medium" : {
 				"iOrder" : -8
 			},
@@ -2111,6 +2222,8 @@ var config_i5 = {
 			}
 		},
 		"conditions" : {
+			"bVisible" : false,
+		
 			"exposure" : {
 				"iOrder" : -5,
 				"inMatrix" : true
