@@ -374,6 +374,26 @@ public class Protocol {
 				return "ENV FATE";
 			}
 		},
+		TO_PHOTOTRANS_SOIL_SECTION {
+			@Override
+			public String toString() {
+				return "Phototransformation in soil";
+			}
+
+			@Override
+			public String getNumber() {
+				return "5.1.2";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 5012;
+			}
+
+			public String getTopCategory() {
+				return "ENV FATE";
+			}
+		},		
 		TO_HYDROLYSIS_SECTION {
 			@Override
 			public String toString() {
