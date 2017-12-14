@@ -1815,6 +1815,34 @@ public class Protocol {
 				return "TOX";
 			}
 		},
+		TRANSCRIPTOMICS_SECTION {
+			@Override
+			public String toString() {
+				return "Transcriptomics";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 801;
+			}
+
+	
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}
+			
+			@Override
+			public String getNumber() {
+				return "OBI_0000424";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/OBI_0000424";
+			}			
+
+		},
 		PROTEOMICS_SECTION {
 			@Override
 			public String toString() {
