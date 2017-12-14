@@ -308,7 +308,7 @@ var config_bao = {
 			"inMatrix" : true,
 			"sTitle" : "Exposure time"
 		},
-		"E.exposure_time" : {
+		"e.exposure_time" : {
 			"iOrder" : -4,
 			"bVisible" : true,
 			"inMatrix" : true,
