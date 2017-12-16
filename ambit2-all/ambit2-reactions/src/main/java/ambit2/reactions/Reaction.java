@@ -22,6 +22,7 @@ import ambit2.smarts.SmartsParser;
 
 public class Reaction 
 {
+	/*
 	protected boolean FlagUse = true;
 	protected String smirks = null;
 	protected int id = 0;
@@ -215,5 +216,6 @@ public class Reaction
 		//TODO handle non-clone case
 		return product;
 	}
+	*/
 	
 }
