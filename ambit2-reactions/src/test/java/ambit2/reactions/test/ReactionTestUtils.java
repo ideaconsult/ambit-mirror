@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.reactions.Reaction;
+import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.reactions.io.ReactionReadUtils;
 import ambit2.reactions.reactor.Reactor;
@@ -131,7 +131,8 @@ public class ReactionTestUtils
 		ReactionDataBase reactDB = new ReactionDataBase(new File(reactionDBFile));
 		
 		System.out.println("Configuring reaction database...");
-		reactDB.configureReactions(reactor.getSMIRKSManager());
+		//reactDB.configureReactions(reactor.getSMIRKSManager());
+		reactDB.configureGenericReactions(reactor.getSMIRKSManager());
 		reactor.setReactionDataBase(reactDB);
 		
 		System.out.println("Configuring reactor strategy ...");
@@ -161,9 +162,9 @@ public class ReactionTestUtils
 		if (FlagPrintReactionDB)
 		{	
 			System.out.println("Reaction database:");
-			for (int i = 0; i < reactDB.reactions.size(); i++)
+			for (int i = 0; i < reactDB.genericReactions.size(); i++)
 			{	
-				Reaction r = reactDB.reactions.get(i);
+				GenericReaction r = reactDB.genericReactions.get(i);
 				System.out.println("  " + r.getName() + "  " + r.getSmirks() + "  " + r.getReactionClass());
 			}
 		}

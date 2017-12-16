@@ -46,10 +46,17 @@ public class ReactionDataBase
 		}
 		
 		if (FlagCleanDB)
+		{	
 			reactions = new ArrayList<Reaction>();
+			genericReactions = new ArrayList<GenericReaction>(); 
+		}	
 		else
+		{	
 			if (reactions == null)
 				reactions = new ArrayList<Reaction>();
+			if (genericReactions == null)
+				genericReactions = new ArrayList<GenericReaction>(); 
+		}	
 		
 		JsonNode reactionsNode = root.path("REACTIONS");
 		if (reactionsNode.isMissingNode())
@@ -61,10 +68,12 @@ public class ReactionDataBase
 		for (int i = 0; i < reactionsNode.size(); i++)
 		{
 			try{
+				
 				Reaction reaction = Reaction.getReactionFromJsonNode(reactionsNode.get(i));
 				reaction.setId(i+1);
 				if (reaction.isFlagUse())
 					reactions.add(reaction);
+				
 				
 				GenericReaction genReact = GenericReaction.getReactionFromJsonNode(reactionsNode.get(i));
 				genReact.setId(i+1);
@@ -77,7 +86,7 @@ public class ReactionDataBase
 			}
 		}
 	}
-	
+			
 	public void configureReactions(SMIRKSManager smrkMan) throws Exception
 	{
 		if (reactions == null)
@@ -87,10 +96,34 @@ public class ReactionDataBase
 			reaction.configure(smrkMan);
 	}
 	
+	
+	public void configureGenericReactions(SMIRKSManager smrkMan) throws Exception
+	{
+		if (genericReactions == null)
+			return;
+		
+		for (GenericReaction reaction : genericReactions)
+			reaction.configure(smrkMan);
+	}
+	
+	
 	public Reaction getReactionByID(int id)
 	{
 		if (reactions != null)
 			for (Reaction r : reactions)
+			{	
+				if (r.getId() == id)
+					return r;
+			}	
+		
+		return null;
+	}
+	
+	
+	public GenericReaction getGenericReactionByID(int id)
+	{
+		if (genericReactions != null)
+			for (GenericReaction r : genericReactions)
 			{	
 				if (r.getId() == id)
 					return r;
