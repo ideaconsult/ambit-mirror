@@ -17,7 +17,7 @@ public class ReactionDataBase
 {
 	private static Logger logger = Logger.getLogger(ReactionDataBase.class.getName());
 	
-	public List<Reaction> reactions = null;
+	//public List<Reaction> reactions = null;
 	public List<GenericReaction> genericReactions = null;
 	
 	
@@ -47,13 +47,13 @@ public class ReactionDataBase
 		
 		if (FlagCleanDB)
 		{	
-			reactions = new ArrayList<Reaction>();
+			//reactions = new ArrayList<Reaction>();
 			genericReactions = new ArrayList<GenericReaction>(); 
 		}	
 		else
 		{	
-			if (reactions == null)
-				reactions = new ArrayList<Reaction>();
+			//if (reactions == null)
+			//	reactions = new ArrayList<Reaction>();
 			if (genericReactions == null)
 				genericReactions = new ArrayList<GenericReaction>(); 
 		}	
@@ -69,11 +69,12 @@ public class ReactionDataBase
 		{
 			try{
 				
+				/*
 				Reaction reaction = Reaction.getReactionFromJsonNode(reactionsNode.get(i));
 				reaction.setId(i+1);
 				if (reaction.isFlagUse())
 					reactions.add(reaction);
-				
+				*/
 				
 				GenericReaction genReact = GenericReaction.getReactionFromJsonNode(reactionsNode.get(i));
 				genReact.setId(i+1);
@@ -87,6 +88,7 @@ public class ReactionDataBase
 		}
 	}
 			
+	/*
 	public void configureReactions(SMIRKSManager smrkMan) throws Exception
 	{
 		if (reactions == null)
@@ -95,6 +97,7 @@ public class ReactionDataBase
 		for (Reaction reaction : reactions)
 			reaction.configure(smrkMan);
 	}
+	*/
 	
 	
 	public void configureGenericReactions(SMIRKSManager smrkMan) throws Exception
@@ -107,6 +110,7 @@ public class ReactionDataBase
 	}
 	
 	
+	/*
 	public Reaction getReactionByID(int id)
 	{
 		if (reactions != null)
@@ -118,6 +122,7 @@ public class ReactionDataBase
 		
 		return null;
 	}
+	*/
 	
 	
 	public GenericReaction getGenericReactionByID(int id)
