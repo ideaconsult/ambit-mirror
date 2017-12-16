@@ -18,6 +18,7 @@ public class ReactionDataBase
 	private static Logger logger = Logger.getLogger(ReactionDataBase.class.getName());
 	
 	public List<Reaction> reactions = null;
+	public List<GenericReaction> genericReactions = null;
 	
 	
 	public ReactionDataBase()
@@ -64,6 +65,11 @@ public class ReactionDataBase
 				reaction.setId(i+1);
 				if (reaction.isFlagUse())
 					reactions.add(reaction);
+				
+				GenericReaction genReact = GenericReaction.getReactionFromJsonNode(reactionsNode.get(i));
+				genReact.setId(i+1);
+				if (genReact.isFlagUse())
+					genericReactions.add(genReact);
 			}
 			catch(Exception e)
 			{
