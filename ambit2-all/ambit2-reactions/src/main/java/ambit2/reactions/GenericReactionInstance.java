@@ -10,6 +10,7 @@ public class GenericReactionInstance
 	public GenericReaction reaction = null;
 	public double score = 0.0;
 	public List<IAtom> instanceAtoms = null;
+	//public List<IAtom> instanceAtomIndices = null;
 	public IAtomContainer target = null;
 	public IAtomContainer products = null;
 	
