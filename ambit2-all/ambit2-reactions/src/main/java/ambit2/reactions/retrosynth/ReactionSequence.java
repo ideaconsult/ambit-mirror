@@ -11,7 +11,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-import ambit2.reactions.Reaction;
+import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.smarts.SMIRKSManager;
 
@@ -36,11 +36,11 @@ public class ReactionSequence
 	/*
 	 * Function is applied for the input molecule from the last step 
 	 */
-	public Map<Reaction,List<List<IAtom>>> generateAllReactionInstances()
+	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances()
 	{
 		IAtomContainer mol = steps.get(steps.size()-1).getInputMolecule();
-		Map<Reaction,List<List<IAtom>>> maps = new HashMap<Reaction,List<List<IAtom>>>();
-		for (Reaction reaction: reactDB.reactions)
+		Map<GenericReaction,List<List<IAtom>>> maps = new HashMap<GenericReaction,List<List<IAtom>>>();
+		for (GenericReaction reaction: reactDB.genericReactions)
 		{	
 			List<List<IAtom>> instances = reaction.findReactionInstances(mol, smrkMan);
 			if (instances != null)
@@ -54,7 +54,7 @@ public class ReactionSequence
 	 * Function is applied for the input molecule from the last step 
 	 * new step is registered
 	 */
-	public void generatedNextStepWithMaxProduct(Reaction reaction, List<IAtom> reactionInstance) throws Exception
+	public void generatedNextStepWithMaxProduct(GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
 		ReactionSequenceStep lastStep = steps.get(steps.size()-1);
 		IAtomContainer products = 

@@ -43,7 +43,9 @@ public class ReactorMetabolismTest extends TestCase
 		
 		ReactionDataBase reactDB = new ReactionDataBase(new File(resource.getFile()));
 				
-		reactDB.configureReactions(reactor.getSMIRKSManager());
+		//reactDB.configureReactions(reactor.getSMIRKSManager());
+		reactDB.configureGenericReactions(reactor.getSMIRKSManager());
+		
 		reactor.setReactionDataBase(reactDB);		
 		
 		ReactorStrategy strategy = new ReactorStrategy(new File(resource.getFile()));  //strategy is in the same file

@@ -22,7 +22,8 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.core.data.MoleculeTools;
-import ambit2.reactions.Reaction;
+import ambit2.reactions.GenericReaction;
+//import ambit2.reactions.Reaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.rules.conditions.DescriptorSolverSet;
 import ambit2.rules.conditions.DescriptorValueCondition;
@@ -116,7 +117,7 @@ public class Reactor
 	
 	protected void setDescriptoSolverForReactDB()
 	{	
-		for (Reaction reaction: reactionDataBase.reactions)
+		for (GenericReaction reaction: reactionDataBase.genericReactions)
 		{	
 			if (reaction.getConditions() != null)
 				for (ICondition cond : reaction.getConditions())
@@ -134,9 +135,9 @@ public class Reactor
 			return 1;		
 		if (reactionDataBase == null)
 			return 2;		
-		if (reactionDataBase.reactions == null)
+		if (reactionDataBase.genericReactions == null)
 			return 3;		
-		if (reactionDataBase.reactions.isEmpty())
+		if (reactionDataBase.genericReactions.isEmpty())
 			return 4;
 		
 		reactorResult = new ReactorResult();
@@ -260,9 +261,9 @@ public class Reactor
 	int generateChildrenNodes(ReactorNode node, IAtomContainer reagent)
 	{	
 		int numOfReactionInstances = 0;
-		for (int i = 0; i < reactionDataBase.reactions.size(); i++)
+		for (int i = 0; i < reactionDataBase.genericReactions.size(); i++)
 		{	
-			Reaction reaction = reactionDataBase.reactions.get(i);
+			GenericReaction reaction = reactionDataBase.genericReactions.get(i);
 			List<List<IAtom>> instances = reaction.findReactionInstances(reagent, smrkMan);
 			
 			//Check reaction conditions
@@ -545,7 +546,7 @@ public class Reactor
 		return false;
 	}
 	
-	void setReactionPath(IAtomContainerSet productsSet, IAtomContainer reagent, Reaction reaction)
+	void setReactionPath(IAtomContainerSet productsSet, IAtomContainer reagent, GenericReaction reaction)
 	{
 		Object reagent_rids = reagent.getProperty(PropertyReactionIds);
 		int rids[] = null;
@@ -603,7 +604,7 @@ public class Reactor
 				sb.append(" " + rids[i]);
 				if (printName)
 				{
-					Reaction r = reactionDataBase.getReactionByID(rids[i]);
+					GenericReaction r = reactionDataBase.getGenericReactionByID(rids[i]);
 					if (r != null)
 						sb.append(" " + r.getName());
 				}
