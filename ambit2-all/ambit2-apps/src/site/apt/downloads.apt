@@ -39,12 +39,14 @@ AMBIT modules
 
  AMBIT consists of multiple {{{http://maven.apache.org/}Maven modules}} which can be used in a stand alone mode or embedded in other applications. 
  
- ambit2-core,db,descriptors,smarts,tautomers,and more-.jar {{{./download_ambitlibs.html}?}}  
- 
  [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.0.2/}ambit2-*-3.0.2.jar}}
 
  [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Download}}
 
+ [ambit-smarts] {{{./smarts.html}SMARTS}} and {{{./smirks.html}SMIRKS}} support 
+ 
+ [ambit-tautomers] {{{https://nexus.ideaconsult.net/#nexus-search;quick~ambit-tautomers}maven artifact}} and {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}code examples}}. 
+ 
 AMBIT API
 ~~~~~~~~~~
 
