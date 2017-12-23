@@ -12,25 +12,40 @@ public class AtomEquivalenceInfo
 	public List<Integer> atomLayersCode = new ArrayList<Integer>();
 	boolean isTerminalAtom = false;
 	int curLayerNum = 0;
+	int nProcessedAtoms = 0;
 	public List<IAtom> curLayerAtoms = new ArrayList<IAtom>();
 
 	public void initialize(IAtom at)
 	{
 		atomLayersCode.add(getAtomCode(at));
 		curLayerAtoms.add(at);
+		nProcessedAtoms = 1;
 	}
 	
 	public void initialize(IAtom at, int numLayers, IAtomContainer mol)
 	{
 		atomLayersCode.add(getAtomCode(at));
 		curLayerAtoms.add(at);
-		for (int n = 1; n <= numLayers; n++)
+		for (int i = 0; i < numLayers; i++)
 			nextLayer(mol);
 	}
 	
 	public void nextLayer(IAtomContainer mol)
 	{
-		//TODO
+		if (nProcessedAtoms >= mol.getAtomCount())
+			return;
+		
+		List<IAtom> newLayerAtoms = new ArrayList<IAtom>();
+		for (int i = 0; i < curLayerAtoms.size(); i++)
+		{
+			IAtom at = curLayerAtoms.get(i);
+			TopLayer topLayer = (TopLayer)at.getProperty(TopLayer.TLProp);
+			
+			//TODO
+		}
+		
+		curLayerAtoms.clear();
+		curLayerAtoms.addAll(newLayerAtoms);
 	}
 	
 	public static Integer getAtomCode(IAtom atom)
