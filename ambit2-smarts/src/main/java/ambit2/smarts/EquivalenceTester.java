@@ -9,15 +9,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class EquivalenceTester 
 {
-	public static class AtomEquivalenceInfo
-	{
-		//atom layers information is added incrementally
-		public List<Integer> atomCode = new ArrayList<Integer>();
-		int curLayer = 0;
-		boolean isTerminalAtom = false;
-	}
-	
-	
 	public IAtomContainer target = null;
 	public int atomClasses[];
 	public int nClasses;
@@ -120,8 +111,16 @@ public class EquivalenceTester
 	{
 		if (target == null)
 			return;
-		AtomEquivalenceInfo atomEqInfo[] = new AtomEquivalenceInfo[target.getAtomCount()];
-		//TODO
 		
+		//Initial atom equivalence info
+		AtomEquivalenceInfo atomEqInfo[] = new AtomEquivalenceInfo[target.getAtomCount()];
+		for (int i = 0; i < atomEqInfo.length; i++)
+		{
+			atomEqInfo[i] = new AtomEquivalenceInfo();
+			atomEqInfo[i].initialize(target.getAtom(i));
+		}
+		
+		//TODO
 	}
+	
 }
