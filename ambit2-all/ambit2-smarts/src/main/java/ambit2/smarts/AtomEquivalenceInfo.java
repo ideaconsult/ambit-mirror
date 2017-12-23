@@ -35,8 +35,57 @@ public class AtomEquivalenceInfo
 	
 	public static Integer getAtomCode(IAtom atom)
 	{
-		Integer n = atom.getAtomicNumber();
+		Integer n = atom.getAtomicNumber()*1000;
 		//TODO handle charges and isotopes
 		return n;
 	}
+	
+	public static int[] getSortedCodesIndices(int codes[])
+	{
+		int n = codes.length;
+		int indices[] = new int[n];
+		
+		switch (n)
+		{
+		case 0:
+			return null;
+		case 1:
+			indices[0] = 0;
+			break;
+		case 2:
+			if (codes[0] > codes[1])
+			{
+				indices[0] = 1;
+				indices[1] = 0;
+			}
+			else
+			{
+				indices[0] = 0;
+				indices[1] = 1;
+			}
+			break;
+			
+		default: //n >= 3 
+			//initialize indices
+			for (int i = 0; i < n; i++)
+				indices[i] = i;
+			//bubble algorithm
+			int tmp;
+			for (int i = (n-2); i >= 0; i--)
+				for (int k = 0; k <= i; k++)
+				{
+					if (codes[indices[k]] > codes[indices[k+1]])
+					{
+						tmp = indices[k];
+						indices[k] = indices[k+1];
+						indices[k+1] = tmp;
+					}
+				}
+			break;
+		}
+		
+		return indices;
+	}
+	
+	
 }
