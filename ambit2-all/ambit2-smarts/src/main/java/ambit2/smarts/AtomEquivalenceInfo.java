@@ -8,6 +8,14 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class AtomEquivalenceInfo 
 {
+	public static final int SHIFT_ATOM_ELEMENT = 100000000;
+	public static final int SHIFT_POS_CHARGE   = 1000000;
+	public static final int SHIFT_NEG_CHARGE   = 100000;
+	public static final int SHIFT_ISOTOPE      = 1000;
+	public static final int SHIFT_BOND_TYPE    = 100;
+	public static final int SHIFT_PREV_LAYER   = 1;
+	
+	
 	//atom layers information is added incrementally
 	public List<Integer> atomLayersCode = new ArrayList<Integer>();
 	boolean isTerminalAtom = false;
@@ -50,7 +58,7 @@ public class AtomEquivalenceInfo
 	
 	public static Integer getAtomCode(IAtom atom)
 	{
-		Integer n = atom.getAtomicNumber()*1000;
+		Integer n = atom.getAtomicNumber()*SHIFT_ATOM_ELEMENT;
 		//TODO handle charges and isotopes
 		return n;
 	}
