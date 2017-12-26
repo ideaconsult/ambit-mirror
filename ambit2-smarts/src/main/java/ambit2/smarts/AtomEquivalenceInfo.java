@@ -18,6 +18,7 @@ public class AtomEquivalenceInfo
 	public static final int SHIFT_TOP_LAYER    = 1;
 	public static final int SHIFT_LAYER_AT1    = 100000;
 	public static final int SHIFT_LAYER_AT2    = 1000;
+	public static final int SHIFT_INNER_BOND_TYPE = 100;
 		
 	//atom layers information is added incrementally
 	public List<Integer> atomLayersCode = new ArrayList<Integer>();
@@ -25,6 +26,7 @@ public class AtomEquivalenceInfo
 	int curLayerNum = 0;
 	int nProcessedBonds = 0;
 	public List<IAtom> curLayerAtoms = new ArrayList<IAtom>();
+	public List<IAtom> prevLayerAtoms = new ArrayList<IAtom>();
 
 	public void initialize(IAtom at)
 	{
@@ -78,8 +80,8 @@ public class AtomEquivalenceInfo
 		}
 		
 		curLayerNum++;
-		curLayerAtoms.clear();
-		curLayerAtoms.addAll(newLayerAtoms);
+		prevLayerAtoms = curLayerAtoms;
+		curLayerAtoms = newLayerAtoms;
 	}	
 	
 	public void nextLayer(IAtomContainer mol)
@@ -107,11 +109,25 @@ public class AtomEquivalenceInfo
 			List<Integer> codes = new ArrayList<Integer>();
 			for (int k = 0; k < tl.atoms.size(); k++)
 			{
-				//TODO handle bonds to previous and current layer
+				
 				IAtom a = tl.atoms.get(k);
+				if (prevLayerAtoms.contains(a))
+					continue; //bond to an atom from previous layer 
+								//it is already processed
 				IBond b = tl.bonds.get(k);
-				int topDegree = ((TopLayer)a.getProperty(TopLayer.TLProp)).atoms.size();
-				codes.add(getAtomCode(a,b, topDegree, (curLayerNum+1)));
+				int atInd = curLayerAtoms.indexOf(a);
+				if (atInd == -1)
+				{	
+					//a new atom code from the next layer
+					int topDegree = ((TopLayer)a.getProperty(TopLayer.TLProp)).atoms.size();
+					codes.add(getAtomCode(a,b, topDegree, (curLayerNum+1)));
+				}
+				else
+				{	
+					//handle bond to an atom from the current layer
+					if (i < atInd)
+						innerBondsCodes.add(getBondCode(b,(i+1),(atInd+1),curLayerNum));
+				}
 			}
 			
 			int sort[] = getSortedCodesIndices(codes);
@@ -128,6 +144,7 @@ public class AtomEquivalenceInfo
 		//They are added before the atom codes for the new layer
 		if (!innerBondsCodes.isEmpty())
 		{	
+			/*
 			if (innerBondsCodes.size() == 1)
 				atomLayersCode.add(innerBondsCodes.get(0));
 			else
@@ -139,12 +156,16 @@ public class AtomEquivalenceInfo
 					atomLayersCode.add(innerBondsCodes.get(index));
 				}	
 			}
+			*/
+			
+			//Sorting of the inner bond codes is not needed
+			atomLayersCode.addAll(innerBondsCodes);
 			nProcessedBonds += innerBondsCodes.size();
 		}			
 		
 		curLayerNum++;
-		curLayerAtoms.clear();
-		curLayerAtoms.addAll(newLayerAtoms);
+		prevLayerAtoms = curLayerAtoms;
+		curLayerAtoms = newLayerAtoms;
 	}
 	
 	public static Integer getAtomCode(IAtom atom, IBond bond, int topDegree, int layerNum)
@@ -154,6 +175,14 @@ public class AtomEquivalenceInfo
 			n = n + bond.getOrder().numeric() * SHIFT_BOND_TYPE; 
 		n = n + SHIFT_TOP_DEGREE * topDegree;
 		//TODO handle charges and isotopes
+		n = n + layerNum;
+		return n;
+	}
+	
+	public static Integer getBondCode(IBond bond, int at1, int at2, int layerNum)
+	{	
+		int n = bond.getOrder().numeric() * SHIFT_INNER_BOND_TYPE; 
+		n = n + SHIFT_LAYER_AT1 * at1 + SHIFT_LAYER_AT2 * at2;
 		n = n + layerNum;
 		return n;
 	}
