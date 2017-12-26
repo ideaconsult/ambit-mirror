@@ -14,7 +14,7 @@ public class AtomEquivalenceInfo
 	public static final int SHIFT_POS_CHARGE   = 100000;
 	public static final int SHIFT_NEG_CHARGE   = 10000;
 	public static final int SHIFT_ISOTOPE      = 1000;
-	public static final int SHIFT_PREV_LAYER   = 1;
+	public static final int SHIFT_TOP_LAYER   = 1;
 	
 	
 	//atom layers information is added incrementally
@@ -50,7 +50,7 @@ public class AtomEquivalenceInfo
 		{
 			IAtom a = tl.atoms.get(0);
 			IBond b = tl.bonds.get(0);
-			atomLayersCode.add(getAtomCode(a,b) + curLayerNum);
+			atomLayersCode.add(getAtomCode(a,b) + (curLayerNum+1));
 			newLayerAtoms.add(a);
 		}
 		else
@@ -59,7 +59,7 @@ public class AtomEquivalenceInfo
 			{
 				IAtom a = tl.atoms.get(k);
 				IBond b = tl.bonds.get(k);
-				codes.add(getAtomCode(a,b) + curLayerNum);
+				codes.add(getAtomCode(a,b) + (curLayerNum+1));
 			}
 
 			int sort[] = getSortedCodesIndices(codes);
@@ -215,5 +215,12 @@ public class AtomEquivalenceInfo
 		return indices;
 	}
 	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < atomLayersCode.size(); i++)
+			sb.append(" " + atomLayersCode.get(i));
+		return sb.toString();
+	}
 	
 }
