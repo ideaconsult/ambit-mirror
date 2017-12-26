@@ -26,7 +26,7 @@ public class AtomEquivalenceInfo
 	int curLayerNum = 0;
 	int nProcessedBonds = 0;
 	public List<IAtom> curLayerAtoms = new ArrayList<IAtom>();
-	public List<IAtom> prevLayerAtoms = new ArrayList<IAtom>();
+	public List<IAtom> prevLayerAtoms = null;
 
 	public void initialize(IAtom at)
 	{
@@ -39,6 +39,13 @@ public class AtomEquivalenceInfo
 		atomLayersCode.add(getAtomCode(at, null, 0, 0));
 		curLayerAtoms.add(at);
 		for (int i = 0; i < numLayers; i++)
+			nextLayer(mol);
+	}
+	
+	public void processAllLayers(IAtomContainer mol)
+	{
+		firstLayer(mol);
+		while (nProcessedBonds < mol.getBondCount())
 			nextLayer(mol);
 	}
 	
@@ -107,9 +114,10 @@ public class AtomEquivalenceInfo
 					continue; // it is a terminal atom from the current layer (layer num > 0)
 			
 			List<Integer> codes = new ArrayList<Integer>();
+			List<IAtom> newAtoms = new ArrayList<IAtom>();
+			
 			for (int k = 0; k < tl.atoms.size(); k++)
-			{
-				
+			{	
 				IAtom a = tl.atoms.get(k);
 				if (prevLayerAtoms.contains(a))
 					continue; //bond to an atom from previous layer 
@@ -121,6 +129,7 @@ public class AtomEquivalenceInfo
 					//a new atom code from the next layer
 					int topDegree = ((TopLayer)a.getProperty(TopLayer.TLProp)).atoms.size();
 					codes.add(getAtomCode(a,b, topDegree, (curLayerNum+1)));
+					newAtoms.add(a);
 				}
 				else
 				{	
@@ -130,14 +139,17 @@ public class AtomEquivalenceInfo
 				}
 			}
 			
-			int sort[] = getSortedCodesIndices(codes);
-			for (int k = 0; k < sort.length; k++)
-			{
-				int index = sort[k];
-				atomLayersCode.add(codes.get(index));
-				newLayerAtoms.add(tl.atoms.get(index));
+			if (!codes.isEmpty())
+			{	
+				int sort[] = getSortedCodesIndices(codes);
+				for (int k = 0; k < sort.length; k++)
+				{
+					int index = sort[k];
+					atomLayersCode.add(codes.get(index));
+					newLayerAtoms.add(newAtoms.get(index));
+				}
+				nProcessedBonds += sort.length;
 			}
-			nProcessedBonds += sort.length;
 		}
 		
 		//Adding the codes for inner bonds from the current layer
