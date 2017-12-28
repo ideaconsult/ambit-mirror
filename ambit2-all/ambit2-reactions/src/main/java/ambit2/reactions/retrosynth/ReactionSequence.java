@@ -30,46 +30,6 @@ public class ReactionSequence
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
 	
-	//List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
-	//TODO make functionality level based (not step based)
-	
-	
-	/*
-	 * Function is applied for the input molecule from the last step 
-	 
-	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances()
-	{
-		IAtomContainer mol = steps.get(steps.size()-1).getInputMolecule();
-		Map<GenericReaction,List<List<IAtom>>> maps = new HashMap<GenericReaction,List<List<IAtom>>>();
-		for (GenericReaction reaction: reactDB.genericReactions)
-		{	
-			List<List<IAtom>> instances = reaction.findReactionInstances(mol, smrkMan);
-			if (instances != null)
-				if (!instances.isEmpty())
-					maps.put(reaction, instances);
-		}	
-		return maps;
-	}
-	*/
-	
-	/*
-	 * Function is applied for the input molecule from the last step 
-	 * new step is registered
-	 
-	public void generatedNextStepWithMaxProduct(GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
-	{
-		ReactionSequenceStep lastStep = steps.get(steps.size()-1);
-		IAtomContainer products = 
-				reaction.applyAtInstance(lastStep.getInputMolecule(), reactionInstance, smrkMan, true);
-		lastStep.setOutputMolecule(products);		
-		IAtomContainer nextInputMol = getMaxProductFragment(products);
-		ReactionSequenceStep nextStep = new ReactionSequenceStep();
-		nextStep.setInputMolecule(nextInputMol);
-		steps.add(nextStep);
-	}
-	
-	*/
-	
 		
 	public ReactionDataBase getReactDB() {
 		return reactDB;
@@ -102,6 +62,41 @@ public class ReactionSequence
 		level.molecules.add(target);	
 		level.levelIndex = 1;
 	}
+	
+	
+	
+	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions)
+	{
+		Map<GenericReaction,List<List<IAtom>>> maps = new HashMap<GenericReaction,List<List<IAtom>>>();
+		for (GenericReaction reaction: reactions)
+		{	
+			List<List<IAtom>> instances = reaction.findReactionInstances(mol, smrkMan);
+			if (instances != null)
+				if (!instances.isEmpty())
+					maps.put(reaction, instances);
+		}	
+		return maps;
+	}
+	
+	
+	
+	/*
+	 * Function is applied for the input molecule from the last step 
+	 * new step is registered
+	 
+	public void generatedNextStepWithMaxProduct(GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
+	{
+		ReactionSequenceStep lastStep = steps.get(steps.size()-1);
+		IAtomContainer products = 
+				reaction.applyAtInstance(lastStep.getInputMolecule(), reactionInstance, smrkMan, true);
+		lastStep.setOutputMolecule(products);		
+		IAtomContainer nextInputMol = getMaxProductFragment(products);
+		ReactionSequenceStep nextStep = new ReactionSequenceStep();
+		nextStep.setInputMolecule(nextInputMol);
+		steps.add(nextStep);
+	}
+	
+	*/
 	
 	IAtomContainer getMaxProductFragment(IAtomContainer products)
 	{
