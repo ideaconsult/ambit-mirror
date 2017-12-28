@@ -7,10 +7,10 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class ReactionSequenceLevel 
 {
-	ReactionSequenceLevel previousLevel = null;
-	ReactionSequenceLevel nextLevel = null;
+	public int levelIndex = 0;
+	public ReactionSequenceLevel previousLevel = null;
+	public ReactionSequenceLevel nextLevel = null;
+	public List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
 	
-	List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 	
-	
-	List<IAtomContainer> molecules = new ArrayList<IAtomContainer>();
+	public List<IAtomContainer> molecules = new ArrayList<IAtomContainer>();
 }
