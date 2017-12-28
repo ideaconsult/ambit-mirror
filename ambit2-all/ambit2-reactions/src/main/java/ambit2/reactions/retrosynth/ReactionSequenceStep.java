@@ -12,8 +12,8 @@ public class ReactionSequenceStep
 {
 	IAtomContainer inputMolecule = null;
 	List<IAtomContainer> outputMolecules = null;
-	int inputMoleculeLevelIndex = 0;
-	int outMoleculesLevelIndices[] = null;
+	//int inputMoleculeLevelIndex = 0;
+	//int outMoleculesLevelIndices[] = null;
 	Reaction reaction = null;
 	List<IAtom> reactionInstance = null;
 		
@@ -29,6 +29,7 @@ public class ReactionSequenceStep
 	public void setOutputMolecules(List<IAtomContainer> outputMolecules) {
 		this.outputMolecules = outputMolecules;		
 	}
+	/*
 	public int getInputMoleculeLevelIndex() {
 		return inputMoleculeLevelIndex;
 	}
@@ -41,6 +42,7 @@ public class ReactionSequenceStep
 	public void setOutMoleculesLevelIndices(int[] outMoleculesLevelIndices) {
 		this.outMoleculesLevelIndices = outMoleculesLevelIndices;
 	}
+	*/
 	public Reaction getReaction() {
 		return reaction;
 	}
