@@ -18,29 +18,34 @@ public class ReactionSequenceLevel
 	{
 		molecules.add(mol);
 		steps.add(step);
-		if (step == null)
+		if (step != null)
+		{	
+			step.inputMolecule = mol;
 			linkStepToNextLevel(step);
+		}	
 	}
 	
 	public void associateStep(int index, ReactionSequenceStep step)
 	{
 		steps.set(index, step);
+		step.inputMolecule = molecules.get(index);
 		linkStepToNextLevel(step);
 	}
 	
 	public void linkStepToNextLevel(ReactionSequenceStep step)
 	{
-		//TODO
+		for (int i = 0; i<step.outputMolecules.size(); i++)
+			nextLevel.addMolecule(step.outputMolecules.get(i), null);
 	}
 	
-	public void removeMolecule(IAtomContainer mol, boolean updateUpperLevels)
+	public void removeMolecule(IAtomContainer mol, boolean updateUpperLevel)
 	{
 		//Removes the molecule, the associated step and 
 		//corresponding reaction subsequence
 		int index = molecules.indexOf(mol);
 		molecules.remove(mol);
 		removeStep(index);
-		if (updateUpperLevels)
+		if (updateUpperLevel)
 		{	
 			//TODO update up levels indices due to molecule removal
 		}	
