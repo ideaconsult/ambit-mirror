@@ -28,14 +28,15 @@ public class ReactionSequence
 	ReactionDataBase reactDB = null;
 	IAtomContainer target = null;
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
-	List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
+	
+	//List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
 	//TODO make functionality level based (not step based)
 	
 	
 	/*
 	 * Function is applied for the input molecule from the last step 
-	 */
+	 
 	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances()
 	{
 		IAtomContainer mol = steps.get(steps.size()-1).getInputMolecule();
@@ -49,11 +50,12 @@ public class ReactionSequence
 		}	
 		return maps;
 	}
+	*/
 	
 	/*
 	 * Function is applied for the input molecule from the last step 
 	 * new step is registered
-	 */
+	 
 	public void generatedNextStepWithMaxProduct(GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
 		ReactionSequenceStep lastStep = steps.get(steps.size()-1);
@@ -66,33 +68,39 @@ public class ReactionSequence
 		steps.add(nextStep);
 	}
 	
+	*/
+	
 		
 	public ReactionDataBase getReactDB() {
 		return reactDB;
 	}
+	
 	public void setReactDB(ReactionDataBase reactDB) {
 		this.reactDB = reactDB;
 	}
+	
 	public IAtomContainer getTarget() {
 		return target;
 	}
+	
 	public void setTarget(IAtomContainer target) {
 		this.target = target;
-	}	
-	public List<ReactionSequenceStep> getSteps() {
-		return steps;
-	}
-	public void setSteps(List<ReactionSequenceStep> steps) {
-		this.steps = steps;
 	}
 	
+	public List<ReactionSequenceLevel> getLevels() {
+		return levels;
+	}
+
+	public void setLevels(List<ReactionSequenceLevel> levels) {
+		this.levels = levels;
+	}
+
 	void initilize()
-	{
-		steps.clear();
-		//Adding first step
-		ReactionSequenceStep step = new ReactionSequenceStep();
-		step.inputMolecule = target;	
-		steps.add(step);
+	{	
+		//Adding first level
+		ReactionSequenceLevel level = new ReactionSequenceLevel();
+		level.molecules.add(target);	
+		level.levelIndex = 1;
 	}
 	
 	IAtomContainer getMaxProductFragment(IAtomContainer products)
