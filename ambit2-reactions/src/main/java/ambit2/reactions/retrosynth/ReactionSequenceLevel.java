@@ -11,6 +11,10 @@ public class ReactionSequenceLevel
 	public ReactionSequenceLevel previousLevel = null;
 	public ReactionSequenceLevel nextLevel = null;
 	public List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
-	
 	public List<IAtomContainer> molecules = new ArrayList<IAtomContainer>();
+	
+	public void removeMolecule(int index)
+	{
+		//TODO
+	}
 }
