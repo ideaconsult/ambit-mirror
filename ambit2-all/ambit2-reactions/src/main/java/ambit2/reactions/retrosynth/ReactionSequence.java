@@ -98,6 +98,8 @@ public class ReactionSequence
 	
 	*/
 	
+	
+	
 	IAtomContainer getMaxProductFragment(IAtomContainer products)
 	{
 		int maxSize = -1;
