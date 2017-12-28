@@ -55,14 +55,28 @@ public class ReactionSequence
 		this.levels = levels;
 	}
 
-	void initilize()
+	public void initilize()
 	{	
 		//Adding first level
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		level.molecules.add(target);	
 		level.levelIndex = 1;
+		levels.add(level);
+		addEmptyLevels(20);
 	}
 	
+	void addEmptyLevels(int nLevels)
+	{
+		ReactionSequenceLevel level = levels.get(levels.size()-1);
+		for (int i = 0; i < nLevels; i++)
+		{
+			ReactionSequenceLevel newLevel = new ReactionSequenceLevel();
+			newLevel.levelIndex = level.levelIndex + 1;
+			level.nextLevel = newLevel;
+			newLevel.previousLevel = level;
+			level = newLevel;
+		}
+	}
 	
 	
 	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions)
