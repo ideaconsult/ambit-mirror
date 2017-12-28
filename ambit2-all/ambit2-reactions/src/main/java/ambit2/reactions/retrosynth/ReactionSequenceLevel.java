@@ -14,6 +14,25 @@ public class ReactionSequenceLevel
 	public List<IAtomContainer> molecules = new ArrayList<IAtomContainer>();
 	
 	
+	public void addMolecule(IAtomContainer mol, ReactionSequenceStep step)
+	{
+		molecules.add(mol);
+		steps.add(step);
+		if (step == null)
+			linkStepToNextLevel(step);
+	}
+	
+	public void associateStep(int index, ReactionSequenceStep step)
+	{
+		steps.set(index, step);
+		linkStepToNextLevel(step);
+	}
+	
+	public void linkStepToNextLevel(ReactionSequenceStep step)
+	{
+		//TODO
+	}
+	
 	public void removeMolecule(IAtomContainer mol, boolean updateUpperLevels)
 	{
 		//Removes the molecule, the associated step and 
