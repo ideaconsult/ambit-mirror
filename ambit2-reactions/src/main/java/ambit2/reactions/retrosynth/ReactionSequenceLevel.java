@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.smarts.SmartsHelper;
+
 public class ReactionSequenceLevel 
 {
 	public int levelIndex = 0;
@@ -73,5 +75,27 @@ public class ReactionSequenceLevel
 		nextLevel = new ReactionSequenceLevel();
 		nextLevel.levelIndex = this.levelIndex + 1;
 		nextLevel.previousLevel = this;
+	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("Level " + levelIndex + "\n");
+		for (int i = 0; i < molecules.size(); i++)
+		{	
+			String smi = null;
+			try {
+				smi = SmartsHelper.moleculeToSMILES(molecules.get(i),true);
+			}
+			catch (Exception x) {};
+			sb.append("" + smi);
+			ReactionSequenceStep step = steps.get(i);
+			if (step != null)
+			{
+				//TODO
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 }

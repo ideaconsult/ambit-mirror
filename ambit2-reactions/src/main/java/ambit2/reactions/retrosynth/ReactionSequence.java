@@ -120,4 +120,16 @@ public class ReactionSequence
 			}
 		return maxFrag;
 	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		ReactionSequenceLevel level = firstLevel;
+		while (level != null)
+		{
+			sb.append(level.toString() + "\n");
+			level = level.nextLevel;
+		}
+		return sb.toString();
+	}
 }
