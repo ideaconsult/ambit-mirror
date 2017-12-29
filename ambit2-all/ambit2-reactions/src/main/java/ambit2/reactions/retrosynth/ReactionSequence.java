@@ -29,7 +29,7 @@ public class ReactionSequence
 	IAtomContainer target = null;
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
-	
+	ReactionSequenceLevel firstLevel = null;
 		
 	public ReactionDataBase getReactDB() {
 		return reactDB;
@@ -59,10 +59,10 @@ public class ReactionSequence
 	{	
 		//Adding first level
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
+		firstLevel = level;
 		level.molecules.add(target);	
 		level.levelIndex = 1;
-		levels.add(level);
-		addEmptyLevels(20);
+		//levels.add(level);
 	}
 	
 	void addEmptyLevels(int nLevels)
