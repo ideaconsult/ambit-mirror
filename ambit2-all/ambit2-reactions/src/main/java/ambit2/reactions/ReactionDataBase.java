@@ -30,6 +30,25 @@ public class ReactionDataBase
 		loadReactionsFromJSON(jsonFile, true);
 	}
 	
+	public ReactionDataBase(List<String> smirksList)
+	{	
+		if (smirksList == null)
+			return;
+		genericReactions = new ArrayList<GenericReaction>(); 
+		
+		for (int i = 0; i < smirksList.size(); i++)
+		{
+			String smirks = smirksList.get(i);
+			GenericReaction gr = new GenericReaction();
+			gr.setId(i+1);
+			gr.setName("Reaction " + (i+1));
+			gr.setFlagUse(true);
+			gr.setSmirks(smirks);
+			gr.setReactionClass("default");
+			genericReactions.add(gr);
+		}
+	}
+	
 	public void loadReactionsFromJSON(File jsonFile, boolean FlagCleanDB) throws Exception
 	{
 		InputStream fin = new FileInputStream(jsonFile); 
