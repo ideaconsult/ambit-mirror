@@ -9,6 +9,12 @@ import ambit2.smarts.SmartsHelper;
 
 public class ReactionSequenceLevel 
 {
+	/*
+	public static enum MoleculeStatus {
+		UNRESOLVED, STARTING_MATERIAL
+	}
+	*/
+	
 	public int levelIndex = 0;
 	public ReactionSequenceLevel previousLevel = null;
 	public ReactionSequenceLevel nextLevel = null;
