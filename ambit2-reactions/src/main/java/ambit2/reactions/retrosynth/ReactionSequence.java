@@ -93,25 +93,18 @@ public class ReactionSequence
 	}
 	
 	
-	
-	/*
-	 * Function is applied for the input molecule from the last step 
-	 * new step is registered
 	 
-	public void generatedNextStepWithMaxProduct(GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
+	public void generatedSequenceStepForReactionInstance(ReactionSequenceLevel level, int moleculeIndex,
+									GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
-		ReactionSequenceStep lastStep = steps.get(steps.size()-1);
-		IAtomContainer products = 
-				reaction.applyAtInstance(lastStep.getInputMolecule(), reactionInstance, smrkMan, true);
-		lastStep.setOutputMolecule(products);		
-		IAtomContainer nextInputMol = getMaxProductFragment(products);
-		ReactionSequenceStep nextStep = new ReactionSequenceStep();
-		nextStep.setInputMolecule(nextInputMol);
-		steps.add(nextStep);
+		ReactionSequenceStep step = new ReactionSequenceStep();
+		IAtomContainer mol = level.molecules.get(moleculeIndex);
+		IAtomContainer products = reaction.applyAtInstance(mol, reactionInstance, smrkMan, true);
+		IAtomContainerSet productFrags = ConnectivityChecker.partitionIntoMolecules(products);
+		for (IAtomContainer frag : productFrags.atomContainers())
+			step.outputMolecules.add(frag);	
+		level.associateStep( moleculeIndex, step);
 	}
-	
-	*/
-	
 	
 	
 	IAtomContainer getMaxProductFragment(IAtomContainer products)
