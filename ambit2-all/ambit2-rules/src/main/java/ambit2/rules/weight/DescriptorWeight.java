@@ -1,0 +1,10 @@
+package ambit2.rules.weight;
+
+import ambit2.rules.functions.ValueTransformation;
+
+public class DescriptorWeight 
+{
+	public String descriptorName = null;
+	public double weight = 0.0;
+	public ValueTransformation valueTrnasformation = null;
+}
