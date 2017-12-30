@@ -5,16 +5,11 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.reactions.retrosynth.ReactionSequence.MoleculeStatus;
 import ambit2.smarts.SmartsHelper;
 
 public class ReactionSequenceLevel 
 {
-	/*
-	public static enum MoleculeStatus {
-		UNRESOLVED, STARTING_MATERIAL
-	}
-	*/
-	
 	public int levelIndex = 0;
 	public ReactionSequenceLevel previousLevel = null;
 	public ReactionSequenceLevel nextLevel = null;
@@ -25,6 +20,7 @@ public class ReactionSequenceLevel
 	public void addMolecule(IAtomContainer mol, ReactionSequenceStep step)
 	{
 		molecules.add(mol);
+		ReactionSequence.setMoleculeStatus(mol, MoleculeStatus.ADDED_TO_LEVEL);
 		steps.add(step);
 		if (step != null)
 		{	

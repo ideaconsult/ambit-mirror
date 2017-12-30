@@ -17,6 +17,7 @@ import ambit2.reactions.reactor.Reactor;
 import ambit2.reactions.reactor.ReactorNode;
 import ambit2.reactions.reactor.ReactorResult;
 import ambit2.reactions.reactor.ReactorStrategy;
+import ambit2.reactions.retrosynth.ReactionSequence;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
@@ -206,15 +207,25 @@ public class ReactionTestUtils
 	
 	public static void testReactionSequence() throws Exception
 	{
+		String smi = "CCCCCO";
 		List<String> smirks = new ArrayList<String>();
 		smirks.add("[C:1]Cl>>[C:1]");
 		smirks.add("[C:1][C:2]>>[C:1][H].[C:2][H]");
 				
 		ReactionDataBase rdb = new ReactionDataBase(smirks);
-		System.out.println(rdb.toString());
+		System.out.println("ReactionDB:\n" + rdb.toString());
+		System.out.println("Target: " + smi);
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smi);
 		
 		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance()); 
 		rdb.configureGenericReactions(smrkMan);
+		
+		ReactionSequence rseq = new ReactionSequence();
+		rseq.setReactDB(rdb);
+		rseq.setTarget(target);
+		rseq.initilize();
+		System.out.println("ReactionSequence:\n" + rseq.toString());
+		
 		
 	}
 }
