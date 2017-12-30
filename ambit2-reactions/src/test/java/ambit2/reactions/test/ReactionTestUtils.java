@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
@@ -19,6 +20,7 @@ import ambit2.reactions.reactor.ReactorStrategy;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
+import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
 
 public class ReactionTestUtils 
@@ -40,11 +42,11 @@ public class ReactionTestUtils
 		
 		//testReactor("C1CCC1CCC", "D:/Projects/Nina/Reactions/reactions.json");
 		
-		testReactor("CC", "D:/Projects/Nina/Reactions/metabolism-reactions.json", 10); //!!!!!!!!!
+		//testReactor("CC", "D:/Projects/Nina/Reactions/metabolism-reactions.json", 10); //!!!!!!!!!
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		
+		testReactionSequence();
 		
 		
 	}
@@ -199,6 +201,20 @@ public class ReactionTestUtils
 			}
 			
 		}
+		
+	}
+	
+	public static void testReactionSequence() throws Exception
+	{
+		List<String> smirks = new ArrayList<String>();
+		smirks.add("[C:1]Cl>>[C:1]");
+		smirks.add("[C:1][C:2]>>[C:1][H].[C:2][H]");
+				
+		ReactionDataBase rdb = new ReactionDataBase(smirks);
+		System.out.println(rdb.toString());
+		
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance()); 
+		rdb.configureGenericReactions(smrkMan);
 		
 	}
 }
