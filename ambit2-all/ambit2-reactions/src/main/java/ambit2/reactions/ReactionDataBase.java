@@ -156,4 +156,15 @@ public class ReactionDataBase
 		return null;
 	}
 	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		if (genericReactions != null)
+			for (GenericReaction r : genericReactions)
+			{	
+				sb.append(r.toString()+"\n");
+			}	
+		return sb.toString();
+	}
+	
 }

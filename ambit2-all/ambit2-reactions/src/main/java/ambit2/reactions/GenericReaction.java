@@ -214,4 +214,12 @@ public class GenericReaction
 		//TODO handle non-clone case
 		return product;
 	}
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("Reaction: " + name);
+		sb.append(" " + smirks);
+		return sb.toString();
+	}
 }
