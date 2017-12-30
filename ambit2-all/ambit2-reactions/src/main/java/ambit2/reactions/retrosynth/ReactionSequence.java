@@ -25,6 +25,14 @@ import ambit2.smarts.SMIRKSManager;
 
 public class ReactionSequence 
 {
+	//Molecule properties
+	public static final String MoleculeStatusProperty = "MOLECULE_STATUS";
+	public static final String MoleculeInChIProperty = "MOLECULE_INCHI";
+
+	public static enum MoleculeStatus {
+		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL
+	}
+	
 	ReactionDataBase reactDB = null;
 	IAtomContainer target = null;
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
@@ -60,8 +68,8 @@ public class ReactionSequence
 		//Adding first level
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		firstLevel = level;
-		level.molecules.add(target);	
 		level.levelIndex = 1;
+		level.addMolecule(target, null);
 		//levels.add(level);
 	}
 	
@@ -76,6 +84,11 @@ public class ReactionSequence
 			newLevel.previousLevel = level;
 			level = newLevel;
 		}
+	}
+	
+	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol)
+	{
+		return generateAllReactionInstances(mol, reactDB.genericReactions);
 	}
 	
 	
@@ -93,7 +106,6 @@ public class ReactionSequence
 	}
 	
 	
-	 
 	public void generatedSequenceStepForReactionInstance(ReactionSequenceLevel level, int moleculeIndex,
 									GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
@@ -106,6 +118,22 @@ public class ReactionSequence
 		level.associateStep( moleculeIndex, step);
 	}
 	
+	public void iterateLevelMolecules(ReactionSequenceLevel level, SyntheticStrategy strategy) throws Exception
+	{
+		for (int i = 0; i<level.molecules.size(); i++)
+		{
+			IAtomContainer mol = level.molecules.get(i);
+			MoleculeStatus status = getMoleculeStatus(mol);
+			if (status == MoleculeStatus.ADDED_TO_LEVEL)
+			{
+				 Map<GenericReaction,List<List<IAtom>>> allInstances = generateAllReactionInstances(mol);
+				 Object obj[] = SyntheticStrategy.getRandomSelection(allInstances);
+				 GenericReaction gr = (GenericReaction) obj[0];
+				 List<IAtom> inst = (List<IAtom>) obj[1];
+				 generatedSequenceStepForReactionInstance(level, i, gr, inst);
+			}
+		}
+	}
 	
 	IAtomContainer getMaxProductFragment(IAtomContainer products)
 	{
@@ -119,6 +147,16 @@ public class ReactionSequence
 				maxSize = frag.getAtomCount();
 			}
 		return maxFrag;
+	}
+	
+	public static MoleculeStatus getMoleculeStatus(IAtomContainer mol)
+	{
+		return (MoleculeStatus) mol.getProperty(MoleculeStatusProperty);
+	}
+	
+	public static void setMoleculeStatus(IAtomContainer mol, MoleculeStatus status)
+	{
+		mol.setProperty(MoleculeStatusProperty, status);
 	}
 	
 	public String toString()
