@@ -63,6 +63,10 @@ public class ReactionSequence
 		this.levels = levels;
 	}
 
+	public ReactionSequenceLevel getFirstLevel() {
+		return firstLevel;
+	}
+
 	public void initilize()
 	{	
 		//Adding first level

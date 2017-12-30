@@ -18,6 +18,7 @@ import ambit2.reactions.reactor.ReactorNode;
 import ambit2.reactions.reactor.ReactorResult;
 import ambit2.reactions.reactor.ReactorStrategy;
 import ambit2.reactions.retrosynth.ReactionSequence;
+import ambit2.reactions.retrosynth.ReactionSequenceLevel;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
@@ -224,6 +225,10 @@ public class ReactionTestUtils
 		rseq.setReactDB(rdb);
 		rseq.setTarget(target);
 		rseq.initilize();
+		
+		ReactionSequenceLevel level = rseq.getFirstLevel();
+		rseq.iterateLevelMolecules(level, null);
+				
 		System.out.println("ReactionSequence:\n" + rseq.toString());
 		
 		

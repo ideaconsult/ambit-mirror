@@ -40,7 +40,7 @@ public class SyntheticStrategy
 				Object obj[] = new Object[2];
 				obj[0] = gr;
 				obj[1] = inst;
-				break;
+				return obj;
 			}
 			else
 				n++;
