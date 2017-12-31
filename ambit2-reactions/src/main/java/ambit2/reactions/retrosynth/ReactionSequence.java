@@ -14,6 +14,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.smarts.SMIRKSManager;
+import ambit2.smarts.SmartsHelper;
 
 /**
  * 
@@ -66,6 +67,14 @@ public class ReactionSequence
 	public ReactionSequenceLevel getFirstLevel() {
 		return firstLevel;
 	}
+	
+	public SMIRKSManager getSmrkMan() {
+		return smrkMan;
+	}
+
+	public void setSmrkMan(SMIRKSManager smrkMan) {
+		this.smrkMan = smrkMan;
+	}
 
 	public void initilize()
 	{	
@@ -116,9 +125,13 @@ public class ReactionSequence
 		ReactionSequenceStep step = new ReactionSequenceStep();
 		IAtomContainer mol = level.molecules.get(moleculeIndex);
 		IAtomContainer products = reaction.applyAtInstance(mol, reactionInstance, smrkMan, true);
+		smrkMan.processProduct(products);
 		IAtomContainerSet productFrags = ConnectivityChecker.partitionIntoMolecules(products);
+		step.outputMolecules = new ArrayList<IAtomContainer>();
 		for (IAtomContainer frag : productFrags.atomContainers())
-			step.outputMolecules.add(frag);	
+		{	
+			step.outputMolecules.add(frag);
+		}	
 		level.associateStep( moleculeIndex, step);
 	}
 	

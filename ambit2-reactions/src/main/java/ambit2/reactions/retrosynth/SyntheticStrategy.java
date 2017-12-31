@@ -27,15 +27,17 @@ public class SyntheticStrategy
 	public static Object[] getRandomSelection(Map<GenericReaction,List<List<IAtom>>> instances)
 	{
 		Random rn = new Random();
+		rn.setSeed(1234555);
 		Set<GenericReaction> grSet = instances.keySet();
 		int grNum = rn.nextInt(grSet.size());
 		int n = 0;
 		for (GenericReaction gr : instances.keySet())
 		{
 			if (n == grNum)
-			{
+			{	
 				List<List<IAtom>> rInst = instances.get(gr);
 				int rInstNum = rn.nextInt(rInst.size());
+				//System.out.println("grNum = " + grNum + "  rInstNum = " + rInstNum + " rInst.size() = " + rInst.size());
 				List<IAtom> inst = rInst.get(rInstNum);
 				Object obj[] = new Object[2];
 				obj[0] = gr;
