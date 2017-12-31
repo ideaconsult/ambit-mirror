@@ -211,17 +211,33 @@ public class ReactionTestUtils
 		String smi = "CCCCCO";
 		List<String> smirks = new ArrayList<String>();
 		smirks.add("[C:1]Cl>>[C:1]");
-		smirks.add("[C:1][C:2]>>[C:1][H].[C:2][H]");
+		//smirks.add("[C:1][H]>>[C:1]O[H]");
+		smirks.add("[H][C:1][C:2][H]>>[H][C:1][H].[H][C:2][H]");
+		//smirks.add("[C:1][C:2]>>[C:1][H].[C:2][H]");
 				
 		ReactionDataBase rdb = new ReactionDataBase(smirks);
 		System.out.println("ReactionDB:\n" + rdb.toString());
 		System.out.println("Target: " + smi);
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smi);
 		
-		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance()); 
-		rdb.configureGenericReactions(smrkMan);
+		SMIRKSManager smrkMan0 = new SMIRKSManager(SilentChemObjectBuilder.getInstance()); 
+		rdb.configureGenericReactions(smrkMan0);
 		
 		ReactionSequence rseq = new ReactionSequence();
+		SMIRKSManager smrkMan = rseq.getSmrkMan();
+		//setup smrkMan
+		smrkMan.setFlagProcessResultStructures(true);
+		smrkMan.setFlagClearHybridizationBeforeResultProcess(true);
+		smrkMan.setFlagClearImplicitHAtomsBeforeResultProcess(false);
+		smrkMan.setFlagClearAromaticityBeforeResultProcess(true);
+		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(false);
+		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(false);
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(true);
+		smrkMan.setFlagApplyStereoTransformation(false);
+		smrkMan.setFlagHAtomsTransformation(false);
+		//smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
+		smrkMan.setFlagAromaticityTransformation(false);
+		
 		rseq.setReactDB(rdb);
 		rseq.setTarget(target);
 		rseq.initilize();
