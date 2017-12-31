@@ -5,12 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.data.MoleculeTools;
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.smarts.SMIRKSManager;
@@ -39,6 +45,9 @@ public class ReactionSequence
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
 	ReactionSequenceLevel firstLevel = null;
+	
+	//molecule pre-process
+	boolean FlagExplicitHAtoms = true;
 		
 	public ReactionDataBase getReactDB() {
 		return reactDB;
@@ -75,6 +84,14 @@ public class ReactionSequence
 	public void setSmrkMan(SMIRKSManager smrkMan) {
 		this.smrkMan = smrkMan;
 	}
+	
+	public boolean isFlagExplicitHAtoms() {
+		return FlagExplicitHAtoms;
+	}
+
+	public void setFlagExplicitHAtoms(boolean flagExplicitHAtoms) {
+		FlagExplicitHAtoms = flagExplicitHAtoms;
+	}
 
 	public void initilize()
 	{	
@@ -107,6 +124,9 @@ public class ReactionSequence
 	
 	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions)
 	{
+		if (FlagExplicitHAtoms)
+			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+		
 		Map<GenericReaction,List<List<IAtom>>> maps = new HashMap<GenericReaction,List<List<IAtom>>>();
 		for (GenericReaction reaction: reactions)
 		{	
@@ -124,6 +144,7 @@ public class ReactionSequence
 	{
 		ReactionSequenceStep step = new ReactionSequenceStep();
 		IAtomContainer mol = level.molecules.get(moleculeIndex);
+		
 		IAtomContainer products = reaction.applyAtInstance(mol, reactionInstance, smrkMan, true);
 		smrkMan.processProduct(products);
 		IAtomContainerSet productFrags = ConnectivityChecker.partitionIntoMolecules(products);
@@ -140,10 +161,13 @@ public class ReactionSequence
 		for (int i = 0; i<level.molecules.size(); i++)
 		{
 			IAtomContainer mol = level.molecules.get(i);
+			
 			MoleculeStatus status = getMoleculeStatus(mol);
 			if (status == MoleculeStatus.ADDED_TO_LEVEL)
 			{
 				 Map<GenericReaction,List<List<IAtom>>> allInstances = generateAllReactionInstances(mol);
+				 if (allInstances.isEmpty())
+					 continue;
 				 Object obj[] = SyntheticStrategy.getRandomSelection(allInstances);
 				 GenericReaction gr = (GenericReaction) obj[0];
 				 List<IAtom> inst = (List<IAtom>) obj[1];
@@ -174,6 +198,19 @@ public class ReactionSequence
 	public static void setMoleculeStatus(IAtomContainer mol, MoleculeStatus status)
 	{
 		mol.setProperty(MoleculeStatusProperty, status);
+	}
+	
+	void preProcess(IAtomContainer mol) throws Exception
+	{
+		
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+
+		CDKHydrogenAdder adder = CDKHydrogenAdder
+				.getInstance(SilentChemObjectBuilder.getInstance());
+		adder.addImplicitHydrogens(mol);
+			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+
+		CDKHueckelAromaticityDetector.detectAromaticity(mol);
 	}
 	
 	public String toString()
