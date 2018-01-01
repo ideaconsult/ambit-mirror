@@ -244,7 +244,13 @@ public class ReactionTestUtils
 		
 		ReactionSequenceLevel level = rseq.getFirstLevel();
 		rseq.iterateLevelMolecules(level, null);
-				
+		
+		level = level.nextLevel;
+		rseq.iterateLevelMolecules(level, null);
+		
+		level = level.nextLevel;
+		rseq.iterateLevelMolecules(level, null);
+		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
 		
 		
