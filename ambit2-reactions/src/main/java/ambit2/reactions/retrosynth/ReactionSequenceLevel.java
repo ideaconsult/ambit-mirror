@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.reactions.retrosynth.ReactionSequence.MoleculeStatus;
 import ambit2.smarts.SmartsHelper;
 
@@ -90,7 +91,9 @@ public class ReactionSequenceLevel
 		{	
 			String smi = null;
 			try {
-				smi = SmartsHelper.moleculeToSMILES(molecules.get(i),true);
+				IAtomContainer mol = molecules.get(i).clone();
+				MoleculeTools.convertExplicitHAtomsToImplicit(mol);
+				smi = SmartsHelper.moleculeToSMILES(mol,true);
 			}
 			catch (Exception x) {};
 			sb.append("" + smi);

@@ -95,6 +95,10 @@ public class ReactionSequence
 
 	public void initilize()
 	{	
+		//Target pre-processing
+		if (FlagExplicitHAtoms)
+			MoleculeTools.convertImplicitToExplicitHydrogens(target);
+		
 		//Adding first level
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		firstLevel = level;
@@ -124,8 +128,8 @@ public class ReactionSequence
 	
 	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions)
 	{
-		if (FlagExplicitHAtoms)
-			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+		//if (FlagExplicitHAtoms)
+		//	MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 		
 		Map<GenericReaction,List<List<IAtom>>> maps = new HashMap<GenericReaction,List<List<IAtom>>>();
 		for (GenericReaction reaction: reactions)
@@ -208,7 +212,7 @@ public class ReactionSequence
 		CDKHydrogenAdder adder = CDKHydrogenAdder
 				.getInstance(SilentChemObjectBuilder.getInstance());
 		adder.addImplicitHydrogens(mol);
-			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+		MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 
 		CDKHueckelAromaticityDetector.detectAromaticity(mol);
 	}
