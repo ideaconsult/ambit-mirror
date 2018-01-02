@@ -37,7 +37,7 @@ public class ReactionSequence
 	public static final String MoleculeInChIProperty = "MOLECULE_INCHI";
 
 	public static enum MoleculeStatus {
-		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL
+		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL, EQUIVALENT_TO_OTHER_MOLECULE
 	}
 	
 	ReactionDataBase reactDB = null;
@@ -99,7 +99,7 @@ public class ReactionSequence
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		firstLevel = level;
 		level.levelIndex = 1;
-		level.addMolecule(target, null);
+		level.addMolecule(target, null, null);
 		//levels.add(level);
 	}
 	
