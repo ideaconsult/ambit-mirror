@@ -31,7 +31,12 @@ import ambit2.smarts.SmartsHelper;
  */
 
 public class ReactionSequence 
-{
+{	
+	public static class InchiEntry {
+		public List<IAtomContainer> molecules = new ArrayList<IAtomContainer>();
+		public List<Integer> levels = new ArrayList<Integer>();
+	}
+	
 	//Molecule properties
 	public static final String MoleculeStatusProperty = "MOLECULE_STATUS";
 	public static final String MoleculeInChIProperty = "MOLECULE_INCHI";
@@ -45,6 +50,7 @@ public class ReactionSequence
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
 	ReactionSequenceLevel firstLevel = null;
+	Map<String,InchiEntry> usedInchies = new HashMap<String,InchiEntry>();
 	
 	//molecule pre-process
 	boolean FlagExplicitHAtoms = true;
@@ -77,6 +83,10 @@ public class ReactionSequence
 		return firstLevel;
 	}
 	
+	public Map<String, InchiEntry> getUsedInchies() {
+		return usedInchies;
+	}
+
 	public SMIRKSManager getSmrkMan() {
 		return smrkMan;
 	}
