@@ -15,11 +15,12 @@ public class ReactionSequenceLevel
 	public ReactionSequenceLevel nextLevel = null;
 	public List<ReactionSequenceStep> steps = new ArrayList<ReactionSequenceStep>(); 
 	public List<IAtomContainer> molecules = new ArrayList<IAtomContainer>();
+	public List<IAtomContainer> prevLevelMolecules = new ArrayList<IAtomContainer>();
 	
-	
-	public void addMolecule(IAtomContainer mol, ReactionSequenceStep step)
+	public void addMolecule(IAtomContainer mol, ReactionSequenceStep step, IAtomContainer prevLevelMol)
 	{
 		molecules.add(mol);
+		prevLevelMolecules.add(prevLevelMol);
 		ReactionSequence.setMoleculeStatus(mol, MoleculeStatus.ADDED_TO_LEVEL);
 		steps.add(step);
 		if (step != null)
@@ -41,7 +42,7 @@ public class ReactionSequenceLevel
 		if (nextLevel == null)
 			getNextLevel();
 		for (int i = 0; i<step.outputMolecules.size(); i++)
-			nextLevel.addMolecule(step.outputMolecules.get(i), null);
+			nextLevel.addMolecule(step.outputMolecules.get(i), null, step.inputMolecule);
 	}
 	
 	public void removeMolecule(IAtomContainer mol, boolean updateUpperLevel)
@@ -50,7 +51,9 @@ public class ReactionSequenceLevel
 		//corresponding reaction subsequence
 		int index = molecules.indexOf(mol);
 		molecules.remove(mol);
+		prevLevelMolecules.remove(index);
 		removeStep(index);
+		
 		if (updateUpperLevel)
 		{	
 			//TODO update up levels indices due to molecule removal
