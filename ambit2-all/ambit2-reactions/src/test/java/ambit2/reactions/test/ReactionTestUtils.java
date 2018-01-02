@@ -232,7 +232,7 @@ public class ReactionTestUtils
 		smrkMan.setFlagClearAromaticityBeforeResultProcess(true);
 		smrkMan.setFlagAddImplicitHAtomsOnResultProcess(false);
 		smrkMan.setFlagConvertAddedImplicitHToExplicitOnResultProcess(false);
-		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(true);
+		smrkMan.setFlagConvertExplicitHToImplicitOnResultProcess(false);
 		smrkMan.setFlagApplyStereoTransformation(false);
 		smrkMan.setFlagHAtomsTransformation(false);
 		//smrkMan.setFlagHAtomsTransformationMode(FlagHAtomsTransformationMode);
