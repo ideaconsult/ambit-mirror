@@ -8,6 +8,6 @@ public interface IReactionSequenceHandler
 	
 	public void setReactionSequence(ReactionSequence sequence);
 	
-	public void addMoleculeToLevel(IAtomContainer mol);
+	public void addMoleculeToLevelEvent(IAtomContainer mol, int levelIndex);
 	
 }
