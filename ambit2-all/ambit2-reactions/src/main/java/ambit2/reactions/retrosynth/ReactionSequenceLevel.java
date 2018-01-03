@@ -96,7 +96,8 @@ public class ReactionSequenceLevel
 				smi = SmartsHelper.moleculeToSMILES(mol,true);
 			}
 			catch (Exception x) {};
-			sb.append("" + smi);
+			sb.append("" + smi 
+					+ "       " + molecules.get(i).getProperty(ReactionSequence.MoleculeInChIKeyProperty));
 			ReactionSequenceStep step = steps.get(i);
 			if (step != null)
 			{
