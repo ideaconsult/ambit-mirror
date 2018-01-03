@@ -157,8 +157,8 @@ public class ReactionSequence
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		firstLevel = level;
 		String inchiKey = setMoleculeInchiKey(target);
-		registerMolInchiKey(target, inchiKey, 1);
-		level.levelIndex = 1;
+		registerMolInchiKey(target, inchiKey, 0);
+		level.levelIndex = 0;
 		level.addMolecule(target, null, null);
 		setMoleculeStatus(target, MoleculeStatus.ADDED_TO_LEVEL);
 		//levels.add(level);
