@@ -50,7 +50,25 @@ public class ReactionSequence
 	public static final String MoleculeInChIKeyProperty = "MOLECULE_INCHI_KEY";
 
 	public static enum MoleculeStatus {
-		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL, EQUIVALENT_TO_OTHER_MOLECULE
+		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL, EQUIVALENT_TO_OTHER_MOLECULE;
+		
+		public static String getShortString(MoleculeStatus status)
+		{
+			switch (status)
+			{
+			case ADDED_TO_LEVEL:
+				return "Add";
+			case UNRESOLVED:
+				return "UnRes";
+			case RESOLVED:
+				return "Res";	
+			case STARTING_MATERIAL:
+				return "StMat";
+			case EQUIVALENT_TO_OTHER_MOLECULE:
+				return "Eq";	
+			}
+			return null;
+		}
 	}
 	
 	ReactionDataBase reactDB = null;
