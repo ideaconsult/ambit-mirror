@@ -57,7 +57,7 @@ public class ReactionSequence
 			switch (status)
 			{
 			case ADDED_TO_LEVEL:
-				return "Add";
+				return "Added";
 			case UNRESOLVED:
 				return "UnRes";
 			case RESOLVED:
@@ -160,7 +160,7 @@ public class ReactionSequence
 		registerMolInchiKey(target, inchiKey, 1);
 		level.levelIndex = 1;
 		level.addMolecule(target, null, null);
-		ReactionSequence.setMoleculeStatus(target, MoleculeStatus.ADDED_TO_LEVEL);
+		setMoleculeStatus(target, MoleculeStatus.ADDED_TO_LEVEL);
 		//levels.add(level);
 	}
 	
@@ -228,9 +228,9 @@ public class ReactionSequence
 			registerMolInchiKey(frag, inchiKey, level.levelIndex+1);
 			//Set new molecule status
 			if (usedInchies.get(inchiKey).molecules.size()>1)
-				ReactionSequence.setMoleculeStatus(frag, MoleculeStatus.EQUIVALENT_TO_OTHER_MOLECULE);
+				setMoleculeStatus(frag, MoleculeStatus.EQUIVALENT_TO_OTHER_MOLECULE);
 			else
-				ReactionSequence.setMoleculeStatus(frag, MoleculeStatus.ADDED_TO_LEVEL);
+				setMoleculeStatus(frag, MoleculeStatus.ADDED_TO_LEVEL);
 		}	
 		level.associateStep(moleculeIndex, step);
 	}
@@ -245,14 +245,19 @@ public class ReactionSequence
 			if (status == MoleculeStatus.ADDED_TO_LEVEL)
 			{
 				//TODO check for starting material 
-				
+
 				Map<GenericReaction,List<List<IAtom>>> allInstances = generateAllReactionInstances(mol);
-				 if (allInstances.isEmpty())
-					 continue;
-				 Object obj[] = SyntheticStrategy.getRandomSelection(allInstances);
-				 GenericReaction gr = (GenericReaction) obj[0];
-				 List<IAtom> inst = (List<IAtom>) obj[1];
-				 generatedSequenceStepForReactionInstance(level, i, gr, inst);
+				if (allInstances.isEmpty())
+				{	
+					setMoleculeStatus(mol, MoleculeStatus.UNRESOLVED);
+					continue;
+				}
+				
+				Object obj[] = SyntheticStrategy.getRandomSelection(allInstances);
+				GenericReaction gr = (GenericReaction) obj[0];
+				List<IAtom> inst = (List<IAtom>) obj[1];
+				generatedSequenceStepForReactionInstance(level, i, gr, inst);
+				setMoleculeStatus(mol, MoleculeStatus.RESOLVED);
 			}
 		}
 	}
