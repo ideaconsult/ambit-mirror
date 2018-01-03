@@ -22,7 +22,6 @@ public class ReactionSequenceLevel
 	{
 		molecules.add(mol);
 		prevLevelMolecules.add(prevLevelMol);
-		ReactionSequence.setMoleculeStatus(mol, MoleculeStatus.ADDED_TO_LEVEL);
 		steps.add(step);
 		if (step != null)
 		{	
@@ -96,8 +95,9 @@ public class ReactionSequenceLevel
 				smi = SmartsHelper.moleculeToSMILES(mol,true);
 			}
 			catch (Exception x) {};
-			sb.append("" + smi 
-					+ "       " + molecules.get(i).getProperty(ReactionSequence.MoleculeInChIKeyProperty));
+			sb.append("" + smi );
+			sb.append("       " + molecules.get(i).getProperty(ReactionSequence.MoleculeStatusProperty));
+			//sb.append("       " + molecules.get(i).getProperty(ReactionSequence.MoleculeInChIKeyProperty));
 			ReactionSequenceStep step = steps.get(i);
 			if (step != null)
 			{
