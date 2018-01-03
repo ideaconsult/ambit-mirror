@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.graph.ConnectivityChecker;
+import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
@@ -15,12 +19,15 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.base.data.Property;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
+import net.sf.jniinchi.INCHI_OPTION;
+import net.sf.jniinchi.INCHI_RET;
 
 /**
  * 
@@ -39,7 +46,7 @@ public class ReactionSequence
 	
 	//Molecule properties
 	public static final String MoleculeStatusProperty = "MOLECULE_STATUS";
-	public static final String MoleculeInChIProperty = "MOLECULE_INCHI";
+	public static final String MoleculeInChIKeyProperty = "MOLECULE_INCHI_KEY";
 
 	public static enum MoleculeStatus {
 		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL, EQUIVALENT_TO_OTHER_MOLECULE
@@ -51,10 +58,12 @@ public class ReactionSequence
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
 	ReactionSequenceLevel firstLevel = null;
 	Map<String,InchiEntry> usedInchies = new HashMap<String,InchiEntry>();
+	List<INCHI_OPTION> inchiOptions = new ArrayList<INCHI_OPTION>();
+	InChIGeneratorFactory inchiGeneratorFactory = null;
 	
 	//molecule pre-process
 	boolean FlagExplicitHAtoms = true;
-		
+	
 	public ReactionDataBase getReactDB() {
 		return reactDB;
 	}
@@ -102,19 +111,47 @@ public class ReactionSequence
 	public void setFlagExplicitHAtoms(boolean flagExplicitHAtoms) {
 		FlagExplicitHAtoms = flagExplicitHAtoms;
 	}
+	
+	public List<INCHI_OPTION> getInchiOptions() {
+		return inchiOptions;
+	}
+
+	public void setInchiOptions(List<INCHI_OPTION> inchiOptions) {
+		this.inchiOptions = inchiOptions;
+	}
 
 	public void initilize()
 	{	
 		//Target pre-processing
 		if (FlagExplicitHAtoms)
 			MoleculeTools.convertImplicitToExplicitHydrogens(target);
+		try
+		{
+			defaultInchiSetup();
+		}
+		catch (Exception e)
+		{
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,e.getMessage());
+		}
 		
 		//Adding first level
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		firstLevel = level;
+		setMoleculeInchiKey(target, 1);
 		level.levelIndex = 1;
 		level.addMolecule(target, null, null);
 		//levels.add(level);
+	}
+	
+	void defaultInchiSetup() throws Exception
+	{
+		inchiOptions.add(INCHI_OPTION.FixedH);
+		inchiOptions.add(INCHI_OPTION.SAbs);
+		inchiOptions.add(INCHI_OPTION.SAsXYZ);
+		inchiOptions.add(INCHI_OPTION.SPXYZ);
+		inchiOptions.add(INCHI_OPTION.FixSp3Bug);
+		inchiOptions.add(INCHI_OPTION.AuxNone);
+		inchiGeneratorFactory = InChIGeneratorFactory.getInstance();
 	}
 	
 	void addEmptyLevels(int nLevels)
@@ -166,6 +203,7 @@ public class ReactionSequence
 		for (IAtomContainer frag : productFrags.atomContainers())
 		{	
 			step.outputMolecules.add(frag);
+			setMoleculeInchiKey(frag, level.levelIndex+1);
 		}	
 		level.associateStep( moleculeIndex, step);
 	}
@@ -214,9 +252,42 @@ public class ReactionSequence
 		mol.setProperty(MoleculeStatusProperty, status);
 	}
 	
-	void preProcess(IAtomContainer mol) throws Exception
-	{
+	public String getInchiKey(IAtomContainer mol)
+	{	
+		try
+		{	
+			InChIGenerator ig = inchiGeneratorFactory.getInChIGenerator(mol, inchiOptions);
+			INCHI_RET returnCode = ig.getReturnStatus();
+			if (INCHI_RET.ERROR == returnCode) {
+				Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,ig.getMessage());
+			}
+			return ig.getInchiKey();
+		}
+		catch (Exception e)
+		{
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE,e.getMessage());
+		}
 		
+		return null;
+	}
+	
+	public void setMoleculeInchiKey(IAtomContainer mol, int level)
+	{
+		String inchiKey = getInchiKey(mol);
+		if (inchiKey != null)
+		{
+			mol.setProperty(MoleculeInChIKeyProperty, inchiKey);
+			registerInchiKey(mol, inchiKey, level);
+		}
+	}
+	
+	void registerInchiKey(IAtomContainer mol, String inchiKey, int level)
+	{
+		//TODO
+	}
+	
+	void preProcess(IAtomContainer mol) throws Exception
+	{	
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 
 		CDKHydrogenAdder adder = CDKHydrogenAdder
