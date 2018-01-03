@@ -24,6 +24,7 @@ import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
+import ambit2.reactions.retrosynth.ReactionSequence.MoleculeStatus;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
 import net.sf.jniinchi.INCHI_OPTION;
@@ -137,9 +138,11 @@ public class ReactionSequence
 		//Adding first level
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		firstLevel = level;
-		setMoleculeInchiKey(target, 1);
+		String inchiKey = setMoleculeInchiKey(target);
+		registerMolInchiKey(target, inchiKey, 1);
 		level.levelIndex = 1;
 		level.addMolecule(target, null, null);
+		ReactionSequence.setMoleculeStatus(target, MoleculeStatus.ADDED_TO_LEVEL);
 		//levels.add(level);
 	}
 	
@@ -175,8 +178,8 @@ public class ReactionSequence
 	
 	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions)
 	{
-		//if (FlagExplicitHAtoms)
-		//	MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+		//Pre-processing should not be needed
+		//it is expected to be done via reaction products processing
 		
 		Map<GenericReaction,List<List<IAtom>>> maps = new HashMap<GenericReaction,List<List<IAtom>>>();
 		for (GenericReaction reaction: reactions)
@@ -203,9 +206,15 @@ public class ReactionSequence
 		for (IAtomContainer frag : productFrags.atomContainers())
 		{	
 			step.outputMolecules.add(frag);
-			setMoleculeInchiKey(frag, level.levelIndex+1);
+			String inchiKey = setMoleculeInchiKey(frag);
+			registerMolInchiKey(frag, inchiKey, level.levelIndex+1);
+			//Set new molecule status
+			if (usedInchies.get(inchiKey).molecules.size()>1)
+				ReactionSequence.setMoleculeStatus(frag, MoleculeStatus.EQUIVALENT_TO_OTHER_MOLECULE);
+			else
+				ReactionSequence.setMoleculeStatus(frag, MoleculeStatus.ADDED_TO_LEVEL);
 		}	
-		level.associateStep( moleculeIndex, step);
+		level.associateStep(moleculeIndex, step);
 	}
 	
 	public void iterateLevelMolecules(ReactionSequenceLevel level, SyntheticStrategy strategy) throws Exception
@@ -217,7 +226,9 @@ public class ReactionSequence
 			MoleculeStatus status = getMoleculeStatus(mol);
 			if (status == MoleculeStatus.ADDED_TO_LEVEL)
 			{
-				 Map<GenericReaction,List<List<IAtom>>> allInstances = generateAllReactionInstances(mol);
+				//TODO check for starting material 
+				
+				Map<GenericReaction,List<List<IAtom>>> allInstances = generateAllReactionInstances(mol);
 				 if (allInstances.isEmpty())
 					 continue;
 				 Object obj[] = SyntheticStrategy.getRandomSelection(allInstances);
@@ -271,14 +282,12 @@ public class ReactionSequence
 		return null;
 	}
 	
-	public void setMoleculeInchiKey(IAtomContainer mol, int level)
+	public String setMoleculeInchiKey(IAtomContainer mol)
 	{
 		String inchiKey = getInchiKey(mol);
 		if (inchiKey != null)
-		{
 			mol.setProperty(MoleculeInChIKeyProperty, inchiKey);
-			registerMolInchiKey(mol, inchiKey, level);
-		}
+		return inchiKey;
 	}
 	
 	void registerMolInchiKey(IAtomContainer mol, String inchiKey, int level)
