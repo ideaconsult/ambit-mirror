@@ -277,13 +277,36 @@ public class ReactionSequence
 		if (inchiKey != null)
 		{
 			mol.setProperty(MoleculeInChIKeyProperty, inchiKey);
-			registerInchiKey(mol, inchiKey, level);
+			registerMolInchiKey(mol, inchiKey, level);
 		}
 	}
 	
-	void registerInchiKey(IAtomContainer mol, String inchiKey, int level)
+	void registerMolInchiKey(IAtomContainer mol, String inchiKey, int level)
 	{
-		//TODO
+		InchiEntry entry = usedInchies.get(inchiKey);
+		if (entry == null)
+		{
+			entry = new InchiEntry();
+			usedInchies.put(inchiKey, entry);
+		}
+		entry.molecules.add(mol);
+		entry.levels.add(level);
+	}
+	
+	void unregisterMolInchiKey(IAtomContainer mol, String inchiKey)
+	{
+		InchiEntry entry = usedInchies.get(inchiKey);
+		if (entry != null)
+		{
+			int index = entry.molecules.indexOf(mol);
+			if (index >= 0)
+			{
+				entry.molecules.remove(index);
+				entry.levels.remove(index);
+				if (entry.molecules.isEmpty())
+					usedInchies.remove(inchiKey); //no molecules associated to the inchi-key
+			}
+		}
 	}
 	
 	void preProcess(IAtomContainer mol) throws Exception
