@@ -96,7 +96,7 @@ public class ReactionSequenceLevel
 			}
 			catch (Exception x) {};
 			sb.append("" + smi );
-			sb.append("       " + MoleculeStatus.getShortString(
+			sb.append("       " + MoleculeStatus.getShortString((MoleculeStatus)
 					molecules.get(i).getProperty(ReactionSequence.MoleculeStatusProperty)));
 			//sb.append("       " + molecules.get(i).getProperty(ReactionSequence.MoleculeInChIKeyProperty));
 			ReactionSequenceStep step = steps.get(i);
