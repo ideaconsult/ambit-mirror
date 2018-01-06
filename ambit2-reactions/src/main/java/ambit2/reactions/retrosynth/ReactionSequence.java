@@ -54,6 +54,8 @@ public class ReactionSequence
 		
 		public static String getShortString(MoleculeStatus status)
 		{
+			if (status == null)
+				return "--";
 			switch (status)
 			{
 			case ADDED_TO_LEVEL:
