@@ -1,5 +1,6 @@
 package ambit2.reactions.io;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
 
@@ -27,12 +28,12 @@ public class ReactionWriteUtils
 		} catch (Exception x) {}
 	}
 	
-	public static RandomAccessFile  createReader(String fname) throws Exception
+	public static RandomAccessFile createReader(File file) throws Exception
 	{
 		RandomAccessFile reader = null; 	
 		
 		try {
-			reader = new RandomAccessFile(fname,"r");
+			reader = new RandomAccessFile(file,"r");
 			
 		}catch (Exception x) {
 			//in case smth's wrong with the writer file, close it and throw an error
