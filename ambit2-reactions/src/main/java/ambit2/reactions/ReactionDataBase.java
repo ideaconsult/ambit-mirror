@@ -15,6 +15,25 @@ import ambit2.smarts.SMIRKSManager;
 
 public class ReactionDataBase 
 {
+	public static class RDBFileConfig {
+		public int idCol = -1;
+		public int nameCol = -1;
+		public int smirksCol = -1;
+		public int smirksFlagsCol = -1;
+		public int smilesCol = -1;
+		public int classCol = -1;
+		public int reactionCenterCol = -1;
+		public int reactionTypeCol = -1;
+		public int transformTypeCol = -1;
+		public int basicScoreCol = -1;
+		public int experimentalConditionsCol = -1;
+		public int reliabilityScoreCol = -1;
+		public int yieldIntervalidCol = -1;
+		public int conditionsCol = -1;
+		public int experimentalConditionsDescriptiomCol = -1;
+		public int infoCol = -1;
+	}
+	
 	private static Logger logger = Logger.getLogger(ReactionDataBase.class.getName());
 	
 	//public List<Reaction> reactions = null;
