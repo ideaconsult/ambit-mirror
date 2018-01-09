@@ -1,16 +1,23 @@
 package ambit2.reactions.retrosynth;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.reactions.io.ReactionWriteUtils;
+import ambit2.smarts.SmartsHelper;
 import net.sf.jniinchi.INCHI_OPTION;
+import net.sf.jniinchi.INCHI_RET;
 
 
 public class StartingMaterialsDataBase 
@@ -54,7 +61,10 @@ public class StartingMaterialsDataBase
 	
 	public StartingMaterialsDataBase(File file)
 	{	
-		loadStartingMaterials(file);
+		try {
+			loadStartingMaterials(file);
+		}
+		catch (Exception e) {}
 	}
 	
 	public boolean isStartingMaterial(String inchiKey)
@@ -68,22 +78,25 @@ public class StartingMaterialsDataBase
 		return false;
 	}
 	
-	void inchiSetup() throws Exception
+	public static List<INCHI_OPTION> getBacisInchiOptions() 
 	{
-		inchiOptions.add(INCHI_OPTION.FixedH);
-		inchiOptions.add(INCHI_OPTION.SAbs);
-		inchiOptions.add(INCHI_OPTION.SAsXYZ);
-		inchiOptions.add(INCHI_OPTION.SPXYZ);
-		inchiOptions.add(INCHI_OPTION.FixSp3Bug);
-		inchiOptions.add(INCHI_OPTION.AuxNone);
-		inchiGeneratorFactory = InChIGeneratorFactory.getInstance();
+		List<INCHI_OPTION> inchiOpt = new ArrayList<INCHI_OPTION>();
+		inchiOpt.add(INCHI_OPTION.FixedH);
+		inchiOpt.add(INCHI_OPTION.SAbs);
+		inchiOpt.add(INCHI_OPTION.SAsXYZ);
+		inchiOpt.add(INCHI_OPTION.SPXYZ);
+		inchiOpt.add(INCHI_OPTION.FixSp3Bug);
+		inchiOpt.add(INCHI_OPTION.AuxNone);
+		
+		return inchiOpt;
 	}
 	
-	void loadStartingMaterials(File file)
+	void loadStartingMaterials(File file) throws Exception
 	{
+		RandomAccessFile f = ReactionWriteUtils.createReader(file);
+		String splitter = "\t";
 		try
-		{	
-			RandomAccessFile f = new RandomAccessFile(file,"r");			
+		{		
 			long length = f.length();
 			
 			while (f.getFilePointer() < length)
@@ -92,7 +105,7 @@ public class StartingMaterialsDataBase
 				line = line.trim();
 				if (line.equals(""))
 					continue;
-				String tokens[] = line.split("\t");
+				String tokens[] = line.split(splitter);
 				if (tokens.length >=3)
 				{
 					StartMaterialData smd = new StartMaterialData();
@@ -105,37 +118,80 @@ public class StartingMaterialsDataBase
 					//error
 				}
 			}
-			
-			f.close();
 		}
-		catch (Exception e)
-		{	
-		}
+		catch (Exception e)	{}
+		
+		ReactionWriteUtils.closeReader(f);
 	}
 	
 	public static void createStartingMaterialsFile(File sourceFile, File outputFile, 
-				Map<String,Integer> column)
-	{
+				Map<String,Integer> columnIndices) throws Exception
+	{		
+		//Setup input columns indices
+		Integer idCol = columnIndices.get("id");
+		Integer smilesCol = columnIndices.get("smiles");
+		Integer mwCol = columnIndices.get("mw");
+		if (idCol == null || smilesCol == null)
+			throw new Exception("Incorrect columns indices!");
+		int maxIndex = idCol;
+		if (maxIndex < smilesCol)
+			maxIndex = smilesCol;
+		if (mwCol != null)
+			if (maxIndex < mwCol)
+				maxIndex = mwCol;
+		//Inchi generator
+		List<INCHI_OPTION> inchiOpt = getBacisInchiOptions();
+		InChIGeneratorFactory inchiGF = InChIGeneratorFactory.getInstance();
+		//Setup file reader and writer
+		RandomAccessFile sf = ReactionWriteUtils.createReader(sourceFile);
+		FileWriter outf = ReactionWriteUtils.createWriter(outputFile.getAbsolutePath());
+		String splitter = "\t";			
+		long length = sf.length();
+		int lineNum = 0;
 		try
 		{	
-			RandomAccessFile sf = new RandomAccessFile(sourceFile,"r");			
-			long length = sf.length();
-			
 			while (sf.getFilePointer() < length)
 			{	
 				String line = sf.readLine();
+				lineNum++;
 				line = line.trim();
 				if (line.equals(""))
 					continue;
-				
-				//TODO
-			}
-			
-			sf.close();
+				String tokens[] = line.split(splitter);
+				if (maxIndex >= tokens.length)
+					continue; //error some of the column are missing
+				String id = tokens[idCol].trim();
+				String smiles = tokens[smilesCol].trim();
+				String inchiKey = null;
+				try
+				{	
+					IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+					InChIGenerator ig = inchiGF.getInChIGenerator(mol, inchiOpt);
+					INCHI_RET returnCode = ig.getReturnStatus();
+					if (INCHI_RET.ERROR == returnCode) {
+						//Error
+					}
+					inchiKey = ig.getInchiKey();
+				}
+				catch (Exception e)
+				{
+					//SEVERE error;
+					continue;
+				}
+								
+				String s = String.format("%s\t%s\t%s",id,smiles,inchiKey);
+				if (mwCol != null)
+					s = s + "\t" + tokens[mwCol].trim();
+				s = s + "\n";
+				//System.out.println("Line " + lineNum);
+				outf.write(s);
+				outf.flush();
+			}			
 		}
-		catch (Exception e)
-		{	
-		}
+		catch (Exception e) 	{}
+		
+		ReactionWriteUtils.closeReader(sf);
+		ReactionWriteUtils.closeWriter(outf);
 	}
 	
 	
