@@ -9,7 +9,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>3.1.0</version>
+		<version>3.2.0-SNAPSHOT</version>
 	</parent>
 	<distributionManagement>
 		<site>
@@ -513,7 +513,7 @@
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>opentox-client</artifactId>
-			<version>3.1.0</version>
+			<version>3.2.0-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
