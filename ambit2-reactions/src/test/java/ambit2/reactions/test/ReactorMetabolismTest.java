@@ -41,7 +41,7 @@ public class ReactorMetabolismTest extends TestCase
 		URL resource = reactor.getClass().getClassLoader().getResource("ambit2/reactions/metabolism-reactions.json");
 		
 		
-		ReactionDataBase reactDB = new ReactionDataBase(new File(resource.getFile()));
+		ReactionDataBase reactDB = new ReactionDataBase(resource.getFile());
 				
 		//reactDB.configureReactions(reactor.getSMIRKSManager());
 		reactDB.configureGenericReactions(reactor.getSMIRKSManager());
