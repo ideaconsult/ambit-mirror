@@ -37,31 +37,19 @@ public class StartingMaterialsDataBase
 	}
 	
 	Map<String,StartMaterialData> materials = new HashMap<String,StartMaterialData>();
-	List<INCHI_OPTION> inchiOptions = new ArrayList<INCHI_OPTION>();
-	InChIGeneratorFactory inchiGeneratorFactory = null;
+	//List<INCHI_OPTION> inchiOptions = new ArrayList<INCHI_OPTION>();
+	//InChIGeneratorFactory inchiGeneratorFactory = null;
 	
-	/*
-	ArrayList<String> errors = new ArrayList<String>(); 
 	
-	//Flags that configure the search process
-	boolean FlagCheckMolDescr = true;	
-	boolean FlagCheckHashCode = false;
-	boolean FlagUSMILESCheck = false;
-	boolean FlagIsomorphismCheck = false;
-		
-	AccessType FlagDescriptorAccess = AccessType.MEMORY;
-	AccessType FlagHashCodeAccess = AccessType.MEMORY;
-	AccessType FlagUSMILESAccess = AccessType.FILE;
-	AccessType FlagFingerprintAccess = AccessType.FILE;
-	AccessType FlagStructureAccess = AccessType.FILE;
 	
-	String sourceStructures = null;
-	String sourceDescriptors = null;
-	String sourceHashCodes = null;
-	*/
 	
 	public StartingMaterialsDataBase()
 	{	
+	}
+	
+	public StartingMaterialsDataBase(String smiles[]) throws Exception
+	{	
+		initlizeFromSmilesArray(smiles);
 	}
 	
 	public StartingMaterialsDataBase(File file)
@@ -230,6 +218,65 @@ public class StartingMaterialsDataBase
 		ReactionWriteUtils.closeWriter(outf);
 	}
 	
+	void initlizeFromSmilesArray(String smiles[]) throws Exception
+	{	
+		if (smiles == null)
+			return;
+		//Inchi generator
+		List<INCHI_OPTION> inchiOpt = getBacisInchiOptions();		
+		InChIGeneratorFactory inchiGF = InChIGeneratorFactory.getInstance();
+		
+		for (int i = 0; i < smiles.length; i++)
+		{	
+			String inchiKey = null;
+			try
+			{	
+				IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles[i]);
+				InChIGenerator ig = inchiGF.getInChIGenerator(mol, inchiOpt);
+				INCHI_RET returnCode = ig.getReturnStatus();
+				if (INCHI_RET.ERROR == returnCode) {
+					//Error
+				}
+				inchiKey = ig.getInchiKey();
+			}
+			catch (Exception e)
+			{
+				//SEVERE error;
+				continue;
+			}
+			
+			if (inchiKey != null)
+			{
+				StartMaterialData smd = new StartMaterialData();
+				smd.id = "SMI-" + (i+1);
+				smd.smiles = smiles[i];
+				materials.put(inchiKey, smd);
+			}
+			
+		}
+	}
+	
+	
+	
+	/*
+	ArrayList<String> errors = new ArrayList<String>(); 
+	
+	//Flags that configure the search process
+	boolean FlagCheckMolDescr = true;	
+	boolean FlagCheckHashCode = false;
+	boolean FlagUSMILESCheck = false;
+	boolean FlagIsomorphismCheck = false;
+		
+	AccessType FlagDescriptorAccess = AccessType.MEMORY;
+	AccessType FlagHashCodeAccess = AccessType.MEMORY;
+	AccessType FlagUSMILESAccess = AccessType.FILE;
+	AccessType FlagFingerprintAccess = AccessType.FILE;
+	AccessType FlagStructureAccess = AccessType.FILE;
+	
+	String sourceStructures = null;
+	String sourceDescriptors = null;
+	String sourceHashCodes = null;
+	*/
 	
 	/*
 	public StartingMaterialsDataBase(String sourceStructures, String sourceDescriptors, String sourceHashCodes)
