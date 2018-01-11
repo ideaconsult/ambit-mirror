@@ -74,6 +74,7 @@ public class ReactionSequence
 	}
 	
 	ReactionDataBase reactDB = null;
+	StartingMaterialsDataBase startMatDB = new StartingMaterialsDataBase(); //empty materials DB
 	IAtomContainer target = null;
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
@@ -93,6 +94,14 @@ public class ReactionSequence
 		this.reactDB = reactDB;
 	}
 	
+	public StartingMaterialsDataBase getStartMatDB() {
+		return startMatDB;
+	}
+
+	public void setStartMatDB(StartingMaterialsDataBase startMatDB) {
+		this.startMatDB = startMatDB;
+	}
+
 	public IAtomContainer getTarget() {
 		return target;
 	}

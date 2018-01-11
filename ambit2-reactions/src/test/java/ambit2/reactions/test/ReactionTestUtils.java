@@ -53,11 +53,11 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		//testReactionSequence();
+		testReactionSequence();
 		
 		//testCreateStartingMaterialsFile();
 		
-		testStartingMaterialsDataBase("/starting-materials-db_v01.txt", 100);
+		//testStartingMaterialsDataBase("/starting-materials-db_v01.txt", 100);
 		
 	}
 	
@@ -258,6 +258,12 @@ public class ReactionTestUtils
 		
 		level = level.nextLevel;
 		rseq.iterateLevelMolecules(level, null);
+		
+		level = level.nextLevel;
+		rseq.iterateLevelMolecules(level, null);
+		
+		//level = level.nextLevel;
+		//rseq.iterateLevelMolecules(level, null);
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
 		
