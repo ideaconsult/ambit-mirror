@@ -16,6 +16,7 @@ import ambit2.smarts.SMIRKSManager;
 public class ReactionDataBase 
 {
 	public static class RDBFileConfig {
+		public int flagUseCol = -1;
 		public int idCol = -1;
 		public int nameCol = -1;
 		public int smirksCol = -1;
@@ -26,11 +27,11 @@ public class ReactionDataBase
 		public int reactionTypeCol = -1;
 		public int transformTypeCol = -1;
 		public int basicScoreCol = -1;
-		public int experimentalConditionsCol = -1;
+		public int experimentalConditionsScoreCol = -1;
 		public int reliabilityScoreCol = -1;
 		public int yieldIntervalidCol = -1;
 		public int conditionsCol = -1;
-		public int experimentalConditionsDescriptiomCol = -1;
+		public int experimentalConditionsInfoCol = -1;
 		public int infoCol = -1;
 	}
 	

@@ -2,6 +2,7 @@ package ambit2.reactions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -18,26 +19,37 @@ import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SmartsConst;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.SmartsConst.SSM_MODE;
+import ambit2.smarts.smirks.SmirksTransformationFlag;
 
 public class GenericReaction 
-{
+{	
+	public static enum ReactionType {
+		REACTION, TRANSFORM, MOLECULE_TRANSFORMATION, UNDEFINED
+	}
+	
+	public static enum TransformType {
+		FG_A, FG_R
+	}
+	
 	protected boolean FlagUse = true;
-	protected String smirks = null;
 	protected int id = 0;
 	protected String name = null;
-	protected String reactionClass = null;
-	protected SMIRKSReaction smirksReaction = null;
+	protected String smirks = null;
+	protected Map<SmirksTransformationFlag,Boolean> smirksFlag = null;
 	protected List<ICondition> conditions = null;
+	protected String reactionClass = null;
+	protected String info = null;
+	protected int reactionCenterIndices[] = null;
+	protected ReactionType reactionType = ReactionType.UNDEFINED;
+	protected TransformType transformType = null;
+	protected double experimentalConditionsScoreCol = 0.0;
+	protected double reliabilityScore = 0.0;
+	protected double yieldLo = 0.0;
+	protected double yieldHi = 0.0;
 	
+	//Work data
+	protected SMIRKSReaction smirksReaction = null;
 	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public boolean isFlagUse() {
 		return FlagUse;
 	}
@@ -46,10 +58,14 @@ public class GenericReaction
 		FlagUse = flagUse;
 	}
 	
-	public SMIRKSReaction getSmirksReaction() {
-		return smirksReaction;
+	public int getId() {
+		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -66,12 +82,12 @@ public class GenericReaction
 		this.smirks = smirks;
 	}
 	
-	public String getReactionClass() {
-		return reactionClass;
+	public Map<SmirksTransformationFlag, Boolean> getSmirksFlag() {
+		return smirksFlag;
 	}
 
-	public void setReactionClass(String reactionClass) {
-		this.reactionClass = reactionClass;
+	public void setSmirksFlag(Map<SmirksTransformationFlag, Boolean> smirksFlag) {
+		this.smirksFlag = smirksFlag;
 	}
 	
 	public List<ICondition> getConditions() {
@@ -82,6 +98,87 @@ public class GenericReaction
 		this.conditions = conditions;
 	}
 	
+	public String getReactionClass() {
+		return reactionClass;
+	}
+
+	public void setReactionClass(String reactionClass) {
+		this.reactionClass = reactionClass;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
+	}
+
+	public int[] getReactionCenterIndices() {
+		return reactionCenterIndices;
+	}
+
+	public void setReactionCenterIndices(int[] reactionCenterIndices) {
+		this.reactionCenterIndices = reactionCenterIndices;
+	}
+	
+	public ReactionType getReactionType() {
+		return reactionType;
+	}
+
+	public void setReactionType(ReactionType reactionType) {
+		this.reactionType = reactionType;
+	}
+
+	public TransformType getTransformType() {
+		return transformType;
+	}
+
+	public void setTransformType(TransformType transformType) {
+		this.transformType = transformType;
+	}
+
+	public double getExperimentalConditionsScoreCol() {
+		return experimentalConditionsScoreCol;
+	}
+
+	public void setExperimentalConditionsScoreCol(
+			double experimentalConditionsScoreCol) {
+		this.experimentalConditionsScoreCol = experimentalConditionsScoreCol;
+	}
+
+	public double getReliabilityScore() {
+		return reliabilityScore;
+	}
+
+	public void setReliabilityScore(double reliabilityScore) {
+		this.reliabilityScore = reliabilityScore;
+	}
+
+	public double getYieldLo() {
+		return yieldLo;
+	}
+
+	public void setYieldLo(double yieldLo) {
+		this.yieldLo = yieldLo;
+	}
+
+	public double getYieldHi() {
+		return yieldHi;
+	}
+
+	public void setYieldHi(double yieldHi) {
+		this.yieldHi = yieldHi;
+	}
+
+	public SMIRKSReaction getSmirksReaction() {
+		return smirksReaction;
+	}
+	
+	public void setSmirksReaction(SMIRKSReaction smirksReaction) {
+		this.smirksReaction = smirksReaction;
+	}
+
 	public boolean checkConditionsForTarget(Object target)
 	{
 		if (conditions == null)
