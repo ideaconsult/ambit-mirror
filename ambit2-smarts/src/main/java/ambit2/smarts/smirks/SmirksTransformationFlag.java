@@ -1,6 +1,6 @@
 package ambit2.smarts.smirks;
 
-public enum SmirksTransformationFlags 
+public enum SmirksTransformationFlag 
 {
 	SSMode, 
 	CheckResultStereo, 
