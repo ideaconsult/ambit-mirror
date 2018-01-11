@@ -53,11 +53,13 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		testReactionSequence();
+		//testReactionSequence();
 		
 		//testCreateStartingMaterialsFile();
 		
 		//testStartingMaterialsDataBase("/starting-materials-db_v01.txt", 100);
+		
+		testStartingMaterialsDataBase(new String[] {"CCC","CCCC","CCCCCO","NC(C)C"});
 		
 	}
 	
@@ -266,7 +268,6 @@ public class ReactionTestUtils
 		//rseq.iterateLevelMolecules(level, null);
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
-		
 	}
 	
 	public static void testCreateStartingMaterialsFile() throws Exception
@@ -294,5 +295,20 @@ public class ReactionTestUtils
 			System.out.println(inchiKey + "  " + sm.id + "   " + sm.smiles);
 		}
 	}
+	
+	public static void testStartingMaterialsDataBase(String smiles[]) throws Exception
+	{
+		StartingMaterialsDataBase smdb = new StartingMaterialsDataBase(smiles);
+		Map<String, StartMaterialData> materials = smdb.getMaterials();
+		
+		for (Entry entry : materials.entrySet())
+		{
+			String inchiKey = (String)entry.getKey();
+			StartMaterialData sm = (StartMaterialData)entry.getValue();
+			System.out.println(inchiKey + "  " + sm.id + "   " + sm.smiles);
+		}
+	}
+	
+	
 	
 }
