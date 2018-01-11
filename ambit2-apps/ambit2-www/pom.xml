@@ -660,7 +660,7 @@
 	<repositories>
 		<repository>
 			<id>nexus-idea</id>
-			<url>https://nexus.ideaconsult.net//content/repositories/thirdparty</url>
+			<url>https://nexus.ideaconsult.net/content/repositories/thirdparty</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
