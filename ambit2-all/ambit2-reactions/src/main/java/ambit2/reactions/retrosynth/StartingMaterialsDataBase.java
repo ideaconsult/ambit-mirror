@@ -183,9 +183,10 @@ public class StartingMaterialsDataBase
 				if (mwCol != null)
 					s = s + "\t" + tokens[mwCol].trim();
 				s = s + "\n";
-				//System.out.println("Line " + lineNum);
+				System.out.println("Line " + lineNum + "   " + s);
 				outf.write(s);
 				outf.flush();
+				
 			}			
 		}
 		catch (Exception e) 	{}

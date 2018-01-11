@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -19,6 +21,7 @@ import ambit2.reactions.reactor.ReactorResult;
 import ambit2.reactions.reactor.ReactorStrategy;
 import ambit2.reactions.retrosynth.ReactionSequence;
 import ambit2.reactions.retrosynth.ReactionSequenceLevel;
+import ambit2.reactions.retrosynth.StartingMaterialsDataBase;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
@@ -48,8 +51,9 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		testReactionSequence();
+		//testReactionSequence();
 		
+		testCreateStartingMaterialsFile();
 		
 	}
 	
@@ -253,6 +257,18 @@ public class ReactionTestUtils
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
 		
+	}
+	
+	public static void testCreateStartingMaterialsFile() throws Exception
+	{
+		String sourceFileName = "/sialbb_prop-sorted_mw.txt";
+		String outFileName = "/starting-materials-db.txt";
+		Map<String,Integer> columnIndices = new HashMap<String,Integer>(); 		
+		columnIndices.put("id", 0);
+		columnIndices.put("smiles", 10);
+		columnIndices.put("mw", 1);
 		
+		StartingMaterialsDataBase.createStartingMaterialsFile(new File(sourceFileName), new File(outFileName),
+				columnIndices);
 	}
 }
