@@ -183,7 +183,7 @@ public class ReactorCli
 		
 		System.out.println("Setting reactor and reaction database...");
 		Reactor reactor = new Reactor();
-		ReactionDataBase reactDB = new ReactionDataBase(new File(reactorConfigFile));
+		ReactionDataBase reactDB = new ReactionDataBase(reactorConfigFile);
 		
 		System.out.println("Configuring reaction database...");
 		//reactDB.configureReactions(reactor.getSMIRKSManager());

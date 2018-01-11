@@ -142,7 +142,7 @@ public class ReactionTestUtils
 	{
 		System.out.println("Setting reactor and reaction database...");
 		Reactor reactor = new Reactor();
-		ReactionDataBase reactDB = new ReactionDataBase(new File(reactionDBFile));
+		ReactionDataBase reactDB = new ReactionDataBase(reactionDBFile);
 		
 		System.out.println("Configuring reaction database...");
 		//reactDB.configureReactions(reactor.getSMIRKSManager());

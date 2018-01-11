@@ -45,9 +45,9 @@ public class ReactionDataBase
 	{	
 	}
 	
-	public ReactionDataBase(File jsonFile) throws Exception
+	public ReactionDataBase(String fileName) throws Exception
 	{	
-		loadReactionsFromJSON(jsonFile, true);
+		loadReactionsFromJSON(new File(fileName), true);
 	}
 	
 	public ReactionDataBase(List<String> smirksList)
