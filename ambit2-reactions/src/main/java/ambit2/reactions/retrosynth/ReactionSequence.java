@@ -241,13 +241,18 @@ public class ReactionSequence
 			if (usedInchies.get(inchiKey).molecules.size()>1)
 				setMoleculeStatus(frag, MoleculeStatus.EQUIVALENT_TO_OTHER_MOLECULE);
 			else
-				setMoleculeStatus(frag, MoleculeStatus.ADDED_TO_LEVEL);
+			{	
+				if (startMatDB.isStartingMaterial(inchiKey))
+					setMoleculeStatus(frag, MoleculeStatus.STARTING_MATERIAL);
+				else
+					setMoleculeStatus(frag, MoleculeStatus.ADDED_TO_LEVEL);
+			}	
 		}	
 		level.associateStep(moleculeIndex, step);
 	}
 	
 	public void iterateLevelMolecules(ReactionSequenceLevel level, SyntheticStrategy strategy) throws Exception
-	{
+	{	
 		for (int i = 0; i<level.molecules.size(); i++)
 		{
 			IAtomContainer mol = level.molecules.get(i);

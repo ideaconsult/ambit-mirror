@@ -53,13 +53,13 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		//testReactionSequence();
+		testReactionSequence();
 		
 		//testCreateStartingMaterialsFile();
 		
 		//testStartingMaterialsDataBase("/starting-materials-db_v01.txt", 100);
 		
-		testStartingMaterialsDataBase(new String[] {"CCC","CCCC","CCCCCO","NC(C)C"});
+		//testStartingMaterialsDataBase(new String[] {"CCC","CCCC","CCCCCO","NC(C)C"});
 		
 	}
 	
@@ -218,6 +218,9 @@ public class ReactionTestUtils
 	
 	public static void testReactionSequence() throws Exception
 	{
+		String startMatSmi[] =  {"CC","CCC","CO","NC(C)C"};
+		StartingMaterialsDataBase smdb = new StartingMaterialsDataBase(startMatSmi);
+		
 		String smi = "CCCCCO";
 		List<String> smirks = new ArrayList<String>();
 		smirks.add("[C:1]Cl>>[C:1]");
@@ -227,6 +230,10 @@ public class ReactionTestUtils
 				
 		ReactionDataBase rdb = new ReactionDataBase(smirks);
 		System.out.println("ReactionDB:\n" + rdb.toString());
+		System.out.println("Staring material DB:");
+		for (String s : startMatSmi)
+			System.out.println("   " + s);
+		System.out.println();
 		System.out.println("Target: " + smi);
 		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smi);
 		
@@ -249,23 +256,20 @@ public class ReactionTestUtils
 		smrkMan.setFlagAromaticityTransformation(false);
 		
 		rseq.setReactDB(rdb);
+		rseq.setStartMatDB(smdb);
 		rseq.setTarget(target);
 		rseq.initilize();
 		
 		ReactionSequenceLevel level = rseq.getFirstLevel();
 		rseq.iterateLevelMolecules(level, null);
 		
-		level = level.nextLevel;
-		rseq.iterateLevelMolecules(level, null);
-		
-		level = level.nextLevel;
-		rseq.iterateLevelMolecules(level, null);
-		
-		level = level.nextLevel;
-		rseq.iterateLevelMolecules(level, null);
-		
-		//level = level.nextLevel;
-		//rseq.iterateLevelMolecules(level, null);
+		for (int i = 0; i < 10; i++)
+		{	
+			level = level.nextLevel;
+			if (level == null)
+				break;
+			rseq.iterateLevelMolecules(level, null);
+		}
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
 	}
