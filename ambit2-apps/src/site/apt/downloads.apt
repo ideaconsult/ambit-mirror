@@ -3,19 +3,17 @@
  -----
  Nina Jeliazkova
  -----
- 2016/05/10
+ 2018/01/10
  -----
 
 AMBIT Web services 
 ~~~~~~~~~~
 
- [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.2/}ambit2.war 3.0.2}} | {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.2/}README}}
- 
- [Previous 3.x release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.1/}ambit2.war 3.0.1}} | {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.1/}README}}
+ [Latest release]{{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.1.0/} ambit2.war 3.1.0}} | {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.1.0/}README}}
+
+ [Previous 3.x release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.2/}ambit2.war 3.0.2}} | {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/ambit-rest-3.0.2/}README}}
    
- [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20REST%20web%20services/services/}ambit2.war 2.7.4 and before}}
-  
- [Development] {{{https://nexus.ideaconsult.net/#nexus-search;gav~~ambit2-www~3.1.0-SNAPSHOT~war~}ambit2.war 3.1.0-SNAPSHOT}}
+ [Development] {{{https://nexus.ideaconsult.net/#nexus-search;gav~~ambit2-www~3.2.0-SNAPSHOT~war~}ambit2.war 3.2.0-SNAPSHOT}}
 
  [Custom releases] {{{./enanomapper.html} eNanoMapper prototype database}} 
 
@@ -39,7 +37,7 @@ AMBIT modules
 
  AMBIT consists of multiple {{{http://maven.apache.org/}Maven modules}} which can be used in a stand alone mode or embedded in other applications. 
  
- [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.0.2/}ambit2-*-3.0.2.jar}}
+ [Latest release] {{{https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/3.1.0/}ambit2-*-3.1.0.jar}}
 
  [Previous releases] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT_modules/}Download}}
 
