@@ -31,6 +31,11 @@ public class StartingMaterialsDataBase
 		public String id = null;
 	}
 	
+	public static class StartMaterialStandartization {
+		public boolean FlagClearStereo = false;
+		public boolean FlagAddNonStereoSmiles = false;
+	}
+	
 	Map<String,StartMaterialData> materials = new HashMap<String,StartMaterialData>();
 	List<INCHI_OPTION> inchiOptions = new ArrayList<INCHI_OPTION>();
 	InChIGeneratorFactory inchiGeneratorFactory = null;
@@ -67,6 +72,22 @@ public class StartingMaterialsDataBase
 		catch (Exception e) {}
 	}
 	
+	public StartingMaterialsDataBase(File file, int numMaterials)
+	{	
+		try {
+			loadStartingMaterials(file,  numMaterials);
+		}
+		catch (Exception e) {}
+	}
+		
+	public Map<String, StartMaterialData> getMaterials() {
+		return materials;
+	}
+
+	public void setMaterials(Map<String, StartMaterialData> materials) {
+		this.materials = materials;
+	}
+
 	public boolean isStartingMaterial(String inchiKey)
 	{
 		return materials.containsKey(inchiKey);
@@ -93,14 +114,27 @@ public class StartingMaterialsDataBase
 	
 	void loadStartingMaterials(File file) throws Exception
 	{
+		loadStartingMaterials(file,-1);
+	}
+	
+	void loadStartingMaterials(File file, int numMaterials) throws Exception
+	{
 		RandomAccessFile f = ReactionWriteUtils.createReader(file);
 		String splitter = "\t";
 		try
 		{		
 			long length = f.length();
+			int n = 0;
 			
 			while (f.getFilePointer() < length)
 			{	
+				if (numMaterials > -1)
+				{	
+					//Condition for loading only the first numMaterials
+					if (n >= numMaterials)
+						break;
+				}
+				
 				String line = f.readLine();
 				line = line.trim();
 				if (line.equals(""))
@@ -112,6 +146,7 @@ public class StartingMaterialsDataBase
 					smd.id = tokens[0];
 					smd.smiles = tokens[1];
 					materials.put(tokens[2], smd);
+					n++;
 				}
 				else
 				{
@@ -125,7 +160,7 @@ public class StartingMaterialsDataBase
 	}
 	
 	public static void createStartingMaterialsFile(File sourceFile, File outputFile, 
-				Map<String,Integer> columnIndices) throws Exception
+				Map<String,Integer> columnIndices, StartMaterialStandartization standartization) throws Exception
 	{		
 		//Setup input columns indices
 		Integer idCol = columnIndices.get("id");

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -22,6 +23,7 @@ import ambit2.reactions.reactor.ReactorStrategy;
 import ambit2.reactions.retrosynth.ReactionSequence;
 import ambit2.reactions.retrosynth.ReactionSequenceLevel;
 import ambit2.reactions.retrosynth.StartingMaterialsDataBase;
+import ambit2.reactions.retrosynth.StartingMaterialsDataBase.StartMaterialData;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
@@ -53,7 +55,9 @@ public class ReactionTestUtils
 		
 		//testReactionSequence();
 		
-		testCreateStartingMaterialsFile();
+		//testCreateStartingMaterialsFile();
+		
+		testStartingMaterialsDataBase("/starting-materials-db_v01.txt", 100);
 		
 	}
 	
@@ -269,6 +273,20 @@ public class ReactionTestUtils
 		columnIndices.put("mw", 1);
 		
 		StartingMaterialsDataBase.createStartingMaterialsFile(new File(sourceFileName), new File(outFileName),
-				columnIndices);
+				columnIndices, null);
 	}
+	
+	public static void testStartingMaterialsDataBase(String smDBFileName, int n) throws Exception
+	{
+		StartingMaterialsDataBase smdb = new StartingMaterialsDataBase(new File(smDBFileName), n);
+		Map<String, StartMaterialData> materials = smdb.getMaterials();
+		
+		for (Entry entry : materials.entrySet())
+		{
+			String inchiKey = (String)entry.getKey();
+			StartMaterialData sm = (StartMaterialData)entry.getValue();
+			System.out.println(inchiKey + "  " + sm.id + "   " + sm.smiles);
+		}
+	}
+	
 }
