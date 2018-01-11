@@ -51,4 +51,12 @@ public class ReactionWriteUtils
 		} catch (Exception x) {}
 	}
 	
+	public static String getFileExtension(String fileName)
+	{
+		int pos = fileName.lastIndexOf(".");
+		if (pos >= 0)
+			return fileName.substring(pos+1);
+		return ("");	
+	}
+	
 }

@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ambit2.reactions.io.ReactionWriteUtils;
 import ambit2.smarts.SMIRKSManager;
 
 
@@ -47,7 +48,11 @@ public class ReactionDataBase
 	
 	public ReactionDataBase(String fileName) throws Exception
 	{	
-		loadReactionsFromJSON(new File(fileName), true);
+		String extension = ReactionWriteUtils.getFileExtension(fileName);
+		if (extension.equalsIgnoreCase("json"))
+			loadReactionsFromJSON(new File(fileName), true);
+		else if (extension.equalsIgnoreCase("txt"))
+			loadReactionsFromTabDelimitedFile(new File(fileName), true);	
 	}
 	
 	public ReactionDataBase(List<String> smirksList)
@@ -125,6 +130,11 @@ public class ReactionDataBase
 				logger.info("Error on reading REACTIONS element #"+ (i+1) + ": " + e.getMessage());
 			}
 		}
+	}
+	
+	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB) throws Exception
+	{
+		//TODO
 	}
 			
 	/*
