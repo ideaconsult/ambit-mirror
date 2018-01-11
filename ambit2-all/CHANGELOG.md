@@ -1,6 +1,20 @@
 #CHANGELOG
-AMBIT2 3.0.3-SNAPSHOT
+
+AMBIT2 3.2.0-SNAPSHOT
 current version at trunk
+
+AMBIT 3.1.0 (Jan 2018)
+
+* Updated dependencies: cdk-1.5.13 
+* SMIRKS and tautomer generation improvements
+* Chemical structure standardisation : ambitcli-3.1.0 release
+* Read Across Workflow improvements
+* Substances data export formats enhancements (Excel, RDF, ISA-JSON)
+* IUCLID6 support
+* VEGA integration
+* jToxKit (web UI) updated
+* Solr proxy resource
+* DB schema 9.2
 
 AMBIT2 3.0.2 (Apr 2016)
 * ambit2-www: fixed errors when deploying to servlet root
