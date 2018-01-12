@@ -13,11 +13,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.rules.IRetroSynthRuleInstance;
 import ambit2.reactions.rules.scores.ReactionScore;
+import ambit2.reactions.rules.scores.ReactionScoreSchema;
 import ambit2.rules.weight.DescriptorWeight;
 
 public class SyntheticStrategy 
 {
-	public ReactionScore reactionScore = new ReactionScore();
+	public ReactionScoreSchema reactionScoreSchema = new ReactionScoreSchema();
 	public List<DescriptorWeight> productComplexityDescirptors = new ArrayList<DescriptorWeight>();
 	public List<DescriptorWeight> productSimilarityDescirptors = new ArrayList<DescriptorWeight>();
 	public Map<String, Double> reactionClassScores = new HashMap<String, Double>();
