@@ -2,12 +2,10 @@ package ambit2.reactions.rules.scores;
 
 public class ReactionSequenceScore 
 {
-	public double moleculeComplexityWeight = 0.0;
-	public double moleculeSimilarityWeight = 0.0;
-	public double levelWeight = 0.0;
-	public double reactionScoreWeight = 0.0;
-	
-	
+	public double moleculeComplexity = 0.0;
+	public double moleculeSimilarity = 0.0;
+	public double level = 0.0;
+	public double reactionScore = 0.0;
 	
 	/*
 	 	"LEVEL_WEIGHT" : 0.3,
