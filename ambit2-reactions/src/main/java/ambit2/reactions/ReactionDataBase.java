@@ -3,8 +3,10 @@ package ambit2.reactions;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -52,7 +54,16 @@ public class ReactionDataBase
 		if (extension.equalsIgnoreCase("json"))
 			loadReactionsFromJSON(new File(fileName), true);
 		else if (extension.equalsIgnoreCase("txt"))
-			loadReactionsFromTabDelimitedFile(new File(fileName), true);	
+			loadReactionsFromTabDelimitedFile(new File(fileName), true);
+		else
+		{
+			//Unsupported file format
+		}
+	}
+	
+	public ReactionDataBase(String fileName, Map<String,Integer> columnIndices) throws Exception
+	{
+		loadReactionsFromTabDelimitedFile(new File(fileName), true, columnIndices);
 	}
 	
 	public ReactionDataBase(List<String> smirksList)
@@ -133,9 +144,49 @@ public class ReactionDataBase
 	}
 	
 	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB) throws Exception
+	{	
+		loadReactionsFromTabDelimitedFile(txtFile, FlagCleanDB, null);
+	}
+	
+	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB, Map<String,Integer> columnIndices) throws Exception
+	{
+		int minNumColumns;
+		Map<String,Integer> indices = columnIndices;
+		if (indices == null)
+		{
+			RandomAccessFile reader = ReactionWriteUtils.createReader(txtFile);
+			//TODO identify column indices from first row
+			
+			ReactionWriteUtils.closeReader(reader);
+			minNumColumns = -1;
+		}
+		else
+		{
+			minNumColumns = checkColumnIndices(columnIndices);
+			if (minNumColumns == -1)
+				return; //Incorrect column indices
+		}
+		
+		if (FlagCleanDB)
+			genericReactions = new ArrayList<GenericReaction>();
+		else
+		{	
+			if (genericReactions == null)
+				genericReactions = new ArrayList<GenericReaction>(); 
+		}	
+		
+		RandomAccessFile reader = ReactionWriteUtils.createReader(txtFile);
+		
+		ReactionWriteUtils.closeReader(reader);
+	}
+	
+	public int checkColumnIndices(Map<String,Integer> columnIndices)
 	{
 		//TODO
+		return 0;
 	}
+	
+	
 			
 	/*
 	public void configureReactions(SMIRKSManager smrkMan) throws Exception
