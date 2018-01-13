@@ -7,6 +7,11 @@ public class ChemComplexityUtils
 {
 	public static double log_2 = Math.log(2);
 	
+	public static double log2(double x)
+	{
+		return Math.log(x)/log_2;
+	}
+	
 	public static double shannonEntropy(Map<String,Integer> groupFrequencies)
 	{
 		int N = 0;
@@ -23,7 +28,7 @@ public class ChemComplexityUtils
 		for (Entry<String,Integer> entry : groupFrequencies.entrySet())
 		{	
 			double p = entry.getValue().doubleValue() / totalNum;
-			I = I - p * Math.log(p)/log_2;
+			I = I - p * log2(p);
 		}
 		return I;
 	}
@@ -44,7 +49,7 @@ public class ChemComplexityUtils
 		for (int k = 0; k < groupFrequencies.length; k++)
 		{	
 			double p = ((double)groupFrequencies[k]) / totalNum;
-			I = I - p * Math.log(p)/log_2;
+			I = I - p * log2(p);
 		}			
 		return I;
 	}
