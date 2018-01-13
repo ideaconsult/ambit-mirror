@@ -39,10 +39,12 @@ public class GenericReaction
 	protected List<ICondition> conditions = null;
 	protected String reactionClass = null;
 	protected String info = null;
+	protected String experimentalConditionsInfo = null;
 	protected int reactionCenterIndices[] = null;
 	protected ReactionType reactionType = ReactionType.UNDEFINED;
 	protected TransformType transformType = null;
-	protected double experimentalConditionsScoreCol = 0.0;
+	protected double experimentalConditionsScore = 0.0;
+	protected double basicScore = 0.0;
 	protected double reliabilityScore = 0.0;
 	protected double yieldLo = 0.0;
 	protected double yieldHi = 0.0;
@@ -113,6 +115,14 @@ public class GenericReaction
 	public void setInfo(String info) {
 		this.info = info;
 	}
+	
+	public String getExperimentalConditionsInfo() {
+		return experimentalConditionsInfo;
+	}
+
+	public void setExperimentalConditionsInfo(String experimentalConditionsInfo) {
+		this.experimentalConditionsInfo = experimentalConditionsInfo;
+	}
 
 	public int[] getReactionCenterIndices() {
 		return reactionCenterIndices;
@@ -138,13 +148,21 @@ public class GenericReaction
 		this.transformType = transformType;
 	}
 
-	public double getExperimentalConditionsScoreCol() {
-		return experimentalConditionsScoreCol;
+	public double getExperimentalConditionsScore() {
+		return experimentalConditionsScore;
 	}
 
-	public void setExperimentalConditionsScoreCol(
-			double experimentalConditionsScoreCol) {
-		this.experimentalConditionsScoreCol = experimentalConditionsScoreCol;
+	public void setExperimentalConditionsScore(
+			double experimentalConditionsScore) {
+		this.experimentalConditionsScore = experimentalConditionsScore;
+	}
+	
+	public double getBasicScore() {
+		return basicScore;
+	}
+
+	public void setBasicScore(double basicScore) {
+		this.basicScore = basicScore;
 	}
 
 	public double getReliabilityScore() {
@@ -248,11 +266,72 @@ public class GenericReaction
 	}
 	
 	public static GenericReaction getReactionFromTokens(String tokens[], Map<String,Integer> indices) throws Exception
-	{
-		GenericReaction reaction = new GenericReaction();
-		//TODO
-		return reaction;
+	{	
+		GenericReaction r = new GenericReaction();
+		Integer ind;
+		
+		ind = indices.get("Id");
+		if (ind != null)
+		{	
+			Integer i = getInt(tokens[ind]);
+			if (i != null)
+				r.id = i;
+		}	
+		
+		ind = indices.get("Name");
+		if (ind != null)
+			r.name = tokens[ind];
+		
+		ind = indices.get("SMIRKS");
+		if (ind != null)
+			r.smirks= tokens[ind];
+		
+		//TODO handle SMIRKSflags and SMILES
+		
+		ind = indices.get("Class");
+		if (ind != null)
+			r.reactionClass= tokens[ind];
+		
+		//TODO handle ReactionCenter, ReactionType and TransformType
+		
+		ind = indices.get("BasicScore");
+		if (ind != null)
+		{	
+			Double d= getDouble(tokens[ind]);
+			if (d != null)
+				r.basicScore = d;
+		}
+		
+		ind = indices.get("ExperimentalConditionsScore");
+		if (ind != null)
+		{	
+			Double d= getDouble(tokens[ind]);
+			if (d != null)
+				r.experimentalConditionsScore = d;
+		}
+		
+		ind = indices.get("ReliabilityScore");
+		if (ind != null)
+		{	
+			Double d= getDouble(tokens[ind]);
+			if (d != null)
+				r.reliabilityScore = d;
+		}
+		
+		//TODO 	Handle YieldInterval and Conditions
+		 
+		ind = indices.get("Info");
+		if (ind != null)
+			r.info = tokens[ind];
+		
+		ind = indices.get("ExperimentalConditionsInfo");
+		if (ind != null)
+			r.experimentalConditionsInfo = tokens[ind];
+		
+		return r;
 	}
+	
+	
 	
 	public static ICondition getConditionFromString(String condStr) throws Exception
 	{
@@ -326,4 +405,30 @@ public class GenericReaction
 		sb.append(" " + smirks);
 		return sb.toString();
 	}
+	
+	//Helpers
+	public static final Integer getInt(String s) {
+
+		try
+		{
+			Integer i = Integer.parseInt(s);
+			return i;
+		}
+		catch (Exception x) {
+			return null;
+		}
+	}
+
+	public static final Double getDouble(String s) {
+		
+		try
+		{
+			Double d = Double.parseDouble(s);
+			return d;
+		}
+		catch (Exception x) {
+			return null;
+		}
+	}
+	
 }
