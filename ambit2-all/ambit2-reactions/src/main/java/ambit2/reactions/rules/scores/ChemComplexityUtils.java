@@ -1,7 +1,11 @@
 package ambit2.reactions.rules.scores;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class ChemComplexityUtils 
 {
@@ -12,11 +16,17 @@ public class ChemComplexityUtils
 		return Math.log(x)/log_2;
 	}
 	
-	public static double shannonEntropy(Map<String,Integer> groupFrequencies)
+	public static int totalGroupNum (Map<String,Integer> groupFrequencies)
 	{
 		int N = 0;
 		for (Entry<String,Integer> entry : groupFrequencies.entrySet())
 			N += entry.getValue(); 
+		return N;
+	}
+	
+	public static double shannonEntropy(Map<String,Integer> groupFrequencies)
+	{
+		int N = totalGroupNum(groupFrequencies);
 		return shannonEntropy(groupFrequencies, N);
 	}
 	
@@ -52,5 +62,26 @@ public class ChemComplexityUtils
 			I = I - p * log2(p);
 		}			
 		return I;
+	}
+	
+	public static List<IAtom[]> getAtomPaths2(IAtom atom, IAtomContainer mol)
+	{
+		//TODO
+		return null;
+	}
+	
+	public static List<IAtom[]> getAtomPaths(IAtom atom, IAtomContainer mol, int pathLenght)
+	{
+		//TODO
+		return null;
+	}
+	
+	public static void registerGroup(String group, Map<String,Integer> groupFrequencies)
+	{
+		Integer freq = groupFrequencies.get(group);
+		if (freq == null)
+			groupFrequencies.put(group, 1);
+		else
+			groupFrequencies.put(group, (freq+1));
 	}
 }
