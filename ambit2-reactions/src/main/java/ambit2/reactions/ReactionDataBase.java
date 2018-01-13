@@ -42,7 +42,7 @@ public class ReactionDataBase
 	
 	//public List<Reaction> reactions = null;
 	public List<GenericReaction> genericReactions = null;
-	
+	public List<String> errors = new ArrayList<String>();
 	
 	public ReactionDataBase()
 	{	
@@ -63,7 +63,12 @@ public class ReactionDataBase
 	
 	public ReactionDataBase(String fileName, Map<String,Integer> columnIndices) throws Exception
 	{
-		loadReactionsFromTabDelimitedFile(new File(fileName), true, columnIndices);
+		loadReactionsFromTabDelimitedFile(new File(fileName), true, columnIndices, 1);
+	}
+	
+	public ReactionDataBase(String fileName, Map<String,Integer> columnIndices, int headerLines) throws Exception
+	{
+		loadReactionsFromTabDelimitedFile(new File(fileName), true, columnIndices, headerLines);
 	}
 	
 	public ReactionDataBase(List<String> smirksList)
@@ -145,26 +150,33 @@ public class ReactionDataBase
 	
 	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB) throws Exception
 	{	
-		loadReactionsFromTabDelimitedFile(txtFile, FlagCleanDB, null);
+		loadReactionsFromTabDelimitedFile(txtFile, FlagCleanDB, null, 1);
 	}
 	
-	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB, Map<String,Integer> columnIndices) throws Exception
+	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB, 
+			Map<String,Integer> columnIndices, int headerLines) throws Exception
 	{
-		int minNumColumns;
+		int maxNeededColumnIndex;
 		Map<String,Integer> indices = columnIndices;
 		if (indices == null)
 		{
-			RandomAccessFile reader = ReactionWriteUtils.createReader(txtFile);
-			//TODO identify column indices from first row
+			//temporary code
+			indices  = getDefaultGenericReacitonTextFileColumnsIndices();
+			maxNeededColumnIndex = checkColumnIndices(indices);
 			
-			ReactionWriteUtils.closeReader(reader);
-			minNumColumns = -1;
+			//TODO identify column indices from first row
+			//RandomAccessFile reader = ReactionWriteUtils.createReader(txtFile);
+			//ReactionWriteUtils.closeReader(reader);
+			//minNumColumns = -1;
 		}
 		else
 		{
-			minNumColumns = checkColumnIndices(columnIndices);
-			if (minNumColumns == -1)
-				return; //Incorrect column indices
+			maxNeededColumnIndex = checkColumnIndices(indices);
+			if (maxNeededColumnIndex == -1)
+			{	
+				errors.add("Incorrect column indices for reading reactions form text file!");
+				return; 
+			}	
 		}
 		
 		if (FlagCleanDB)
@@ -176,14 +188,65 @@ public class ReactionDataBase
 		}	
 		
 		RandomAccessFile reader = ReactionWriteUtils.createReader(txtFile);
-		
+		//Iterate lines
+		String splitter = "\t";			
+		long length = reader.length();
+		int lineNum = 0;
+		try
+		{	
+			//Header lines are skipped
+			while ((lineNum < headerLines) && (reader.getFilePointer() < length))
+			{
+				String line = reader.readLine();
+				lineNum++;
+			}
+			
+			while (reader.getFilePointer() < length)
+			{	
+				String line = reader.readLine();
+				lineNum++;
+				line = line.trim();
+				if (line.equals(""))
+					continue; //empty line is skipped
+				String tokens[] = line.split(splitter);
+				if (tokens.length <= maxNeededColumnIndex)
+				{
+					errors.add("Insufficient column for reading reaction at line " + lineNum);
+					continue;
+				}
+				
+				try	{
+					GenericReaction r = GenericReaction.getReactionFromTokens(tokens, indices);
+					genericReactions.add(r);
+				}
+				catch (Exception x)	{
+					errors.add("Error on reading reaction at line " + lineNum + "  :" + x.getMessage());
+				}
+				
+			}
+		}
+		catch (Exception e) {
+			errors.add("Error while iterating file lines: " + e.getMessage());
+		}
+
 		ReactionWriteUtils.closeReader(reader);
 	}
 	
+	/**
+	 * 
+	 * @param columnIndices
+	 * @return the maximal needed column index
+	 */
 	public int checkColumnIndices(Map<String,Integer> columnIndices)
 	{
 		//TODO
 		return 0;
+	}
+	
+	public static Map<String,Integer> getDefaultGenericReacitonTextFileColumnsIndices()
+	{
+		//TODO
+		return null;
 	}
 	
 	

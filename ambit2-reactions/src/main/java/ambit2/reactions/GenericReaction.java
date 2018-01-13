@@ -247,6 +247,13 @@ public class GenericReaction
 		return reaction;
 	}
 	
+	public static GenericReaction getReactionFromTokens(String tokens[], Map<String,Integer> indices) throws Exception
+	{
+		GenericReaction reaction = new GenericReaction();
+		//TODO
+		return reaction;
+	}
+	
 	public static ICondition getConditionFromString(String condStr) throws Exception
 	{
 		IDescriptorValueCondition dvc= ConditionParsingUtils.getDescriptorValueConditionFromToken(condStr);
