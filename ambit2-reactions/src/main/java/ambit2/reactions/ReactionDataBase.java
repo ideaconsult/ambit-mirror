@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -37,6 +38,26 @@ public class ReactionDataBase
 		public int experimentalConditionsInfoCol = -1;
 		public int infoCol = -1;
 	}
+	
+	public static final String DEFAULT_TXT_FILE_COLUMN_NAMES [] = 
+	{
+		"Id",
+		"Name",
+		"SMIRKS",
+		"SMIRKSflags",
+		"SMILES",
+		"Class",
+		"ReactionCenter",
+		"ReactionType",
+		"TransformType",
+		"BasicScore",
+		"ExperimentalConditionsScore",
+		"ReliabilityScore",
+		"YieldInterval",
+		"Conditions",
+		"ExperimentalConditionsInfo",
+		"Info"
+	};
 	
 	private static Logger logger = Logger.getLogger(ReactionDataBase.class.getName());
 	
@@ -162,7 +183,7 @@ public class ReactionDataBase
 		{
 			//temporary code
 			indices  = getDefaultGenericReacitonTextFileColumnsIndices();
-			maxNeededColumnIndex = checkColumnIndices(indices);
+			maxNeededColumnIndex = indices.size();  //checkColumnIndices(indices) is not needed
 			
 			//TODO identify column indices from first row
 			//RandomAccessFile reader = ReactionWriteUtils.createReader(txtFile);
@@ -245,8 +266,10 @@ public class ReactionDataBase
 	
 	public static Map<String,Integer> getDefaultGenericReacitonTextFileColumnsIndices()
 	{
-		//TODO
-		return null;
+		Map<String,Integer> indices = new HashMap<String,Integer>();
+		for (int i = 0; i < DEFAULT_TXT_FILE_COLUMN_NAMES.length; i++)
+			indices.put(DEFAULT_TXT_FILE_COLUMN_NAMES[i], i);
+		return indices;
 	}
 	
 	
