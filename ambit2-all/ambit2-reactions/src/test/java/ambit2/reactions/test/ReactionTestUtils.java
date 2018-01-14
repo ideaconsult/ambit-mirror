@@ -1,6 +1,8 @@
 package ambit2.reactions.test;
 
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +16,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.core.data.MoleculeTools;
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.reactions.io.ReactionReadUtils;
@@ -37,6 +40,8 @@ public class ReactionTestUtils
 {
 	public static boolean FlagPrintReactionDB = false;
 	public static boolean FlagPrintReactionStrategy = false;
+	public static boolean FlagExcplicitHAtoms = false;
+	
 	
 	public static void main(String[] args) throws Exception 
 	{
@@ -64,9 +69,7 @@ public class ReactionTestUtils
 		
 		//testStartingMaterialsDataBase(new String[] {"CCC","CCCC","CCCCCO","NC(C)C"});
 		
-		//testAtomComplexity("c1cccc[n+]1C(=O)C", true);
-		testAtomComplexity("c1ccccc1C(=O)C", true);
-		//testAtomComplexity("C=C", true);
+		testAtomComplexity();
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception
@@ -322,7 +325,10 @@ public class ReactionTestUtils
 	public static void testAtomComplexity(String smiles, boolean includeImplicitHAtoms) throws Exception
 	{
 		System.out.println("Testing atom complexity: " + smiles);
+		NumberFormat formatter = new DecimalFormat("#0.00"); 
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		if (FlagExcplicitHAtoms)
+			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
 		TopLayer.setAtomTopLayers(mol);
 		AtomComplexity atomCompl = new AtomComplexity();
 		atomCompl.setIncludeImplicitHAtoms(includeImplicitHAtoms);
@@ -330,9 +336,9 @@ public class ReactionTestUtils
 		{
 			IAtom atom = mol.getAtom(i);
 			double c = atomCompl.calcAtomComplexity(atom, mol);
-			System.out.println("" + (i+1) + "  " + atom.getSymbol() + "  " + c);
+			System.out.println("" + (i+1) + "  " + atom.getSymbol() + "  " + formatter.format(c));
 		}
-		
+		/*
 		System.out.println("\nAtom paths details:");
 		for (int i = 0; i < mol.getAtomCount(); i++)
 		{
@@ -341,6 +347,40 @@ public class ReactionTestUtils
 			System.out.println("" + (i+1) + "  " + atom.getSymbol() + "  " + c);
 			System.out.println(atomCompl.getAtomPathsAsString(atom, mol));
 		}
+		*/
+		
+	}
+	
+	public static void testAtomComplexity() throws Exception
+	{
+		//FlagExcplicitHAtoms = true;
+		//R1
+		testAtomComplexity("COc1ccccc1", true);
+		testAtomComplexity("COc1ccc2cc1.C2(=O)C", true);
+		//R2
+		testAtomComplexity("OCC=C", true);
+		testAtomComplexity("OCC1CO1", true);
+		//R3
+		testAtomComplexity("CC(=O)c1ccccc1", true);
+		testAtomComplexity("CC(O)c1ccccc1", true);
+		//R4
+		testAtomComplexity("C1CCC=CC1", true);
+		testAtomComplexity("C1CCCCC1", true);
+		//R5
+		testAtomComplexity("N#Cc1ccccc1", true);
+		testAtomComplexity("NC(=O)c1ccccc1", true);
+		//R6
+		testAtomComplexity("C=CC=C", true);
+		testAtomComplexity("C=C", true);
+		testAtomComplexity("C1CCC=CC1", true);
+		//R7
+		testAtomComplexity("NNc1ccccc1", true);
+		testAtomComplexity("O=C1CCCCC1", true);
+		testAtomComplexity("C1CCC2=C3C1.N3C4C=CC=CC2=4", true);
+		//R8
+		testAtomComplexity("O=Cc1ccccc1", true);
+		testAtomComplexity("CCC(=O)OC", true);
+		testAtomComplexity("COC(=O)C(C)C(O)c1ccccc1", true);
 		
 	}
 	
