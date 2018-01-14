@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
@@ -24,11 +25,13 @@ import ambit2.reactions.retrosynth.ReactionSequence;
 import ambit2.reactions.retrosynth.ReactionSequenceLevel;
 import ambit2.reactions.retrosynth.StartingMaterialsDataBase;
 import ambit2.reactions.retrosynth.StartingMaterialsDataBase.StartMaterialData;
+import ambit2.reactions.rules.scores.AtomComplexity;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.TopLayer;
 
 public class ReactionTestUtils 
 {
@@ -53,7 +56,7 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		testReactionSequence();
+		//testReactionSequence();
 		
 		//testCreateStartingMaterialsFile();
 		
@@ -61,6 +64,9 @@ public class ReactionTestUtils
 		
 		//testStartingMaterialsDataBase(new String[] {"CCC","CCCC","CCCCCO","NC(C)C"});
 		
+		//testAtomComplexity("c1cccc[n+]1C(=O)C", true);
+		testAtomComplexity("c1ccccc1C(=O)C", true);
+		//testAtomComplexity("C=C", true);
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception
@@ -313,6 +319,30 @@ public class ReactionTestUtils
 		}
 	}
 	
+	public static void testAtomComplexity(String smiles, boolean includeImplicitHAtoms) throws Exception
+	{
+		System.out.println("Testing atom complexity: " + smiles);
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		TopLayer.setAtomTopLayers(mol);
+		AtomComplexity atomCompl = new AtomComplexity();
+		atomCompl.setIncludeImplicitHAtoms(includeImplicitHAtoms);
+		for (int i = 0; i < mol.getAtomCount(); i++)
+		{
+			IAtom atom = mol.getAtom(i);
+			double c = atomCompl.calcAtomComplexity(atom, mol);
+			System.out.println("" + (i+1) + "  " + atom.getSymbol() + "  " + c);
+		}
+		
+		System.out.println("\nAtom paths details:");
+		for (int i = 0; i < mol.getAtomCount(); i++)
+		{
+			IAtom atom = mol.getAtom(i);
+			double c = atomCompl.calcAtomComplexity(atom, mol);
+			System.out.println("" + (i+1) + "  " + atom.getSymbol() + "  " + c);
+			System.out.println(atomCompl.getAtomPathsAsString(atom, mol));
+		}
+		
+	}
 	
 	
 }
