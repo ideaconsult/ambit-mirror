@@ -51,10 +51,14 @@ public class AtomComplexity
 	
 	public String getPathString(IAtom path[])
 	{
-		//TODO
-		return null;
+		StringBuffer sb =  new StringBuffer();
+		for (int i = 0; i < path.length; i++)
+		{
+			sb.append(path[i].getSymbol());
+			//TODO
+		}
+		return sb.toString();
 	}
-	
 	
 	
 }

@@ -72,7 +72,20 @@ public class ChemComplexityUtils
 	
 	public static List<IAtom[]> getAtomPaths(IAtom atom, IAtomContainer mol, int pathLenght)
 	{
-		//TODO
+		switch (pathLenght)
+		{
+		case 0:
+			//TODO
+			break;
+		case 1:
+			//TODO
+			break;
+		case 2:
+			return getAtomPaths2(atom, mol);
+		default:
+			//TODO
+			break;
+		}
 		return null;
 	}
 	
