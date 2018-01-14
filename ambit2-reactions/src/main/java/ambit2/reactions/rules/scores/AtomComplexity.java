@@ -31,7 +31,7 @@ public class AtomComplexity
 
 	public double calcAtomComplexity(IAtom atom, IAtomContainer mol)
 	{
-		List<IAtom[]> paths = ChemComplexityUtils.getAtomPaths(atom, mol, pathLenght);
+		List<IAtom[]> paths = ChemComplexityUtils.getAtomPaths(atom, mol, pathLenght, includeImplicitHAtoms);
 		Map<String,Integer> pathFreq = new HashMap<String,Integer>();
 		for (int i = 0; i < paths.size(); i++)
 		{
@@ -52,18 +52,31 @@ public class AtomComplexity
 	public String getPathString(IAtom path[])
 	{
 		StringBuffer sb =  new StringBuffer();
-		sb.append(path[0].getSymbol());
-		int xd[] = ChemComplexityUtils.getAtomXDInfo(path[0]);
-		sb.append("X"+xd[0]);
-		sb.append("D"+xd[1]);
-		for (int i = 0; i < path.length; i++)
-		{
-			sb.append("~");
+		int xd[];
+		for (int i = 0; i < path.length-1; i++)
+		{	
 			sb.append(path[i].getSymbol());
 			xd = ChemComplexityUtils.getAtomXDInfo(path[i]);
 			sb.append("X"+xd[0]);
 			sb.append("D"+xd[1]);
+			sb.append("~");
 		}
+		
+		//Last atom in the atom path
+		IAtom at = path[path.length-1];
+		if (at == null)
+		{
+			//at is a implicit hydrogen
+			sb.append("HX1D1");
+		}
+		else
+		{	
+			sb.append(at.getSymbol());
+			xd = ChemComplexityUtils.getAtomXDInfo(at);
+			sb.append("X"+xd[0]);
+			sb.append("D"+xd[1]);
+		}
+		
 		return sb.toString();
 	}
 	

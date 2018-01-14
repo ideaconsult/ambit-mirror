@@ -1,5 +1,6 @@
 package ambit2.reactions.rules.scores;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -66,13 +67,46 @@ public class ChemComplexityUtils
 		return I;
 	}
 	
-	public static List<IAtom[]> getAtomPaths2(IAtom atom, IAtomContainer mol)
+	public static List<IAtom[]> getAtomPaths1(IAtom atom, IAtomContainer mol, boolean includeImplicitHAtoms)
 	{
 		//TODO
 		return null;
 	}
 	
-	public static List<IAtom[]> getAtomPaths(IAtom atom, IAtomContainer mol, int pathLenght)
+	public static List<IAtom[]> getAtomPaths2(IAtom atom, IAtomContainer mol, boolean includeImplicitHAtoms)
+	{
+		List<IAtom[]> paths = new ArrayList<IAtom[]>();
+		List<IAtom> neighAtoms = ((TopLayer)atom.getProperty(TopLayer.TLProp)).atoms;
+		for (IAtom at1: neighAtoms)
+		{
+			if (at1.getSymbol().equals("H"))
+				continue; //H atom can be only a path termination atom
+			
+			List<IAtom> neighAt1 = ((TopLayer)at1.getProperty(TopLayer.TLProp)).atoms;
+			for (IAtom at2: neighAt1)
+			{
+				IAtom path[] = new IAtom[3];
+				path[0] = atom;
+				path[1] = at1;
+				path[2] = at2;
+				paths.add(path);
+			}
+			Integer hci = atom.getImplicitHydrogenCount();
+			if (hci != null)			
+				for (int i = 0; i < hci; i++)
+				{	
+					IAtom path[] = new IAtom[3];
+					path[0] = atom;
+					path[1] = at1;
+					path[2] = null;
+					paths.add(path);
+				}
+		}
+		return paths;
+	}
+	
+	public static List<IAtom[]> getAtomPaths(IAtom atom, IAtomContainer mol, 
+				int pathLenght, boolean includeImplicitHAtoms)
 	{
 		switch (pathLenght)
 		{
@@ -80,11 +114,11 @@ public class ChemComplexityUtils
 			//TODO
 			break;
 		case 1:
-			//TODO
-			break;
+			return getAtomPaths1(atom, mol, includeImplicitHAtoms);
 		case 2:
-			return getAtomPaths2(atom, mol);
+			return getAtomPaths2(atom, mol, includeImplicitHAtoms);
 		default:
+			//pathLenght >= 3
 			//TODO
 			break;
 		}
