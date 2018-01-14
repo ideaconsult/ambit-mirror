@@ -49,6 +49,15 @@ public class AtomComplexity
 		return ac;
 	}
 	
+	public String getAtomPathsAsString(IAtom atom, IAtomContainer mol)
+	{
+		List<IAtom[]> paths = ChemComplexityUtils.getAtomPaths(atom, mol, pathLenght, includeImplicitHAtoms);
+		StringBuffer sb = new StringBuffer();
+		for (IAtom[] path : paths)
+			sb.append(getPathString(path) + "\n");
+		return sb.toString();
+	}
+	
 	public String getPathString(IAtom path[])
 	{
 		StringBuffer sb =  new StringBuffer();

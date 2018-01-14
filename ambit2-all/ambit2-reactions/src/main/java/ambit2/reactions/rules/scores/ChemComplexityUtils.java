@@ -77,23 +77,65 @@ public class ChemComplexityUtils
 	{
 		List<IAtom[]> paths = new ArrayList<IAtom[]>();
 		List<IAtom> neighAtoms = ((TopLayer)atom.getProperty(TopLayer.TLProp)).atoms;
+		
+		//Separate paths of the type "atom~H" (length=1) for each implicit H
+		if (includeImplicitHAtoms)
+		{	
+			int atom_hci = getImplicitHCount (atom);
+			for (int i = 0; i < atom_hci; i++)
+			{
+				//Register path: atom~iplicitH
+				IAtom path[] = new IAtom[2];
+				path[0] = atom;
+				path[1] = null;
+				paths.add(path);
+			}
+		}
+		
 		for (IAtom at1: neighAtoms)
 		{
 			if (at1.getSymbol().equals("H"))
-				continue; //H atom can be only a path termination atom
-			
-			List<IAtom> neighAt1 = ((TopLayer)at1.getProperty(TopLayer.TLProp)).atoms;
-			for (IAtom at2: neighAt1)
-			{
-				IAtom path[] = new IAtom[3];
+			{	
+				//Explicit H atom is the termination atom of a path of length 1
+				//Register path: atom~at1
+				IAtom path[] = new IAtom[2];
 				path[0] = atom;
 				path[1] = at1;
-				path[2] = at2;
 				paths.add(path);
+				continue; 
+			}	
+			
+			List<IAtom> neighAt1 = ((TopLayer)at1.getProperty(TopLayer.TLProp)).atoms;
+			int at1_hci = getImplicitHCount (at1);
+			
+			if (neighAt1.size() == 1)
+			{
+				//only one neighbor of at1 and this is the input atom
+				if (!includeImplicitHAtoms || at1_hci == 0)
+				{
+					//Register path: atom~at1
+					IAtom path[] = new IAtom[2];
+					path[0] = atom;
+					path[1] = at1;
+					paths.add(path);
+				}
 			}
-			Integer hci = atom.getImplicitHydrogenCount();
-			if (hci != null)			
-				for (int i = 0; i < hci; i++)
+			else
+				for (IAtom at2: neighAt1)
+				{
+					if (at2 == atom)
+						continue;
+					//Register path: atom~at1~at2
+					IAtom path[] = new IAtom[3];
+					path[0] = atom;
+					path[1] = at1;
+					path[2] = at2;
+					paths.add(path);
+				}
+			
+			if (includeImplicitHAtoms)
+			{	
+				for (int i = 0; i < at1_hci; i++)
 				{	
 					IAtom path[] = new IAtom[3];
 					path[0] = atom;
@@ -101,8 +143,17 @@ public class ChemComplexityUtils
 					path[2] = null;
 					paths.add(path);
 				}
+			}
 		}
 		return paths;
+	}
+	
+	static int getImplicitHCount (IAtom atom)
+	{
+		Integer hci = atom.getImplicitHydrogenCount();
+		if (hci != null)	
+			return hci;
+		return 0;
 	}
 	
 	public static List<IAtom[]> getAtomPaths(IAtom atom, IAtomContainer mol, 
