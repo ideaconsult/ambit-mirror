@@ -52,13 +52,19 @@ public class AtomComplexity
 	public String getPathString(IAtom path[])
 	{
 		StringBuffer sb =  new StringBuffer();
+		sb.append(path[0].getSymbol());
+		int xd[] = ChemComplexityUtils.getAtomXDInfo(path[0]);
+		sb.append("X"+xd[0]);
+		sb.append("D"+xd[1]);
 		for (int i = 0; i < path.length; i++)
 		{
+			sb.append("~");
 			sb.append(path[i].getSymbol());
-			//TODO
+			xd = ChemComplexityUtils.getAtomXDInfo(path[i]);
+			sb.append("X"+xd[0]);
+			sb.append("D"+xd[1]);
 		}
 		return sb.toString();
 	}
-	
 	
 }
