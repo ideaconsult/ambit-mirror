@@ -62,7 +62,13 @@ public class MolecularComplexity
 	 */
 	public double calcMolecularComplexity02()
 	{
-		return 0.0;
+		if (target == null)
+			return 0.0;
+		calcAtomComplexities();
+		double cM2 = 0.0;
+		for (int i = 0; i < atomComplexities.size(); i++)
+			cM2 += Math.pow(2,atomComplexities.get(i));
+		return ChemComplexityUtils.log2(cM2);
 	}
 	
 	void calcAtomComplexities()
