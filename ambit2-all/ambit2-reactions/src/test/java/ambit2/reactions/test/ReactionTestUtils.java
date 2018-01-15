@@ -29,6 +29,7 @@ import ambit2.reactions.retrosynth.ReactionSequenceLevel;
 import ambit2.reactions.retrosynth.StartingMaterialsDataBase;
 import ambit2.reactions.retrosynth.StartingMaterialsDataBase.StartMaterialData;
 import ambit2.reactions.rules.scores.AtomComplexity;
+import ambit2.reactions.rules.scores.MolecularComplexity;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
@@ -69,7 +70,9 @@ public class ReactionTestUtils
 		
 		//testStartingMaterialsDataBase(new String[] {"CCC","CCCC","CCCCCO","NC(C)C"});
 		
-		testAtomComplexity();
+		//testAtomComplexity();
+		
+		testMolceculeComplexity();
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception
@@ -384,5 +387,39 @@ public class ReactionTestUtils
 		
 	}
 	
+	public static void testMolceculeComplexity(String smiles, boolean includeImplicitHAtoms) throws Exception
+	{
+		System.out.println("Testing molecule complexity: " + smiles);
+		NumberFormat formatter = new DecimalFormat("#0.00"); 
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		if (FlagExcplicitHAtoms)
+			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+		TopLayer.setAtomTopLayers(mol);
+		MolecularComplexity molCompl = new MolecularComplexity();
+		molCompl.getAtomComplexityCalculator().setIncludeImplicitHAtoms(includeImplicitHAtoms);
+		molCompl.setTarget(mol);
+		double cM = molCompl.calcMolecularComplexity01();
+		double cM_star = molCompl.calcMolecularComplexity02();
+		System.out.println("  cM = " + formatter.format(cM) + "  cM* = " + formatter.format(cM_star));
+	}
+	
+	public static void testMolceculeComplexity() throws Exception
+	{
+		testMolceculeComplexity("CCOCC", true);
+		testMolceculeComplexity("CCCCC", true);
+		testMolceculeComplexity("CCCCCC", true);
+		testMolceculeComplexity("CCCCCCC", true);
+		testMolceculeComplexity("CCCCC(C)C", true);
+		testMolceculeComplexity("CCCC(C)CC", true);
+		testMolceculeComplexity("C1CCCC1", true);
+		testMolceculeComplexity("C1CCCCC1", true);
+		testMolceculeComplexity("c1ccccc1", true);
+		testMolceculeComplexity("C1CCOCC1", true);
+		testMolceculeComplexity("c1cnccc1", true);
+		testMolceculeComplexity("C1CCNCC1", true);
+		testMolceculeComplexity("C1CCNCC=1", true);
+		testMolceculeComplexity("N1CC2CC2C1", true);
+		testMolceculeComplexity("N1CCCC1C", true);
+	}
 	
 }
