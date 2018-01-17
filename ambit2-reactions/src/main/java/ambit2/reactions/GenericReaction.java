@@ -402,7 +402,25 @@ public class GenericReaction
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("Reaction: " + name);
-		sb.append(" " + smirks);
+		sb.append(" id = " + id);
+		sb.append(" use = " + FlagUse);
+		sb.append(" smirks = " + smirks + "  ");
+		if (reactionClass != null)
+			sb.append(" class = " + reactionClass);
+		if (info != null)
+			sb.append(" info = " + info);
+		if (experimentalConditionsInfo != null)
+			sb.append(" experimentalConditionsInfo = " + experimentalConditionsInfo);
+		if (transformType !=null);
+			sb.append(" transformType = " + transformType);
+		sb.append(" expCondScore = " + experimentalConditionsScore);
+		sb.append(" basicScore = " + basicScore);
+		sb.append(" reliabilityScore = " + reliabilityScore);
+		sb.append(" yieldLo = " + yieldLo);
+		sb.append(" yieldHi = " + yieldHi);
+		
+		//TODO conditions, reactionCenterIndices[]
+		
 		return sb.toString();
 	}
 	
