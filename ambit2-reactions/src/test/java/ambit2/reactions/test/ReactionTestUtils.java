@@ -62,7 +62,7 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		//testReactionSequence();
+		testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null);
 		
 		//testCreateStartingMaterialsFile();
 		
@@ -74,7 +74,7 @@ public class ReactionTestUtils
 		
 		//testMolceculeComplexity();
 		
-		testReactionDataBase("/Volumes/Data/RDB_080118_SA-mod.txt");
+		//testReactionDataBase("/Volumes/Data/RDB_080118_SA-mod.txt");
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception
@@ -230,26 +230,35 @@ public class ReactionTestUtils
 		
 	}
 	
-	public static void testReactionSequence() throws Exception
+	public static void testReactionSequence(String targetSmiles, String reactionDBFileName, String startMatDBFileName) throws Exception
 	{
-		String startMatSmi[] =  {"CC","CCC","CO","NC(C)C"};
+		String startMatSmi[] =  {"CC","CCC","CO","NC(C)C", "Cl"};
 		StartingMaterialsDataBase smdb = new StartingMaterialsDataBase(startMatSmi);
 		
-		String smi = "CCCCCO";
-		List<String> smirks = new ArrayList<String>();
-		smirks.add("[C:1]Cl>>[C:1]");
-		//smirks.add("[C:1][H]>>[C:1]O[H]");
-		smirks.add("[H][C:1][C:2][H]>>[H][C:1][H].[H][C:2][H]");
-		//smirks.add("[C:1][C:2]>>[C:1][H].[C:2][H]");
-				
-		ReactionDataBase rdb = new ReactionDataBase(smirks);
-		System.out.println("ReactionDB:\n" + rdb.toString());
+		//Set up reaction DB
+		ReactionDataBase rdb;
+		if (reactionDBFileName == null)
+		{	
+			List<String> smirks = new ArrayList<String>();
+			smirks.add("[C:1]Cl>>[C:1]");
+			//smirks.add("[C:1][H]>>[C:1]O[H]");
+			smirks.add("[H][C:1][C:2][H]>>[H][C:1][H].[H][C:2][H]");
+			//smirks.add("[C:1][C:2]>>[C:1][H].[C:2][H]");
+
+			rdb = new ReactionDataBase(smirks);
+			System.out.println("ReactionDB:\n" + rdb.toString());
+		}
+		else
+		{
+			rdb = new ReactionDataBase(reactionDBFileName);
+		}
+		
 		System.out.println("Staring material DB:");
 		for (String s : startMatSmi)
 			System.out.println("   " + s);
 		System.out.println();
-		System.out.println("Target: " + smi);
-		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(smi);
+		System.out.println("Target: " + targetSmiles);
+		IAtomContainer target = SmartsHelper.getMoleculeFromSmiles(targetSmiles);
 		
 		SMIRKSManager smrkMan0 = new SMIRKSManager(SilentChemObjectBuilder.getInstance()); 
 		rdb.configureGenericReactions(smrkMan0);
@@ -277,7 +286,7 @@ public class ReactionTestUtils
 		ReactionSequenceLevel level = rseq.getFirstLevel();
 		rseq.iterateLevelMolecules(level, null);
 		
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 30; i++)
 		{	
 			level = level.nextLevel;
 			if (level == null)

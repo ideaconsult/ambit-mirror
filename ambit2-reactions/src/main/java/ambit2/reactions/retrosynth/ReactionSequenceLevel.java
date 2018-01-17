@@ -6,6 +6,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.core.data.MoleculeTools;
+import ambit2.reactions.GenericReaction;
 import ambit2.reactions.retrosynth.ReactionSequence.MoleculeStatus;
 import ambit2.smarts.SmartsHelper;
 
@@ -82,6 +83,22 @@ public class ReactionSequenceLevel
 		nextLevel.previousLevel = this;
 	}
 	
+	public Object[] getGenerationInfo(int molIndex)
+	{
+		if (prevLevelMolecules != null)
+		{
+			IAtomContainer genMol = prevLevelMolecules.get(molIndex);
+			if (genMol == null)
+				return null;
+			int genMolPrevLevIndex = previousLevel.molecules.indexOf(genMol);
+			Object obj[] = new Object[2];
+			obj[0] = previousLevel.steps.get(genMolPrevLevIndex).reaction;
+			obj[1] = genMolPrevLevIndex;
+			return obj;
+		}
+		return null;
+	}
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
@@ -96,9 +113,16 @@ public class ReactionSequenceLevel
 			}
 			catch (Exception x) {};
 			sb.append("" + smi );
-			sb.append("       " + MoleculeStatus.getShortString((MoleculeStatus)
+			sb.append("   " + MoleculeStatus.getShortString((MoleculeStatus)
 					molecules.get(i).getProperty(ReactionSequence.MoleculeStatusProperty)));
 			//sb.append("       " + molecules.get(i).getProperty(ReactionSequence.MoleculeInChIKeyProperty));
+			Object obj[] = getGenerationInfo(i);
+			if (obj != null)
+			{	
+				GenericReaction genReaction = (GenericReaction)obj[0];
+				sb.append("   <R" + genReaction.getId()+"," + ((Integer)obj[1]+1) + ">");
+			}
+			
 			ReactionSequenceStep step = steps.get(i);
 			if (step != null)
 			{

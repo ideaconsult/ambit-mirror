@@ -6,6 +6,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 
+import ambit2.reactions.GenericReaction;
 import ambit2.reactions.Reaction;
 
 public class ReactionSequenceStep 
@@ -14,7 +15,7 @@ public class ReactionSequenceStep
 	List<IAtomContainer> outputMolecules = null;
 	//int inputMoleculeLevelIndex = 0;
 	//int outMoleculesLevelIndices[] = null;
-	Reaction reaction = null;
+	GenericReaction reaction = null;
 	List<IAtom> reactionInstance = null;
 		
 	public IAtomContainer getInputMolecule() {
@@ -43,10 +44,10 @@ public class ReactionSequenceStep
 		this.outMoleculesLevelIndices = outMoleculesLevelIndices;
 	}
 	*/
-	public Reaction getReaction() {
+	public GenericReaction getReaction() {
 		return reaction;
 	}
-	public void setReaction(Reaction reaction) {
+	public void setReaction(GenericReaction reaction) {
 		this.reaction = reaction;
 	}
 	public List<IAtom> getReactionInstance() {
