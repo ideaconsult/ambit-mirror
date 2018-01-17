@@ -229,12 +229,17 @@ public class ReactionDataBase
 				line = line.trim();
 				if (line.equals(""))
 					continue; //empty line is skipped
+				if (line.startsWith("#"))
+					continue; //comment line is omitted (line starting with '#')
 				String tokens[] = line.split(splitter);
+				
+				/*
 				if (tokens.length <= maxNeededColumnIndex)
 				{
 					errors.add("Insufficient column for reading reaction at line " + lineNum);
 					continue;
 				}
+				*/
 				
 				try	{
 					GenericReaction r = GenericReaction.getReactionFromTokens(tokens, indices);
@@ -288,11 +293,17 @@ public class ReactionDataBase
 	
 	public void configureGenericReactions(SMIRKSManager smrkMan) throws Exception
 	{
+		errors.clear();
 		if (genericReactions == null)
 			return;
-		
 		for (GenericReaction reaction : genericReactions)
-			reaction.configure(smrkMan);
+		{	
+			try {
+				reaction.configure(smrkMan);
+			} catch (Exception e) {
+				errors.add("Config errors for reaction id=" + reaction.id + "  " + e.getMessage());
+			}
+		}	
 	}
 	
 	
