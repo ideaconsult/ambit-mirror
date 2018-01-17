@@ -271,7 +271,7 @@ public class GenericReaction
 		Integer ind;
 		
 		ind = indices.get("Id");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 		{	
 			Integer i = getInt(tokens[ind]);
 			if (i != null)
@@ -279,23 +279,23 @@ public class GenericReaction
 		}	
 		
 		ind = indices.get("Name");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 			r.name = tokens[ind];
 		
 		ind = indices.get("SMIRKS");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 			r.smirks= tokens[ind];
 		
 		//TODO handle SMIRKSflags and SMILES
 		
 		ind = indices.get("Class");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 			r.reactionClass= tokens[ind];
 		
 		//TODO handle ReactionCenter, ReactionType and TransformType
 		
 		ind = indices.get("BasicScore");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 		{	
 			Double d= getDouble(tokens[ind]);
 			if (d != null)
@@ -303,7 +303,7 @@ public class GenericReaction
 		}
 		
 		ind = indices.get("ExperimentalConditionsScore");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 		{	
 			Double d= getDouble(tokens[ind]);
 			if (d != null)
@@ -311,7 +311,7 @@ public class GenericReaction
 		}
 		
 		ind = indices.get("ReliabilityScore");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 		{	
 			Double d= getDouble(tokens[ind]);
 			if (d != null)
@@ -321,11 +321,11 @@ public class GenericReaction
 		//TODO 	Handle YieldInterval and Conditions
 		 
 		ind = indices.get("Info");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 			r.info = tokens[ind];
 		
 		ind = indices.get("ExperimentalConditionsInfo");
-		if (ind != null)
+		if (ind != null && ind < tokens.length)
 			r.experimentalConditionsInfo = tokens[ind];
 		
 		return r;

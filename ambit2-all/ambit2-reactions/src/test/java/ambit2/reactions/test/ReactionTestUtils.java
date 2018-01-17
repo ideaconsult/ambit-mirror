@@ -72,7 +72,9 @@ public class ReactionTestUtils
 		
 		//testAtomComplexity();
 		
-		testMolceculeComplexity();
+		//testMolceculeComplexity();
+		
+		testReactionDataBase("/Volumes/Data/RDB_080118_SA-mod.txt");
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception
@@ -323,6 +325,34 @@ public class ReactionTestUtils
 			StartMaterialData sm = (StartMaterialData)entry.getValue();
 			System.out.println(inchiKey + "  " + sm.id + "   " + sm.smiles);
 		}
+	}
+	
+	public static void testReactionDataBase(String reactionDBFileName) throws Exception
+	{
+		ReactionDataBase rdb = new ReactionDataBase(reactionDBFileName);
+		System.out.println("Reading reaction database: " + reactionDBFileName);
+		if (!rdb.errors.isEmpty())
+		{
+			System.out.println("Errors:");
+			for (int i = 0; i < rdb.errors.size(); i++)
+				System.out.println(rdb.errors.get(i));
+		}
+		
+		for (int i = 0; i < rdb.genericReactions.size(); i++)
+		{	
+			GenericReaction r = rdb.genericReactions.get(i);
+			System.out.println(r.toString());
+		}
+		SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
+		rdb.configureGenericReactions(smrkMan);
+		
+		if (!rdb.errors.isEmpty())
+		{
+			System.out.println("Reaction config errors:");
+			for (int i = 0; i < rdb.errors.size(); i++)
+				System.out.println(rdb.errors.get(i));
+		}
+		
 	}
 	
 	public static void testAtomComplexity(String smiles, boolean includeImplicitHAtoms) throws Exception
