@@ -226,6 +226,7 @@ public class ReactionSequence
 									GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
 		ReactionSequenceStep step = new ReactionSequenceStep();
+		step.reaction = reaction;
 		IAtomContainer mol = level.molecules.get(moleculeIndex);
 		
 		IAtomContainer products = reaction.applyAtInstance(mol, reactionInstance, smrkMan, true);
