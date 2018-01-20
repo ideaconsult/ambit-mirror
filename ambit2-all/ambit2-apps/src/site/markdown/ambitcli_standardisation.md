@@ -6,11 +6,11 @@ Chemical structure standardization. Available since AMBIT 3.0.0.
 
 ## Download
 
-* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.2/ambitcli-3.0.2.jar/download">ambitcli-3.0.2</a>
+* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.1.0/ambitcli-3.1.0-release.jar/download">ambitcli-3.1.0</a>
 
 * <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">All releases</a>
 
-* Pre-release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.1.0/">ambitcli-3.1.0-{buildnumber}.jar</a> 
+* Pre-release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.2.0/">ambitcli-3.2.0-{buildnumber}.jar</a> 
 
 * Development <a href="https://nexus.ideaconsult.net#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
 
@@ -78,13 +78,13 @@ $java -jar -Djava.util.logging.config.file=myLoggingConfigFilePath .... other op
 * Generate SMILES, InChI and InChI key, retain only the PUBCHEM_CID from the fields in the input file
 
 ````
-    java -jar ambitcli-3.0.2-7354.jar -a standardize -m post -a standardize -m post -d page=0 -d pagesize=-1 -d tautomers=false -d tag_tokeep=PUBCHEM_CID -d smilescanonical=false -d smiles=true -d inchi=true -i inputfile -o outputfile
+    java -jar ambitcli-3.1.0-release.jar -a standardize -m post -a standardize -m post -d page=0 -d pagesize=-1 -d tautomers=false -d tag_tokeep=PUBCHEM_CID -d smilescanonical=false -d smiles=true -d inchi=true -i inputfile -o outputfile
 ````
 
 * Full standardisation, write SMILES, InChI and InChI key into AMBIT_SMILES, AMBIT_InChI, AMBIT_InChIKey, retain only the PUBCHEM_CID from the fields in the input file
 
 ````
-    java -jar ambitcli-3.0.2-7354.jar -a standardize -m post -a standardize -m post -d page=0 -d pagesize=-1 -d tag_smiles=AMBIT_SMILES -d tag_inchi=AMBIT_InChI -d tag_inchikey=AMBIT_InChIKey -d tautomers=true -d splitfragments=true -d implicith=true -d smiles=true -d smilescanonical=false -d inchi=true -d neutralise=true -d isotopes=true -d tag_tokeep=PUBCHEM_CID
+    java -jar ambitcli-3.1.0-release.jar -a standardize -m post -a standardize -m post -d page=0 -d pagesize=-1 -d tag_smiles=AMBIT_SMILES -d tag_inchi=AMBIT_InChI -d tag_inchikey=AMBIT_InChIKey -d tautomers=true -d splitfragments=true -d implicith=true -d smiles=true -d smilescanonical=false -d inchi=true -d neutralise=true -d isotopes=true -d tag_tokeep=PUBCHEM_CID
 ````
 
 ### Options
