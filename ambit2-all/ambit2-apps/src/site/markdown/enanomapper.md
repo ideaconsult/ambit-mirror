@@ -48,7 +48,7 @@ Free text search on eNanoMapper and cananoLab databases
 is part of the computational infrastructure for toxicological data management
  of engineered nanomaterials, developed within the [EU FP7 eNanoMapper](http://www.enanomapper.net) project. 
  
-* [NEW] [User friendly data entry templates](http://ambit.sourceforge.net/enanomapper/templates)
+* [Data entry templates](http://ambit.sourceforge.net/enanomapper/templates)
  
 * Provides support for upload, search and retrieval of nanomaterials and experimental data through a REST web services [API](http://enanomapper.github.io/API/) and a web browser interface. 
  
@@ -82,7 +82,7 @@ The eNanoMapper prototype database is an open source web application, which can 
 
 Try the public web services, datasets and models : 
 
--   <form action="http://search.data.enanomapper.net" method="GET"><input type="text" id="search" name="search" value="zinc oxide"/><input type='submit' value='Search'/></form>
+-   <form action="http://search.data.enanomapper.net/enm" method="GET"><input type="text" id="search" name="search" value="zinc oxide"/><input type='submit' value='Search'/></form>
 
 -   [**Search nanomaterials by identifier**](https://apps.ideaconsult.net/enanomapper/substance?search=NM-111%26)
 
