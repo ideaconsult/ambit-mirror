@@ -92,6 +92,7 @@ import ambit2.dbcli.CliOptions._preprocessingoptions;
 import ambit2.dbcli.CliOptions._subcommandmode;
 import ambit2.dbcli.descriptors.AtomEnvironmentGeneratorApp;
 import ambit2.dbcli.exceptions.InvalidCommand;
+import ambit2.dbcli.processor.StdzBatchProcessor;
 import ambit2.descriptors.processors.BitSetGenerator;
 import ambit2.descriptors.processors.FPTable;
 import ambit2.descriptors.simmatrix.SimilarityMatrix;
@@ -733,7 +734,7 @@ public class AmbitCli {
 	protected float parseThresholdParam() {
 		try {
 			Object n = options.getParam(":threshold");
-			return ((Double)n).floatValue();
+			return ((Double) n).floatValue();
 		} catch (Exception x) {
 			logger_cli.log(Level.WARNING, x.toString());
 			return 0.75f;
@@ -1311,7 +1312,7 @@ public class AmbitCli {
 		final IChemObjectWriter writer = out.getWriter();
 		if (writer instanceof FilesWithHeaderWriter)
 			((FilesWithHeaderWriter) writer).setAddSMILEScolumn(false);
-		final boolean writesdf = writer instanceof SDFWriter;
+		
 		final BatchDBProcessor<IStructureRecord> batch = new BatchDBProcessor<IStructureRecord>() {
 
 			@Override
@@ -1362,123 +1363,7 @@ public class AmbitCli {
 
 		};
 		batch.setProcessorChain(new ProcessorsChain<IStructureRecord, IBatchStatistics, IProcessor>());
-		batch.getProcessorChain().add(new DefaultAmbitProcessor<IStructureRecord, IStructureRecord>() {
-
-			protected MoleculeReader molReader = new MoleculeReader(true, false);
-
-			@Override
-			public IStructureRecord process(IStructureRecord record) throws Exception {
-
-				IAtomContainer mol;
-				IAtomContainer processed = null;
-
-				try {
-					mol = molReader.process(record);
-					if (mol != null) {
-						for (Property p : record.getRecordProperties()) {
-							Object v = record.getRecordProperty(p);
-
-							// initially to get rid of smiles, inchi ,
-							// etc, these are
-							// already parsed
-							if (tags_to_keep != null && Arrays.binarySearch(tags_to_keep, p.getName()) < 0)
-								continue;
-							if (p.getName().startsWith("http://www.opentox.org/api/1.1#"))
-								continue;
-							else
-								mol.setProperty(p, v);
-						}
-						if (tags_to_keep != null) {
-							List<String> toRemove = null;
-							Iterator pi = mol.getProperties().keySet().iterator();
-							while (pi.hasNext()) {
-								Object p = pi.next();
-								if (Arrays.binarySearch(tags_to_keep, p.toString()) < 0) {
-									if (toRemove == null)
-										toRemove = new ArrayList<String>();
-									toRemove.add(p.toString());
-								}
-
-							}
-							if (toRemove != null)
-								for (String propertyToRemove : toRemove)
-									mol.removeProperty(propertyToRemove);
-
-						}
-
-					} else {
-						logger_cli.log(Level.SEVERE, "MSG_STANDARDIZE",
-								new Object[] { "Empty molecule See the ERROR tag in the output file", getIds(record) });
-						return record;
-					}
-				} catch (Exception x) {
-					logger_cli.log(Level.SEVERE, "MSG_ERR_MOLREAD", new Object[] { getIds(record), x.toString() });
-					return record;
-				} finally {
-
-				}
-				processed = mol;
-
-				// CDK adds these for the first MOL line
-				if (!writesdf) {
-					// if (mol.getProperty(CDKConstants.TITLE) != null)
-					// mol.removeProperty(CDKConstants.TITLE);
-					if (mol.getProperty(CDKConstants.REMARK) != null)
-						mol.removeProperty(CDKConstants.REMARK);
-				}
-				if ((smirksProcessor != null) && smirksProcessor.isEnabled()) {
-					processed = smirksProcessor.process(processed);
-				}
-
-				try {
-					processed = standardprocessor.process(processed);
-
-				} catch (Exception x) {
-					String err = processed.getProperty(StructureStandardizer.ERROR_TAG);
-					logger_cli.log(Level.SEVERE, x.getMessage(), x);
-					if (processed != null) {
-						err = processed.getProperty(StructureStandardizer.ERROR_TAG);
-						processed.setProperty(StructureStandardizer.ERROR_TAG, String.format("%s %s %s",
-								err == null ? "" : err, x.getClass().getName(), x.getMessage()));
-					}
-				} finally {
-					if (processed != null) {
-						Iterator<Entry<Object, Object>> p = mol.getProperties().entrySet().iterator();
-						// don't overwrite properties from the source
-						// molecule
-						while (p.hasNext()) {
-							Entry<Object, Object> entry = p.next();
-							Object value = processed.getProperty(entry.getKey());
-							if (value == null || "".equals(value.toString().trim()))
-								processed.setProperty(entry.getKey(), entry.getValue());
-						}
-					}
-				}
-				if (processed != null)
-					try {
-						if (writesdf && sdf_title != null) {
-
-							for (Entry<Object, Object> p : processed.getProperties().entrySet())
-								if (sdf_title.equals(p.getKey().toString().toLowerCase())) {
-									processed.setProperty(CDKConstants.TITLE, p.getValue());
-									break;
-								}
-						}
-						if (debugatomtypes) {
-							Object debug = (processed == null) ? null : processed.getProperty("AtomTypes");
-
-							if (debug != null && !"".equals(debug))
-								writer.write(processed);
-						} else
-							writer.write(processed);
-					} catch (Exception x) {
-						logger_cli.log(Level.SEVERE, x.getMessage());
-					}
-				return record;
-
-			}
-
-		});
+		batch.getProcessorChain().add(new StdzBatchProcessor(standardprocessor, smirksProcessor, tags_to_keep,logger_cli,writer,sdf_title,debugatomtypes));
 		batch.addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
