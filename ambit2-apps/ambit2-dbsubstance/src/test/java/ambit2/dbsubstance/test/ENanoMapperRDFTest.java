@@ -44,10 +44,12 @@ public class ENanoMapperRDFTest extends DbUnitTest {
 
 	public static File getRDFFile() throws Exception {
 		File baseDir = new File(System.getProperty("java.io.tmpdir"));
-		File file = new File(baseDir, "datamodel.ttl");
+		File file = new File(baseDir, "enmvdata.ttl");
+		
 		if (!file.exists()) {
-			URL url = new URL(
-					"https://gist.githubusercontent.com/egonw/07e5fc9b1be7f9ece44834a169ddc155/raw/datamodel.ttl");
+			URL url = ENanoMapperRDF2Test.class.getClassLoader().getResource("ambit2/db/data/ttl/enmvdata.ttl");
+			Assert.assertNotNull(url);
+			//URL url = new URL("https://raw.githubusercontent.com/egonw/enmrdf/master/data.ttl");
 			DownloadTool.download(url, file);
 		}
 		return file;
@@ -79,15 +81,15 @@ public class ENanoMapperRDFTest extends DbUnitTest {
 			ITable table = c.createQueryTable("EXPECTED",
 					"SELECT count(*) as c FROM substance");
 			//
-			Assert.assertEquals(new BigInteger("1"), table.getValue(0, "c"));
+			Assert.assertEquals(new BigInteger("17"), table.getValue(0, "c"));
 
 			table = c.createQueryTable("EXPECTED",
 					"SELECT count(*) as c FROM substance_protocolapplication");
-			Assert.assertEquals(new BigInteger("2"), table.getValue(0, "c"));			
+			Assert.assertEquals(new BigInteger("20"), table.getValue(0, "c"));			
 			
 			table = c.createQueryTable("EXPECTED",
 					"SELECT count(*) as c FROM substance_experiment");
-			Assert.assertEquals(new BigInteger("2"), table.getValue(0, "c"));		
+			Assert.assertEquals(new BigInteger("20"), table.getValue(0, "c"));		
 			
 		} finally {
 			c.close();

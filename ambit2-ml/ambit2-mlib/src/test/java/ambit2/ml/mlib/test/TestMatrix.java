@@ -27,6 +27,9 @@ import org.apache.spark.mllib.clustering.StreamingKMeans;
 import org.apache.spark.storage.StorageLevel;
 import org.junit.Test;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+
 import scala.Tuple3;
 import scala.reflect.ClassTag;
 
@@ -193,17 +196,17 @@ public class TestMatrix extends TestSparkAbstract {
 	@Test
 	public void testcreateMatrixSparse() throws Exception {
 		String source = "/chembl";
-		createMatrix(source, -1, false,0.25);
+		createMatrix(source, -1, false, 0.75);
 	}
 
 	@Test
 	public void testcreateMatrixDense() throws Exception {
 		String source = "/train";
-		createMatrix(source, 10, true,0.25);
+		createMatrix(source, 10, true, 0.25);
 	}
 
-	public void createMatrix(String source, int max, boolean dense, double threshold)
-			throws Exception {
+	public void createMatrix(String source, int max, boolean dense,
+			double threshold) throws Exception {
 
 		List<L> b = new ArrayList<L>();
 		long now = System.currentTimeMillis();
@@ -211,6 +214,8 @@ public class TestMatrix extends TestSparkAbstract {
 		File folder = new File(dir_ + source);
 		File[] files = folder.listFiles();
 
+		double tt[] = new double[] { 0, 0.25, 0.5, 0.75, 0.8, 0.9, 0.95, 1 };
+		long histogram[] = new long[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		for (File file : files) {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			try {
@@ -218,7 +223,8 @@ public class TestMatrix extends TestSparkAbstract {
 				int r = 0;
 				while ((line = reader.readLine()) != null) {
 					r++;
-					b.add(dense ? parseLineDense(line) : parseLineSparse(line,r));
+					b.add(dense ? parseLineDense(line) : parseLineSparse(line,
+							r));
 					if ((max > 0) && (r > max))
 						break;
 				}
@@ -238,13 +244,23 @@ public class TestMatrix extends TestSparkAbstract {
 				for (int j = i + 1; j < b.size(); j++) {
 					L item2 = b.get(j);
 					double t = tanimoto(item1.getBs(), item2.getBs());
-					if (t > threshold) {
+					for (int k = 0; k < tt.length; k++)
+						if (t <= tt[k]) {
+							histogram[k]++;
+							break;
+						}
+					if (t >= threshold) {
 						writer.write(String.format("%s\t%s\t%4.2f\n",
 								item1.getId(), item2.getId(), t));
 					}
 				}
-				if ((i % 1000) == 0) {
-					System.out.println(i);
+				if ((i % 5000) == 0) {
+					StringBuilder bb = new StringBuilder();
+					for (int k = 0; k < histogram.length; k++)
+						bb.append(String.format("%s:%s\t", tt[k],histogram[k]));
+					System.out.println(String.format("%d\t%s msec\t%s", i,
+							(System.currentTimeMillis() - now) / (i + 1),
+							bb.toString()));
 				}
 				writer.flush();
 			}

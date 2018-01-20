@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -20,7 +18,6 @@ import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -30,20 +27,19 @@ import ambit2.core.io.FileInputState;
 import ambit2.descriptors.AtomEnvironentMatrix;
 
 public class AtomEnvironmentGeneratorApp {
-	static Logger logger ;
-	protected CDKHydrogenAdder hAdder = CDKHydrogenAdder
-			.getInstance(SilentChemObjectBuilder.getInstance());;
+	static Logger logger;
+	protected CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());;
 	protected boolean hydrogens = false;
-	protected Aromaticity aromaticity = new Aromaticity(ElectronDonation.cdk(),
-			Cycles.cdkAromaticSet());
-	
+	protected Aromaticity aromaticity = new Aromaticity(ElectronDonation.cdk(), Cycles.cdkAromaticSet());
+
 	public AtomEnvironmentGeneratorApp(Logger logger) {
-		if (logger == null) this.logger = Logger.getLogger("ambitcli", "ambit2.dbcli.msg");
-		else this.logger = logger;
+		if (logger == null)
+			this.logger = Logger.getLogger("ambitcli", "ambit2.dbcli.msg");
+		else
+			this.logger = logger;
 	}
 
-	protected Map<String, String> lookup(String id_tag, String activityTag,
-			String mergeResultsFile) {
+	protected Map<String, String> lookup(String id_tag, String activityTag, String mergeResultsFile) {
 
 		if (mergeResultsFile == null)
 			return null;
@@ -59,8 +55,7 @@ public class AtomEnvironmentGeneratorApp {
 		Map<String, String> map = new HashMap<String, String>();
 		IIteratingChemObjectReader reader = null;
 		try {
-			reader = FileInputState.getReader(new FileInputStream(
-					mergeResultsFile), mergeResultsFile);
+			reader = FileInputState.getReader(new FileInputStream(mergeResultsFile), mergeResultsFile);
 			while (reader.hasNext()) {
 				IAtomContainer mol = (IAtomContainer) reader.next();
 				String id = mol.getProperty(id_tag);
@@ -86,23 +81,27 @@ public class AtomEnvironmentGeneratorApp {
 		mmwriter.write(value);
 	}
 
-	public long runAtomTypeMatrixDescriptor(String root, File file,
-			String id_tag, String activityTag, String mergeResultsFile,
-			boolean noCSV, boolean noMM, boolean noJSON, boolean normalize,
-			Double laplace_smoothing, boolean costsensitive,
-			boolean levels_as_namespace) throws Exception {
+	public long runAtomTypeMatrixDescriptor(String root, File file, String id_tag, String activityTag,
+			String mergeResultsFile, boolean noCSV, boolean noMM, boolean noJSON, boolean normalize,
+			Double laplace_smoothing, boolean costsensitive, boolean levels_as_namespace) throws Exception {
 
-		Map<String, String> lookup = lookup(id_tag, activityTag,
-				mergeResultsFile);
+		Map<String, String> lookup = lookup(id_tag, activityTag, mergeResultsFile);
 
-		AtomEnvironentMatrix gen = new AtomEnvironentMatrix(CDKAtomTypeMatcher.getInstance(SilentChemObjectBuilder.getInstance()),"org/openscience/cdk/dict/data/cdk-atom-types.owl",7);
-		InputStream in = new FileInputStream(file);
+		AtomEnvironentMatrix gen = new AtomEnvironentMatrix(
+				CDKAtomTypeMatcher.getInstance(SilentChemObjectBuilder.getInstance()),
+				"org/openscience/cdk/dict/data/cdk-atom-types.owl", 7);
 
-		IIteratingChemObjectReader<IAtomContainer> reader = new IteratingSDFReader(
-				new InputStreamReader(in),
-				SilentChemObjectBuilder.getInstance());
+		/*
+		 * InputStream in = new FileInputStream(file);
+		 * 
+		 * IIteratingChemObjectReader<IAtomContainer> reader = new
+		 * IteratingSDFReader( new InputStreamReader(in),
+		 * SilentChemObjectBuilder.getInstance());
+		 */
 
-		File mmfile = new File(root, file.getName().replace(".sdf", ".mm.tmp"));
+		IIteratingChemObjectReader<IAtomContainer> reader = FileInputState.getReader(file);
+
+		File mmfile = new File(root, file.getName() + ".mm.tmp");
 		FileWriter mmwriter = null;
 		if (!noMM) {
 			/**
@@ -111,13 +110,12 @@ public class AtomEnvironmentGeneratorApp {
 			mmwriter = new FileWriter(mmfile);
 		}
 
-		File vwfile = new File(root, file.getName().replace(".sdf", ".vw"));
+		File vwfile = new File(root, file.getName() + ".vw");
 		FileWriter vwwriter = new FileWriter(vwfile);
 
 		FileWriter jsonwriter = null;
 		if (!noJSON) {
-			File jsonfile = new File(root, file.getName().replace(".sdf",
-					".json"));
+			File jsonfile = new File(root, file.getName() + ".json");
 			jsonwriter = new FileWriter(jsonfile);
 		}
 		int mmrows = 0;
@@ -127,8 +125,7 @@ public class AtomEnvironmentGeneratorApp {
 		Hashtable<String, FileWriter> writers = new Hashtable<String, FileWriter>();
 		String[] sets = new String[] { "ALL" };
 		for (String set : sets) {
-			FileWriter writer = new FileWriter(new File(root, file.getName()
-					.replace(".sdf", "") + set + "_AEMATRIX.csv"));
+			FileWriter writer = new FileWriter(new File(root, file.getName() + set + "_AEMATRIX.csv"));
 			writers.put(set, writer);
 		}
 		int row = 0;
@@ -138,10 +135,8 @@ public class AtomEnvironmentGeneratorApp {
 			IAtomContainer mol = reader.next();
 			Object id = id_tag == null ? row : mol.getProperty(id_tag);
 
-			String set = mol.getProperty("Set") == null ? "" : mol.getProperty(
-					"Set").toString();
-			Object activityValue = mol.getProperty(activityTag) == null ? ""
-					: mol.getProperty(activityTag);
+			String set = mol.getProperty("Set") == null ? "" : mol.getProperty("Set").toString();
+			Object activityValue = mol.getProperty(activityTag) == null ? "" : mol.getProperty(activityTag);
 
 			if (lookup != null && (id_tag != null)) {
 				activityValue = lookup.get(id);
@@ -152,12 +147,11 @@ public class AtomEnvironmentGeneratorApp {
 				csvWriter = writers.get("ALL");
 
 			if (row % 100 == 1) {
-				logger.log(Level.INFO,"MSG_INFO_PROCESSED", row);
+				logger.log(Level.INFO, "MSG_INFO_PROCESSED", row);
 			}
 
 			try {
-				AtomContainerManipulator
-						.percieveAtomTypesAndConfigureAtoms(mol);
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 			} catch (Exception x) {
 				printError(row, id_tag, id, x);
 			}
@@ -170,8 +164,7 @@ public class AtomEnvironmentGeneratorApp {
 
 			try {
 				if (hydrogens) {
-					AtomContainerManipulator
-							.convertImplicitToExplicitHydrogens(mol);
+					AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
 
 				} else {
 					if (mol.getBondCount() > 1) {
@@ -200,7 +193,7 @@ public class AtomEnvironmentGeneratorApp {
 			} catch (Exception x) {
 				printError(row, id_tag, id, x);
 			}
-			Map<String,Integer> values = gen.doCalculation(mol).getResults();
+			Map<String, Integer> values = gen.doCalculation(mol).getResults();
 			if (!header) {
 				mm_write(csvWriter, id_tag == null ? "Row" : id_tag);
 				mm_write(csvWriter, ",");
@@ -226,8 +219,8 @@ public class AtomEnvironmentGeneratorApp {
 					mm_write(csvWriter, String.format("%d", row));
 				mm_write(jsonwriter, String.format("\"id\":%d,", row));
 			} else {
-				mm_write(jsonwriter, String.format("\"id\":%s,", JSONUtils
-						.jsonQuote(JSONUtils.jsonEscape(id.toString()))));
+				mm_write(jsonwriter,
+						String.format("\"id\":%s,", JSONUtils.jsonQuote(JSONUtils.jsonEscape(id.toString()))));
 				if (!noCSV)
 					mm_write(csvWriter, id.toString());
 			}
@@ -248,31 +241,24 @@ public class AtomEnvironmentGeneratorApp {
 				vwwriter.write(" ");
 			} else
 				try {
-					int activity = Integer.parseInt(activityValue
-							.toString());
-					sActivity = activity == 1.0 ? "Positive"
-							: (activity == 0) ? "Negative" : activityValue
-									.toString();
+					int activity = Integer.parseInt(activityValue.toString());
+					sActivity = activity == 1.0 ? "Positive" : (activity == 0) ? "Negative" : activityValue.toString();
 					mm_write(csvWriter, sActivity);
-					mm_write(
-							jsonwriter,
-							String.format("\"activity\":%s,", JSONUtils
-									.jsonQuote(JSONUtils.jsonEscape(sActivity))));
+					mm_write(jsonwriter,
+							String.format("\"activity\":%s,", JSONUtils.jsonQuote(JSONUtils.jsonEscape(sActivity))));
 					if (jsonwriter != null)
 						jsonwriter.flush();
-					//int iActivity = activity == 1.0 ? 3 : ((activity == 0) ? 1		: 0);
-					importance = activity == 1.0 ? 3
-							: ((activity == 0) ? 1 : 0);
+					// int iActivity = activity == 1.0 ? 3 : ((activity == 0) ?
+					// 1 : 0);
+					importance = activity == 1.0 ? 3 : ((activity == 0) ? 1 : 0);
 					// int iActivity = activity == 1.0 ? 1 : ((activity == 0) ?
 					// -1 : 0);
 					String vwActivity;
 					if (costsensitive)
 						vwActivity = activity == 1.0 ? "1:5.0 2:0.5 3:0"
-								: ((activity == 0) ? "1:0.0 2:5.0 3:5.0"
-										: "1 2 3");
+								: ((activity == 0) ? "1:0.0 2:5.0 3:5.0" : "1 2 3");
 					else
-						vwActivity = activity == 1.0 ? "1"
-								: ((activity == 0) ? "2" : "3");
+						vwActivity = activity == 1.0 ? "1" : ((activity == 0) ? "2" : "3");
 					;
 					// vwwriter.write(Integer.toString(iActivity)); // label
 					vwwriter.write(vwActivity); // label
@@ -283,13 +269,11 @@ public class AtomEnvironmentGeneratorApp {
 					if (costsensitive)
 						vwwriter.write("A".equals(activityValue) ? "1:5.0 2:0.5 3:0.0"
 								: ("B".equals(activityValue) ? "1:5.0 1:0.0 3:0.5"
-										: ("C".equals(activityValue) ? "1:0 2:5.0 3:5.0"
-												: activityValue.toString())));
+										: ("C".equals(activityValue) ? "1:0 2:5.0 3:5.0" : activityValue.toString())));
 					else
-						vwwriter.write("A".equals(activityValue) ? "1" : ("B"
-								.equals(activityValue) ? "3" : ("C"
-								.equals(activityValue) ? "2" : activityValue
-								.toString())));
+						vwwriter.write("A".equals(activityValue) ? "1"
+								: ("B".equals(activityValue) ? "3"
+										: ("C".equals(activityValue) ? "2" : activityValue.toString())));
 				}
 			if (!noCSV) {
 				mm_write(csvWriter, ",");
@@ -318,11 +302,9 @@ public class AtomEnvironmentGeneratorApp {
 				if (count <= 0)
 					continue;
 				mmentries++;
-				mm_write(mmwriter,
-						String.format("%d\t%d\t%d\n", mmrows, (i + 1), count));
+				mm_write(mmwriter, String.format("%d\t%d\t%d\n", mmrows, (i + 1), count));
 				mm_write(jsonwriter, comma);
-				mm_write(jsonwriter,
-						String.format("\"%s\":%d", gen.getDescriptorNames()[i], count));
+				mm_write(jsonwriter, String.format("\"%s\":%d", gen.getDescriptorNames()[i], count));
 				comma = ",";
 
 			}
@@ -333,14 +315,13 @@ public class AtomEnvironmentGeneratorApp {
 			if (!levels_as_namespace)
 				vwwriter.write(" |AE");
 
-			
 			for (int l = 0; l < 9; l++) {
 				StringBuilder aebuilder = new StringBuilder();
 				String ns = String.format("L%d_", l);
 
 				if (levels_as_namespace) {
 					vwwriter.write(" |");
-					vwwriter.write(String.format("%dL_	",l));
+					vwwriter.write(String.format("%dL_	", l));
 				}
 
 				for (int i = 0; i < gen.getDescriptorNames().length; i++)
@@ -366,22 +347,18 @@ public class AtomEnvironmentGeneratorApp {
 							if (laplace_smoothing != null) {
 								if (sum[l] <= 0)
 									continue;
-								v = (((double) count) + laplace_smoothing)
-										/ (sum[l] + laplace_smoothing * n[l]);
-								aebuilder.append(String
-										.format(" %s:%e", tag, v));
+								v = (((double) count) + laplace_smoothing) / (sum[l] + laplace_smoothing * n[l]);
+								aebuilder.append(String.format(" %s:%e", tag, v));
 							} else {
 
 								if (count <= 0)
 									continue;
 
 								if (normalize) {
-									aebuilder.append(String.format(" %s:%f",
-											tag, ((double) count) / sum[l]));
+									aebuilder.append(String.format(" %s:%f", tag, ((double) count) / sum[l]));
 
 								} else
-									aebuilder.append(String.format(" %s:%d",
-											tag, count));
+									aebuilder.append(String.format(" %s:%d", tag, count));
 							}
 						}
 
@@ -407,12 +384,9 @@ public class AtomEnvironmentGeneratorApp {
 		}
 		if (mmwriter != null) {
 			mmwriter.close();
-			mmwriter = new FileWriter(new File(root, file.getName().replace(
-					".sdf", ".mm")));
-			mm_write(mmwriter,
-					"%%MatrixMarket matrix coordinate real general\n");
-			mm_write(mmwriter,
-					String.format("%d\t%d\t%d\n", mmrows, mmcols, mmentries));
+			mmwriter = new FileWriter(new File(root, file.getName() + ".mm"));
+			mm_write(mmwriter, "%%MatrixMarket matrix coordinate real general\n");
+			mm_write(mmwriter, String.format("%d\t%d\t%d\n", mmrows, mmcols, mmentries));
 			BufferedReader bin = null;
 			try {
 				String line;
@@ -451,8 +425,8 @@ public class AtomEnvironmentGeneratorApp {
 	}
 
 	private void printError(int row, String id_tag, Object id, Exception x) {
-		logger.severe(String.format("\nError at row %d\t%s = %s\t%s", row,
-				id_tag == null ? "ROW=" : id_tag, id, x.getMessage()));
+		logger.severe(String.format("\nError at row %d\t%s = %s\t%s", row, id_tag == null ? "ROW=" : id_tag, id,
+				x.getMessage()));
 	}
 
 	public static void main(String[] args) {
@@ -475,9 +449,8 @@ public class AtomEnvironmentGeneratorApp {
 			if (file == null)
 				throw new Exception(
 						"SDF file not specified.\nUsage: AtomEnvironmentGeneratorTest rootfolder file.sdf idtag activitytag mergeresultsfile");
-			test.runAtomTypeMatrixDescriptor(root, new File(root, file),
-					id_tag, activityTag, mergeResultsFile, noCSV, false, false,
-					true, null, true, false);
+			test.runAtomTypeMatrixDescriptor(root, new File(root, file), id_tag, activityTag, mergeResultsFile, noCSV,
+					false, false, true, null, true, false);
 		} catch (Exception x) {
 			logger.severe(x.getMessage());
 		}

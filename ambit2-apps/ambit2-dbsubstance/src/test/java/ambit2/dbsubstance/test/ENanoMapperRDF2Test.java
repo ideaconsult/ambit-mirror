@@ -36,9 +36,12 @@ public class ENanoMapperRDF2Test {
 
 	public static File getRDFFile() throws Exception {
 		File baseDir = new File(System.getProperty("java.io.tmpdir"));
-		File file = new File(baseDir, "datamodel2.ttl");
+		File file = new File(baseDir, "enmvdata.ttl");
+		
 		if (!file.exists()) {
-			URL url = new URL("https://raw.githubusercontent.com/egonw/enmrdf/master/data.ttl");
+			URL url = ENanoMapperRDF2Test.class.getClassLoader().getResource("ambit2/db/data/ttl/enmvdata.ttl");
+			Assert.assertNotNull(url);
+			//URL url = new URL("https://raw.githubusercontent.com/egonw/enmrdf/master/data.ttl");
 			DownloadTool.download(url, file);
 		}
 		return file;
