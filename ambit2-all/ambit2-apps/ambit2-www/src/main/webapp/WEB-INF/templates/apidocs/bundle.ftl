@@ -874,7 +874,7 @@
 			        {
 			            "method": "PUT",
 			            "summary": "Import studies for this bundle",
-			            "notes": "Import studies for this bundle. Supports <a href='https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/bundle.md'>JSON format</a> Example JSON :<a href='https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/json/matrixupdate.json'>matrixupdate.json</a> and <a href='https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/json/study.json'>study.json</a>",
+			            "notes": "Import studies for this bundle. Supports <a href='https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/bundle.md'>JSON format</a> Example JSON :<a href='https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/json/matrixupdate.json'>matrixupdate.json</a> and <a href='https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/ambit2-core/src/test/resources/ambit2/core/data/json/study.json'>study.json</a>",
 			            "type": "Task",
 			            "nickname": "uploadBundleStudy",
 		                "consumes": [

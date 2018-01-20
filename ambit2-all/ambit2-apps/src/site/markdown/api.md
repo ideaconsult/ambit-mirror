@@ -7,16 +7,16 @@
 Since the 2011 publication a number of enhancements were implemented, including [JSON](http://www.json.org/) serialisation of all REST resources and support for Substances and experimental data.  
 
 ### Interactive API Documentation by Swagger-UI 
-* [AMBIT API documentation](http://ideaconsult.github.io/examples-ambit/apidocs/)
+* [AMBIT API documentation](http://ideaconsult.github.io/apps-ambit/apidocs/)
 
-### [How to](https://github.com/ideaconsult/examples-ambit/tree/master/ambit-json-docs) 
-* How to access [Datasets](https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/dataset.md)
-* How to [search chemical compounds](https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/query.md)
-* How to access [Algorithms](https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/algorithm.md) 
-* How to access [Models](https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/model.md)
-* How to access [Substances](https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/substance.md)
-* How to access [Bundles (of substances and studies)](https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/bundle.md)
-* How to [run Toxtree predictions](https://github.com/ideaconsult/examples-ambit/blob/master/ambit-json-docs/toxtree.md) using REST web services and JSON.
+### [How to](https://github.com/ideaconsult/apps-ambit/tree/master/ambit-json-docs) 
+* How to access [Datasets](https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/dataset.md)
+* How to [search chemical compounds](https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/query.md)
+* How to access [Algorithms](https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/algorithm.md) 
+* How to access [Models](https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/model.md)
+* How to access [Substances](https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/substance.md)
+* How to access [Bundles (of substances and studies)](https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/bundle.md)
+* How to [run Toxtree predictions](https://github.com/ideaconsult/apps-ambit/blob/master/ambit-json-docs/toxtree.md) using REST web services and JSON.
 * The JSON or [JSONP](https://en.wikipedia.org/wiki/JSONP) representation could be retrieved via HTTP Accept headers **"application/json"** or **"application/x-javascript"** respectively. The callback parameter when using JSONP is 'callback'.* As a workaround for web browsers restriction, the URI parameter **?media=application/json** or **?media=application/x-javascript** could be used.
 
 ### Examples  

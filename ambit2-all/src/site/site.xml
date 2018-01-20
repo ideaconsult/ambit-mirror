@@ -62,7 +62,7 @@
 
       <item name="Home" href="http://ambit.sourceforge.net"/>
       <item name="How to cite AMBIT" href="http://ambit.sf.net/pubs_citeambit.html" />      
-	  <item name="How to use AMBIT from Java" href="https://github.com/ideaconsult/examples-ambit" />
+	  <item name="How to use AMBIT from Java" href="https://github.com/ideaconsult/apps-ambit" />
 
     </menu> 
     <menu ref="reports"/>

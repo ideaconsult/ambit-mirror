@@ -28,7 +28,7 @@ Standalone applications
 
  [QMRF Editor] {{{http://qmrf.sf.net}http://qmrf.sf.net}}
  
- [Molbrowser] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Converts SDF file to a static web page}}
+ [Molbrowser] {{{https://github.com/ideaconsult/apps-ambit/tree/master/appdomain-example}Converts SDF file to a static web page}}
  
  [Applicability domain] {{{./download_ambitdiscovery.html}AMBIT Discovery}}
  
@@ -43,20 +43,20 @@ AMBIT modules
 
  [ambit-smarts] {{{./smarts.html}SMARTS}} and {{{./smirks.html}SMIRKS}} support 
  
- [ambit-tautomers] {{{https://nexus.ideaconsult.net/#nexus-search;quick~ambit-tautomers}maven artifact}} and {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}code examples}}. 
+ [ambit-tautomers] {{{https://nexus.ideaconsult.net/#nexus-search;quick~ambit-tautomers}maven artifact}} and {{{https://github.com/ideaconsult/apps-ambit/tree/master/tautomers-example}code examples}}. 
  
 AMBIT API
 ~~~~~~~~~~
 
-  {{{http://ideaconsult.github.io/examples-ambit/apidocs/}AMBIT REST API documentation (live)}}  
+  {{{http://ideaconsult.github.io/apps-ambit/apidocs/}AMBIT REST API documentation (live)}}  
 
 Source code examples
 ~~~~~~~~~~
 
- {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}How to use ambit2-tautomer package}}
+ {{{https://github.com/ideaconsult/apps-ambit/tree/master/tautomers-example}How to use ambit2-tautomer package}}
  
- {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}How to use AMBIT SMIRKS implementation}}
+ {{{https://github.com/ideaconsult/apps-ambit/tree/master/smirks-example}How to use AMBIT SMIRKS implementation}}
   
- {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}How to use applicability domain methods in AMBIT}}
+ {{{https://github.com/ideaconsult/apps-ambit/tree/master/appdomain-example}How to use applicability domain methods in AMBIT}}
  
  

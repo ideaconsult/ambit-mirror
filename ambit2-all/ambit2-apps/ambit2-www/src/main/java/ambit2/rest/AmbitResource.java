@@ -513,7 +513,7 @@ public class AmbitResource extends FreeMarkerResource {
 		
 		w.write(String.format("<a href='%s/ui/toxtree' >Toxtree</a> ",baseReference));
 
-		w.write(String.format("<a href='http://ideaconsult.github.io/examples-ambit/apidocs/' target=_blank>API</a>&nbsp;",baseReference));
+		w.write(String.format("<a href='http://ideaconsult.github.io/apps-ambit/apidocs/' target=_blank>API</a>&nbsp;",baseReference));
 
 
 		w.write("</div>");

@@ -86,8 +86,6 @@
 			<artifactId>org.restlet.ext.servlet</artifactId>
 			<version>${restlet.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>net.ideaconsult</groupId> <artifactId>opentox-dsl</artifactId> 
-			<version>1.0.4</version> </dependency> -->
 		<dependency>
 			<groupId>net.ideaconsult.restnet</groupId>
 			<artifactId>restnet-userdb</artifactId>
