@@ -40,7 +40,7 @@ import ambit2.user.rest.resource.SimpleUserJSONReporter;
 import ambit2.user.rest.resource.UserDBResource;
 
 /**
- * See http://ideaconsult.github.io/examples-ambit/apidocs/#!/myaccount/
+ * See http://ideaconsult.github.io/apps-ambit/apidocs/#!/myaccount/
  * assignRignts
  * 
  * @author nina

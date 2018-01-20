@@ -25,7 +25,7 @@ AMBIT Modules {modules}
 	
     {{{https://nexus.ideaconsult.net#nexus-search;gav~ambit~~~jar~}Maven artifacts search}}
 	
-	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}}, code examples) at {{{https://github.com/ideaconsult/examples-ambit}GitHub}}. 
+	More details about ({{{./AMBIT2-LIBS/apidocs}javadoc}}, code examples) at {{{https://github.com/ideaconsult/apps-ambit}GitHub}}. 
 
 AMBIT Applications {applications} 
 
@@ -91,9 +91,9 @@ AMBIT modules license
 
 How to use:
 
- [Example: tautomers] {{{https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example}Examples how to use ambit2-tautomer package}}
+ [Example: tautomers] {{{https://github.com/ideaconsult/apps-ambit/tree/master/tautomers-example}Examples how to use ambit2-tautomer package}}
  
- [Example: SMIRKS] {{{https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example}Examples how to use AMBIT SMIRKS implementation}}
+ [Example: SMIRKS] {{{https://github.com/ideaconsult/apps-ambit/tree/master/smirks-example}Examples how to use AMBIT SMIRKS implementation}}
   
- [Example: applicability domain] {{{https://github.com/ideaconsult/examples-ambit/tree/master/appdomain-example}Examples how to use applicability domain methods in AMBIT}}
+ [Example: applicability domain] {{{https://github.com/ideaconsult/apps-ambit/tree/master/appdomain-example}Examples how to use applicability domain methods in AMBIT}}
 	

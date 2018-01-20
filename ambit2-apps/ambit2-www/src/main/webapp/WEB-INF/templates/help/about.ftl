@@ -66,7 +66,7 @@ REST Web services API<a href='#' class='chelp api'>?<a><br/>
   </div>
 
 	  <div id="api">
-	  		 Data exchange, data analysis and predictions <a href='http://ideaconsult.github.io/examples-ambit/apidocs/'  target=_blank class='qxternal'>REST API</a>
+	  		 Data exchange, data analysis and predictions <a href='http://ideaconsult.github.io/apps-ambit/apidocs/'  target=_blank class='qxternal'>REST API</a>
 	  </div>
 	  
 </div>      

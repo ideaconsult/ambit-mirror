@@ -79,7 +79,7 @@ The transformations can be applied on various sites of the target molecule in se
     //products returned in a separate atom sontainer set
 ```
 
- * More examples https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example
+ * More examples https://github.com/ideaconsult/apps-ambit/tree/master/smirks-example
 
 ## Applications 
 

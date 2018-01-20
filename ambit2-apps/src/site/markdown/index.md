@@ -148,7 +148,7 @@ Private assessments. The assessments are only visible to the owner by default, r
 
 ## Developers  
 
--   [**API-Docs**](http://ideaconsult.github.io/examples-ambit/apidocs/), [Downloads and source code examples](downloads.html)  
+-   [**API-Docs**](http://ideaconsult.github.io/apps-ambit/apidocs/), [Downloads and source code examples](downloads.html)  
 
 ---
 

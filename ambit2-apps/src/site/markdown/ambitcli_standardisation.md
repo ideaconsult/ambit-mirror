@@ -93,7 +93,7 @@ $java -jar -Djava.util.logging.config.file=myLoggingConfigFilePath .... other op
 ````sh
  -d smirks=null|file.json
 ````
-Chemical structure transformation by [SMIRKS](http://daylight.com/dayhtml_tutorials/languages/smirks/index.html), implemented by [ambit2-smirks package](https://github.com/ideaconsult/examples-ambit/tree/master/smirks-example). 
+Chemical structure transformation by [SMIRKS](http://daylight.com/dayhtml_tutorials/languages/smirks/index.html), implemented by [ambit2-smirks package](https://github.com/ideaconsult/apps-ambit/tree/master/smirks-example). 
 The option expects either null (default) or a JSON file defining SMIRKS in the following format. Any number of transformations could be specified.    
 
 ````json
@@ -156,7 +156,7 @@ If true uses org.openscience.cdk.stereo.StereoElementFactory to generate the ste
  -d tautomers=true|false		
  -d tag_rank=RANK	 
 ````
-If true generates the top ranked tautomer via [ambit-tautomers](https://github.com/ideaconsult/examples-ambit/tree/master/tautomers-example) package [doi:10.1002/minf.201200133](http://onlinelibrary.wiley.com/doi/10.1002/minf.201200133/abstract). Default is false.
+If true generates the top ranked tautomer via [ambit-tautomers](https://github.com/ideaconsult/apps-ambit/tree/master/tautomers-example) package [doi:10.1002/minf.201200133](http://onlinelibrary.wiley.com/doi/10.1002/minf.201200133/abstract). Default is false.
 The tag_rank option specifies the tag to store the tautomer rank (energy based, less is better).
 
 Note: this is the slowest operation within the standardisation options, as it generates all tautomers and selects the top ranked one. Typical processing time is 200-500 msec per chemical structure.

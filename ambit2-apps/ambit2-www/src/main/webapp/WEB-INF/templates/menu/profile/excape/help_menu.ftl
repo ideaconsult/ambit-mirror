@@ -3,7 +3,7 @@
 							<li> <a href="#">Guide</a>
 								<ul>
 								<li><a href='http://ambit.sourceforge.net/excape.html' target='guide'>Quick User guide</a></li>
-							  <li><a href='http://ideaconsult.github.io/examples-ambit/apidocs/' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>								
+							  <li><a href='http://ideaconsult.github.io/apps-ambit/apidocs/' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>								
 								<li><a href="http://ambit.sourceforge.net" target=_blank title="ExCAPE database is customized version of AMBIT web services">ambit.sf.net</a>	</li>									 
 								</ul>
 							</li>
