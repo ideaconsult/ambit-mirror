@@ -4,11 +4,11 @@ A [command line Java application](download_ambitcli.html) used for processing ch
 
 ## Download
 
-* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.0.2/ambitcli-3.0.2.jar/download">ambitcli-3.0.2</a>
+* Latest release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.1.0/ambitcli-3.1.0-release.jar/download">ambitcli-3.1.0</a>
 
 * <a href="http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/">All releases</a>
 
-* Pre-release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.1.0/">ambitcli-3.1.0-{buildnumber}.jar</a> 
+* Pre-release <a href="https://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/ambitcli/ambitcli-3.2.0/">ambitcli-3.2.0-{buildnumber}.jar</a> 
 
 * Development <a href="https://nexus.ideaconsult.net/#nexus-search;gav~~ambit2-dbcli~~jar~">Maven repository</a>
 
