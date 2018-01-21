@@ -15,4 +15,5 @@ public class ReactionScore
 	public double reactionCenterComplexity = 0.0;
 	public double electronWithdrawingLevel = 0.0;
 	
+	public double totalScore = 0.0;
 }
