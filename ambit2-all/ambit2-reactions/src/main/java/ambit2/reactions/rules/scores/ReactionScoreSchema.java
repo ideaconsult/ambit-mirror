@@ -14,4 +14,15 @@ public class ReactionScoreSchema
 	public double reactionCenterPositionWeight = 0.0;
 	public double reactionCenterComplexityWeight = 0.0;
 	public double electronWithdrawingLevelWeight = 0.0;
+	
+	public static ReactionScoreSchema getDefaultReactionScoreSchema()
+	{
+		ReactionScoreSchema rss = new ReactionScoreSchema();
+		rss.basicScoreWeight = 0.30;
+		rss.transformScoreWeight = 0.20;
+		rss.experimentalConditionsScoreWeight = 0.20;
+		rss.yieldScoreWeight = 0.20;
+		rss.productComplexityWeight = 0.30;
+		return rss;
+	}
 }
