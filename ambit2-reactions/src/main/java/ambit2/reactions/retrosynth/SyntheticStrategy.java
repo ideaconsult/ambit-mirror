@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.reactions.GenericReaction;
+import ambit2.reactions.GenericReactionInstance;
 import ambit2.reactions.rules.IRetroSynthRuleInstance;
 import ambit2.reactions.rules.SyntheticStrategyDescriptorSolver;
 import ambit2.reactions.rules.scores.ReactionScore;
@@ -58,6 +59,13 @@ public class SyntheticStrategy
 		//Currently the strategy does nothing
 		//TODO
 		return ruleInstances;
+	}
+	
+	public ReactionScore calcReactionScore(GenericReactionInstance gri)
+	{
+		ReactionScore rscore = new ReactionScore();
+		//TODO
+		return rscore;
 	}
 	
 	public static SyntheticStrategy getDefaultSyntheticStrategy()
