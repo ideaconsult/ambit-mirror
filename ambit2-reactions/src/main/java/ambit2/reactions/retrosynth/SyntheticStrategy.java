@@ -22,7 +22,7 @@ public class SyntheticStrategy
 	public List<DescriptorWeight> productComplexityDescirptors = new ArrayList<DescriptorWeight>();
 	public List<DescriptorWeight> productSimilarityDescirptors = new ArrayList<DescriptorWeight>();
 	public Map<String, Double> reactionClassScores = new HashMap<String, Double>();
-	public Map<String, Double> trbasformTypeScores = new HashMap<String, Double>();
+	public Map<String, Double> trasformTypeScores = new HashMap<String, Double>();
 	
 	
 	public static Object[] getRandomSelection(Map<GenericReaction,List<List<IAtom>>> instances)
@@ -56,6 +56,13 @@ public class SyntheticStrategy
 		//Currently the strategy does nothing
 		//TODO
 		return ruleInstances;
+	}
+	
+	public static SyntheticStrategy getDefaultSyntheticStrategy()
+	{
+		SyntheticStrategy synthStrategy = new SyntheticStrategy();
+		synthStrategy.reactionScoreSchema = ReactionScoreSchema.getDefaultReactionScoreSchema();	
+		return synthStrategy;
 	}
 	
 }
