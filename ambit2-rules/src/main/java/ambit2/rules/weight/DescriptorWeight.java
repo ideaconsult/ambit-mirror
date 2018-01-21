@@ -1,10 +1,10 @@
 package ambit2.rules.weight;
 
-import ambit2.rules.functions.ValueTransformation;
+import ambit2.rules.functions.IFunction;
 
 public class DescriptorWeight 
 {
 	public String descriptorName = null;
 	public double weight = 0.0;
-	public ValueTransformation valueTrnasformation = null;
+	public IFunction valueTrnasformation = null;
 }
