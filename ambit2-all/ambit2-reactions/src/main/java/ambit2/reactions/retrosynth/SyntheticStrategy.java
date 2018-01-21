@@ -12,6 +12,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.rules.IRetroSynthRuleInstance;
+import ambit2.reactions.rules.SyntheticStrategyDescriptorSolver;
 import ambit2.reactions.rules.scores.ReactionScore;
 import ambit2.reactions.rules.scores.ReactionScoreSchema;
 import ambit2.rules.weight.DescriptorWeight;
@@ -24,6 +25,7 @@ public class SyntheticStrategy
 	public Map<String, Double> reactionClassScores = new HashMap<String, Double>();
 	public Map<String, Double> trasformTypeScores = new HashMap<String, Double>();
 	
+	protected SyntheticStrategyDescriptorSolver solver = new SyntheticStrategyDescriptorSolver();
 	
 	public static Object[] getRandomSelection(Map<GenericReaction,List<List<IAtom>>> instances)
 	{
