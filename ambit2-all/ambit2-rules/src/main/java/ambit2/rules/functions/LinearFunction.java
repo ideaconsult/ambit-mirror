@@ -4,6 +4,11 @@ public class LinearFunction implements IFunction
 {
 	protected double params[] =  {1.0, 0.0};
 	
+	public LinearFunction(double params[])
+	{
+		this.params = params;
+	}
+	
 	@Override
 	public String getName() {
 		return "Linear";
