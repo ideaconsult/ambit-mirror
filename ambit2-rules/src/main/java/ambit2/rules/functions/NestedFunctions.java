@@ -15,7 +15,7 @@ public class NestedFunctions implements IFunction
 	public double getFunctionValue(double argument) {
 		double value = argument;
 		for (int i=0; i < functions.size(); i++)
-			value = functions.get(0).getFunctionValue(value);
+			value = functions.get(i).getFunctionValue(value);
 		return value;
 	}
 
