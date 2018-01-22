@@ -14,6 +14,7 @@ import ambit2.reactions.GenericReaction;
 import ambit2.reactions.GenericReactionInstance;
 import ambit2.reactions.rules.IRetroSynthRuleInstance;
 import ambit2.reactions.rules.SyntheticStrategyDescriptorSolver;
+import ambit2.reactions.rules.scores.AtomComplexity;
 import ambit2.reactions.rules.scores.ReactionScore;
 import ambit2.reactions.rules.scores.ReactionScoreSchema;
 import ambit2.rules.weight.DescriptorWeight;
@@ -26,13 +27,13 @@ public class SyntheticStrategy
 	
 	public ReactionScoreSchema reactionScoreSchema = new ReactionScoreSchema();
 	public List<DescriptorWeight> productComplexityDescirptors = new ArrayList<DescriptorWeight>();
-	public List<DescriptorWeight> productSimilarityDescirptors = new ArrayList<DescriptorWeight>();
+	//public List<DescriptorWeight> productSimilarityDescirptors = new ArrayList<DescriptorWeight>();
 	public Map<String, Double> reactionClassScores = new HashMap<String, Double>();
 	public Map<String, Double> trasformTypeScores = new HashMap<String, Double>();
 	public ReactionCenterComplexityMethod reactionCenterComplexityMethod = ReactionCenterComplexityMethod.ATOMS_AVERAGE;
 	
 	protected SyntheticStrategyDescriptorSolver solver = new SyntheticStrategyDescriptorSolver();
-	
+	protected AtomComplexity atomComplexity = new AtomComplexity();
 	
 	
 	public ReactionScore calcReactionScore(GenericReactionInstance gri)
@@ -69,16 +70,30 @@ public class SyntheticStrategy
 	
 	double calcProductComplexity(IAtomContainer product)
 	{
-		double c = 0.0;
-		//TODO
-		return c;
+		double complexity = 0.0;
+		for (DescriptorWeight dw : productComplexityDescirptors)
+		{
+			Double c = (Double)solver.calculateDescriptor(dw.descriptorName, product);
+			complexity += c * dw.weight;
+		}
+		return complexity;
 	}
 	
 	double calcReactionCenterComplexity(GenericReactionInstance gri)
-	{
-		double c = 0.0;
-		//TODO
-		return c;
+	{	
+		switch (reactionCenterComplexityMethod)
+		{
+		case FIRST_ATOM:
+			IAtom at = gri.instanceAtoms.get(0);
+			return atomComplexity.calcAtomComplexity(at, gri.target);
+			
+		case ATOMS_AVERAGE:
+			double complexity = 0.0;
+			for (IAtom a : gri.instanceAtoms)
+				complexity += atomComplexity.calcAtomComplexity(a, gri.target);
+			break;
+		}
+		return 0.0;
 	}
 	
 	public static SyntheticStrategy getDefaultSyntheticStrategy()
