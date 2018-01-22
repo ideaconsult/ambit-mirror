@@ -20,13 +20,61 @@ import ambit2.rules.weight.DescriptorWeight;
 
 public class SyntheticStrategy 
 {
+	public static enum InstanceAtomsComplexityMethod {
+		FIRST_ATOM, ATOMS_AVERAGE
+	}
+	
 	public ReactionScoreSchema reactionScoreSchema = new ReactionScoreSchema();
 	public List<DescriptorWeight> productComplexityDescirptors = new ArrayList<DescriptorWeight>();
 	public List<DescriptorWeight> productSimilarityDescirptors = new ArrayList<DescriptorWeight>();
 	public Map<String, Double> reactionClassScores = new HashMap<String, Double>();
 	public Map<String, Double> trasformTypeScores = new HashMap<String, Double>();
+	public InstanceAtomsComplexityMethod atomComplexityMethod = InstanceAtomsComplexityMethod.ATOMS_AVERAGE;
 	
 	protected SyntheticStrategyDescriptorSolver solver = new SyntheticStrategyDescriptorSolver();
+	
+	
+	
+	public ReactionScore calcReactionScore(GenericReactionInstance gri)
+	{
+		ReactionScore rscore = new ReactionScore();
+		
+		if (reactionScoreSchema.basicScoreWeight > 0.0)
+		{	
+			rscore.basicScore = gri.reaction.getBasicScore();
+			rscore.totalScore += rscore.basicScore * reactionScoreSchema.basicScoreWeight;
+		}	
+		
+		if (reactionScoreSchema.productComplexityWeight > 0.0)
+		{
+			rscore.productComplexity = calcProductComplexity(gri.products);
+			rscore.totalScore += rscore.productComplexity * reactionScoreSchema.productComplexityWeight;	
+		}
+		
+		//TODO
+		return rscore;
+	}
+	
+	double calcProductComplexity(IAtomContainer product)
+	{
+		double c = 0.0;
+		//TODO
+		return c;
+	}
+	
+	public static SyntheticStrategy getDefaultSyntheticStrategy()
+	{
+		SyntheticStrategy synthStrategy = new SyntheticStrategy();
+		synthStrategy.reactionScoreSchema = ReactionScoreSchema.getDefaultReactionScoreSchema();	
+		return synthStrategy;
+	}
+	
+	public ArrayList<IRetroSynthRuleInstance> applyStrategy(IAtomContainer target, ArrayList<IRetroSynthRuleInstance> ruleInstances)
+	{
+		//Currently the strategy does nothing
+		//TODO
+		return ruleInstances;
+	}
 	
 	public static Object[] getRandomSelection(Map<GenericReaction,List<List<IAtom>>> instances)
 	{
@@ -52,27 +100,6 @@ public class SyntheticStrategy
 				n++;
 		}
 		return null;
-	}
-	
-	public ArrayList<IRetroSynthRuleInstance> applyStrategy(IAtomContainer target, ArrayList<IRetroSynthRuleInstance> ruleInstances)
-	{
-		//Currently the strategy does nothing
-		//TODO
-		return ruleInstances;
-	}
-	
-	public ReactionScore calcReactionScore(GenericReactionInstance gri)
-	{
-		ReactionScore rscore = new ReactionScore();
-		//TODO
-		return rscore;
-	}
-	
-	public static SyntheticStrategy getDefaultSyntheticStrategy()
-	{
-		SyntheticStrategy synthStrategy = new SyntheticStrategy();
-		synthStrategy.reactionScoreSchema = ReactionScoreSchema.getDefaultReactionScoreSchema();	
-		return synthStrategy;
 	}
 	
 }
