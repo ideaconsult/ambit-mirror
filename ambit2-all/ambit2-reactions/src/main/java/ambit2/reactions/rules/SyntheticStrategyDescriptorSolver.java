@@ -11,8 +11,8 @@ public class SyntheticStrategyDescriptorSolver extends AbstractDescriptorSolver
 	
 	public SyntheticStrategyDescriptorSolver()
 	{
-		descriptorList.add("mol-complexity01");
-		descriptorList.add("mol-complexity02");
+		descriptorList.add("MOL_COMPLEXITY_01");
+		descriptorList.add("MOL_COMPLEXITY_02");
 		//TODO fill descriptor list
 	}
 	
