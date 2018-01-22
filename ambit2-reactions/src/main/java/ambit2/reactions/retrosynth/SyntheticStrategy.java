@@ -20,7 +20,7 @@ import ambit2.rules.weight.DescriptorWeight;
 
 public class SyntheticStrategy 
 {
-	public static enum InstanceAtomsComplexityMethod {
+	public static enum ReactionCenterComplexityMethod {
 		FIRST_ATOM, ATOMS_AVERAGE
 	}
 	
@@ -29,7 +29,7 @@ public class SyntheticStrategy
 	public List<DescriptorWeight> productSimilarityDescirptors = new ArrayList<DescriptorWeight>();
 	public Map<String, Double> reactionClassScores = new HashMap<String, Double>();
 	public Map<String, Double> trasformTypeScores = new HashMap<String, Double>();
-	public InstanceAtomsComplexityMethod atomComplexityMethod = InstanceAtomsComplexityMethod.ATOMS_AVERAGE;
+	public ReactionCenterComplexityMethod reactionCenterComplexityMethod = ReactionCenterComplexityMethod.ATOMS_AVERAGE;
 	
 	protected SyntheticStrategyDescriptorSolver solver = new SyntheticStrategyDescriptorSolver();
 	
@@ -51,11 +51,30 @@ public class SyntheticStrategy
 			rscore.totalScore += rscore.productComplexity * reactionScoreSchema.productComplexityWeight;	
 		}
 		
-		//TODO
+		if (reactionScoreSchema.reactionCenterComplexityWeight > 0.0)
+		{
+			rscore.reactionCenterComplexity = calcReactionCenterComplexity(gri);
+			rscore.totalScore += rscore.reactionCenterComplexity * reactionScoreSchema.reactionCenterComplexityWeight;	
+		}
+		
+		if (reactionScoreSchema.yieldScoreWeight > 0.0)
+		{
+			//average of lo and hi reaction yield
+			rscore.yieldScore = 0.5*(gri.reaction.getYieldHi() + gri.reaction.getYieldLo());
+			rscore.totalScore += rscore.yieldScore * reactionScoreSchema.yieldScoreWeight;	
+		}
+		
 		return rscore;
 	}
 	
 	double calcProductComplexity(IAtomContainer product)
+	{
+		double c = 0.0;
+		//TODO
+		return c;
+	}
+	
+	double calcReactionCenterComplexity(GenericReactionInstance gri)
 	{
 		double c = 0.0;
 		//TODO
@@ -71,7 +90,7 @@ public class SyntheticStrategy
 	
 	public ArrayList<IRetroSynthRuleInstance> applyStrategy(IAtomContainer target, ArrayList<IRetroSynthRuleInstance> ruleInstances)
 	{
-		//Currently the strategy does nothing
+		//Not used
 		//TODO
 		return ruleInstances;
 	}
