@@ -158,7 +158,7 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 	@Override
 	public Object next() {
-		return nextRecord();
+		return iterator.next();
 		/*
 		 * if (structureRecord == null) structureRecord =
 		 * transform(iterator.next()); if (molReader == null) molReader = new
@@ -184,8 +184,9 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 	@Override
 	public IStructureRecord nextRecord() {
-		if (structureRecord == null)
-			structureRecord = transform(iterator.next());
+		if (structureRecord == null) {
+			structureRecord = transform((CSVRecord)next());
+		}
 		return structureRecord;
 	}
 
