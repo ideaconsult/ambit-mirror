@@ -17,6 +17,7 @@ import ambit2.reactions.rules.SyntheticStrategyDescriptorSolver;
 import ambit2.reactions.rules.scores.AtomComplexity;
 import ambit2.reactions.rules.scores.ReactionScore;
 import ambit2.reactions.rules.scores.ReactionScoreSchema;
+import ambit2.rules.functions.LinearFunction;
 import ambit2.rules.weight.DescriptorWeight;
 
 public class SyntheticStrategy 
@@ -99,7 +100,18 @@ public class SyntheticStrategy
 	public static SyntheticStrategy getDefaultSyntheticStrategy()
 	{
 		SyntheticStrategy synthStrategy = new SyntheticStrategy();
-		synthStrategy.reactionScoreSchema = ReactionScoreSchema.getDefaultReactionScoreSchema();	
+		synthStrategy.reactionScoreSchema = ReactionScoreSchema.getDefaultReactionScoreSchema();
+		
+		//set productComplexityDescirptors
+		DescriptorWeight dw = new DescriptorWeight();
+		dw.descriptorName = "MOL_COMPLEXITY_02";
+		//convert complexity interval [a,b] into score ranging [100,0]
+		//fun(x) = 100*(b-x)/(b-a) = -100/(b-a)*x + 100*b/(b-a)
+		double a = 0;
+		double b = 10; 
+		dw.valueTrnasformation = new LinearFunction(new double[]{-100.0/(b-a), 100.0*b/(b-a)});
+		dw.weight = 100.0;
+		synthStrategy.productComplexityDescirptors.add(dw);
 		return synthStrategy;
 	}
 	
