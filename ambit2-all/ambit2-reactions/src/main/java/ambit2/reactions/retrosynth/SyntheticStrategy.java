@@ -23,6 +23,7 @@ import ambit2.reactions.rules.SyntheticStrategyDescriptorSolver;
 import ambit2.reactions.rules.scores.AtomComplexity;
 import ambit2.reactions.rules.scores.ReactionScore;
 import ambit2.reactions.rules.scores.ReactionScoreSchema;
+import ambit2.rules.functions.IFunction;
 import ambit2.rules.functions.LinearFunction;
 import ambit2.rules.weight.DescriptorWeight;
 
@@ -35,6 +36,7 @@ public class SyntheticStrategy
 	public ReactionScoreSchema reactionScoreSchema = new ReactionScoreSchema();
 	public List<DescriptorWeight> productComplexityDescirptors = new ArrayList<DescriptorWeight>();
 	//public List<DescriptorWeight> productSimilarityDescirptors = new ArrayList<DescriptorWeight>();
+	public IFunction reactionCenterScoreFunction = null;
 	public Map<String, Double> reactionClassScores = new HashMap<String, Double>();
 	public Map<String, Double> trasformTypeScores = new HashMap<String, Double>();
 	public ReactionCenterComplexityMethod reactionCenterComplexityMethod = ReactionCenterComplexityMethod.ATOMS_AVERAGE;
@@ -106,13 +108,15 @@ public class SyntheticStrategy
 		{
 		case FIRST_ATOM:
 			IAtom at = gri.instanceAtoms.get(0);
-			return atomComplexity.calcAtomComplexity(at, gri.target);
+			return reactionCenterScoreFunction.
+					getFunctionValue(atomComplexity.calcAtomComplexity(at, gri.target));
 			
 		case ATOMS_AVERAGE:
 			double complexity = 0.0;
 			for (IAtom a : gri.instanceAtoms)
 				complexity += atomComplexity.calcAtomComplexity(a, gri.target);
-			return complexity;
+			return reactionCenterScoreFunction.
+					getFunctionValue(complexity/gri.instanceAtoms.size());
 		}
 		return 0.0;
 	}
@@ -121,6 +125,9 @@ public class SyntheticStrategy
 	{
 		SyntheticStrategy synthStrategy = new SyntheticStrategy();
 		synthStrategy.reactionScoreSchema = ReactionScoreSchema.getDefaultReactionScoreSchema();
+		
+		//atom complexity 10 gives score 100: fun(x) = 10*x
+		synthStrategy.reactionCenterScoreFunction = new LinearFunction(new double[] {10,0});
 		
 		//set productComplexityDescirptors
 		DescriptorWeight dw = new DescriptorWeight();
