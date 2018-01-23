@@ -69,14 +69,14 @@ public class SyntheticStrategy
 		
 		if (reactionScoreSchema.productComplexityWeight > 0.0)
 		{
-			rscore.productComplexity = calcProductComplexity(gri.products);
-			rscore.totalScore += rscore.productComplexity * reactionScoreSchema.productComplexityWeight;	
+			rscore.productComplexityScore = calcProductComplexity(gri.products);
+			rscore.totalScore += rscore.productComplexityScore * reactionScoreSchema.productComplexityWeight;	
 		}
 		
 		if (reactionScoreSchema.reactionCenterComplexityWeight > 0.0)
 		{
-			rscore.reactionCenterComplexity = calcReactionCenterComplexity(gri);
-			rscore.totalScore += rscore.reactionCenterComplexity * reactionScoreSchema.reactionCenterComplexityWeight;	
+			rscore.reactionCenterComplexityScore = calcReactionCenterComplexity(gri);
+			rscore.totalScore += rscore.reactionCenterComplexityScore * reactionScoreSchema.reactionCenterComplexityWeight;	
 		}
 		
 		if (reactionScoreSchema.yieldScoreWeight > 0.0)
@@ -124,14 +124,27 @@ public class SyntheticStrategy
 		
 		//set productComplexityDescirptors
 		DescriptorWeight dw = new DescriptorWeight();
-		dw.descriptorName = "MOL_COMPLEXITY_02";
+		dw.descriptorName = "MOL_COMPLEXITY_01";
 		//convert complexity interval [a,b] into score ranging [100,0]
 		//fun(x) = 100*(b-x)/(b-a) = -100/(b-a)*x + 100*b/(b-a)
 		double a = 0;
-		double b = 10; 
+		double b = 150; 
 		dw.valueTrnasformation = new LinearFunction(new double[]{-100.0/(b-a), 100.0*b/(b-a)});
-		dw.weight = 100.0;
+		dw.weight = 1.0;
 		synthStrategy.productComplexityDescirptors.add(dw);
+		
+		/*
+		DescriptorWeight dw2 = new DescriptorWeight();
+		dw.descriptorName = "MOL_COMPLEXITY_02";
+		//convert complexity interval [a,b] into score ranging [100,0]
+		//fun(x) = 100*(b-x)/(b-a) = -100/(b-a)*x + 100*b/(b-a)
+		a = 0;
+		b = 10; 
+		dw2.valueTrnasformation = new LinearFunction(new double[]{-100.0/(b-a), 100.0*b/(b-a)});
+		dw2.weight = 1.0;
+		synthStrategy.productComplexityDescirptors.add(dw2);
+		*/
+		
 		return synthStrategy;
 	}
 	

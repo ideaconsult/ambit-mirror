@@ -75,6 +75,8 @@ public class ReactionTestUtils
 		
 		//testMolceculeComplexity();
 		
+		//testMolceculeComplexity2();
+		
 		//testReactionDataBase("/Volumes/Data/RDB_080118_SA-mod.txt");
 	}
 	
@@ -461,6 +463,14 @@ public class ReactionTestUtils
 		testMolceculeComplexity("C1CCNCC=1", true);
 		testMolceculeComplexity("N1CC2CC2C1", true);
 		testMolceculeComplexity("N1CCCC1C", true);
+	}
+	
+	public static void testMolceculeComplexity2() throws Exception
+	{
+		testMolceculeComplexity("C1CCN1CCC.CCCCO", true);
+		testMolceculeComplexity("C1CCN1CCC", true);
+		testMolceculeComplexity("CCCCO", true);
+		testMolceculeComplexity("CC(CCC(N)CCO)COCCCCc2ccccc2c3ccccc3", true);
 	}
 	
 }
