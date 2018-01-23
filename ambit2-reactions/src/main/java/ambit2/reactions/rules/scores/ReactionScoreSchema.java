@@ -23,6 +23,7 @@ public class ReactionScoreSchema
 		rss.experimentalConditionsScoreWeight = 0.20;
 		rss.yieldScoreWeight = 0.20;
 		rss.productComplexityWeight = 0.30;
+		rss.reactionCenterComplexityWeight = 0.20;
 		return rss;
 	}
 }
