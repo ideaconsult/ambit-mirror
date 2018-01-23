@@ -23,10 +23,12 @@ import ambit2.base.data.Property;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.reactions.GenericReaction;
+import ambit2.reactions.GenericReactionInstance;
 import ambit2.reactions.ReactionDataBase;
 import ambit2.reactions.retrosynth.ReactionSequence.MoleculeStatus;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.TopLayer;
 import net.sf.jniinchi.INCHI_OPTION;
 import net.sf.jniinchi.INCHI_RET;
 
@@ -75,6 +77,7 @@ public class ReactionSequence
 	
 	ReactionDataBase reactDB = null;
 	StartingMaterialsDataBase startMatDB = new StartingMaterialsDataBase(); //empty materials DB
+	SyntheticStrategy strategy = null;
 	IAtomContainer target = null;
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	List<ReactionSequenceLevel> levels = new ArrayList<ReactionSequenceLevel>(); 
@@ -100,6 +103,14 @@ public class ReactionSequence
 
 	public void setStartMatDB(StartingMaterialsDataBase startMatDB) {
 		this.startMatDB = startMatDB;
+	}
+	
+	public SyntheticStrategy getStrategy() {
+		return strategy;
+	}
+
+	public void setStrategy(SyntheticStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 	public IAtomContainer getTarget() {
@@ -208,7 +219,7 @@ public class ReactionSequence
 	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions)
 	{
 		//Pre-processing should not be needed
-		//it is expected to be done via reaction products processing
+		//it is expected to be done via reaction products processing from previous steps
 		
 		Map<GenericReaction,List<List<IAtom>>> maps = new HashMap<GenericReaction,List<List<IAtom>>>();
 		for (GenericReaction reaction: reactions)
@@ -231,6 +242,11 @@ public class ReactionSequence
 		
 		IAtomContainer products = reaction.applyAtInstance(mol, reactionInstance, smrkMan, true);
 		smrkMan.processProduct(products);
+		//calculate reaction score
+		TopLayer.setAtomTopLayers(products);
+		GenericReactionInstance gri = new GenericReactionInstance(reaction, mol, reactionInstance, products);
+		step.reactionScore = strategy.calcReactionScore(gri);
+		
 		IAtomContainerSet productFrags = ConnectivityChecker.partitionIntoMolecules(products);
 		step.outputMolecules = new ArrayList<IAtomContainer>();
 		for (IAtomContainer frag : productFrags.atomContainers())
@@ -252,7 +268,7 @@ public class ReactionSequence
 		level.associateStep(moleculeIndex, step);
 	}
 	
-	public void iterateLevelMolecules(ReactionSequenceLevel level, SyntheticStrategy strategy) throws Exception
+	public void iterateLevelMolecules(ReactionSequenceLevel level) throws Exception
 	{	
 		for (int i = 0; i<level.molecules.size(); i++)
 		{

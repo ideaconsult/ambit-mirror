@@ -14,6 +14,26 @@ public class GenericReactionInstance
 	public IAtomContainer target = null;
 	public IAtomContainer products = null;
 	
+	public GenericReactionInstance()
+	{	
+	}
+	
+	public GenericReactionInstance(GenericReaction reaction, IAtomContainer target, List<IAtom> instanceAtoms)
+	{
+		this.reaction = reaction;
+		this.target = target;
+		this.instanceAtoms = instanceAtoms;
+	}
+	
+	public GenericReactionInstance(GenericReaction reaction, IAtomContainer target, 
+			List<IAtom> instanceAtoms, IAtomContainer products)
+	{
+		this.reaction = reaction;
+		this.target = target;
+		this.instanceAtoms = instanceAtoms;
+		this.products = products;
+	}
+	
 	public void generateProducts()
 	{
 		//TODO

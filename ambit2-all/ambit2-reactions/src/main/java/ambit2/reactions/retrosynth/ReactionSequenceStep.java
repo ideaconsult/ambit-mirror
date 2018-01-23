@@ -8,6 +8,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.Reaction;
+import ambit2.reactions.rules.scores.ReactionScore;
 
 public class ReactionSequenceStep 
 {
@@ -17,11 +18,12 @@ public class ReactionSequenceStep
 	//int outMoleculesLevelIndices[] = null;
 	GenericReaction reaction = null;
 	List<IAtom> reactionInstance = null;
+	ReactionScore reactionScore = null;
 		
 	public IAtomContainer getInputMolecule() {
 		return inputMolecule;
 	}
-	public void setInputMolecules(IAtomContainer inputMolecule) {
+	public void setInputMolecule(IAtomContainer inputMolecule) {
 		this.inputMolecule = inputMolecule;
 	}
 	public List<IAtomContainer> getOutputMolecules() {
@@ -55,5 +57,13 @@ public class ReactionSequenceStep
 	}
 	public void setReactionInstance(List<IAtom> reactionInstance) {
 		this.reactionInstance = reactionInstance;
-	}	
+	}
+	public ReactionScore getReactionScore() {
+		return reactionScore;
+	}
+	public void setReactionScore(ReactionScore reactionScore) {
+		this.reactionScore = reactionScore;
+	}
+	
+	
 }
