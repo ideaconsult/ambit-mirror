@@ -167,6 +167,8 @@ public class ReactionDataBase
 				logger.info("Error on reading REACTIONS element #"+ (i+1) + ": " + e.getMessage());
 			}
 		}
+		
+		fin.close();
 	}
 	
 	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB) throws Exception

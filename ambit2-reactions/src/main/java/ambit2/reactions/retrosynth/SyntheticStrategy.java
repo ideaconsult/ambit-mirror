@@ -1,5 +1,8 @@
 package ambit2.reactions.retrosynth;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +12,9 @@ import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.GenericReactionInstance;
@@ -36,6 +42,14 @@ public class SyntheticStrategy
 	protected SyntheticStrategyDescriptorSolver solver = new SyntheticStrategyDescriptorSolver();
 	protected AtomComplexity atomComplexity = new AtomComplexity();
 	
+	public SyntheticStrategy() 
+	{	
+	}
+	
+	public SyntheticStrategy(File file) 
+	{	
+		//TODO
+	}
 	
 	public ReactionScore calcReactionScore(GenericReactionInstance gri)
 	{
@@ -92,7 +106,7 @@ public class SyntheticStrategy
 			double complexity = 0.0;
 			for (IAtom a : gri.instanceAtoms)
 				complexity += atomComplexity.calcAtomComplexity(a, gri.target);
-			break;
+			return complexity;
 		}
 		return 0.0;
 	}
@@ -115,6 +129,32 @@ public class SyntheticStrategy
 		return synthStrategy;
 	}
 	
+	public void loadFromJSON(File jsonFile) throws Exception
+	{
+		InputStream fin = new FileInputStream(jsonFile); 
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = null;
+		
+		try {
+			
+			root = mapper.readTree(fin);
+		} catch (Exception x) {
+			throw x;
+		} finally {
+			try {fin.close();} catch (Exception x) {}	
+		}
+		
+		//TODO
+		
+		fin.close();
+	}
+	
+	public String getAsJSONString() 
+	{
+		StringBuffer sb = new StringBuffer();
+		//TODO
+		return sb.toString();
+	}
 	public ArrayList<IRetroSynthRuleInstance> applyStrategy(IAtomContainer target, ArrayList<IRetroSynthRuleInstance> ruleInstances)
 	{
 		//Not used
