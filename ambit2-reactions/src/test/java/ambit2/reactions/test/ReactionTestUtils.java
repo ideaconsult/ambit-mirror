@@ -27,6 +27,7 @@ import ambit2.reactions.reactor.ReactorStrategy;
 import ambit2.reactions.retrosynth.ReactionSequence;
 import ambit2.reactions.retrosynth.ReactionSequenceLevel;
 import ambit2.reactions.retrosynth.StartingMaterialsDataBase;
+import ambit2.reactions.retrosynth.SyntheticStrategy;
 import ambit2.reactions.retrosynth.StartingMaterialsDataBase.StartMaterialData;
 import ambit2.reactions.rules.scores.AtomComplexity;
 import ambit2.reactions.rules.scores.MolecularComplexity;
@@ -264,6 +265,7 @@ public class ReactionTestUtils
 		rdb.configureGenericReactions(smrkMan0);
 		
 		ReactionSequence rseq = new ReactionSequence();
+		rseq.setStrategy(SyntheticStrategy.getDefaultSyntheticStrategy());
 		SMIRKSManager smrkMan = rseq.getSmrkMan();
 		//setup smrkMan
 		smrkMan.setFlagProcessResultStructures(true);
@@ -284,14 +286,14 @@ public class ReactionTestUtils
 		rseq.initilize();
 		
 		ReactionSequenceLevel level = rseq.getFirstLevel();
-		rseq.iterateLevelMolecules(level, null);
+		rseq.iterateLevelMolecules(level);
 		
 		for (int i = 0; i < 30; i++)
 		{	
 			level = level.nextLevel;
 			if (level == null)
 				break;
-			rseq.iterateLevelMolecules(level, null);
+			rseq.iterateLevelMolecules(level);
 		}
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());

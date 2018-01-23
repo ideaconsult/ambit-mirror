@@ -8,6 +8,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import ambit2.core.data.MoleculeTools;
 import ambit2.reactions.GenericReaction;
 import ambit2.reactions.retrosynth.ReactionSequence.MoleculeStatus;
+import ambit2.reactions.rules.scores.ReactionScore;
 import ambit2.smarts.SmartsHelper;
 
 public class ReactionSequenceLevel 
@@ -91,9 +92,11 @@ public class ReactionSequenceLevel
 			if (genMol == null)
 				return null;
 			int genMolPrevLevIndex = previousLevel.molecules.indexOf(genMol);
-			Object obj[] = new Object[2];
-			obj[0] = previousLevel.steps.get(genMolPrevLevIndex).reaction;
+			Object obj[] = new Object[3];
+			ReactionSequenceStep rss = previousLevel.steps.get(genMolPrevLevIndex); 
+			obj[0] = rss.reaction;
 			obj[1] = genMolPrevLevIndex;
+			obj[2] = rss.reactionScore;
 			return obj;
 		}
 		return null;
@@ -120,14 +123,22 @@ public class ReactionSequenceLevel
 			if (obj != null)
 			{	
 				GenericReaction genReaction = (GenericReaction)obj[0];
-				sb.append("   <R" + genReaction.getId()+"," + ((Integer)obj[1]+1) + ">");
+				sb.append("   <R" + genReaction.getId()+",M" + ((Integer)obj[1]+1));
+				if (obj[2] != null)
+				{
+					ReactionScore rscore = (ReactionScore)obj[2];
+					sb.append(",S" + ((Double)rscore.totalScore).intValue());
+				}
+				sb.append(">");
 			}
 			
+			/*
 			ReactionSequenceStep step = steps.get(i);
 			if (step != null)
 			{
 				//TODO
 			}
+			*/
 			sb.append("\n");
 		}
 		return sb.toString();
