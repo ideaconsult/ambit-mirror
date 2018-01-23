@@ -128,8 +128,12 @@ public class ReactionSequenceLevel
 				{
 					ReactionScore rscore = (ReactionScore)obj[2];
 					sb.append(",S" + ((Double)rscore.totalScore).intValue());
+					sb.append(">");
+					sb.append("     " + rscore.toStringLine());
 				}
-				sb.append(">");
+				else
+					sb.append(">");
+				
 			}
 			
 			/*
