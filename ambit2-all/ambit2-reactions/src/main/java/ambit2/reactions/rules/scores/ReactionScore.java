@@ -16,4 +16,16 @@ public class ReactionScore
 	public double electronWithdrawingLevel = 0.0;
 	
 	public double totalScore = 0.0;
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("basicScore = " + basicScore + "\n");
+		sb.append("exp.cond.Score = " + experimentalConditionsScore + "\n");
+		sb.append("yieldScore = " + yieldScore + "\n");
+		sb.append("productComplexity = " + productComplexity + "\n");
+		sb.append("reactionCenterComplexity = " + reactionCenterComplexity + "\n");
+		
+		return sb.toString();
+	}
 }
