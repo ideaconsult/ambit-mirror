@@ -242,7 +242,12 @@ public class MoleculeTools {
 						atom.setFlag(CDKConstants.ISAROMATIC, true);
 				}
 			}
-			Kekulization.kekulize(mol);
+			try {
+				Kekulization.kekulize(mol);
+			} catch (Exception x) {
+				String title = mol.getProperty(CDKConstants.TITLE);
+				logger.warning(String.format("%s\t%s",title,x.getMessage()));
+			}
 			return true;
 		} else
 			return false;
