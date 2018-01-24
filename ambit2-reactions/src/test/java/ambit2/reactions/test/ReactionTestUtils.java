@@ -76,9 +76,9 @@ public class ReactionTestUtils
 		
 		//testAtomComplexity();
 		
-		//testMolceculeComplexity();
+		//testMoleculeComplexity();
 		
-		//testMolceculeComplexity2();
+		//testMoleculeComplexity2();
 		
 		//testReactionDataBase("/Volumes/Data/RDB_080118_SA-mod.txt");
 	}
@@ -433,9 +433,8 @@ public class ReactionTestUtils
 		
 	}
 	
-	public static void testMolceculeComplexity(String smiles, boolean includeImplicitHAtoms) throws Exception
-	{
-		System.out.println("Testing molecule complexity: " + smiles);
+	public static void testMoleculeComplexity(String smiles, boolean includeImplicitHAtoms) throws Exception
+	{		System.out.println("Testing molecule complexity: " + smiles);
 		NumberFormat formatter = new DecimalFormat("#0.00"); 
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		if (FlagExcplicitHAtoms)
@@ -449,31 +448,31 @@ public class ReactionTestUtils
 		System.out.println("  cM = " + formatter.format(cM) + "  cM* = " + formatter.format(cM_star));
 	}
 	
-	public static void testMolceculeComplexity() throws Exception
+	public static void testMoleculeComplexity() throws Exception
 	{
-		testMolceculeComplexity("CCOCC", true);
-		testMolceculeComplexity("CCCCC", true);
-		testMolceculeComplexity("CCCCCC", true);
-		testMolceculeComplexity("CCCCCCC", true);
-		testMolceculeComplexity("CCCCC(C)C", true);
-		testMolceculeComplexity("CCCC(C)CC", true);
-		testMolceculeComplexity("C1CCCC1", true);
-		testMolceculeComplexity("C1CCCCC1", true);
-		testMolceculeComplexity("c1ccccc1", true);
-		testMolceculeComplexity("C1CCOCC1", true);
-		testMolceculeComplexity("c1cnccc1", true);
-		testMolceculeComplexity("C1CCNCC1", true);
-		testMolceculeComplexity("C1CCNCC=1", true);
-		testMolceculeComplexity("N1CC2CC2C1", true);
-		testMolceculeComplexity("N1CCCC1C", true);
+		testMoleculeComplexity("CCOCC", true);
+		testMoleculeComplexity("CCCCC", true);
+		testMoleculeComplexity("CCCCCC", true);
+		testMoleculeComplexity("CCCCCCC", true);
+		testMoleculeComplexity("CCCCC(C)C", true);
+		testMoleculeComplexity("CCCC(C)CC", true);
+		testMoleculeComplexity("C1CCCC1", true);
+		testMoleculeComplexity("C1CCCCC1", true);
+		testMoleculeComplexity("c1ccccc1", true);
+		testMoleculeComplexity("C1CCOCC1", true);
+		testMoleculeComplexity("c1cnccc1", true);
+		testMoleculeComplexity("C1CCNCC1", true);
+		testMoleculeComplexity("C1CCNCC=1", true);
+		testMoleculeComplexity("N1CC2CC2C1", true);
+		testMoleculeComplexity("N1CCCC1C", true);
 	}
 	
-	public static void testMolceculeComplexity2() throws Exception
+	public static void testMoleculeComplexity2() throws Exception
 	{
-		testMolceculeComplexity("C1CCN1CCC.CCCCO", true);
-		testMolceculeComplexity("C1CCN1CCC", true);
-		testMolceculeComplexity("CCCCO", true);
-		testMolceculeComplexity("CC(CCC(N)CCO)COCCCCc2ccccc2c3ccccc3", true);
+		testMoleculeComplexity("C1CCN1CCC.CCCCO", true);
+		testMoleculeComplexity("C1CCN1CCC", true);
+		testMoleculeComplexity("CCCCO", true);
+		testMoleculeComplexity("CC(CCC(N)CCO)COCCCCc2ccccc2c3ccccc3", true);
 	}
 	
 }
