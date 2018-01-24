@@ -1,18 +1,43 @@
 package ambit2.reactions.syntheticaccessibility;
 
-import ambit2.reactions.ReactionConst.SynthAccessStrategy;
+import java.util.List;
+
+import ambit2.reactions.ReactionConst.SynthAccessMethod;
+import ambit2.reactions.retrosynth.ReactionSequence;
+import ambit2.reactions.rules.scores.ReactionSequenceScoreSchema;
 
 public class SyntheticAccessibilityManager 
 {
-	private SynthAccessStrategy strategy = SynthAccessStrategy.DESCRIPTORS;
+	protected SynthAccessMethod synthAccessMethod = SynthAccessMethod.RETRO_SYNTHESIS;
+	protected ReactionSequenceScoreSchema reactionSequenceScoreSchema = null;
 
-	public SynthAccessStrategy getStrategy()
-	{
-		return strategy;
+	public SynthAccessMethod getSynthAccessMethod() {
+		return synthAccessMethod;
 	}
 
-	public void setStrategy(SynthAccessStrategy newStrategy)
-	{
-		strategy = newStrategy;
+	public void setSynthAccessMethod(SynthAccessMethod synthAccessMethod) {
+		this.synthAccessMethod = synthAccessMethod;
 	}
+
+	public ReactionSequenceScoreSchema getReactionSequenceScoreSchema() {
+		return reactionSequenceScoreSchema;
+	}
+
+	public void setReactionSequenceScoreSchema(ReactionSequenceScoreSchema reactionSequenceScoreSchema) {
+		this.reactionSequenceScoreSchema = reactionSequenceScoreSchema;
+	}
+	
+	public double calcSyntheticAccessibilityScore(ReactionSequence reactSeq)
+	{
+		//TODO
+		return 0.0;
+	}
+	
+	public double calcSyntheticAccessibilityScore(List<ReactionSequence> reactSeqList)
+	{
+		//TODO
+		return 0.0;
+	}
+	
+	
 }
