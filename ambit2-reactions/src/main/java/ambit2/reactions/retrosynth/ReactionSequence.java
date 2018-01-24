@@ -52,7 +52,7 @@ public class ReactionSequence
 	public static final String MoleculeInChIKeyProperty = "MOLECULE_INCHI_KEY";
 
 	public static enum MoleculeStatus {
-		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL, EQUIVALENT_TO_OTHER_MOLECULE;
+		ADDED_TO_LEVEL, UNRESOLVED, RESOLVED, STARTING_MATERIAL, STARTING_MATERIAL_RESOLVED, EQUIVALENT_TO_OTHER_MOLECULE;
 		
 		public static String getShortString(MoleculeStatus status)
 		{
@@ -68,6 +68,8 @@ public class ReactionSequence
 				return "Res";	
 			case STARTING_MATERIAL:
 				return "StMat";
+			case STARTING_MATERIAL_RESOLVED:
+				return "StMatRes";
 			case EQUIVALENT_TO_OTHER_MOLECULE:
 				return "Eq";	
 			}
