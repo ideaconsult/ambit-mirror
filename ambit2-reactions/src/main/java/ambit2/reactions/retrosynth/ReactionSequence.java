@@ -234,6 +234,18 @@ public class ReactionSequence
 		return maps;
 	}
 	
+	public List<GenericReactionInstance> handleReactionInstances(Map<GenericReaction,List<List<IAtom>>> instances, IAtomContainer target)
+	{
+		//TODO
+		return null;
+	}
+	
+	public GenericReactionInstance getBestInstance(List<GenericReactionInstance> griList)
+	{
+		//TODO
+		return null;
+	}
+	
 	
 	public void generateSequenceStepForReactionInstance(ReactionSequenceLevel level, int moleculeIndex,
 									GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
@@ -270,6 +282,12 @@ public class ReactionSequence
 		level.associateStep(moleculeIndex, step);
 	}
 	
+	public void generateSequenceStepForReactionInstance(ReactionSequenceLevel level, int moleculeIndex,
+			GenericReactionInstance rInst) throws Exception
+	{
+		//TODO
+	}
+	
 	public void iterateLevelMolecules(ReactionSequenceLevel level) throws Exception
 	{
 		for (int i = 0; i<level.molecules.size(); i++)
@@ -279,8 +297,8 @@ public class ReactionSequence
 			MoleculeStatus status = getMoleculeStatus(mol);
 			if (status == MoleculeStatus.ADDED_TO_LEVEL)
 			{
-				//TODO check for starting material 
-
+				//check for starting material is performed on product generation
+				
 				Map<GenericReaction,List<List<IAtom>>> allInstances = generateAllReactionInstances(mol);
 				if (allInstances.isEmpty())
 				{	
@@ -288,17 +306,15 @@ public class ReactionSequence
 					continue;
 				}
 				
-				//TODO
-				/*
-				Object obj[] = SyntheticStrategy.getRandomSelection(allInstances);
-				GenericReaction gr = (GenericReaction) obj[0];
-				List<IAtom> inst = (List<IAtom>) obj[1];
-				generatedSequenceStepForReactionInstance(level, i, gr, inst);
+				List<GenericReactionInstance> griList = handleReactionInstances(allInstances, mol);
+				GenericReactionInstance bestInst = getBestInstance(griList);				
+				generateSequenceStepForReactionInstance(level, i, bestInst);
 				setMoleculeStatus(mol, MoleculeStatus.RESOLVED);
-				*/
 			}
 		}
 	}
+	
+	
 	
 	public void iterateLevelMoleculesRandomly(ReactionSequenceLevel level) throws Exception
 	{	
@@ -309,7 +325,7 @@ public class ReactionSequence
 			MoleculeStatus status = getMoleculeStatus(mol);
 			if (status == MoleculeStatus.ADDED_TO_LEVEL)
 			{
-				//TODO check for starting material 
+				//check for starting material is performed on product generation
 
 				Map<GenericReaction,List<List<IAtom>>> allInstances = generateAllReactionInstances(mol);
 				if (allInstances.isEmpty())
