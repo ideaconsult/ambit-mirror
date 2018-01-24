@@ -5,10 +5,13 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.reactions.rules.scores.ReactionScore;
+
 public class GenericReactionInstance 
 {
 	public GenericReaction reaction = null;
-	public double score = 0.0;
+	//public double score = 0.0;
+	public ReactionScore reactionScore = null;
 	public List<IAtom> instanceAtoms = null;
 	//public List<IAtom> instanceAtomIndices = null;
 	public IAtomContainer target = null;

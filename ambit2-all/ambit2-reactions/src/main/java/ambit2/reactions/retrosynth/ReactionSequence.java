@@ -283,9 +283,32 @@ public class ReactionSequence
 	}
 	
 	public void generateSequenceStepForReactionInstance(ReactionSequenceLevel level, int moleculeIndex,
-			GenericReactionInstance rInst) throws Exception
+			GenericReactionInstance gri) throws Exception
 	{
-		//TODO
+		ReactionSequenceStep step = new ReactionSequenceStep();
+		step.reaction = gri.reaction;
+		//IAtomContainer mol = level.molecules.get(moleculeIndex);
+		step.reactionScore = gri.reactionScore;
+		
+		IAtomContainerSet productFrags = ConnectivityChecker.partitionIntoMolecules(gri.products);
+		step.outputMolecules = new ArrayList<IAtomContainer>();
+		for (IAtomContainer frag : productFrags.atomContainers())
+		{	
+			step.outputMolecules.add(frag);
+			String inchiKey = setMoleculeInchiKey(frag);
+			registerMolInchiKey(frag, inchiKey, level.levelIndex+1);
+			//Set new molecule status
+			if (usedInchies.get(inchiKey).molecules.size()>1)
+				setMoleculeStatus(frag, MoleculeStatus.EQUIVALENT_TO_OTHER_MOLECULE);
+			else
+			{	
+				if (startMatDB.isStartingMaterial(inchiKey))
+					setMoleculeStatus(frag, MoleculeStatus.STARTING_MATERIAL);
+				else
+					setMoleculeStatus(frag, MoleculeStatus.ADDED_TO_LEVEL);
+			}	
+		}	
+		level.associateStep(moleculeIndex, step);
 	}
 	
 	public void iterateLevelMolecules(ReactionSequenceLevel level) throws Exception
