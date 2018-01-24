@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -234,10 +235,26 @@ public class ReactionSequence
 		return maps;
 	}
 	
-	public List<GenericReactionInstance> handleReactionInstances(Map<GenericReaction,List<List<IAtom>>> instances, IAtomContainer target)
+	public List<GenericReactionInstance> handleReactionInstances(Map<GenericReaction,List<List<IAtom>>> instances, 
+					IAtomContainer target) throws Exception
 	{
-		//TODO
-		return null;
+		List<GenericReactionInstance> griList = new ArrayList<GenericReactionInstance>();
+		Set<GenericReaction> grKeys = instances.keySet();
+		for (GenericReaction gr : grKeys)
+		{
+			List<List<IAtom>> grInst = instances.get(gr);
+			for (int i = 0; i < grInst.size(); i++)
+			{	
+				IAtomContainer products = gr.applyAtInstance(target, grInst.get(i), smrkMan, true);
+				smrkMan.processProduct(products);
+				//calculate reaction score
+				TopLayer.setAtomTopLayers(products);
+				GenericReactionInstance gri = new GenericReactionInstance(gr, target, grInst.get(i), products);
+				gri.reactionScore = strategy.calcReactionScore(gri);
+			}
+			//TODO take into account reaction instance occurrences
+		}
+		return griList;
 	}
 	
 	public GenericReactionInstance getBestInstance(List<GenericReactionInstance> griList)
