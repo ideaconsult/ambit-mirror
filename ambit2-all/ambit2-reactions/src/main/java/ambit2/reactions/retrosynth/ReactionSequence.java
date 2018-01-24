@@ -235,7 +235,7 @@ public class ReactionSequence
 	}
 	
 	
-	public void generatedSequenceStepForReactionInstance(ReactionSequenceLevel level, int moleculeIndex,
+	public void generateSequenceStepForReactionInstance(ReactionSequenceLevel level, int moleculeIndex,
 									GenericReaction reaction, List<IAtom> reactionInstance) throws Exception
 	{
 		ReactionSequenceStep step = new ReactionSequenceStep();
@@ -321,7 +321,7 @@ public class ReactionSequence
 				Object obj[] = SyntheticStrategy.getRandomSelection(allInstances);
 				GenericReaction gr = (GenericReaction) obj[0];
 				List<IAtom> inst = (List<IAtom>) obj[1];
-				generatedSequenceStepForReactionInstance(level, i, gr, inst);
+				generateSequenceStepForReactionInstance(level, i, gr, inst);
 				setMoleculeStatus(mol, MoleculeStatus.RESOLVED);
 			}
 		}
