@@ -288,14 +288,14 @@ public class ReactionTestUtils
 		rseq.initilize();
 		
 		ReactionSequenceLevel level = rseq.getFirstLevel();
-		rseq.iterateLevelMolecules(level);
+		rseq.iterateLevelMoleculesRandomly(level);
 		
 		for (int i = 0; i < 30; i++)
 		{	
 			level = level.nextLevel;
 			if (level == null)
 				break;
-			rseq.iterateLevelMolecules(level);
+			rseq.iterateLevelMoleculesRandomly(level);
 		}
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
