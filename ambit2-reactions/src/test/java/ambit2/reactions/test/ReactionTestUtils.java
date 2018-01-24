@@ -63,9 +63,9 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		//testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null);
+		testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null);
 		
-		testReactionSequence("CCCCCO", "/RDB_080118_SA-mod__.txt", null);
+		//testReactionSequence("CCCCCO", "/RDB_080118_SA-mod__.txt", null);
 		
 		
 		//testCreateStartingMaterialsFile();

@@ -242,8 +242,14 @@ public class ReactionSequence
 	
 	public GenericReactionInstance getBestInstance(List<GenericReactionInstance> griList)
 	{
-		//TODO
-		return null;
+		GenericReactionInstance bestGri = griList.get(0);
+		for (int i = 1; i < griList.size(); i++)
+		{
+			GenericReactionInstance gri = griList.get(i);
+			if (gri.reactionScore.totalScore > bestGri.reactionScore.totalScore)
+				bestGri = gri;
+		}
+		return bestGri;
 	}
 	
 	
