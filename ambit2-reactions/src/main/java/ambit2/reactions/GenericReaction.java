@@ -318,8 +318,25 @@ public class GenericReaction
 				r.reliabilityScore = d;
 		}
 		
-		//TODO 	Handle YieldInterval and Conditions
-		 
+		//TODO Handle Conditions
+		
+		ind = indices.get("YieldInterval");
+		if (ind != null && ind < tokens.length)
+		{	
+			String s = tokens[ind];
+			String s_tok[] = s.split("-");
+			if (s_tok.length == 2)
+			{
+				try
+				{
+					r.yieldLo = Double.parseDouble(s_tok[0]);
+					r.yieldHi = Double.parseDouble(s_tok[1]);
+					//System.out.println("*** --> " + r.yieldLo + " - " + r.yieldHi);
+				}
+				catch (Exception e) {};
+			}
+		}	
+		
 		ind = indices.get("Info");
 		if (ind != null && ind < tokens.length)
 			r.info = tokens[ind];
@@ -330,7 +347,6 @@ public class GenericReaction
 		
 		return r;
 	}
-	
 	
 	
 	public static ICondition getConditionFromString(String condStr) throws Exception

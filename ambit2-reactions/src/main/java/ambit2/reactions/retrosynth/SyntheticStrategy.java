@@ -126,7 +126,7 @@ public class SyntheticStrategy
 		SyntheticStrategy synthStrategy = new SyntheticStrategy();
 		synthStrategy.reactionScoreSchema = ReactionScoreSchema.getDefaultReactionScoreSchema();
 		
-		//atom complexity 10 gives score 100: fun(x) = 10*x
+		//atom complexity 10 gives score 100 i.e. fun(x) = 10*x
 		synthStrategy.reactionCenterScoreFunction = new LinearFunction(new double[] {10,0});
 		
 		//set productComplexityDescirptors
