@@ -11,4 +11,11 @@ public class ReactionSequenceScoreSchema
 	 	"LEVEL_WEIGHT" : 0.3,
 		"REACTION_SCORE_WEIGHT" : 0.7
 	 */
+	
+	public static ReactionSequenceScoreSchema getDefaultSchema()
+	{
+		ReactionSequenceScoreSchema rsss = new ReactionSequenceScoreSchema();
+		//TODO
+		return rsss;
+	}
 }
