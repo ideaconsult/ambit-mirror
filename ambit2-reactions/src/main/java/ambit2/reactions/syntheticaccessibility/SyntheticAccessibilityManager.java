@@ -2,42 +2,38 @@ package ambit2.reactions.syntheticaccessibility;
 
 import java.util.List;
 
-import ambit2.reactions.ReactionConst.SynthAccessMethod;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import ambit2.reactions.retrosynth.ReactionSequence;
-import ambit2.reactions.rules.scores.ReactionSequenceScoreSchema;
+
 
 public class SyntheticAccessibilityManager 
-{
-	protected SynthAccessMethod synthAccessMethod = SynthAccessMethod.RETRO_SYNTHESIS;
-	protected ReactionSequenceScoreSchema reactionSequenceScoreSchema = null;
-
-	public SynthAccessMethod getSynthAccessMethod() {
-		return synthAccessMethod;
+{	
+	protected  SyntheticAccessibilityStrategy strategy = null;
+	
+	
+	public SyntheticAccessibilityStrategy getStrategy() {
+		return strategy;
 	}
 
-	public void setSynthAccessMethod(SynthAccessMethod synthAccessMethod) {
-		this.synthAccessMethod = synthAccessMethod;
+	public void setStrategy(SyntheticAccessibilityStrategy strategy) {
+		this.strategy = strategy;
 	}
 
-	public ReactionSequenceScoreSchema getReactionSequenceScoreSchema() {
-		return reactionSequenceScoreSchema;
-	}
-
-	public void setReactionSequenceScoreSchema(ReactionSequenceScoreSchema reactionSequenceScoreSchema) {
-		this.reactionSequenceScoreSchema = reactionSequenceScoreSchema;
+	public double calcSyntheticAccessibility(IAtomContainer mol)
+	{
+		return 0.0;
 	}
 	
-	public double calcSyntheticAccessibilityScore(ReactionSequence reactSeq)
+	double getSyntheticAccessibilityScore(ReactionSequence reactSeq)
 	{
 		//TODO
 		return 0.0;
 	}
 	
-	public double calcSyntheticAccessibilityScore(List<ReactionSequence> reactSeqList)
+	double getSyntheticAccessibilityScore(List<ReactionSequence> reactSeqList)
 	{
 		//TODO
 		return 0.0;
 	}
-	
 	
 }
