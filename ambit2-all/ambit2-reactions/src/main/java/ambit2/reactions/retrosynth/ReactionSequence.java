@@ -251,6 +251,7 @@ public class ReactionSequence
 				TopLayer.setAtomTopLayers(products);
 				GenericReactionInstance gri = new GenericReactionInstance(gr, target, grInst.get(i), products);
 				gri.reactionScore = strategy.calcReactionScore(gri);
+				griList.add(gri);
 			}
 			//TODO take into account reaction instance occurrences
 		}
