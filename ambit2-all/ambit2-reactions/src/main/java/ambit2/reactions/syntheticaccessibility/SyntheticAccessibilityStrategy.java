@@ -14,4 +14,9 @@ public class SyntheticAccessibilityStrategy
 	
 	public SynthAccessMethod synthAccessMethod = SynthAccessMethod.RETRO_SYNTHESIS;
 	public ReactionSequenceScoreSchema reactionSequenceScoreSchema = null;
+	
+	//weights used for COMBINED_METHOD
+	public double combinedDescrWeight = 0.5;
+	public double combinedStartMatWeight = 0.0;
+	public double combinedRetroSynthWeight = 0.5;
 }
