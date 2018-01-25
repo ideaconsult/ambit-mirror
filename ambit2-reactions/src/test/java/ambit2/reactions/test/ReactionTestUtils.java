@@ -63,7 +63,7 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null, true);
+		testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null, false);
 		
 		//testReactionSequence("CCCCCO", "/RDB_080118_SA-mod__.txt", null);
 		
@@ -311,7 +311,16 @@ public class ReactionTestUtils
 		}
 		else
 		{
-			
+			ReactionSequenceLevel level = rseq.getFirstLevel();
+			rseq.iterateLevelMolecules(level);
+
+			for (int i = 0; i < 30; i++)
+			{	
+				level = level.nextLevel;
+				if (level == null)
+					break;
+				rseq.iterateLevelMolecules(level);
+			}
 		}
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
