@@ -63,7 +63,7 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null);
+		testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null, true);
 		
 		//testReactionSequence("CCCCCO", "/RDB_080118_SA-mod__.txt", null);
 		
@@ -238,6 +238,12 @@ public class ReactionTestUtils
 	
 	public static void testReactionSequence(String targetSmiles, String reactionDBFileName, String startMatDBFileName) throws Exception
 	{
+		testReactionSequence(targetSmiles, reactionDBFileName, startMatDBFileName, false); 
+	}
+	
+	public static void testReactionSequence(String targetSmiles,
+			String reactionDBFileName, String startMatDBFileName, boolean isRandomStrategy) throws Exception
+	{
 		String startMatSmi[] =  {"CC","CCC","CO","NC(C)C", "Cl"};
 		StartingMaterialsDataBase smdb = new StartingMaterialsDataBase(startMatSmi);
 		
@@ -290,15 +296,22 @@ public class ReactionTestUtils
 		rseq.setTarget(target);
 		rseq.initilize();
 		
-		ReactionSequenceLevel level = rseq.getFirstLevel();
-		rseq.iterateLevelMoleculesRandomly(level);
-		
-		for (int i = 0; i < 30; i++)
+		if (isRandomStrategy)
 		{	
-			level = level.nextLevel;
-			if (level == null)
-				break;
+			ReactionSequenceLevel level = rseq.getFirstLevel();
 			rseq.iterateLevelMoleculesRandomly(level);
+
+			for (int i = 0; i < 30; i++)
+			{	
+				level = level.nextLevel;
+				if (level == null)
+					break;
+				rseq.iterateLevelMoleculesRandomly(level);
+			}
+		}
+		else
+		{
+			
 		}
 		
 		System.out.println("ReactionSequence:\n" + rseq.toString());
