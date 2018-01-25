@@ -21,6 +21,42 @@ public class SyntheticAccessibilityManager
 
 	public double calcSyntheticAccessibility(IAtomContainer mol)
 	{
+		switch (strategy.synthAccessMethod)
+		{
+		case DESCRIPTORS:
+			return getDescriptorsSynthAccScore(mol);
+		case RETRO_SYNTHESIS:
+			return getRetroSyntheticScore(mol);
+		case START_MATERIALS:
+			return getStartMaterialsSynthAccScore(mol);
+		case COMBINED_METHOD: 
+			double sa = 0.0;
+			if (strategy.combinedDescrWeight > 0.0)
+				sa += strategy.combinedDescrWeight * getDescriptorsSynthAccScore(mol);
+			if (strategy.combinedRetroSynthWeight > 0.0)
+				sa += strategy.combinedRetroSynthWeight * getRetroSyntheticScore(mol);
+			if (strategy.combinedStartMatWeight > 0.0)
+				sa += strategy.combinedStartMatWeight * getStartMaterialsSynthAccScore(mol);
+			return sa;
+		}
+		return 0.0;
+	}
+	
+	double getDescriptorsSynthAccScore(IAtomContainer mol)
+	{
+		//TODO
+		return 0.0;
+	}
+	
+	double getRetroSyntheticScore(IAtomContainer mol)
+	{
+		//TODO
+		return 0.0;
+	}
+	
+	double getStartMaterialsSynthAccScore(IAtomContainer mol)
+	{
+		//TODO
 		return 0.0;
 	}
 	
