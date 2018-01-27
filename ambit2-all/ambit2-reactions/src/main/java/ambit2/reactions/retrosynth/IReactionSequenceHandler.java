@@ -11,7 +11,10 @@ public interface IReactionSequenceHandler
 	}
 	
 	public static enum EventType {
-		ADD_MOLECULE, REMOVE_MOLECULE
+		ADD_MOLECULE, 
+		REMOVE_MOLECULE, 
+		ADD_LEVEL, 
+		REMOVE_LEVEL
 	}
 	
 	public ReactionSequence getReactionSequence();
