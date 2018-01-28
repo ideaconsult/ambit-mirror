@@ -88,6 +88,7 @@ public class ReactionSequence
 	Map<String,InchiEntry> usedInchies = new HashMap<String,InchiEntry>();
 	List<INCHI_OPTION> inchiOptions = new ArrayList<INCHI_OPTION>();
 	InChIGeneratorFactory inchiGeneratorFactory = null;
+	IReactionSequenceHandler reactionSequenceHandler = null;
 	
 	//molecule pre-process
 	boolean FlagExplicitHAtoms = true;
@@ -162,6 +163,14 @@ public class ReactionSequence
 
 	public void setInchiOptions(List<INCHI_OPTION> inchiOptions) {
 		this.inchiOptions = inchiOptions;
+	}
+	
+	public IReactionSequenceHandler getReactionSequenceHandler() {
+		return reactionSequenceHandler;
+	}
+
+	public void setReactionSequenceHandler(IReactionSequenceHandler reactionSequenceHandler) {
+		this.reactionSequenceHandler = reactionSequenceHandler;
 	}
 
 	public void initilize()
