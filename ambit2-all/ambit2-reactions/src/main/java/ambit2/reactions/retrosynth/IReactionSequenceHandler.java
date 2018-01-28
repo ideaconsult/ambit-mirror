@@ -14,7 +14,9 @@ public interface IReactionSequenceHandler
 		ADD_MOLECULE, 
 		REMOVE_MOLECULE, 
 		ADD_LEVEL, 
-		REMOVE_LEVEL
+		REMOVE_LEVEL,
+		ADD_MANY_LEVELS,
+		RESET
 	}
 	
 	public ReactionSequence getReactionSequence();
