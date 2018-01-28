@@ -8,6 +8,11 @@ public interface IReactionSequenceHandler
 		public EventType type = null;
 		public int level = 0;
 		public Object params[] = null;
+		public RSEvent(EventType type, int level, Object params[]) {
+			this.type = type;
+			this.level = level;
+			this.params = params;
+		}
 	}
 	
 	public static enum EventType {
