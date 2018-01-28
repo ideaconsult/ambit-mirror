@@ -198,6 +198,15 @@ public class ReactionSequence
 		//levels.add(level);
 	}
 	
+	public void reset()
+	{
+		ReactionSequenceLevel level = new ReactionSequenceLevel();
+		firstLevel = level;
+		level.levelIndex = 0;
+		level.addMolecule(target, null, null);
+		setMoleculeStatus(target, MoleculeStatus.ADDED_TO_LEVEL);
+	}
+	
 	void defaultInchiSetup() throws Exception
 	{
 		inchiOptions.add(INCHI_OPTION.FixedH);
