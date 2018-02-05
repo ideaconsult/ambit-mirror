@@ -198,6 +198,18 @@ public class ReactionSequence
 		//levels.add(level);
 	}
 	
+	public ReactionSequenceLevel getLevel(int levIndex)
+	{
+		int index = 0;
+		ReactionSequenceLevel level = firstLevel;
+		while ((index < levIndex) && (level != null))
+		{
+			level = level.nextLevel;
+			index++;
+		}
+		return level;
+	}
+	
 	public void reset()
 	{
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
