@@ -26,4 +26,17 @@ public class ReactionScoreSchema
 		rss.reactionCenterComplexityWeight = 0.20;
 		return rss;
 	}
+	
+	public String toString() 
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("basicScoreWeight = " + basicScoreWeight + "\n");
+		sb.append("transformScoreWeight = " + transformScoreWeight + "\n");
+		sb.append("experimentalConditionsScoreWeight = " + experimentalConditionsScoreWeight + "\n");
+		sb.append("yieldScoreWeight = " + yieldScoreWeight + "\n");
+		sb.append("productComplexityWeight = " + productComplexityWeight + "\n");
+		sb.append("reactionCenterComplexityWeight = " + reactionCenterComplexityWeight + "\n");
+		
+		return sb.toString();
+	}
 }
