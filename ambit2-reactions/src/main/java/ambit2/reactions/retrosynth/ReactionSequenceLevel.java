@@ -123,7 +123,7 @@ public class ReactionSequenceLevel
 			if (obj != null)
 			{	
 				GenericReaction genReaction = (GenericReaction)obj[0];
-				sb.append("   <R" + genReaction.getId()+",M" + ((Integer)obj[1]+1));
+				sb.append("   <R" + genReaction.getExternId()+",M" + ((Integer)obj[1]+1));
 				if (obj[2] != null)
 				{
 					ReactionScore rscore = (ReactionScore)obj[2];
