@@ -236,7 +236,12 @@ public class ReactionDataBase
 					continue; //empty line is skipped
 				if (line.startsWith("#"))
 					continue; //comment line is omitted (line starting with '#')
+				
 				String tokens[] = line.split(splitter);
+				
+				//Clean up tokens
+				for (int i = 0; i < tokens.length; i++)
+					tokens[i] = cleanUpToken (tokens[i]);
 				
 				/*
 				if (tokens.length <= maxNeededColumnIndex)
@@ -261,6 +266,18 @@ public class ReactionDataBase
 		}
 
 		ReactionWriteUtils.closeReader(reader);
+	}
+	
+	String cleanUpToken(String token)
+	{
+		String tok1 = token.trim();
+		if (tok1.length() <2)
+			return tok1;
+		
+		if (token.charAt(0) == '"')
+			if (token.charAt(token.length()-1) == '"')
+				return token.substring(1, token.length()-1).trim();
+		return tok1;
 	}
 	
 	/**
