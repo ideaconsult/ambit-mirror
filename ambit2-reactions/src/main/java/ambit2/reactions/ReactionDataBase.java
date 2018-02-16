@@ -20,10 +20,11 @@ import ambit2.smarts.SMIRKSManager;
 
 public class ReactionDataBase 
 {
+	/*
 	public static class RDBFileConfig {
 		public int flagUseCol = -1;
 		public int idCol = -1;
-		public int externIddCol = -1;
+		public int externIdCol = -1;
 		public int nameCol = -1;
 		public int smirksCol = -1;
 		public int smirksFlagsCol = -1;
@@ -40,6 +41,7 @@ public class ReactionDataBase
 		public int experimentalConditionsInfoCol = -1;
 		public int infoCol = -1;
 	}
+	*/
 	
 	public static final String DEFAULT_TXT_FILE_COLUMN_NAMES [] = 
 	{
@@ -58,7 +60,9 @@ public class ReactionDataBase
 		"YieldInterval",
 		"Conditions",
 		"ExperimentalConditionsInfo",
-		"Info"
+		"Info",
+		"Priority",
+		"FunctionalGroup"
 	};
 	
 	private static Logger logger = Logger.getLogger(ReactionDataBase.class.getName());
@@ -180,7 +184,7 @@ public class ReactionDataBase
 	}
 	
 	public void loadReactionsFromTabDelimitedFile(File txtFile, boolean FlagCleanDB, 
-			Map<String,Integer> columnIndices, int headerLines) throws Exception
+			Map<String,Integer> columnIndices, int numHeaderLines) throws Exception
 	{
 		int maxNeededColumnIndex;
 		Map<String,Integer> indices = columnIndices;
@@ -221,9 +225,11 @@ public class ReactionDataBase
 		try
 		{	
 			//Header lines are skipped
-			while ((lineNum < headerLines) && (reader.getFilePointer() < length))
+			List<String> headerLines = new ArrayList<String>();
+			while ((lineNum < numHeaderLines) && (reader.getFilePointer() < length))
 			{
 				String line = reader.readLine();
+				headerLines.add(line);
 				lineNum++;
 			}
 			
@@ -266,6 +272,13 @@ public class ReactionDataBase
 		}
 
 		ReactionWriteUtils.closeReader(reader);
+	}
+	
+	Map<String,Integer> recognizeColumnIndices(String line)
+	{
+		Map<String,Integer> columnIndices = new HashMap<String,Integer>();
+		//TODO
+		return columnIndices;
 	}
 	
 	String cleanUpToken(String token)
