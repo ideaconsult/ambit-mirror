@@ -22,6 +22,7 @@ public class ReactionDataBase
 	public static class RDBFileConfig {
 		public int flagUseCol = -1;
 		public int idCol = -1;
+		public int externIddCol = -1;
 		public int nameCol = -1;
 		public int smirksCol = -1;
 		public int smirksFlagsCol = -1;
@@ -41,7 +42,7 @@ public class ReactionDataBase
 	
 	public static final String DEFAULT_TXT_FILE_COLUMN_NAMES [] = 
 	{
-		"Id",
+		"ExternId",
 		"Name",
 		"SMIRKS",
 		"SMIRKSflags",

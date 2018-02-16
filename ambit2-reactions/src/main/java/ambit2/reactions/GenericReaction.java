@@ -33,6 +33,7 @@ public class GenericReaction
 	
 	protected boolean FlagUse = true;
 	protected int id = 0;
+	protected String externId = "";
 	protected String name = null;
 	protected String smirks = null;
 	protected Map<SmirksTransformationFlag,Boolean> smirksFlag = null;
@@ -67,7 +68,15 @@ public class GenericReaction
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+			
+	public String getExternId() {
+		return externId;
+	}
+
+	public void setExternId(String externId) {
+		this.externId = externId;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -276,7 +285,11 @@ public class GenericReaction
 			Integer i = getInt(tokens[ind]);
 			if (i != null)
 				r.id = i;
-		}	
+		}
+		
+		ind = indices.get("ExternId");
+		if (ind != null && ind < tokens.length)
+			r.externId = tokens[ind];
 		
 		ind = indices.get("Name");
 		if (ind != null && ind < tokens.length)
