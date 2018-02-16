@@ -17,6 +17,7 @@ public class ReactionScore
 	public double reactionCenterPositionScore = 0.0;
 	public double reactionCenterComplexityScore = 0.0;
 	public double electronWithdrawingLevelScore = 0.0;
+	public double priorityScore = 0.0;
 	
 	public double totalScore = 0.0;
 	
@@ -29,6 +30,8 @@ public class ReactionScore
 		sb.append("yieldScore = " + yieldScore + "\n");
 		sb.append("prodComplScore = " + f.format(productComplexityScore) + "\n");
 		sb.append("reactionCenterComplScore = " + f.format(reactionCenterComplexityScore) + "\n");
+		sb.append("priorityScore = " + f.format(priorityScore) + "\n");
+		
 		return sb.toString();
 	}
 	
@@ -41,6 +44,7 @@ public class ReactionScore
 		sb.append("  yieldScore = " + yieldScore);
 		sb.append("  productComplScore = " + f.format(productComplexityScore));
 		sb.append("  reactionCenterComplScore = " + f.format(reactionCenterComplexityScore));
+		sb.append("  priorityScore = " + f.format(priorityScore));
 		return sb.toString();
 	}
 }

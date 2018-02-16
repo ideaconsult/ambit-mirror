@@ -53,6 +53,7 @@ public class GenericReaction
 	protected double reliabilityScore = 0.0;
 	protected double yieldLo = 0.0;
 	protected double yieldHi = 0.0;
+	protected double priority = 0.0;
 	
 	//Work data
 	protected SMIRKSReaction smirksReaction = null;
@@ -201,6 +202,14 @@ public class GenericReaction
 
 	public void setYieldHi(double yieldHi) {
 		this.yieldHi = yieldHi;
+	}
+	
+	public double getPriority() {
+		return priority;
+	}
+
+	public void setPriority(double priority) {
+		this.priority = priority;
 	}
 
 	public SMIRKSReaction getSmirksReaction() {
