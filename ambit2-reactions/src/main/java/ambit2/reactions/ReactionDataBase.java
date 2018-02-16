@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ambit2.reactions.GenericReaction.ReactionConfigStatus;
 import ambit2.reactions.io.ReactionWriteUtils;
 import ambit2.smarts.SMIRKSManager;
 
@@ -64,6 +65,7 @@ public class ReactionDataBase
 	
 	//public List<Reaction> reactions = null;
 	public List<GenericReaction> genericReactions = null;
+	public List<GenericReaction> excludedGenericReactions = null;
 	public List<String> errors = new ArrayList<String>();
 	
 	public ReactionDataBase()
@@ -304,7 +306,7 @@ public class ReactionDataBase
 			try {
 				reaction.configure(smrkMan);
 			} catch (Exception e) {
-				errors.add("Config errors for reaction id=" + reaction.id + "  " + e.getMessage());
+				errors.add("Config errors for reaction exterId=" + reaction.externId + "  " + e.getMessage());
 			}
 		}	
 	}
@@ -335,6 +337,32 @@ public class ReactionDataBase
 			}	
 		
 		return null;
+	}
+	
+	public String getErrorsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < errors.size(); i++)
+			sb.append(errors.get(i) + "\n");
+		return sb.toString();
+	}
+	
+	public void excludeReactionsWithConfigErrors()
+	{	
+		if (genericReactions != null)
+		{	
+			List<GenericReaction> newGRList = new ArrayList<GenericReaction>();
+			List<GenericReaction> excludedGenericReactions = new ArrayList<GenericReaction>();
+			for (int i = 0; i < genericReactions.size(); i++)
+			{	
+				GenericReaction r = genericReactions.get(i);
+				if (r.getConfigStatus() == ReactionConfigStatus.ERROR)
+					excludedGenericReactions.add(r);
+				else
+					newGRList.add(r);
+			}
+			genericReactions = newGRList;
+		}	
 	}
 	
 	public String toString()

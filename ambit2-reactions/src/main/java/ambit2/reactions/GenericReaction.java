@@ -31,6 +31,10 @@ public class GenericReaction
 		FG_A, FG_R
 	}
 	
+	public static enum ReactionConfigStatus {
+		NON_CONFIGURED, CONFIGURED, ERROR
+	}
+	
 	protected boolean FlagUse = true;
 	protected int id = 0;
 	protected String externId = "";
@@ -52,6 +56,7 @@ public class GenericReaction
 	
 	//Work data
 	protected SMIRKSReaction smirksReaction = null;
+	protected ReactionConfigStatus configStatus = ReactionConfigStatus.NON_CONFIGURED;
 	
 	public boolean isFlagUse() {
 		return FlagUse;
@@ -205,6 +210,10 @@ public class GenericReaction
 	public void setSmirksReaction(SMIRKSReaction smirksReaction) {
 		this.smirksReaction = smirksReaction;
 	}
+	
+	public ReactionConfigStatus getConfigStatus() {
+		return configStatus;
+	}
 
 	public boolean checkConditionsForTarget(Object target)
 	{
@@ -225,8 +234,13 @@ public class GenericReaction
 	public void configure(SMIRKSManager smrkMan) throws Exception
 	{
 		smirksReaction = smrkMan.parse(smirks);
-		if (!smrkMan.getErrors().equals(""))		
+		if (smrkMan.getErrors().equals(""))
+			configStatus = ReactionConfigStatus.CONFIGURED;
+		else	
+		{	
+			configStatus = ReactionConfigStatus.ERROR;
 			throw (new Exception ("There are errors in SMIRKS: " + smirks + "  " + smrkMan.getErrors()));
+		}
 	}
 	
 	public static GenericReaction getReactionFromJsonNode(JsonNode node) throws Exception
