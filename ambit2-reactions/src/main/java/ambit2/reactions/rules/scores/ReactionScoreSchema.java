@@ -14,6 +14,7 @@ public class ReactionScoreSchema
 	public double reactionCenterPositionWeight = 0.0;
 	public double reactionCenterComplexityWeight = 0.0;
 	public double electronWithdrawingLevelWeight = 0.0;
+	public double priorityScoreWeight = 0.0;
 	
 	public static ReactionScoreSchema getDefaultReactionScoreSchema()
 	{
@@ -24,6 +25,8 @@ public class ReactionScoreSchema
 		rss.yieldScoreWeight = 0.20;
 		rss.productComplexityWeight = 0.30;
 		rss.reactionCenterComplexityWeight = 0.20;
+		rss.priorityScoreWeight = 0.20;
+		
 		return rss;
 	}
 	
@@ -36,6 +39,7 @@ public class ReactionScoreSchema
 		sb.append("yieldScoreWeight = " + yieldScoreWeight + "\n");
 		sb.append("productComplexityWeight = " + productComplexityWeight + "\n");
 		sb.append("reactionCenterComplexityWeight = " + reactionCenterComplexityWeight + "\n");
+		sb.append("priorityScoreWeight = " + priorityScoreWeight + "\n");
 		
 		return sb.toString();
 	}
