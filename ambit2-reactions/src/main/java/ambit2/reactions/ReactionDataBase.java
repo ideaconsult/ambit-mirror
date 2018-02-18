@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -193,11 +194,6 @@ public class ReactionDataBase
 			//temporary code
 			indices  = getDefaultGenericReacitonTextFileColumnsIndices();
 			maxNeededColumnIndex = indices.size();  //checkColumnIndices(indices) is not needed
-			
-			//TODO identify column indices from first row
-			//RandomAccessFile reader = ReactionWriteUtils.createReader(txtFile);
-			//ReactionWriteUtils.closeReader(reader);
-			//minNumColumns = -1;
 		}
 		else
 		{
@@ -276,8 +272,17 @@ public class ReactionDataBase
 	
 	Map<String,Integer> recognizeColumnIndices(String line)
 	{
+		String tokens[] = line.split("\t");
 		Map<String,Integer> columnIndices = new HashMap<String,Integer>();
-		//TODO
+		for (int i = 0; i < tokens.length; i++)
+		{
+			for (int k = 0; k < DEFAULT_TXT_FILE_COLUMN_NAMES.length; k++)
+				if (DEFAULT_TXT_FILE_COLUMN_NAMES[k].equalsIgnoreCase(tokens[i]))
+				{
+					columnIndices.put(DEFAULT_TXT_FILE_COLUMN_NAMES[k], i);
+					break;
+				}
+		}	
 		return columnIndices;
 	}
 	
@@ -296,12 +301,26 @@ public class ReactionDataBase
 	/**
 	 * 
 	 * @param columnIndices
-	 * @return the maximal needed column index
+	 * @return the maximal needed column index or 
+	 * negative value if error is present
 	 */
 	public int checkColumnIndices(Map<String,Integer> columnIndices)
 	{
-		//TODO
-		return 0;
+		int maxIndex = -1;
+		Set<String> keys = columnIndices.keySet();
+		for (String key: keys)
+		{
+			Integer ind = columnIndices.get(key);
+			if (ind != null)
+				if (maxIndex < ind)
+					maxIndex = ind;
+		}
+		//Check critically needed columns:
+		if (columnIndices.get("Name") == null)
+			return -1;
+		if (columnIndices.get("SMIRKS") == null)
+			return -2;
+		return maxIndex;
 	}
 	
 	public static Map<String,Integer> getDefaultGenericReacitonTextFileColumnsIndices()
