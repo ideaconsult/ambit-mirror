@@ -56,7 +56,7 @@ public class ReactionDataBase
 		"ReactionType",
 		"TransformType",
 		"BasicScore",
-		"ExperimentalConditionsScore",
+		"ExperimentalConditions",
 		"ReliabilityScore",
 		"YieldInterval",
 		"Conditions",
@@ -229,6 +229,19 @@ public class ReactionDataBase
 				lineNum++;
 			}
 			
+			//Handle indices from header line
+			if (indices == null)
+				if (!headerLines.isEmpty())
+				{	
+					System.out.println("***** + Handle indices from header line");
+					indices  = recognizeColumnIndices(headerLines.get(0));
+					maxNeededColumnIndex = checkColumnIndices(indices);
+					if (maxNeededColumnIndex == -1)
+						throw new Exception("Incorrect column indices for reading reactions form text file!");
+					
+					System.out.println("Missing Columns: " + getMissingColumns(indices));
+				}
+			
 			while (reader.getFilePointer() < length)
 			{	
 				String line = reader.readLine();
@@ -284,6 +297,21 @@ public class ReactionDataBase
 				}
 		}	
 		return columnIndices;
+	}
+	
+	String getMissingColumns(Map<String,Integer> columnIndices)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < DEFAULT_TXT_FILE_COLUMN_NAMES.length; i++)
+		{	
+			if (columnIndices.get(DEFAULT_TXT_FILE_COLUMN_NAMES[i]) == null)
+			{	
+				sb.append(DEFAULT_TXT_FILE_COLUMN_NAMES[i]);
+				sb.append(" ");
+			}
+		}	
+		
+		return sb.toString();
 	}
 	
 	String cleanUpToken(String token)

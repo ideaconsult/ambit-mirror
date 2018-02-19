@@ -63,7 +63,7 @@ public class ReactionTestUtils
 		
 		//testReactor("C", "/Volumes/Data/Projects/reactor-config1.json"); 
 		
-		testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null, false);
+		//testReactionSequence("CCCCCO", "/Volumes/Data/RDB_080118_SA-mod.txt", null, false);
 		
 		//testReactionSequence("CCCCCO", "/RDB_080118_SA-mod__.txt", null);
 		
@@ -81,6 +81,8 @@ public class ReactionTestUtils
 		//testMoleculeComplexity2();
 		
 		//testReactionDataBase("/Volumes/Data/RDB_080118_SA-mod.txt");
+		
+		testReactionDataBase("/RDB_080118_SA-mod__.txt");
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception
