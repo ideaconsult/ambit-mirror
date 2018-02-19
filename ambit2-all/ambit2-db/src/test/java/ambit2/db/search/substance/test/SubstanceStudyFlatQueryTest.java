@@ -74,6 +74,12 @@ public class SubstanceStudyFlatQueryTest extends QueryTest<SubstanceStudyFlatQue
 					continue;
 				if ("content".equals(header))
 					continue;
+				if ("isRobustStudy".equals(header))
+					continue;
+				if ("isUsedforClassification".equals(header))
+					continue;
+				if ("isUsedforMSDS".equals(header))
+					continue;				
 				if ("investigation".equals(header)) {
 					if (record.get(header) != null)
 						Assert.assertEquals(test_investigation, record.get(header));
