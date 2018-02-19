@@ -41,6 +41,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected String dbTag = "ENM";
 	protected boolean searchfriendly = true;
 	public static final SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
 	public enum _JSON_MODE {
 		experiment, substance
 	}
@@ -95,7 +96,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			{ "id", "document_uuid", "type_s", "topcategory", "endpointcategory", "guidance", "endpoint",
 					"effectendpoint", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
 					"upQualifier", "upValue", "err", "errQualifier", "conditions", "params", "textValue",
-					"interpretation_result", "unit", "category", "idresult","updated" },
+					"interpretation_result", "unit", "category", "idresult", "updated", "r_value", "r_purposeFlag",
+					"r_studyResultType" },
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
@@ -103,6 +105,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	private static final String header_summary_refs = "SUMMARY.REFS_hss";
 	private static final String header_summary_refowner = "SUMMARY.REFOWNERS_hss";
 	private static final String header_dbtag = "dbtag_hss";
+
+	private static final String header_reliability = "reliability_s";
+	private static final String header_studyResultType = "studyResultType_s";
+	private static final String header_purposeFlag = "purposeFlag_s";
 
 	private static final String header_component = "component_s";
 
@@ -113,7 +119,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s",
 			"reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
 			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
-			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s","updated_s","E.method_s", "E.cell_type_s", header_summary_results, header_summary_refs,
+			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", "updated_s", "E.method_s", "E.cell_type_s",
+			header_reliability, header_studyResultType, header_purposeFlag, header_summary_results, header_summary_refs,
 			header_summary_refowner, "" } };
 
 	@Override
@@ -322,7 +329,6 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					Object cell = prm.get("E.cell_type_s");
 					Object method = prm.get("E.method_s");
 
-		
 					if (papp.getEffects() != null)
 						for (EffectRecord<String, Object, String> e : papp.getEffects()) {
 							String effectid = String.format("%s/%d",
@@ -339,7 +345,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									if (papp.getProtocol().getGuideline() != null
 											&& !papp.getProtocol().getGuideline().isEmpty())
 										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0));
-									
+
 								}
 								_childParams_.add(prm);
 							}
@@ -351,11 +357,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							substance2Bucket(record, study, suffix);
 							study.remove("id");
 							protocolapplication2Bucket(papp, study, suffix);
-							if (cell!=null)
+							if (cell != null)
 								study.put("E.cell_type_s", cell.toString());
-							if (method!=null)
+							if (method != null)
 								study.put("E.method_s", method.toString());
-														
+
 							study.setHeader(study_headers_combined[0]);
 
 							protocol2Bucket(papp.getProtocol(), study, suffix);
@@ -382,9 +388,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 											if (papp.getProtocol().getGuideline() != null
 													&& !papp.getProtocol().getGuideline().isEmpty())
 												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0));
-											if (cell!=null)
+											if (cell != null)
 												prmc.put("E.cell_type_s", cell.toString());
-											if (method!=null)
+											if (method != null)
 												prmc.put("E.method_s", method.toString());
 										}
 										_childParams_.add(prmc);
@@ -410,10 +416,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						Bucket study = new Bucket();
 						substance2Bucket(record, study, suffix);
 						protocolapplication2Bucket(papp, study, suffix);
-						if (cell!=null)
+						if (cell != null)
 							study.put("E.cell_type_s", cell.toString());
-						if (method!=null)
-							study.put("E.method_s", method.toString());						
+						if (method != null)
+							study.put("E.method_s", method.toString());
 						study.setHeader(study_headers_combined[0]);
 
 						protocol2Bucket(papp.getProtocol(), study, suffix);
@@ -577,8 +583,16 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			Bucket bucket, boolean suffix) {
 		bucket.put(ns("document_uuid", suffix, "_s"), papp.getDocumentUUID());
 		bucket.put("type_s", "study");
-		if (papp.getUpdated()!=null)
-		bucket.put("updated_s", dateformatter.format(papp.getUpdated()));
+		if (papp.getUpdated() != null)
+			bucket.put("updated_s", dateformatter.format(papp.getUpdated()));
+		if (papp.getReliability() != null) {
+			if (papp.getReliability().getValue() != null)
+				bucket.put(header_reliability, papp.getReliability().getValue());
+			if (papp.getReliability().getStudyResultType() != null)
+				bucket.put(header_studyResultType, papp.getReliability().getStudyResultType());
+			if (papp.getReliability().getPurposeFlag() != null)
+				bucket.put(header_purposeFlag, papp.getReliability().getPurposeFlag());
+		}
 		if (papp.getInterpretationResult() != null && !"".equals(papp.getInterpretationResult()))
 			bucket.put(ns("interpretation_result", suffix, "_s"), papp.getInterpretationResult().toUpperCase());
 	}

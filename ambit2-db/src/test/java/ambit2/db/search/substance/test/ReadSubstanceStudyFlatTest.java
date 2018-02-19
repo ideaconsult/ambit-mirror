@@ -60,6 +60,10 @@ public class ReadSubstanceStudyFlatTest extends
 					Assert.assertNotNull(effect.getLoValue());
 					Assert.assertNotNull(effect.getConditions());
 				}
+				Assert.assertNotNull(m.getReliability());
+				Assert.assertNotNull(m.getReliability().getValue());
+				Assert.assertNotNull(m.getReliability().getStudyResultType());
+				Assert.assertNotNull(m.getReliability().getPurposeFlag());
 			}
 		}
 		Assert.assertEquals(4, count);

@@ -39,7 +39,12 @@ public class ReadSubstanceStudyTest extends QueryTest<ReadSubstanceStudy> {
 			Assert.assertNotNull(m.getParameters());
 			Assert.assertNotNull(m.getReference());
 			Assert.assertNotNull(m.getReferenceOwner());
-
+			
+			
+			Assert.assertNotNull(m.getReliability());
+			Assert.assertNotNull(m.getReliability().getValue());
+			Assert.assertNotNull(m.getReliability().getStudyResultType());
+			Assert.assertNotNull(m.getReliability().getPurposeFlag());
 		}
 		Assert.assertEquals(4, count);
 
