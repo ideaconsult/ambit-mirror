@@ -338,7 +338,7 @@ public class GenericReaction
 				r.basicScore = d;
 		}
 		
-		ind = indices.get("ExperimentalConditionsScore");
+		ind = indices.get("ExperimentalConditions");
 		if (ind != null && ind < tokens.length)
 		{	
 			Double d= getDouble(tokens[ind]);
@@ -455,6 +455,7 @@ public class GenericReaction
 		StringBuffer sb = new StringBuffer();
 		sb.append("Reaction: " + name);
 		sb.append(" id = " + id);
+		sb.append(" externId = " + externId);
 		sb.append(" use = " + FlagUse);
 		sb.append(" smirks = " + smirks + "  ");
 		if (reactionClass != null)
