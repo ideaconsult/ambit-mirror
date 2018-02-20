@@ -300,8 +300,49 @@ public class ReactionSequence
 	
 	public GenericReactionInstance[] sortReactionInstances(List<GenericReactionInstance> griList, SortingMethod sortMethod) 
 	{
-		//TODO
-		return null;
+		int n = griList.size();
+		GenericReactionInstance gri[] = new GenericReactionInstance[n];		
+		for (int i=0; i<n; i++)
+			gri[i] = griList.get(i);
+		
+		if (n == 1)
+			return gri; //no sorting is needed
+		
+		GenericReactionInstance tmp;
+		
+		//Sorting in descending order (from max to min)
+		for (int i = 0; i < n-1; i++)
+			for (int k = i; k < n-1; k++ )
+			{
+				if (compare(gri[k],gri[k+1],sortMethod) < 0)
+				{
+					tmp = gri[k];
+					gri[k] = gri[k+1];
+					gri[k+1] = tmp;
+				}
+			}
+		return gri;
+	}
+	
+	/**
+	 * 
+	 * @param inst0
+	 * @param inst1
+	 * @param sortMethod
+	 * @return negatine value if inst0 < inst1, 0 if inst0 = inst1, positive value if inst0 > inst1
+	 */
+	int compare(GenericReactionInstance inst0, GenericReactionInstance inst1, SortingMethod sortMethod)
+	{
+		switch (sortMethod)
+		{
+		case REACTION_SCORE:
+			return Double.compare(inst0.reactionScore.totalScore, inst1.reactionScore.totalScore);
+			
+		case REACTION_PRIORITY:
+			return Double.compare(inst0.reactionScore.priorityScore, inst1.reactionScore.priorityScore);
+		}
+		
+		return 0;
 	}
 	
 	public GenericReactionInstance getBestInstance(List<GenericReactionInstance> griList)
