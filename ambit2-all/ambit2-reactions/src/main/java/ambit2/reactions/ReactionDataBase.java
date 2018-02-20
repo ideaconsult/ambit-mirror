@@ -191,9 +191,12 @@ public class ReactionDataBase
 		Map<String,Integer> indices = columnIndices;
 		if (indices == null)
 		{
+			/*
 			//temporary code
+			System.out.println("***** + Handle indices by deafult");
 			indices  = getDefaultGenericReacitonTextFileColumnsIndices();
 			maxNeededColumnIndex = indices.size();  //checkColumnIndices(indices) is not needed
+			*/
 		}
 		else
 		{
@@ -241,6 +244,8 @@ public class ReactionDataBase
 					
 					System.out.println("Missing Columns: " + getMissingColumns(indices));
 				}
+			
+			System.out.println("ColumnIndices:\n" + columnIndicesToString(indices));
 			
 			while (reader.getFilePointer() < length)
 			{	
@@ -309,6 +314,23 @@ public class ReactionDataBase
 				sb.append(DEFAULT_TXT_FILE_COLUMN_NAMES[i]);
 				sb.append(" ");
 			}
+		}	
+		
+		return sb.toString();
+	}
+	
+	String columnIndicesToString(Map<String,Integer> columnIndices)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < DEFAULT_TXT_FILE_COLUMN_NAMES.length; i++)
+		{	
+			sb.append(DEFAULT_TXT_FILE_COLUMN_NAMES[i]);
+			Integer ind = columnIndices.get(DEFAULT_TXT_FILE_COLUMN_NAMES[i]);
+			if (ind == null)
+				sb.append(" : null");
+			else
+				sb.append(" : " + ind);
+			sb.append("\n");
 		}	
 		
 		return sb.toString();
