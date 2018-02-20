@@ -65,7 +65,7 @@ public class SyntheticStrategy
 		
 		if (reactionScoreSchema.priorityScoreWeight > 0.0)
 		{	
-			rscore.priorityScore = gri.reaction.getPriority();
+			rscore.priorityScore = gri.reaction.getPriorityScore();
 			rscore.totalScore += rscore.priorityScore * reactionScoreSchema.priorityScoreWeight;
 		}
 		

@@ -62,7 +62,7 @@ public class ReactionDataBase
 		"Conditions",
 		"ExperimentalConditionsInfo",
 		"Info",
-		"Priority",
+		"PriorityScore",
 		"FunctionalGroup"
 	};
 	
