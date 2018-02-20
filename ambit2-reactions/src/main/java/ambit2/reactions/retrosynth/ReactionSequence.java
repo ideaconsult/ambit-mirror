@@ -293,35 +293,34 @@ public class ReactionSequence
 	}
 	
 	
-	public GenericReactionInstance[] sortReactionInstances(List<GenericReactionInstance> griList) 
+	public int[] sortReactionInstances(List<GenericReactionInstance> griList) 
 	{
 		return sortReactionInstances(griList, SortingMethod.REACTION_SCORE);
 	}
 	
-	public GenericReactionInstance[] sortReactionInstances(List<GenericReactionInstance> griList, SortingMethod sortMethod) 
+	public int[] sortReactionInstances(List<GenericReactionInstance> griList, SortingMethod sortMethod) 
 	{
 		int n = griList.size();
-		GenericReactionInstance gri[] = new GenericReactionInstance[n];		
+		int sort[] = new int[n];		
 		for (int i=0; i<n; i++)
-			gri[i] = griList.get(i);
+			sort[i] = i;
 		
 		if (n == 1)
-			return gri; //no sorting is needed
-		
-		GenericReactionInstance tmp;
+			return sort; //no sorting is needed
 		
 		//Sorting in descending order (from max to min)
+		int tmp;
 		for (int i = 0; i < n-1; i++)
 			for (int k = i; k < n-1; k++ )
 			{
-				if (compare(gri[k],gri[k+1],sortMethod) < 0)
+				if (compare(griList.get(sort[k]), griList.get(sort[k+1]), sortMethod) < 0)
 				{
-					tmp = gri[k];
-					gri[k] = gri[k+1];
-					gri[k+1] = tmp;
+					tmp = sort[k];
+					sort[k] = sort[k+1];
+					sort[k+1] = tmp;
 				}
 			}
-		return gri;
+		return sort;
 	}
 	
 	/**
