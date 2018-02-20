@@ -649,26 +649,33 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			boolean suffix) {
 		if (e.getEndpoint() != null)
 			bucket.put(ns("effectendpoint", suffix, "_s"), e.getEndpoint().toUpperCase());
-		bucket.put(ns("unit", suffix, "_s"), e.getUnit());
-		if (!"".equals(e.getLoQualifier()))
-			bucket.put(ns("loQualifier", suffix, "_s"), e.getLoQualifier());
-		bucket.put(ns("loValue", suffix, "_d"), e.getLoValue());
-		if (!"".equals(e.getUpQualifier()))
-			bucket.put(ns("upQualifier", suffix, "_s"), e.getUpQualifier());
-		bucket.put(ns("upValue", suffix, "_d"), e.getUpValue());
-		if (!"".equals(e.getErrQualifier()))
-			bucket.put(ns("errQualifier", suffix, "_s"), e.getErrQualifier());
-		if (!"".equals(e.getErrorValue()))
-			bucket.put(ns("err", suffix, "_d"), e.getErrorValue());
+		bucket.put(ns("unit", suffix, "_s"), e.getUnit() == null ? "" : e.getUnit());
+
+		if (e.getLoValue() != null || e.getUpValue() != null) {
+			if (e.getLoQualifier() != null && !"".equals(e.getLoQualifier()))
+				bucket.put(ns("loQualifier", suffix, "_s"), e.getLoQualifier());
+
+			if (e.getLoValue() != null)
+				bucket.put(ns("loValue", suffix, "_d"), e.getLoValue());
+			if (e.getUpQualifier() != null && !"".equals(e.getUpQualifier()))
+				bucket.put(ns("upQualifier", suffix, "_s"), e.getUpQualifier());
+			if (e.getUpValue() != null)
+				bucket.put(ns("upValue", suffix, "_d"), e.getUpValue());
+			if (e.getErrQualifier() !=null && !"".equals(e.getErrQualifier()))
+				bucket.put(ns("errQualifier", suffix, "_s"), e.getErrQualifier());
+			if (e.getErrorValue()!=null && !"".equals(e.getErrorValue()))
+				bucket.put(ns("err", suffix, "_d"), e.getErrorValue());
+		} 
 
 		final String catchall4search = "_text_";
-		if (e.getTextValue() != null)
+		if (e.getTextValue() != null) {
 			if (e.getTextValue().toString().startsWith("{")) {
 				IParams nonzero = SubstanceStudyParser.parseTextValueProteomics(dx, e.getTextValue().toString());
 				bucket.put(catchall4search, nonzero);
 			} else {
-				bucket.put(catchall4search, e.getTextValue());
+				bucket.put(ns("textValue", suffix, "_s"), e.getTextValue());
 			}
+		}
 
 	}
 
