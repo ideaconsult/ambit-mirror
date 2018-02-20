@@ -79,7 +79,7 @@ public class ReactionSequence
 	}
 	
 	public static enum SortingMethod {
-		REACTION_SCORE, REACTION_PRIORITY
+		NONE, REACTION_SCORE, REACTION_PRIORITY
 	}
 	
 	ReactionDataBase reactDB = null;
@@ -293,12 +293,12 @@ public class ReactionSequence
 	}
 	
 	
-	public int[] sortReactionInstances(List<GenericReactionInstance> griList) 
+	public static int[] sortReactionInstances(List<GenericReactionInstance> griList) 
 	{
 		return sortReactionInstances(griList, SortingMethod.REACTION_SCORE);
 	}
 	
-	public int[] sortReactionInstances(List<GenericReactionInstance> griList, SortingMethod sortMethod) 
+	public static int[] sortReactionInstances(List<GenericReactionInstance> griList, SortingMethod sortMethod) 
 	{
 		int n = griList.size();
 		int sort[] = new int[n];		
@@ -330,7 +330,7 @@ public class ReactionSequence
 	 * @param sortMethod
 	 * @return negatine value if inst0 < inst1, 0 if inst0 = inst1, positive value if inst0 > inst1
 	 */
-	int compare(GenericReactionInstance inst0, GenericReactionInstance inst1, SortingMethod sortMethod)
+	public static int compare(GenericReactionInstance inst0, GenericReactionInstance inst1, SortingMethod sortMethod)
 	{
 		switch (sortMethod)
 		{
