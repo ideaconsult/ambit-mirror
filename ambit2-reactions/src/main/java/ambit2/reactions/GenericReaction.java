@@ -53,7 +53,7 @@ public class GenericReaction
 	protected double reliabilityScore = 0.0;
 	protected double yieldLo = 0.0;
 	protected double yieldHi = 0.0;
-	protected double priority = 0.0;
+	protected double priorityScore = 0.0;
 	
 	//Work data
 	protected SMIRKSReaction smirksReaction = null;
@@ -204,12 +204,12 @@ public class GenericReaction
 		this.yieldHi = yieldHi;
 	}
 	
-	public double getPriority() {
-		return priority;
+	public double getPriorityScore() {
+		return priorityScore;
 	}
 
-	public void setPriority(double priority) {
-		this.priority = priority;
+	public void setPriorityScore(double priorityScore) {
+		this.priorityScore = priorityScore;
 	}
 
 	public SMIRKSReaction getSmirksReaction() {
@@ -381,12 +381,12 @@ public class GenericReaction
 		if (ind != null && ind < tokens.length)
 			r.experimentalConditionsInfo = tokens[ind];
 		
-		ind = indices.get("Priority");
+		ind = indices.get("PriorityScore");
 		if (ind != null && ind < tokens.length)
 		{	
 			Double d= getDouble(tokens[ind]);
 			if (d != null)
-				r.priority = d;
+				r.priorityScore = d;
 		}
 		
 		return r;
@@ -476,7 +476,7 @@ public class GenericReaction
 			sb.append(" transformType = " + transformType);
 		sb.append(" expCondScore = " + experimentalConditionsScore);
 		sb.append(" basicScore = " + basicScore);
-		sb.append(" priority = " + priority);
+		sb.append(" priorityScore = " + priorityScore);
 		sb.append(" reliabilityScore = " + reliabilityScore);
 		sb.append(" yieldLo = " + yieldLo);
 		sb.append(" yieldHi = " + yieldHi);
