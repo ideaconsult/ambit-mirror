@@ -78,6 +78,10 @@ public class ReactionSequence
 		}
 	}
 	
+	public static enum SortingMethod {
+		REACTION_SCORE, REACTION_PRIORITY
+	}
+	
 	ReactionDataBase reactDB = null;
 	StartingMaterialsDataBase startMatDB = new StartingMaterialsDataBase(); //empty materials DB
 	SyntheticStrategy strategy = null;
@@ -286,6 +290,18 @@ public class ReactionSequence
 			//TODO take into account reaction instance occurrences
 		}
 		return griList;
+	}
+	
+	
+	public GenericReactionInstance[] sortReactionInstances(List<GenericReactionInstance> griList) 
+	{
+		return sortReactionInstances(griList, SortingMethod.REACTION_SCORE);
+	}
+	
+	public GenericReactionInstance[] sortReactionInstances(List<GenericReactionInstance> griList, SortingMethod sortMethod) 
+	{
+		//TODO
+		return null;
 	}
 	
 	public GenericReactionInstance getBestInstance(List<GenericReactionInstance> griList)
