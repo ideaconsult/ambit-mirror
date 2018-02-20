@@ -310,8 +310,8 @@ public class ReactionSequence
 		
 		//Sorting in descending order (from max to min)
 		int tmp;
-		for (int i = 0; i < n-1; i++)
-			for (int k = i; k < n-1; k++ )
+		for (int i = n-1; i >= 1; i--)
+			for (int k = 0; k < i; k++)
 			{
 				if (compare(griList.get(sort[k]), griList.get(sort[k+1]), sortMethod) < 0)
 				{
