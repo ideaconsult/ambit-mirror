@@ -63,6 +63,12 @@ public class SyntheticStrategy
 			rscore.totalScore += rscore.basicScore * reactionScoreSchema.basicScoreWeight;
 		}
 		
+		if (reactionScoreSchema.priorityScoreWeight > 0.0)
+		{	
+			rscore.priorityScore = gri.reaction.getPriority();
+			rscore.totalScore += rscore.priorityScore * reactionScoreSchema.priorityScoreWeight;
+		}
+		
 		if (reactionScoreSchema.experimentalConditionsScoreWeight > 0.0)
 		{	
 			rscore.experimentalConditionsScore = gri.reaction.getExperimentalConditionsScore();

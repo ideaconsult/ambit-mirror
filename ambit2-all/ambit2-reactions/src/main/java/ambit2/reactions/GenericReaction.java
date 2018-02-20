@@ -381,6 +381,14 @@ public class GenericReaction
 		if (ind != null && ind < tokens.length)
 			r.experimentalConditionsInfo = tokens[ind];
 		
+		ind = indices.get("Priority");
+		if (ind != null && ind < tokens.length)
+		{	
+			Double d= getDouble(tokens[ind]);
+			if (d != null)
+				r.priority = d;
+		}
+		
 		return r;
 	}
 	
@@ -468,6 +476,7 @@ public class GenericReaction
 			sb.append(" transformType = " + transformType);
 		sb.append(" expCondScore = " + experimentalConditionsScore);
 		sb.append(" basicScore = " + basicScore);
+		sb.append(" priority = " + priority);
 		sb.append(" reliabilityScore = " + reliabilityScore);
 		sb.append(" yieldLo = " + yieldLo);
 		sb.append(" yieldHi = " + yieldHi);
