@@ -216,6 +216,7 @@ public class ReactionSequence
 	
 	public void reset()
 	{
+		usedInchies.clear();
 		ReactionSequenceLevel level = new ReactionSequenceLevel();
 		firstLevel = level;
 		level.levelIndex = 0;
