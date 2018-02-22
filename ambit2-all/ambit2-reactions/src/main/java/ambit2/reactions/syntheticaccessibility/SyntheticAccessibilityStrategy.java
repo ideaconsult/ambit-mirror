@@ -8,8 +8,7 @@ import ambit2.rules.functions.LinearFunction;
 import ambit2.rules.weight.DescriptorWeight;
 
 public class SyntheticAccessibilityStrategy 
-{
-	
+{	
 	public List<DescriptorWeight> descirptors = new ArrayList<DescriptorWeight>();
 	public double startMaterialSimilarityWeight = 0.0;
 	public double retroSynthesisWeight = 0.0;
