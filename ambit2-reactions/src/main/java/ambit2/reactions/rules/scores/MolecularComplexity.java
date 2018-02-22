@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IStereoElement;
 
 public class MolecularComplexity 
 {
@@ -90,10 +91,11 @@ public class MolecularComplexity
 	}
 	
 	public static int numberOfStereoElements(IAtomContainer mol)
-	{
-		//TODO
-		return 0;
+	{	
+		int n = 0;
+		for (IStereoElement element : mol.stereoElements())
+			n++;
+		return n;
 	}
-	
 	
 }
