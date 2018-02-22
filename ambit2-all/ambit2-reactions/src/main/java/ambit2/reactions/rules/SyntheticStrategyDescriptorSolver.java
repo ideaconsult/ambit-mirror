@@ -13,7 +13,8 @@ public class SyntheticStrategyDescriptorSolver extends AbstractDescriptorSolver
 	{
 		descriptorList.add("MOL_COMPLEXITY_01");
 		descriptorList.add("MOL_COMPLEXITY_02");
-		//TODO fill descriptor list
+		descriptorList.add("NUMBER_OF_STEREO_ELEMENTS");
+		descriptorList.add("RING_COMPLEXITY");
 	}
 	
 	@Override
@@ -27,8 +28,14 @@ public class SyntheticStrategyDescriptorSolver extends AbstractDescriptorSolver
 		case 1:
 			molComplexity.setTarget((IAtomContainer)target);
 			return molComplexity.calcMolecularComplexity02();
+		case 2:
+			return new Double(MolecularComplexity.
+					numberOfStereoElements((IAtomContainer)target));
+		case 3:
+			return MolecularComplexity.ringComplexity((IAtomContainer)target);
 		}
 		return null;
 	}
+	   
 
 }
