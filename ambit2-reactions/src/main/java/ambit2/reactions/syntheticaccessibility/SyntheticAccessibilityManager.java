@@ -41,6 +41,7 @@ public class SyntheticAccessibilityManager
 
 	public double calcSyntheticAccessibility(IAtomContainer mol)
 	{	
+		calculatedDescrData.clear();
 		double sa = 0.0;
 		
 		for (int i = 0; i < strategy.descirptors.size(); i++)
@@ -65,6 +66,23 @@ public class SyntheticAccessibilityManager
 		}
 		
 		return sa;
+	}
+	
+	public String getCalculationDetailsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < strategy.descirptors.size(); i++)
+		{
+			DescriptorWeight dw = strategy.descirptors.get(i);
+			DescrData descrDat = calculatedDescrData.get(i);
+			sb.append(dw.descriptorName);
+			sb.append("  "); 
+			sb.append(descrDat.value);
+			sb.append("  ");
+			sb.append(descrDat.transformedValue);
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 	
 	
