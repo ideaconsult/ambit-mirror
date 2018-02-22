@@ -103,7 +103,9 @@ public class SyntheticStrategy
 		for (DescriptorWeight dw : productComplexityDescirptors)
 		{	
 			Double c = (Double)solver.calculateDescriptor(dw.descriptorName, product);
-			double f_c = dw.valueTrnasformation.getFunctionValue(c);
+			double f_c = c;
+			if (dw.valueTrnasformation != null)
+				f_c = dw.valueTrnasformation.getFunctionValue(c);
 			complexity += f_c * dw.weight;
 			//System.out.println(dw.descriptorName + "  " + c + "   " + f_c);			
 		}
