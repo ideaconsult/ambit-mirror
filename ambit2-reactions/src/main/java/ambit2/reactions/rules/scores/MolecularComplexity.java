@@ -82,4 +82,18 @@ public class MolecularComplexity
 			atomComplexities.add(c);
 		}
 	}
+	
+	public static double ringComplexity(IAtomContainer mol)
+	{
+		//TODO
+		return 0.0;
+	}
+	
+	public static int numberOfStereoElements(IAtomContainer mol)
+	{
+		//TODO
+		return 0;
+	}
+	
+	
 }
