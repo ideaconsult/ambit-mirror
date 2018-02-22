@@ -3,12 +3,16 @@ package ambit2.reactions.syntheticaccessibility;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+
 import ambit2.reactions.retrosynth.ReactionSequence;
+import ambit2.reactions.rules.SyntheticStrategyDescriptorSolver;
+import ambit2.rules.weight.DescriptorWeight;
 
 
 public class SyntheticAccessibilityManager 
 {	
 	protected  SyntheticAccessibilityStrategy strategy = null;
+	protected SyntheticStrategyDescriptorSolver solver = new SyntheticStrategyDescriptorSolver();
 	
 	
 	public SyntheticAccessibilityStrategy getStrategy() {
@@ -20,29 +24,26 @@ public class SyntheticAccessibilityManager
 	}
 
 	public double calcSyntheticAccessibility(IAtomContainer mol)
-	{
-		switch (strategy.synthAccessMethod)
+	{	
+		double sa = 0.0;
+		
+		for (DescriptorWeight dw : strategy.descirptors)
 		{
-		case DESCRIPTORS:
-			return getDescriptorsSynthAccScore(mol);
-		case RETRO_SYNTHESIS:
-			return getRetroSyntheticScore(mol);
-		case START_MATERIALS:
-			return getStartMaterialsSynthAccScore(mol);
-		case COMBINED_METHOD: 
-			double sa = 0.0;
-			if (strategy.combinedDescrWeight > 0.0)
-				sa += strategy.combinedDescrWeight * getDescriptorsSynthAccScore(mol);
-			if (strategy.combinedRetroSynthWeight > 0.0)
-				sa += strategy.combinedRetroSynthWeight * getRetroSyntheticScore(mol);
-			if (strategy.combinedStartMatWeight > 0.0)
-				sa += strategy.combinedStartMatWeight * getStartMaterialsSynthAccScore(mol);
-			return sa;
+			Double c = (Double)solver.calculateDescriptor(dw.descriptorName, mol);
+			sa += c * dw.weight;
 		}
-		return 0.0;
+		
+		if (strategy.startMatrialeSimilarityWeight > 0.0)
+			sa += strategy.startMatrialeSimilarityWeight * getStartMaterialSimilarityScore(mol);
+		
+		if (strategy.retroSynthesisWeight > 0.0)
+			sa += strategy.retroSynthesisWeight * getRetroSyntheticScore(mol);
+		
+		return sa;
 	}
 	
-	double getDescriptorsSynthAccScore(IAtomContainer mol)
+	
+	double getStartMaterialSimilarityScore(IAtomContainer mol)
 	{
 		//TODO
 		return 0.0;
@@ -54,12 +55,7 @@ public class SyntheticAccessibilityManager
 		return 0.0;
 	}
 	
-	double getStartMaterialsSynthAccScore(IAtomContainer mol)
-	{
-		//TODO
-		return 0.0;
-	}
-	
+	/*
 	double getSyntheticAccessibilityScore(ReactionSequence reactSeq)
 	{
 		//TODO
@@ -71,5 +67,6 @@ public class SyntheticAccessibilityManager
 		//TODO
 		return 0.0;
 	}
+	*/
 	
 }
