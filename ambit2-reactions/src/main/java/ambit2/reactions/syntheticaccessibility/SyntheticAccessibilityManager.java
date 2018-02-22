@@ -33,8 +33,8 @@ public class SyntheticAccessibilityManager
 			sa += c * dw.weight;
 		}
 		
-		if (strategy.startMatrialeSimilarityWeight > 0.0)
-			sa += strategy.startMatrialeSimilarityWeight * getStartMaterialSimilarityScore(mol);
+		if (strategy.startMaterialSimilarityWeight > 0.0)
+			sa += strategy.startMaterialSimilarityWeight * getStartMaterialSimilarityScore(mol);
 		
 		if (strategy.retroSynthesisWeight > 0.0)
 			sa += strategy.retroSynthesisWeight * getRetroSyntheticScore(mol);
