@@ -18,7 +18,7 @@ public class SyntheticAccessibilityStrategy
 	{
 		SyntheticAccessibilityStrategy saStrategy = new SyntheticAccessibilityStrategy();
 		
-		//set Molecule Complexity Descriptor
+		//(1) Set Molecule Complexity Descriptor
 		DescriptorWeight dw = new DescriptorWeight();
 		dw.descriptorName = "MOL_COMPLEXITY_01";
 		//convert complexity interval [a,b] into score ranging [100,0]
@@ -26,7 +26,16 @@ public class SyntheticAccessibilityStrategy
 		double a = 0;
 		double b = 150; 
 		dw.valueTrnasformation = new LinearFunction(new double[]{-100.0/(b-a), 100.0*b/(b-a)});
-		dw.weight = 1.0;
+		dw.weight = 0.7;
+		saStrategy.descirptors.add(dw);
+		
+		//(2) Set Stereo Elements Descriptor
+		dw = new DescriptorWeight();
+		dw.descriptorName = "NUMBER_OF_STEREO_ELEMENTS";
+		//-10% for each stereo element
+		//fun(x) = -10x + 100
+		dw.valueTrnasformation = new LinearFunction(new double[]{-10.0, 100.0});
+		dw.weight = 0.3;
 		saStrategy.descirptors.add(dw);
 
 		return saStrategy;
