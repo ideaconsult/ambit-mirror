@@ -1,5 +1,6 @@
 package ambit2.reactions.syntheticaccessibility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -11,9 +12,20 @@ import ambit2.rules.weight.DescriptorWeight;
 
 public class SyntheticAccessibilityManager 
 {	
+	public static class DescrData
+	{
+		public double value = 0.0;
+		public double transformedValue = 0.0;
+		public DescrData(double value, double transformedValue){
+			this.value = value;
+			this.transformedValue = transformedValue; 
+		}
+	}
+	
+	
 	protected  SyntheticAccessibilityStrategy strategy = null;
 	protected SyntheticStrategyDescriptorSolver solver = new SyntheticStrategyDescriptorSolver();
-	
+	protected List<DescrData> calculatedDescrData = new ArrayList<DescrData>();
 	
 	public SyntheticAccessibilityStrategy getStrategy() {
 		return strategy;
@@ -22,22 +34,35 @@ public class SyntheticAccessibilityManager
 	public void setStrategy(SyntheticAccessibilityStrategy strategy) {
 		this.strategy = strategy;
 	}
+	
+	public List<DescrData> getCalculatedDescrData() {
+		return calculatedDescrData;
+	}
 
 	public double calcSyntheticAccessibility(IAtomContainer mol)
 	{	
 		double sa = 0.0;
 		
-		for (DescriptorWeight dw : strategy.descirptors)
+		for (int i = 0; i < strategy.descirptors.size(); i++)
 		{
+			DescriptorWeight dw = strategy.descirptors.get(i);
 			Double c = (Double)solver.calculateDescriptor(dw.descriptorName, mol);
-			sa += c * dw.weight;
+			Double f_c = c;
+			if (dw.valueTrnasformation != null)
+				f_c = dw.valueTrnasformation.getFunctionValue(c);
+			sa += f_c * dw.weight;
+			DescrData descrData = new DescrData(c, f_c); 
 		}
 		
 		if (strategy.startMaterialSimilarityWeight > 0.0)
+		{	
 			sa += strategy.startMaterialSimilarityWeight * getStartMaterialSimilarityScore(mol);
+		}	
 		
 		if (strategy.retroSynthesisWeight > 0.0)
+		{	
 			sa += strategy.retroSynthesisWeight * getRetroSyntheticScore(mol);
+		}
 		
 		return sa;
 	}
