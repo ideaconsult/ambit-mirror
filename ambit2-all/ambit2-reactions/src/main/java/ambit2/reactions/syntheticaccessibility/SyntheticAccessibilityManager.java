@@ -52,7 +52,8 @@ public class SyntheticAccessibilityManager
 			if (dw.valueTrnasformation != null)
 				f_c = dw.valueTrnasformation.getFunctionValue(c);
 			sa += f_c * dw.weight;
-			DescrData descrData = new DescrData(c, f_c); 
+			DescrData descrData = new DescrData(c, f_c);
+			calculatedDescrData.add(descrData);
 		}
 		
 		if (strategy.startMaterialSimilarityWeight > 0.0)
