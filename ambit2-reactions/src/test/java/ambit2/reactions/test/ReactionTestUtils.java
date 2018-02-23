@@ -34,6 +34,8 @@ import ambit2.reactions.rules.scores.MolecularComplexity;
 import ambit2.reactions.sets.ReactionData;
 import ambit2.reactions.sets.ReactionGroup;
 import ambit2.reactions.sets.ReactionSet;
+import ambit2.reactions.syntheticaccessibility.SyntheticAccessibilityManager;
+import ambit2.reactions.syntheticaccessibility.SyntheticAccessibilityStrategy;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.TopLayer;
@@ -82,7 +84,9 @@ public class ReactionTestUtils
 		
 		//testReactionDataBase("/Volumes/Data/RDB_080118_SA-mod.txt");
 		
-		testReactionDataBase("/RDB_080118_SA-mod__.txt");
+		//testReactionDataBase("/RDB_080118_SA-mod__.txt");
+		
+		testSyntheticAccessibility("C/C=C/OCCCC/C=C/C");
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception
@@ -497,6 +501,25 @@ public class ReactionTestUtils
 		testMoleculeComplexity("C1CCN1CCC", true);
 		testMoleculeComplexity("CCCCO", true);
 		testMoleculeComplexity("CC(CCC(N)CCO)COCCCCc2ccccc2c3ccccc3", true);
+	}
+	
+	public static void testSyntheticAccessibility(String smiles) throws Exception
+	{
+		System.out.println("Testing SyntheticAccessibility: " + smiles);
+		NumberFormat formatter = new DecimalFormat("#0.00"); 
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		if (FlagExcplicitHAtoms)
+			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+		TopLayer.setAtomTopLayers(mol);
+		SyntheticAccessibilityManager saMan = new SyntheticAccessibilityManager(); 
+		SyntheticAccessibilityStrategy saStrategy = SyntheticAccessibilityStrategy.getDefaultStrategy();
+		saMan.setStrategy(saStrategy);
+		
+		double sa = saMan.calcSyntheticAccessibility(mol);
+		System.out.println("SA = " + formatter.format(sa));
+		System.out.println("SA details: ");
+		System.out.println(saMan.getCalculationDetailsAsString());
+		
 	}
 	
 }
