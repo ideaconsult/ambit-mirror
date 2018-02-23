@@ -26,16 +26,25 @@ public class SyntheticAccessibilityStrategy
 		double a = 0;
 		double b = 150; 
 		dw.valueTrnasformation = new LinearFunction(new double[]{-100.0/(b-a), 100.0*b/(b-a)});
-		dw.weight = 0.7;
+		dw.weight = 0.5;
 		saStrategy.descirptors.add(dw);
 		
 		//(2) Set Stereo Elements Descriptor
 		dw = new DescriptorWeight();
 		dw.descriptorName = "NUMBER_OF_STEREO_ELEMENTS";
-		//-10% for each stereo element
-		//fun(x) = -10x + 100
-		dw.valueTrnasformation = new LinearFunction(new double[]{-10.0, 100.0});
+		//-30% for each stereo element
+		//fun(x) = -30x + 100
+		dw.valueTrnasformation = new LinearFunction(new double[]{-30.0, 100.0});
 		dw.weight = 0.3;
+		saStrategy.descirptors.add(dw);
+		
+		//(3) Cyclomatic number
+		dw = new DescriptorWeight();
+		dw.descriptorName = "CYCLOMATIC_NUMBER";
+		//-20% for each ring
+		//fun(x) = -20x + 100
+		dw.valueTrnasformation = new LinearFunction(new double[]{-20.0, 100.0});
+		dw.weight = 0.2;
 		saStrategy.descirptors.add(dw);
 
 		return saStrategy;

@@ -90,6 +90,11 @@ public class MolecularComplexity
 		return 0.0;
 	}
 	
+	public static int cyclomaticNumber(IAtomContainer mol)
+	{	
+		return (mol.getBondCount() - mol.getAtomCount() + 1);
+	}
+	
 	public static int numberOfStereoElements(IAtomContainer mol)
 	{	
 		int n = 0;
