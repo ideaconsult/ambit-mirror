@@ -84,16 +84,6 @@ public class MolecularComplexity
 		}
 	}
 	
-	public static double ringComplexity(IAtomContainer mol)
-	{
-		//TODO
-		return 0.0;
-	}
-	
-	public static int cyclomaticNumber(IAtomContainer mol)
-	{	
-		return (mol.getBondCount() - mol.getAtomCount() + 1);
-	}
 	
 	public static int numberOfStereoElements(IAtomContainer mol)
 	{	

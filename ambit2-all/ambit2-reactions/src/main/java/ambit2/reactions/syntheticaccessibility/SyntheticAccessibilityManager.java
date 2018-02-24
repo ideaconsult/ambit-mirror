@@ -1,5 +1,7 @@
 package ambit2.reactions.syntheticaccessibility;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +73,7 @@ public class SyntheticAccessibilityManager
 	
 	public String getCalculationDetailsAsString()
 	{
+		NumberFormat form = new DecimalFormat("#0.000");
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < strategy.descirptors.size(); i++)
 		{
@@ -78,9 +81,9 @@ public class SyntheticAccessibilityManager
 			DescrData descrDat = calculatedDescrData.get(i);
 			sb.append(dw.descriptorName);
 			sb.append("  "); 
-			sb.append(descrDat.value);
-			sb.append("  ");
-			sb.append(descrDat.transformedValue);
+			sb.append(form.format(descrDat.value));
+			sb.append("  score = ");
+			sb.append(form.format(descrDat.transformedValue));
 			sb.append("\n");
 		}
 		return sb.toString();

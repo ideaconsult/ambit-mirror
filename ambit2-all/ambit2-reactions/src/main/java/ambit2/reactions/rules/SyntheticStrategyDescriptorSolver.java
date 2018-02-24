@@ -3,6 +3,7 @@ package ambit2.reactions.rules;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.reactions.rules.scores.MolecularComplexity;
+import ambit2.reactions.rules.scores.RingComplexity;
 import ambit2.rules.conditions.AbstractDescriptorSolver;
 
 public class SyntheticStrategyDescriptorSolver extends AbstractDescriptorSolver
@@ -32,9 +33,9 @@ public class SyntheticStrategyDescriptorSolver extends AbstractDescriptorSolver
 		case 2:
 			return new Double(MolecularComplexity.numberOfStereoElements((IAtomContainer)target));
 		case 3:
-			return MolecularComplexity.ringComplexity((IAtomContainer)target);
+			return RingComplexity.ringComplexity((IAtomContainer)target);
 		case 4:
-			return new Double(MolecularComplexity.cyclomaticNumber((IAtomContainer)target));
+			return new Double(RingComplexity.cyclomaticNumber((IAtomContainer)target));
 		}
 		return null;
 	}
