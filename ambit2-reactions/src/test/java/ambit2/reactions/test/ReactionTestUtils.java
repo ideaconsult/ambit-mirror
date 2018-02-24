@@ -86,9 +86,9 @@ public class ReactionTestUtils
 		
 		//testReactionDataBase("/RDB_080118_SA-mod__.txt");
 		
-		//testSyntheticAccessibility("C/C=C/OCCCC/C=C/CC1CCNCC1CCCC");
+		testSyntheticAccessibility("[C@](O)(C)(N)C/C=C/OCCCC/C=C/CC1CC2CCN2CC1CCC[C@](O)(C)N");
 		testSyntheticAccessibility("CCCCC=O");
-		testSyntheticAccessibility("C2CCNC21CCCC1CC(CCC)CCNC1CCCC1");
+		testSyntheticAccessibility("C2CCNC21CCCC1CC(CCC)CCNC1CCC1");
 	}
 	
 	public static void testReadReactionFromRuleFormat(String fileName) throws Exception

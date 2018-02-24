@@ -17,6 +17,9 @@ public class SyntheticStrategyDescriptorSolver extends AbstractDescriptorSolver
 		descriptorList.add("NUMBER_OF_STEREO_ELEMENTS");
 		descriptorList.add("RING_COMPLEXITY");
 		descriptorList.add("CYCLOMATIC_NUMBER");
+		descriptorList.add("WEIGHTED_NUMBER_OF_STEREO_ELEMENTS");
+		descriptorList.add("NUMBER_OF_TETRAHEDRAL_STEREO_ELEMENTS");
+		
 	}
 	
 	@Override
@@ -31,11 +34,20 @@ public class SyntheticStrategyDescriptorSolver extends AbstractDescriptorSolver
 			molComplexity.setTarget((IAtomContainer)target);
 			return molComplexity.calcMolecularComplexity02();
 		case 2:
-			return new Double(MolecularComplexity.numberOfStereoElements((IAtomContainer)target));
+			return new Double(MolecularComplexity.
+					numberOfStereoElements((IAtomContainer)target));
 		case 3:
 			return RingComplexity.ringComplexity((IAtomContainer)target);
 		case 4:
-			return new Double(RingComplexity.cyclomaticNumber((IAtomContainer)target));
+			return new Double(RingComplexity.
+					cyclomaticNumber((IAtomContainer)target));
+		case 5:
+			return new Double(MolecularComplexity.
+					weightedNumberOfStereoElements((IAtomContainer)target));
+		case 6:
+			return new Double(MolecularComplexity.
+					numberOfTetrahedralStereoElements((IAtomContainer)target));
+			
 		}
 		return null;
 	}
