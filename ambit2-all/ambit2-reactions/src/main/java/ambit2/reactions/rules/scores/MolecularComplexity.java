@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IStereoElement;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.stereo.TetrahedralChirality;
 
 public class MolecularComplexity 
 {
@@ -90,6 +92,28 @@ public class MolecularComplexity
 		int n = 0;
 		for (IStereoElement element : mol.stereoElements())
 			n++;
+		return n;
+	}
+	
+	public static double weightedNumberOfStereoElements(IAtomContainer mol)
+	{	
+		double n = 0;
+		for (IStereoElement element : mol.stereoElements())
+		{	
+			if (element instanceof DoubleBondStereochemistry)
+				n+=0.3;
+			else
+				n+=1.0;
+		}	
+		return n;
+	}
+	
+	public static int numberOfTetrahedralStereoElements(IAtomContainer mol)
+	{	
+		int n = 0;
+		for (IStereoElement element : mol.stereoElements())
+			if (element instanceof TetrahedralChirality)
+				n++;
 		return n;
 	}
 	

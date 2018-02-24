@@ -31,7 +31,7 @@ public class SyntheticAccessibilityStrategy
 		
 		//(2) Set Stereo Elements Descriptor
 		dw = new DescriptorWeight();
-		dw.descriptorName = "NUMBER_OF_STEREO_ELEMENTS";
+		dw.descriptorName = "WEIGHTED_NUMBER_OF_STEREO_ELEMENTS";
 		//-30% for each stereo element
 		//fun(x) = -30x + 100
 		dw.valueTrnasformation = new LinearFunction(new double[]{-30.0, 100.0});
