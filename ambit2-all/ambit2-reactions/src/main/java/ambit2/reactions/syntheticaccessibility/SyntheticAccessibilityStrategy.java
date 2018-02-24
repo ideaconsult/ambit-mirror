@@ -26,7 +26,7 @@ public class SyntheticAccessibilityStrategy
 		double a = 0;
 		double b = 150; 
 		dw.valueTrnasformation = new LinearFunction(new double[]{-100.0/(b-a), 100.0*b/(b-a)});
-		dw.weight = 0.5;
+		dw.weight = 0.4;
 		saStrategy.descirptors.add(dw);
 		
 		//(2) Set Stereo Elements Descriptor
@@ -35,16 +35,25 @@ public class SyntheticAccessibilityStrategy
 		//-30% for each stereo element
 		//fun(x) = -30x + 100
 		dw.valueTrnasformation = new LinearFunction(new double[]{-30.0, 100.0});
-		dw.weight = 0.3;
+		dw.weight = 0.1;
 		saStrategy.descirptors.add(dw);
 		
 		//(3) Cyclomatic number
 		dw = new DescriptorWeight();
 		dw.descriptorName = "CYCLOMATIC_NUMBER";
-		//-20% for each ring
-		//fun(x) = -20x + 100
-		dw.valueTrnasformation = new LinearFunction(new double[]{-20.0, 100.0});
+		//-10% for each ring
+		//fun(x) = -10x + 100
+		dw.valueTrnasformation = new LinearFunction(new double[]{-10.0, 100.0});
 		dw.weight = 0.2;
+		saStrategy.descirptors.add(dw);
+		
+		//(4) Ring complexity
+		dw = new DescriptorWeight();
+		dw.descriptorName = "RING_COMPLEXITY";
+		//[1.0, 2.0] interval is mapped into score interval [100,0]
+		//fun(x) = 100*(2.0-x)/(2.0-1.0) = -100x + 200
+		dw.valueTrnasformation = new LinearFunction(new double[]{-100, 200});
+		dw.weight = 0.3;
 		saStrategy.descirptors.add(dw);
 
 		return saStrategy;
