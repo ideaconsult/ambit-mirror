@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.logging.Level;
 
 import org.apache.commons.cli.CommandLine;
@@ -26,9 +28,14 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitIOException;
+import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
+import ambit2.reactions.syntheticaccessibility.SyntheticAccessibilityManager;
+import ambit2.reactions.syntheticaccessibility.SyntheticAccessibilityStrategy;
+import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.TopLayer;
 
 
 public class SyntheticAccessibilityCli 
@@ -238,8 +245,6 @@ public class SyntheticAccessibilityCli
 	
 	protected int runCalculation() throws Exception
 	{
-		System.out.println("verbose = " + flagVerbose);
-		
 		if (targetSmiles != null)
 			return calculateSA(targetSmiles);
 		
@@ -248,14 +253,36 @@ public class SyntheticAccessibilityCli
 		
 		throw new Exception("No target smiles, nor input file are specified!\n"
 				+ "Use -s or -i command line option.");
-		
 	}	
 	
-	int calculateSA(String smi) 
+	int calculateSA(String smiles) 
 	{
-		System.out.println("Calculating SA for: " + smi);
-		//TODO
+		System.out.println("Calculating SA for: " + smiles);
+		NumberFormat formatter = new DecimalFormat("#0.000"); 
+		IAtomContainer mol = null;
+		try
+		{
+			mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+			//if (FlagExcplicitHAtoms)
+			//	MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+		}
+		catch (Exception x){
+			System.out.println(x.getMessage());
+			return -1;
+		}
 		
+		TopLayer.setAtomTopLayers(mol);
+		SyntheticAccessibilityManager saMan = new SyntheticAccessibilityManager(); 
+		SyntheticAccessibilityStrategy saStrategy = SyntheticAccessibilityStrategy.getDefaultStrategy();
+		saMan.setStrategy(saStrategy);
+		
+		double sa = saMan.calcSyntheticAccessibility(mol);
+		System.out.println("SA = " + formatter.format(sa));
+		if (flagVerbose)
+		{	
+			System.out.println("SA details: ");
+			System.out.println(saMan.getCalculationDetailsAsString());
+		}
 		return 0;
 	}
 	
