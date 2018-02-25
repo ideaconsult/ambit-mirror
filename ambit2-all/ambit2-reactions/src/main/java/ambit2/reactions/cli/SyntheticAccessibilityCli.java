@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.apache.commons.cli.CommandLine;
@@ -34,6 +35,7 @@ import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.reactions.syntheticaccessibility.SyntheticAccessibilityManager;
 import ambit2.reactions.syntheticaccessibility.SyntheticAccessibilityStrategy;
+import ambit2.reactions.syntheticaccessibility.SyntheticAccessibilityManager.DescrData;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.TopLayer;
 
@@ -47,6 +49,8 @@ public class SyntheticAccessibilityCli
 	public String inputFile = null;
 	public boolean flagVerbose = false;
 	
+	SyntheticAccessibilityManager saMan; 
+	SyntheticAccessibilityStrategy saStrategy;
 	
 	public static void main(String[] args) 
 	{
@@ -272,8 +276,8 @@ public class SyntheticAccessibilityCli
 		}
 		
 		TopLayer.setAtomTopLayers(mol);
-		SyntheticAccessibilityManager saMan = new SyntheticAccessibilityManager(); 
-		SyntheticAccessibilityStrategy saStrategy = SyntheticAccessibilityStrategy.getDefaultStrategy();
+		saMan = new SyntheticAccessibilityManager(); 
+		saStrategy = SyntheticAccessibilityStrategy.getDefaultStrategy();
 		saMan.setStrategy(saStrategy);
 		
 		double sa = saMan.calcSyntheticAccessibility(mol);
@@ -305,6 +309,23 @@ public class SyntheticAccessibilityCli
 			reader = getReader(in,file.getName());
 			System.out.println(String.format("Reading %s",file.getAbsoluteFile()));
 			
+			//Setup saMan 
+			saMan = new SyntheticAccessibilityManager(); 
+			saStrategy = SyntheticAccessibilityStrategy.getDefaultStrategy();
+			saMan.setStrategy(saStrategy);
+			
+			//Setup first header line of output
+			System.out.print("SA");
+			if (flagVerbose)
+				for (int i = 0; i < saStrategy.descirptors.size(); i++)
+				{
+					String dName = saStrategy.descirptors.get(i).descriptorName;
+					System.out.print("\t");
+					System.out.print(dName);
+					System.out.print("\t");
+					System.out.print(dName+"_score");
+				}
+			System.out.println();
 			
 			while (reader.hasNext()) 
 			{	
@@ -314,7 +335,6 @@ public class SyntheticAccessibilityCli
 					records_error++;
 					continue;
 				}
-				
 				
 				try {
 					
@@ -333,10 +353,8 @@ public class SyntheticAccessibilityCli
 					}
 					
 					performCalculation(molecule);
-					
 					records_processed++;
-					
-					System.out.println("#" + records_processed + "  NA" + molecule.getAtomCount());
+					//System.out.println("#" + records_processed + "  NA = " + molecule.getAtomCount());
 				} 
 				catch (Exception x) {
 					records_error++;
@@ -361,7 +379,25 @@ public class SyntheticAccessibilityCli
 	
 	void performCalculation(IAtomContainer mol)
 	{
-		//TODO
+		NumberFormat f = new DecimalFormat("#0.000");
+		TopLayer.setAtomTopLayers(mol);
+		double sa = saMan.calcSyntheticAccessibility(mol);
+		System.out.print(f.format(sa));
+		if (flagVerbose)
+		{	
+			//System.out.println("SA details: ");
+			//System.out.println(saMan.getCalculationDetailsAsString());
+			List<DescrData> listDD = saMan.getCalculatedDescrData();
+			for (int i = 0; i < listDD.size(); i++)
+			{
+				DescrData dd = listDD.get(i);
+				System.out.print("\t");
+				System.out.print(f.format(dd.value));
+				System.out.print("\t");
+				System.out.print(f.format(dd.transformedValue));
+			}
+		}
+		System.out.println();	
 	}
 		
 	protected IIteratingChemObjectReader<IAtomContainer> getReader(InputStream in, String extension) throws CDKException, AmbitIOException {
