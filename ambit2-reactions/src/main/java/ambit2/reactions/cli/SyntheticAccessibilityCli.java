@@ -25,6 +25,7 @@ import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -48,6 +49,7 @@ public class SyntheticAccessibilityCli
 	public String configFile = null;
 	public String inputFile = null;
 	public boolean flagVerbose = false;
+	SmilesGenerator smiGen = SmilesGenerator.generic();
 	
 	SyntheticAccessibilityManager saMan; 
 	SyntheticAccessibilityStrategy saStrategy;
@@ -315,17 +317,24 @@ public class SyntheticAccessibilityCli
 			saMan.setStrategy(saStrategy);
 			
 			//Setup first header line of output
-			System.out.print("SA");
+			StringBuffer sb = new StringBuffer();
+			sb.append("#");
+			sb.append("\t");
+			sb.append("smiles");
+			sb.append("\t");
+			sb.append("NumAtoms");
+			sb.append("\t");
+			sb.append("SA");
 			if (flagVerbose)
 				for (int i = 0; i < saStrategy.descirptors.size(); i++)
 				{
 					String dName = saStrategy.descirptors.get(i).descriptorName;
-					System.out.print("\t");
-					System.out.print(dName);
-					System.out.print("\t");
-					System.out.print(dName+"_score");
+					sb.append("\t");
+					sb.append(dName);
+					sb.append("\t");
+					sb.append(dName+"_score");
 				}
-			System.out.println();
+			System.out.println(sb.toString());
 			
 			while (reader.hasNext()) 
 			{	
@@ -348,11 +357,12 @@ public class SyntheticAccessibilityCli
 						for (IBond bond : molecule.bonds()) if (bond.getFlag(CDKConstants.ISAROMATIC)) {aromatic = true; break;}
 						if (aromatic)
 							Kekulization.kekulize(molecule);
+							
 					} catch (Exception x) {
 						System.out.println(String.format("[Record %d] Error %s\t%s", records_read, file.getAbsoluteFile(), x.getMessage()));
 					}
 					
-					performCalculation(molecule);
+					performCalculation(molecule, (records_processed+1));
 					records_processed++;
 					//System.out.println("#" + records_processed + "  NA = " + molecule.getAtomCount());
 				} 
@@ -377,11 +387,27 @@ public class SyntheticAccessibilityCli
 		return records_read;
 	}
 	
-	void performCalculation(IAtomContainer mol)
+	void performCalculation(IAtomContainer mol, int num)
 	{
 		NumberFormat f = new DecimalFormat("#0.000");
 		TopLayer.setAtomTopLayers(mol);
+		String smiles = "null"; 
+		try {
+			//smiles = SmartsHelper.moleculeToSMILES(mol, true);
+			smiles = smiGen.aromatic().create(mol);
+			if (smiles.trim().equals(""))
+				smiles = "*****";
+		}
+		catch(Exception x){
+			System.out.println("moleculeToSMILES error:" + x.getMessage());
+		}
 		double sa = saMan.calcSyntheticAccessibility(mol);
+		System.out.print(num);
+		System.out.print("\t");
+		System.out.print(smiles);
+		System.out.print("\t");
+		System.out.print(mol.getAtomCount());
+		System.out.print("\t");
 		System.out.print(f.format(sa));
 		if (flagVerbose)
 		{	
