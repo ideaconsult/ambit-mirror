@@ -352,7 +352,11 @@
 			<artifactId>ambit2-model</artifactId>
 			<version>${ambit.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-frame</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-weka</artifactId>
@@ -475,11 +479,6 @@
 		<!-- <dependency> <groupId>jmol</groupId> <artifactId>jmol</artifactId> 
 			<version>11.8.23</version> </dependency> -->
 
-		<dependency>
-			<groupId>dnsjava</groupId>
-			<artifactId>dnsjava</artifactId>
-			<version>2.1.1</version>
-		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-chebi</artifactId>

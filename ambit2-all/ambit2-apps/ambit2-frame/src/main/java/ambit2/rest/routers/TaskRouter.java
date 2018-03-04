@@ -1,4 +1,4 @@
-package ambit2.rest.routers.opentox;
+package ambit2.rest.routers;
 
 import org.restlet.Context;
 
