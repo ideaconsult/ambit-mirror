@@ -28,13 +28,7 @@ import ambit2.rest.property.PropertyJSONReporter;
 
 public class AlgorithmsPile {
 
-	private static final Object[][] algorithms = fromJSON();
-
-	public static Object[][] getAlgorithms() {
-		return algorithms;
-	}
-
-	public static synchronized List<Algorithm<String>> createList() {
+	public List<Algorithm<String>> createList(Object[][] algorithms) {
 		List<Algorithm<String>> algorithmList = new ArrayList<Algorithm<String>>();
 		for (Object[] d : algorithms) {
 			Algorithm<String> alg = new Algorithm<String>(d[1].toString());
@@ -80,9 +74,13 @@ public class AlgorithmsPile {
 
 	private static final String _headers = "id\tname\tclass\tinputparam\ttype\tendpoint\trequires\timplementationof";
 
-	public static Object[][] fromJSON() {
-		try (InputStream in = AlgorithmsPile.class.getClassLoader()
-				.getResourceAsStream("ambit2/rest/config/algorithmspile.json")) {
+	public Object[][] fromJSON() {
+		return fromJSONStream(AlgorithmsPile.class.getClassLoader()
+				.getResourceAsStream("ambit2/rest/config/algorithmspile.json"));
+	}
+	
+	public  Object[][] fromJSONStream(InputStream jsonstream) {
+		try (InputStream in = jsonstream) {
 			return fromJSON(in);
 		} catch (Exception x) {
 			Logger.getAnonymousLogger().log(Level.SEVERE, x.getMessage());
@@ -111,7 +109,7 @@ public class AlgorithmsPile {
 	 * @throws JsonProcessingException
 	 * @throws IOException
 	 */
-	public static Object[][] fromJSON(InputStream in) throws JsonProcessingException, IOException {
+	public Object[][] fromJSON(InputStream in) throws JsonProcessingException, IOException {
 		ObjectMapper m = new ObjectMapper();
 		ArrayNode nodes = (ArrayNode) m.readTree(in);
 		String[] headers = _headers.split("\t");
@@ -178,9 +176,6 @@ public class AlgorithmsPile {
 
 	}
 
-	public static String toJSON() {
-		return toJSON(algorithms);
-	}
 
 	public static String toJSON(Object[][] algorithms) {
 
@@ -239,8 +234,8 @@ public class AlgorithmsPile {
 		return b.toString();
 	}
 
-	@Override
-	public String toString() {
+
+	public String toString(Object[][] algorithms) {
 		StringBuilder b = new StringBuilder();
 
 		b.append(_headers);

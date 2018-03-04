@@ -30,5 +30,15 @@
 			<artifactId>dnsjava</artifactId>
 			<version>2.1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
+<build>
+
+</build>	
 </project>

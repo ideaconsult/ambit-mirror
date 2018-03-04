@@ -1,0 +1,1476 @@
+[{
+	"id": "SimpleKMeans",
+	"name": "Clustering: k-means",
+	"class": "weka.clusterers.SimpleKMeans",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Clustering", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#LazyLearning", "http://www.opentox.org/algorithmTypes.owl#UnSupervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "BayesNet",
+	"name": "Bayes Network learning using various search algorithms and quality measures.",
+	"class": "weka.classifiers.bayes.BayesNet",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "BayesianLogisticRegression",
+	"name": "Bayesian Logistic Regression. doi:10.1198/004017007000000245",
+	"class": "weka.classifiers.bayes.BayesianLogisticRegression",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "DMNBtext",
+	"name": "DMNBtext: Discriminative Multinomial Naive Bayes classifier",
+	"class": "weka.classifiers.bayes.DMNBtext",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "NaiveBayes",
+	"name": "Naive Bayes classifier",
+	"class": "weka.classifiers.bayes.NaiveBayes",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "NBM",
+	"name": "Multinomial Naive Bayes classifier",
+	"class": "weka.classifiers.bayes.NaiveBayesMultinomial",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "J48",
+	"name": "Classification: Decision tree J48",
+	"class": "weka.classifiers.trees.J48",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "RandomForest",
+	"name": "Constructs random forest. doi:10.1023/A:1010933404324",
+	"class": "weka.classifiers.trees.RandomForest",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "PART",
+	"name": "Classification: Decision rules PART",
+	"class": "weka.classifiers.rules.PART",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "DecisionTable",
+	"name": "Classification: Decision table",
+	"class": "weka.classifiers.rules.DecisionTable",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "IB1",
+	"name": "IB1-type classifier. Uses a simple distance measure to find the training instance closest to the given test instance, and predicts the same class as this training instance.",
+	"class": "weka.classifiers.lazy.IB1",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#LazyLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "IBk",
+	"name": "K-nearest neighbours classifier. Can select appropriate value of K based on cross-validation.",
+	"class": "weka.classifiers.lazy.IBk",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#LazyLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "Functional tree",
+	"name": "Jaoa Gama (2004). Functional Trees. Machine Learning, Vol. 55(3), ",
+	"class": "weka.classifiers.functions.FT",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "LibLINEAR",
+	"name": "A Library for Large Linear Classification",
+	"class": "weka.classifiers.functions.LibLINEAR",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "LR",
+	"name": "Regression: Linear regression",
+	"class": "weka.classifiers.functions.LinearRegression",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "IsotonicRegression",
+	"name": "Isotonic Regression",
+	"class": "weka.classifiers.functions.IsotonicRegression",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "LMSLR",
+	"name": "Least median squared linear regression. ISBN-13:978-0471488552",
+	"class": "weka.classifiers.functions.LeastMedSq",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "LogisticRegression",
+	"name": "Logistic regression",
+	"class": "weka.classifiers.functions.Logistic",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "MLP",
+	"name": "Multilayer Perceptron",
+	"class": "weka.classifiers.functions.MultilayerPerceptron",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "PaceRegresion",
+	"name": "Pace Regression http://hdl.handle.net/10289/2131",
+	"class": "weka.classifiers.functions.PaceRegression",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "RBFNetwork",
+	"name": "Radial Basis Function network",
+	"class": "weka.classifiers.functions.RBFNetwork",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "SMO",
+	"name": "SMO: Sequential Minimal Optimization algorithm for training a Support Vector classifier",
+	"class": "weka.classifiers.functions.SMO",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "SMOreg",
+	"name": "SMOreg: Sequential Minimal Optimization algorithm for training a Support Vector regression",
+	"class": "weka.classifiers.functions.SMOreg",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "VotedPerceptron",
+	"name": "Voted Perceptron algorithm doi:10.1023/A:1007662407062",
+	"class": "weka.classifiers.functions.VotedPerceptron",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "Winnow",
+	"name": "Winnow and Balanced Winnow algorithms doi:10.1007/BF00116827",
+	"class": "weka.classifiers.functions.Winnow",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "PLS",
+	"name": "Partial Least Squares ISBN:0952866625",
+	"class": "weka.classifiers.functions.PLSClassifier",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Regression", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "AODE",
+	"name": "Not So Naive Bayes: Aggregating One-Dependence Estimators doi:10.1007/s10994-005-4258-6",
+	"class": "weka.classifiers.bayes.AODE",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "HNB",
+	"name": "Hidden Naive Bayes doi:10.1109/TKDE.2008.234",
+	"class": "weka.classifiers.bayes.HNB",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Classification", "http://www.opentox.org/algorithmTypes.owl#SingleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#Supervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "PCA",
+	"name": "Principal Component Analysis",
+	"class": "weka.attributeSelection.PrincipalComponents",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#FeatureSelection", "http://www.opentox.org/algorithmTypes.owl#MultipleTarget", "http://www.opentox.org/algorithmTypes.owl#EagerLearning", "http://www.opentox.org/algorithmTypes.owl#UnSupervised"],
+	"endpoint": null,
+	"requires": "property"
+}, {
+	"id": "pka",
+	"name": "pKa Prediction doi:10.1021/ci8001815",
+	"class": "ambit2.descriptors.PKASmartsDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Dissociation_constant_pKa",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#pkaSMARTS"
+}, {
+	"id": "CrossSectionalDiameter",
+	"name": "CrossSectionalDiameter",
+	"class": "ambit2.descriptors.CrossSectionalDiameterDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Size",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#CrossSectionalDiameter"
+}, {
+	"id": "MaximumDiameter",
+	"name": "MaximumDiameter",
+	"class": "ambit2.descriptors.MaximumDiameterDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Size",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#MaximumDiameter"
+}, {
+	"id": "SizeDiameter",
+	"name": "SizeDiameter",
+	"class": "ambit2.descriptors.SizeDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Size",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#Size"
+}, {
+	"id": "categories",
+	"name": "OECD Categories",
+	"class": "ambit2.descriptors.FunctionalGroupDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#categories"
+}, {
+	"id": "toxtreecramer",
+	"name": "ToxTree: Cramer rules",
+	"class": "toxTree.tree.cramer.CramerRules",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreecramer"
+}, {
+	"id": "toxtreecramer2",
+	"name": "ToxTree: Extended Cramer rules",
+	"class": "cramer2.CramerRulesWithExtensions",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreecramer2"
+}, {
+	"id": "toxtreeverhaar",
+	"name": "ToxTree: Verhaar scheme for predicting toxicity mode of action",
+	"class": "verhaar.VerhaarScheme",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeverhaar"
+}, {
+	"id": "toxtreeverhaar2",
+	"name": "ToxTree: Verhaar scheme (modified) for predicting toxicity mode of action",
+	"class": "toxtree.plugins.verhaar2.VerhaarScheme2",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Acute_toxicity_to_fish_lethality",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeverhaar2"
+}, {
+	"id": "toxtreeeye",
+	"name": "ToxTree: Eye irritation",
+	"class": "eye.EyeIrritationRules",
+	"inputparam": {
+		"/feature/MolWeightUser+input": {
+
+			"type": "Feature",
+			"title": "MolWeight",
+			"units": "A",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Melting+PointUser+input": {
+
+			"type": "Feature",
+			"title": "Melting Point",
+			"units": "℃",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/LogPUser+input": {
+
+			"type": "Feature",
+			"title": "LogP",
+			"units": "",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Lipid+SolubilityUser+input": {
+
+			"type": "Feature",
+			"title": "Lipid Solubility",
+			"units": "g/kg",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Water+SolubilityUser+input": {
+
+			"type": "Feature",
+			"title": "Water Solubility",
+			"units": "g/l",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		}
+	},
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Eye_irritation_corrosion",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeeye"
+}, {
+	"id": "toxtreeskinirritation",
+	"name": "ToxTree: Skin irritation",
+	"class": "sicret.SicretRules",
+	"inputparam": {
+		"/feature/MolWeightUser+input": {
+
+			"type": "Feature",
+			"title": "MolWeight",
+			"units": "A",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Melting+PointUser+input": {
+
+			"type": "Feature",
+			"title": "Melting Point",
+			"units": "℃C",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/LogPUser+input": {
+
+			"type": "Feature",
+			"title": "LogP",
+			"units": "",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Lipid+SolubilityUser+input": {
+
+			"type": "Feature",
+			"title": "Lipid Solubility",
+			"units": "g/kg",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Water+SolubilityUser+input": {
+
+			"type": "Feature",
+			"title": "Water Solubility",
+			"units": "g/l",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Vapour+PressureUser+input": {
+
+			"type": "Feature",
+			"title": "Vapour Pressure",
+			"units": "Pa",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		},
+		"/feature/Surface+TensionUser+input": {
+
+			"type": "Feature",
+			"title": "Surface Tension",
+			"units": "mN/m",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		}
+	},
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#SkinIrritationCorrosion",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeskin"
+}, {
+	"id": "toxtreemic",
+	"name": "ToxTree: Structure Alerts for the in vivo micronucleus assay in rodents",
+	"class": "mic.MICRules",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Endpoints",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreemic"
+}, {
+	"id": "toxtreeskinsens",
+	"name": "ToxTree: Skin sensitisation alerts (M. Cronin)",
+	"class": "toxtree.plugins.skinsensitisation.SkinSensitisationPlugin",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#SkinSensitisation",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeskinsensitisation"
+}, {
+	"id": "toxtreednabinding",
+	"name": "ToxTree: DNA binding",
+	"class": "toxtree.plugins.dnabinding.DNABindingPlugin",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#DNABinding",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreednabinding"
+}, {
+	"id": "toxtreeproteinbinding",
+	"name": "ToxTree: Protein binding",
+	"class": "toxtree.plugins.proteinbinding.ProteinBindingPlugin",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#ProteinBinding",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeproteinbinding"
+}, {
+	"id": "toxtreesmartcyp",
+	"name": "SmartCYP: Cytochrome P450-Mediated Drug Metabolism",
+	"class": "toxtree.plugins.smartcyp.SMARTCYPPlugin",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Protein-binding",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreesmartcyp"
+}, {
+	"id": "toxtreemichaelacceptors",
+	"name": "ToxTree: Michael acceptors",
+	"class": "michaelacceptors.MichaelAcceptorRules",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#SkinSensitisation",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreemichaelacc"
+}, {
+	"id": "toxtreecarc",
+	"name": "ToxTree: Benigni/Bossa rules for carcinogenicity and mutagenicity",
+	"class": "mutant.BB_CarcMutRules",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Carcinogenicity",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreecarc"
+}, {
+	"id": "toxtreeames",
+	"name": "ToxTree: In vitro mutagenicity (Ames test) alerts by ISS",
+	"class": "toxtree.plugins.ames.AmesMutagenicityRules",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Mutagenicity",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeames"
+}, {
+	"id": "toxtreebiodeg",
+	"name": "START biodegradation and persistence plug-in",
+	"class": "com.molecularnetworks.start.BiodgeradationRules",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#PersistenceBiodegradation",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreestart"
+}, {
+	"id": "toxtreekroes",
+	"name": "ToxTree: ILSI/Kroes decision tree for TTC",
+	"class": "toxtree.plugins.kroes.Kroes1Tree",
+	"inputparam": {
+		"/feature/DailyIntakeUser+input": {
+
+			"type": "Feature",
+			"title": "DailyIntake",
+			"units": "µg/day",
+			"isNominal": false,
+			"isNumeric": false,
+			"isMultiValue": false,
+			"sameAs": null,
+			"isModelPredictionFeature": false,
+			"creator": "http://toxtree.sourceforge.net",
+			"order": 0,
+			"source": {
+				"URI": "null/dataset/User+input",
+				"type": "Dataset"
+			},
+			"annotation": []
+
+		}
+	},
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Rules"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreekroes"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",
+	"name": "XLogP",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#xlogP"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor",
+	"name": "ALogP",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.ALOGPDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#ALOGP"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor",
+	"name": "Prediction of logP based on the number of carbon and hetero atoms",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.MannholdLogPDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#Octanol-water_partition_coefficient_Kow",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#mannholdLogP"
+}, {
+	"id": "ambit2.descriptors.MolecularWeight",
+	"name": "MolecularWeight",
+	"class": "ambit2.descriptors.MolecularWeight",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#MolecularWeight",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#MolecularWeight"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",
+	"name": "Lipinski Rule of Five",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "http://www.opentox.org/echaEndpoints.owl#HumanHealthEffects",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#lipinskifailures"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",
+	"name": "WHIM descriptors",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.WHIMDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#WHIM"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",
+	"name": "TPSA descriptor",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#tpsa"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",
+	"name": "CPSA descriptor",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#CPSA"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",
+	"name": "Number of aromatic atoms",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#aromaticAtomsCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",
+	"name": "Number of aromatic bonds",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#aromaticBondsCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor",
+	"name": "Number of bonds",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.BondCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#bondCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor",
+	"name": "Number of atoms",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#atomCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor",
+	"name": "Number of rotatable bonds",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#rotatableBondsCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",
+	"name": "Chi chain descriptor",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiChain"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",
+	"name": "Chi cluster descriptor",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiCluster"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",
+	"name": "Chi path cluster descriptor",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiPathCluster"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",
+	"name": "Chi path descriptor",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#chiPath"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",
+	"name": "Largest chain",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#largestChain"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor",
+	"name": "Largest Pi system",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#largestPiSystem"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor",
+	"name": "Hydrogen Bond acceptors",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#hBondacceptors"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",
+	"name": "Hydrogen Bond donors",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#hBondDonors"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",
+	"name": "BCUT descriptors",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#BCUT"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",
+	"name": "ZagrebIndex",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#zagrebIndex"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor",
+	"name": "Atomic polarizabilities",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#apol"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge",
+	"name": "ATS autocorrelation descriptor charge",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#autoCorrelationCharge"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass",
+	"name": "ATS autocorrelation descriptor mass",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#autoCorrelationMass"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability",
+	"name": "ATS autocorrelation descriptor polarizability",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#autoCorrelationPolarizability"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor",
+	"name": "Difference between atomic polarizabilities of all bonded atoms",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#bpol"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor",
+	"name": "Topological descriptor characterizing the carbon connectivity",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#carbonTypes"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor",
+	"name": "A topological descriptor combining distance and adjacency information",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#eccentricConnectivityIndex"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor",
+	"name": "Fragment complexity",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor",
+	"name": "Characterizing the mass distribution of the molecule",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.GravitationalIndexDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#gravitationalIndex"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor",
+	"name": "Kier and Hall kappa molecular shape indices",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor",
+	"name": "A fragment count descriptor that uses e-state fragments",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#kierHallSmarts"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor",
+	"name": "Evaluates length over breadth descriptors",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.LengthOverBreadthDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#lengthOverBreadth"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor",
+	"name": "Number of atoms in the longest aliphatic chain",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#longestAliphaticChain"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor",
+	"name": "Molecular Distance Edge",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#mde"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor",
+	"name": "Moment of inertia and radius of gyration",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.MomentOfInertiaDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#momentOfInertia"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor",
+	"name": "The graph diameter D is defined as the largest vertex eccentricity in the graph",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#petitjeanNumber"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor",
+	"name": "Petitjean shape indices",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#petitjeanShapeIndex"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor",
+	"name": "Vertex adjacency information (magnitude)",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#vAdjMa"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor",
+	"name": "Wiener Path number and Wiener Polarity Number",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#wienerNumbers"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor",
+	"name": "Number of each amino acid in an atom container",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#aminoAcidsCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.AcidicGroupCountDescriptor",
+	"name": "The number of acidic groups.",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.AcidicGroupCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#basicGroupCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.BasicGroupCountDescriptor",
+	"name": "The number of basic groups.",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.BasicGroupCountDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#acidicGroupCount"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.FMFDescriptor",
+	"name": "FMF descriptor characterizing complexity of a molecule.",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.FMFDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#fmf"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.HybridizationRatioDescriptor",
+	"name": "Reports the fraction of sp3 carbons to sp2 carbons",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.HybridizationRatioDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#hybratio"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor",
+	"name": "Weighted path descriptors (Randic) characterizing molecular branching.",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#weightedPath"
+}, {
+	"id": "org.openscience.cdk.qsar.descriptors.molecular.VABCDescriptor",
+	"name": "Volume descriptor.",
+	"class": "org.openscience.cdk.qsar.descriptors.molecular.VABCDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#vabc"
+}, {
+	"id": "ambit2.mopac.MopacOriginalStructure",
+	"name": "MOPAC descriptors (Energy, EHOMO, ELUMO,etc.)",
+	"class": "ambit2.mopac.MopacOriginalStructure",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"
+}, {
+	"id": "ambit2.rest.algorithm.descriptors.DragonDescriptorWeb",
+	"name": "DRAGON6 descriptors",
+	"class": "ambit2.rest.algorithm.descriptors.DragonDescriptorWeb",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#dragon"
+}, {
+	"id": "ambit2.some.DescriptorSOMEShell",
+	"name": "Site Of Metabolism Estimator (SOME) Bioinformatics (2009) 25(10):1251-1258.",
+	"class": "ambit2.some.DescriptorSOMEShell",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#SOME"
+}, {
+	"id": "ambit2.descriptors.InChI",
+	"name": "InChI 1.03",
+	"class": "ambit2.descriptors.InChI",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#inchi"
+}, {
+	"id": "ambit2.descriptors.AtomTypeVerifierDescriptor",
+	"name": "AtomTypes verifier",
+	"class": "ambit2.descriptors.AtomTypeVerifierDescriptor",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#atomtypeverifier"
+}, {
+	"id": "ambit2.descriptors.KekulizationVerifier",
+	"name": "Kekulization verifier",
+	"class": "ambit2.descriptors.KekulizationVerifier",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#kekulizationverifier"
+}, {
+	"id": "ambit2.descriptors.SaturationCheckerVerifier",
+	"name": "Saturation Checker verifier",
+	"class": "ambit2.descriptors.SaturationCheckerVerifier",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#saturationcheckerverifier"
+}, {
+	"id": "ambit2.mopac.MopacShell",
+	"name": "MOPAC: optimizes 3D structure",
+	"class": "ambit2.mopac.MopacShell",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Structure"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"
+}, {
+	"id": "ambit2.mopac.MopacShellBalloon",
+	"name": "MOPAC: optimizes 3D structure (starting structure by Balloon)",
+	"class": "ambit2.mopac.MopacShellBalloon",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Structure"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"
+}, {
+	"id": "ambit2.mopac.MopacShellOB",
+	"name": "MOPAC: optimizes 3D structure (starting structure by OpenBabel)",
+	"class": "ambit2.mopac.MopacShellOB",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Structure"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#MOPACdescriptors"
+}, {
+	"id": "Structure2D",
+	"name": "Generates 2D coordinates",
+	"class": "Structure2D",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Structure2D"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#Structure2D"
+}, {
+	"id": "ambit2.descriptors.fingerprints.EStateFingerprinterWrapper",
+	"name": "EState Fingerprints",
+	"class": "ambit2.descriptors.fingerprints.EStateFingerprinterWrapper",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.EStateFingerprinter"
+}, {
+	"id": "ambit2.descriptors.fingerprints.ExtendedFingerprinterWrapper",
+	"name": "Extended Fingerprints",
+	"class": "ambit2.descriptors.fingerprints.ExtendedFingerprinterWrapper",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.ExtendedFingerprinter"
+}, {
+	"id": "ambit2.descriptors.fingerprints.HybridizationFingerprinterWrapper",
+	"name": "Hybridization Fingerprints",
+	"class": "ambit2.descriptors.fingerprints.HybridizationFingerprinterWrapper",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.HybridizationFingerprinter"
+}, {
+	"id": "ambit2.descriptors.fingerprints.MACCSFingerprinterWrapper",
+	"name": "MACCS Fingerprints",
+	"class": "ambit2.descriptors.fingerprints.MACCSFingerprinterWrapper",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.MACCSFingerprinter"
+}, {
+	"id": "ambit2.descriptors.fingerprints.PubChemFingerprinterWrapper",
+	"name": "PubChem Fingerprints",
+	"class": "ambit2.descriptors.fingerprints.PubChemFingerprinterWrapper",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.PubChemFingerprinter"
+}, {
+	"id": "ambit2.descriptors.fingerprints.SubstructureFingerprinterWrapper",
+	"name": "Substructure Fingerprints",
+	"class": "ambit2.descriptors.fingerprints.SubstructureFingerprinterWrapper",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#org.openscience.cdk.fingerprint.SubstructureFingerprinter"
+}, {
+	"id": "finder",
+	"name": "Find",
+	"class": "finder",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Finder"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#finder"
+}, {
+	"id": "selectstructure",
+	"name": "Replaces the current structure with the preferred one",
+	"class": null,
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#PreferredStructure"],
+	"endpoint": "",
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#StructureSelector"
+}, {
+	"id": "pcaRanges",
+	"name": "Applicability domain: PCA ranges",
+	"class": "ambit2.model.numeric.DataCoverageDescriptors",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "property",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_pcaRanges"
+}, {
+	"id": "distanceEuclidean",
+	"name": "Applicability domain: Euclidean distance",
+	"class": "ambit2.model.numeric.distance.DataCoverageDistanceEuclidean",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "property",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_distanceEuclidean"
+}, {
+	"id": "distanceCityBlock",
+	"name": "Applicability domain: Cityblock distance",
+	"class": "ambit2.model.numeric.distance.DataCoverageDistanceCityBlock",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "property",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_distanceCityBlock"
+}, {
+	"id": "distanceMahalanobis",
+	"name": "Applicability domain: Mahalanobis distance",
+	"class": "ambit2.model.numeric.distance.DataCoverageDistanceMahalanobis",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "property",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_distanceMahalanobis"
+}, {
+	"id": "nparamdensity",
+	"name": "Applicability domain: nonparametric density estimation",
+	"class": "ambit2.model.numeric.DataCoverageDensity",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "property",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_nparamdensity"
+}, {
+	"id": "leverage",
+	"name": "Applicability domain: Leverage",
+	"class": "ambit2.model.numeric.DataCoverageLeverage",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "property",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_leverage"
+}, {
+	"id": "fptanimoto",
+	"name": "Applicability domain: Fingerprints, Tanimoto distance to a consensus fingerprints",
+	"class": "ambit2.model.structure.DataCoverageFingerprintsTanimoto",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_fptanimoto"
+}, {
+	"id": "fpmissingfragments",
+	"name": "Applicability domain: Fingerprints, Missing fragments",
+	"class": "ambit2.model.structure.DataCoverageFingeprintsMissingFragments",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#AppDomain"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#ad_fpmissingfragments"
+}, {
+	"id": "fingerprints",
+	"name": "Generate fingerprints",
+	"class": "fp1024",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Fingerprints"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#db_fingerprints"
+}, {
+	"id": "atomenvironments",
+	"name": "Generate atomenvironments",
+	"class": "atomenvironments",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Fingerprints"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#db_atomenvironments"
+}, {
+	"id": "structurequality",
+	"name": "Structure quality workflow",
+	"class": "fp1024_struc",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Fingerprints"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#db_structurequality"
+}, {
+	"id": "struckeys",
+	"name": "Generate structure keys",
+	"class": "sk1024",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Fingerprints"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#db_struckeys"
+}, {
+	"id": "smartsprop",
+	"name": "Generate SMARTS accelerator data",
+	"class": "smarts_accelerator",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Fingerprints"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#db_smartprop"
+}, {
+	"id": "inchi",
+	"name": "Generate InChI",
+	"class": "inchi",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Fingerprints"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#inchi"
+}, {
+	"id": "superservice",
+	"name": "Calls a remote service",
+	"class": null,
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#SuperService"],
+	"endpoint": null,
+	"requires": null,
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#superservice"
+}, {
+	"id": "superbuilder",
+	"name": "Builds a model with all dependencies",
+	"class": null,
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#SuperBuilder"],
+	"endpoint": null,
+	"requires": null,
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#superbuilder"
+}, {
+	"id": "mockup",
+	"name": "Sleeps for 'delay' milliseconds, returns 'dataset_uri' or 'model_uri', specified on input. For testing purposes",
+	"class": null,
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Mockup"],
+	"endpoint": null,
+	"requires": null,
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#mockup"
+}, {
+	"id": "expert",
+	"name": "Human experts input",
+	"class": "expert",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Expert"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#expert_input"
+}, {
+	"id": "tautomers",
+	"name": "Tautomers generator",
+	"class": "tautomers",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#TautomerGenerator"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#tautomergen"
+}, {
+	"id": "ambit2.rest.algorithm.descriptors.OPSCountsWrapper",
+	"name": "Number of pathways and assays in OpenPhacts",
+	"class": "ambit2.rest.algorithm.descriptors.OPSCountsWrapper",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#DescriptorCalculation"],
+	"endpoint": null,
+	"requires": "structure",
+	"implementationof": "http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT",
+	"disabled" : true
+}
+, {
+	"id": "vega",
+	"name": "VEGA models",
+	"class": "ambit2.vega.ExternalModelVega",
+	"inputparam": null,
+	"type": ["http://www.opentox.org/algorithmTypes.owl#Learning","http://www.opentox.org/algorithmTypes.owl#Supervised","http://www.opentox.org/algorithmTypes.owl#ExternalModels"],
+	"endpoint": null,
+	"requires": "structure",
+	"format" : "EXTERNAL",
+	"implementationof": "https://www.vegahub.eu/"
+}
+
+]
