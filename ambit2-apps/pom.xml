@@ -378,6 +378,7 @@
     <!--
 		<module>ambit2-export</module>
 		-->
+    <module>ambit2-frame</module>
   </modules>
   <dependencies>
     <!-- Ambit -->

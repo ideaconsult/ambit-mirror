@@ -12,7 +12,7 @@ import org.restlet.data.Reference;
 
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 
-public class PolicyProtectedTask extends Task<ITaskResult, Object> {
+public class PolicyProtectedTask<O> extends Task<ITaskResult, O> {
 	/**
 	 * 
 	 */
@@ -24,7 +24,7 @@ public class PolicyProtectedTask extends Task<ITaskResult, Object> {
 	 * @param autocreatePolicy  Used to avoid creating policy for the policy itself by 
 	 * POST /admin/policy
 	 */
-	public PolicyProtectedTask(Object user, boolean autocreatePolicy) {
+	public PolicyProtectedTask(O user, boolean autocreatePolicy) {
 		super(user);	
 		this.autocreatePolicy = autocreatePolicy;
 	}

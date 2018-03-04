@@ -53,7 +53,7 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 
 	public ProxyResource() {
 		super();
-		solrServices = ((AmbitApplication) getApplication()).getSolrServices();
+		solrServices = ((AmbitFreeMarkerApplication) getApplication()).getSolrServices();
 		setHtmlbyTemplate(true);
 	}
 
