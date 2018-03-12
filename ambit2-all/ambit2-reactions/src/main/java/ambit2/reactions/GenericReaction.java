@@ -42,6 +42,8 @@ public class GenericReaction
 	protected String smirks = null;
 	protected Map<SmirksTransformationFlag,Boolean> smirksFlag = null;
 	protected List<ICondition> conditions = null;
+	protected List<Double> conditionScores = null; 
+	protected List<ICondition> applicationConditions = null;
 	protected String reactionClass = null;
 	protected String info = null;
 	protected String experimentalConditionsInfo = null;
@@ -115,6 +117,22 @@ public class GenericReaction
 		this.conditions = conditions;
 	}
 	
+	public List<Double> getConditionScores() {
+		return conditionScores;
+	}
+
+	public void setConditionScores(List<Double> conditionScores) {
+		this.conditionScores = conditionScores;
+	}
+
+	public List<ICondition> getApplicationConditions() {
+		return applicationConditions;
+	}
+
+	public void setApplicationConditions(List<ICondition> applicationConditions) {
+		this.applicationConditions = applicationConditions;
+	}
+
 	public String getReactionClass() {
 		return reactionClass;
 	}
