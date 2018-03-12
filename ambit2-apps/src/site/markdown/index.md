@@ -72,11 +72,13 @@ Toxtree predictions online
 
 ---
 
-## News
+## Events
+
+- **LRI AMBIT2 tool: supporting read-across workflow with integrated substance database and predictive models** , poster at [QSAR 2018, June 11-15, 2018, Slovenia](http://www.qsar2018.com/)
 
 - **AMBIT-LRI Hands-On Training** Oct 5-6, Brussels, Belgium at [CAAT Academy In Silico Tools in Chemicals Hazard Assessments](https://www.eventbrite.com/e/in-silico-tools-in-chemicals-hazard-assessments-tickets-32083001120)
 
-- **AMBIT-LRI Hands-On Training** Sept 29, 2017, Brussels at CEFIC [Registration](http://cefic-lri.org/news/cefic-lri-organizes-training-on-ambit2)
+- **AMBIT-LRI Hands-On Training** Sept 29, 2017, Brussels at CEFIC [Videos and slides](http://cefic-lri.org/toolbox/ambit/)
 
 - AMBIT-LRI Hands-On Training June 16, 2017, Helsinki, Finland at [CAAT Academy 17 Tools for Read-Across](https://www.caat-academy.org/)
 
@@ -88,17 +90,26 @@ Toxtree predictions online
 
 - [ECHA gives out registration data to support development of non-test methods](http://echa.europa.eu/view-article/-/journal_content/title/echa-gives-out-registration-data-to-support-development-of-non-test-methods)
 
-- [More on AMBIT LRI tool](http://cefic-lri.org/lri_toolbox/ambit/) 
-
 [Cefic](http://cefic-lri.org/), the European chemical industry council, has launched its new [AMBIT](http://cefic-lri.org/lri_toolbox/ambit/) chemical safety prediction tool, an open source software programme for companies to enable them to enhance their chemical safety compliance efforts.
 
 ### The LRI AMBIT Read across tool
  
 - **Online** at [https://ambitlri.ideaconsult.net](https://ambitlri.ideaconsult.net)
 
-- [User guide](ra.html) 
-
 The LRI AMBIT-IUCLID tool is loaded with [REACH data](http://echa.europa.eu/view-article/-/journal_content/title/echa-gives-out-registration-data-to-support-development-of-non-test-methods) subject to the legal notice. Substance composition and IUCLID import is supported. The comprehensive search functionality allowing  structure search, substructure search, and similarity search even in databases not designed for, such as IUCLID, in order to find substances appropriate for read-across and category approaches. It also enables the inclusion of impurities (important in real industrial conditions) in substance search requests. User interface for creating read across assessment  and generating reports is available in online and downloadable versions.
+
+**Watch** below the videos with the [CEFIC LRI workshop](http://cefic-lri.org/toolbox/ambit/) presentations:
+
+- [Why AMBIT2 is good?](https://youtu.be/kibSVfpaYd0)
+
+- [AMBIT2 Project Overview](https://youtu.be/kibSVfpaYd0)
+
+- [IUCLID Substance Data](https://youtu.be/6FGBeYwrOQQ)
+
+- [AMBIT2 Cheminformatics System](https://youtu.be/64YUbx6J7K0)
+
+- [Assessment Workflows](https://youtu.be/u4Z88hd2LCM)
+  
 
 ### AMBIT User guide
 
@@ -106,7 +117,9 @@ The LRI AMBIT-IUCLID tool is loaded with [REACH data](http://echa.europa.eu/view
 
 -  Quick user guides: [**Structure search**](usage.html) | [**Substance search**](usage_substance.html) | [**Datasets**](usage_dataset.html)
 
--  LRI Workshop on AMBIT and READ-ACROSS [**Video and slides**](http://cefic-lri.org/events/lri-workshop-on-ambit-and-read-across/)
+- LRI Workshop on AMBIT and READ-ACROSS (Sep 2017) [**Video and slides**](http://cefic-lri.org/toolbox/ambit/)
+
+- LRI Workshop on AMBIT and READ-ACROSS (Jan 2016) [**Video and slides**](http://cefic-lri.org/events/lri-workshop-on-ambit-and-read-across/)
 
 ### Nanomaterials database
 
