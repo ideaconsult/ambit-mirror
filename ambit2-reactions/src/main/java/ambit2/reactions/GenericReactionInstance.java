@@ -73,4 +73,27 @@ public class GenericReactionInstance
 		}
 	}
 	
+	public double getConditionsScore()
+	{
+		double score = 0.0;
+		if (conditionsStatus != null)
+			for (int i = 0; i < conditionsStatus.length; i++)
+			{
+				if (conditionsStatus[i])
+					score += reaction.conditionScores.get(i);
+			}
+		return score;
+	}
+	
+	public boolean getApplicationStatus()
+	{
+		if (applicationConditionsStatus != null)
+			for (int i = 0; i < applicationConditionsStatus.length; i++)
+			{
+				if (!applicationConditionsStatus[i])
+					return false;
+			}
+		return true;
+	}
+	
 }
