@@ -5,13 +5,24 @@ import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
 import ambit2.smarts.groups.GroupMatch;
 
-public class ProductExcludeGroupCondition implements ICondition
-{
-	GroupMatch groupMatch = null;
+public class ReactionGroupCondition implements ICondition
+{	
+	public static enum RGConditionType {
+		PRODUCT_EXCLUDE_GROUP, PRODUCT_INCLUDE_GROUP, 
+		REACTANT_EXCLUDE_GROUP, REACTANT_INCLUDE_GROUP
+	}
 	
-	public ProductExcludeGroupCondition(String smarts, SmartsParser parser, IsomorphismTester isoTester)
+	GroupMatch groupMatch = null;
+	RGConditionType conditionType = null;
+	
+	public ReactionGroupCondition(
+			RGConditionType conditionType, 
+			String smarts, 
+			SmartsParser parser, 
+			IsomorphismTester isoTester)
 	{
 		groupMatch = new GroupMatch(smarts, parser, isoTester);
+		this.conditionType = conditionType;
 	}
 	
 	@Override
@@ -29,5 +40,4 @@ public class ProductExcludeGroupCondition implements ICondition
 	public void setIsNegated(boolean isNeg) {
 		//does not have any effect
 	}
-	
 }
