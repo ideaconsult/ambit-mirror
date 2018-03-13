@@ -2,6 +2,11 @@ package ambit2.reactions.rules;
 
 import java.util.ArrayList;
 
+import ambit2.reactions.GenericReaction;
+import ambit2.rules.conditions.ICondition;
+import ambit2.rules.conditions.IDescriptorValueCondition;
+import ambit2.rules.conditions.parser.ConditionParsingUtils;
+
 
 
 public class ReactionParser 
@@ -73,6 +78,17 @@ public class ReactionParser
 		{	
 			return(null);
 		}		
+	}
+	
+	public static ICondition getConditionFromString(String condStr) throws Exception
+	{
+		IDescriptorValueCondition dvc= ConditionParsingUtils.getDescriptorValueConditionFromToken(condStr);
+		return dvc;
+	}
+	
+	public static void parseReactionConditionsFromString(GenericReaction r, String condStr)
+	{
+		//TODO
 	}
 	
 }
