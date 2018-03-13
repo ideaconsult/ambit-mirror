@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import ambit2.reactions.rules.ReactionParser;
 import ambit2.rules.conditions.ICondition;
 import ambit2.rules.conditions.IDescriptorValueCondition;
 import ambit2.rules.conditions.parser.ConditionJsonParser;
@@ -293,7 +294,7 @@ public class GenericReaction
 				
 				if (obj[i] instanceof String)
 				{
-					 ICondition condition = getConditionFromString((String) obj[i]);
+					 ICondition condition = ReactionParser.getConditionFromString((String) obj[i]);
 					 conditions.add(condition);
 				}
 				else
@@ -372,7 +373,11 @@ public class GenericReaction
 				r.reliabilityScore = d;
 		}
 		
-		//TODO Handle Conditions
+		ind = indices.get("Conditions");
+		if (ind != null && ind < tokens.length)
+		{	
+			ReactionParser.parseReactionConditionsFromString(r,tokens[ind]);
+		}
 		
 		ind = indices.get("YieldInterval");
 		if (ind != null && ind < tokens.length)
@@ -411,11 +416,6 @@ public class GenericReaction
 	}
 	
 	
-	public static ICondition getConditionFromString(String condStr) throws Exception
-	{
-		IDescriptorValueCondition dvc= ConditionParsingUtils.getDescriptorValueConditionFromToken(condStr);
-		return dvc;
-	}
 	
 	public List<List<IAtom>> findReactionInstances(IAtomContainer target, SMIRKSManager smrkMan)
 	{
