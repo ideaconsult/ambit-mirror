@@ -46,5 +46,12 @@ public class TestGroupMatch extends TestCase
 		boolean res = matchGroup("CCCO", "CCCCN");
 		assertEquals(false, res);
 	}
+	
+	public void test03()  throws Exception
+	{
+		boolean res = matchGroup("[*;R]", "C1CCC1N");
+		assertEquals(true, res);
+	}
+	
 
 }

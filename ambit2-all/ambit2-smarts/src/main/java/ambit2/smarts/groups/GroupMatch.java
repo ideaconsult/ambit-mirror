@@ -2,11 +2,13 @@ package ambit2.smarts.groups;
 
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
+import ambit2.smarts.SmartsFlags;
 import ambit2.smarts.SmartsParser;
 
 public class GroupMatch 
@@ -16,7 +18,10 @@ public class GroupMatch
 	String smarts = null;
 	IQueryAtomContainer smartsQuery = null;
 	List<QuerySequenceElement> sequence = null;
+	List<IAtom> reursiveAtoms = null;
 	String error = null;
+	
+	SmartsFlags flags = new SmartsFlags();
 	
 	public GroupMatch(String smarts, SmartsParser parser, IsomorphismTester isoTester)
 	{
@@ -32,7 +37,17 @@ public class GroupMatch
 		
 		if (parser.getErrors().isEmpty())
 		{	
-			// parser.setNeededDataFlags();  //TODO 
+			parser.setNeededDataFlags(); 
+			flags.hasRecursiveSmarts = parser.hasRecursiveSmarts;
+	    	flags.mNeedExplicitHData = parser.needExplicitHData();
+	    	flags.mNeedNeighbourData = parser.needNeighbourData();
+	    	flags.mNeedParentMoleculeData = parser.needParentMoleculeData();
+	    	flags.mNeedRingData = parser.needRingData();
+	    	flags.mNeedRingData2 = parser.needRingData2();
+	    	flags.mNeedValenceData = parser.needValencyData();
+			
+	    	//recursiveAtoms = getRecursiveAtoms(smartsQuery);
+	    	
 			isoTester.setQuery(smartsQuery);
 			sequence = isoTester.transferSequenceToOwner();
 		}
@@ -42,16 +57,11 @@ public class GroupMatch
 	
 	
 	public boolean match(IAtomContainer target)
-	{
-		/*
-		SmartsParser.prepareTargetForSMARTSSearch(
-				flags.mNeedNeighbourData, 
-				flags.mNeedValenceData, 
-				flags.mNeedRingData, 
-				flags.mNeedRingData2, 
-				flags.mNeedExplicitHData , 
-				flags.mNeedParentMoleculeData, mol);	
-			*/	
+	{	
+		SmartsParser.prepareTargetForSMARTSSearch(flags, target);
+    	
+		//if (flags.hasRecursiveSmarts)
+    	 //   mapRecursiveAtomsAgainstTarget(recursiveAtoms, target);
 		
 		isoTester.setSequence(smartsQuery, sequence);
 		return isoTester.hasIsomorphism(target);
