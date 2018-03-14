@@ -95,5 +95,19 @@ public class TestGroupMatch extends TestCase
 		assertEquals(false, res);
 	}
 	
+	//Recursive SMARTS
+	
+	public void test100()  throws Exception
+	{
+		boolean res = matchGroup("[C;$(CO)]", "CCCCCO");
+		assertEquals(true, res);
+	}
+	
+	public void test101()  throws Exception
+	{
+		boolean res = matchGroup("[C;!$(CO)]", "CCCCCN");
+		assertEquals(true, res);
+	}
+	
 
 }
