@@ -53,5 +53,47 @@ public class TestGroupMatch extends TestCase
 		assertEquals(true, res);
 	}
 	
+	public void test04()  throws Exception
+	{
+		boolean res = matchGroup("[*;R]", "CCCCN");
+		assertEquals(false, res);
+	}
+	
+	public void test05()  throws Exception
+	{
+		boolean res = matchGroup("[*;r5]", "C1CCCC1N");
+		assertEquals(true, res);
+	}
+	
+	public void test06()  throws Exception
+	{
+		boolean res = matchGroup("[*;r5]", "C1CCC1N");
+		assertEquals(false, res);
+	}
+	
+	public void test07()  throws Exception
+	{
+		boolean res = matchGroup("[*+]", "CCCC");
+		assertEquals(false, res);
+	}
+	
+	public void test08()  throws Exception
+	{
+		boolean res = matchGroup("[*+]", "CCC[C+]");
+		assertEquals(true, res);
+	}
+	
+	public void test09()  throws Exception
+	{
+		boolean res = matchGroup("[a]", "c1cc(C)c(N)cc1");
+		assertEquals(true, res);
+	}
+	
+	public void test10()  throws Exception
+	{
+		boolean res = matchGroup("[a]", "C1CCCC1");
+		assertEquals(false, res);
+	}
+	
 
 }
