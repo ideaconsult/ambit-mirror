@@ -35,7 +35,7 @@ public class SyntheticAccessibilityStrategy
 		//-30% for each stereo element
 		//fun(x) = -30x + 100
 		dw.valueTrnasformation = new LinearFunction(new double[]{-30.0, 100.0});
-		dw.weight = 0.1;
+		dw.weight = 0.2;
 		saStrategy.descirptors.add(dw);
 		
 		//(3) Cyclomatic number
@@ -44,7 +44,7 @@ public class SyntheticAccessibilityStrategy
 		//-10% for each ring
 		//fun(x) = -10x + 100
 		dw.valueTrnasformation = new LinearFunction(new double[]{-10.0, 100.0});
-		dw.weight = 0.2;
+		dw.weight = 0.1;
 		saStrategy.descirptors.add(dw);
 		
 		//(4) Ring complexity
