@@ -22,7 +22,7 @@ Standalone applications
 
  [AMBIT command line] {{{./download_ambitcli.html}Standardisation, file processing, database import}}
  
- [AMBIT Reactor] {{{./reactor.html}Simulation of chemical reactions}}
+ [AMBIT Reactor] {{{./reactor.html}Simulation of chemical reactions and synthetic accessibility}} 
   
  [Tautomers generation (command line)] {{{http://sourceforge.net/projects/ambit/files/Ambit2/AMBIT%20applications/tautomers/ambit-tautomers-2.0.0-SNAPSHOT.jar/download}ambit-tautomers-2.0.0-SNAPSHOT.jar}} 
 
