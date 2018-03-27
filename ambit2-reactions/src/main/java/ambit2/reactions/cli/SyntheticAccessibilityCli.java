@@ -43,7 +43,7 @@ import ambit2.smarts.TopLayer;
 
 public class SyntheticAccessibilityCli 
 {
-	private static final String title = "Synthetic Accessibility Model";
+	private static final String title = "Synthetic Accessibility Prediction";
 	
 	public String targetSmiles = null;
 	public String configFile = null;
@@ -105,11 +105,12 @@ public class SyntheticAccessibilityCli
 		if (message!=null) System.out.println(message);
 		System.out.println(title);
 	    HelpFormatter formatter = new HelpFormatter();
-	    formatter.printHelp( ReactorCli.class.getName(), options );
+	    formatter.printHelp( SyntheticAccessibilityCli.class.getName(), options );
 	}
 	
 	enum _option {
 		
+		/*
 		config {
 			@Override
 			public String getArgName() {
@@ -124,6 +125,7 @@ public class SyntheticAccessibilityCli
 				return "c";
 			}
 		},
+		*/
 		
 		smiles {
 			@Override
@@ -224,12 +226,14 @@ public class SyntheticAccessibilityCli
 		if (argument != null)
 			argument = argument.trim();
 		switch (option) {
+		/*
 		case config: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			configFile = argument;
 			break;
 		}
+		*/
 		case smiles: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
