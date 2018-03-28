@@ -32,8 +32,7 @@ import ambit2.core.processors.structure.MoleculeReader;
  */
 public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 		implements IRawReader<IStructureRecord>, ICiteable {
-	static Logger logger = Logger.getLogger(RawIteratingCSVReader.class
-			.getName());
+	static Logger logger = Logger.getLogger(RawIteratingCSVReader.class.getName());
 	protected CSVParser parser;
 	protected Iterator<CSVRecord> iterator;
 	protected IStructureRecord structureRecord;
@@ -43,6 +42,15 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 	public String optionalSMILESHeader = null;
 	public String optionalInChIKeyHeader = null;
 	public String optionalInChIHeader = null;
+	protected boolean keeprawrecord = true;
+
+	public boolean isKeeprawrecord() {
+		return keeprawrecord;
+	}
+
+	public void setKeeprawrecord(boolean keeprawrecord) {
+		this.keeprawrecord = keeprawrecord;
+	}
 
 	public String getOptionalInChIKeyHeader() {
 		return optionalInChIKeyHeader;
@@ -65,8 +73,7 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 	}
 
 	public void setOptionalSMILESHeader(String optionalSMILESHeader) {
-		this.optionalSMILESHeader = optionalSMILESHeader == null ? null
-				: optionalSMILESHeader.toUpperCase();
+		this.optionalSMILESHeader = optionalSMILESHeader == null ? null : optionalSMILESHeader.toUpperCase();
 	}
 
 	private enum special_header {
@@ -95,27 +102,22 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 		this(in, CSVFormat.EXCEL);
 	}
 
-	public RawIteratingCSVReader(InputStream in, DelimitedFileFormat format)
-			throws CDKException {
+	public RawIteratingCSVReader(InputStream in, DelimitedFileFormat format) throws CDKException {
 		this(new InputStreamReader(in), format);
 	}
 
-	public RawIteratingCSVReader(Reader in, DelimitedFileFormat format)
-			throws CDKException {
+	public RawIteratingCSVReader(Reader in, DelimitedFileFormat format) throws CDKException {
 		super();
-		this.format = CSVFormat.DEFAULT.withDelimiter(
-				format.getFieldDelimiter().charAt(0)).withQuote(
-				format.getTextDelimiter());
+		this.format = CSVFormat.DEFAULT.withDelimiter(format.getFieldDelimiter().charAt(0))
+				.withQuote(format.getTextDelimiter());
 		setReader(in);
 	}
 
-	public RawIteratingCSVReader(InputStream in, CSVFormat format)
-			throws CDKException {
+	public RawIteratingCSVReader(InputStream in, CSVFormat format) throws CDKException {
 		this(new InputStreamReader(in), format);
 	}
 
-	public RawIteratingCSVReader(Reader in, CSVFormat format)
-			throws CDKException {
+	public RawIteratingCSVReader(Reader in, CSVFormat format) throws CDKException {
 		super();
 		this.format = format;
 		setReader(in);
@@ -139,9 +141,7 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 	@Override
 	public IResourceFormat getFormat() {
-		return new DelimitedFileFormat(
-				Character.toString(format.getDelimiter()),
-				format.getQuoteCharacter());
+		return new DelimitedFileFormat(Character.toString(format.getDelimiter()), format.getQuoteCharacter());
 	}
 
 	@Override
@@ -158,18 +158,14 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 	@Override
 	public Object next() {
-		return iterator.next();
-		/*
-		 * if (structureRecord == null) structureRecord =
-		 * transform(iterator.next()); if (molReader == null) molReader = new
-		 * MoleculeReader(); try { IAtomContainer mol =
-		 * molReader.process(structureRecord); if (mol == null) mol = new
-		 * AtomContainer(); for (Property p :
-		 * structureRecord.getRecordProperties()) { Object v =
-		 * structureRecord.getRecordProperty(p); if (v != null)
-		 * mol.setProperty(p, v); } return mol; } catch (AmbitException x) {
-		 * x.printStackTrace(); return new AtomContainer(); }
-		 */
+		if (keeprawrecord)
+			return iterator.next();
+		else {
+			if (structureRecord == null) {
+				structureRecord = transform((CSVRecord) iterator.next());
+			}
+			return structureRecord;
+		}
 	}
 
 	@Override
@@ -184,10 +180,13 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 	@Override
 	public IStructureRecord nextRecord() {
-		if (structureRecord == null) {
-			structureRecord = transform((CSVRecord)next());
-		}
-		return structureRecord;
+		Object nextRecord = next();
+		if (nextRecord instanceof CSVRecord) {
+			if (structureRecord == null) {
+				structureRecord = transform((CSVRecord) nextRecord);
+			}
+			return structureRecord;
+		} else return structureRecord;
 	}
 
 	protected IStructureRecord transform(CSVRecord record) {
@@ -196,32 +195,28 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 
 		String[] ids = new String[special_header.values().length];
 
-		Iterator<Entry<String, Integer>> header = parser.getHeaderMap()
-				.entrySet().iterator();
+		Iterator<Entry<String, Integer>> header = parser.getHeaderMap().entrySet().iterator();
 		while (header.hasNext()) {
 			Entry<String, Integer> entry = header.next();
-			String value= null;
+			String value = null;
 			try {
 				value = record.get(entry.getValue());
 			} catch (Exception x) {
-				logger.log(Level.WARNING, String.format("Error reading column %s %s", entry.getKey(),x.getClass().getName(),x.getMessage()));
+				logger.log(Level.WARNING, String.format("Error reading column %s %s", entry.getKey(),
+						x.getClass().getName(), x.getMessage()));
 			}
-			if (value==null) continue;
+			if (value == null)
+				continue;
 			try {
-				special_header h = special_header.valueOf(entry.getKey()
-						.replace("_", "").toUpperCase());
-				ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null
-						: value.trim();
+				special_header h = special_header.valueOf(entry.getKey().replace("_", "").toUpperCase());
+				ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null : value.trim();
 				special_props[h.ordinal()] = h.getproperty();
 				special_props[h.ordinal()].setOrder(entry.getValue());
 				continue;
 			} catch (Exception x) {
-				if (optionalSMILESHeader != null
-						&& entry.getKey().toUpperCase()
-								.equals(optionalSMILESHeader)) {
+				if (optionalSMILESHeader != null && entry.getKey().toUpperCase().equals(optionalSMILESHeader)) {
 					special_header h = special_header.SMILES;
-					ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null
-							: value.trim();
+					ids[h.ordinal()] = value == null || "".equals(value.trim()) ? null : value.trim();
 					special_props[h.ordinal()] = h.getproperty();
 					special_props[h.ordinal()].setOrder(entry.getValue());
 				}
@@ -245,16 +240,13 @@ public class RawIteratingCSVReader extends DefaultIteratingChemObjectReader
 		structureRecord.setInchiKey(ids[special_header.INCHIKEY.ordinal()]);
 
 		if (structureRecord.getInchi() != null)
-			structureRecord.setRecordProperty(
-					special_props[special_header.INCHI.ordinal()],
+			structureRecord.setRecordProperty(special_props[special_header.INCHI.ordinal()],
 					structureRecord.getInchi());
 		if (structureRecord.getInchiKey() != null)
-			structureRecord.setRecordProperty(
-					special_props[special_header.INCHIKEY.ordinal()],
+			structureRecord.setRecordProperty(special_props[special_header.INCHIKEY.ordinal()],
 					structureRecord.getInchiKey());
 		if (structureRecord.getSmiles() != null)
-			structureRecord.setRecordProperty(
-					special_props[special_header.SMILES.ordinal()],
+			structureRecord.setRecordProperty(special_props[special_header.SMILES.ordinal()],
 					structureRecord.getSmiles());
 		return structureRecord;
 	}

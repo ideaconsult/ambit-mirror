@@ -120,6 +120,7 @@ public class BatchDBProcessor<ITEMTYPE> extends
 							.hasExtension(file)) {
 						RawIteratingCSVReader reader = new RawIteratingCSVReader(
 								new FileReader(file), CSVFormat.EXCEL);
+						reader.setKeeprawrecord(false);
 						reader.setOptionalSMILESHeader(((FileInputState) target)
 								.getOptionalSMILESHeader());
 						reader.setOptionalInChIHeader(((FileInputState) target)
@@ -137,6 +138,7 @@ public class BatchDBProcessor<ITEMTYPE> extends
 						RawIteratingCSVReader reader = new RawIteratingCSVReader(
 								new FileReader(file),
 								CSVFormat.TDF.withCommentMarker('#'));
+						reader.setKeeprawrecord(false);
 						reader.setOptionalSMILESHeader(((FileInputState) target)
 								.getOptionalSMILESHeader());
 						reader.setOptionalInChIHeader(((FileInputState) target)
