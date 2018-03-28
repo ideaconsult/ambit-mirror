@@ -401,7 +401,8 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 	    chain.add(writer);
 	    batch.setProcessorChain(chain);
 	    writer.setConnection(connection);
-	    IBatchStatistics stats = batch.process(new FileInputState(file));
+	    FileInputState fin = new FileInputState(file);
+	    IBatchStatistics stats = batch.process(fin);
 
 	    if (firstCompoundOnly) {
 		if (recordImported == null)
