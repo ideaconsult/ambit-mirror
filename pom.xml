@@ -502,6 +502,15 @@
 			</properties>
 		</profile>
 		<profile>
+			<id>JRE9</id>
+			<activation>
+				<jdk>1.9</jdk>
+			</activation>
+			<properties>
+				<sourceVersion>1.9</sourceVersion>
+			</properties>
+		</profile>			
+		<profile>
 			<!-- http://stackoverflow.com/questions/15886209/maven-is-not-working-in-java-8-when-javadoc-tags-are-incomplete -->
 			<id>disable-java8-doclint</id>
 			<activation>
