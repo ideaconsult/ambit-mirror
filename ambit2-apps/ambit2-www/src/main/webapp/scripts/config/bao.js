@@ -272,6 +272,11 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true
 		},
+		"concentration_ml" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true
+		},		
 		"time point" : {
 			"iOrder" : -6,
 			"bVisible" : true,
