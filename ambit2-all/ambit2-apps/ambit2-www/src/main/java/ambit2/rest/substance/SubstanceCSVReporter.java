@@ -3,26 +3,23 @@ package ambit2.rest.substance;
 import java.io.Writer;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.modbcum.i.exceptions.AmbitException;
-
 import org.restlet.Request;
 
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.json.JSONUtils;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
-public class SubstanceCSVReporter<Q extends IQueryRetrieval<SubstanceRecord>>
-		extends SubstanceJSONReporter<Q> {
+public class SubstanceCSVReporter<Q extends IQueryRetrieval<SubstanceRecord>> extends SubstanceJSONReporter<Q> {
 
 	/**
-     * 
-     */
+	 * 
+	 */
 	private static final long serialVersionUID = -3848727989098277273L;
 
-	public SubstanceCSVReporter(Request request,
-			SubstanceEndpointsBundle[] bundles) {
+	public SubstanceCSVReporter(Request request, SubstanceEndpointsBundle[] bundles) {
 		super(request, null, bundles, false);
 		comma = ",";
 	}
@@ -30,7 +27,8 @@ public class SubstanceCSVReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 	@Override
 	public void header(java.io.Writer output, Q query) {
 		try {
-			output.write("Substance Name,Substance UUID,Substance Type,Public name,Reference Substance UUID,Owner, Owner UUID,Info\n");
+			output.write(
+					"Substance Name,Substance UUID,Substance Type,Public name,Reference Substance UUID,Owner, Owner UUID,Info\n");
 
 		} catch (Exception x) {
 			logger.log(Level.WARNING, x.getMessage(), x);
@@ -56,12 +54,13 @@ public class SubstanceCSVReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 			if (item.getPublicName() != null)
 				writer.write(JSONUtils.jsonQuote(item.getPublicName()));
 			writer.write(comma);
-			if (item.getReferenceSubstanceUUID()!=null)
+			if (item.getReferenceSubstanceUUID() != null)
 				writer.write(JSONUtils.jsonQuote(item.getReferenceSubstanceUUID()));
 			writer.write(comma);
 			writer.write(JSONUtils.jsonQuote(item.getOwnerName()));
 			writer.write(comma);
-			writer.write(item.getOwnerUUID());
+			if (item.getOwnerUUID() != null)
+				writer.write(item.getOwnerUUID());
 			writer.write(comma);
 
 			if (item.getExternalids() != null) {
