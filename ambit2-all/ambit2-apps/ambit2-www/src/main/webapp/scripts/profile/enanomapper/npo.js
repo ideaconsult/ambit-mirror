@@ -211,6 +211,12 @@ var config_npo = {
 			"bVisible" : true,
 			"inMatrix" : true
 		},
+		"concentration_ml" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Concentration"
+		},			
 		"time point" : {
 			"iOrder" : -6,
 			"bVisible" : true,
