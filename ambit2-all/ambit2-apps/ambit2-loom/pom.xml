@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>3.2.0</version>
+		<version>3.3.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>ambit2-loom</artifactId>
 	<name>Remote services integration</name>
@@ -54,12 +54,6 @@
 			<artifactId>loom-tb-wiki</artifactId>
 			<version>${net.idea.loom.version}</version>
 			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openscience.cdk</groupId>
-			<artifactId>cdk-qsar</artifactId>
-			<version>${cdk.version}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
