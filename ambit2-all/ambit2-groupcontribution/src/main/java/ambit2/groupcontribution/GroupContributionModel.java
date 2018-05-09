@@ -79,6 +79,14 @@ public class GroupContributionModel
 	{
 		correctionFactors.add(corrFactor);
 	}
+	
+	public List<IGroup.Type> getCustomGroups() {
+		return customGroups;
+	}
+
+	public void setCustomGroups(List<IGroup.Type> customGroups) {
+		this.customGroups = customGroups;
+	}
 
 	public Map<String,IGroup> getGroups() {
 		return groups;

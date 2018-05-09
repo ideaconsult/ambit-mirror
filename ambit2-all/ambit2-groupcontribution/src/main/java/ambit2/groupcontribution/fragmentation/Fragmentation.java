@@ -112,6 +112,71 @@ public class Fragmentation
 		
 	}
 	
+	public static void makeCustomGroupFragmenation(DataSetObject dso, GroupContributionModel gcm)
+	{
+		Fragmentation fragmentation = new Fragmentation(); 
+		dso.fragmentation = fragmentation;
+		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
+		Map<IAtom, int[]> atomLocDescr = calcAtomLocalDescriptors(dso.molecule, locDescr);
+		
+		for (IGroup.Type grType : gcm.getCustomGroups())
+		{
+			switch (grType)
+			{
+			case ATOM:
+				calcAtomFragments(dso, atomLocDescr, gcm);
+				break;
+			case BOND:
+				calcBondFragments(dso, atomLocDescr, gcm);
+				break;
+			case B_GROUP:
+				calcBGroupFragments(dso, atomLocDescr, gcm);
+				break;
+			case D_GROUP:
+				calcDGroupFragments(dso, atomLocDescr, gcm);
+				break;
+			case G_GROUP:
+				calcGGroupFragments(dso, atomLocDescr, gcm);
+				break;	
+			case L_GROUP:
+				calcLGroupFragments(dso, atomLocDescr, gcm);
+				break;	
+				//TODO
+			}
+		}
+	}
+	
+	public static void calcAtomFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	{
+		//TODO
+	}
+	
+	public static void calcBondFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	{
+		//TODO
+	}
+	
+	public static void calcBGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	{
+		//TODO
+	}
+	
+	public static void calcDGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	{
+		//TODO
+	}
+	
+	public static void calcGGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	{
+		//TODO
+	}
+	
+	public static void calcLGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	{
+		//TODO
+	}
+	
+	
 	public static Map<IAtom, int[]> calcAtomLocalDescriptors(IAtomContainer molecule, 
 												List<ILocalDescriptor> locDescr)
 	{
@@ -129,6 +194,8 @@ public class Fragmentation
 		}
 		return descr;
 	}
+	
+	
 	
 	public static MatrixDouble generateFragmentationMatrix(DataSet dataset, GroupContributionModel gcm)
 	{
