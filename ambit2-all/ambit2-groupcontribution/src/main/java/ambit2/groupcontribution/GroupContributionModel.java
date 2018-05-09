@@ -21,15 +21,17 @@ public class GroupContributionModel
 		ATOMIC, BOND_BASED, CUSTOM_GROUPS, CORRECTION_FACTORS_ONLY
 	}
 	
+	/*
 	public enum GroupType {
 		ATOM, BOND, G_GROUP, D_GROUP, L_GROUP, RING3, RING4, RING5, RING6
 	}
+	*/
 		
 	private String modelName = "";
 	private List<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private List<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
-	private List<GroupType> customGroups = new ArrayList<GroupType>();	
-	private 	List<DescriptorInfo> descriptors = null;
+	private List<IGroup.Type> customGroups = new ArrayList<IGroup.Type>();	
+	private List<DescriptorInfo> descriptors = null;
 	
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
