@@ -137,8 +137,17 @@
 				<role>Specification</role>
 			</roles>
 		</developer>
+
+		<developer>
+			<id>egonw</id>
+			<name>Egon Willighagen</name>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+			<url>http://chem-bla-ics.blogspot.bg/</url>
+		</developer>
 	</developers>
-	<contributors></contributors>
+
 	<scm>
 		<url>https://sourceforge.net/p/ambit/git/ci/master/tree/ambit2-all/ambit2-apps</url>
 		<connection>scm:git:git://git.code.sf.net/p/ambit/git/ambit2-all/ambit2-apps</connection>

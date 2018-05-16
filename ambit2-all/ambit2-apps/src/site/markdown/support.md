@@ -24,6 +24,18 @@
 		
 * Request custom installation and database content
 
+
+##Donations
+
+AMBIT is an open source project. You don\'t have to pay to use it. But if you find it so helpful in your work that you\'d like to show your appreciation to its developers, feel free to send a donation of your choice to one of the following addresses:
+
+| Cryptocurrency |	Address | 
+| ---------------|----------|
+| VeriCoin |	VRJNt2uTGYpU3gb6DgCiRUxFpFkuaxn1vn |
+| Verium|	VGmMEr5FDnPHeRmf4SgdzS1sNHoES9YJ9y |
+| Zcash	|t1Mxu24zu9cjGd96sxVYttPBSbq6TAjzEFS |
+| Bitcoin Gold |	GUiVQqYivNxs8B9tXSYZCkVkWwBdPWC9JY |
+
 ##Online support 
 
 * [Post a comment](http://sourceforge.net/projects/ambit/forums)
