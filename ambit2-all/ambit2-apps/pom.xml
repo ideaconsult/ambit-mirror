@@ -150,8 +150,8 @@
 
 	<scm>
 		<url>https://sourceforge.net/p/ambit/git/ci/master/tree/ambit2-all/ambit2-apps</url>
-		<connection>scm:git:git://git.code.sf.net/p/ambit/git/ambit2-all/ambit2-apps</connection>
-		<developerConnection>scm:git:ssh://USER@git.code.sf.net/p/ambit/git/ambit2-all/ambit2-apps</developerConnection>
+		<connection>scm:git:git://git.code.sf.net/p/ambit/git</connection>
+		<developerConnection>scm:git:ssh://USER@git.code.sf.net/p/ambit/git</developerConnection>
 	</scm>
 	<organization>
 		<name>Ideaconsult Ltd</name>
@@ -229,7 +229,6 @@
 					<configuration>
 						<releaseProfiles>release</releaseProfiles>
 						<remoteTagging>true</remoteTagging>
-						<tagBase>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags</tagBase>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<!-- <preparationGoals>clean install</preparationGoals> -->
 					</configuration>
@@ -353,7 +352,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.6</version>
+				<version>2.9</version>
 				<reportSets>
 					<reportSet>
 						<reports>
