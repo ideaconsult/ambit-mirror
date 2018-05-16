@@ -125,10 +125,10 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</connection>
-		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</developerConnection>
-		<tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
-		<url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</url>
+		<connection>scm:git:git://git.code.sf.net/p/ambit/git</connection>
+		<developerConnection>scm:git:ssh://USER@git.code.sf.net/p/ambit/git </developerConnection>
+		<tag>HEAD</tag>
+		<url>https://sourceforge.net/p/ambit/git/ci/master/tree/ambit2-all/</url>
 	</scm>
 	<organization>
 		<name>Ideaconsult Ltd.</name>
@@ -251,7 +251,6 @@
 					<configuration>
 						<releaseProfiles>release</releaseProfiles>
 						<remoteTagging>true</remoteTagging>
-						<tagBase>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags</tagBase>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<!-- <preparationGoals>clean install</preparationGoals> -->
 					</configuration>
