@@ -125,9 +125,10 @@
 		</developer>
 	</developers>
 	<scm>
+		<connection>scm:git:git://git.code.sf.net/p/ambit/git</connection>
+		<developerConnection>scm:git:ssh://USER@git.code.sf.net/p/ambit/git </developerConnection>
+		<tag>HEAD</tag>
 		<url>https://sourceforge.net/p/ambit/git/ci/master/tree/ambit2-all/</url>
-		<connection>scm:git:git://git.code.sf.net/p/ambit/git/ambit2-all/</connection>
-		<developerConnection>scm:git:ssh://USER@git.code.sf.net/p/ambit/git/ambit2-all/</developerConnection>
 	</scm>
 	<organization>
 		<name>Ideaconsult Ltd.</name>
@@ -250,7 +251,6 @@
 					<configuration>
 						<releaseProfiles>release</releaseProfiles>
 						<remoteTagging>true</remoteTagging>
-						<tagBase>scm:svn:https://ambit.svn.sourceforge.net/svnroot/ambit/tags</tagBase>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<!-- <preparationGoals>clean install</preparationGoals> -->
 					</configuration>
@@ -423,7 +423,7 @@
 					<failOnError>false</failOnError>
 
 				</configuration>
-
+				
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -508,7 +508,7 @@
 			<properties>
 				<sourceVersion>1.9</sourceVersion>
 			</properties>
-		</profile>
+		</profile>			
 		<profile>
 			<!-- http://stackoverflow.com/questions/15886209/maven-is-not-working-in-java-8-when-javadoc-tags-are-incomplete -->
 			<id>disable-java8-doclint</id>
