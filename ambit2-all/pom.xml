@@ -125,10 +125,9 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:svn:https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</connection>
-		<developerConnection>scm:svn+ssh://USER@svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</developerConnection>
-		<tag>scm:svn:https://svn.code.sf.net/p/ambit/code/tags</tag>
-		<url>https://svn.code.sf.net/p/ambit/code/trunk/ambit2-all/</url>
+		<url>https://sourceforge.net/p/ambit/git/ci/master/tree/ambit2-all/</url>
+		<connection>scm:git:git://git.code.sf.net/p/ambit/git/ambit2-all/</connection>
+		<developerConnection>scm:git:ssh://USER@git.code.sf.net/p/ambit/git/ambit2-all/</developerConnection>
 	</scm>
 	<organization>
 		<name>Ideaconsult Ltd.</name>
@@ -424,7 +423,7 @@
 					<failOnError>false</failOnError>
 
 				</configuration>
-				
+
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -509,7 +508,7 @@
 			<properties>
 				<sourceVersion>1.9</sourceVersion>
 			</properties>
-		</profile>			
+		</profile>
 		<profile>
 			<!-- http://stackoverflow.com/questions/15886209/maven-is-not-working-in-java-8-when-javadoc-tags-are-incomplete -->
 			<id>disable-java8-doclint</id>
