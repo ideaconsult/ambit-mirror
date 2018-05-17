@@ -1,4 +1,4 @@
-#AMBIT 
+# AMBIT 
 
 [AMBIT](http://ambit.sourceforge.net/) offers chemoinformatics functionality via OpenTox API compliant REST web services.
 
