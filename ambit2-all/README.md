@@ -1,27 +1,27 @@
-http://ambit.sourceforge.net
+# http://ambit.sourceforge.net
 
 This is multi module maven project.
 
-#Build
+## Build
 
 Prerequisites for building AMBIT2
 JDK 1.7 or higher 
 MySQL 5.6.5 or higher 
 Maven 3.x
 
-## Build ambit2 libraries:  
+### Build ambit2 libraries:  
 
-Retrieve sources from SVN
+Retrieve sources from Sourceforge [Git](http://ambit.sourceforge.net/source-repository.html)
+
 ````
-svn checkout svn://svn.code.sf.net/p/ambit/code/trunk/ambit2-all ambit-all
+git clone git://git.code.sf.net/p/ambit/git
 cd ambit2-all
 mvn package -DskipTests=true
 ````
 
+The build process includes mandatory database tests and may take a while.  To skip tests, use `-DskipTests=true` option.
 
-### The build process includes mandatory database tests and may take a while.  Use `-DskipTests=true` option to skip the tests.
-
-####Database configuration 
+#### Database configuration 
 
 The test database `ambit-test` must exist before the running the tests. Use the following MySQL commands to create and set rights. 
 
@@ -59,22 +59,26 @@ The database name and the user are set via Maven profile, e.g. there should be "
 </settings>
 ````
 
-## Build applications - AMBIT REST web services and standalone applications:
+### Build applications - AMBIT REST web services and standalone applications:
 
 ````
 cd ambit2-apps
 mvn clean buildnumber:create package -P http -P ambit-release -P aa-enabled -P aa-admin-disabled -P license-in-text-column -DskipTests=true
 ````
-See ambit2-all/ambit2-apps/README.txt for options
+
+- See ambit2-all/ambit2-apps/README.txt for options
+- See http://ambit.sourceforge.net/install_ambitrest.html for configuration options
+
 
 ### Dependencies
 
-* The Toxtree dependeniies are available as Maven artifacts at http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/releases and 
+* The [Toxtree](http://toxtree.sourceforge.net/) dependeniies are available as Maven artifacts at https://nexus.ideaconsult.net/content/repositories/releases and 
 https://nexus.ideaconsult.net/content/repositories/snapshots
 
-* Optionally, to build Toxtree version on your own, get the source 
+* Optionally, to build Toxtree version on your own, get the [source](http://toxtree.sourceforge.net/source-repository.html)
 
 ````
-svn checkout http://svn.code.sf.net/p/toxtree/svn/trunk/toxtree toxtree 
+git clone git://git.code.sf.net/p/toxtree/git toxtree-git
+cd toxtree
 mvn install
 ````

@@ -9,3 +9,7 @@ http://ambit.sourceforge.net/downloads.html
 ````
 mvn clean buildnumber:create install -DskipTests=true
 ````
+
+## Installation and configuration
+
+http://ambit.sourceforge.net/install_ambitrest.html
