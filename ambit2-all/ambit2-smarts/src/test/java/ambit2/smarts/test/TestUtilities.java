@@ -3264,8 +3264,8 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@@H](N)Cl");
 		
 		//tu.testSmartsManagerBoolSearch("[#6]-:[#6]","c1ccccc1");
-		tu.testSmartsManagerBoolSearch("[#6][$([NX3H0])]([#6])[#6]","CN(C)C");
-		tu.testSmartsManagerBoolSearch("[$([NX3H2])][#6]","NCCCC");
+		//tu.testSmartsManagerBoolSearch("[#6][$([NX3H0])]([#6])[#6]","CN(C)C");
+		//tu.testSmartsManagerBoolSearch("[$([NX3H2])][#6]","NCCCC");
 		tu.testSmartsManagerBoolSearch("[#6][CX3](=O)[$([NX3H0]([#6])[#6]),$([NX3H2]),$([NX3H])]","CCNC(=O)C=CCCC=CCC");
 		
 		//tu.testIsomorphismAllMappings("[#6]-&:[#6]","c1ccccc1");
