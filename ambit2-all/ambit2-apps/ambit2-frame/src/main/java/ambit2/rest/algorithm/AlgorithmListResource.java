@@ -218,7 +218,7 @@ public class AlgorithmListResource extends CatalogResource<Algorithm<String>> {
 		if (algorithm.hasType(AlgorithmType.Mockup)) {
 			return new CallableMockup(form, token);
 		} else
-			return new CallableMockup(form, token);
+			throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
 	@Override
