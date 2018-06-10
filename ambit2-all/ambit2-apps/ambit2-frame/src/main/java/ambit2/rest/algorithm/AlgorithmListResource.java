@@ -58,7 +58,6 @@ public class AlgorithmListResource extends CatalogResource<Algorithm<String>> {
 		}
 	}
 
-
 	protected Iterator<Algorithm<String>> getAlgorithmIterator(AlgorithmsPile algobucket, Object type, Object search) {
 		return AlgorithmsPile.createIterator(algorithmList, type == null ? null : type.toString(),
 				search == null ? null : search.toString());
@@ -140,13 +139,17 @@ public class AlgorithmListResource extends CatalogResource<Algorithm<String>> {
 			String jsonpcallback = params.getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = params.getFirstValue("callback");
-			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest(), jsonpcallback);
+			AlgorithmJSONReporter r = createAlgorithmJSONReporter(getRequest(), jsonpcallback);
 			return new StringConvertor(r, MediaType.APPLICATION_JAVASCRIPT);
 		} else {
-			AlgorithmJSONReporter r = new AlgorithmJSONReporter(getRequest());
+			AlgorithmJSONReporter r = createAlgorithmJSONReporter(getRequest(), null);
 			return new StringConvertor(r, MediaType.APPLICATION_JSON);
 		}
 
+	}
+
+	protected AlgorithmJSONReporter createAlgorithmJSONReporter(Request request, String jsonpcallback) {
+		return new AlgorithmJSONReporter(request, jsonpcallback);
 	}
 
 	protected Reference getSourceReference() throws ResourceException {

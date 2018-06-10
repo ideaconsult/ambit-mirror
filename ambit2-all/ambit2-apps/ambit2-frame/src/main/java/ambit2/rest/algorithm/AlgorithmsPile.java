@@ -75,11 +75,11 @@ public class AlgorithmsPile {
 	private static final String _headers = "id\tname\tclass\tinputparam\ttype\tendpoint\trequires\timplementationof";
 
 	public Object[][] fromJSON() {
-		return fromJSONStream(AlgorithmsPile.class.getClassLoader()
-				.getResourceAsStream("ambit2/rest/config/algorithmspile.json"));
+		return fromJSONStream(
+				AlgorithmsPile.class.getClassLoader().getResourceAsStream("ambit2/rest/config/algorithmspile.json"));
 	}
-	
-	public  Object[][] fromJSONStream(InputStream jsonstream) {
+
+	public Object[][] fromJSONStream(InputStream jsonstream) {
 		try (InputStream in = jsonstream) {
 			return fromJSON(in);
 		} catch (Exception x) {
@@ -134,10 +134,19 @@ public class AlgorithmsPile {
 						int n = 0;
 						while (pi.hasNext()) {
 							Map.Entry<String, JsonNode> p = pi.next();
-							String creator = p.getValue().get("creator").asText();
+							String creator = "ambit";
+							try {
+								creator = p.getValue().get("creator").asText();
+							} catch (Exception x) {
+
+							}
 							ILiteratureEntry ref = LiteratureEntry.getInstance("User input", creator);
 							String name = p.getValue().get("title").asText();
-							String units = p.getValue().get("units").asText();
+							String units = "";
+							try {
+								units = p.getValue().get("units").asText();
+							} catch (Exception x) {
+							}
 							Property property = new Property(name, units, ref);
 							subitems[n] = property;
 							n++;
@@ -175,7 +184,6 @@ public class AlgorithmsPile {
 		return algs;
 
 	}
-
 
 	public static String toJSON(Object[][] algorithms) {
 
@@ -233,7 +241,6 @@ public class AlgorithmsPile {
 		b.append("]");
 		return b.toString();
 	}
-
 
 	public String toString(Object[][] algorithms) {
 		StringBuilder b = new StringBuilder();

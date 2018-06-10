@@ -28,7 +28,7 @@ public class AlgorithmJSONReporter extends AlgorithmURIReporter {
 		this.jsonpCallback = JSONUtils.jsonSanitizeCallback(jsonpcallback);
 	}
 
-	private static String format = "\n{\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"content\": \"%s\",\n\t\"endpoint\": \"%s\",\n\t\"description\": \"%s\",\n\t\"format\": \"%s\",\n\t\"implementationOf\": \"%s\",\n\t\"isDataProcessing\": %s,\n\t\"requiresDataset\": %s,\n\t\"isSupevised\": %s,\n\t\"requires\": \"%s\",\n\t\"type\": [\n%s]\n}";
+	private static String format = "\n\t\"uri\":\"%s\",\n\t\"id\": \"%s\",\n\t\"name\": \"%s\",\n\t\"content\": \"%s\",\n\t\"endpoint\": \"%s\",\n\t\"description\": \"%s\",\n\t\"format\": \"%s\",\n\t\"implementationOf\": \"%s\",\n\t\"isDataProcessing\": %s,\n\t\"requiresDataset\": %s,\n\t\"isSupevised\": %s,\n\t\"requires\": \"%s\",\n\t\"type\": [\n%s]";
 
 	@Override
 	public void processItem(Algorithm algorithm, Writer output) {
@@ -36,30 +36,38 @@ public class AlgorithmJSONReporter extends AlgorithmURIReporter {
 			if (comma != null)
 				output.write(comma);
 
+			output.write("\n{");
 			String uri = getURI(algorithm);
-			StringBuilder b = new StringBuilder();
-			for (int i = 0; i < algorithm.getType().length; i++) {
-				if (i > 0)
-					b.append(",\n");
-				b.append("\t\t\"");
-				b.append(algorithm.getType()[i]);
-				b.append("\"");
-			}
-			output.write(String.format(format, uri, algorithm.getId(),
-					algorithm.getName() == null ? "" : algorithm.getName(),
-					algorithm.getContent() == null ? "" : algorithm.getContent(),
-					algorithm.getEndpoint() == null ? "" : algorithm.getEndpoint(),
-					algorithm.getDescription() == null ? "" : algorithm.getDescription(),
-					algorithm.getFormat() == null ? "" : algorithm.getFormat(),
-					algorithm.getImplementationOf() == null ? "" : algorithm.getImplementationOf(),
-					algorithm.isDataProcessing(), algorithm.isRequiresDataset(), algorithm.isSupervised(),
-					algorithm.getRequirement() == null ? "" : algorithm.getRequirement(), b.toString()));
+
+			item2json(algorithm,uri);
 			comma = ",";
 		} catch (IOException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
+			x.printStackTrace();
+		} finally {
+			try {output.write("}\n");} catch (Exception x) {}
 		}
 	}
-
+	
+	protected void item2json(Algorithm algorithm, String uri) throws IOException {
+		StringBuilder b = new StringBuilder();
+		for (int i = 0; i < algorithm.getType().length; i++) {
+			if (i > 0)
+				b.append(",\n");
+			b.append("\t\t\"");
+			b.append(algorithm.getType()[i]);
+			b.append("\"");
+		}		
+		output.write(String.format(format, uri, algorithm.getId(),
+				algorithm.getName() == null ? "" : algorithm.getName(),
+				algorithm.getContent() == null ? "" : algorithm.getContent(),
+				algorithm.getEndpoint() == null ? "" : algorithm.getEndpoint(),
+				algorithm.getDescription() == null ? "" : algorithm.getDescription(),
+				algorithm.getFormat() == null ? "" : algorithm.getFormat(),
+				algorithm.getImplementationOf() == null ? "" : algorithm.getImplementationOf(),
+				algorithm.isDataProcessing(), algorithm.isRequiresDataset(), algorithm.isSupervised(),
+				algorithm.getRequirement() == null ? "" : algorithm.getRequirement(), b.toString()));
+	}
 	@Override
 	public void footer(Writer output, Iterator<Algorithm> query) {
 		try {
