@@ -1,0 +1,7 @@
+**/.settings/
+**/.vscode/
+**/target/
+**/.classpath
+**/.factorypath
+**/.project
+**/dependency-reduced-pom.xml
