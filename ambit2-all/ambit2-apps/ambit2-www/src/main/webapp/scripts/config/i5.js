@@ -3162,6 +3162,14 @@ var config_i5 = {
 			}
 		}
 	},
+	"EXPOSURE_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"effects" : config_bao["effects"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"]
+
+	},
 	"RISKASSESSMENT_SECTION" : {
 		"protocol" : {
 			"guideline" : {

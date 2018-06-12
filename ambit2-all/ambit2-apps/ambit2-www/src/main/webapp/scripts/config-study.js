@@ -935,6 +935,28 @@ var config_study = {
 			"conditions" : config_toxcast["conditions"],
 			"protocol" : config_toxcast["protocol"],
 			"interpretation" : config_toxcast["interpretation"]
+		},
+		"EXPOSURE_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : {
+				"bVisible" : false,
+				"time start": {
+					"iOrder" : -6,
+					"bVisible" : true,
+					"inMatrix" : true,
+					"sTitle" : "Time start"
+				},
+				"time stop": {
+					"iOrder" : -7,
+					"bVisible" : true,
+					"inMatrix" : true,
+					"sTitle" : "Time stop"
+				}
+			},	
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+
 		}
 	}
 }

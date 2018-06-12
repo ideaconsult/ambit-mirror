@@ -3065,8 +3065,22 @@ public class Protocol {
 				return null;
 			}
 	
-		};		
+		},
 
+		EXPOSURE_SECTION {
+			@Override
+			public String getNumber() {
+				return "";
+			}
+			@Override
+			public String getTopCategory() {
+				return "EXPOSURE";
+			}
+			@Override
+			public String toString() {
+				return "Exposure";
+			}
+		}		
 		;
 		public String getTopCategory() {
 			return "P-CHEM";
