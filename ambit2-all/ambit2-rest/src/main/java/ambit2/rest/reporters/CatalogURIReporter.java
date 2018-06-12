@@ -18,7 +18,7 @@ public class CatalogURIReporter<T> extends ListReporter<T, Writer> {
     protected Request request;
 
     public Reference getResourceRef() {
-	return request == null ? null : request.getResourceRef();
+	return request == null ? baseReference : request.getResourceRef();
     }
 
     protected Request getRequest() {
