@@ -33,7 +33,7 @@ public class TestUtils
 		testLocalDescriptor(smiles, new LDAtomHybridization());		
 		testLocalDescriptor(smiles, new LDAtomValency());
 		testLocalDescriptor(smiles, new LDAtomHeavyNeighbours());
-		//testGetExplicitHCount(moleculeBuilder(smiles));
+		testGetExplicitHCount(moleculeBuilder(smiles));
 		//testGetHCount(moleculeBuilder(smiles));
 	}
 
