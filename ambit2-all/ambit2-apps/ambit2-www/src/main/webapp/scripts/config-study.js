@@ -941,6 +941,12 @@ var config_study = {
 			"effects" : config_bao["effects"],
 			"conditions" : {
 				"bVisible" : false,
+				"sampling specification": {
+					"iOrder" : -7,
+					"bVisible" : true,
+					"inMatrix" : true,
+					"sTitle" : "Sampling specification"
+				},				
 				"time start": {
 					"iOrder" : -6,
 					"bVisible" : true,
@@ -948,7 +954,7 @@ var config_study = {
 					"sTitle" : "Time start"
 				},
 				"time stop": {
-					"iOrder" : -7,
+					"iOrder" : -5,
 					"bVisible" : true,
 					"inMatrix" : true,
 					"sTitle" : "Time stop"
