@@ -144,6 +144,24 @@ public enum ParticleTypes {
 			return "936-414-1";
 		}
 	},
+	ENM_9000005 {
+		// Aluminium oxide
+		@Override
+		public String getSMILES() {
+			return "[Al+3].[Al+3].[O-2].[O-2].[O-2]";
+		}
+
+		@Override
+		public String getCAS() {
+			return "1344-28-1";
+		}
+
+		@Override
+		public String getFormula() {
+			return "Al2O3";
+		}
+		
+	},
 	ENM_9000006 {
 		// CeO2
 		@Override
