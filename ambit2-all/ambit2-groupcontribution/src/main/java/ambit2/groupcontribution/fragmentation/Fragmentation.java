@@ -116,11 +116,27 @@ public class Fragmentation
 	{
 		Fragmentation fragmentation = new Fragmentation(); 
 		dso.fragmentation = fragmentation;
-		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
-		Map<IAtom, int[]> atomLocDescr = calcAtomLocalDescriptors(dso.molecule, locDescr);
-		
-		for (IGroup.Type grType : gcm.getCustomGroups())
+					
+		List<ILocalDescriptor> gcmlocDescr = gcm.getLocalDescriptors();
+		Map<IAtom, int[]> gcmAtomLocDescr = null;
+				
+		for (int i = 0; i < gcm.getCustomGroups().size(); i++)
 		{
+			IGroup.Type grType = gcm.getCustomGroups().get(i);
+			List<ILocalDescriptor> locDescr = gcm.getCustomGroupLocalDescriptors().get(i); 
+			Map<IAtom, int[]> atomLocDescr = null;
+			
+			if (locDescr == null)
+			{
+				if (gcmAtomLocDescr == null)
+					gcmAtomLocDescr = calcAtomLocalDescriptors(dso.molecule, gcmlocDescr);
+				
+				//By default local descriptors from the GCM model are used
+				atomLocDescr = gcmAtomLocDescr;
+			}
+			else
+				atomLocDescr = calcAtomLocalDescriptors(dso.molecule, locDescr);
+			
 			switch (grType)
 			{
 			case ATOM:
