@@ -140,46 +140,61 @@ public class Fragmentation
 			switch (grType)
 			{
 			case ATOM:
-				calcAtomFragments(dso, atomLocDescr, gcm);
+				calcAtomFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;
 			case BOND:
-				calcBondFragments(dso, atomLocDescr, gcm);
+				calcBondFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;				
 			case D_GROUP:
-				calcDGroupFragments(dso, atomLocDescr, gcm);
+				calcDGroupFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;
 			case G_GROUP:
-				calcGGroupFragments(dso, atomLocDescr, gcm);
+				calcGGroupFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;	
 			case L_GROUP:
-				calcLGroupFragments(dso, atomLocDescr, gcm);
+				calcLGroupFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;	
 				//TODO
 			}
 		}
 	}
 	
-	public static void calcAtomFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcAtomFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
 	
-	public static void calcBondFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcBondFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
 		
-	public static void calcDGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcDGroupFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
 	
-	public static void calcGGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcGGroupFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
 	
-	public static void calcLGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcLGroupFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
