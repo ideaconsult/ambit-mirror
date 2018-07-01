@@ -128,10 +128,7 @@ public class Fragmentation
 				break;
 			case BOND:
 				calcBondFragments(dso, atomLocDescr, gcm);
-				break;
-			case B_GROUP:
-				calcBGroupFragments(dso, atomLocDescr, gcm);
-				break;
+				break;				
 			case D_GROUP:
 				calcDGroupFragments(dso, atomLocDescr, gcm);
 				break;
@@ -155,12 +152,7 @@ public class Fragmentation
 	{
 		//TODO
 	}
-	
-	public static void calcBGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
-	{
-		//TODO
-	}
-	
+		
 	public static void calcDGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
 	{
 		//TODO
