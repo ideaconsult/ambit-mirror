@@ -98,7 +98,7 @@ $(document)
 			<div id="breadCrumb" class="breadCrumb module remove-bottom h5">
                     <ul>
                         <li>
-                            <a href="https://sandbox.ideaconsult.net/search/excape/" title="AMBIT Home">Home</a>
+                            <a href="https://solr.ideaconsult.net/search/excape/" title="AMBIT Home">Home</a>
                         </li>
                     </ul>
 			</div>
