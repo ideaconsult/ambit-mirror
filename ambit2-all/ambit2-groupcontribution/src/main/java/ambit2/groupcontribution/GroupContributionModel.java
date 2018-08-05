@@ -30,7 +30,8 @@ public class GroupContributionModel
 	private String modelName = "";
 	private List<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private List<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
-	private List<IGroup.Type> customGroups = new ArrayList<IGroup.Type>();	
+	private List<IGroup.Type> customGroups = new ArrayList<IGroup.Type>();
+	private List<List<ILocalDescriptor>> customGroupLocalDescriptors = new ArrayList<List<ILocalDescriptor>>();
 	private List<DescriptorInfo> descriptors = null;
 	
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
@@ -86,6 +87,14 @@ public class GroupContributionModel
 
 	public void setCustomGroups(List<IGroup.Type> customGroups) {
 		this.customGroups = customGroups;
+	}
+	
+	public List<List<ILocalDescriptor>> getCustomGroupLocalDescriptors() {
+		return customGroupLocalDescriptors;
+	}
+
+	public void setCustomGroupLocalDescriptors(List<List<ILocalDescriptor>> customGroupLocalDescriptors) {
+		this.customGroupLocalDescriptors = customGroupLocalDescriptors;
 	}
 
 	public Map<String,IGroup> getGroups() {

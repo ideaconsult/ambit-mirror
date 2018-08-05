@@ -7,7 +7,7 @@ public interface IGroup
 	public enum Type{
 		ATOM,
 		BOND,
-		B_GROUP,
+		//B_GROUP,
 		D_GROUP,
 		G_GROUP,
 		L_GROUP, 

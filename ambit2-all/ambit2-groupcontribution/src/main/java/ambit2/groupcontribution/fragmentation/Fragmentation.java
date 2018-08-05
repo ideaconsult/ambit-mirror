@@ -116,62 +116,85 @@ public class Fragmentation
 	{
 		Fragmentation fragmentation = new Fragmentation(); 
 		dso.fragmentation = fragmentation;
-		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
-		Map<IAtom, int[]> atomLocDescr = calcAtomLocalDescriptors(dso.molecule, locDescr);
-		
-		for (IGroup.Type grType : gcm.getCustomGroups())
+					
+		List<ILocalDescriptor> gcmlocDescr = gcm.getLocalDescriptors();
+		Map<IAtom, int[]> gcmAtomLocDescr = null;
+				
+		for (int i = 0; i < gcm.getCustomGroups().size(); i++)
 		{
+			IGroup.Type grType = gcm.getCustomGroups().get(i);
+			List<ILocalDescriptor> locDescr = gcm.getCustomGroupLocalDescriptors().get(i); 
+			Map<IAtom, int[]> atomLocDescr = null;
+			
+			if (locDescr == null)
+			{
+				if (gcmAtomLocDescr == null)
+					gcmAtomLocDescr = calcAtomLocalDescriptors(dso.molecule, gcmlocDescr);
+				
+				//By default local descriptors from the GCM model are used
+				atomLocDescr = gcmAtomLocDescr;
+			}
+			else
+				atomLocDescr = calcAtomLocalDescriptors(dso.molecule, locDescr);
+			
 			switch (grType)
 			{
 			case ATOM:
-				calcAtomFragments(dso, atomLocDescr, gcm);
+				calcAtomFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;
 			case BOND:
-				calcBondFragments(dso, atomLocDescr, gcm);
-				break;
-			case B_GROUP:
-				calcBGroupFragments(dso, atomLocDescr, gcm);
-				break;
+				calcBondFragments(fragmentation, dso, atomLocDescr, gcm);
+				break;				
 			case D_GROUP:
-				calcDGroupFragments(dso, atomLocDescr, gcm);
+				calcDGroupFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;
 			case G_GROUP:
-				calcGGroupFragments(dso, atomLocDescr, gcm);
+				calcGGroupFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;	
 			case L_GROUP:
-				calcLGroupFragments(dso, atomLocDescr, gcm);
+				calcLGroupFragments(fragmentation, dso, atomLocDescr, gcm);
 				break;	
 				//TODO
 			}
 		}
 	}
 	
-	public static void calcAtomFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcAtomFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
 	
-	public static void calcBondFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcBondFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
+	{
+		//TODO
+	}
+		
+	public static void calcDGroupFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
 	
-	public static void calcBGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcGGroupFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}
 	
-	public static void calcDGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
-	{
-		//TODO
-	}
-	
-	public static void calcGGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
-	{
-		//TODO
-	}
-	
-	public static void calcLGroupFragments(DataSetObject dso, Map<IAtom, int[]> atomLocDescr, GroupContributionModel gcm)
+	public static void calcLGroupFragments(Fragmentation fragmentation, 
+			DataSetObject dso, 
+			Map<IAtom, int[]> atomLocDescr, 
+			GroupContributionModel gcm)
 	{
 		//TODO
 	}

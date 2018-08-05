@@ -122,5 +122,9 @@ public class DataSet
 		CDKHueckelAromaticityDetector.detectAromaticity(molecule);
 	}
 	
-	
+	public static DataSet makeDataSet(List<String> smilesList, List<Double> propertyValues)
+	{
+		//TODO
+		return null;
+	}
 }
