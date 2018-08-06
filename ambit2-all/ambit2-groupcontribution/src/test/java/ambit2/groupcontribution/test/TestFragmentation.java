@@ -56,7 +56,7 @@ public class TestFragmentation extends TestCase
 			String[] expectedFragmentsDesignations, List<int[]> expectedFragFrequences) throws Exception
 	{
 		
-		DataSet trainDataSet = DataSet.makeDataSet(smiles, null);
+		DataSet trainDataSet = DataSet.makeDataSet(smiles, null, "test_property");
 		Fragmentation.makeFragmentation(trainDataSet, gcm);
 		
 		Map<String,IGroup> groups = gcm.getGroups();
@@ -78,7 +78,7 @@ public class TestFragmentation extends TestCase
 		List<int[]> expFragFreq = new ArrayList<int[]>();
 		String[] expFragDesignations = {"C2","C3"};
 		
-		//checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);
 		
 	}
 	

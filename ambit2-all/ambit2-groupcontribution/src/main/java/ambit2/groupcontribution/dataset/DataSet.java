@@ -20,11 +20,15 @@ import ambit2.base.exceptions.AmbitIOException;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
+import ambit2.smarts.SmartsHelper;
 
 public class DataSet 
 {
 	public List<DataSetObject> dataObjects = new ArrayList<DataSetObject>();
 	File datafile = null;
+	
+	public DataSet(){		
+	}
 	
 	
 	public DataSet(File f) throws Exception
@@ -122,9 +126,23 @@ public class DataSet
 		CDKHueckelAromaticityDetector.detectAromaticity(molecule);
 	}
 	
-	public static DataSet makeDataSet(List<String> smilesList, List<Double> propertyValues)
+	public static DataSet makeDataSet(List<String> smilesList, 
+			List<Double> propertyValues, String propertyName) throws Exception
 	{
-		//TODO
-		return null;
+		DataSet ds = new DataSet();
+		
+		for (int i = 0; i < smilesList.size(); i++)
+		{		
+			IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smilesList.get(i));
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			CDKHueckelAromaticityDetector.detectAromaticity(mol);
+			DataSetObject dso = new DataSetObject();
+			dso.molecule = mol;
+			if (propertyValues != null)
+				dso.molecule.setProperty(propertyName, propertyValues.get(i));
+			ds.dataObjects.add(dso);
+		}
+		
+		return ds;
 	}
 }
