@@ -10,6 +10,7 @@ import org.openscience.cdk.tools.LoggingTool;
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.dataset.DataSet;
+import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
@@ -38,7 +39,7 @@ public class TestFragmentation extends TestCase
 		GroupContributionModel gcm = new GroupContributionModel();
 		gcm.setTargetEndpoint("test_property");
 		gcm.setModelType(gcmType);
-		System.out.println("GCM type : " + gcm.getModelType().toString());		
+		//System.out.println("GCM type : " + gcm.getModelType().toString());		
 		GCMParser gcmParser = new GCMParser();
 		
 		List<ILocalDescriptor> locDescriptors = gcmParser.getLocalDescriptorsFromString(localDescriptors);
@@ -66,13 +67,34 @@ public class TestFragmentation extends TestCase
 		Arrays.sort(groupsArray);
 		
 		assertEquals("Number of fragments: ", expectedFragmentsDesignations.length, groupsArray.length);
+		
+		//Check gcm groups
 		for (int i = 0; i < groupsArray.length; i++)
 		{	
 			assertEquals("Fragment " + (i+1) + " designation: ", 
 					expectedFragmentsDesignations[i], groupsArray[i]);			
-		}	
+		}
 		
-		//TODO
+		//Check group frequencies
+		for (int i = 0; i < smiles.size(); i++)
+		{
+			DataSetObject dso =  trainDataSet.dataObjects.get(i);
+			int[] expFreqs = expectedFragFrequences.get(i);
+			
+			int freq = 0;
+			for (int k = 0; k < groupsArray.length; k++)
+			{	
+				Integer iObj = dso.fragmentation.groupFrequencies.get(groupsArray[k]);
+				if (iObj == null)
+					freq = 0;
+				else
+					freq = iObj.intValue();
+				
+				assertEquals("Mol #" + (i+1) + " " + smiles.get(i) + 
+						", frag #"  + (k+1) + " " + groupsArray[k] + ", frequency: ", 
+						expFreqs[k], freq);					
+			}			
+		}		
 	}
 	
 	public void test01() throws Exception 
@@ -80,18 +102,19 @@ public class TestFragmentation extends TestCase
 		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,H");
 		List<String> smiles = new ArrayList<String>(); 
 		List<int[]> expFragFreq = new ArrayList<int[]>();
-		String[] expFragDesignations = {"C2","C3"};
+		String[] expFragDesignations = {"C1","C2","C3"};
 		
 		//Add molecules and expected fragment frequencies
 		smiles.add("CCC");
-		expFragFreq.add(new int[] {1,2});
+		expFragFreq.add(new int[] {0,1,2});
 		smiles.add("CCCC");
-		expFragFreq.add(new int[] {2,2});
+		expFragFreq.add(new int[] {0,2,2});
 		smiles.add("CCCCC");
-		expFragFreq.add(new int[] {3,2});
+		expFragFreq.add(new int[] {0,3,2});
+		smiles.add("CC(C)C");
+		expFragFreq.add(new int[] {1,0,3});
 		
-		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);
-		
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
 	}
 		
 	
