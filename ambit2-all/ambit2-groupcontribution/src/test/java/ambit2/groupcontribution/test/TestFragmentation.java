@@ -1,6 +1,7 @@
 package ambit2.groupcontribution.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -62,9 +63,14 @@ public class TestFragmentation extends TestCase
 		Map<String,IGroup> groups = gcm.getGroups();
 		int n = groups.keySet().size();
 		String groupsArray[] = groups.keySet().toArray(new String[n]);
-		for (String s: groupsArray) 
-			System.out.println(s);
+		Arrays.sort(groupsArray);
+		
 		assertEquals("Number of fragments: ", expectedFragmentsDesignations.length, groupsArray.length);
+		for (int i = 0; i < groupsArray.length; i++)
+		{	
+			assertEquals("Fragment " + (i+1) + " designation: ", 
+					expectedFragmentsDesignations[i], groupsArray[i]);			
+		}	
 		
 		//TODO
 	}
@@ -73,17 +79,20 @@ public class TestFragmentation extends TestCase
 	{
 		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,H");
 		List<String> smiles = new ArrayList<String>(); 
-		smiles.add("CCC");
-		
 		List<int[]> expFragFreq = new ArrayList<int[]>();
 		String[] expFragDesignations = {"C2","C3"};
+		
+		//Add molecules and expected fragment frequencies
+		smiles.add("CCC");
+		expFragFreq.add(new int[] {1,2});
+		smiles.add("CCCC");
+		expFragFreq.add(new int[] {2,2});
+		smiles.add("CCCCC");
+		expFragFreq.add(new int[] {3,2});
 		
 		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);
 		
 	}
-	
-	
-	
 		
 	
 }
