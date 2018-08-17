@@ -505,7 +505,7 @@ public class Learner
 			
 			if (model.getValidationConfig().verboseReport)
 			{	
-				out_s = "LOO #" + (i+1) + df.format(b.el[i][0]) + "  "+ df.format(model_value)
+				out_s = "LOO #" + (i+1) + "  " + df.format(b.el[i][0]) + "  "+ df.format(model_value)
 					+ "      diff = " + df.format(diff) + endline;
 				if (repCfg.FlagConsoleOutput)
 					System.out.print(out_s);
