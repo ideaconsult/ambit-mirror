@@ -35,7 +35,7 @@ public class GroupContributionCli
 	public Double threshold = null;
 	public String gcmType = null;
 	public String validation = null;
-	
+	public boolean FlagFragmenationOnly = false;
 	
 	public static void main(String[] args) {
 		GroupContributionCli gcCli = new GroupContributionCli();
@@ -171,11 +171,33 @@ public class GroupContributionCli
 			}
 			@Override
 			public String getDescription() {
-				return "Validation specification: <self>,<LOO>,<YS-n>,<CV-n<-m>>,<vebose>,<boot-n>,<external>";
+				return "Validation specification: <self>,<LOO>,<YS-n>,<CV-n<-m>>,<verbose>,<boot-n>,<external>";
 			}
 			@Override
 			public String getShortName() {
 				return "v";
+			}
+		},
+		
+		fragmentation {
+			@Override
+			public String getArgName() {
+				return null;
+			}
+			@Override
+			public String getDescription() {
+				return "Only fragmentation is calculated. No modeling";
+			}
+			@Override
+			public String getShortName() {
+				return "f";
+			}
+			//This is needed of options without argument
+			public Option createOption() {
+		    	Option option   = OptionBuilder.withLongOpt(name())
+		        .withDescription(getDescription())
+		        .create(getShortName());
+		    	return option;
 			}
 		},
 		
@@ -279,6 +301,10 @@ public class GroupContributionCli
 			validation = argument;
 			break;
 		}
+		case fragmentation: {
+			FlagFragmenationOnly = true;
+			break;
+		}
 		}
 	}
 	
@@ -341,7 +367,8 @@ public class GroupContributionCli
 				System.out.println("Target property: " + targetProperty);
 			if (validation != null)
 				System.out.println("Validation: " + validation);
-				
+			if (FlagFragmenationOnly)
+				System.out.println("Fragmentation only");
 		}
 		else
 		{
@@ -385,6 +412,12 @@ public class GroupContributionCli
 				if (!globDescriptors.isEmpty())
 					gcm.setDescriptors(globDescriptors);
 			}
+		}
+		
+		if (FlagFragmenationOnly)
+		{
+			performFragmentation();
+			return 0;
 		}
 		
 		if (threshold != null)
@@ -533,5 +566,10 @@ public class GroupContributionCli
 		}	
 		
 		return valCfg;
+	}
+	
+	void performFragmentation()
+	{
+		//TODO
 	}
 }
