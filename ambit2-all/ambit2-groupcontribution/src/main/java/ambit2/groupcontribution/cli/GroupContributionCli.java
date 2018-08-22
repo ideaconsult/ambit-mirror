@@ -414,11 +414,6 @@ public class GroupContributionCli
 			}
 		}
 		
-		if (FlagFragmenationOnly)
-		{
-			performFragmentation();
-			return 0;
-		}
 		
 		if (threshold != null)
 			gcm.setColStatPercentageThreshold(threshold);
@@ -436,6 +431,13 @@ public class GroupContributionCli
 		Learner learner = new Learner();
 		learner.setModel(gcm);
 		learner.setTrainDataSet(trainDataSet);
+		
+		if (FlagFragmenationOnly)
+		{
+			learner.performFragmentationOnly();
+			return 0;
+		}
+		
 		
 		int res = learner.train();
 		if (res != 0)
@@ -567,9 +569,5 @@ public class GroupContributionCli
 		
 		return valCfg;
 	}
-	
-	void performFragmentation()
-	{
-		//TODO
-	}
+		
 }

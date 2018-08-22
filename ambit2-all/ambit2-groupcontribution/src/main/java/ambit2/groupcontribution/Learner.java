@@ -146,6 +146,27 @@ public class Learner
 		return 0;
 	}
 	
+	public int performFragmentationOnly()
+	{
+		GCMReportConfig repCfg = model.getReportConfig();
+		
+		initVariables();
+		
+		Fragmentation.makeFragmentation(trainDataSet, model);
+		if (!errors.isEmpty())
+			return 1;
+		
+		if (repCfg.reportGroups)
+			reportGroups();
+		
+		/*
+		makeInitialMatrixes();
+		if (!errors.isEmpty())
+			return 2;
+		*/
+		return 0;
+	}
+	
 	
 	public void initVariables()
 	{	
