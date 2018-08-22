@@ -159,11 +159,14 @@ public class Learner
 		if (repCfg.reportGroups)
 			reportGroups();
 		
-		/*
+		
 		makeInitialMatrixes();
 		if (!errors.isEmpty())
 			return 2;
-		*/
+		
+		if (repCfg.reportMatrices)
+			reportFragmentationMatrixAndDescriptors();
+		
 		return 0;
 	}
 	
@@ -626,9 +629,11 @@ public class Learner
 		{
 			System.out.println("Matrix A0");
 			System.out.println(A0.toString(3,0));
-			System.out.println("Matrix D0");
 			if (D0 != null)
-				System.out.println(D0.toString(3,3));			
+			{	
+				System.out.println("Matrix D0");				
+				System.out.println(D0.toString(3,3));	
+			}	
 			System.out.println("Matrix A");
 			System.out.println(A.toString(3,0));
 			System.out.println("Matrix b0");
@@ -639,14 +644,42 @@ public class Learner
 			model.addToReport("Matrix A0\n");
 			model.addToReport(A0.toString(3,0) + "\n");	
 			if (D0 != null)
+			{	
 				model.addToReport("Matrix D0\n");
-			model.addToReport(D0.toString(3,3) + "\n");	
+				model.addToReport(D0.toString(3,3) + "\n");
+			}	
 			model.addToReport("Matrix A\n");
 			model.addToReport(A.toString(3,0) + "\n");			
 			model.addToReport("Matrix b0\n");
 			model.addToReport(b0.toString(3,3) + "\n");
 		}
 	}
+	
+	void reportFragmentationMatrixAndDescriptors()
+	{
+		GCMReportConfig repCfg = model.getReportConfig();
+
+		if (repCfg.FlagConsoleOutput)
+		{
+			System.out.println("Matrix A0");
+			System.out.println(A0.toString(3,0));
+			if (D0 != null)
+			{	
+				System.out.println("Matrix D0");				
+				System.out.println(D0.toString(3,3));	
+			}
+		}
+		if (repCfg.FlagBufferOutput)
+		{
+			model.addToReport("Matrix A0\n");
+			model.addToReport(A0.toString(3,0) + "\n");	
+			if (D0 != null)
+			{	
+				model.addToReport("Matrix D0\n");
+				model.addToReport(D0.toString(3,3) + "\n");
+			}
+		}		
+	}	
 	
 	void reportContributions()
 	{
