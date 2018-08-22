@@ -387,8 +387,8 @@ public class Learner
 	
 	public void performSelfTest(ValidationConfig validation)
 	{
-		DecimalFormat df = new DecimalFormat(" ##0.000;-##0.000");
 		GCMReportConfig repCfg = model.getReportConfig();
+		DecimalFormat df = getDecimalFormat(repCfg.decimalDigits);
 		int n = A.nRows;
 		
 		if (validation.selfTest)
@@ -492,7 +492,7 @@ public class Learner
 		if (repCfg.FlagBufferOutput)
 			model.addToReport(out_s);
 		
-		DecimalFormat df = new DecimalFormat(" ##0.000;-##0.000");
+		DecimalFormat df = getDecimalFormat(repCfg.decimalDigits);
 		List<Double> modVals = new ArrayList<Double>();
 		List<Double> expVals = new ArrayList<Double>();
 		int m = A.nRows;
@@ -731,5 +731,18 @@ public class Learner
 				}
 			}
 		}
+	}
+	
+	DecimalFormat getDecimalFormat(int digits)
+	{
+		DecimalFormat df;
+		if (digits < 0)
+			df = new DecimalFormat(" ##0.0000;-##0.0000");
+		else
+		{	
+			//TODO
+			df = new DecimalFormat(" ##0.0000;-##0.0000");
+		}	
+		return df;
 	}
 }

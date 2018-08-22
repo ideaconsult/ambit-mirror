@@ -10,4 +10,6 @@ public class GCMReportConfig
 	public boolean reportMatrices = true;
 	public boolean reportContributions = true;
 	
+	public int decimalDigits = -1; 
+	
 }
