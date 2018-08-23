@@ -2,11 +2,15 @@ package ambit2.groupcontribution.correctionfactors;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class SmartsCorrectionFactor implements ICorrectionFactor
+import ambit2.groupcontribution.transformations.IHasValueTransformation;
+import ambit2.groupcontribution.transformations.IValueTransformation;
+
+public class SmartsCorrectionFactor implements ICorrectionFactor, IHasValueTransformation
 {
 	private String smarts = null;
 	private double contribution = 0.0;
 	private String designation = "";
+	private IValueTransformation transformation = null;
 	
 	public SmartsCorrectionFactor(String smarts)
 	{
@@ -43,6 +47,16 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 	public Type getType() {
 		// TODO
 		return null;
+	}
+		
+	public IValueTransformation getValueTransformation()
+	{
+		return transformation;
+	}
+	
+	public void setValueTransformation(IValueTransformation transformation)
+	{
+		this.transformation  = transformation;
 	}
 
 }
