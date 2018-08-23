@@ -36,6 +36,7 @@ public class GroupContributionCli
 	public String gcmType = null;
 	public String validation = null;
 	public boolean FlagFragmenationOnly = false;
+	public int fractionDigits = -1;
 	
 	public static void main(String[] args) {
 		GroupContributionCli gcCli = new GroupContributionCli();
@@ -161,6 +162,21 @@ public class GroupContributionCli
 			@Override
 			public String getShortName() {
 				return "m";
+			}
+		},
+		
+		frac_digits {
+			@Override
+			public String getArgName() {
+				return "frac_digits";
+			}
+			@Override
+			public String getDescription() {
+				return "Report fraction digits";
+			}
+			@Override
+			public String getShortName() {
+				return "g";
 			}
 		},
 		
@@ -305,6 +321,22 @@ public class GroupContributionCli
 			FlagFragmenationOnly = true;
 			break;
 		}
+		case frac_digits: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			try {
+				int fd = Integer.parseInt(argument);
+				if (fd <= 0)
+					System.out.println("Incorrect option -g argument: " + argument);
+				else
+					fractionDigits = fd;
+			}
+			catch (Exception e)
+			{
+				System.out.println("Incorrect option -g argument: " + argument);
+			}
+			break;
+		}
 		}
 	}
 	
@@ -424,6 +456,11 @@ public class GroupContributionCli
 			if (valCfg == null)
 				return -2;
 			gcm.setValidationConfig(valCfg);
+		}
+		
+		if (fractionDigits >= 0)
+		{
+			gcm.getReportConfig().fractionDigits = fractionDigits;
 		}
 		
 		//Fragmentation.makeFragmentation(trainDataSet, gcm);
