@@ -35,8 +35,8 @@ public class Calculator
 		}
 		
 		//Correction factors
-		Map<ICorrectionFactor,Integer> corrFactors = getCorrectionFactorsCount(mol, model);	
-		for (Map.Entry<ICorrectionFactor,Integer> entry : corrFactors.entrySet())
+		Map<ICorrectionFactor,Double> corrFactors = getCorrectionFactorsCount(mol, model);	
+		for (Map.Entry<ICorrectionFactor,Double> entry : corrFactors.entrySet())
 			modelValue +=  entry.getKey().getContribution() * entry.getValue();
 			
 		return modelValue;
@@ -98,15 +98,15 @@ public class Calculator
 	
 	
 	
-	public static Map<ICorrectionFactor,Integer> getCorrectionFactorsCount(IAtomContainer mol, GroupContributionModel model)
+	public static Map<ICorrectionFactor,Double> getCorrectionFactorsCount(IAtomContainer mol, GroupContributionModel model)
 	{
-		Map<ICorrectionFactor,Integer> corrFactors = new HashMap<ICorrectionFactor,Integer>();
+		Map<ICorrectionFactor,Double> corrFactors = new HashMap<ICorrectionFactor,Double>();
 		List<ICorrectionFactor> modelCorrFactors = model.getCorrectionFactors();
 		for (ICorrectionFactor factor : modelCorrFactors)
 		{
-			int count = factor.calculateFor(mol);
-			if (count > 0)
-				corrFactors.put(factor, new Integer(count));
+			double cf = factor.calculateFor(mol);
+			if (cf != 0.0)
+				corrFactors.put(factor, cf);
 		}
 			
 		return corrFactors;

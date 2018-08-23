@@ -1,8 +1,9 @@
 package ambit2.groupcontribution.groups;
 
+import ambit2.groupcontribution.transformations.IHasValueTransformation;
 import ambit2.groupcontribution.transformations.IValueTransformation;
 
-public abstract class ValueTransformedGroup implements IGroup 
+public abstract class ValueTransformedGroup implements IGroup, IHasValueTransformation
 {
 	IValueTransformation transformation = null;
 	
