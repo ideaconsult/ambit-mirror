@@ -11,6 +11,6 @@ public interface ICorrectionFactor
 	public double getContribution();
 	public void setContribution(double contribution);
 	public String getDesignation();	
-	public int calculateFor(IAtomContainer mol);
+	public double calculateFor(IAtomContainer mol);
 	public Type getType();
 }
