@@ -10,20 +10,23 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
 import ambit2.smarts.SmartsAtomExpression;
+import ambit2.smarts.SmartsConst;
 import ambit2.smarts.SmartsFlags;
 import ambit2.smarts.SmartsParser;
+import ambit2.smarts.SmartsConst.SSM_MODE;
 
 public class GroupMatch 
 {
-	IsomorphismTester isoTester = null;
-	SmartsParser parser = null;
-	String smarts = null;
-	IQueryAtomContainer smartsQuery = null;
-	List<QuerySequenceElement> sequence = null;
-	List<SmartsAtomExpression> recursiveAtoms = null;
-	String error = null;
+	private IsomorphismTester isoTester = null;
+	private SmartsParser parser = null;
+	private String smarts = null;
+	private IQueryAtomContainer smartsQuery = null;
+	private List<QuerySequenceElement> sequence = null;
+	private List<SmartsAtomExpression> recursiveAtoms = null;
+	private String error = "";
 	
-	SmartsFlags flags = new SmartsFlags();
+	private SmartsFlags flags = new SmartsFlags();
+	private SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
 	
 	public GroupMatch(String smarts, SmartsParser parser, IsomorphismTester isoTester)
 	{
@@ -84,6 +87,37 @@ public class GroupMatch
 		return isoTester.hasIsomorphism(target);
 	}
 	
+		
+	public List<List<IAtom>> getMappings(IAtomContainer target)
+	{
+		SmartsParser.prepareTargetForSMARTSSearch(flags, target);
+    	
+		if (flags.hasRecursiveSmarts)
+			 mapRecursiveAtomsAgainstTarget(recursiveAtoms, target);
+		
+		isoTester.setSequence(smartsQuery, sequence);
+		
+		if (FlagSSMode == SmartsConst.SSM_MODE.SSM_NON_IDENTICAL) 
+    	{
+			List<List<IAtom>> maps = isoTester.getNonIdenticalMappings(target);
+    		return maps;
+    	}
+		
+		//TODO
+		
+		return null;
+	}
+	
+	
+	public int matchCount(IAtomContainer target)
+	{
+		List<List<IAtom>> maps = getMappings(target);
+		if (maps == null)
+			return 0;
+		else
+			return maps.size();
+	}
+	
 	public void mapRecursiveAtomsAgainstTarget(List<SmartsAtomExpression> recursiveAtoms, IAtomContainer target) {
 		// Reset for new mapping
 		for (int i = 0; i < recursiveAtoms.size(); i++)
@@ -105,7 +139,35 @@ public class GroupMatch
 			}
 		}
 	}
-	
+		
+	public SSM_MODE getFlagSSMode() {
+		return FlagSSMode;
+	}
+
+	public void setFlagSSMode(SSM_MODE flagSSMode) {
+		FlagSSMode = flagSSMode;
+	}
+
+	public IsomorphismTester getIsoTester() {
+		return isoTester;
+	}
+
+	public SmartsParser getParser() {
+		return parser;
+	}
+
+	public String getSmarts() {
+		return smarts;
+	}
+
+	public IQueryAtomContainer getSmartsQuery() {
+		return smartsQuery;
+	}
+
+	public List<QuerySequenceElement> getSequence() {
+		return sequence;
+	}
+
 	public String getError()
 	{
 		return error;
