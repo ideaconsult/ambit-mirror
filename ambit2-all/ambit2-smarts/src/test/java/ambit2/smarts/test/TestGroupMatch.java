@@ -10,6 +10,7 @@ import org.openscience.cdk.tools.LoggingTool;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
+import ambit2.smarts.SmartsConst.SSM_MODE;
 import ambit2.smarts.groups.GroupMatch;
 
 public class TestGroupMatch extends TestCase
@@ -33,6 +34,14 @@ public class TestGroupMatch extends TestCase
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		GroupMatch grpMatch = new GroupMatch(smarts, sp, isoTester);
 		return grpMatch.match(mol); 
+	}
+	
+	public int getGroupMatchCount(String smarts, String smiles, SSM_MODE flagSSMode) throws Exception 
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		GroupMatch grpMatch = new GroupMatch(smarts, sp, isoTester);
+		grpMatch.setFlagSSMode(flagSSMode);
+		return grpMatch.matchCount(mol); 
 	}
 	
 	public void test01()  throws Exception
