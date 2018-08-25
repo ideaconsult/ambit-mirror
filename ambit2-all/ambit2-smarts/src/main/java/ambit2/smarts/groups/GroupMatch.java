@@ -103,7 +103,17 @@ public class GroupMatch
     		return maps;
     	}
 		
-		//TODO
+		if (FlagSSMode == SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING) 
+    	{
+			List<List<IAtom>> maps = isoTester.getNonOverlappingMappings(target);
+    		return maps;
+    	}
+		
+		if (FlagSSMode == SmartsConst.SSM_MODE.SSM_ALL) 
+    	{
+			List<List<IAtom>> maps = isoTester.getAllIsomorphismMappings(target);
+    		return maps;
+    	}
 		
 		return null;
 	}
