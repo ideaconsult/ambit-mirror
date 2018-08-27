@@ -3,6 +3,10 @@ package ambit2.groupcontribution.correctionfactors;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.groupcontribution.transformations.IValueTransformation;
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsParser;
+import ambit2.smarts.SmartsConst.SSM_MODE;
+import ambit2.smarts.groups.GroupMatch;
 
 public class SmartsCorrectionFactor implements ICorrectionFactor
 {
@@ -11,14 +15,34 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 	private String designation = "";
 	private IValueTransformation transformation = null;
 	
-	public SmartsCorrectionFactor(String smarts)
+	private GroupMatch groupMatch = null;
+		
+	public SmartsCorrectionFactor(String smarts, 
+			SmartsParser parser, 
+			IsomorphismTester isoTester) throws Exception
 	{
 		this.smarts = smarts;
+		groupMatch = new GroupMatch(smarts, parser, isoTester);		
+	}	
+	
+	public SmartsCorrectionFactor(String smarts, 
+			SmartsParser parser, 
+			IsomorphismTester isoTester,
+			IValueTransformation transformation) throws Exception
+	{
+		this(smarts, parser, isoTester);
+		this.transformation = transformation;		
 	}
 	
-	public void configure()
+	public SmartsCorrectionFactor(String smarts, 
+			SmartsParser parser, 
+			IsomorphismTester isoTester,
+			SSM_MODE flagSSMode,
+			IValueTransformation transformation) throws Exception
 	{
-		//TODO
+		this(smarts, parser, isoTester);
+		groupMatch.setFlagSSMode(flagSSMode);
+		this.transformation = transformation;		
 	}
 	
 	@Override
@@ -37,15 +61,26 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 	}
 
 	@Override
-	public double calculateFor(IAtomContainer mol) {
-		// TODO 
-		return 0.0;
+	public double calculateFor(IAtomContainer mol) 
+	{
+		double matchCount = groupMatch.matchCount(mol); 
+		if (transformation == null)
+			return matchCount;
+		else
+		{	
+			try {
+				double res = transformation.transform(matchCount);
+				return res;
+			}
+			catch (Exception x) {
+				return 0.0;
+			}
+		}		
 	}
 
 	@Override
 	public Type getType() {
-		// TODO
-		return null;
+		return Type.SMARTS;
 	}
 		
 	public IValueTransformation getValueTransformation()
