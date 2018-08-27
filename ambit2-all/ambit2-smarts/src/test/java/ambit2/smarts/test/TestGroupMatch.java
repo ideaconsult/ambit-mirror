@@ -118,5 +118,45 @@ public class TestGroupMatch extends TestCase
 		assertEquals(true, res);
 	}
 	
+	//Test group counts
+	
+	public void test501() throws Exception
+	{
+		String smarts = "CC";
+		String target = "CCCN";		
+		
+		int res = getGroupMatchCount(smarts, target, SSM_MODE.SSM_NON_IDENTICAL);
+		assertEquals("Matching " + smarts + " against " + target + " in mode NON_IDENTICAL: ",
+				2, res);
+		
+		res = getGroupMatchCount(smarts, target, SSM_MODE.SSM_NON_OVERLAPPING);
+		assertEquals("Matching " + smarts + " against " + target + " in mode NON_OVERLAPPING: ",
+				1, res);
+		
+		res = getGroupMatchCount(smarts, target, SSM_MODE.SSM_ALL);
+		assertEquals("Matching " + smarts + " against " + target + " in mode ALL: ",
+				4, res);		
+	}
+	
+	public void test502() throws Exception
+	{
+		String smarts = "ccn";
+		String target = "c1ccccn1";		
+		
+		int res = getGroupMatchCount(smarts, target, SSM_MODE.SSM_NON_IDENTICAL);
+		assertEquals("Matching " + smarts + " against " + target + " in mode NON_IDENTICAL: ",
+				2, res);
+		
+		res = getGroupMatchCount(smarts, target, SSM_MODE.SSM_NON_OVERLAPPING);
+		assertEquals("Matching " + smarts + " against " + target + " in mode NON_OVERLAPPING: ",
+				1, res);
+		
+		res = getGroupMatchCount(smarts, target, SSM_MODE.SSM_ALL);
+		assertEquals("Matching " + smarts + " against " + target + " in mode ALL: ",
+				2, res);		
+	}
+	
+	
+	
 
 }
