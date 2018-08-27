@@ -1,49 +1,52 @@
 package ambit2.groupcontribution.correctionfactors;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-
 import ambit2.groupcontribution.transformations.IValueTransformation;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
-import ambit2.smarts.SmartsConst.SSM_MODE;
 import ambit2.smarts.groups.GroupMatch;
 
-public class SmartsCorrectionFactor implements ICorrectionFactor
+public class AtomPairCorrectionFactor implements ICorrectionFactor
 {
-	private String smarts = null;
+	private String smarts1 = null;
+	private String smarts2 = null;
+	private int distance = -1;
+	
 	private double contribution = 0.0;
 	private String designation = "";
 	private IValueTransformation transformation = null;
 	
-	private GroupMatch groupMatch = null;
-		
-	public SmartsCorrectionFactor(String smarts, 
-			SmartsParser parser, 
+	private GroupMatch groupMatch1 = null;
+	private GroupMatch groupMatch2 = null;
+	
+	public AtomPairCorrectionFactor(String smarts1, String smarts2, 
+			int distance,
+			SmartsParser parser,
 			IsomorphismTester isoTester) throws Exception
 	{
-		this.smarts = smarts;
-		designation = "G(" + smarts + ")";
-		groupMatch = new GroupMatch(smarts, parser, isoTester);		
-	}	
-	
-	public SmartsCorrectionFactor(String smarts, 
-			SmartsParser parser, 
-			IsomorphismTester isoTester,
-			IValueTransformation transformation) throws Exception
-	{
-		this(smarts, parser, isoTester);
-		this.transformation = transformation;		
+		this.smarts1 = smarts1;
+		this.distance = distance;
+		designation = "AP(" + smarts1 + "," + smarts2 + 
+				((distance>=0)?(""+distance):"") + ")";
+		groupMatch1 = new GroupMatch(smarts1, parser, isoTester);
+		groupMatch2 = new GroupMatch(smarts2, parser, isoTester);
 	}
 	
-	public SmartsCorrectionFactor(String smarts, 
-			SmartsParser parser, 
+	public AtomPairCorrectionFactor(String smarts1, String smarts2, 
+			SmartsParser parser,			
+			IsomorphismTester isoTester) throws Exception
+	{
+		this(smarts1, smarts2, -1, parser, isoTester);
+	}
+	
+	public AtomPairCorrectionFactor(String smarts1, String smarts2, 
+			int distance,
+			SmartsParser parser,
 			IsomorphismTester isoTester,
-			SSM_MODE flagSSMode,
 			IValueTransformation transformation) throws Exception
 	{
-		this(smarts, parser, isoTester);
-		groupMatch.setFlagSSMode(flagSSMode);
-		this.transformation = transformation;		
+		this(smarts1, smarts2, distance, parser, isoTester);
+		this.transformation = transformation;
 	}
 	
 	@Override
@@ -64,26 +67,15 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 	@Override
 	public double calculateFor(IAtomContainer mol) 
 	{
-		double matchCount = groupMatch.matchCount(mol); 
-		if (transformation == null)
-			return matchCount;
-		else
-		{	
-			try {
-				double res = transformation.transform(matchCount);
-				return res;
-			}
-			catch (Exception x) {
-				return 0.0;
-			}
-		}		
+		//TODO
+		return 0;
 	}
 
 	@Override
 	public Type getType() {
-		return Type.SMARTS;
+		return Type.ATOM_PAIR;
 	}
-		
+	
 	public IValueTransformation getValueTransformation()
 	{
 		return transformation;
