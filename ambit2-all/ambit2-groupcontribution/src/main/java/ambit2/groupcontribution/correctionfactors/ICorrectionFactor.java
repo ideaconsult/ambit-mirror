@@ -2,7 +2,9 @@ package ambit2.groupcontribution.correctionfactors;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public interface ICorrectionFactor 
+import ambit2.groupcontribution.transformations.IHasValueTransformation;
+
+public interface ICorrectionFactor extends IHasValueTransformation
 {
 	public enum Type{
 		PREDEFINED, ATOM_PAIR, SMARTS

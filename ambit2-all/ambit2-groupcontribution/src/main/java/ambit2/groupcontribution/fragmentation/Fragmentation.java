@@ -20,6 +20,8 @@ import ambit2.groupcontribution.utils.math.MatrixDouble;
 public class Fragmentation 
 {
 	public Map<String, Integer> groupFrequencies = new HashMap<String, Integer>();
+	public Map<String, Double> correctionFactors = new HashMap<String, Double>();
+	
 	
 	public void addGroup(String groupDesignation)
 	{
@@ -46,9 +48,14 @@ public class Fragmentation
 			case BOND_BASED:
 				makeBondBasedFragmenation(dso, gcm);
 				break;
+			case CORRECTION_FACTORS_ONLY:
+				Fragmentation fragmentation = new Fragmentation(); 
+				dso.fragmentation = fragmentation;
+				break;
+				
 			}
 			
-			//TODO handle correction factors
+			//Handle correction factors
 		}
 		
 	}

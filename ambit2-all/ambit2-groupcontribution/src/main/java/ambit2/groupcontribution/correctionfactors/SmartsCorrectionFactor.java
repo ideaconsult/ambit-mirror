@@ -2,10 +2,9 @@ package ambit2.groupcontribution.correctionfactors;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-import ambit2.groupcontribution.transformations.IHasValueTransformation;
 import ambit2.groupcontribution.transformations.IValueTransformation;
 
-public class SmartsCorrectionFactor implements ICorrectionFactor, IHasValueTransformation
+public class SmartsCorrectionFactor implements ICorrectionFactor
 {
 	private String smarts = null;
 	private double contribution = 0.0;
