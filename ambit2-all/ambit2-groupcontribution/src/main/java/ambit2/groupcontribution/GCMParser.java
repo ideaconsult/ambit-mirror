@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
+import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LocalDescriptorManager;
 
 public class GCMParser 
 {
+	public static String[] CorrectionFactorsDesignation = { "G", "AP" };
+	
 	public boolean FlagOmitEmptyTokens = true;
 	public boolean FlagTrimTokens = true;
 	
@@ -116,6 +119,61 @@ public class GCMParser
 		}
 		
 		return descriptors;
+	}
+	
+	public List<ICorrectionFactor> getCorrectionFactorsFromString(String cfStr)
+	{
+		errors.clear();
+		List<ICorrectionFactor> corFactors = new ArrayList<ICorrectionFactor>();
+		int openBrackets = 0;
+		List<Integer> sepPos = new ArrayList<Integer>();
+		for (int i = 0; i < cfStr.length(); i++)
+		{
+			switch (cfStr.charAt(i))
+			{
+			case '(':
+				openBrackets++;
+				break;
+			case ')':
+				openBrackets--;
+				break;
+			case ',':
+				if (openBrackets == 0)
+					sepPos.add(i);
+				break;
+			}
+		}
+		
+		int endPos = 0;
+		int pos = 0;
+		for (int i = 0; i < sepPos.size(); i++)
+		{
+			endPos = sepPos.get(i);
+			String s =  cfStr.substring(pos, endPos);
+			ICorrectionFactor cf = getCorrectionFactorFromString(s);
+			if (cf != null)
+				corFactors.add(cf);
+			pos = endPos;
+		}
+		
+		endPos = cfStr.length();
+		String s =  cfStr.substring(pos, endPos);
+		ICorrectionFactor cf = getCorrectionFactorFromString(s);
+		if (cf != null)
+			corFactors.add(cf);
+		
+		return corFactors;
+	}
+	
+	ICorrectionFactor getCorrectionFactorFromString(String cfStr)
+	{
+		if (cfStr.startsWith("G("))
+		{
+			//TODO
+		}
+			
+		errors.add("Unknown correction factor: " + cfStr);
+		return null;
 	}
 	
 	
