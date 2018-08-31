@@ -300,6 +300,8 @@ public class Property implements Serializable,
 			return opentox_EC;
 		else if (n.contains("synonym"))
 			return opentox_Name;
+		else if (n.contains("tradename"))
+			return opentox_TradeName;		
 		else if (n.contains("i5uuid"))
 			return opentox_IUCLID5_UUID;
 		else if (n.contains("uuid"))
