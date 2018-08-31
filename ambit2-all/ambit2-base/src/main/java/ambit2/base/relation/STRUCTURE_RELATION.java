@@ -15,6 +15,12 @@ public enum STRUCTURE_RELATION {
 			return METABOLITE_OF;
 		}
 	},
+	HAS_DEGRADANT {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return DEGRADANT_OF;
+		}
+	},	
 	HAS_CONSTITUENT {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
@@ -57,6 +63,13 @@ public enum STRUCTURE_RELATION {
 			return DOPING_OF;
 		}
 	},	
+	HAS_SUBSTANCE {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return HAS_SUBSTANCE;
+		}
+	},	
+	
 	TAUTOMER_OF {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
@@ -69,6 +82,12 @@ public enum STRUCTURE_RELATION {
 			return HAS_METABOLITE;
 		}
 	},
+	DEGRADANT_OF {
+		@Override
+		public STRUCTURE_RELATION inverseOf() {
+			return HAS_DEGRADANT;
+		}
+	},	
 	CONSTITUENT_OF {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
