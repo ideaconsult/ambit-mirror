@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
@@ -56,6 +57,8 @@ public class Fragmentation
 			}
 			
 			//Handle correction factors
+			if (!gcm.getCorrectionFactors().isEmpty())
+				;
 		}
 		
 	}
@@ -163,6 +166,23 @@ public class Fragmentation
 				break;	
 				//TODO
 			}
+		}
+	}
+	
+	public static void calcCorrectionFactors (DataSetObject dso, GroupContributionModel gcm)
+	{
+		if (dso.fragmentation == null)
+		{
+			//This is for the case "correction factors only"
+			Fragmentation fragmentation = new Fragmentation(); 
+			dso.fragmentation = fragmentation;
+		}		
+		
+		for (int i = 0; i < gcm.getCorrectionFactors().size(); i++)
+		{
+			ICorrectionFactor cf = gcm.getCorrectionFactors().get(i);
+			double cfVal = cf.calculateFor(dso.molecule);
+			dso.fragmentation.correctionFactors.put(cf.getDesignation(), cfVal);
 		}
 	}
 	
