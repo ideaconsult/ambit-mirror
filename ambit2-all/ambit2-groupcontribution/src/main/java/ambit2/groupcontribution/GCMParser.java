@@ -180,7 +180,7 @@ public class GCMParser
 		return corFactors;
 	}
 	
-	ICorrectionFactor getCorrectionFactorFromString(String cfStr)
+	public ICorrectionFactor getCorrectionFactorFromString(String cfStr)
 	{
 		if (cfStr.startsWith("G("))
 			return extractSmartsCorrectionFactor(cfStr);
