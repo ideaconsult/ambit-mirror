@@ -168,13 +168,25 @@ public class GCMParser
 	ICorrectionFactor getCorrectionFactorFromString(String cfStr)
 	{
 		if (cfStr.startsWith("G("))
-		{
-			//TODO
-		}
-			
+			return extractSmartsCorrectionFactor(cfStr);
+		
+		if (cfStr.startsWith("AP("))
+			return extractAtomPairCorrectionFactor(cfStr);
+				
 		errors.add("Unknown correction factor: " + cfStr);
 		return null;
 	}
 	
+	ICorrectionFactor extractSmartsCorrectionFactor(String cfStr)
+	{
+		//TODO
+		return null;
+	}
+	
+	ICorrectionFactor extractAtomPairCorrectionFactor(String cfStr)
+	{
+		//TODO
+		return null;
+	}
 	
 }
