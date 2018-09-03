@@ -93,5 +93,10 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 	{
 		this.transformation  = transformation;
 	}
+	
+	public String getError()
+	{
+		return (groupMatch.getError());
+	}
 
 }

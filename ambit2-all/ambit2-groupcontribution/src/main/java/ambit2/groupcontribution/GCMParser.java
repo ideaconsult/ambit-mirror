@@ -5,8 +5,11 @@ import java.util.List;
 
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
+import ambit2.groupcontribution.correctionfactors.SmartsCorrectionFactor;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LocalDescriptorManager;
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsParser;
 
 public class GCMParser 
 {
@@ -15,8 +18,20 @@ public class GCMParser
 	public boolean FlagOmitEmptyTokens = true;
 	public boolean FlagTrimTokens = true;
 	
+	private IsomorphismTester isoTester = null;
+	private SmartsParser parser = null;
+	
 	private List<String> errors = new ArrayList<String>();
 	
+	public GCMParser() 
+	{
+	}
+	
+	public GCMParser(SmartsParser parser, IsomorphismTester isoTester) 
+	{
+		this.parser = parser;
+		this.isoTester = isoTester;
+	}
 	
 	public List<String> getErrors()
 	{
@@ -179,8 +194,49 @@ public class GCMParser
 	
 	ICorrectionFactor extractSmartsCorrectionFactor(String cfStr)
 	{
-		//TODO
-		return null;
+		//Analyzing string: extract smarts argument
+		int openBrackets = 1; //Counting opening "G("
+		int closingArgBracketPos = -1;
+		for (int i = 2; i < cfStr.length(); i++)
+		{
+			switch (cfStr.charAt(i))
+			{
+			case '(':
+				openBrackets++;
+				break;
+			case ')':
+				openBrackets--;
+				if (openBrackets == 0)
+				{	
+					closingArgBracketPos = i;
+				}	
+				break;			
+			}			
+		}
+		
+		if (closingArgBracketPos == -1)
+		{	
+			errors.add("Incorrect correction factor: " + cfStr);
+			return null;
+		}
+		
+		
+		String smarts = cfStr.substring(2, closingArgBracketPos);
+		try {
+			SmartsCorrectionFactor cf = new SmartsCorrectionFactor(smarts, parser, isoTester);
+			if (cf.getError().equals(""))
+				return cf;
+			else
+			{
+				errors.add(cf.getError());
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			errors.add("Correction factor error: " + e.getMessage());
+			return null;
+		}
 	}
 	
 	ICorrectionFactor extractAtomPairCorrectionFactor(String cfStr)
