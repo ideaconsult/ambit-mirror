@@ -42,6 +42,10 @@ import ambit2.rest.substance.SubstanceRDFReporter;
 public class NanoWikiRDFTest extends DbUnitTest {
 
 	public static File getNanoWikiFile() throws Exception {
+		return getNanoWikiFile5();
+	}
+
+	public static File getNanoWikiFile4() throws Exception {
 		File baseDir = new File(System.getProperty("java.io.tmpdir"));
 		File file = new File(baseDir, "nanowiki4.rdf.gz");
 		if (!file.exists()) {
@@ -50,7 +54,17 @@ public class NanoWikiRDFTest extends DbUnitTest {
 		}
 		return file;
 	}
-
+	
+	public static File getNanoWikiFile5() throws Exception {
+		File baseDir = new File(System.getProperty("java.io.tmpdir"));
+		File file = new File(baseDir, "nanowiki5.rdf.gz");
+		if (!file.exists()) {
+			URL url = new URL("https://ndownloader.figshare.com/files/13009007");
+			DownloadTool.download(url, file);
+		}
+		return file;
+	}
+	
 	@Test
 	public void test() throws Exception {
 	}
@@ -74,6 +88,10 @@ public class NanoWikiRDFTest extends DbUnitTest {
 		}
 	}
 
+	@Test
+	public void dbcleanup() throws Exception {
+		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
+	}
 	@Test
 	public void testWriteNanoWikiRDF() throws Exception {
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
@@ -100,6 +118,7 @@ public class NanoWikiRDFTest extends DbUnitTest {
 		DBSubstanceWriter writer = new DBSubstanceWriter(
 				DBSubstanceWriter.datasetMeta(), new SubstanceRecord(), true,
 				true);
+		writer.setImportBundles(true);
 		writer.setSplitRecord(splitRecord);
 		writer.setConnection(connection);
 		writer.open();
