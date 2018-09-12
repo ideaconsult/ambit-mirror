@@ -5,6 +5,33 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/jopentox-ui.js'></script>
 
+
+<script type='application/ld+json'>
+
+{
+    "@context": "http://schema.org",
+    "@type": "Dataset",
+    "@id": "${ambit_request}",  
+    "dateCreated": "2016-10-31T19:35:55Z",
+    "dateModified": "2016-10-31T19:35:55Z", 
+    "name": "name of the bundle",
+    "url": "${ambit_request}",
+    "version": "1",
+    "publisher": {
+        "@type": "Organization",
+        "name": "${menu_profile}"  
+    },
+    "description" : "bundle descrption",
+    "creator": [      
+      {
+        "@type": "Person",
+        "name": "#maintainer"  
+      }
+    ]
+  }
+</script>
+
+
 <script type='text/javascript'>
 	
 	function confirmDeleteBundle(txt) {
