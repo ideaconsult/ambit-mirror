@@ -635,7 +635,7 @@ public class Learner
 				System.out.println(D0.toString(3,3));	
 			}	
 			System.out.println("Matrix A");
-			System.out.println(A.toString(3,0));
+			System.out.println(A.toString(3,3));
 			System.out.println("Matrix b0");
 			System.out.println(b0.toString(3,3));
 		}
@@ -649,7 +649,7 @@ public class Learner
 				model.addToReport(D0.toString(3,3) + "\n");
 			}	
 			model.addToReport("Matrix A\n");
-			model.addToReport(A.toString(3,0) + "\n");			
+			model.addToReport(A.toString(3,3) + "\n");			
 			model.addToReport("Matrix b0\n");
 			model.addToReport(b0.toString(3,3) + "\n");
 		}
