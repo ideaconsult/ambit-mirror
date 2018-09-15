@@ -141,7 +141,7 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		Resource sowner = getOutput().createResource(sownerURI);
 		getOutput().add(substanceResource, DCTerms.source, sowner);
 		getOutput().add(sowner, RDF.type, RDFTermsSubstance.VOID_DATASET.getResource(getOutput()));
-		if (record.getOwnerName() != null)
+		if (record.getOwnerName() != null && !record.getOwnerName().trim().isEmpty())
 			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
 
 		// placeholder, change to property
