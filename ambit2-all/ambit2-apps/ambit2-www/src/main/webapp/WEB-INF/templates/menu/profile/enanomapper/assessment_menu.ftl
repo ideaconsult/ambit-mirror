@@ -13,10 +13,12 @@
 <ul>
 <#if username??>
 	<li><a href="${ambit_root}/myaccount/bundle" title="Browse/Edit">Own bundles</a></li>
+	<li ><a href="${ambit_root}/dir/bd">Draft bundles</a></li>
 <#else>
 </#if>
 	<li><a href="${ambit_root}/bundle" title="Browse/Edit">All bundles</a></li>
 </ul>	
+
 </li>
 </ul>
 
