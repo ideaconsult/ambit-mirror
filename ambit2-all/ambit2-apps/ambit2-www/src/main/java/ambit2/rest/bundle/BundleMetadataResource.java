@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import org.apache.commons.fileupload.FileItem;
 import org.restlet.Context;
@@ -125,7 +126,17 @@ public class BundleMetadataResource
 				query.setValue(dataset);
 				return query;
 			} catch (NumberFormatException x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+				try {
+					dataset = new SubstanceEndpointsBundle();
+					UUID uuid=UUID.fromString(Reference.decode(id.toString()));
+					dataset.setBundle_number(uuid);
+					query = new ReadBundle(getUserName(), getPublishedStatus());
+					query.setValue(dataset);
+					return query;
+				} catch (Exception xx) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+				}
+
 			}
 		else {
 			Form form = getParams();

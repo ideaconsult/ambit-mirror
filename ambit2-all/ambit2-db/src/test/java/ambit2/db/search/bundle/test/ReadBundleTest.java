@@ -3,6 +3,7 @@ package ambit2.db.search.bundle.test;
 import java.sql.ResultSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import junit.framework.Assert;
 
@@ -76,4 +77,36 @@ public class ReadBundleTest extends QueryTest<ReadBundle> {
 			c.close();
 		}
 	}
+	
+	protected ReadBundle createQueryBundleNumber() throws Exception {
+		Set<_published_status> status = new TreeSet<_published_status>();
+		status.add(_published_status.draft);
+		ReadBundle q = new ReadBundle("guest", status);
+		SubstanceEndpointsBundle b = new SubstanceEndpointsBundle();
+		b.setBundle_number(UUID.fromString("efdb21bb-e79f-3286-a988-b6f6944d3734"));
+		q.setValue(b);
+		return q;
+	}
+	
+
+	@Test
+	public void testSelectBundleNumber() throws Exception {
+		setUpDatabaseFromResource(getDbFile());
+		IDatabaseConnection c = getConnection();
+		ResultSet rs = null;
+		try {
+			executor.setConnection(c.getConnection());
+			executor.open();
+			ReadBundle q = createQueryBundleNumber();
+			rs = executor.process(q);
+			Assert.assertNotNull(rs);
+			verify(q, rs);
+		} finally {
+			if (rs != null)
+				rs.close();
+			c.close();
+		}
+	}
+	
+	
 }

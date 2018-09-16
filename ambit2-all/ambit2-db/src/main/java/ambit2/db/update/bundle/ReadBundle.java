@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.query.QueryParam;
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.SourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.update.bundle.UpdateBundle._published_status;
 import ambit2.db.update.dataset.AbstractReadDataset;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.query.QueryParam;
 
 /**
  * Retrieve {@link SourceDataset} by id
@@ -22,8 +22,7 @@ import ambit2.db.update.dataset.AbstractReadDataset;
  * @author nina
  * 
  */
-public class ReadBundle extends
-		AbstractReadDataset<String, SubstanceEndpointsBundle> {
+public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBundle> {
 
 	public static final String select_datasets = "SELECT idbundle as id_srcdataset,name,user_name,idreference,title,url,licenseURI,rightsHolder,stars,maintainer,created,description,hex(bundle_number) bn,version,user_name,published_status,updated FROM bundle join catalog_references using(idreference) %s %s\n";
 	/**
@@ -31,6 +30,43 @@ public class ReadBundle extends
 	 */
 	private static final long serialVersionUID = -5560670663328542819L;
 	protected Set<_published_status> status = null;
+
+	private enum _IDMODE {
+		all {
+			@Override
+			public String getSQL() {
+				return "";
+			}
+			
+		},
+		idbundle {
+			@Override
+			public String getSQL() {
+				return "where idbundle=?";
+			}
+			
+			
+		}, 
+		name {
+			@Override
+			public String getSQL() {
+				return "where name like ?";
+			}
+			
+		}, 
+		bundle_number  {
+			@Override
+			public String getSQL() {
+				return "where bundle_number=unhex(?)";
+			}
+						
+		}
+		;
+		public abstract String getSQL();
+		
+	};
+
+	protected _IDMODE _idmode = _IDMODE.all;
 
 	public Set<_published_status> getStatus() {
 		return status;
@@ -40,21 +76,19 @@ public class ReadBundle extends
 		this.status = status;
 	}
 
-	
 	public ReadBundle(Set<_published_status> status) {
 		super();
 		setStatus(status);
 	}
 
-	public ReadBundle(String username,Set<_published_status> status) {
+	public ReadBundle(String username, Set<_published_status> status) {
 		super();
 		setFieldname(username);
 		setStatus(status);
 	}
 
 	@Override
-	protected SubstanceEndpointsBundle createObject(String title,
-			LiteratureEntry le, String username) {
+	protected SubstanceEndpointsBundle createObject(String title, LiteratureEntry le, String username) {
 		SubstanceEndpointsBundle d = new SubstanceEndpointsBundle(title);
 		d.setTitle(le.getTitle());
 		d.setURL(le.getURL());
@@ -72,14 +106,21 @@ public class ReadBundle extends
 
 	public List<QueryParam> getParameters() throws AmbitException {
 		List<QueryParam> params = new ArrayList<QueryParam>();
+		_idmode = _IDMODE.all;
 		if (getValue() != null) {
-			if (getValue().getID() > 0)
-				params.add(new QueryParam<Integer>(Integer.class, getValue()
-						.getID()));
-			else if (getValue().getName() != null)
-				params.add(new QueryParam<String>(String.class, getValue()
-						.getName()));
-			else
+			if (getValue().getID() > 0) {
+				_idmode = _IDMODE.idbundle;
+				params.add(new QueryParam<Integer>(Integer.class, getValue().getID()));
+			} else if (getValue().getName() != null) {
+				_idmode = _IDMODE.name;
+				params.add(new QueryParam<String>(String.class, getValue().getName()));
+			} else if (getValue().getBundle_number() != null) {
+				_idmode = _IDMODE.bundle_number;
+				String bn = getValue().getBundle_number().toString().replaceAll("-", "");
+				params.add(new QueryParam<String>(String.class, bn));
+				// where bundle_number in (select bundle_number from bundle
+				// where idbundle=?)
+			} else
 				throw new AmbitException("Undefined bundle");
 		}
 		// user name
@@ -98,32 +139,26 @@ public class ReadBundle extends
 			p.append(s.name());
 			p.append("'");
 			d = ",";
-		}	
+		}
 		p.append(") ");
-		String sql = String
-				.format(select_datasets,
-						getValue() == null ? p.toString()
-								: getValue().getID() > 0 ? "where idbundle=?"
-										: "where name like ?",
-						(getFieldname() == null) ? "" : " and user_name=?");
+		String sql = String.format(select_datasets,_idmode.getSQL(),
+				//getValue() == null ? p.toString() : getValue().getID() > 0 ? "where idbundle=?" : "where name like ?",
+				(getFieldname() == null) ? "" : " and user_name=?");
 		return sql;
 
 	}
 
 	@Override
 	public String toString() {
-		return (getValue() != null ? getValue().getID() > 0 ? String.format(
-				"/bundle/%d", getValue().getID()) : String.format("/bundle/%s",
-				getValue().getName()) : "Bundle");
+		return (getValue() != null ? getValue().getID() > 0 ? String.format("/bundle/%d", getValue().getID())
+				: String.format("/bundle/%s", getValue().getName()) : "Bundle");
 	}
 
-	
 	@Override
-	public SubstanceEndpointsBundle getObject(ResultSet rs)
-			throws AmbitException {
+	public SubstanceEndpointsBundle getObject(ResultSet rs) throws AmbitException {
 		SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle();
 		try {
-			
+
 			bundle.setTitle(rs.getString(_fields.title.getIndex()));
 			bundle.setURL(rs.getString(_fields.url.getIndex()));
 			bundle.setReferenceID(rs.getInt(_fields.idreference.name()));
@@ -133,14 +168,14 @@ public class ReadBundle extends
 			bundle.setLicenseURI(rs.getString(_fields.licenseURI.name()));
 			bundle.setrightsHolder(rs.getString(_fields.rightsHolder.name()));
 			bundle.setMaintainer(rs.getString(_fields.maintainer.name()));
-        } catch (SQLException x) {
-        	throw new AmbitException(x);
-        }
-        try {
-        	bundle.setStars(rs.getInt(_fields.stars.name()));        	
-        } catch (SQLException x) {
-        	bundle.setStars(-1);
-        }
+		} catch (SQLException x) {
+			throw new AmbitException(x);
+		}
+		try {
+			bundle.setStars(rs.getInt(_fields.stars.name()));
+		} catch (SQLException x) {
+			bundle.setStars(-1);
+		}
 
 		try {
 			bundle.setCreated(rs.getTimestamp("created").getTime());
