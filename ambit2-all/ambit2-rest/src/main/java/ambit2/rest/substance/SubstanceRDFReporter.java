@@ -33,6 +33,8 @@ import ambit2.base.data.study.IValue;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.substance.ExternalIdentifier;
+import ambit2.base.data.substance.SubstanceEndpointsBundle;
+import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.core.io.json.SubstanceStudyParser;
@@ -40,6 +42,7 @@ import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import ambit2.rest.property.PropertyURIReporter;
 import ambit2.rest.structure.CompoundURIReporter;
 import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.modbcum.i.facet.IFacet;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.idea.restnet.c.ResourceDoc;
 import net.idea.restnet.db.QueryURIReporter;
@@ -141,8 +144,24 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 		Resource sowner = getOutput().createResource(sownerURI);
 		getOutput().add(substanceResource, DCTerms.source, sowner);
 		getOutput().add(sowner, RDF.type, RDFTermsSubstance.VOID_DATASET.getResource(getOutput()));
-		if (record.getOwnerName() != null)
-			getOutput().add(sowner, DCTerms.title, record.getOwnerName());
+		if (record.getOwnerName() != null && !record.getOwnerName().trim().isEmpty())
+			getOutput().add(sowner, DCTerms.publisher, record.getOwnerName());
+		if (record.getFacets() != null) {
+			for (IFacet facet : record.getFacets()) {
+				if (facet instanceof BundleRoleFacet) {
+					BundleRoleFacet bundleRole = (BundleRoleFacet)facet;
+					SubstanceEndpointsBundle bundle = bundleRole.getValue();
+					if (bundle.getName() != null)
+					    getOutput().add(sowner, DCTerms.title, bundle.getName());
+					if (bundle.getLicenseURI() != null)
+					    getOutput().add(
+					    	sowner, DCTerms.license, getOutput().createResource(bundle.getLicenseURI())
+					    );
+					if (bundle.getDescription() != null)
+					    getOutput().add(sowner, DCTerms.description, bundle.getDescription());
+				}
+			}
+		}
 
 		// placeholder, change to property
 		String TMP_NS = "http://TMP.URI";
@@ -381,8 +400,14 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 						getOutput().add(endpoint, statoProp,
 								getOutput().createTypedLiteral(effect.getLoValue() + "-" + effect.getUpValue()));
 					} else if (effect.getLoValue() != null) {
-						getOutput().add(endpoint, RDFTermsSubstance.has_value.getProperty(getOutput()),
-								getOutput().createTypedLiteral(effect.getLoValue()));
+						if (effect.getErrorValue() != null) {
+							Property statoProp = getOutput().createProperty("http://purl.obolibrary.org/obo/STATO_0000035");
+							getOutput().add(endpoint, statoProp,
+									getOutput().createTypedLiteral(effect.getLoValue() + " ± " + effect.getErrorValue()));
+						} else {
+							getOutput().add(endpoint, RDFTermsSubstance.has_value.getProperty(getOutput()),
+									getOutput().createTypedLiteral(effect.getLoValue()));
+						}
 					}
 
 					if (effect.getUnit() != null)

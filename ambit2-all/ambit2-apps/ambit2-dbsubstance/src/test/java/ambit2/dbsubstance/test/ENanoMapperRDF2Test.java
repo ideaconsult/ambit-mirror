@@ -39,9 +39,9 @@ public class ENanoMapperRDF2Test {
 		File file = new File(baseDir, "enmvdata.ttl");
 		
 		if (!file.exists()) {
-			URL url = ENanoMapperRDF2Test.class.getClassLoader().getResource("ambit2/db/data/ttl/enmvdata.ttl");
-			Assert.assertNotNull(url);
-			//URL url = new URL("https://raw.githubusercontent.com/egonw/enmrdf/master/data.ttl");
+			//URL url = ENanoMapperRDF2Test.class.getClassLoader().getResource("ambit2/db/data/ttl/enmvdata.ttl");
+			//Assert.assertNotNull(url);
+			URL url = new URL("https://raw.githubusercontent.com/egonw/enmrdf/master/2ndYoungScientistForum/data.ttl");
 			DownloadTool.download(url, file);
 		}
 		return file;
