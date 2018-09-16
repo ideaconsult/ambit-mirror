@@ -30,6 +30,7 @@ import ambit2.db.substance.study.DeleteStudy;
 import ambit2.db.substance.study.UpdateEffectRecords;
 import ambit2.db.substance.study.UpdateSubstanceStudy;
 import ambit2.db.update.bundle.CreateBundle;
+import ambit2.db.update.bundle.UpdateBundle;
 import ambit2.db.update.bundle.chemicals.AddAllChemicalsperSubstanceToBundle;
 import ambit2.db.update.bundle.substance.AddSubstanceToBundle;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -241,16 +242,29 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 				if (facet instanceof BundleRoleFacet) {
 					SubstanceEndpointsBundle bundle = ((BundleRoleFacet) facet).getValue();
 
-					if (bundle.getID() == 0)
+					if (bundle.getID() == 0) {
 						try {
-							// UpdateBundle
-
+							//this creates draft bundles regardless of the status
 							CreateBundle cb = new CreateBundle();
 							cb.setObject(bundle);
 							x.process(cb);
 						} catch (Exception xx) {
 							logger.log(Level.WARNING, xx.getMessage());
 						}
+					}	
+					if (bundle.getID() > 0 && !"draft".equals(bundle.getStatus())) {
+						try {
+							// update the status
+
+							UpdateBundle cb = new UpdateBundle();
+							cb.setObject(bundle);
+							x.process(cb);
+						} catch (Exception xx) {
+							logger.log(Level.WARNING, xx.getMessage());
+						}
+					}					
+					
+					
 					if (qbundles == null)
 						qbundles = new AddSubstanceToBundle();
 					qbundles.setGroup(bundle);

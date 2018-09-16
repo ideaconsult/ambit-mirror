@@ -3043,10 +3043,11 @@ function defineBundlesTable_enm(root, url, deleteVisible, copyVisible) {
 									"sWidth" : "15%",
 									"bUseRendered" : false,
 									"fnRender" : function(o, val) {
+										var uri=root+"/bundle/"+o.aData.number
 										var sOut = "<a style='font-size:75%;' target='table' href='"
-												+ o.aData.URI
+												+ uri
 												+ "' title='Click to view the bundle at "
-												+ o.aData.URI
+												+ uri
 												+ "'>"
 												+ val
 												+ "</a> ";
@@ -3061,12 +3062,11 @@ function defineBundlesTable_enm(root, url, deleteVisible, copyVisible) {
 									"sWidth" : "25%",
 									"bUseRendered" : false,
 									"fnRender" : function(o, val) {
+										var uri=root+"/bundle/"+o.aData.number
 										var sOut = "<a target='table' style='font-weight:bold;' href='"
-												+ root
-												+ "/ui/assessment?bundle_uri="
-												+ encodeURIComponent(o.aData.URI)
+												+uri
 												+ "' title='Click to view the bundle at "
-												+ o.aData.URI
+												+ uri
 												+ "'>"
 												+ (o.aData.title == null ? o.aData.id
 														: o.aData.title)

@@ -66,7 +66,7 @@ public class SubstanceEndpointsBundle implements ISourceDataset {
 		this.version = version;
 	}
 
-	protected int version;
+	protected int version=1;
 
 	public String getDescription() {
 		return description;

@@ -47,6 +47,7 @@ public class Bundle_crud_test extends
 		adataset.setDescription("description");
 		adataset.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
 		adataset.setUserName("testuser");
+		adataset.setVersion(1);
 		CreateBundle user = new CreateBundle();
 		user.setObject(adataset);
 		return user;
