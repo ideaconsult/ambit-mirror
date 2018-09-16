@@ -139,6 +139,7 @@ public class DBSubstanceImport {
 
 	protected boolean clearMeasurements = true;
 	protected boolean keepEffectRecords = false;
+
 	public boolean isKeepEffectRecords() {
 		return keepEffectRecords;
 	}
@@ -164,7 +165,6 @@ public class DBSubstanceImport {
 	public void setClearMeasurements(boolean clearMeasurements) {
 		this.clearMeasurements = clearMeasurements;
 	}
-	
 
 	public boolean isClearComposition() {
 		return clearComposition;
@@ -246,7 +246,6 @@ public class DBSubstanceImport {
 			}
 		return true;
 	}
-	
 
 	protected static boolean isKeepEffectRecords(CommandLine line) {
 		if (line.hasOption('k'))
@@ -265,7 +264,7 @@ public class DBSubstanceImport {
 			}
 		return false;
 	}
-	
+
 	protected static Date timestamp_release(CommandLine line) {
 		if (line.hasOption('a'))
 			try {
@@ -274,7 +273,7 @@ public class DBSubstanceImport {
 			}
 		return null;
 	}
-	
+
 	protected int maxRefSubstances = -1;
 
 	protected static int getMaxRefSubstances(CommandLine line) {
@@ -458,9 +457,11 @@ public class DBSubstanceImport {
 
 		Option clearMeasurement = OptionBuilder.hasArg().withLongOpt("clearMeasurements").withArgName("value")
 				.withDescription("Remove measurements for the substance being imported true|false").create("m");
-		
+
 		Option keepEffectRecords = OptionBuilder.hasArg().withLongOpt("keepEffectRecords").withArgName("value")
-				.withDescription("Keep effect records when adding effects with the same protocol applciation UUID (true|false), default false").create("k");		
+				.withDescription(
+						"Keep effect records when adding effects with the same protocol applciation UUID (true|false), default false")
+				.create("k");
 
 		Option matchStructure = OptionBuilder.hasArg().withLongOpt("structureMatch").withArgName("value")
 				.withDescription("Match structure by uuid|cas|einecs|smiles|inchi").create("x");
@@ -470,10 +471,10 @@ public class DBSubstanceImport {
 
 		Option isSplitRecord = OptionBuilder.hasArg().withLongOpt("isSplitRecord").withArgName("value")
 				.withDescription("true|false").create("s");
-		
+
 		Option addDefaultComposition = OptionBuilder.hasArg().withLongOpt("defaultcomposition").withArgName("value")
 				.withDescription("true|false").create("d");
-		
+
 		Option timestamp_release = OptionBuilder.hasArg().withLongOpt("timestamp_release").withArgName("value")
 				.withDescription("Timestamp, default null").create("a");
 
@@ -536,7 +537,7 @@ public class DBSubstanceImport {
 			if ("xslx".equals(getParserType()))
 				if (jsonConfig == null)
 					throw new Exception("Missing JSON config file, mandatory for importing XLSX!");
-			
+
 			setPrefix(getPrefix(line));
 			outputFile = getOutput(line);
 
@@ -551,7 +552,7 @@ public class DBSubstanceImport {
 			setSplitRecord(isSplitRecord(line));
 			setAddDefaultComposition(addDefaultComposition(line));
 			setUpdated(timestamp_release(line));
-			
+
 			maxRefSubstances = getMaxRefSubstances(line);
 			if (line.hasOption("h")) {
 				printHelp(options, null);
@@ -678,8 +679,8 @@ public class DBSubstanceImport {
 			parser = createParser(fin, xlsx);
 			logger_cli.log(Level.INFO, "MSG_IMPORT",
 					new Object[] { parser.getClass().getName(), inputFile.getAbsolutePath() });
-			
-			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true,getPrefix()) {
+
+			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true, getPrefix()) {
 				@Override
 				public IStructureRecord validate(SubstanceRecord record) throws Exception {
 					record.setContent(inputFile.getName());
@@ -700,9 +701,10 @@ public class DBSubstanceImport {
 						}
 
 					}
-					for (ProtocolApplication papp : record.getMeasurements()) {
-						papp.setUpdated(getUpdated());
-					}
+					if (record.getMeasurements() != null)
+						for (ProtocolApplication papp : record.getMeasurements()) {
+							papp.setUpdated(getUpdated());
+						}
 					return super.validate(record);
 				}
 			};
@@ -851,7 +853,7 @@ public class DBSubstanceImport {
 						validator.process((IStructureRecord) record);
 						break;
 					}
-					default : {
+					default: {
 						cleanReferenceStructure(srecord);
 						List<ProtocolApplication> m = srecord.getMeasurements();
 						cleanupEmptyRecords(srecord, m);
