@@ -243,16 +243,17 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 						LiteratureEntry reference = new LiteratureEntry(originalname, originalname);
 						reader = new CSV12SubstanceReader(new CSV12Reader(new FileReader(file), reference, "FCSV-"));
 					} else if (ext.endsWith(".rdf")) {
-						if (writer instanceof DBSubstanceWriter)
+						if (writer instanceof DBSubstanceWriter) {
 							((DBSubstanceWriter) writer).setSplitRecord(false);
+							((DBSubstanceWriter) writer).setImportBundles(true);
+						}
 						reader = new NanoWikiRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"), null,
 								"RDF/XML");
-						if (writer instanceof DBSubstanceWriter)
-							((DBSubstanceWriter) writer).setImportBundles(true);
-
 					} else if (ext.endsWith(".ttl")) {
-						if (writer instanceof DBSubstanceWriter)
+						if (writer instanceof DBSubstanceWriter) {
 							((DBSubstanceWriter) writer).setSplitRecord(false);
+							((DBSubstanceWriter) writer).setImportBundles(true);
+						}
 						reader = new ENanoMapperRDFReader(new InputStreamReader(new FileInputStream(file), "UTF-8"),
 								"ENM3");
 
