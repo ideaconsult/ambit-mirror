@@ -160,11 +160,12 @@ public class GCMParser
 		}
 		
 		int endPos = 0;
-		int pos = 0;
+		int pos = -1;
 		for (int i = 0; i < sepPos.size(); i++)
 		{
 			endPos = sepPos.get(i);
-			String s =  cfStr.substring(pos, endPos);
+			String s =  cfStr.substring(pos+1, endPos);
+			//System.out.println("cf:" + s);
 			ICorrectionFactor cf = getCorrectionFactorFromString(s);
 			if (cf != null)
 				corFactors.add(cf);
@@ -172,7 +173,8 @@ public class GCMParser
 		}
 		
 		endPos = cfStr.length();
-		String s =  cfStr.substring(pos, endPos);
+		String s =  cfStr.substring(pos+1, endPos);
+		//System.out.println("cf:" + s);
 		ICorrectionFactor cf = getCorrectionFactorFromString(s);
 		if (cf != null)
 			corFactors.add(cf);
@@ -194,7 +196,7 @@ public class GCMParser
 	
 	ICorrectionFactor extractSmartsCorrectionFactor(String cfStr)
 	{
-		//Analyzing string: extract smarts argument
+		//Analyzing string: extract smarts argument		
 		int openBrackets = 1; //Counting opening "G("
 		int closingArgBracketPos = -1;
 		for (int i = 2; i < cfStr.length(); i++)

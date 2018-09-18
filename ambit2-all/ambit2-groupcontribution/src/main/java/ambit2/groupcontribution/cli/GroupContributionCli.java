@@ -21,6 +21,8 @@ import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.utils.math.CrossValidation;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsParser;
 
 
 
@@ -445,7 +447,8 @@ public class GroupContributionCli
 		}
 		System.out.println("GCM type : " + gcm.getModelType().toString());
 		
-		GCMParser gcmParser = new GCMParser();
+		GCMParser gcmParser = new GCMParser(new SmartsParser(), new IsomorphismTester());
+		
 		
 		List<ILocalDescriptor> locDescriptors = gcmParser.getLocalDescriptorsFromString(localDescriptors);
 		if (!gcmParser.getErrors().isEmpty())
@@ -459,7 +462,16 @@ public class GroupContributionCli
 		if (corFactors != null)
 		{
 			List<ICorrectionFactor> cfs = gcmParser.getCorrectionFactorsFromString(corFactors);
-			gcm.setCorrectionFactors(cfs);
+			if (!gcmParser.getErrors().isEmpty())
+			{
+				System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
+				return -1;
+			}
+			else
+			{
+				if (!cfs.isEmpty())
+					gcm.setCorrectionFactors(cfs);
+			}
 		}
 		
 		if (globalDescriptors != null)
