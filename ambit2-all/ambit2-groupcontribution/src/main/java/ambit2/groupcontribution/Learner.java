@@ -37,13 +37,16 @@ public class Learner
 	private String endline = "\n";
 	
 	//Work matrices: 
-	//A0 - initial fragment frequencies, D0/D - initial final descriptors 
+	//A0 - initial fragment frequencies, D0/D - initial/final descriptors 
+	//Cf0/Cf - initial/final correction factors
 	//A - final matrix for modeling combining all info
 	//b0/b - target property matrix
 	MatrixDouble A = null;
 	MatrixDouble A0 = null;
 	MatrixDouble D0 = null;
 	MatrixDouble D = null;
+	MatrixDouble Cf0 = null;
+	MatrixDouble Cf = null;
 	MatrixDouble b = null;
 	MatrixDouble b0 = null;
 	MatrixDouble modeled_b = null;
@@ -180,7 +183,10 @@ public class Learner
 	void makeInitialMatrixes()
 	{
 		A0 = Fragmentation.generateFragmentationMatrix(trainDataSet, model);
-						
+		
+		if (!model.getCorrectionFactors().isEmpty())
+			Cf0 = Fragmentation.generateCorrectionFactorMatrix(trainDataSet, model);
+				
 		//Setting initialColumnGroups
 		Map<String,IGroup> groups = model.getGroups();
 		int n = groups.keySet().size();
@@ -261,7 +267,14 @@ public class Learner
 			for (int i = 0; i < D.nColumns; i++)
 				usedDescriptors.add(i);
 			n = n + D.nColumns; 
-		}	
+		}
+		
+		if (Cf != null)
+		{
+			Cf = Cf0;
+			//TODO filter Cf
+			n = n + Cf.nColumns;
+		}
 
 		if (n==0)
 		{
@@ -271,8 +284,7 @@ public class Learner
 		
 		b=b0;
 		A = new MatrixDouble(m,n);
-		
-		
+				
 		//Filling matrix A  
 		int col;
 		for(int j = 0; j < usedGroupColumns.size(); j++)
@@ -286,7 +298,14 @@ public class Learner
 			int nGroupColumns = usedGroupColumns.size();
 			for (int j = 0; j < D.nColumns; j++)
 				A.copyColumnFrom(nGroupColumns + j, D, j);
-		}		
+		}
+		
+		if (Cf != null)
+		{
+			int ind0 = usedGroupColumns.size() + D.nColumns;
+			for (int j = 0; j < Cf.nColumns; j++)
+				A.copyColumnFrom(ind0 + j, Cf, j);
+		}
 	}
 	
 	int  makeModel()
