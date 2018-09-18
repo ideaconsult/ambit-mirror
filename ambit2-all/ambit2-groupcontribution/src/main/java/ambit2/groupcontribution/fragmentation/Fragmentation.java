@@ -1,5 +1,6 @@
 package ambit2.groupcontribution.fragmentation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,8 @@ import ambit2.groupcontribution.utils.math.MatrixDouble;
 public class Fragmentation 
 {
 	public Map<String, Integer> groupFrequencies = new HashMap<String, Integer>();
-	public Map<String, Double> correctionFactors = new HashMap<String, Double>();
+	public List<Double> correctionFactors = new ArrayList<Double>();
+	//public Map<String, Double> correctionFactors = new HashMap<String, Double>();
 	
 	
 	public void addGroup(String groupDesignation)
@@ -58,7 +60,8 @@ public class Fragmentation
 			
 			//Handle correction factors
 			if (!gcm.getCorrectionFactors().isEmpty())
-				;
+				calcCorrectionFactors(dso,gcm);
+			
 		}
 		
 	}
@@ -171,18 +174,20 @@ public class Fragmentation
 	
 	public static void calcCorrectionFactors (DataSetObject dso, GroupContributionModel gcm)
 	{
+		/*
 		if (dso.fragmentation == null)
 		{
 			//This is for the case "correction factors only"
 			Fragmentation fragmentation = new Fragmentation(); 
 			dso.fragmentation = fragmentation;
-		}		
+		}
+		*/		
 		
 		for (int i = 0; i < gcm.getCorrectionFactors().size(); i++)
 		{
 			ICorrectionFactor cf = gcm.getCorrectionFactors().get(i);
 			double cfVal = cf.calculateFor(dso.molecule);
-			dso.fragmentation.correctionFactors.put(cf.getDesignation(), cfVal);
+			dso.fragmentation.correctionFactors.add(cfVal);
 		}
 	}
 	
@@ -268,6 +273,22 @@ public class Fragmentation
 		}
 		
 		return A;
+	}
+	
+	public static MatrixDouble generateCorrectionFactorMatrix(DataSet dataset, GroupContributionModel gcm)
+	{
+		int m = dataset.dataObjects.size();
+		int n = gcm.getCorrectionFactors().size();
+				
+		MatrixDouble Cf = new MatrixDouble(m,n);
+		for (int i = 0; i < m; i++)
+		{
+			DataSetObject dso = dataset.dataObjects.get(i);
+			for (int j = 0; j < n; j++)
+				Cf.el[i][j] = dso.fragmentation.correctionFactors.get(j);			
+		}
+		
+		return Cf;
 	}
 	
 	public static MatrixDouble generatePropertyMatrix(DataSet dataset, String property) throws Exception
