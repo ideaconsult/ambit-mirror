@@ -15,6 +15,7 @@ import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.Learner;
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
+import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
@@ -35,6 +36,7 @@ public class GroupContributionCli
 	public Double threshold = null;
 	public String gcmType = null;
 	public String validation = null;
+	public String corFactors = null;
 	public boolean FlagFragmenationOnly = false;
 	public int fractionDigits = -1;
 	
@@ -194,6 +196,21 @@ public class GroupContributionCli
 				return "v";
 			}
 		},
+
+		correction_factors {
+			@Override
+			public String getArgName() {
+				return "correction-factors";
+			}
+			@Override
+			public String getDescription() {
+				return "Correction factors specification: G(SMARTS),...";
+			}
+			@Override
+			public String getShortName() {
+				return "o";
+			}
+		},
 		
 		fragmentation {
 			@Override
@@ -316,7 +333,13 @@ public class GroupContributionCli
 				return;
 			validation = argument;
 			break;
-		}
+		}		
+		case correction_factors: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			corFactors = argument;
+			break;
+		}		
 		case fragmentation: {
 			FlagFragmenationOnly = true;
 			break;
@@ -391,6 +414,8 @@ public class GroupContributionCli
 				System.out.println("gcm config: " + gcmConfigFile);
 			if (localDescriptors != null)
 				System.out.println("Local descriptors: " + localDescriptors);
+			if (corFactors != null)
+				System.out.println("Correction factors: " + corFactors);
 			if (globalDescriptors != null)
 				System.out.println("Global descriptors: " + globalDescriptors);
 			if (threshold != null)
@@ -430,6 +455,12 @@ public class GroupContributionCli
 		}
 		else
 			gcm.setLocalDescriptors(locDescriptors);
+		
+		if (corFactors != null)
+		{
+			List<ICorrectionFactor> cfs = gcmParser.getCorrectionFactorsFromString(corFactors);
+			gcm.setCorrectionFactors(cfs);
+		}
 		
 		if (globalDescriptors != null)
 		{
