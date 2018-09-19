@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<description>Exposes  AMBIT 2 database search and other functionality by REST style web services.</description>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>ambit2-www</artifactId>
+	<artifactId>ambit2-www-docker</artifactId>
 	<packaging>war</packaging>
 	<name>Ambit2 REST web services</name>
 	<parent>
@@ -49,7 +49,7 @@
 				<ambit.db.user.test>guest</ambit.db.user.test>
 				<ambit.db.user.test.password>guest</ambit.db.user.test.password>
 				<ambit.db.create.allow>true</ambit.db.create.allow>
-				<ambit.db.host>localhost</ambit.db.host>
+				<ambit.db.host>ambit-db</ambit.db.host>
 				<!-- root pasword for creating new db, used for testing -->
 				<ambit.db.user.root.password></ambit.db.user.root.password>
 				<!-- Ontology service , assumed on the same host -->
