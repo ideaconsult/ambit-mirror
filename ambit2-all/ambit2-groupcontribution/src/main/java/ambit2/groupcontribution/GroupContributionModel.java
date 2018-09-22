@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSetObject;
@@ -198,7 +200,6 @@ public class GroupContributionModel
 		}
 		
 		return sb.toString();
-
 	}	
 	
 	public String getGroupsAsString()
@@ -212,7 +213,6 @@ public class GroupContributionModel
 			//System.out.println("  " + (i+1) + "  " + groupsStr[i]);
 			sb.append("  " + (i+1) + "  " + groupsStr[i] + "\n");
 		}
-
 		
 		return sb.toString();
 	}
@@ -224,7 +224,6 @@ public class GroupContributionModel
 		{			
 			sb.append("  " + (i+1) + "  " + correctionFactors.get(i).getDesignation() + "\n");
 		}
-
 		
 		return sb.toString();
 	}
@@ -247,6 +246,10 @@ public class GroupContributionModel
 		this.validationConfig = validationConfig;
 	}	
 
-	
+	public double calcModelValue(IAtomContainer mol)
+	{
+		//TODO use Fragmentation
+		return 0.0;
+	}
 	
 }
