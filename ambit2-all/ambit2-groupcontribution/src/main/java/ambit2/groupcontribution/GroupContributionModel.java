@@ -217,6 +217,18 @@ public class GroupContributionModel
 		return sb.toString();
 	}
 	
+	public String getCorrectionFactorsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < correctionFactors.size(); i++)
+		{			
+			sb.append("  " + (i+1) + "  " + correctionFactors.get(i).getDesignation() + "\n");
+		}
+
+		
+		return sb.toString();
+	}
+	
 	public void addToReport(String info)
 	{
 		report.append(info);

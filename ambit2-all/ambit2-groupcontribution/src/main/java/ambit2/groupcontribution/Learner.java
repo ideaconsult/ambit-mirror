@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
+import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
@@ -61,6 +62,8 @@ public class Learner
 	List<Integer> usedGroupColumns = new ArrayList<Integer>();
 	List<Integer> excludedDescriptors = new ArrayList<Integer>();
 	List<Integer> usedDescriptors = new ArrayList<Integer>();
+	List<Integer> usedCorrectionFactors = new ArrayList<Integer>();
+	
 	
 	String initialColumnGroups[] = null;
 	//Map<Integer,String> indexGroupMap = new HashMap<Integer,String>();
@@ -269,10 +272,12 @@ public class Learner
 			n = n + D.nColumns; 
 		}
 		
-		if (Cf != null)
+		if (Cf0 != null)
 		{
 			Cf = Cf0;
 			//TODO filter Cf
+			for (int i = 0; i < Cf.nColumns; i++)
+				usedCorrectionFactors.add(i);
 			n = n + Cf.nColumns;
 		}
 
@@ -296,14 +301,14 @@ public class Learner
 		if (D != null)		
 		{
 			int nGroupColumns = usedGroupColumns.size();
-			for (int j = 0; j < D.nColumns; j++)
+			for (int j = 0; j < D.nColumns; j++)  //TODO use usedDescriptors
 				A.copyColumnFrom(nGroupColumns + j, D, j);
 		}
 		
 		if (Cf != null)
 		{
-			int ind0 = usedGroupColumns.size() + D.nColumns;
-			for (int j = 0; j < Cf.nColumns; j++)
+			int ind0 = usedGroupColumns.size() + usedDescriptors.size();
+			for (int j = 0; j < Cf.nColumns; j++) //TODO use usedCorrectionFactors
 				A.copyColumnFrom(ind0 + j, Cf, j);
 		}
 	}
@@ -342,6 +347,16 @@ public class Learner
 				int dIndex = usedDescriptors.get(i);
 				DescriptorInfo di = diList.get(dIndex);
 				di.setContribution(x.el[offset+i][0]);
+			}
+			
+			//Set descriptor contributions
+			offset = usedGroupColumns.size() + usedDescriptors.size();
+			List<ICorrectionFactor> cfList = model.getCorrectionFactors();
+			for (int i = 0; i < usedCorrectionFactors.size(); i++)
+			{
+				int cfIndex = usedCorrectionFactors.get(i);
+				ICorrectionFactor cf = cfList.get(cfIndex);
+				cf.setContribution(x.el[offset+i][0]);
 			}
 		}
 		else
@@ -627,15 +642,29 @@ public class Learner
 		GCMReportConfig repCfg = model.getReportConfig();
 		
 		String grps = model.getGroupsAsString();
+		String cfs = null;
+		if (!model.getCorrectionFactors().isEmpty())
+			cfs = model.getCorrectionFactorsAsString();
+		
 		if (repCfg.FlagConsoleOutput)
 		{	
 			System.out.println("Groups:");
 			System.out.println(grps);
+			if (!model.getCorrectionFactors().isEmpty())
+			{	
+				System.out.println("Correction factors:");				
+				System.out.println(cfs);
+			}
 		}
 		if (repCfg.FlagBufferOutput)
 		{	
 			model.addToReport("Groups:\n");
 			model.addToReport(grps);
+			if (!model.getCorrectionFactors().isEmpty())
+			{				
+				model.addToReport("Correction factors:\n");				
+				model.addToReport(cfs);
+			}
 			model.addToReport("\n");
 		}
 	}
@@ -725,7 +754,18 @@ public class Learner
 					System.out.println("\t" + diList.get(i).getName() + "\t" 
 							+ diList.get(i).getContribution());
 				}
-			}	
+			}
+			
+			List<ICorrectionFactor> cfList = model.getCorrectionFactors();
+			if (!cfList.isEmpty())
+			{	
+				System.out.println("Correction factor contibutions:");
+				for (int i = 0; i < cfList.size(); i++)
+				{	
+					System.out.println("\t" + cfList.get(i).getDesignation() + "\t" 
+							+ cfList.get(i).getContribution());
+				}
+			}
 		}
 		
 		if (repCfg.FlagBufferOutput)
