@@ -42,28 +42,32 @@ public class Fragmentation
 		for (int i = 0; i < dataset.dataObjects.size(); i++)
 		{
 			DataSetObject dso = dataset.dataObjects.get(i);
-			switch (gcm.getModelType())
-			{
-			case ATOMIC:
-				makeAtomicFragmenation(dso, gcm);
-				break;
-			case BOND_BASED:
-				makeBondBasedFragmenation(dso, gcm);
-				break;
-			case CORRECTION_FACTORS_ONLY:
-				Fragmentation fragmentation = new Fragmentation(); 
-				dso.fragmentation = fragmentation;
-				break;
-				
-			}
-			
-			//Handle correction factors
-			if (!gcm.getCorrectionFactors().isEmpty())
-				calcCorrectionFactors(dso,gcm);
-			
+			makeFragmentation(dso, gcm);	
 		}
-		
 	}
+	
+	public static void makeFragmentation(DataSetObject dso, GroupContributionModel gcm)
+	{
+		switch (gcm.getModelType())
+		{
+		case ATOMIC:
+			makeAtomicFragmenation(dso, gcm);
+			break;
+		case BOND_BASED:
+			makeBondBasedFragmenation(dso, gcm);
+			break;
+		case CORRECTION_FACTORS_ONLY:
+			Fragmentation fragmentation = new Fragmentation(); 
+			dso.fragmentation = fragmentation;
+			break;
+		}
+
+		//Handle correction factors
+		if (!gcm.getCorrectionFactors().isEmpty())
+			calcCorrectionFactors(dso,gcm);
+
+	}
+	
 	
 	public static void makeAtomicFragmenation (DataSetObject dso, GroupContributionModel gcm)
 	{

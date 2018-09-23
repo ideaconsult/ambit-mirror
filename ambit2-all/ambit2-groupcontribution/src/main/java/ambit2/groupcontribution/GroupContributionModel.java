@@ -257,6 +257,17 @@ public class GroupContributionModel
 
 	public double calcModelValue(IAtomContainer mol)
 	{
+		DataSetObject dso = new DataSetObject();
+		return calcModelValue(dso);
+	}
+	
+	public double calcModelValue(DataSetObject dso)
+	{
+		if (dso.fragmentation == null)
+		{
+			//TODO
+		}
+		
 		//TODO use Fragmentation
 		return 0.0;
 	}
