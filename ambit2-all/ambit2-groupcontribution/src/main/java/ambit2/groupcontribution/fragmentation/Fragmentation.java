@@ -85,7 +85,8 @@ public class Fragmentation
 			((AtomGroup)group).setAtomDesignation(designation);
 			
 			fragmentation.addGroup(designation);
-			gcm.addGroup(group);
+			if (gcm.isAllowGroupRegistration())
+				gcm.addGroup(group);
 		}
 	}
 	
@@ -119,7 +120,8 @@ public class Fragmentation
 			IGroup group = new BondGroup();
 			((BondGroup)group).setBondDesignation(designation);
 			fragmentation.addGroup(designation);
-			gcm.addGroup(group);
+			if (gcm.isAllowGroupRegistration())
+				gcm.addGroup(group);
 		}
 		
 	}

@@ -44,6 +44,7 @@ public class GroupContributionModel
 	private StringBuffer report = new StringBuffer(); 
 	private ValidationConfig validationConfig = new ValidationConfig(); 
 	
+	private boolean allowGroupRegistration = true;
 	
 	//TODO add group rules and LocalDescriptor rules
 	
@@ -244,7 +245,15 @@ public class GroupContributionModel
 
 	public void setValidationConfig(ValidationConfig validationConfig) {
 		this.validationConfig = validationConfig;
-	}	
+	}
+		
+	public boolean isAllowGroupRegistration() {
+		return allowGroupRegistration;
+	}
+
+	public void setAllowGroupRegistration(boolean allowGroupRegistration) {
+		this.allowGroupRegistration = allowGroupRegistration;
+	}
 
 	public double calcModelValue(IAtomContainer mol)
 	{
