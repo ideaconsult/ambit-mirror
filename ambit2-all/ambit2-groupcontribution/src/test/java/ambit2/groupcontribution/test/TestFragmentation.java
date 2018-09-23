@@ -340,7 +340,7 @@ public class TestFragmentation extends TestCase
 		smiles.add("C1CC1CC#C");
 		expFragFreq.add(new int[] {1,2,3,0,0,0,0,0,0});
 		
-		smiles.add("CC(O)C");
+		smiles.add("CC(O)C");	
 		expFragFreq.add(new int[] {0,1,0,2,0,0,0,1,0});
 		smiles.add("CC(=O)C");
 		expFragFreq.add(new int[] {1,0,0,2,0,0,1,0,0});
@@ -455,6 +455,428 @@ public class TestFragmentation extends TestCase
 		expFragFreq.add(new int[] {1,1,5,0,0,1,0,1,0});
 		
 			
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+	
+	public void test03() throws Exception 
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,HeN");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C1","C2","C3","C4"};
+		
+		//Add molecules and expected fragment frequencies
+		smiles.add("CCC");
+		expFragFreq.add(new int[] {2,1,0,0});
+		smiles.add("CCCC");
+		expFragFreq.add(new int[] {2,2,0,0});
+		smiles.add("CCCCC");
+		expFragFreq.add(new int[] {2,3,0,0});
+		smiles.add("CC(C)C");
+		expFragFreq.add(new int[] {3,0,1,0});
+		smiles.add("CC(C)(C)C");
+		expFragFreq.add(new int[] {4,0,0,1});
+		
+		smiles.add("C=CC");
+		expFragFreq.add(new int[] {2,1,0,0});
+		smiles.add("CC=CC");
+		expFragFreq.add(new int[] {2,2,0,0});
+		smiles.add("C=CCC=C");
+		expFragFreq.add(new int[] {2,3,0,0});
+		smiles.add("C=C(C)C");
+		expFragFreq.add(new int[] {3,0,1,0});
+		
+		smiles.add("C#CC");
+		expFragFreq.add(new int[] {2,1,0,0});
+		smiles.add("CC#CC");
+		expFragFreq.add(new int[] {2,2,0,0});
+		smiles.add("C#CCC=C");
+		expFragFreq.add(new int[] {2,3,0,0});
+		
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+	
+
+	public void test03_01() throws Exception 
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,HeN");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C0","C1","C2","C3","C4","O1","O2"};
+		
+		//Add molecules and expected fragment frequencies
+		smiles.add("C");
+		expFragFreq.add(new int[] {1,0,0,0,0,0,0});
+		smiles.add("CCO");
+		expFragFreq.add(new int[] {0,1,1,0,0,1,0});
+		smiles.add("CCCO");
+		expFragFreq.add(new int[] {0,1,2,0,0,1,0});
+		smiles.add("CCCCO");
+		expFragFreq.add(new int[] {0,1,3,0,0,1,0});
+		smiles.add("CC(O)C");
+		expFragFreq.add(new int[] {0,2,0,1,0,1,0});
+		smiles.add("CC(O)(C)C");
+		expFragFreq.add(new int[] {0,3,0,0,1,1,0});
+		smiles.add("CC(O)(O)C");
+		expFragFreq.add(new int[] {0,2,0,0,1,2,0});
+		
+		smiles.add("O=CC");
+		expFragFreq.add(new int[] {0,1,1,0,0,1,0});
+		smiles.add("CC=CO");
+		expFragFreq.add(new int[] {0,1,2,0,0,1,0});
+		smiles.add("C=CCC=O");
+		expFragFreq.add(new int[] {0,1,3,0,0,1,0});
+		smiles.add("C=C(O)C");
+		expFragFreq.add(new int[] {0,2,0,1,0,1,0});
+		
+		smiles.add("C#CO");
+		expFragFreq.add(new int[] {0,1,1,0,0,1,0});
+		smiles.add("CC#CO");
+		expFragFreq.add(new int[] {0,1,2,0,0,1,0});
+		smiles.add("C#CCC=O");
+		expFragFreq.add(new int[] {0,1,3,0,0,1,0});
+		
+		smiles.add("C1CCOC1");
+		expFragFreq.add(new int[] {0,0,4,0,0,0,1});
+		smiles.add("C1CCOCC1");
+		expFragFreq.add(new int[] {0,0,5,0,0,0,1});
+		smiles.add("C1COC1");
+		expFragFreq.add(new int[] {0,0,3,0,0,0,1});
+		smiles.add("C1OC1");
+		expFragFreq.add(new int[] {0,0,2,0,0,0,1});
+		
+		smiles.add("C1C(C)COC1");
+		expFragFreq.add(new int[] {0,1,3,1,0,0,1});
+		smiles.add("C1C(C)COCC1");
+		expFragFreq.add(new int[] {0,1,4,1,0,0,1});
+		smiles.add("C1C(O)COCC1");
+		expFragFreq.add(new int[] {0,0,4,1,0,1,1});
+				
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+	
+	
+	public void test03_02() throws Exception 
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,HeN");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C1","C2","C3","C4","S1","S2"};
+		
+		//Add molecules and expected fragment frequencies
+		
+		smiles.add("CCS");
+		expFragFreq.add(new int[] {1,1,0,0,1,0});
+		smiles.add("CCCS");
+		expFragFreq.add(new int[] {1,2,0,0,1,0});
+		smiles.add("CCCCS");
+		expFragFreq.add(new int[] {1,3,0,0,1,0});
+		smiles.add("CC(S)C");
+		expFragFreq.add(new int[] {2,0,1,0,1,0});
+		smiles.add("CC(S)(C)C");
+		expFragFreq.add(new int[] {3,0,0,1,1,0});
+		smiles.add("CC(S)(S)C");
+		expFragFreq.add(new int[] {2,0,0,1,2,0});
+		
+		smiles.add("S=CC");
+		expFragFreq.add(new int[] {1,1,0,0,1,0}); 
+		smiles.add("CC=CS");
+		expFragFreq.add(new int[] {1,2,0,0,1,0});
+		smiles.add("C=CCC=S");
+		expFragFreq.add(new int[] {1,3,0,0,1,0}); 
+		smiles.add("C=C(S)C");
+		expFragFreq.add(new int[] {2,0,1,0,1,0});
+		
+		smiles.add("C#CS");
+		expFragFreq.add(new int[] {1,1,0,0,1,0});
+		smiles.add("CC#CS");
+		expFragFreq.add(new int[] {1,2,0,0,1,0});
+		smiles.add("C#CCC=S");
+		expFragFreq.add(new int[] {1,3,0,0,1,0});
+		
+		smiles.add("C1CCSC1");
+		expFragFreq.add(new int[] {0,4,0,0,0,1}); 
+		smiles.add("C1CCSCC1");
+		expFragFreq.add(new int[] {0,5,0,0,0,1});
+		smiles.add("C1CSC1");
+		expFragFreq.add(new int[] {0,3,0,0,0,1}); 
+		smiles.add("C1SC1");
+		expFragFreq.add(new int[] {0,2,0,0,0,1});
+		
+		smiles.add("C1C(C)CSC1");
+		expFragFreq.add(new int[] {1,3,1,0,0,1});
+		smiles.add("C1C(C)CSCC1");
+		expFragFreq.add(new int[] {1,4,1,0,0,1});
+		
+				
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+	
+	public void test03_03() throws Exception 
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,HeN");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C1","C2","C3","C4","N1","N2"};
+		
+		//Add molecules and expected fragment frequencies
+		
+		smiles.add("CCN");
+		expFragFreq.add(new int[] {1,1,0,0,1,0});
+		smiles.add("CCCN");
+		expFragFreq.add(new int[] {1,2,0,0,1,0});
+		smiles.add("CCCCN");
+		expFragFreq.add(new int[] {1,3,0,0,1,0});
+		smiles.add("CC(N)C");
+		expFragFreq.add(new int[] {2,0,1,0,1,0});
+		smiles.add("CC(N)(C)C");
+		expFragFreq.add(new int[] {3,0,0,1,1,0});
+		smiles.add("CC(N)(N)C");
+		expFragFreq.add(new int[] {2,0,0,1,2,0});
+		
+		smiles.add("N=CC");
+		expFragFreq.add(new int[] {1,1,0,0,1,0}); 
+		smiles.add("CC=CN");
+		expFragFreq.add(new int[] {1,2,0,0,1,0});
+		smiles.add("C=CCC=N");
+		expFragFreq.add(new int[] {1,3,0,0,1,0}); 
+		smiles.add("C=C(N)C");
+		expFragFreq.add(new int[] {2,0,1,0,1,0});
+		
+		smiles.add("C#CN");
+		expFragFreq.add(new int[] {1,1,0,0,1,0});
+		smiles.add("CC#CN");
+		expFragFreq.add(new int[] {1,2,0,0,1,0});
+		smiles.add("C#CCC=N");
+		expFragFreq.add(new int[] {1,3,0,0,1,0});
+		
+		smiles.add("C1CCNC1");
+		expFragFreq.add(new int[] {0,4,0,0,0,1}); 
+		smiles.add("C1CCNCC1");
+		expFragFreq.add(new int[] {0,5,0,0,0,1});
+		smiles.add("C1CNC1");
+		expFragFreq.add(new int[] {0,3,0,0,0,1}); 
+		smiles.add("C1NC1");
+		expFragFreq.add(new int[] {0,2,0,0,0,1});
+		
+		smiles.add("C1C(C)CNC1");
+		expFragFreq.add(new int[] {1,3,1,0,0,1});
+		smiles.add("C1C(C)CNCC1");
+		expFragFreq.add(new int[] {1,4,1,0,0,1});
+		
+				
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+
+
+	
+	public void test04() throws Exception 
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,Hyb");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C1","C2","C3"};
+		
+		//Add molecules and expected fragment frequencies
+		smiles.add("CCC");
+		expFragFreq.add(new int[] {0,0,3});
+		smiles.add("C=CC");
+		expFragFreq.add(new int[] {0,2,1});
+		smiles.add("C#CC");
+		expFragFreq.add(new int[] {2,0,1});
+		smiles.add("CC(C)C");
+		expFragFreq.add(new int[] {0,0,4});
+		smiles.add("CCCC");
+		expFragFreq.add(new int[] {0,0,4});
+		smiles.add("CC=CCC");
+		expFragFreq.add(new int[] {0,2,3});
+		smiles.add("CC#CCC");
+		expFragFreq.add(new int[] {2,0,3});
+		smiles.add("CC(=C)C");
+		expFragFreq.add(new int[] {0,2,2});
+		smiles.add("CC(C)(C)C");
+		expFragFreq.add(new int[] {0,0,5});
+		smiles.add("CC(=C)C(=C)C");
+		expFragFreq.add(new int[] {0,4,2});
+		smiles.add("C=CC(C#C)C=C");
+		expFragFreq.add(new int[] {2,4,1});
+		
+		smiles.add("C1CC1");
+		expFragFreq.add(new int[] {0,0,3});
+		smiles.add("C1CCC1");
+		expFragFreq.add(new int[] {0,0,4});
+		smiles.add("C1CCCC1");
+		expFragFreq.add(new int[] {0,0,5});
+		smiles.add("C1CCCCC1");
+		expFragFreq.add(new int[] {0,0,6});
+		smiles.add("C1C=C1");
+		expFragFreq.add(new int[] {0,2,1});
+		smiles.add("C1C=CC1");
+		expFragFreq.add(new int[] {0,2,2});
+		smiles.add("C1=CC=C1");
+		expFragFreq.add(new int[] {0,4,0});
+		smiles.add("C1C#CC1");
+		expFragFreq.add(new int[] {2,0,2});
+		smiles.add("C1=CC=CC1");
+		expFragFreq.add(new int[] {0,4,1});
+		smiles.add("C1CC(C)CC1");
+		expFragFreq.add(new int[] {0,0,6});
+		smiles.add("C1CC(=C)CC1");
+		expFragFreq.add(new int[] {0,2,4});
+				
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+	
+	
+	
+	public void test04_01() throws Exception 
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,Hyb");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C1","C2","C3","N1","N2","N3"};
+		
+		//Add molecules and expected fragment frequencies
+		smiles.add("CN");
+		expFragFreq.add(new int[] {0,0,1,0,0,1});
+		smiles.add("C=N");
+		expFragFreq.add(new int[] {0,1,0,0,1,0});
+		smiles.add("C#N");
+		expFragFreq.add(new int[] {1,0,0,1,0,0});
+		smiles.add("CCN");
+		expFragFreq.add(new int[] {0,0,2,0,0,1});
+		smiles.add("C=CCN");
+		expFragFreq.add(new int[] {0,2,1,0,0,1});
+		smiles.add("CCCCC1CNC1");
+		expFragFreq.add(new int[] {0,0,7,0,0,1});
+		smiles.add("CC=CC=C1CNC1");
+		expFragFreq.add(new int[] {0,4,3,0,0,1});
+		smiles.add("CC=CC=C1C=NC1");
+		expFragFreq.add(new int[] {0,5,2,0,1,0});
+		smiles.add("C1CC1C#N");
+		expFragFreq.add(new int[] {1,0,3,1,0,0});
+		smiles.add("C1=CC1C#N");
+		expFragFreq.add(new int[] {1,2,1,1,0,0});
+		smiles.add("C1NC1C#N");
+		expFragFreq.add(new int[] {1,0,2,1,0,1});
+	
+				
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+	
+	
+	public void test04_02() throws Exception 
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,Hyb");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C1","C2","C3","O2","O3"};
+		
+		//Add molecules and expected fragment frequencies
+		smiles.add("CO");
+		expFragFreq.add(new int[] {0,0,1,0,1});
+		smiles.add("C=O");
+		expFragFreq.add(new int[] {0,1,0,1,0});
+		smiles.add("C#CO");
+		expFragFreq.add(new int[] {2,0,0,0,1});
+		smiles.add("C=CCO");
+		expFragFreq.add(new int[] {0,2,1,0,1});
+		smiles.add("C=CC=O");
+		expFragFreq.add(new int[] {0,3,0,1,0});
+		smiles.add("CCCCC1COC1");
+		expFragFreq.add(new int[] {0,0,7,0,1});
+		smiles.add("CC=CC=C1COC1");
+		expFragFreq.add(new int[] {0,4,3,0,1});
+		smiles.add("CC=CC=C1COC1");
+		expFragFreq.add(new int[] {0,4,3,0,1});
+	
+				
+		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
+	}
+	
+	
+		
+	public void test07() throws Exception
+	{
+		GroupContributionModel gcm = createGCM (GroupContributionModel.Type.ATOMIC, "A,H,HeN");
+		List<String> smiles = new ArrayList<String>(); 
+		List<int[]> expFragFreq = new ArrayList<int[]>();
+		String[] expFragDesignations = {"C02","C11","C12","C21","C22","C31",
+										"N01","N11","N21",
+										"O01","O11",
+										"S01","S11" 
+				};
+		
+		//Add molecules and expected fragment frequencies
+		smiles.add("CCC");
+		expFragFreq.add(new int[] {0,0,0,0,1,2,
+									0,0,0,
+									0,0,
+									0,0 
+									});
+		smiles.add("C#C");
+		expFragFreq.add(new int[] {0,2,0,0,0,0,
+									0,0,0,
+									0,0,
+									0,0 
+									});
+		smiles.add("C=CC");
+		expFragFreq.add(new int[] {0,0,1,1,0,1,
+									0,0,0,
+									0,0,
+									0,0 
+									});
+		smiles.add("C#CC");
+		expFragFreq.add(new int[] {1,1,0,0,0,1,
+									0,0,0,
+									0,0,
+									0,0 
+									});
+		smiles.add("CC#N");
+		expFragFreq.add(new int[] {1,0,0,0,0,1,
+									1,0,0,
+									0,0,
+									0,0 
+									});
+		smiles.add("CC=N");
+		expFragFreq.add(new int[] {0,0,1,0,0,1,
+									0,1,0,
+									0,0,
+								 	0,0	
+									});
+								 
+		smiles.add("CCN");
+		expFragFreq.add(new int[] {0,0,0,0,1,1,
+									0,0,1,
+									0,0,
+									0,0 
+									});
+		smiles.add("CC=O");
+		expFragFreq.add(new int[] {0,0,1,0,0,1,
+									0,0,0,
+									1,0,
+									0,0 
+								 	});
+		smiles.add("CCO");
+		expFragFreq.add(new int[] {0,0,0,0,1,1,
+									0,0,0,
+									0,1,
+									0,0 
+									});
+		smiles.add("CC=S");
+		expFragFreq.add(new int[] {0,0,1,0,0,1,
+									0,0,0,
+									0,0,
+									1,0
+									});
+		smiles.add("CCS");
+		expFragFreq.add(new int[] {0,0,0,0,1,1,
+									0,0,0,
+									0,0,
+									0,1
+									});		
+		
+		
 		checkFragmentation (gcm, smiles, expFragDesignations, expFragFreq);		
 	}
 		
