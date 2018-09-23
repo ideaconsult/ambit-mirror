@@ -23,7 +23,6 @@ public class Fragmentation
 {
 	public Map<String, Integer> groupFrequencies = new HashMap<String, Integer>();
 	public List<Double> correctionFactors = new ArrayList<Double>();
-	//public Map<String, Double> correctionFactors = new HashMap<String, Double>();
 	
 	
 	public void addGroup(String groupDesignation)
@@ -174,15 +173,6 @@ public class Fragmentation
 	
 	public static void calcCorrectionFactors (DataSetObject dso, GroupContributionModel gcm)
 	{
-		/*
-		if (dso.fragmentation == null)
-		{
-			//This is for the case "correction factors only"
-			Fragmentation fragmentation = new Fragmentation(); 
-			dso.fragmentation = fragmentation;
-		}
-		*/		
-		
 		for (int i = 0; i < gcm.getCorrectionFactors().size(); i++)
 		{
 			ICorrectionFactor cf = gcm.getCorrectionFactors().get(i);
