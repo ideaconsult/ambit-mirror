@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -12,6 +14,7 @@ import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
+import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
@@ -264,12 +267,40 @@ public class GroupContributionModel
 	public double calcModelValue(DataSetObject dso)
 	{
 		if (dso.fragmentation == null)
+		{	
+			Fragmentation.makeFragmentation(dso, this);
+		}		
+		double value  = 0.0;
+		
+		//Handle groups
+		Set<Entry<String, Integer>> entries =  dso.fragmentation.groupFrequencies.entrySet();
+		for (Entry<String, Integer> entry : entries)
 		{
-			//TODO
+			String key = entry.getKey();
+			IGroup group = groups.get(key);
+			if (group != null)
+				value += group.getContribution() * entry.getValue();
 		}
 		
-		//TODO use Fragmentation
-		return 0.0;
+		//Handle correction factors
+		if (!correctionFactors.isEmpty())
+			for (int i = 0; i < correctionFactors.size(); i++)
+			{	
+				value += correctionFactors.get(i).getContribution() * 
+						 dso.fragmentation.correctionFactors.get(i);
+			}	
+				
+		//Handle descriptors
+		for (int i = 0; i < descriptors.size(); i++)
+		{	
+			DescriptorInfo di = descriptors.get(i);
+			di.getName();
+			Double d = dso.getPropertyDoubleValue(di.getName());
+			if (d == null)
+				value += di.getContribution() * d;
+		}
+		
+		return value;
 	}
 	
 }

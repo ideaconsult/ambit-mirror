@@ -349,7 +349,7 @@ public class Learner
 				di.setContribution(x.el[offset+i][0]);
 			}
 			
-			//Set descriptor contributions
+			//Set correction factors
 			offset = usedGroupColumns.size() + usedDescriptors.size();
 			List<ICorrectionFactor> cfList = model.getCorrectionFactors();
 			for (int i = 0; i < usedCorrectionFactors.size(); i++)
