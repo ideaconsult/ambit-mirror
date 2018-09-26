@@ -521,8 +521,10 @@ public class GroupContributionCli
 		
 		int res = learner.train();
 		if (res != 0)
+		{	
 			System.out.println(learner.getAllErrorsAsString());
-		
+			return res;
+		}
 		
 		System.out.println();
 		learner.validate();

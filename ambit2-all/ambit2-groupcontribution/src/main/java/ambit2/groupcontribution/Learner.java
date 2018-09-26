@@ -120,8 +120,11 @@ public class Learner
 		initVariables();
 		
 		Fragmentation.makeFragmentation(trainDataSet, model);
-		if (!errors.isEmpty())
+		if (trainDataSet.nErrors > 0)
+		{	
+			reportDataSetErrors(trainDataSet);
 			return 1;
+		}	
 		
 		if (repCfg.reportGroups)
 			reportGroups();
@@ -159,8 +162,11 @@ public class Learner
 		initVariables();
 		
 		Fragmentation.makeFragmentation(trainDataSet, model);
-		if (!errors.isEmpty())
+		if (trainDataSet.nErrors > 0)
+		{	
+			reportDataSetErrors(trainDataSet);
 			return 1;
+		}	
 		
 		if (repCfg.reportGroups)
 			reportGroups();
@@ -789,6 +795,23 @@ public class Learner
 							+ diList.get(i).getContribution() + "\n");
 				}
 			}
+		}
+	}
+	
+	void reportDataSetErrors(DataSet dataSet)
+	{
+		GCMReportConfig repCfg = model.getReportConfig();		
+		if (repCfg.FlagConsoleOutput)
+		{	
+			System.out.println("Fragmentation errors:");
+			System.out.println(dataSet.reportErrorsAsString());
+			
+		}
+		if (repCfg.FlagBufferOutput)
+		{	
+			model.addToReport("Fragmentation errors::\n");
+			model.addToReport(dataSet.reportErrorsAsString());
+			model.addToReport("\n");
 		}
 	}
 	

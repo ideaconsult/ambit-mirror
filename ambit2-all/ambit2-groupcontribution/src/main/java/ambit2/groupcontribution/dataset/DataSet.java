@@ -25,6 +25,7 @@ import ambit2.smarts.SmartsHelper;
 public class DataSet 
 {
 	public List<DataSetObject> dataObjects = new ArrayList<DataSetObject>();
+	public int nErrors = 0;
 	File datafile = null;
 	
 	public DataSet(){		
@@ -34,8 +35,7 @@ public class DataSet
 	public DataSet(File f) throws Exception
 	{
 		datafile = f;
-		loadDataFromFile(datafile);
-		
+		loadDataFromFile(datafile);		
 	}
 	
 	public void loadDataFromFile(File file) throws Exception
@@ -144,5 +144,36 @@ public class DataSet
 		}
 		
 		return ds;
+	}
+	
+	public String reportErrorsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < dataObjects.size(); i++)
+		{
+			DataSetObject dso = dataObjects.get(i);
+			if (dso.error == null)
+				continue;
+			
+			sb.append("#");
+			sb.append(i+1);
+			sb.append("  ");
+			if (dso.molNotation == null)
+				sb.append (dso.molNotation);
+			else
+			{
+				try {
+					String smiles = SmartsHelper.moleculeToSMILES(dso.molecule, true);
+					sb.append(smiles);
+				}
+				catch (Exception e) {}
+			}
+			sb.append("  ");
+			sb.append(dso.error);
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+		
 	}
 }

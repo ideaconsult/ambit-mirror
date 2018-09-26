@@ -24,7 +24,6 @@ public class Fragmentation
 	public Map<String, Integer> groupFrequencies = new HashMap<String, Integer>();
 	public List<Double> correctionFactors = new ArrayList<Double>();
 	
-	
 	public void addGroup(String groupDesignation)
 	{
 		Integer freq = groupFrequencies.get(groupDesignation);
@@ -42,7 +41,13 @@ public class Fragmentation
 		for (int i = 0; i < dataset.dataObjects.size(); i++)
 		{
 			DataSetObject dso = dataset.dataObjects.get(i);
-			makeFragmentation(dso, gcm);	
+			try	{
+				makeFragmentation(dso, gcm);
+			}
+			catch (Exception e) {
+				dso.error = "Error on making fragmentation: " + e.getMessage();
+				dataset.nErrors++;
+			}
 		}
 	}
 	
@@ -65,7 +70,6 @@ public class Fragmentation
 		//Handle correction factors
 		if (!gcm.getCorrectionFactors().isEmpty())
 			calcCorrectionFactors(dso,gcm);
-
 	}
 	
 	
