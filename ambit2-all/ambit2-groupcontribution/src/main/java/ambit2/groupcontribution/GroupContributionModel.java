@@ -303,4 +303,22 @@ public class GroupContributionModel
 		return value;
 	}
 	
+	
+	public String toJsonString()
+	{
+		StringBuffer sb = new StringBuffer();
+		String endLine = "\n";
+		String offset = "\t";
+		
+		sb.append("{" + endLine);
+		
+		sb.append(offset + "\"" + "MODEL_NAME" + "\" : \n" + modelName + "\"" + endLine); 	
+		
+		sb.append("}" + endLine);
+		
+		return sb.toString();
+				
+	}
+	
+	
 }

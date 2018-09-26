@@ -37,7 +37,7 @@ public class GCM2Json
 			}
 		}
 
-		//JSONParsingUtils jsonUtils = new JSONParsingUtils();
+		JSONParsingUtils jsonUtils = new JSONParsingUtils();
 		GroupContributionModel gcm = new GroupContributionModel();
 		
 		JsonNode curNode = root.path("MODEL_NAME");
