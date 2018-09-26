@@ -483,9 +483,9 @@ public class GroupContributionCli
 		}
 		
 		
+		//Setup additional config info
 		DataSet trainDataSet = new DataSet(new File(addConfigInfo.trainingSetFile));
-		
-		
+				
 		if (addConfigInfo.gcmTypeString != null)
 		{
 			GroupContributionModel.Type type = getModelType(addConfigInfo.gcmTypeString);
@@ -556,7 +556,6 @@ public class GroupContributionCli
 			gcm.getReportConfig().fractionDigits = addConfigInfo.fractionDigits;
 		}
 		
-		//Fragmentation.makeFragmentation(trainDataSet, gcm);
 		
 		Learner learner = new Learner();
 		learner.setModel(gcm);

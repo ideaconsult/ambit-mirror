@@ -334,10 +334,10 @@ public class GroupContributionModel
 		String endLine = "\n";
 		String offset = "\t";
 		
-		sb.append("{" + endLine);
-		
-		sb.append(offset + "\"" + "MODEL_NAME" + "\" : " + modelName + "\"" + endLine); 	
-		
+		sb.append("{" + endLine);		
+		sb.append(offset + "\"" + "MODEL_NAME" + "\" : \"" + modelName + "\"" + endLine);
+		sb.append(offset + "\"" + "MODEL_TYPE" + "\" : \"" + additionalConfig.gcmTypeString + "\"" + endLine);
+				
 		sb.append("}" + endLine);
 		
 		return sb.toString();

@@ -37,8 +37,9 @@ public class GCM2Json
 			}
 		}
 
-		JSONParsingUtils jsonUtils = new JSONParsingUtils();
+		//JSONParsingUtils jsonUtils = new JSONParsingUtils();
 		GroupContributionModel gcm = new GroupContributionModel();
+		GroupContributionModel.GCMConfigInfo addConfigInfo = gcm.getAdditionalConfig();
 		
 		JsonNode curNode = root.path("MODEL_NAME");
 		if (!curNode.isMissingNode())
@@ -54,6 +55,9 @@ public class GCM2Json
 		{	
 			if (curNode.isTextual())
 			{
+				addConfigInfo.gcmTypeString = curNode.asText();
+				
+				/*
 				String t = curNode.asText();
 				try {
 					Type type = Type.valueOf(t);
@@ -63,6 +67,7 @@ public class GCM2Json
 				{
 					configErrors.add("MODEL_TYPE '" + t + "' is not correct!");
 				}
+				*/
 			}	
 			else
 				configErrors.add("MODEL_TYPE is not textual!");
