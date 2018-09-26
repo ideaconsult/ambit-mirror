@@ -222,7 +222,7 @@ public class Learner
 				
 		try
 		{
-			b0 = Fragmentation.generatePropertyMatrix(trainDataSet, model.getTargetEndpoint());
+			b0 = Fragmentation.generatePropertyMatrix(trainDataSet, model.getTargetProperty());
 		}
 		catch(Exception e)
 		{

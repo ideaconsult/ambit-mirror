@@ -22,6 +22,17 @@ import ambit2.groupcontribution.utils.math.ValidationConfig;
 
 public class GroupContributionModel 
 {
+	public static class GCMConfigInfo {
+		public String trainingSetFile = null;
+		public String localDescriptorsString = null;
+		public String globalDescriptorsString = null;
+		public Double threshold = null;
+		public String validationString = null;
+		public String corFactorsString = null;		
+		public int fractionDigits = -1;
+		
+	}
+	
 	public enum Type {
 		ATOMIC, BOND_BASED, CUSTOM_GROUPS, CORRECTION_FACTORS_ONLY
 	}
@@ -41,13 +52,15 @@ public class GroupContributionModel
 	
 	private Map<String,IGroup> groups = new HashMap<String,IGroup>();
 	private Type modelType = Type.ATOMIC;
-	private String targetEndpoint = null;
+	private String targetProperty = null;
 	private Double colStatPercentageThreshold = null;
 	private GCMReportConfig reportConfig = new GCMReportConfig(); 	
 	private StringBuffer report = new StringBuffer(); 
 	private ValidationConfig validationConfig = new ValidationConfig(); 
+	private GCMConfigInfo additionalConfig = new GCMConfigInfo();
 	
 	private boolean allowGroupRegistration = true;
+	
 	
 	//TODO add group rules and LocalDescriptor rules
 	
@@ -130,12 +143,12 @@ public class GroupContributionModel
 		this.modelType = modelType;
 	}
 	
-	public String getTargetEndpoint() {
-		return targetEndpoint;
+	public String getTargetProperty() {
+		return targetProperty;
 	}
 
-	public void setTargetEndpoint(String targetEndpoint) {
-		this.targetEndpoint = targetEndpoint;
+	public void setTargetProperty(String targetProperty) {
+		this.targetProperty = targetProperty;
 	}
 	
 	public Double getColStatPercentageThreshold() {
@@ -162,6 +175,15 @@ public class GroupContributionModel
 		this.descriptors = descriptors;
 	}
 	
+	public GCMConfigInfo getAdditionalConfig() {
+		return additionalConfig;
+	}
+
+	public void setAdditionalConfig(GCMConfigInfo additionalConfig) {
+		this.additionalConfig = additionalConfig;
+	}
+
+	
 	/*
 	public void addDescriptor(String descrName) {
 		DescriptorInfo di = new DescriptorInfo();
@@ -169,6 +191,7 @@ public class GroupContributionModel
 		descriptors.add(di);
 	}
 	*/
+	
 	
 	public String getAtomDesignation(int descriptors[])
 	{

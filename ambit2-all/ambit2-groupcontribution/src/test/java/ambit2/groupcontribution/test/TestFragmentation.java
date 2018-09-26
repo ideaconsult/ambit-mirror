@@ -37,7 +37,7 @@ public class TestFragmentation extends TestCase
 			) throws Exception
 	{
 		GroupContributionModel gcm = new GroupContributionModel();
-		gcm.setTargetEndpoint("test_property");
+		gcm.setTargetProperty("test_property");
 		gcm.setModelType(gcmType);
 		//System.out.println("GCM type : " + gcm.getModelType().toString());		
 		GCMParser gcmParser = new GCMParser();

@@ -403,18 +403,23 @@ public class GroupContributionCli
 	
 	protected int runGCM() throws Exception
 	{	
+		GroupContributionModel gcm;
+		GroupContributionModel.GCMConfigInfo addConfigInfo;
 				
 		if (gcmConfigFile == null)
 		{	
 			System.out.println("Configuration file not assigned. Getting data from command line options");
+			gcm = new GroupContributionModel();
+			addConfigInfo = gcm.getAdditionalConfig();
 			
 			if (trainSetFile == null)
 				throw new Exception("Training set file not assigned! Use -t command line option.");
 			
-			if (trainSetFile != null) 
+			if (trainSetFile != null)
+			{	
 				System.out.println("train set file: " + trainSetFile);
-			if (gcmConfigFile != null)
-				System.out.println("gcm config: " + gcmConfigFile);
+				addConfigInfo.trainingSetFile = trainSetFile;
+			}	
 			if (localDescriptors != null)
 				System.out.println("Local descriptors: " + localDescriptors);
 			if (corFactors != null)
@@ -424,16 +429,21 @@ public class GroupContributionCli
 			if (threshold != null)
 				System.out.println("Column filtration threshold: " + threshold);
 			if (targetProperty != null)
+			{	
 				System.out.println("Target property: " + targetProperty);
+				gcm.setTargetProperty(targetProperty);
+			}	
 			if (validation != null)
 				System.out.println("Validation: " + validation);
 			if (FlagFragmenationOnly)
 				System.out.println("Fragmentation only");
 		}
 		else
-		{
+		{			
+			System.out.println("GCM config: " + gcmConfigFile);
+			
 			GCM2Json g2j = new GCM2Json();
-			GroupContributionModel gcm = g2j.loadFromJSON(new File(gcmConfigFile));
+			gcm = g2j.loadFromJSON(new File(gcmConfigFile));
 			
 			if (!g2j.configErrors.isEmpty())
 			{	
@@ -450,10 +460,9 @@ public class GroupContributionCli
 		}
 		
 		
-		DataSet trainDataSet = new DataSet(new File(trainSetFile));
+		DataSet trainDataSet = new DataSet(new File(addConfigInfo.trainingSetFile));
 		
-		GroupContributionModel gcm = new GroupContributionModel();
-		gcm.setTargetEndpoint(targetProperty);
+		
 		if (gcmType != null)
 		{
 			GroupContributionModel.Type type = getModelType(gcmType);
