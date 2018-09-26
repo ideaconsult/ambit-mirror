@@ -312,7 +312,7 @@ public class GroupContributionModel
 		
 		sb.append("{" + endLine);
 		
-		sb.append(offset + "\"" + "MODEL_NAME" + "\" : \n" + modelName + "\"" + endLine); 	
+		sb.append(offset + "\"" + "MODEL_NAME" + "\" : " + modelName + "\"" + endLine); 	
 		
 		sb.append("}" + endLine);
 		
