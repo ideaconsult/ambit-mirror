@@ -69,6 +69,22 @@ public class GCM2Json
 		}	
 		
 		return gcm;
-	}	
+	}
+	
+	public String getAllErrorsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (String err : configErrors)
+			sb.append(err + "\n");
+		return sb.toString();
+	}
+	
+	public String getAllWarningAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (String w : configWarnings)
+			sb.append(w + "\n");
+		return sb.toString();
+	}
 	
 }

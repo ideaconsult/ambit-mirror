@@ -19,6 +19,7 @@ import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
+import ambit2.groupcontribution.io.GCM2Json;
 import ambit2.groupcontribution.utils.math.CrossValidation;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
 import ambit2.smarts.IsomorphismTester;
@@ -431,7 +432,21 @@ public class GroupContributionCli
 		}
 		else
 		{
-			//TODO handle config file
+			GCM2Json g2j = new GCM2Json();
+			GroupContributionModel gcm = g2j.loadFromJSON(new File(gcmConfigFile));
+			
+			if (!g2j.configErrors.isEmpty())
+			{	
+				System.out.println(g2j.getAllErrorsAsString());
+				return -1;
+			}	
+			else if (!g2j.configErrors.isEmpty())
+				System.out.println(g2j.getAllErrorsAsString());
+			
+			String gcm_json = gcm.toJsonString();
+			System.out.println(gcm_json);
+			
+			return 0;
 		}
 		
 		
