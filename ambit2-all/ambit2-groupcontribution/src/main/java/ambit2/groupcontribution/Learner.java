@@ -37,6 +37,9 @@ public class Learner
 	private double epsilon = 1.0e-15;
 	private String endline = "\n";
 	
+	private int matrixDig = 5;
+	private int matrixDecDig = 3;
+	
 	//Work matrices: 
 	//A0 - initial fragment frequencies, D0/D - initial/final descriptors 
 	//Cf0/Cf - initial/final correction factors
@@ -112,7 +115,23 @@ public class Learner
 	public void setExternalDataSet(DataSet externalDataSet) {
 		this.externalDataSet = externalDataSet;
 	}
-	
+			
+	public int getMatrixDig() {
+		return matrixDig;
+	}
+
+	public void setMatrixDig(int matrixDig) {
+		this.matrixDig = matrixDig;
+	}
+
+	public int getMatrixDecDig() {
+		return matrixDecDig;
+	}
+
+	public void setMatrixDecDig(int matrixDecDig) {
+		this.matrixDecDig = matrixDecDig;
+	}
+
 	public int train()
 	{
 		GCMReportConfig repCfg = model.getReportConfig();
@@ -681,31 +700,41 @@ public class Learner
 		
 		if (repCfg.FlagConsoleOutput)
 		{
-			System.out.println("Matrix A0");
+			System.out.println("Matrix A0  (group counts)");
 			System.out.println(A0.toString(3,0));
 			if (D0 != null)
 			{	
-				System.out.println("Matrix D0");				
-				System.out.println(D0.toString(3,3));	
-			}	
-			System.out.println("Matrix A");
-			System.out.println(A.toString(3,3));
-			System.out.println("Matrix b0");
-			System.out.println(b0.toString(3,3));
+				System.out.println("Matrix D0  (descriptors)");				
+				System.out.println(D0.toString(matrixDig,matrixDecDig));	
+			}
+			if (Cf0 != null)
+			{	
+				System.out.println("Matrix Cf0  (correction factors)");				
+				System.out.println(Cf0.toString(matrixDig,matrixDecDig));	
+			}			
+			System.out.println("Matrix A  (A0,D0,Cf0 - filtered and united)");
+			System.out.println(A.toString(matrixDig,matrixDecDig));
+			System.out.println("Matrix b0  (traget property)");
+			System.out.println(b0.toString(matrixDig,matrixDecDig));
 		}
 		if (repCfg.FlagBufferOutput)
 		{
-			model.addToReport("Matrix A0\n");
+			model.addToReport("Matrix A0  (group counts)\n");
 			model.addToReport(A0.toString(3,0) + "\n");	
 			if (D0 != null)
 			{	
-				model.addToReport("Matrix D0\n");
-				model.addToReport(D0.toString(3,3) + "\n");
-			}	
-			model.addToReport("Matrix A\n");
-			model.addToReport(A.toString(3,3) + "\n");			
+				model.addToReport("Matrix D0  (descriptors)\n");
+				model.addToReport(D0.toString(matrixDig,matrixDecDig) + "\n");
+			}
+			if (Cf0 != null)
+			{	
+				model.addToReport("Matrix Cf0  (correction factors)\n");
+				model.addToReport(Cf0.toString(matrixDig,matrixDecDig) + "\n");
+			}
+			model.addToReport("Matrix A  (A0,D0,Cf0 - filtered and united)\n");
+			model.addToReport(A.toString(matrixDig,matrixDecDig) + "\n");			
 			model.addToReport("Matrix b0\n");
-			model.addToReport(b0.toString(3,3) + "\n");
+			model.addToReport(b0.toString(matrixDig,matrixDecDig) + "\n");
 		}
 	}
 	
@@ -715,22 +744,32 @@ public class Learner
 
 		if (repCfg.FlagConsoleOutput)
 		{
-			System.out.println("Matrix A0");
+			System.out.println("Matrix A0  (group counts)");
 			System.out.println(A0.toString(3,0));
 			if (D0 != null)
 			{	
-				System.out.println("Matrix D0");				
-				System.out.println(D0.toString(3,3));	
+				System.out.println("Matrix D0  (descriptors)");				
+				System.out.println(D0.toString(matrixDig,matrixDecDig));	
+			}
+			if (Cf0 != null)
+			{	
+				System.out.println("Matrix Cf0  (correction factors)");				
+				System.out.println(Cf0.toString(matrixDig,matrixDecDig));	
 			}
 		}
 		if (repCfg.FlagBufferOutput)
 		{
-			model.addToReport("Matrix A0\n");
+			model.addToReport("Matrix A0  (group counts)\n");
 			model.addToReport(A0.toString(3,0) + "\n");	
 			if (D0 != null)
 			{	
-				model.addToReport("Matrix D0\n");
-				model.addToReport(D0.toString(3,3) + "\n");
+				model.addToReport("Matrix D0  (descriptors)\n");
+				model.addToReport(D0.toString(matrixDig,matrixDecDig) + "\n");
+			}
+			if (Cf0 != null)
+			{	
+				model.addToReport("Matrix Cf0  (correction factors)\n");
+				model.addToReport(Cf0.toString(matrixDig,matrixDecDig) + "\n");
 			}
 		}		
 	}	
