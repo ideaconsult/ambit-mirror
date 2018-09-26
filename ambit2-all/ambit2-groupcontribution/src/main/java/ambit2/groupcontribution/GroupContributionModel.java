@@ -27,6 +27,7 @@ public class GroupContributionModel
 		public String localDescriptorsString = null;
 		public String globalDescriptorsString = null;
 		public Double threshold = null;
+		public String gcmTypeString = null;
 		public String validationString = null;
 		public String corFactorsString = null;		
 		public int fractionDigits = -1;

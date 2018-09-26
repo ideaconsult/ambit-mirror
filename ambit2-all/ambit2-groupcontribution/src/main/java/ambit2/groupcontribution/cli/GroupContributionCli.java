@@ -421,22 +421,45 @@ public class GroupContributionCli
 				addConfigInfo.trainingSetFile = trainSetFile;
 			}	
 			if (localDescriptors != null)
+			{	
 				System.out.println("Local descriptors: " + localDescriptors);
+				addConfigInfo.localDescriptorsString = localDescriptors;
+			}	
 			if (corFactors != null)
+			{	
 				System.out.println("Correction factors: " + corFactors);
+				addConfigInfo.corFactorsString = corFactors;
+			}	
 			if (globalDescriptors != null)
+			{	
 				System.out.println("Global descriptors: " + globalDescriptors);
+				addConfigInfo.globalDescriptorsString = globalDescriptors;
+			}	
 			if (threshold != null)
+			{	
 				System.out.println("Column filtration threshold: " + threshold);
+				addConfigInfo.threshold = threshold;
+			}	
 			if (targetProperty != null)
 			{	
 				System.out.println("Target property: " + targetProperty);
 				gcm.setTargetProperty(targetProperty);
 			}	
 			if (validation != null)
+			{	
 				System.out.println("Validation: " + validation);
+				addConfigInfo.validationString = validation;
+			}
+			if (gcmType != null)
+			{
+				addConfigInfo.gcmTypeString = gcmType;
+			}
+			
 			if (FlagFragmenationOnly)
 				System.out.println("Fragmentation only");
+			
+			if (fractionDigits >= 0)
+				addConfigInfo.fractionDigits = fractionDigits;						
 		}
 		else
 		{			
@@ -463,9 +486,9 @@ public class GroupContributionCli
 		DataSet trainDataSet = new DataSet(new File(addConfigInfo.trainingSetFile));
 		
 		
-		if (gcmType != null)
+		if (addConfigInfo.gcmTypeString != null)
 		{
-			GroupContributionModel.Type type = getModelType(gcmType);
+			GroupContributionModel.Type type = getModelType(addConfigInfo.gcmTypeString);
 			if (type != null)
 				gcm.setModelType(type);
 		}
@@ -474,7 +497,8 @@ public class GroupContributionCli
 		GCMParser gcmParser = new GCMParser(new SmartsParser(), new IsomorphismTester());
 		
 		
-		List<ILocalDescriptor> locDescriptors = gcmParser.getLocalDescriptorsFromString(localDescriptors);
+		List<ILocalDescriptor> locDescriptors = 
+				gcmParser.getLocalDescriptorsFromString(addConfigInfo.localDescriptorsString);
 		if (!gcmParser.getErrors().isEmpty())
 		{
 			System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
@@ -483,9 +507,10 @@ public class GroupContributionCli
 		else
 			gcm.setLocalDescriptors(locDescriptors);
 		
-		if (corFactors != null)
+		if (addConfigInfo.corFactorsString != null)
 		{
-			List<ICorrectionFactor> cfs = gcmParser.getCorrectionFactorsFromString(corFactors);
+			List<ICorrectionFactor> cfs = 
+					gcmParser.getCorrectionFactorsFromString(addConfigInfo.corFactorsString);
 			if (!gcmParser.getErrors().isEmpty())
 			{
 				System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
@@ -498,9 +523,10 @@ public class GroupContributionCli
 			}
 		}
 		
-		if (globalDescriptors != null)
+		if (addConfigInfo.globalDescriptorsString != null)
 		{
-			List<DescriptorInfo> globDescriptors = gcmParser.getGlobalDescriptorsFromString(globalDescriptors);
+			List<DescriptorInfo> globDescriptors = 
+					gcmParser.getGlobalDescriptorsFromString(addConfigInfo.globalDescriptorsString);
 			if (!gcmParser.getErrors().isEmpty())
 			{
 				System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
@@ -514,20 +540,20 @@ public class GroupContributionCli
 		}
 		
 		
-		if (threshold != null)
-			gcm.setColStatPercentageThreshold(threshold);
+		if (addConfigInfo.threshold != null)
+			gcm.setColStatPercentageThreshold(addConfigInfo.threshold);
 			
-		if (validation != null)
+		if (addConfigInfo.validationString != null)
 		{
-			ValidationConfig valCfg = getValidationConfigFromString(validation);
+			ValidationConfig valCfg = getValidationConfigFromString(addConfigInfo.validationString);
 			if (valCfg == null)
 				return -2;
 			gcm.setValidationConfig(valCfg);
 		}
 		
-		if (fractionDigits >= 0)
+		if (addConfigInfo.fractionDigits >= 0)
 		{
-			gcm.getReportConfig().fractionDigits = fractionDigits;
+			gcm.getReportConfig().fractionDigits = addConfigInfo.fractionDigits;
 		}
 		
 		//Fragmentation.makeFragmentation(trainDataSet, gcm);
