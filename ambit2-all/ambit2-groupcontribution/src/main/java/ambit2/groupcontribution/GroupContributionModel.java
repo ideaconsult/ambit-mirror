@@ -44,7 +44,7 @@ public class GroupContributionModel
 	}
 	*/
 		
-	private String modelName = "";
+	private String modelName = null;
 	private List<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private List<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
 	private List<IGroup.Type> customGroups = new ArrayList<IGroup.Type>();
@@ -333,11 +333,33 @@ public class GroupContributionModel
 		StringBuffer sb = new StringBuffer();
 		String endLine = "\n";
 		String offset = "\t";
+		int nFields = 0;
 		
-		sb.append("{" + endLine);		
-		sb.append(offset + "\"" + "MODEL_NAME" + "\" : \"" + modelName + "\"" + endLine);
-		sb.append(offset + "\"" + "MODEL_TYPE" + "\" : \"" + additionalConfig.gcmTypeString + "\"" + endLine);
-				
+		sb.append("{" + endLine);
+		if (modelName != null)
+		{	
+			sb.append(offset + "\"" + "MODEL_NAME" + "\" : \"" + modelName + "\"");
+			nFields++;
+		}	
+		
+		if (additionalConfig.gcmTypeString != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "MODEL_TYPE" + "\" : \"" + additionalConfig.gcmTypeString + "\"");
+			nFields++;
+		}
+		
+		if (additionalConfig.localDescriptorsString != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "LOCAL_DESCRIPTORS" + "\" : \"" + additionalConfig.localDescriptorsString + "\"");
+			nFields++;
+		}
+		
+		
+		sb.append(endLine);
 		sb.append("}" + endLine);
 		
 		return sb.toString();

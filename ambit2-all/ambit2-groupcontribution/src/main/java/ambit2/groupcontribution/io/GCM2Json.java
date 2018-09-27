@@ -71,7 +71,18 @@ public class GCM2Json
 			}	
 			else
 				configErrors.add("MODEL_TYPE is not textual!");
-		}	
+		}
+		
+		curNode = root.path("LOCAL_DESCRIPTORS");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isTextual())			
+				addConfigInfo.localDescriptorsString = curNode.asText();
+			else
+				configErrors.add("LOCAL_DESCRIPTORS is not textual!");
+		}
+		
+		
 		
 		return gcm;
 	}
