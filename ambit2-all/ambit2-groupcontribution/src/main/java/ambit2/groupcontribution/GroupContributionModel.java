@@ -24,6 +24,7 @@ public class GroupContributionModel
 {
 	public static class GCMConfigInfo {
 		public String trainingSetFile = null;
+		public String externalSetFile = null;		
 		public String localDescriptorsString = null;
 		public String globalDescriptorsString = null;
 		public Double threshold = null;

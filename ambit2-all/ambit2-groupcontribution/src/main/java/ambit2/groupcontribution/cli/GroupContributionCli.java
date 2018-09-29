@@ -32,6 +32,7 @@ public class GroupContributionCli
 	private static final String title = "Group contribution modeling";
 	
 	public String trainSetFile = null;
+	public String externalSetFile = null;	
 	public String gcmConfigFile = null;
 	public String localDescriptors = null;
 	public String globalDescriptors = null;
@@ -92,6 +93,21 @@ public class GroupContributionCli
 			@Override
 			public String getShortName() {
 				return "t";
+			}
+		},
+		
+		extern {
+			@Override
+			public String getArgName() {
+				return "extern";
+			}
+			@Override
+			public String getDescription() {
+				return "External data set";
+			}
+			@Override
+			public String getShortName() {
+				return "x";
 			}
 		},
 		
@@ -290,6 +306,12 @@ public class GroupContributionCli
 			trainSetFile = argument;
 			break;
 		}
+		case extern: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			externalSetFile = argument;
+			break;
+		}
 		case config: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -419,7 +441,12 @@ public class GroupContributionCli
 			{	
 				System.out.println("train set file: " + trainSetFile);
 				addConfigInfo.trainingSetFile = trainSetFile;
-			}	
+			}
+			if (externalSetFile != null)
+			{	
+				System.out.println("External set file: " + trainSetFile);
+				addConfigInfo.externalSetFile = externalSetFile;
+			}
 			if (localDescriptors != null)
 			{	
 				System.out.println("Local descriptors: " + localDescriptors);
@@ -578,6 +605,12 @@ public class GroupContributionCli
 		System.out.println();
 		learner.validate();
 		
+		//External test
+		if (addConfigInfo.externalSetFile != null)
+		{
+			//TODO
+		}
+			
 		return 0;
 	}	
 	
