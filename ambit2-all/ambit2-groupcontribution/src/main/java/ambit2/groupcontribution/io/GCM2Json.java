@@ -48,7 +48,16 @@ public class GCM2Json
 				gcm.setModelName(curNode.asText());
 			else
 				configErrors.add("MODEL_NAME is not textual!");
-		}	
+		}
+		
+		curNode = root.path("MODEL_DESCRIPTION");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isTextual())
+				gcm.setModelDescription(curNode.asText());
+			else
+				configErrors.add("MODEL_DESCRIPTION is not textual!");
+		}
 		
 		curNode = root.path("MODEL_TYPE");
 		if (!curNode.isMissingNode())

@@ -46,6 +46,8 @@ public class GroupContributionModel
 	*/
 		
 	private String modelName = null;
+	private String modelDescription = null;
+	
 	private List<ILocalDescriptor> localDescriptors = new ArrayList<ILocalDescriptor>();	
 	private List<ICorrectionFactor> correctionFactors = new ArrayList<ICorrectionFactor>();
 	private List<IGroup.Type> customGroups = new ArrayList<IGroup.Type>();
@@ -74,6 +76,14 @@ public class GroupContributionModel
 	public void setModelName(String modelName)
 	{
 		this.modelName = modelName;
+	}
+	
+	public String getModelDescription() {
+		return modelDescription;
+	}
+
+	public void setModelDescription(String modelDescription) {
+		this.modelDescription = modelDescription;
 	}
 
 	public List<ILocalDescriptor> getLocalDescriptors() {
@@ -342,6 +352,14 @@ public class GroupContributionModel
 			sb.append(offset + "\"" + "MODEL_NAME" + "\" : \"" + modelName + "\"");
 			nFields++;
 		}	
+		
+		if (modelDescription != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "MODEL_DESCRIPTION" + "\" : \"" + modelDescription + "\"");
+			nFields++;
+		}
 		
 		if (additionalConfig.gcmTypeString != null)
 		{
