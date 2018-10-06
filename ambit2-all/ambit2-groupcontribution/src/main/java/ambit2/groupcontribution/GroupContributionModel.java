@@ -27,7 +27,7 @@ public class GroupContributionModel
 		public String externalSetFile = null;		
 		public String localDescriptorsString = null;
 		public String globalDescriptorsString = null;
-		public Double threshold = null;
+		public Double columnFiltrationthreshold = null;
 		public String gcmTypeString = null;
 		public String validationString = null;
 		public String corFactorsString = null;		
@@ -390,6 +390,24 @@ public class GroupContributionModel
 			if (nFields > 0)
 				sb.append("," + endLine);
 			sb.append(offset + "\"" + "CORRECTION_FACTORS" + "\" : \"" + additionalConfig.corFactorsString + "\"");
+			nFields++;
+		}
+		
+		if (additionalConfig.columnFiltrationthreshold != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "COLUMN_FILTRATION_THRESHOLD" + "\" : " 
+				+ additionalConfig.columnFiltrationthreshold);
+			nFields++;
+		}
+		
+		if (additionalConfig.fractionDigits != -1)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "FRACTION_DIGITS" + "\" : " 
+				+ additionalConfig.fractionDigits);
 			nFields++;
 		}
 		

@@ -465,7 +465,7 @@ public class GroupContributionCli
 			if (threshold != null)
 			{	
 				System.out.println("Column filtration threshold: " + threshold);
-				addConfigInfo.threshold = threshold;
+				addConfigInfo.columnFiltrationthreshold = threshold;
 			}	
 			if (targetProperty != null)
 			{	
@@ -567,8 +567,8 @@ public class GroupContributionCli
 		}
 		
 		
-		if (addConfigInfo.threshold != null)
-			gcm.setColStatPercentageThreshold(addConfigInfo.threshold);
+		if (addConfigInfo.columnFiltrationthreshold != null)
+			gcm.setColStatPercentageThreshold(addConfigInfo.columnFiltrationthreshold);
 			
 		if (addConfigInfo.validationString != null)
 		{

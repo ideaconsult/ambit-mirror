@@ -63,21 +63,7 @@ public class GCM2Json
 		if (!curNode.isMissingNode())
 		{	
 			if (curNode.isTextual())
-			{
-				addConfigInfo.gcmTypeString = curNode.asText();
-				
-				/*
-				String t = curNode.asText();
-				try {
-					Type type = Type.valueOf(t);
-					gcm.setModelType(type);
-				}
-				catch (Exception x)
-				{
-					configErrors.add("MODEL_TYPE '" + t + "' is not correct!");
-				}
-				*/
-			}	
+				addConfigInfo.gcmTypeString = curNode.asText();				
 			else
 				configErrors.add("MODEL_TYPE is not textual!");
 		}
@@ -109,6 +95,27 @@ public class GCM2Json
 				configErrors.add("CORRECTION_FACTORS is not textual!");
 			//TODO handle non textual json node
 		}
+		
+		try {
+			Double d = JSONParsingUtils.extractDoubleKeyword(root, "COLUMN_FILTRATION_THRESHOLD", false);
+			if (d != null)
+				addConfigInfo.columnFiltrationthreshold = d;	
+		}
+		catch (Exception e){
+			configErrors.add(e.getMessage());		
+		}
+		
+		try {
+			Integer i = JSONParsingUtils.extractIntKeyword(root, "FRACTION_DIGITS", false);
+			if (i != null)
+				addConfigInfo.fractionDigits = i;	
+		}
+		catch (Exception e){
+			configErrors.add(e.getMessage());		
+		}
+		
+		
+		
 		
 		
 		return gcm;
