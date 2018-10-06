@@ -411,6 +411,22 @@ public class GroupContributionModel
 			nFields++;
 		}
 		
+		if (additionalConfig.trainingSetFile != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "TRAINING_SET_FILE" + "\" : \"" + additionalConfig.trainingSetFile + "\"");
+			nFields++;
+		}
+		
+		if (additionalConfig.externalSetFile != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "EXTERNAL_SET_FILE" + "\" : \"" + additionalConfig.externalSetFile + "\"");
+			nFields++;
+		}
+		
 		sb.append(endLine);
 		sb.append("}" + endLine);
 		

@@ -114,8 +114,23 @@ public class GCM2Json
 			configErrors.add(e.getMessage());		
 		}
 		
+		curNode = root.path("TRAINING_SET_FILE");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isTextual())			
+				addConfigInfo.trainingSetFile = curNode.asText();
+			else
+				configErrors.add("TRAINING_SET_FILE is not textual!");			
+		}
 		
-		
+		curNode = root.path("EXTERNAL_SET_FILE");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isTextual())			
+				addConfigInfo.externalSetFile = curNode.asText();
+			else
+				configErrors.add("EXTERNAL_SET_FILE is not textual!");			
+		}
 		
 		
 		return gcm;
