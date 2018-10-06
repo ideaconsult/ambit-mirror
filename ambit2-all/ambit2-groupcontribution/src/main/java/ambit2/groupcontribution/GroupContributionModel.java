@@ -377,6 +377,21 @@ public class GroupContributionModel
 			nFields++;
 		}
 		
+		if (additionalConfig.globalDescriptorsString != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "GLOBAL_DESCRIPTORS" + "\" : \"" + additionalConfig.globalDescriptorsString + "\"");
+			nFields++;
+		}
+		
+		if (additionalConfig.corFactorsString != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "CORRECTION_FACTORS" + "\" : \"" + additionalConfig.corFactorsString + "\"");
+			nFields++;
+		}
 		
 		sb.append(endLine);
 		sb.append("}" + endLine);

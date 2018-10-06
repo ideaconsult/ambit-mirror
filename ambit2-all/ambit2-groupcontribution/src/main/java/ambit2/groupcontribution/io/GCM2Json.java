@@ -91,6 +91,24 @@ public class GCM2Json
 				configErrors.add("LOCAL_DESCRIPTORS is not textual!");
 		}
 		
+		curNode = root.path("GLOBAL_DESCRIPTORS");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isTextual())			
+				addConfigInfo.globalDescriptorsString = curNode.asText();
+			else
+				configErrors.add("GLOBAL_DESCRIPTORS is not textual!");
+		}
+		
+		curNode = root.path("CORRECTION_FACTORS");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isTextual())			
+				addConfigInfo.corFactorsString = curNode.asText();
+			else
+				configErrors.add("CORRECTION_FACTORS is not textual!");
+			//TODO handle non textual json node
+		}
 		
 		
 		return gcm;
