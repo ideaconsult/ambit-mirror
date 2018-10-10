@@ -608,7 +608,9 @@ public class GroupContributionCli
 		//External test
 		if (addConfigInfo.externalSetFile != null)
 		{
-			//TODO
+			DataSet externalDataSet = new DataSet(new File(addConfigInfo.externalSetFile));
+			learner.setExternalDataSet(externalDataSet);
+			learner.performExternalValidation();
 		}
 			
 		return 0;

@@ -671,8 +671,9 @@ public class Learner
 		}
 				
 		for (int i = 0; i < externalDataSet.dataObjects.size(); i++)
-		{
+		{			
 			DataSetObject dso = externalDataSet.dataObjects.get(i);
+			//System.out.println("" + i + "  " + dso.molecule.getAtomCount());
 			model_value = model.calcModelValue(dso);
 			exp_value = exp_matrix.el[i][0];
 			diff = model_value - exp_value;

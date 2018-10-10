@@ -326,14 +326,15 @@ public class GroupContributionModel
 			}	
 				
 		//Handle descriptors
-		for (int i = 0; i < descriptors.size(); i++)
-		{	
-			DescriptorInfo di = descriptors.get(i);
-			di.getName();
-			Double d = dso.getPropertyDoubleValue(di.getName());
-			if (d == null)
-				value += di.getContribution() * d;
-		}
+		if (descriptors != null)
+			for (int i = 0; i < descriptors.size(); i++)
+			{	
+				DescriptorInfo di = descriptors.get(i);
+				di.getName();
+				Double d = dso.getPropertyDoubleValue(di.getName());
+				if (d == null)
+					value += di.getContribution() * d;
+			}
 		
 		return value;
 	}
