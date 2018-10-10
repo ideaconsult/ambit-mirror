@@ -9,6 +9,7 @@ import java.util.Set;
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
+import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.ArrayUtils;
@@ -634,7 +635,82 @@ public class Learner
 		{	
 			double params[] = crossValidation(cv.numFolds);
 		}	
-	}	
+	}
+	
+	public void performExternalValidation()
+	{	
+		if (externalDataSet == null)
+			return;
+		
+		GCMReportConfig repCfg = model.getReportConfig();
+		
+		String out_s = "External Validation" + endline 
+						+ "-----------------------------------" + endline;
+		if (repCfg.FlagConsoleOutput)
+			System.out.print(out_s);
+		if (repCfg.FlagBufferOutput)
+			model.addToReport(out_s);
+		
+		DecimalFormat df = getDecimalFormat(repCfg.fractionDigits);
+		List<Double> modVals = new ArrayList<Double>();
+		List<Double> expVals = new ArrayList<Double>();
+		MatrixDouble exp_matrix = null;
+				
+		double exp_value;
+		double model_value;
+		double diff;
+		
+		try
+		{
+			exp_matrix = Fragmentation.generatePropertyMatrix(externalDataSet, model.getTargetProperty());
+		}
+		catch(Exception e)
+		{
+			errors.add("Error while generating target endpoint column-matrix" + e.getMessage());
+			return;
+		}
+				
+		for (int i = 0; i < externalDataSet.dataObjects.size(); i++)
+		{
+			DataSetObject dso = externalDataSet.dataObjects.get(i);
+			model_value = model.calcModelValue(dso);
+			exp_value = exp_matrix.el[i][0];
+			diff = model_value - exp_value;
+			
+			modVals.add(model_value);
+			expVals.add(exp_value);
+			
+			if (model.getValidationConfig().verboseReport)
+			{	
+				out_s = "#" + (i+1) + "  " + df.format(exp_value) + "  "+ df.format(model_value)
+					+ "      diff = " + df.format(diff) + endline;
+				if (repCfg.FlagConsoleOutput)
+					System.out.print(out_s);
+				if (repCfg.FlagBufferOutput)
+					model.addToReport(out_s);
+			}
+		}	
+		
+		double rmsError = Statistics.rmsError(expVals, modVals);
+		double mae = Statistics.meanAbsoluteError(expVals, modVals);
+		double corCoeff = Statistics.corrleationCoefficient(expVals, modVals);
+		double concordCorCoeff = Statistics.getConcordanceCorrelationCoefficient(expVals, modVals);
+		
+		MatrixDouble model_matrix = new MatrixDouble(modVals);		
+		double Q2_external = Statistics.getR2(exp_matrix, model_matrix);
+		
+		
+		out_s =	"RMSE = "+df.format(rmsError) + endline
+				+ "MAE = "+df.format(mae) + endline
+				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (PPMC)" + endline
+				+ "Rc^2 = "+df.format(concordCorCoeff*concordCorCoeff)  + "   (concordance cor. coef.)" + endline
+				+ "Q^2  = "+df.format(Q2_external) + endline + endline;
+		
+		if (repCfg.FlagConsoleOutput)
+			System.out.print(out_s);
+		if (repCfg.FlagBufferOutput)
+			model.addToReport(out_s);
+	}
 	
 	double[] crossValidation(int nFolds)
 	{
