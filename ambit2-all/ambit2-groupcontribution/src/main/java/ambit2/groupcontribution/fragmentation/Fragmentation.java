@@ -134,6 +134,14 @@ public class Fragmentation
 		
 	}
 	
+	public static void makeSecondOrderFragmenation(DataSetObject dso, GroupContributionModel gcm)
+	{
+		Fragmentation fragmentation = new Fragmentation(); 
+		dso.fragmentation = fragmentation;
+		
+		//TODO
+	}
+	
 	public static void makeCustomGroupFragmenation(DataSetObject dso, GroupContributionModel gcm)
 	{
 		Fragmentation fragmentation = new Fragmentation(); 
@@ -196,7 +204,20 @@ public class Fragmentation
 			Map<IAtom, int[]> atomLocDescr, 
 			GroupContributionModel gcm)
 	{
-		//TODO
+		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
+
+		for (IAtom atom : dso.molecule.atoms())
+		{
+			int descriptors[] = atomLocDescr.get(atom);
+			
+			IGroup group = new AtomGroup();
+			String designation = gcm.getAtomDesignation(descriptors);
+			((AtomGroup)group).setAtomDesignation(designation);
+
+			fragmentation.addGroup(designation);
+			if (gcm.isAllowGroupRegistration())
+				gcm.addGroup(group);
+		}
 	}
 	
 	public static void calcBondFragments(Fragmentation fragmentation, 
@@ -204,7 +225,32 @@ public class Fragmentation
 			Map<IAtom, int[]> atomLocDescr, 
 			GroupContributionModel gcm)
 	{
-		//TODO
+		for (IBond bo : dso.molecule.bonds())
+		{
+			int d0[] = atomLocDescr.get(bo.getAtom(0));
+			int d1[] = atomLocDescr.get(bo.getAtom(1));
+			String des0 = gcm.getAtomDesignation(d0);
+			String des1 = gcm.getAtomDesignation(d1);
+			
+			String boType = "-";
+			if (bo.getOrder() == IBond.Order.DOUBLE)
+				boType = "=";
+			else
+				if (bo.getOrder() == IBond.Order.TRIPLE)
+					boType = "#";
+			
+			String designation;
+			if (des0.compareTo(des1) < 0)
+				designation = des0 + boType + des1;
+			else
+				designation = des1 + boType + des0;
+			
+			IGroup group = new BondGroup();
+			((BondGroup)group).setBondDesignation(designation);
+			fragmentation.addGroup(designation);
+			if (gcm.isAllowGroupRegistration())
+				gcm.addGroup(group);
+		}
 	}
 		
 	public static void calcDGroupFragments(Fragmentation fragmentation, 
