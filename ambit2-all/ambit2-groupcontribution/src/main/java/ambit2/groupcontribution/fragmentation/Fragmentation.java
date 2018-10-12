@@ -14,6 +14,7 @@ import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
+import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.groups.AtomGroup;
 import ambit2.groupcontribution.groups.BondGroup;
 import ambit2.groupcontribution.groups.IGroup;
@@ -61,6 +62,9 @@ public class Fragmentation
 		case BOND_BASED:
 			makeBondBasedFragmenation(dso, gcm);
 			break;
+		case SECOND_ORDER:
+			makeSecondOrderFragmenation(dso, gcm);
+			break;				
 		case CORRECTION_FACTORS_ONLY:
 			Fragmentation fragmentation = new Fragmentation(); 
 			dso.fragmentation = fragmentation;
@@ -139,7 +143,14 @@ public class Fragmentation
 		Fragmentation fragmentation = new Fragmentation(); 
 		dso.fragmentation = fragmentation;
 		
-		//TODO
+		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
+		Map<IAtom, int[]> atomLocDescr = calcAtomLocalDescriptors(dso.molecule, locDescr);		
+		calcBondFragments(fragmentation, dso, atomLocDescr, gcm);
+		
+		List<ILocalDescriptor> locDescr2 = getDefaultSecondOrderLocalDescriptors();
+		Map<IAtom, int[]> atomLocDescr2 = calcAtomLocalDescriptors(dso.molecule, locDescr2);		
+		calcGGroupFragments(fragmentation, dso, atomLocDescr2, gcm);		
+		calcDGroupFragments(fragmentation, dso, atomLocDescr2, gcm);
 	}
 	
 	public static void makeCustomGroupFragmenation(DataSetObject dso, GroupContributionModel gcm)
@@ -294,6 +305,14 @@ public class Fragmentation
 			descr.put(atom, descriptors);
 		}
 		return descr;
+	}
+	
+	public static List<ILocalDescriptor> getDefaultSecondOrderLocalDescriptors()
+	{
+		List<ILocalDescriptor> locDescr = new ArrayList<ILocalDescriptor>();
+		ILocalDescriptor ld = new LDAtomSymbol();
+		locDescr.add(ld);
+		return locDescr;
 	}
 	
 	
