@@ -17,7 +17,7 @@ public class DGroup extends ValueTransformedGroup
 		this.contribution = contribution;
 	}
 	
-	public void setGroupBondDesignation(String groupDesignation) {		
+	public void setGroupDesignation(String groupDesignation) {		
 		this.groupDesignation = groupDesignation;
 	}
 

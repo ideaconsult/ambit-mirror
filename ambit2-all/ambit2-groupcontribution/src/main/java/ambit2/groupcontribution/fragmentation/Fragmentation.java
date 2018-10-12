@@ -17,6 +17,7 @@ import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.groups.AtomGroup;
 import ambit2.groupcontribution.groups.BondGroup;
+import ambit2.groupcontribution.groups.GGroup;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
 
@@ -47,6 +48,7 @@ public class Fragmentation
 			}
 			catch (Exception e) {
 				dso.error = "Error on making fragmentation: " + e.getMessage();
+				e.printStackTrace();
 				dataset.nErrors++;
 			}
 		}
@@ -282,7 +284,8 @@ public class Fragmentation
 		for (IAtom at : dso.molecule.atoms())
 		{
 			int d[] = atomLocDescr.get(at);
-			String des = gcm.getAtomDesignation(d);
+			String des = GroupContributionModel.
+					makeAtomDesignation(d, getDefaultSecondOrderLocalDescriptors());			
 			atomDes.put(at, des);
 		}
 		
@@ -297,13 +300,11 @@ public class Fragmentation
 			{
 				for (int k = i+1; k < n; k++)
 				{
-					int d0[] = atomLocDescr.get(neighAt.get(0));
-					int d1[] = atomLocDescr.get(neighAt.get(1));
-					String des0 = atomDes.get(neighAt.get(0));
-					String des1 = atomDes.get(neighAt.get(1));
+					String des0 = atomDes.get(neighAt.get(i));
+					String des1 = atomDes.get(neighAt.get(k));
 					
 					String boType0 = "-";
-					IBond bo0 = dso.molecule.getBond(at,neighAt.get(0));
+					IBond bo0 = dso.molecule.getBond(at,neighAt.get(i));
 					if (bo0.getOrder() == IBond.Order.DOUBLE)
 						boType0 = "=";
 					else
@@ -311,7 +312,7 @@ public class Fragmentation
 							boType0 = "#";
 					
 					String boType1 = "-";
-					IBond bo1 = dso.molecule.getBond(at,neighAt.get(1));
+					IBond bo1 = dso.molecule.getBond(at,neighAt.get(k));
 					if (bo1.getOrder() == IBond.Order.DOUBLE)
 						boType1 = "=";
 					else
@@ -323,7 +324,13 @@ public class Fragmentation
 						designation = atomDes.get(at) + "(" + boType0 + des0 + ")" + boType1 + des1;
 					else
 						designation = atomDes.get(at) + "(" + boType1 + des1 + ")" + boType0 + des0;
-					//TODO add G group					
+					//add G group
+					IGroup group = new GGroup();
+					((GGroup)group).setGroupDesignation(designation);
+
+					fragmentation.addGroup(designation);
+					if (gcm.isAllowGroupRegistration())
+						gcm.addGroup(group);
 				}
 			}
 		}

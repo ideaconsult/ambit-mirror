@@ -178,7 +178,7 @@ public class GroupContributionCli
 			}
 			@Override
 			public String getDescription() {
-				return "Group contribution model type: atomic, bond_based, ...";
+				return "Group contribution model type: atomic, bond_based, second_order";
 			}
 			@Override
 			public String getShortName() {
@@ -622,6 +622,8 @@ public class GroupContributionCli
 			return GroupContributionModel.Type.ATOMIC;
 		if (s.equalsIgnoreCase("bond_based"))
 			return GroupContributionModel.Type.BOND_BASED;
+		if (s.equalsIgnoreCase("second_order"))
+			return GroupContributionModel.Type.SECOND_ORDER;
 		//...		
 		return null;
 	}

@@ -213,7 +213,20 @@ public class GroupContributionModel
 		return sb.toString();
 	}
 	
-	String getDescriptorDesignation(ILocalDescriptor desc, int value)
+	public static String makeAtomDesignation(int descriptors[], List<ILocalDescriptor> locDescr)
+	{
+		if (descriptors.length != locDescr.size())
+			return null;
+		
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < descriptors.length; i++)
+			sb.append(getDescriptorDesignation(
+					locDescr.get(i),	descriptors[i]) );
+		
+		return sb.toString();
+	}
+	
+	public static String getDescriptorDesignation(ILocalDescriptor desc, int value)
 	{
 		if (desc instanceof LDAtomSymbol)
 			return desc.getDesignation(value);
