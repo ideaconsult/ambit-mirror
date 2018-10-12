@@ -39,12 +39,7 @@ public class GroupContributionModel
 		ATOMIC, BOND_BASED, SECOND_ORDER, CUSTOM_GROUPS, CORRECTION_FACTORS_ONLY
 	}
 	
-	/*
-	public enum GroupType {
-		ATOM, BOND, G_GROUP, D_GROUP, L_GROUP, RING3, RING4, RING5, RING6
-	}
-	*/
-		
+	
 	private String modelName = null;
 	private String modelDescription = null;
 	
