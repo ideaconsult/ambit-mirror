@@ -277,7 +277,57 @@ public class Fragmentation
 			Map<IAtom, int[]> atomLocDescr, 
 			GroupContributionModel gcm)
 	{
-		//TODO
+		//Calculate atom designations
+		Map<IAtom, String> atomDes = new HashMap<IAtom, String>();
+		for (IAtom at : dso.molecule.atoms())
+		{
+			int d[] = atomLocDescr.get(at);
+			String des = gcm.getAtomDesignation(d);
+			atomDes.put(at, des);
+		}
+		
+		for (IAtom at : dso.molecule.atoms())
+		{
+			List<IAtom> neighAt = dso.molecule.getConnectedAtomsList(at);
+			int n = neighAt.size(); 
+			if (n < 2)
+				continue;
+									
+			for (int i = 0; i < n-1; i++)
+			{
+				for (int k = i+1; k < n; k++)
+				{
+					int d0[] = atomLocDescr.get(neighAt.get(0));
+					int d1[] = atomLocDescr.get(neighAt.get(1));
+					String des0 = atomDes.get(neighAt.get(0));
+					String des1 = atomDes.get(neighAt.get(1));
+					
+					String boType0 = "-";
+					IBond bo0 = dso.molecule.getBond(at,neighAt.get(0));
+					if (bo0.getOrder() == IBond.Order.DOUBLE)
+						boType0 = "=";
+					else
+						if (bo0.getOrder() == IBond.Order.TRIPLE)
+							boType0 = "#";
+					
+					String boType1 = "-";
+					IBond bo1 = dso.molecule.getBond(at,neighAt.get(1));
+					if (bo1.getOrder() == IBond.Order.DOUBLE)
+						boType1 = "=";
+					else
+						if (bo1.getOrder() == IBond.Order.TRIPLE)
+							boType1 = "#";
+										
+					String designation;
+					if (des0.compareTo(des1) < 0)
+						designation = atomDes.get(at) + "(" + boType0 + des0 + ")" + boType1 + des1;
+					else
+						designation = atomDes.get(at) + "(" + boType1 + des1 + ")" + boType0 + des0;
+					//TODO add G group					
+				}
+			}
+		}
+		
 	}
 	
 	public static void calcLGroupFragments(Fragmentation fragmentation, 
