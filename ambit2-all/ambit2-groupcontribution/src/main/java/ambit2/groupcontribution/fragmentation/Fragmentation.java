@@ -17,6 +17,7 @@ import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.groups.AtomGroup;
 import ambit2.groupcontribution.groups.BondGroup;
+import ambit2.groupcontribution.groups.DGroup;
 import ambit2.groupcontribution.groups.GGroup;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
@@ -196,8 +197,7 @@ public class Fragmentation
 				break;	
 			case L_GROUP:
 				calcLGroupFragments(fragmentation, dso, atomLocDescr, gcm);
-				break;	
-				//TODO
+				break;
 			}
 		}
 	}
@@ -271,7 +271,98 @@ public class Fragmentation
 			Map<IAtom, int[]> atomLocDescr, 
 			GroupContributionModel gcm)
 	{
-		//TODO
+		//Calculate atom designations
+		Map<IAtom, String> atomDes = new HashMap<IAtom, String>();
+		for (IAtom at : dso.molecule.atoms())
+		{
+			int d[] = atomLocDescr.get(at);
+			String des = GroupContributionModel.
+					makeAtomDesignation(d, getDefaultSecondOrderLocalDescriptors());			
+			atomDes.put(at, des);
+		}
+		
+		for (IAtom at : dso.molecule.atoms())
+		{
+			List<IAtom> neighAt = dso.molecule.getConnectedAtomsList(at);
+			int n = neighAt.size(); 
+			if (n < 3)
+				continue;
+									
+			for (int i = 0; i < n-2; i++)			
+				for (int k = i+1; k < n-1; k++)
+					for (int r = k+1; r < n; r++)
+					{
+						String des[] = new String[3];
+						des[0] = atomDes.get(neighAt.get(i));
+						des[1] = atomDes.get(neighAt.get(k));
+						des[2] = atomDes.get(neighAt.get(r));
+						
+						String boType[] = new String[3];
+
+						boType[0] = "-";
+						IBond bo0 = dso.molecule.getBond(at,neighAt.get(i));
+						if (bo0.getOrder() == IBond.Order.DOUBLE)
+							boType[0] = "=";
+						else
+							if (bo0.getOrder() == IBond.Order.TRIPLE)
+								boType[0] = "#";
+
+						boType[1] = "-";
+						IBond bo1 = dso.molecule.getBond(at,neighAt.get(k));
+						if (bo1.getOrder() == IBond.Order.DOUBLE)
+							boType[1] = "=";
+						else
+							if (bo1.getOrder() == IBond.Order.TRIPLE)
+								boType[1] = "#";
+						
+						boType[2] = "-";
+						IBond bo2 = dso.molecule.getBond(at,neighAt.get(r));
+						if (bo2.getOrder() == IBond.Order.DOUBLE)
+							boType[2] = "=";
+						else
+							if (bo1.getOrder() == IBond.Order.TRIPLE)
+								boType[2] = "#";
+
+						String designation;
+						
+						//Sort neighbor atoms designations
+						int si[] = {0,1,2};
+						//Put max at the end
+						if (des[si[0]].compareTo(des[si[1]]) > 0)
+						{	
+							int tmp = si[0];
+							si[0] = si[1];
+							si[1] = tmp;						
+						}	
+						if (des[si[1]].compareTo(des[si[2]]) > 0)
+						{	
+							int tmp = si[1];
+							si[1] = si[2];
+							si[2] = tmp;						
+						}
+						//Check first two elements again
+						if (des[si[0]].compareTo(des[si[1]]) > 0)
+						{	
+							int tmp = si[0];
+							si[0] = si[1];
+							si[1] = tmp;						
+						}
+							
+						
+						designation = atomDes.get(at) + "(" + boType[si[0]] + des[si[0]] + ")"
+								+ "(" + boType[si[1]] + des[si[1]] + ")" + boType[si[2]] + des[si[2]];
+						
+						//add D group
+						IGroup group = new DGroup();
+						((DGroup)group).setGroupDesignation(designation);
+
+						fragmentation.addGroup(designation);
+						if (gcm.isAllowGroupRegistration())
+							gcm.addGroup(group);
+					}
+		}
+		
+				
 	}
 	
 	public static void calcGGroupFragments(Fragmentation fragmentation, 
