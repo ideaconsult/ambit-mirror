@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.openscience.cdk.exception.CDKException;
@@ -112,7 +114,12 @@ public class FileInputState extends FileState implements IInputState {
 		} else if (file.getName().endsWith(_FILE_TYPE.ZIP_INDEX.getExtension())) {
 			return new ZipReader(file);
 		} else if (file.getName().endsWith(_FILE_TYPE.GZ_INDEX.getExtension())) {
-			return new ZipReader(file);
+			String uncompressed = file.getName().replaceAll(_FILE_TYPE.GZ_INDEX.getExtension(), "");
+			try {
+				return getReader(new GZIPInputStream(new FileInputStream(file)), uncompressed);
+			} catch (IOException x) {
+				throw new AmbitIOException(x);
+			}
 		}
 		return getReader(new FileInputStream(file), file.getName(), format);
 	}

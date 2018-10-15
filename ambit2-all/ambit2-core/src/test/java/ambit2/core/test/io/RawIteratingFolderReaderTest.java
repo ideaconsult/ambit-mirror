@@ -38,7 +38,10 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 
+import ambit2.core.io.FileInputState;
 import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.ZipReader;
 
@@ -84,6 +87,22 @@ public class RawIteratingFolderReaderTest {
 		}
 		reader.close();
 		Assert.assertEquals(2,count);
+	}
+	
+	@Test
+	public void testGzip() throws Exception {
+		File zfile = new File("src/test/resources/ambit2/core/data/zip/test.csv.gz");
+		IIteratingChemObjectReader reader = FileInputState.getReader(zfile);
+		int count=0;
+		while (reader.hasNext()) {
+			Object o = reader.next();
+			Assert.assertTrue(o instanceof IAtomContainer);
+			Assert.assertTrue(((IAtomContainer)o).getAtomCount()>0);
+			count++;
+		}
+		reader.close();
+		Assert.assertEquals(3, count);
+		
 	}
 	
 }
