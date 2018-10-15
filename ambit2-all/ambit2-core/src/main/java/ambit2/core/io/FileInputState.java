@@ -279,6 +279,14 @@ public class FileInputState extends FileState implements IInputState {
 			return new ToXMLReaderSimple(stream);
 		} else if (ext.endsWith(_FILE_TYPE.MALARIA_HTS_SHEETS.getExtension())) {
 			return new MalariaHTSDataDelimitedReader(stream);
+		} else if (ext.endsWith(_FILE_TYPE.GZ_INDEX.getExtension())) {
+			String uncompressed = ext.replaceAll(_FILE_TYPE.GZ_INDEX.getExtension(), "");
+			try {
+				return getReader(new GZIPInputStream(stream), uncompressed);
+			} catch (IOException x) {
+				throw new AmbitIOException(x);
+			}
+
 		} else if (ext.endsWith(_FILE_TYPE.ZIP_INDEX.getExtension())) {
 			return new ZipReader(stream);
 		} else if (ext.endsWith(_FILE_TYPE.I5D_INDEX.getExtension())) {
