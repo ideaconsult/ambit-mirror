@@ -1,5 +1,6 @@
 package ambit2.groupcontribution.cli;
 
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -26,6 +27,14 @@ public class GCMPredictCli {
 		}
 		return options;
 	}
+	
+	protected static void printHelp(Options options,String message) {
+		if (message!=null) System.out.println(message);
+		System.out.println(title);
+	    HelpFormatter formatter = new HelpFormatter();
+	    formatter.printHelp( GroupContributionCli.class.getName(), options );
+	}
+	
 	
 	enum _option {
 		
@@ -55,7 +64,7 @@ public class GCMPredictCli {
 			}
 			@Override
 			public String getShortName() {
-				return "c";
+				return "s";
 			}
 		},
 		
@@ -85,9 +94,34 @@ public class GCMPredictCli {
 			}
 			@Override
 			public String getShortName() {
-				return "i";
+				return "o";
 			}
-		};
+		},
+		
+		help {
+			@Override
+			public String getArgName() {
+				return null;
+			}
+			@Override
+			public String getDescription() {
+				return title;
+			}
+			@Override
+			public String getShortName() {
+				return "h";
+			}
+			@Override
+			public String getDefaultValue() {
+				return null;
+			}
+			public Option createOption() {
+		    	Option option   = OptionBuilder.withLongOpt(name())
+		        .withDescription(getDescription())
+		        .create(getShortName());
+		    	return option;
+			}
+		};	
 		
 		public abstract String getArgName();
 		public abstract String getDescription();
@@ -104,7 +138,40 @@ public class GCMPredictCli {
 
 	    	return option;
 		}
-	}	
+	}
+	
+	public void setOption(_option option, String argument) throws Exception 
+	{
+		if (argument != null)
+			argument = argument.trim();
+		switch (option) {
+		case config: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			gcmConfigFile = argument;
+			break;
+		}
+		case smiles: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			inputSmiles = argument;
+			break;
+		}
+		case input: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			inputFileName = argument;
+			break;
+		}
+		case output: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			outputFileName = argument;
+			break;
+		}
+		
+		}	
+	}
 	
 	public int run(String[] args) 
 	{
