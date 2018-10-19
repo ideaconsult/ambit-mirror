@@ -34,6 +34,7 @@ public class GroupContributionCli
 	public String trainSetFile = null;
 	public String externalSetFile = null;	
 	public String gcmConfigFile = null;
+	public String outputGCMFile = null;
 	public String localDescriptors = null;
 	public String globalDescriptors = null;
 	public String targetProperty = null;
@@ -73,11 +74,26 @@ public class GroupContributionCli
 			}
 			@Override
 			public String getDescription() {
-				return "GCM configuration (.json) file";
+				return "Input GCM configuration (.json) file";
 			}
 			@Override
 			public String getShortName() {
-				return "c";
+				return "i";
+			}
+		},
+		
+		output {
+			@Override
+			public String getArgName() {
+				return "out-file";
+			}
+			@Override
+			public String getDescription() {
+				return "Output GCM configuration (.json) file";
+			}
+			@Override
+			public String getShortName() {
+				return "o";
 			}
 		},
 		
@@ -227,7 +243,7 @@ public class GroupContributionCli
 			}
 			@Override
 			public String getShortName() {
-				return "o";
+				return "c";
 			}
 		},
 		
@@ -316,6 +332,12 @@ public class GroupContributionCli
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			gcmConfigFile = argument;
+			break;
+		}
+		case output: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			outputGCMFile = argument;
 			break;
 		}
 		case local_descriptors: {
@@ -612,9 +634,18 @@ public class GroupContributionCli
 			learner.setExternalDataSet(externalDataSet);
 			learner.performExternalValidation();
 		}
-			
+		
+		//saveOutputGCMToFile(gcm);
 		return 0;
-	}	
+	}
+	
+	void saveOutputGCMToFile(GroupContributionModel gcm)
+	{
+		String gcm_json = gcm.toJsonString();
+		System.out.println(gcm_json);
+		
+		//TODO
+	}
 	
 	GroupContributionModel.Type getModelType(String s)
 	{
