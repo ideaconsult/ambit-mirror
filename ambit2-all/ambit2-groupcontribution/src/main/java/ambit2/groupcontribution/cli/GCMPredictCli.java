@@ -1,9 +1,21 @@
 package ambit2.groupcontribution.cli;
 
+import java.io.File;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.groupcontribution.Calculator;
+import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.io.GCM2Json;
+import ambit2.smarts.SmartsHelper;
 
 
 public class GCMPredictCli {
@@ -175,6 +187,101 @@ public class GCMPredictCli {
 	
 	public int run(String[] args) 
 	{
+		Options options = createOptions();
+		final CommandLineParser parser = new PosixParser();
+		try {
+			CommandLine line = parser.parse( options, args,false );
+			if (line.hasOption(_option.help.name())) {
+				printHelp(options, null);
+				return -1;
+			}
+
+			for (_option o: _option.values()) 
+				if (line.hasOption(o.getShortName())) try {
+					setOption(o,line.getOptionValue(o.getShortName()));
+				} catch (Exception x) {
+					printHelp(options,x.getMessage());
+					return -1;
+				}
+
+			return runGCMPredict();	
+
+		} catch (Exception x ) {
+			System.out.println("**********" + x.getMessage());
+			x.printStackTrace();
+			//printHelp(options,x.getMessage());
+			return -1;
+		} finally {
+			try { 
+				//run whatever cleanup is needed
+			} catch (Exception xx) {
+				printHelp(options,xx.getMessage());
+			}
+		}
+	}
+	
+	protected int runGCMPredict() throws Exception
+	{
+		GroupContributionModel gcm = null;
+		
+		if ((inputFileName == null) && (inputSmiles == null))
+		{
+			System.out.println("No input is given! \n"
+					+ "Please assign input SMILES or input molecules file)!");
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		if (gcmConfigFile == null)
+		{	
+			System.out.println("GCM configuration file not assigned!");
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		else
+		{
+			System.out.println("GCM config: " + gcmConfigFile);
+			
+			GCM2Json g2j = new GCM2Json();
+			gcm = g2j.loadFromJSON(new File(gcmConfigFile));
+			
+			if (!g2j.configErrors.isEmpty())
+			{	
+				System.out.println(g2j.getAllErrorsAsString());
+				return -1;
+			}	
+			else if (!g2j.configErrors.isEmpty())
+				System.out.println(g2j.getAllErrorsAsString());
+			
+			String gcm_json = gcm.toJsonString();
+			System.out.println(gcm_json);
+		}
+		
+		if (inputSmiles != null)
+		{
+			IAtomContainer mol = null;
+			try {
+				mol = SmartsHelper.getMoleculeFromSmiles(inputSmiles);	
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			}
+			catch (Exception x) {
+				System.out.println("Error on creating input molecule: " + x.getMessage());
+				return -2;
+			}
+			
+			if (mol == null)
+			{
+				System.out.println("Unable to create and configure input molecule from : " + inputSmiles);
+				return -3;
+			}
+			
+			double modelVal = Calculator.calcModelFor(mol, gcm);
+			System.out.println("GCM value " + modelVal);
+			return 0;
+		}
+		
+		//TODO handle input file
+		
 		return 0;
 	}
 
