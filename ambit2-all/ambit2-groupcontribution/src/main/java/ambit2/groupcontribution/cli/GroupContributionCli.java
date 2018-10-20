@@ -635,7 +635,7 @@ public class GroupContributionCli
 			learner.performExternalValidation();
 		}
 		
-		//saveOutputGCMToFile(gcm);
+		saveOutputGCMToFile(gcm);
 		return 0;
 	}
 	

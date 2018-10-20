@@ -442,7 +442,16 @@ public class GroupContributionModel
 				sb.append("," + endLine);
 			sb.append(allGroupInfoToJsonString(offset));
 			nFields++;
-		}		
+		}
+		
+		if (!correctionFactors.isEmpty())
+		{	
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(allCorrectionFactorsToJsonString(offset));
+			nFields++;
+		}
+				
 		sb.append(endLine);
 		sb.append("}" + endLine);
 		
@@ -463,6 +472,7 @@ public class GroupContributionModel
 			nGroups++;
 			IGroup group = groups.get(key);
 			sb.append(offset + "\t{" + endLine);
+			sb.append(offset + "\t\t\"TYPE\": \"" + group.getType() + "\"," + endLine);
 			sb.append(offset + "\t\t\"DESIGNATION\": \"" + key + "\"," + endLine);
 			sb.append(offset + "\t\t\"CONTRIBUTION\": " + group.getContribution() + endLine);			
 			if (nGroups < keys.size())
@@ -471,10 +481,31 @@ public class GroupContributionModel
 				sb.append(offset + "\t}" + endLine);
 		}
 		
-		sb.append(offset + "]" + endLine);
-		
+		sb.append(offset + "]");
 		return sb.toString();
 	}
 	
+	public String allCorrectionFactorsToJsonString(String offset)
+	{
+		StringBuffer sb = new StringBuffer();
+		String endLine = "\n";		
+		int nCorFactors = correctionFactors.size();		
+		sb.append(offset + "\"CORRECTION_FACTORS\": [" + endLine);
+		for (int i = 0; i < nCorFactors; i++)			
+		{
+			ICorrectionFactor cf = correctionFactors.get(i);
+			sb.append(offset + "\t{" + endLine);
+			sb.append(offset + "\t\t\"TYPE\": \"" + cf.getType() + "\"," + endLine);
+			sb.append(offset + "\t\t\"DESIGNATION\": \"" + cf.getDesignation() + "\"," + endLine);
+			sb.append(offset + "\t\t\"CONTRIBUTION\": " + cf.getContribution() + endLine);			
+			if (i < (nCorFactors-1))
+				sb.append(offset + "\t}," + endLine);
+			else
+				sb.append(offset + "\t}" + endLine);
+		}
+		
+		sb.append(offset + "]");
+		return sb.toString();
+	}
 	
 }
