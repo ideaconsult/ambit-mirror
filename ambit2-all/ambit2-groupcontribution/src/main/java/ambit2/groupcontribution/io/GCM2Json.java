@@ -10,6 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.GroupContributionModel.Type;
+import ambit2.groupcontribution.groups.AtomGroup;
+import ambit2.groupcontribution.groups.BondGroup;
+import ambit2.groupcontribution.groups.DGroup;
+import ambit2.groupcontribution.groups.GGroup;
+import ambit2.groupcontribution.groups.IGroup;
 import ambit2.rules.json.JSONParsingUtils;
 
 
@@ -132,8 +137,114 @@ public class GCM2Json
 				configErrors.add("EXTERNAL_SET_FILE is not textual!");			
 		}
 		
+		curNode = root.path("GROUPS");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isArray())			
+			{
+				for (int i = 0; i < curNode.size(); i++)
+				{
+					curNode.get(i);
+					IGroup g = getGroupsFromJsonNode (curNode, i);
+					if (g != null)
+						gcm.addGroup(g);
+				}
+			}
+			else
+				configErrors.add("GROUPS is not array!");			
+		}
+		
 		
 		return gcm;
+	}
+	
+	IGroup getGroupsFromJsonNode (JsonNode node, int arrayIndex)
+	{
+		IGroup group = null;
+		IGroup.Type type = null;
+		String designation = null;
+		Double contribution = null;
+		
+		JsonNode jsnod = node.path("TYPE");
+		if (jsnod.isMissingNode())
+		{
+			configErrors.add("In section GROUPS, element #" + (arrayIndex+1) + ", TYPE is missing!");
+			return null;
+		}
+		else
+		{
+			if (!jsnod.isTextual())
+			{
+				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " TYPE is not text!");
+				return null;
+			}
+			type = IGroup.Type.fromString(jsnod.asText());
+			if (type == null)
+			{
+				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " TYPE is not correct!");
+				return null;
+			}
+		}
+		
+		jsnod = node.path("DESIGNATION");
+		if (jsnod.isMissingNode())
+		{
+			configErrors.add("In section GROUPS, element #" + (arrayIndex+1) + " DESIGNATION is missing!");
+			return null;
+		}
+		else
+		{
+			if (!jsnod.isTextual())
+			{
+				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " DESIGNATION is not text!");
+				return null;
+			}
+			designation = jsnod.asText();
+		}
+		
+		jsnod = node.path("CONTRIBUTION");
+		if (jsnod.isMissingNode())
+		{
+			configErrors.add("In section GROUPS, element #" + (arrayIndex+1) + " CONTRIBUTION is missing!");
+			return null;
+		}
+		else
+		{
+			if (!jsnod.isDouble())
+			{
+				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " CONTRIBUTION is not double!");
+				return null;
+			}
+			contribution = jsnod.asDouble();
+		}
+		
+		group = generateGroup(type, designation);
+		group.setContribution(contribution);
+		return group;
+	}
+	
+	IGroup generateGroup(IGroup.Type type, String designation)
+	{	
+		switch (type)
+		{
+		case ATOM:
+			AtomGroup ag = new AtomGroup();
+			ag.setAtomDesignation(designation);
+			return ag;
+		case BOND:
+			BondGroup bg = new BondGroup();
+			bg.setBondDesignation(designation);
+			return bg;
+		case G_GROUP:
+			GGroup gg = new GGroup();
+			gg.setGroupDesignation(designation);
+			return gg;
+		case D_GROUP:
+			DGroup dg = new DGroup();
+			dg.setGroupDesignation(designation);
+			return dg;			
+		}
+		return null;
 	}
 	
 	public String getAllErrorsAsString()

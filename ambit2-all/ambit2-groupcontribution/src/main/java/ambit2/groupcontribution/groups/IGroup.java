@@ -2,6 +2,7 @@ package ambit2.groupcontribution.groups;
 
 import ambit2.groupcontribution.transformations.IValueTransformation;
 
+
 public interface IGroup 
 {
 	public enum Type{
@@ -14,7 +15,7 @@ public interface IGroup
 		RING3, 
 		RING4, 
 		RING5, 
-		RING6,
+		RING6;
 		/*
 		ATOM_TOP_LAYER_1,
 		ATOM_TOP_LAYER_2, 
@@ -22,6 +23,19 @@ public interface IGroup
 		ATOM_TOP_LAYER_12,  //This is layers 1 and 2 together 
 		ATOM_TOP_LAYER_123, //This is layers 1, 2 and 3 together
 		*/
+		
+		public static Type fromString(String s)
+		{
+			try
+			{
+				Type type  = Type.valueOf(s) ;
+				return (type);
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
+		}
 	}
 	   
 	public double getContribution();
