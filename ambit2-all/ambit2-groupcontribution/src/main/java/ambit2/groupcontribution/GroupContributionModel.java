@@ -436,11 +436,44 @@ public class GroupContributionModel
 			nFields++;
 		}
 		
+		if (!groups.isEmpty())
+		{	
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(allGroupInfoToJsonString(offset));
+			nFields++;
+		}		
 		sb.append(endLine);
 		sb.append("}" + endLine);
 		
 		return sb.toString();
 				
+	}
+	
+	public String allGroupInfoToJsonString(String offset)
+	{
+		StringBuffer sb = new StringBuffer();
+		String endLine = "\n";		
+		int nGroups = 0;
+		
+		sb.append(offset + "\"GROUPS\": [" + endLine);
+		Set<String> keys = groups.keySet();		
+		for (String key : keys)
+		{
+			nGroups++;
+			IGroup group = groups.get(key);
+			sb.append(offset + "\t{" + endLine);
+			sb.append(offset + "\t\t\"DESIGNATION\": \"" + key + "\"," + endLine);
+			sb.append(offset + "\t\t\"CONTRIBUTION\": " + group.getContribution() + endLine);			
+			if (nGroups < keys.size())
+				sb.append(offset + "\t}," + endLine);
+			else
+				sb.append(offset + "\t}" + endLine);
+		}
+		
+		sb.append(offset + "]" + endLine);
+		
+		return sb.toString();
 	}
 	
 	
