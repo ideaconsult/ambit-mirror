@@ -332,6 +332,15 @@ public class GCM2Json
 			contribution = jsnod.asDouble();
 		}
 		
+		try {
+			params = JSONParsingUtils.extractArrayKeyword(node, "PARAMETERS", true);
+		}
+		catch (Exception x){
+			configErrors.add("In section CORRECTION_FACTORS, element #" 
+					+ (arrayIndex+1) + " " + x.getMessage() );
+			return null;
+		}
+		
 		//TODO
 		
 		return null;
