@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.GroupContributionModel.Type;
+import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.groups.AtomGroup;
 import ambit2.groupcontribution.groups.BondGroup;
 import ambit2.groupcontribution.groups.DGroup;
@@ -145,7 +146,7 @@ public class GCM2Json
 				for (int i = 0; i < curNode.size(); i++)
 				{
 					curNode.get(i);
-					IGroup g = getGroupsFromJsonNode (curNode, i);
+					IGroup g = getGroupFromJsonNode (curNode, i);
 					if (g != null)
 						gcm.addGroup(g);
 				}
@@ -154,11 +155,30 @@ public class GCM2Json
 				configErrors.add("GROUPS is not array!");			
 		}
 		
+		curNode = root.path("CORRECTION_FACTORS");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isArray())			
+			{
+				for (int i = 0; i < curNode.size(); i++)
+				{
+					curNode.get(i);
+					ICorrectionFactor cf = getCorrectionFactorFromJsonNode(curNode, i);
+					if (cf != null)
+						gcm.addCorrectionFactor(cf);
+				}
+			}
+			else
+				configErrors.add("CORRECTION_FACTORS is not array!");			
+		}
+		
+		
+		
 		
 		return gcm;
 	}
 	
-	IGroup getGroupsFromJsonNode (JsonNode node, int arrayIndex)
+	IGroup getGroupFromJsonNode (JsonNode node, int arrayIndex)
 	{
 		IGroup group = null;
 		IGroup.Type type = null;
@@ -244,6 +264,19 @@ public class GCM2Json
 			dg.setGroupDesignation(designation);
 			return dg;			
 		}
+		return null;
+	}
+	
+	ICorrectionFactor getCorrectionFactorFromJsonNode(JsonNode node, int arrayIndex)
+	{
+		ICorrectionFactor cf = null;
+		ICorrectionFactor.Type type = null;
+		String designation = null;
+		Double contribution = null;
+		Object params[] = null;
+		
+		//TODO
+		
 		return null;
 	}
 	
