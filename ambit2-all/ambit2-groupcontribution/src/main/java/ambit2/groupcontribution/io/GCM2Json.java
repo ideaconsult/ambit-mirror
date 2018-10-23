@@ -171,10 +171,7 @@ public class GCM2Json
 			else
 				configErrors.add("CORRECTION_FACTORS is not array!");			
 		}
-		
-		
-		
-		
+				
 		return gcm;
 	}
 	
@@ -274,6 +271,66 @@ public class GCM2Json
 		String designation = null;
 		Double contribution = null;
 		Object params[] = null;
+		
+		JsonNode jsnod = node.path("TYPE");
+		if (jsnod.isMissingNode())
+		{
+			configErrors.add("In section CORRECTION_FACTORS, element #" 
+					+ (arrayIndex+1) + ", TYPE is missing!");
+			return null;
+		}
+		else
+		{
+			if (!jsnod.isTextual())
+			{
+				configErrors.add("In section CORRECTION_FACTORS element #" 
+						+ (arrayIndex+1) + " TYPE is not text!");
+				return null;
+			}
+			type = ICorrectionFactor.Type.fromString(jsnod.asText());
+			if (type == null)
+			{
+				configErrors.add("In section CORRECTION_FACTORS element #" 
+						+ (arrayIndex+1) + " TYPE is not correct!");
+				return null;
+			}
+		}
+		
+		jsnod = node.path("DESIGNATION");
+		if (jsnod.isMissingNode())
+		{
+			configErrors.add("In section CORRECTION_FACTORS, element #" 
+					+ (arrayIndex+1) + " DESIGNATION is missing!");
+			return null;
+		}
+		else
+		{
+			if (!jsnod.isTextual())
+			{
+				configErrors.add("In section CORRECTION_FACTORS element #" 
+					+ (arrayIndex+1) + " DESIGNATION is not text!");
+				return null;
+			}
+			designation = jsnod.asText();
+		}
+		
+		jsnod = node.path("CONTRIBUTION");
+		if (jsnod.isMissingNode())
+		{
+			configErrors.add("In section CORRECTION_FACTORS, element #" 
+					+ (arrayIndex+1) + " CONTRIBUTION is missing!");
+			return null;
+		}
+		else
+		{
+			if (!jsnod.isDouble())
+			{
+				configErrors.add("In section CORRECTION_FACTORS element #" 
+						+ (arrayIndex+1) + " CONTRIBUTION is not double!");
+				return null;
+			}
+			contribution = jsnod.asDouble();
+		}
 		
 		//TODO
 		
