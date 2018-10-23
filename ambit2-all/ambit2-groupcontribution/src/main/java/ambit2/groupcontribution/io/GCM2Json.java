@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.GroupContributionModel.Type;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
+import ambit2.groupcontribution.correctionfactors.SmartsCorrectionFactor;
 import ambit2.groupcontribution.groups.AtomGroup;
 import ambit2.groupcontribution.groups.BondGroup;
 import ambit2.groupcontribution.groups.DGroup;
@@ -264,6 +265,7 @@ public class GCM2Json
 		return null;
 	}
 	
+		
 	ICorrectionFactor getCorrectionFactorFromJsonNode(JsonNode node, int arrayIndex)
 	{
 		ICorrectionFactor cf = null;
@@ -343,6 +345,20 @@ public class GCM2Json
 		
 		//TODO
 		
+		return null;
+	}
+	
+	ICorrectionFactor generateCorrectionFactor(ICorrectionFactor.Type type, 
+				String designation, Object params[])
+	{	
+		switch (type)
+		{
+		case SMARTS:
+			//Check params
+			//SmartsCorrectionFactor cf = new SmartsCorrectionFactor((String)params[0], ) 
+			return null;
+					
+		}
 		return null;
 	}
 	
