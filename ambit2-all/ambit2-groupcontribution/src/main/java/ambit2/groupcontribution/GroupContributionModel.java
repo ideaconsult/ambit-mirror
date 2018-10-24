@@ -61,6 +61,7 @@ public class GroupContributionModel
 	
 	private boolean allowGroupRegistration = true;
 	
+	private List<String> calculationErrors = new ArrayList<String>();
 	
 	//TODO add group rules and LocalDescriptor rules
 	
@@ -302,13 +303,19 @@ public class GroupContributionModel
 		this.allowGroupRegistration = allowGroupRegistration;
 	}
 
+	public double calcModelValue(IAtomContainer mol,  boolean missingMolDescrError)
+	{
+		DataSetObject dso = new DataSetObject();
+		return calcModelValue(dso, missingMolDescrError);
+	}
+	
 	public double calcModelValue(IAtomContainer mol)
 	{
 		DataSetObject dso = new DataSetObject();
-		return calcModelValue(dso);
+		return calcModelValue(dso, true);
 	}
 	
-	public double calcModelValue(DataSetObject dso)
+	public double calcModelValue(DataSetObject dso, boolean missingMolDescrError)
 	{
 		if (dso.fragmentation == null)
 		{	
@@ -341,14 +348,27 @@ public class GroupContributionModel
 				DescriptorInfo di = descriptors.get(i);
 				di.getName();
 				Double d = dso.getPropertyDoubleValue(di.getName());
-				if (d == null)
+				if (d != null)
 					value += di.getContribution() * d;
+				else
+				{
+					if (missingMolDescrError)
+						calculationErrors.add("Descriptor " + di.getName() + " is missing");
+				}
 			}
 		
 		return value;
 	}
 	
+		
+	public List<String> getCalculationErrors() {
+		return calculationErrors;
+	}
 	
+	public void clearCalculationErrors() {
+		calculationErrors.clear();
+	}
+
 	public String toJsonString()
 	{
 		StringBuffer sb = new StringBuffer();

@@ -666,8 +666,6 @@ public class GroupContributionCli
 			System.out.println("Error on creating GCM output json file: " 
 				+ x.getMessage());
 		}
-		
-		//TODO
 	}
 	
 	GroupContributionModel.Type getModelType(String s)
