@@ -99,4 +99,8 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 		return (groupMatch.getError());
 	}
 
+	public String getSmarts() {
+		return smarts;
+	}
+
 }

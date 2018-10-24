@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
+import ambit2.groupcontribution.correctionfactors.SmartsCorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
@@ -497,7 +498,16 @@ public class GroupContributionModel
 			sb.append(offset + "\t{" + endLine);
 			sb.append(offset + "\t\t\"TYPE\": \"" + cf.getType() + "\"," + endLine);
 			sb.append(offset + "\t\t\"DESIGNATION\": \"" + cf.getDesignation() + "\"," + endLine);
-			sb.append(offset + "\t\t\"CONTRIBUTION\": " + cf.getContribution() + endLine);			
+			sb.append(offset + "\t\t\"CONTRIBUTION\": " + cf.getContribution());	
+			String params = getCorrectionFactorsParametersAsJsonArray(cf);
+			if (params != null)
+			{	
+				sb.append("," + endLine);
+				sb.append(offset + "\t\t\"PARAMETERS\": " + params + endLine);
+			}
+			else
+				sb.append(endLine);
+			
 			if (i < (nCorFactors-1))
 				sb.append(offset + "\t}," + endLine);
 			else
@@ -506,6 +516,21 @@ public class GroupContributionModel
 		
 		sb.append(offset + "]");
 		return sb.toString();
+	}
+	
+	public String getCorrectionFactorsParametersAsJsonArray(ICorrectionFactor cf)
+	{
+		switch (cf.getType())
+		{
+		case SMARTS:
+			SmartsCorrectionFactor scf = (SmartsCorrectionFactor)cf;
+			String param_str = "[\"" + scf.getSmarts() + "\"]";
+			return param_str;
+		case ATOM_PAIR:
+			//TODO
+			return null;
+		}
+		return null;
 	}
 	
 }
