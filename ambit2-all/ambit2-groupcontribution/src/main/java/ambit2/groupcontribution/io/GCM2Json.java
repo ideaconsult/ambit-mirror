@@ -146,6 +146,15 @@ public class GCM2Json
 			configErrors.add(e.getMessage());		
 		}
 		
+		curNode = root.path("VALIDATION");
+		if (!curNode.isMissingNode())
+		{	
+			if (curNode.isTextual())			
+				addConfigInfo.validationString = curNode.asText();
+			else
+				configErrors.add("VALIDATION is not textual!");			
+		}
+		
 		curNode = root.path("TRAINING_SET_FILE");
 		if (!curNode.isMissingNode())
 		{	

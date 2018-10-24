@@ -526,10 +526,11 @@ public class GroupContributionCli
 			else if (!g2j.configErrors.isEmpty())
 				System.out.println(g2j.getAllErrorsAsString());
 			
-			String gcm_json = gcm.toJsonString();
-			System.out.println(gcm_json);
+			addConfigInfo = gcm.getAdditionalConfig();
 			
-			return 0;
+			//String gcm_json = gcm.toJsonString();
+			//System.out.println(gcm_json);			
+			//return 0;
 		}
 		
 		
@@ -600,6 +601,11 @@ public class GroupContributionCli
 				return -2;
 			gcm.setValidationConfig(valCfg);
 		}
+		else
+		{	
+			gcm.getValidationConfig().reset();
+			gcm.getValidationConfig().verboseReport = true;
+		}	
 		
 		if (addConfigInfo.fractionDigits >= 0)
 		{
