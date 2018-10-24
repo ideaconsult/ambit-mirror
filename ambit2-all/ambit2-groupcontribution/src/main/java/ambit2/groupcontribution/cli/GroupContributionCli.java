@@ -470,31 +470,52 @@ public class GroupContributionCli
 				System.out.println("External set file: " + trainSetFile);
 				addConfigInfo.externalSetFile = externalSetFile;
 			}
+			
 			if (localDescriptors != null)
 			{	
 				System.out.println("Local descriptors: " + localDescriptors);
 				addConfigInfo.localDescriptorsString = localDescriptors;
-			}	
+			}
+			else
+			{
+				System.out.println("Local descriptors not assigned!!");
+				System.out.println("Using by default: A");
+				addConfigInfo.localDescriptorsString = "A";
+			}
+			
+			
 			if (corFactors != null)
 			{	
 				System.out.println("Correction factors: " + corFactors);
 				addConfigInfo.corFactorsString = corFactors;
-			}	
+			}
+			
 			if (globalDescriptors != null)
 			{	
 				System.out.println("Global descriptors: " + globalDescriptors);
 				addConfigInfo.globalDescriptorsString = globalDescriptors;
-			}	
+			}
+			
 			if (threshold != null)
 			{	
 				System.out.println("Column filtration threshold: " + threshold);
 				addConfigInfo.columnFiltrationthreshold = threshold;
-			}	
+			}
+			else
+			{
+				double defThesh = 0.001;
+				System.out.println("Using default Column filtration threshold: " + defThesh);
+				addConfigInfo.columnFiltrationthreshold = defThesh;
+			}
+			
 			if (targetProperty != null)
 			{	
 				System.out.println("Target property: " + targetProperty);
 				gcm.setTargetProperty(targetProperty);
-			}	
+			}
+			else 
+				throw new Exception("Target property not assigned! Use -p command line option.");
+			
 			if (validation != null)
 			{	
 				System.out.println("Validation: " + validation);
