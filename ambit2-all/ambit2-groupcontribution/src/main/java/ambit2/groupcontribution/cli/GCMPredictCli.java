@@ -1,6 +1,7 @@
 package ambit2.groupcontribution.cli;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
@@ -17,6 +18,8 @@ import ambit2.groupcontribution.Calculator;
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
+import ambit2.groupcontribution.dataset.DataSet;
+import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.io.GCM2Json;
 import ambit2.smarts.IsomorphismTester;
@@ -108,7 +111,7 @@ public class GCMPredictCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Output file name";
+				return "Output file name (*.csv)";
 			}
 			@Override
 			public String getShortName() {
@@ -319,8 +322,97 @@ public class GCMPredictCli {
 			return 0;
 		}
 		
-		//TODO handle input file
+		//Handle input file
+		DataSet dataSet = null;
+		if (inputFileName != null)
+		{	
+			try {
+				dataSet = new DataSet(new File(inputFileName));
+			}
+			catch (Exception x) {
+				return -4;
+			}
+			
+		}
+		if (dataSet == null)
+		{
+			System.out.println("Unable to load molecules from : " + inputFileName);
+			return -5;
+		}
 		
+		//Handle output file
+		FileWriter outWriter = null;
+		if (outputFileName != null)
+		{	
+			try {
+				outWriter = new FileWriter(outputFileName);
+			}
+			catch (Exception x) {
+				System.out.println("Unable to create output file: " + outputFileName 
+						+ " error: " + x.getMessage());
+				return -6;
+			}
+		}
+		
+		System.out.println("GCM calculateting property " + gcm.getTargetProperty() 
+			+ " for " + dataSet.dataObjects.size() + " molecules ...");
+		
+		String endLine = System.getProperty("line.separator");
+		String out_s = "Mol#,ModelValue(" + gcm.getTargetProperty() + "),SMILES,CalcStatus";
+			
+		if (outWriter == null)
+			System.out.println(out_s);
+		else
+		{	
+			outWriter.write(out_s);
+			outWriter.write(endLine);
+			outWriter.flush();
+		}
+		
+		for (int i = 0; i < dataSet.dataObjects.size(); i++)
+		{
+			DataSetObject dso = dataSet.dataObjects.get(i);
+			double modelVal = gcm.calcModelValue(dso, true);
+			
+			String errorStatus = "OK";
+			if (!gcm.getCalculationErrors().isEmpty())
+			{
+				errorStatus = gcm.getCalculationErrors().get(0);
+				gcm.clearCalculationErrors();
+			}
+			
+			String molStr = "";
+			try {
+				molStr = SmartsHelper.moleculeToSMILES(dso.molecule, true);
+			}
+			catch (Exception x) {
+			}	
+			
+			out_s = "" + (i+1) + ","  + modelVal + "," + molStr + "," + errorStatus;
+			
+			if (outWriter == null)
+				System.out.println(out_s);
+			else
+			{	
+				outWriter.write(out_s);
+				outWriter.write(endLine);
+				outWriter.flush();
+			}	
+			
+		}
+		
+		
+		try {
+			if (outWriter != null)
+				outWriter.close();
+		}
+		catch (Exception x) {
+			System.out.println("Error on closing output file: " + outputFileName
+					+ ": " + x.getMessage());
+		}
+		
+		System.out.println("Done");
+				
 		return 0;
 	}
 
