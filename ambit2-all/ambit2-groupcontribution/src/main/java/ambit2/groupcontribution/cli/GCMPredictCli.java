@@ -16,6 +16,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.groupcontribution.Calculator;
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.io.GCM2Json;
 import ambit2.smarts.IsomorphismTester;
@@ -270,6 +271,22 @@ public class GCMPredictCli {
 			}
 			else
 				gcm.setLocalDescriptors(locDescriptors);
+			
+			if (gcm.getAdditionalConfig().globalDescriptorsString != null)
+			{
+				List<DescriptorInfo> globDescriptors = 
+						gcmParser.getGlobalDescriptorsFromString(gcm.getAdditionalConfig().globalDescriptorsString);
+				if (!gcmParser.getErrors().isEmpty())
+				{
+					System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
+					return -1;
+				}
+				else
+				{
+					if (!globDescriptors.isEmpty())
+						gcm.setDescriptors(globDescriptors);
+				}
+			}
 			
 			//String gcm_json = gcm.toJsonString();
 			//System.out.println(gcm_json);
