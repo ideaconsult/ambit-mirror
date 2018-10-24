@@ -39,7 +39,8 @@ public class Fragmentation
 	
 	public static void makeFragmentation(DataSet dataset, GroupContributionModel gcm)
 	{
-		gcm.clearGroups();
+		if (gcm.isAllowGroupRegistration())
+			gcm.clearGroups();
 		
 		for (int i = 0; i < dataset.dataObjects.size(); i++)
 		{

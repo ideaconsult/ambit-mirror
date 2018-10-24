@@ -15,6 +15,13 @@ public class DataSetObject
 	public String molNotation = null;
 	public String error = null;
 	
+	public DataSetObject() {		
+	}
+	
+	public DataSetObject(IAtomContainer molecule) {
+		this.molecule = molecule;
+	}
+	
 	public Double getPropertyDoubleValue(String property)
 	{
 		//Internal molecule properties take precedence over external ones

@@ -275,7 +275,10 @@ public class GCMPredictCli {
 				return -3;
 			}
 			
-			double modelVal = Calculator.calcModelFor(mol, gcm);
+			//This is critical to be set false.
+			gcm.setAllowGroupRegistration(false);
+			
+			double modelVal = gcm.calcModelValue(mol);
 			System.out.println("GCM value " + modelVal);
 			return 0;
 		}

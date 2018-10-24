@@ -305,13 +305,13 @@ public class GroupContributionModel
 
 	public double calcModelValue(IAtomContainer mol,  boolean missingMolDescrError)
 	{
-		DataSetObject dso = new DataSetObject();
+		DataSetObject dso = new DataSetObject(mol);
 		return calcModelValue(dso, missingMolDescrError);
 	}
 	
 	public double calcModelValue(IAtomContainer mol)
 	{
-		DataSetObject dso = new DataSetObject();
+		DataSetObject dso = new DataSetObject(mol);
 		return calcModelValue(dso, true);
 	}
 	
@@ -328,9 +328,13 @@ public class GroupContributionModel
 		for (Entry<String, Integer> entry : entries)
 		{
 			String key = entry.getKey();
+			//System.out.println("-->" + key);
 			IGroup group = groups.get(key);
 			if (group != null)
+			{	
+				//System.out.println("  " + group.getContribution() + "  " + entry.getValue());
 				value += group.getContribution() * entry.getValue();
+			}	
 		}
 		
 		//Handle correction factors

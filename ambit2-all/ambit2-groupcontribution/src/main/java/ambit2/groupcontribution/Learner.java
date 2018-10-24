@@ -643,6 +643,7 @@ public class Learner
 			return;
 		
 		GCMReportConfig repCfg = model.getReportConfig();
+		model.setAllowGroupRegistration(false);
 		
 		String out_s = "External Validation" + endline 
 						+ "-----------------------------------" + endline;

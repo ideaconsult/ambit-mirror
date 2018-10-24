@@ -18,7 +18,9 @@ import ambit2.groupcontribution.groups.IGroup;
 
 public class Calculator 
 {
-	
+	/*
+	 * Currently not used. It calculated directly from GroupContributionModel object
+	 * 
 	public static double calcModelFor(IAtomContainer mol, GroupContributionModel model)
 	{
 		double modelValue = 0.0;
@@ -30,7 +32,8 @@ public class Calculator
 		for (Map.Entry<String,Integer> entry : groups.entrySet())
 		{
 			String grpDes = entry.getKey();
-			if (modelGroups.containsKey(grpDes));
+			System.out.println("-->" + grpDes);
+			if (modelGroups.containsKey(grpDes))
 				modelValue += modelGroups.get(grpDes).getContribution() * entry.getValue(); 
 		}
 		
@@ -40,7 +43,8 @@ public class Calculator
 			modelValue +=  entry.getKey().getContribution() * entry.getValue();
 			
 		return modelValue;
-	}	
+	}
+	*/	
 	
 	public static Map<String,Integer> getGroupsCount(IAtomContainer mol, GroupContributionModel model)
 	{
