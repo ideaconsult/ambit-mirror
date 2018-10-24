@@ -1,6 +1,7 @@
 package ambit2.groupcontribution.cli;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -13,9 +14,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.groupcontribution.Calculator;
+import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.io.GCM2Json;
+import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsParser;
 
 
 public class GCMPredictCli {
@@ -240,7 +245,7 @@ public class GCMPredictCli {
 		}
 		else
 		{
-			System.out.println("GCM config: " + gcmConfigFile);
+			//System.out.println("GCM config: " + gcmConfigFile);
 			
 			GCM2Json g2j = new GCM2Json();
 			gcm = g2j.loadFromJSON(new File(gcmConfigFile));
@@ -253,8 +258,21 @@ public class GCMPredictCli {
 			else if (!g2j.configErrors.isEmpty())
 				System.out.println(g2j.getAllErrorsAsString());
 			
-			String gcm_json = gcm.toJsonString();
-			System.out.println(gcm_json);
+			//Setup from additional info config
+			GCMParser gcmParser = new GCMParser(new SmartsParser(), new IsomorphismTester());
+			
+			List<ILocalDescriptor> locDescriptors = 
+					gcmParser.getLocalDescriptorsFromString(gcm.getAdditionalConfig().localDescriptorsString);
+			if (!gcmParser.getErrors().isEmpty())
+			{
+				System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());
+				return -1;
+			}
+			else
+				gcm.setLocalDescriptors(locDescriptors);
+			
+			//String gcm_json = gcm.toJsonString();
+			//System.out.println(gcm_json);
 		}
 		
 		if (inputSmiles != null)
@@ -279,7 +297,8 @@ public class GCMPredictCli {
 			gcm.setAllowGroupRegistration(false);
 			
 			double modelVal = gcm.calcModelValue(mol);
-			System.out.println("GCM value " + modelVal);
+			System.out.println("GCM value (" + gcm.getTargetProperty()+") for " 
+					+ inputSmiles +  " is " +  modelVal);
 			return 0;
 		}
 		

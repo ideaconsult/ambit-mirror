@@ -395,6 +395,14 @@ public class GroupContributionModel
 			nFields++;
 		}
 		
+		if (targetProperty != null)
+		{
+			if (nFields > 0)
+				sb.append("," + endLine);
+			sb.append(offset + "\"" + "TARGET_PROPERTY" + "\" : \"" + targetProperty + "\"");
+			nFields++;
+		}
+		
 		if (additionalConfig.gcmTypeString != null)
 		{
 			if (nFields > 0)
