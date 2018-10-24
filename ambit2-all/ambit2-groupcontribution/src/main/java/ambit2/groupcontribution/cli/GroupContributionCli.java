@@ -433,8 +433,8 @@ public class GroupContributionCli
 			return runGCM();	
 
 		} catch (Exception x ) {
-			System.out.println("**********" + x.getMessage());
-			x.printStackTrace();
+			System.out.println("**** GCM " + x.getMessage());
+			//x.printStackTrace();
 			//printHelp(options,x.getMessage());
 			return -1;
 		} finally {
