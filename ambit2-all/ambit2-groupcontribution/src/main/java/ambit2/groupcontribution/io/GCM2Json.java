@@ -18,6 +18,8 @@ import ambit2.groupcontribution.groups.DGroup;
 import ambit2.groupcontribution.groups.GGroup;
 import ambit2.groupcontribution.groups.IGroup;
 import ambit2.rules.json.JSONParsingUtils;
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsParser;
 
 
 public class GCM2Json 
@@ -26,6 +28,20 @@ public class GCM2Json
 	
 	public ArrayList<String> configErrors = new ArrayList<String>();
 	public ArrayList<String> configWarnings = new ArrayList<String>();
+	
+	private IsomorphismTester isoTester = null;
+	private SmartsParser parser = null;
+	
+		
+	public GCM2Json() {
+		isoTester = new IsomorphismTester();
+		parser = new SmartsParser();
+	}
+	
+	public GCM2Json(IsomorphismTester isoTester, SmartsParser parser) {
+		this.isoTester = isoTester;
+		this.parser = parser;
+	}
 	
 	public GroupContributionModel loadFromJSON(File jsonConfig) throws Exception 
 	{
@@ -349,16 +365,31 @@ public class GCM2Json
 	}
 	
 	ICorrectionFactor generateCorrectionFactor(ICorrectionFactor.Type type, 
-				String designation, Object params[])
+				String designation, Object params[]) throws Exception
 	{	
 		switch (type)
 		{
 		case SMARTS:
 			//Check params
-			//SmartsCorrectionFactor cf = new SmartsCorrectionFactor((String)params[0], ) 
-			return null;
-					
+			if (params == null)
+				throw new Exception("no parameters for SMARTS correction factor");
+			if (params.length > 0)
+			{
+				if (!(params[0] instanceof String))
+					throw new Exception("First parameter for SMARTS correction factor is not string");
+			}
+			//Create corr. factor
+			SmartsCorrectionFactor cf = new SmartsCorrectionFactor((String)params[0], parser, isoTester);
+			if (cf.getError().equals(""))
+				return cf;
+			else
+				throw new Exception("Errors on creating SMARTS correction factor: " + cf.getError());
+			
+		case ATOM_PAIR:
+			//TODO
+			break;
 		}
+		
 		return null;
 	}
 	
