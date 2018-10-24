@@ -486,7 +486,7 @@ public class GroupContributionModel
 		String endLine = "\n";		
 		int nGroups = 0;
 		
-		sb.append(offset + "\"GROUPS\": [" + endLine);
+		sb.append(offset + "\"CALCULATED_GROUPS\": [" + endLine);
 		Set<String> keys = groups.keySet();		
 		for (String key : keys)
 		{
@@ -511,7 +511,7 @@ public class GroupContributionModel
 		StringBuffer sb = new StringBuffer();
 		String endLine = "\n";		
 		int nCorFactors = correctionFactors.size();		
-		sb.append(offset + "\"CORRECTION_FACTORS\": [" + endLine);
+		sb.append(offset + "\"CALCULATED_CORRECTION_FACTORS\": [" + endLine);
 		for (int i = 0; i < nCorFactors; i++)			
 		{
 			ICorrectionFactor cf = correctionFactors.get(i);

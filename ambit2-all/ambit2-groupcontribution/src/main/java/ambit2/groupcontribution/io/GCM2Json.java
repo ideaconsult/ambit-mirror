@@ -155,38 +155,36 @@ public class GCM2Json
 				configErrors.add("EXTERNAL_SET_FILE is not textual!");			
 		}
 		
-		curNode = root.path("GROUPS");
+		curNode = root.path("CALCULATED_GROUPS");
 		if (!curNode.isMissingNode())
 		{	
 			if (curNode.isArray())			
 			{
 				for (int i = 0; i < curNode.size(); i++)
-				{
-					curNode.get(i);
-					IGroup g = getGroupFromJsonNode (curNode, i);
+				{					
+					IGroup g = getGroupFromJsonNode (curNode.get(i), i);
 					if (g != null)
 						gcm.addGroup(g);
 				}
 			}
 			else
-				configErrors.add("GROUPS is not array!");			
+				configErrors.add("CALCULATED_GROUPS is not array!");			
 		}
 		
-		curNode = root.path("CORRECTION_FACTORS");
+		curNode = root.path("CALCULATED_CORRECTION_FACTORS");
 		if (!curNode.isMissingNode())
 		{	
 			if (curNode.isArray())			
 			{
 				for (int i = 0; i < curNode.size(); i++)
-				{
-					curNode.get(i);
-					ICorrectionFactor cf = getCorrectionFactorFromJsonNode(curNode, i);
+				{	
+					ICorrectionFactor cf = getCorrectionFactorFromJsonNode(curNode.get(i), i);
 					if (cf != null)
 						gcm.addCorrectionFactor(cf);
 				}
 			}
 			else
-				configErrors.add("CORRECTION_FACTORS is not array!");			
+				configErrors.add("CALCULATED_CORRECTION_FACTORS is not array!");			
 		}
 				
 		return gcm;
@@ -202,20 +200,20 @@ public class GCM2Json
 		JsonNode jsnod = node.path("TYPE");
 		if (jsnod.isMissingNode())
 		{
-			configErrors.add("In section GROUPS, element #" + (arrayIndex+1) + ", TYPE is missing!");
+			configErrors.add("In section CALCULATED_GROUPS, element #" + (arrayIndex+1) + ", TYPE is missing!");
 			return null;
 		}
 		else
 		{
 			if (!jsnod.isTextual())
 			{
-				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " TYPE is not text!");
+				configErrors.add("In section CALCULATED_GROUPS element #" + (arrayIndex+1) + " TYPE is not text!");
 				return null;
 			}
 			type = IGroup.Type.fromString(jsnod.asText());
 			if (type == null)
 			{
-				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " TYPE is not correct!");
+				configErrors.add("In section CALCULATED_GROUPS element #" + (arrayIndex+1) + " TYPE is not correct!");
 				return null;
 			}
 		}
@@ -223,14 +221,14 @@ public class GCM2Json
 		jsnod = node.path("DESIGNATION");
 		if (jsnod.isMissingNode())
 		{
-			configErrors.add("In section GROUPS, element #" + (arrayIndex+1) + " DESIGNATION is missing!");
+			configErrors.add("In section CALCULATED_GROUPS, element #" + (arrayIndex+1) + " DESIGNATION is missing!");
 			return null;
 		}
 		else
 		{
 			if (!jsnod.isTextual())
 			{
-				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " DESIGNATION is not text!");
+				configErrors.add("In section CALCULATED_GROUPS element #" + (arrayIndex+1) + " DESIGNATION is not text!");
 				return null;
 			}
 			designation = jsnod.asText();
@@ -239,14 +237,14 @@ public class GCM2Json
 		jsnod = node.path("CONTRIBUTION");
 		if (jsnod.isMissingNode())
 		{
-			configErrors.add("In section GROUPS, element #" + (arrayIndex+1) + " CONTRIBUTION is missing!");
+			configErrors.add("In section CALCULATED_GROUPS, element #" + (arrayIndex+1) + " CONTRIBUTION is missing!");
 			return null;
 		}
 		else
 		{
 			if (!jsnod.isDouble())
 			{
-				configErrors.add("In section GROUPS element #" + (arrayIndex+1) + " CONTRIBUTION is not double!");
+				configErrors.add("In section CALCULATED_GROUPS element #" + (arrayIndex+1) + " CONTRIBUTION is not double!");
 				return null;
 			}
 			contribution = jsnod.asDouble();
@@ -293,7 +291,7 @@ public class GCM2Json
 		JsonNode jsnod = node.path("TYPE");
 		if (jsnod.isMissingNode())
 		{
-			configErrors.add("In section CORRECTION_FACTORS, element #" 
+			configErrors.add("In section CALCULATED_CORRECTION_FACTORS, element #" 
 					+ (arrayIndex+1) + ", TYPE is missing!");
 			return null;
 		}
@@ -301,14 +299,14 @@ public class GCM2Json
 		{
 			if (!jsnod.isTextual())
 			{
-				configErrors.add("In section CORRECTION_FACTORS element #" 
+				configErrors.add("In section CALCULATED_CORRECTION_FACTORS element #" 
 						+ (arrayIndex+1) + " TYPE is not text!");
 				return null;
 			}
 			type = ICorrectionFactor.Type.fromString(jsnod.asText());
 			if (type == null)
 			{
-				configErrors.add("In section CORRECTION_FACTORS element #" 
+				configErrors.add("In section CALCULATED_CORRECTION_FACTORS element #" 
 						+ (arrayIndex+1) + " TYPE is not correct!");
 				return null;
 			}
@@ -317,7 +315,7 @@ public class GCM2Json
 		jsnod = node.path("DESIGNATION");
 		if (jsnod.isMissingNode())
 		{
-			configErrors.add("In section CORRECTION_FACTORS, element #" 
+			configErrors.add("In section CALCULATED_CORRECTION_FACTORS, element #" 
 					+ (arrayIndex+1) + " DESIGNATION is missing!");
 			return null;
 		}
@@ -325,7 +323,7 @@ public class GCM2Json
 		{
 			if (!jsnod.isTextual())
 			{
-				configErrors.add("In section CORRECTION_FACTORS element #" 
+				configErrors.add("In section CALCULATED_CORRECTION_FACTORS element #" 
 					+ (arrayIndex+1) + " DESIGNATION is not text!");
 				return null;
 			}
@@ -335,7 +333,7 @@ public class GCM2Json
 		jsnod = node.path("CONTRIBUTION");
 		if (jsnod.isMissingNode())
 		{
-			configErrors.add("In section CORRECTION_FACTORS, element #" 
+			configErrors.add("In section CALCULATED_CORRECTION_FACTORS, element #" 
 					+ (arrayIndex+1) + " CONTRIBUTION is missing!");
 			return null;
 		}
@@ -343,7 +341,7 @@ public class GCM2Json
 		{
 			if (!jsnod.isDouble())
 			{
-				configErrors.add("In section CORRECTION_FACTORS element #" 
+				configErrors.add("In section CALCULATED_CORRECTION_FACTORS element #" 
 						+ (arrayIndex+1) + " CONTRIBUTION is not double!");
 				return null;
 			}
@@ -354,12 +352,21 @@ public class GCM2Json
 			params = JSONParsingUtils.extractArrayKeyword(node, "PARAMETERS", true);
 		}
 		catch (Exception x){
-			configErrors.add("In section CORRECTION_FACTORS, element #" 
+			configErrors.add("In section CALCULATED_CORRECTION_FACTORS, element #" 
 					+ (arrayIndex+1) + " " + x.getMessage() );
 			return null;
 		}
 		
-		//TODO
+		try
+		{
+			cf = generateCorrectionFactor(type, designation, params);
+			cf.setContribution(contribution);
+			return cf;
+		}	
+		catch (Exception x) {
+			configErrors.add("In section CALCULATED_CORRECTION_FACTORS, element #" 
+					+ (arrayIndex+1) + " " + x.getMessage());
+		}
 		
 		return null;
 	}
