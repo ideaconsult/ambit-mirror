@@ -1,6 +1,7 @@
 package ambit2.groupcontribution.cli;
 
 import java.io.File;
+import java.io.RandomAccessFile;
 import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
@@ -89,7 +90,7 @@ public class GroupContributionCli
 			}
 			@Override
 			public String getDescription() {
-				return "Output GCM configuration (.json) file";
+				return "Output GCM configuration to a *.json file or to console (con)";
 			}
 			@Override
 			public String getShortName() {
@@ -641,8 +642,30 @@ public class GroupContributionCli
 	
 	void saveOutputGCMToFile(GroupContributionModel gcm)
 	{
-		String gcm_json = gcm.toJsonString();
-		System.out.println(gcm_json);
+		if (outputGCMFile == null)
+			return;
+		
+		if (outputGCMFile.equalsIgnoreCase("con") || 
+				outputGCMFile.equalsIgnoreCase("console") )
+		{	
+			String gcm_json = gcm.toJsonString();
+			System.out.println(gcm_json);
+			return;
+		}	
+		
+		try 
+		{
+			File file = new File (outputGCMFile);
+			RandomAccessFile f = new RandomAccessFile(file, "rw");
+			f.setLength(0);
+			String gcm_json = gcm.toJsonString();
+			f.write(gcm_json.getBytes());
+			f.close();
+		}
+		catch (Exception x) {
+			System.out.println("Error on creating GCM output json file: " 
+				+ x.getMessage());
+		}
 		
 		//TODO
 	}
