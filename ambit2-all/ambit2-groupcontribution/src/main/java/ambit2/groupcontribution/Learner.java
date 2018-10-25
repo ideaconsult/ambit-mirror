@@ -792,7 +792,7 @@ public class Learner
 			}			
 			System.out.println("Matrix A  (A0,D0,Cf0 - filtered and united)");
 			System.out.println(A.toString(matrixDig,matrixDecDig));
-			System.out.println("Matrix b0  (traget property)");
+			System.out.println("Matrix b0  (target property)");
 			System.out.println(b0.toString(matrixDig,matrixDecDig));
 		}
 		if (repCfg.FlagBufferOutput)
@@ -859,7 +859,7 @@ public class Learner
 		
 		if (repCfg.FlagConsoleOutput)
 		{
-			System.out.println("Group contibutions:");
+			System.out.println("Group contributions:");
 			Set<String> keys = groups.keySet();
 			for (String key : keys)
 			{
@@ -871,7 +871,7 @@ public class Learner
 			List<DescriptorInfo> diList = model.getDescriptors();
 			if (diList != null)
 			{	
-				System.out.println("Descriptor contibutions:");
+				System.out.println("Descriptor contributions:");
 				for (int i = 0; i < diList.size(); i++)
 				{	
 					System.out.println("\t" + diList.get(i).getName() + "\t" 
@@ -882,7 +882,7 @@ public class Learner
 			List<ICorrectionFactor> cfList = model.getCorrectionFactors();
 			if (!cfList.isEmpty())
 			{	
-				System.out.println("Correction factor contibutions:");
+				System.out.println("Correction factor contributions:");
 				for (int i = 0; i < cfList.size(); i++)
 				{	
 					System.out.println("\t" + cfList.get(i).getDesignation() + "\t" 
@@ -893,7 +893,7 @@ public class Learner
 		
 		if (repCfg.FlagBufferOutput)
 		{
-			model.addToReport("Group contibutions:\n");
+			model.addToReport("Group contributions:\n");
 			Set<String> keys = groups.keySet();
 			for (String key : keys)
 			{
@@ -905,7 +905,7 @@ public class Learner
 			List<DescriptorInfo> diList = model.getDescriptors();
 			if (diList != null)
 			{	
-				model.addToReport("Descriptor contibutions:\n");
+				model.addToReport("Descriptor contributions:\n");
 				for (int i = 0; i < diList.size(); i++)
 				{	
 					model.addToReport("\t" + diList.get(i).getName() + "\t" 
