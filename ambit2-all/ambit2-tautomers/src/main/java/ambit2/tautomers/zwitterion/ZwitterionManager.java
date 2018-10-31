@@ -17,10 +17,18 @@ public class ZwitterionManager
 	
 	IAtomContainer originalMolecule = null;
 	IAtomContainer molecule = null;
+	List<IAcidicCenter> initialAcidicCenters = new ArrayList<IAcidicCenter>();
+	List<IBasicCenter> initialBasicCenters = new ArrayList<IBasicCenter>();	
+	List<IAcidicCenter> acidicCenters = new ArrayList<IAcidicCenter>();
+	List<IBasicCenter> basicCenters = new ArrayList<IBasicCenter>();
+	
+	//TODO add flags for S and P based acids
 	
 	List<String> errors = new ArrayList<String>();
 	int numOfRegistrations = 0;
 	int status = TautomerConst.STATUS_NONE;
+		
+	
 	
 	public ZwitterionManager() 
 	{
@@ -39,8 +47,18 @@ public class ZwitterionManager
 	public List<IAtomContainer> generateZwitterions() throws Exception {
 		status = TautomerConst.STATUS_STARTED;
 		numOfRegistrations = 0;
+		
+		searchAllAcidicAndBasicCenters();
+		
+		//combinatorial zwitterion generation
 		//TODO
 		
 		return null;
 	}	
+	
+	void searchAllAcidicAndBasicCenters()
+	{
+		//TODO groups search and filtration
+		
+	}
 }
