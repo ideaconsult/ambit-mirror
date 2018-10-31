@@ -2,7 +2,7 @@ package ambit2.tautomers.zwitterion;
 
 import org.openscience.cdk.interfaces.IAtom;
 
-public class CarboxylicGroupState 
+public class CarboxylicGroupState implements IAcidicCenter
 {	
 	public IAtom carbon = null;
 	public IAtom oxygen1 = null; //hydroxyl group oxygen   
