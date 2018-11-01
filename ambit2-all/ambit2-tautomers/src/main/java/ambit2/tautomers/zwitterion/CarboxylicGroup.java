@@ -6,7 +6,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
-public class CarboxylicGroupState implements IAcidicCenter
+public class CarboxylicGroup implements IAcidicCenter
 {	
 	IAtom carbon = null;
 	IAtom oxygen1 = null; //hydroxyl group oxygen   
@@ -31,9 +31,9 @@ public class CarboxylicGroupState implements IAcidicCenter
 		//TODO 
 	}
 	
-	public static List<CarboxylicGroupState> findAllCenters(IAtomContainer mol)
+	public static List<CarboxylicGroup> findAllCenters(IAtomContainer mol)
 	{
-		List<CarboxylicGroupState> centers = new ArrayList<CarboxylicGroupState>();
+		List<CarboxylicGroup> centers = new ArrayList<CarboxylicGroup>();
 		//TODO
 		return centers;
 	}
