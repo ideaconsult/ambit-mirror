@@ -2,7 +2,7 @@ package ambit2.tautomers.zwitterion;
 
 import org.openscience.cdk.interfaces.IAtom;
 
-public class AminoGroupState implements IBasicCenter 
+public class AminoGroup implements IBasicCenter 
 {
 	public IAtom nitrogen = null;
 	public int numHAtoms = 0;
