@@ -1,6 +1,10 @@
 package ambit2.tautomers.zwitterion;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class CarboxylicGroupState implements IAcidicCenter
 {	
@@ -25,6 +29,13 @@ public class CarboxylicGroupState implements IAcidicCenter
 	@Override
 	public void shiftState() {
 		//TODO 
-	}	
+	}
+	
+	public static List<CarboxylicGroupState> findAllCenters(IAtomContainer mol)
+	{
+		List<CarboxylicGroupState> centers = new ArrayList<CarboxylicGroupState>();
+		//TODO
+		return centers;
+	}
 	
 }
