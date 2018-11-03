@@ -6,10 +6,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 public class AminoGroup implements IBasicCenter 
 {
 	public IAtom nitrogen = null;
-	public int numHAtoms = 0;
-	public int numHeavyAtoms = 0;
-	public int charge = 0;
-	
+	IAtom hydrogen = null;
+	IAtomContainer molecule = null;
+	boolean explicitH = false;
 	State state = State.NEUTRAL;
 	
 	@Override
@@ -25,7 +24,15 @@ public class AminoGroup implements IBasicCenter
 	
 	@Override
 	public void shiftState() {
-		//TODO 
+		switch (state)
+		{
+		case CATION:
+			setState(State.NEUTRAL);
+			break;
+		case NEUTRAL:
+			setState(State.CATION);
+			break;
+		} 
 	}
 
 	@Override
@@ -35,11 +42,11 @@ public class AminoGroup implements IBasicCenter
 
 	@Override
 	public boolean explicitHAtoms() {
-		return false;
+		return explicitH;
 	}
 	
 	@Override
 	public IAtomContainer getMolecule() {		
-		return null;
+		return molecule;
 	}
 }

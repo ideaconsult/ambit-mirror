@@ -192,7 +192,7 @@ public class CarboxylicGroup implements IAcidicCenter
 
 	@Override
 	public IAtomContainer getMolecule() {		
-		return null;
+		return molecule;
 	}
 	
 }
