@@ -114,4 +114,42 @@ public class ZwitterionManager
 		}
 		
 	}
+	
+	List<int[]> getCombinations(int k, int n, List<int[]> comb_k_1)
+	{
+		//Choosing k elements out of a set with n elements
+		List<int[]> combList = new ArrayList<int[]>();
+		if (k > n)
+			return combList; //empty list
+		
+		switch (k)
+		{
+		case 1:
+			for (int i = 0; i < n; i++)
+				combList.add(new int[] {i});
+			break;
+		case 2:
+			for (int i = 0; i < n-1; i++)
+				for (int j = i+1; j < n; j++)
+					combList.add(new int[] {i,j});
+		case 3:
+			for (int i = 0; i < n-2; i++)
+				for (int j = i+1; j < n-1; j++)
+					for (int s = j+1; s < n; s++)
+						combList.add(new int[] {i,j,s});	
+			break;
+		case 4:
+			for (int i = 0; i < n-3; i++)
+				for (int j = i+1; j < n-2; j++)
+					for (int s = j+1; s < n-1; s++)
+						for (int r = j+1; r < n; r++)
+							combList.add(new int[] {i,j,s,r});
+		default: // k > 4
+			//combinations c(k-1,n) are used
+			//TODO
+			break;	
+			
+		}
+		return combList;
+	}
 }
