@@ -20,8 +20,8 @@ public class ZwitterionManager
 	IAtomContainer molecule = null;
 	List<IAcidicCenter> initialAcidicCenters = new ArrayList<IAcidicCenter>();
 	List<IBasicCenter> initialBasicCenters = new ArrayList<IBasicCenter>();	
-	List<IAcidicCenter> acidicCenters = null;
-	List<IBasicCenter> basicCenters = null;
+	List<IAcidicCenter> acidicCenters = new ArrayList<IAcidicCenter>();
+	List<IBasicCenter> basicCenters = new ArrayList<IBasicCenter>();
 		
 	List<String> errors = new ArrayList<String>();
 	int numOfRegistrations = 0;
@@ -31,6 +31,7 @@ public class ZwitterionManager
 	public boolean FlagUseSulfonicGroups = true;
 	public boolean FlagUseSulfinicGroups = true;
 	public boolean FlagUsePhosphoricGroups = true;
+	public int MaxNumberZwitterions = -1;
 		
 	
 	public ZwitterionManager() 
@@ -53,11 +54,42 @@ public class ZwitterionManager
 		
 		searchAllAcidicAndBasicCenters();
 		
-		//combinatorial zwitterion generation
-		//TODO
+		//TODO handle initial ion states combinations
 		
+		acidicCenters.addAll(initialAcidicCenters);
+		basicCenters.addAll(initialBasicCenters);		
+		
+		List<IAtomContainer> res = getZwitterionCombinations();
+		
+		return res;
+	}
+	
+	List<IAtomContainer> getZwitterionCombinations()
+	{
+		List<IAtomContainer> zwittList = new ArrayList<IAtomContainer>();
+		int min = acidicCenters.size();
+		if (basicCenters.size() < min)
+			min = basicCenters.size();
+		
+		if (min == 0)
+			return zwittList; //Nothing to be generated
+		
+		for (int i = 0; i < MaxNumberZwitterions; i++)
+		{	
+			if (i >= min)
+				break;
+			List<IAtomContainer> zw = getZwitterionCombinations(i);
+			zwittList.addAll(zw);
+		}
+		return zwittList;
+	}
+	
+	List<IAtomContainer> getZwitterionCombinations(int n)
+	{
+		//Combinatorial zwitterion generation
+		//TODO
 		return null;
-	}	
+	}
 	
 	void searchAllAcidicAndBasicCenters()
 	{
@@ -81,7 +113,5 @@ public class ZwitterionManager
 			}
 		}
 		
-		acidicCenters = initialAcidicCenters;
-		basicCenters = initialBasicCenters;
 	}
 }
