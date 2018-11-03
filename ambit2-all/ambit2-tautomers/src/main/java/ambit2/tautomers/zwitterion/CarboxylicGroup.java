@@ -3,6 +3,8 @@ package ambit2.tautomers.zwitterion;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -10,10 +12,10 @@ import org.openscience.cdk.interfaces.IBond;
 public class CarboxylicGroup implements IAcidicCenter
 {	
 	IAtom carbon = null;
-	IAtom oxygen1 = null; //hydroxyl group oxygen   
-	IAtom oxygen2 = null; //carbonil group oxygen
-	//int numHAtoms = 0;
-	//int charge = 0;
+	IAtom oxygen1 = null; //hydroxyl oxygen   
+	IAtom oxygen2 = null; //carbonyl oxygen
+	IAtom hydrogen = null;
+	IAtomContainer molecule = null;
 	boolean explicitH = false;
 	State state = State.NEUTRAL;
 	
@@ -24,13 +26,48 @@ public class CarboxylicGroup implements IAcidicCenter
 	
 	@Override
 	public void setState(State state) {
+		if (this.state == state)
+			return; //nothing is done
+		
+		switch (state)
+		{
+		case ANION:
+			oxygen1.setFormalCharge(-1);
+			if (explicitH)
+			{
+				molecule.removeAtomAndConnectedElectronContainers(hydrogen);
+				hydrogen = null;
+			}
+			else
+				oxygen1.setImplicitHydrogenCount(oxygen1.getImplicitHydrogenCount()-1);
+			break;
+		case NEUTRAL:
+			oxygen1.setFormalCharge(0);
+			if (explicitH)
+			{
+				hydrogen = new Atom("H");
+				molecule.addAtom(hydrogen);
+				molecule.addBond(new Bond(oxygen1,hydrogen));
+			}
+			else
+				oxygen1.setImplicitHydrogenCount(oxygen1.getImplicitHydrogenCount()+1);
+			break;
+		}
+		
 		this.state = state;
-		// TODO 		
 	}
 	
 	@Override
 	public void shiftState() {
-		//TODO 
+		switch (state)
+		{
+		case ANION:
+			setState(State.NEUTRAL);
+			break;
+		case NEUTRAL:
+			setState(State.ANION);
+			break;
+		}
 	}
 	
 	public static CarboxylicGroup getCenter(IAtomContainer mol, IAtom atom)
@@ -44,6 +81,7 @@ public class CarboxylicGroup implements IAcidicCenter
 				
 		IAtom o1 = null;
 		IAtom o2 = null;
+		IAtom h = null;
 		State st = State.NEUTRAL;
 		boolean explH = false;
 		
@@ -87,12 +125,14 @@ public class CarboxylicGroup implements IAcidicCenter
 						if ((at_list.get(0) != at) && (at_list.get(0).getAtomicNumber() == 1) )
 						{	
 							o1 = at;
+							h = at_list.get(0);
 							explH = true;
 						}
 						else
 							if ((at_list.get(1) != at) && (at_list.get(1).getAtomicNumber() == 1) )
 							{	
 								o1 = at;
+								h = at_list.get(1);
 								explH = true;
 							}
 					}
@@ -130,12 +170,24 @@ public class CarboxylicGroup implements IAcidicCenter
 
 	@Override
 	public IAtom[] getAtoms() {		
-		return null;
+		IAtom[] atoms;
+		if (explicitH && hydrogen != null)
+			atoms = new IAtom[4];
+		else
+			atoms = new IAtom[3];
+		atoms[0] = carbon;
+		atoms[1] = oxygen1;
+		atoms[2] = oxygen2;
+		
+		if (explicitH && hydrogen != null)
+			atoms[3] = hydrogen;
+		
+		return atoms;
 	}
 
 	@Override
 	public boolean explicitHAtoms() {
-		return false;
+		return explicitH;
 	}
 	
 }
