@@ -1,6 +1,7 @@
 package ambit2.tautomers.zwitterion;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 public class SulfonicGroup implements IAcidicCenter
 {
@@ -30,5 +31,10 @@ public class SulfonicGroup implements IAcidicCenter
 	@Override
 	public boolean explicitHAtoms() {
 		return false;
+	}
+	
+	@Override
+	public IAtomContainer getMolecule() {		
+		return null;
 	}
 }

@@ -189,5 +189,10 @@ public class CarboxylicGroup implements IAcidicCenter
 	public boolean explicitHAtoms() {
 		return explicitH;
 	}
+
+	@Override
+	public IAtomContainer getMolecule() {		
+		return null;
+	}
 	
 }
