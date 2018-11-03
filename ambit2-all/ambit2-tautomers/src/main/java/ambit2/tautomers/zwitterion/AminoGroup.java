@@ -1,7 +1,10 @@
 package ambit2.tautomers.zwitterion;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -21,9 +24,38 @@ public class AminoGroup implements IBasicCenter
 	}
 	
 	@Override
-	public void setState(State state) {
-		this.state = state;
-		// TODO 		
+	public void setState(State state) 
+	{
+		if (this.state == state)
+			return; //nothing is done
+		
+		switch (state)
+		{
+		case CATION:
+			nitrogen.setFormalCharge(+1);
+			if (explicitH)
+			{
+				hydrogen = new Atom("H");
+				molecule.addAtom(hydrogen);
+				molecule.addBond(new Bond(nitrogen,hydrogen));
+			}
+			else
+				nitrogen.setImplicitHydrogenCount(nitrogen.getImplicitHydrogenCount()+1);
+			break;
+			
+		case NEUTRAL:
+			nitrogen.setFormalCharge(0);
+			if (explicitH)
+			{
+				molecule.removeAtomAndConnectedElectronContainers(hydrogen);
+				hydrogen = null;
+			}
+			else
+				nitrogen.setImplicitHydrogenCount(nitrogen.getImplicitHydrogenCount()-1);
+			break;
+		}
+		
+		this.state = state;		
 	}
 	
 	@Override
@@ -92,6 +124,18 @@ public class AminoGroup implements IBasicCenter
 		ag.explicitH = explH;
 		
 		return ag;
+	}
+	
+	public static List<AminoGroup> findAllCenters(IAtomContainer mol)
+	{
+		List<AminoGroup> centers = new ArrayList<AminoGroup>();
+		for (IAtom at : mol.atoms())
+		{
+			AminoGroup center = getCenter(mol, at);
+			if (center != null)
+				centers.add(center);
+		}
+		return centers;
 	}
 
 	@Override
