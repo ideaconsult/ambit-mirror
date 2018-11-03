@@ -1,6 +1,6 @@
 package ambit2.tautomers.zwitterion;
 
-public interface IBasicCenter 
+public interface IBasicCenter extends ICenter
 {	
 	public static enum State {
 		NEUTRAL, CATION

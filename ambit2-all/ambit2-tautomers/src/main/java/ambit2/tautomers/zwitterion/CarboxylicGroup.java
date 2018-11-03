@@ -127,5 +127,15 @@ public class CarboxylicGroup implements IAcidicCenter
 		}
 		return centers;
 	}
+
+	@Override
+	public IAtom[] getAtoms() {		
+		return null;
+	}
+
+	@Override
+	public boolean explicitHAtoms() {
+		return false;
+	}
 	
 }

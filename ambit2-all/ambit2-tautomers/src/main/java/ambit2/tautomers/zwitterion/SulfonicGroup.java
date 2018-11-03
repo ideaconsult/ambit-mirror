@@ -1,5 +1,6 @@
 package ambit2.tautomers.zwitterion;
 
+import org.openscience.cdk.interfaces.IAtom;
 
 public class SulfonicGroup implements IAcidicCenter
 {
@@ -19,5 +20,15 @@ public class SulfonicGroup implements IAcidicCenter
 	@Override
 	public void shiftState() {
 		//TODO 
+	}
+
+	@Override
+	public IAtom[] getAtoms() {
+		return null;
+	}
+
+	@Override
+	public boolean explicitHAtoms() {
+		return false;
 	}
 }

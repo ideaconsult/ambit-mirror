@@ -25,5 +25,15 @@ public class AminoGroup implements IBasicCenter
 	@Override
 	public void shiftState() {
 		//TODO 
+	}
+
+	@Override
+	public IAtom[] getAtoms() {
+		return null;
+	}
+
+	@Override
+	public boolean explicitHAtoms() {
+		return false;
 	}	
 }

@@ -1,6 +1,6 @@
 package ambit2.tautomers.zwitterion;
 
-public interface IAcidicCenter 
+public interface IAcidicCenter extends ICenter
 {
 	public static enum State {
 		NEUTRAL, ANION
