@@ -148,6 +148,7 @@ public class CarboxylicGroup implements IAcidicCenter
 			cg.carbon = atom;
 			cg.oxygen1 = o1;
 			cg.oxygen2 = o2;
+			cg.hydrogen = h;
 			cg.state = st;
 			cg.explicitH = explH;
 			return cg;
