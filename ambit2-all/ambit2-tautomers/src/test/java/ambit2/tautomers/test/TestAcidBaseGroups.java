@@ -177,5 +177,21 @@ public class TestAcidBaseGroups extends TestCase
 		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
 	}
 	
+	public void test201() throws Exception 
+	{	
+		String smi = "CCCC(=O)O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<CarboxylicGroup> centerList = CarboxylicGroup.findAllCenters(mol);
+		CarboxylicGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing carboxylic group state shift", "CCCC(=O)[O-]", newSmi);
+		assertEquals("Testing carboxylic group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
 	
 }
