@@ -77,4 +77,15 @@ public class TestAcidBaseGroups extends TestCase
 		expectedPositions.add(new int[] {5});
 		check(smi, mol, centerList, expectedPositions);
 	}
+	
+	public void test02() throws Exception 
+	{
+		String smi = "NCCCC[N+][H]";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<AminoGroup> centerList = AminoGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		expectedPositions.add(new int[] {0});
+		expectedPositions.add(new int[] {5,6});
+		check(smi, mol, centerList, expectedPositions);
+	}
 }
