@@ -389,7 +389,7 @@ var config_i5 = {
 				"bVisible" : true,
 				"inMatrix" : true
 			}
-		}		
+		}
 
 	},
 	"ASPECT_RATIO_SHAPE_SECTION" : {
@@ -454,7 +454,7 @@ var config_i5 = {
 				"bVisible" : true,
 				"inMatrix" : true
 			}
-		}		
+		}
 	},
 	"PC_THERMAL_STABILITY_SECTION" : {
 		"parameters" : config_bao["parameters"],
@@ -478,14 +478,14 @@ var config_i5 = {
 				"bVisible" : true,
 				"inMatrix" : true
 			}
-		}			
+		}
 	},
 	"RADICAL_FORMATION_POTENTIAL_SECTION" : {
 		"parameters" : config_bao["parameters"],
 		"effects" : config_bao["effects"],
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"]		
+		"interpretation" : config_bao["interpretation"]
 	},
 	"PC_GRANULOMETRY_SECTION" : {
 		"parameters" : config_bao["parameters"],
@@ -497,15 +497,15 @@ var config_i5 = {
 				"inMatrix" : false,
 				"bVisible" : true,
 				"mRender" : function(data, type, full) {
-					return "<span class='jtox-toolkit shortened ' title='" + data
-							+ "'>" + data + "</span>";
+					return "<span class='jtox-toolkit shortened ' title='"
+							+ data + "'>" + data + "</span>";
 				}
 			},
 			"criteria" : {
 				"bVisible" : false,
 				"mRender" : function(data, type, full) {
-					return "<span class='jtox-toolkit shortened ' title='" + data
-							+ "'>" + data + "</span>";
+					return "<span class='jtox-toolkit shortened ' title='"
+							+ data + "'>" + data + "</span>";
 				}
 			}
 		}
@@ -530,7 +530,7 @@ var config_i5 = {
 				"bVisible" : true,
 				"inMatrix" : true
 			}
-		},	
+		},
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
 		"interpretation" : config_bao["interpretation"]
@@ -567,8 +567,23 @@ var config_i5 = {
 		"effects" : config_bao["effects"],
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"]
-
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"iOrder" : -7,
+				"bVisible" : true,
+				"sTitle" : "Result"
+			}
+		}
 	},
 	"POROSITY_SECTION" : {
 		"parameters" : config_bao["parameters"],
@@ -619,6 +634,13 @@ var config_i5 = {
 		"interpretation" : config_bao["interpretation"]
 
 	},
+	"IMPURITY_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"effects" : config_bao["effects"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"]		
+	},
 	"EXPOSURE_SECTION" : {
 		"parameters" : config_bao["parameters"],
 		"effects" : config_bao["effects"],
@@ -626,6 +648,6 @@ var config_i5 = {
 		"protocol" : config_bao["protocol"],
 		"interpretation" : config_bao["interpretation"]
 
-	}	
+	}
 
 }
