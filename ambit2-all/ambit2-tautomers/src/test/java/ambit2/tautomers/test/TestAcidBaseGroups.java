@@ -88,4 +88,23 @@ public class TestAcidBaseGroups extends TestCase
 		expectedPositions.add(new int[] {5,6});
 		check(smi, mol, centerList, expectedPositions);
 	}
+	
+	
+	public void test101() throws Exception 
+	{	
+		String smi = "CCCCN";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<AminoGroup> centerList = AminoGroup.findAllCenters(mol);
+		AminoGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing amino group state shift", "CCCC[NH3+]", newSmi);
+		assertEquals("Testing amino group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
+	
 }

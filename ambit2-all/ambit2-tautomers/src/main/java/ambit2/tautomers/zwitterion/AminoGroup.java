@@ -122,6 +122,7 @@ public class AminoGroup implements IBasicCenter
 		ag.heavyNeighborCount = heavyAtCount;
 		ag.state = st;
 		ag.explicitH = explH;
+		ag.molecule = mol;
 		
 		return ag;
 	}
