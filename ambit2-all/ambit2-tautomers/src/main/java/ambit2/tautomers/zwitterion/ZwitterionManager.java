@@ -122,7 +122,50 @@ public class ZwitterionManager
 		}
 		
 		//Combinatorial zwitterion generation for k > 1
-		//TODO
+		{
+			List<int[]> acidComb = getCombinations(k, acidicCenters.size(), prevAcidComb);
+			List<int[]> baseComb = getCombinations(k, basicCenters.size(), prevBaseComb);
+			for (int[] a_comb : acidComb)
+			{
+				IAcidicCenter ac[] = new IAcidicCenter[k]; 
+				for (int i = 0; i < k; i++)
+				{	
+					ac[i] = acidicCenters.get(a_comb[i]);
+					ac[i].shiftState();
+				}			
+						
+				for (int[] b_comb : baseComb)
+				{
+					IBasicCenter bc[] = new IBasicCenter[k]; 
+					for (int i = 0; i < k; i++)
+					{	
+						bc[i] = basicCenters.get(b_comb[i]);
+						bc[i].shiftState();
+					}
+					
+					try {
+						IAtomContainer newZwitt = molecule.clone();
+						zwList.add(newZwitt);
+					}
+					catch (Exception x) {
+						errors.add(x.getMessage());
+					}
+					
+					for (int i = 0; i < k; i++)
+						bc[i].shiftState(); //return to neutral
+				}
+				
+				for (int i = 0; i < k; i++)				
+					ac[i].shiftState(); //return to neutral
+			}
+			
+			//Combination setup for next value of k
+			if (k >= 3)
+			{
+				prevAcidComb = acidComb;
+				prevBaseComb = baseComb;
+			}
+		}
 		
 		return null;
 	}
