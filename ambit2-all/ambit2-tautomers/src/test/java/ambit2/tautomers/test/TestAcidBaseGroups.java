@@ -29,7 +29,7 @@ public class TestAcidBaseGroups extends TestCase
 		return new TestSuite(TestAcidBaseGroups.class);
 	}
 	
-	void check(String smi, IAtomContainer mol, 
+	void checkAminoGroup(String smi, IAtomContainer mol, 
 			List<AminoGroup> centerList, List<int[]> expectedPositions )
 	{
 		assertEquals("Amino group positions ", expectedPositions.size(), centerList.size());
@@ -41,7 +41,7 @@ public class TestAcidBaseGroups extends TestCase
 		}
 	}
 	
-	void checkCarboxylixGroup(String smi, IAtomContainer mol, 
+	void checkCarboxylicGroup(String smi, IAtomContainer mol, 
 			List<CarboxylicGroup> centerList, List<int[]> expectedPositions )
 	{
 		assertEquals("Amino group positions ", expectedPositions.size(), centerList.size());
@@ -95,7 +95,7 @@ public class TestAcidBaseGroups extends TestCase
 		List<int[]> expectedPositions = new ArrayList<int[]>();
 		expectedPositions.add(new int[] {0});
 		expectedPositions.add(new int[] {5});
-		check(smi, mol, centerList, expectedPositions);
+		checkAminoGroup(smi, mol, centerList, expectedPositions);
 	}
 	
 	public void test02() throws Exception 
@@ -106,9 +106,28 @@ public class TestAcidBaseGroups extends TestCase
 		List<int[]> expectedPositions = new ArrayList<int[]>();
 		expectedPositions.add(new int[] {0});
 		expectedPositions.add(new int[] {5,6});
-		check(smi, mol, centerList, expectedPositions);
+		checkAminoGroup(smi, mol, centerList, expectedPositions);
 	}
 	
+	public void test11() throws Exception 
+	{
+		String smi = "CCCC(O)=O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<CarboxylicGroup> centerList = CarboxylicGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		expectedPositions.add(new int[] {3,4,5});
+		checkCarboxylicGroup(smi, mol, centerList, expectedPositions);
+	}
+	
+	public void test12() throws Exception 
+	{
+		String smi = "CCCC([O-])=O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<CarboxylicGroup> centerList = CarboxylicGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		expectedPositions.add(new int[] {3,4,5});
+		checkCarboxylicGroup(smi, mol, centerList, expectedPositions);
+	}
 	
 	public void test101() throws Exception 
 	{	
