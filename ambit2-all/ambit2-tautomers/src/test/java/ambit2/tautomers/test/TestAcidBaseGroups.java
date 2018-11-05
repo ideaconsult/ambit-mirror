@@ -9,6 +9,8 @@ import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.smarts.SmartsHelper;
 import ambit2.tautomers.zwitterion.AminoGroup;
+import ambit2.tautomers.zwitterion.CarboxylicGroup;
+import ambit2.tautomers.zwitterion.IAcidicCenter;
 import ambit2.tautomers.zwitterion.IBasicCenter;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -35,17 +37,35 @@ public class TestAcidBaseGroups extends TestCase
 		for (AminoGroup g : centerList)
 		{
 			IAtom atoms[] = g.getAtoms();
-			int atInd[] = new int[atoms.length];
-			String s = "";
-			for (int i = 0; i < atoms.length; i++) {
-				int ind = mol.getAtomNumber(atoms[i]);
-				atInd[i] = ind;
-				s += (" " + atoms[i].getSymbol()+ind); 
-			}
-			
-			boolean res = findAtoms(atInd, expectedPositions);
-			assertEquals("Group position " + s + " in " + smi, true, res);
+			chechGroupPositions(smi, mol, atoms, expectedPositions);			
 		}
+	}
+	
+	void checkCarboxylixGroup(String smi, IAtomContainer mol, 
+			List<CarboxylicGroup> centerList, List<int[]> expectedPositions )
+	{
+		assertEquals("Amino group positions ", expectedPositions.size(), centerList.size());
+		
+		for (CarboxylicGroup g : centerList)
+		{
+			IAtom atoms[] = g.getAtoms();
+			chechGroupPositions(smi, mol, atoms, expectedPositions);
+		}
+	}
+	
+	void chechGroupPositions(String smi, IAtomContainer mol, 
+			IAtom atoms[], List<int[]> expectedPositions)
+	{	
+		int atInd[] = new int[atoms.length];
+		String s = "";
+		for (int i = 0; i < atoms.length; i++) {
+			int ind = mol.getAtomNumber(atoms[i]);
+			atInd[i] = ind;
+			s += (" " + atoms[i].getSymbol()+ind); 
+		}
+		
+		boolean res = findAtoms(atInd, expectedPositions);
+		assertEquals("Group position " + s + " in " + smi, true, res);
 	}
 	
 	boolean findAtoms(int atomIndices[], List<int[]> expectedPositions)
