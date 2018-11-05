@@ -106,5 +106,37 @@ public class TestAcidBaseGroups extends TestCase
 		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
 	}
 	
+	public void test102() throws Exception 
+	{	
+		String smi = "CCCCNC";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<AminoGroup> centerList = AminoGroup.findAllCenters(mol);
+		AminoGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing amino group state shift", "CCCC[NH2+]C", newSmi);
+		assertEquals("Testing amino group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
+	public void test103() throws Exception 
+	{	
+		String smi = "CCCCN(C)C";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<AminoGroup> centerList = AminoGroup.findAllCenters(mol);
+		AminoGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing amino group state shift", "CCCC[NH+](C)C", newSmi);
+		assertEquals("Testing amino group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
 	
 }
