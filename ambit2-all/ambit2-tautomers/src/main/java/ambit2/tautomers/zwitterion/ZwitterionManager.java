@@ -145,8 +145,24 @@ public class ZwitterionManager
 						for (int r = j+1; r < n; r++)
 							combList.add(new int[] {i,j,s,r});
 		default: // k > 4
+			List<int[]> prev_comb_list = comb_k_1;
+			if (prev_comb_list == null)
+				prev_comb_list = getCombinations(k-1, n, null); //recursion
+			
 			//combinations c(k-1,n) are used
-			//TODO
+			for (int[] c : prev_comb_list)
+			{	
+				//Previous combination (c) forms the first k-1 
+				//elements from the new of combination (comb) 
+				for (int i = c[k-2]+1; i < k; i++)
+				{
+					int comb[] = new int[k];
+					for (int s = 0; s < (k-1); s++)
+						comb[s] = c[s];
+					comb[k-1] = i;
+					combList.add(comb);
+				}
+			}
 			break;	
 			
 		}
