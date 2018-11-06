@@ -31,6 +31,8 @@ public class EffectRecord_crud_test
 		record.setEndpoint("LC50");
 		record.setUnit("mg/L");
 		record.setLoValue(83.1);
+		record.setErrQualifier("RDS %");
+		record.setErrorValue(0.01);
 		return record;
 	}
 
@@ -43,6 +45,8 @@ public class EffectRecord_crud_test
 		record.setConditions(params);
 		record.setEndpoint("log Pow");
 		record.setLoValue(0.35);
+		record.setErrQualifier("RDS %");
+		record.setErrorValue(0.01);
 		return record;
 	}
 
@@ -71,6 +75,8 @@ public class EffectRecord_crud_test
 		record.setLoValue(260);
 		record.setUpValue(320);
 		record.setUnit("mg/kg bw");
+		record.setErrQualifier("RDS %");
+		record.setErrorValue(0.01);
 		return record;
 	}
 
