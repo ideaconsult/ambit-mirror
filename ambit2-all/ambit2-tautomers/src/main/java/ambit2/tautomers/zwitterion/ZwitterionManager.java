@@ -26,12 +26,14 @@ public class ZwitterionManager
 	List<String> errors = new ArrayList<String>();
 	int numOfRegistrations = 0;
 	int status = TautomerConst.STATUS_NONE;
+	List<int[]> prevAcidComb = null;
+	List<int[]> prevBaseComb = null;
 		
 	public boolean FlagUseCarboxylicGroups = true;
 	public boolean FlagUseSulfonicGroups = true;
 	public boolean FlagUseSulfinicGroups = true;
 	public boolean FlagUsePhosphoricGroups = true;
-	public int MaxNumberZwitterions = -1;
+	public int MaxNumberZwitterions = 1000000;
 		
 	
 	public ZwitterionManager() 
@@ -43,9 +45,9 @@ public class ZwitterionManager
 	{	
 	}
 	
-	public void setStructure(IAtomContainer str) throws Exception {
-		molecule = str;
+	public void setStructure(IAtomContainer str) throws Exception {		
 		originalMolecule = str;
+		molecule = (IAtomContainer) originalMolecule.clone();
 	}	
 	
 	public List<IAtomContainer> generateZwitterions() throws Exception {
@@ -67,28 +69,114 @@ public class ZwitterionManager
 	List<IAtomContainer> getZwitterionCombinations()
 	{
 		List<IAtomContainer> zwittList = new ArrayList<IAtomContainer>();
-		int min = acidicCenters.size();
-		if (basicCenters.size() < min)
-			min = basicCenters.size();
+		int minZC = acidicCenters.size();
+		if (basicCenters.size() < minZC)
+			minZC = basicCenters.size();
 		
-		if (min == 0)
+		if (minZC > MaxNumberZwitterions)
+			minZC = MaxNumberZwitterions;
+		
+		if (minZC == 0)
 			return zwittList; //Nothing to be generated
 		
-		for (int i = 0; i < MaxNumberZwitterions; i++)
-		{	
-			if (i >= min)
-				break;
+		prevAcidComb = null;
+		prevBaseComb = null;
+		
+		for (int i = 1; i <= minZC; i++)
+		{				
+			setAllToNeutralState();
 			List<IAtomContainer> zw = getZwitterionCombinations(i);
 			zwittList.addAll(zw);
 		}
 		return zwittList;
 	}
 	
-	List<IAtomContainer> getZwitterionCombinations(int n)
-	{
-		//Combinatorial zwitterion generation
-		//TODO
+	List<IAtomContainer> getZwitterionCombinations(int k)
+	{		
+		List<IAtomContainer> zwList = new ArrayList<IAtomContainer>();
+		
+		if (k == 1)
+		{
+			for (int i = 0; i < acidicCenters.size(); i++)
+			{	
+				IAcidicCenter ac = acidicCenters.get(i);
+				ac.shiftState();
+				
+				for (int j = 0; j < basicCenters.size(); j++)
+				{
+					IBasicCenter bc = basicCenters.get(j);
+					bc.shiftState();
+					try {
+						IAtomContainer newZwitt = molecule.clone();
+						zwList.add(newZwitt);
+					}
+					catch (Exception x) {
+						errors.add(x.getMessage());
+					}
+					bc.shiftState(); //return to neutral
+				}
+				ac.shiftState(); //return to neutral
+			}
+			
+			return zwList;
+		}
+		
+		//Combinatorial zwitterion generation for k > 1
+		{
+			List<int[]> acidComb = getCombinations(k, acidicCenters.size(), prevAcidComb);
+			List<int[]> baseComb = getCombinations(k, basicCenters.size(), prevBaseComb);
+			for (int[] a_comb : acidComb)
+			{
+				IAcidicCenter ac[] = new IAcidicCenter[k]; 
+				for (int i = 0; i < k; i++)
+				{	
+					ac[i] = acidicCenters.get(a_comb[i]);
+					ac[i].shiftState();
+				}			
+						
+				for (int[] b_comb : baseComb)
+				{
+					IBasicCenter bc[] = new IBasicCenter[k]; 
+					for (int i = 0; i < k; i++)
+					{	
+						bc[i] = basicCenters.get(b_comb[i]);
+						bc[i].shiftState();
+					}
+					
+					try {
+						IAtomContainer newZwitt = molecule.clone();
+						zwList.add(newZwitt);
+					}
+					catch (Exception x) {
+						errors.add(x.getMessage());
+					}
+					
+					for (int i = 0; i < k; i++)
+						bc[i].shiftState(); //return to neutral
+				}
+				
+				for (int i = 0; i < k; i++)				
+					ac[i].shiftState(); //return to neutral
+			}
+			
+			//Combination setup for next value of k
+			if (k >= 3)
+			{
+				prevAcidComb = acidComb;
+				prevBaseComb = baseComb;
+			}
+		}
+		
 		return null;
+	}
+	
+	void setAllToNeutralState()
+	{
+		for (IAcidicCenter ac : acidicCenters)
+			ac.setState(IAcidicCenter.State.NEUTRAL);
+		
+		for (IBasicCenter bc : basicCenters)
+			bc.setState(IBasicCenter.State.NEUTRAL);		
 	}
 	
 	void searchAllAcidicAndBasicCenters()
@@ -145,8 +233,24 @@ public class ZwitterionManager
 						for (int r = j+1; r < n; r++)
 							combList.add(new int[] {i,j,s,r});
 		default: // k > 4
+			List<int[]> prev_comb_list = comb_k_1;
+			if (prev_comb_list == null)
+				prev_comb_list = getCombinations(k-1, n, null); //recursion
+			
 			//combinations c(k-1,n) are used
-			//TODO
+			for (int[] c : prev_comb_list)
+			{	
+				//Previous combination (c) forms the first k-1 
+				//elements from the new of combination (comb) 
+				for (int i = c[k-2]+1; i < k; i++)
+				{
+					int comb[] = new int[k];
+					for (int s = 0; s < (k-1); s++)
+						comb[s] = c[s];
+					comb[k-1] = i;
+					combList.add(comb);
+				}
+			}
 			break;	
 			
 		}

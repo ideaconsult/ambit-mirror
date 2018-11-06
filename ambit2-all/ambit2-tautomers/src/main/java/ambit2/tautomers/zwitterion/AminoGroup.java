@@ -122,6 +122,7 @@ public class AminoGroup implements IBasicCenter
 		ag.heavyNeighborCount = heavyAtCount;
 		ag.state = st;
 		ag.explicitH = explH;
+		ag.molecule = mol;
 		
 		return ag;
 	}
@@ -140,7 +141,17 @@ public class AminoGroup implements IBasicCenter
 
 	@Override
 	public IAtom[] getAtoms() {
-		return null;
+		IAtom[] atoms;
+		if (explicitH && hydrogen != null)
+			atoms = new IAtom[2];
+		else
+			atoms = new IAtom[1];
+		
+		atoms[0] = nitrogen;
+		if (explicitH && hydrogen != null)
+			atoms[1] = hydrogen;
+		
+		return atoms;
 	}
 
 	@Override
