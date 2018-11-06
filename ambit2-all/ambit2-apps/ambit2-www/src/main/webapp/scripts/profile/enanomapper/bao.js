@@ -60,6 +60,18 @@ var config_bao = {
 									sOut += "</li>";
 								});
 				sOut += "</ul>";
+				
+				try {
+					if (full.interpretation.result != undefined && full.interpretation.result != "") {
+						sOut += "<ul><li>";
+						sOut += ("<span style='font-weight:bold;'>"
+								+ full.interpretation.criteria + "</span>");
+						sOut += ":";
+						sOut += full.interpretation.result;
+
+						sOut += "</li></ul>";
+					}	
+				} catch (err) {} 
 
 				return sOut;
 			}
@@ -325,6 +337,16 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : false
 		},
+		"calibration range" : {
+			"iOrder" : -4,
+			"bVisible" : true,
+			"inMatrix" : false
+		},		
+		"emission wavelength" : {
+			"iOrder" : -3,
+			"bVisible" : true,
+			"inMatrix" : false
+		},		
 		"material" : {
 			"iOrder" : -5,
 			"bVisible" : true,
@@ -332,6 +354,8 @@ var config_bao = {
 			"sTitle" : "Treatment"
 		},
 		"ph" : {
+			"sTitle" : "pH",
+			"iOrder" : -4,
 			"bVisible" : true
 		},
 		"medium" : {

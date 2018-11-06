@@ -301,6 +301,13 @@ var config_study = {
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
 		},
+		"IMPURITY_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+		},		
 		"TO_PHOTOTRANS_AIR_SECTION" : config_i5["TO_PHOTOTRANS_AIR_SECTION"],
 
 		"TO_HYDROLYSIS_SECTION" : config_i5["TO_HYDROLYSIS_SECTION"],
