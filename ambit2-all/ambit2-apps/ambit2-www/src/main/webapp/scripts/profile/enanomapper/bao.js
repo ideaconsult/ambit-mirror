@@ -62,7 +62,7 @@ var config_bao = {
 				sOut += "</ul>";
 				
 				try {
-					if (full.interpretation.result != undefined) {
+					if (full.interpretation.result != undefined && full.interpretation.result != "") {
 						sOut += "<ul><li>";
 						sOut += ("<span style='font-weight:bold;'>"
 								+ full.interpretation.criteria + "</span>");
@@ -355,6 +355,7 @@ var config_bao = {
 		},
 		"ph" : {
 			"sTitle" : "pH",
+			"iOrder" : -4,
 			"bVisible" : true
 		},
 		"medium" : {
