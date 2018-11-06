@@ -1,5 +1,7 @@
 package ambit2.tautomers.cli;
 
+import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -7,6 +9,11 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.smarts.SmartsHelper;
+import ambit2.tautomers.zwitterion.ZwitterionManager;
 
 public class ZwitterionCli 
 {
@@ -190,7 +197,60 @@ public class ZwitterionCli
 	
 	protected int runZwittGen() throws Exception
 	{
+		if ((inputFileName == null) && (inputSmiles == null))
+		{
+			System.out.println("No input is given! \n"
+					+ "Please assign input SMILES or input molecules file)!");
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		if (inputSmiles != null)
+		{
+			IAtomContainer mol = null;
+			try {
+				mol = SmartsHelper.getMoleculeFromSmiles(inputSmiles);	
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+			}
+			catch (Exception x) {
+				System.out.println("Error on creating input molecule: " + x.getMessage());
+				return -2;
+			}
+			
+			if (mol == null)
+			{
+				System.out.println("Unable to create and configure input molecule from : " + inputSmiles);
+				return -3;
+			}
+			
+			System.out.println("Input molecule: " + inputSmiles);
+			
+			ZwitterionManager zwittMan = new ZwitterionManager();			
+			zwittMan.setStructure(mol);
+			
+			try {
+				List<IAtomContainer> zwList =  zwittMan.generateZwitterions();
+				
+				if (zwList.isEmpty())
+					System.out.println("No zwitterions");
+				else
+				{
+					System.out.println("Zwitterions:");
+					for (int i = 0; i < zwList.size(); i++)
+						System.out.println(SmartsHelper.moleculeToSMILES(zwList.get(i), true));
+				}
+			}
+			catch (Exception x) {
+				System.out.println("Error on zwitterion generation: " + x.getMessage());
+				return -4;
+			}
+			
+			return 0;
+		}
+		
+		//Handle input file
 		//TODO
+		
 		return 0;
 	}
 
