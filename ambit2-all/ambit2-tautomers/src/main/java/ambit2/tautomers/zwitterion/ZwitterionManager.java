@@ -30,12 +30,11 @@ public class ZwitterionManager
 	List<int[]> prevBaseComb = null;
 		
 	public boolean FlagUseCarboxylicGroups = true;
-	public boolean FlagUseSulfonicGroups = true;
-	public boolean FlagUseSulfinicGroups = true;
+	public boolean FlagUseSulfonicAndSulfinicGroups = true;	
 	public boolean FlagUsePhosphoricGroups = true;
+	
 	public int MaxNumberZwitterions = 1000000;
 		
-	
 	public ZwitterionManager() 
 	{	
 	}
@@ -197,12 +196,31 @@ public class ZwitterionManager
 						initialAcidicCenters.add(c);
 				}
 				break;
+			
 			case 7:
 				IBasicCenter c = AminoGroup.getCenter(molecule, atom);
 				if (c != null)
 					initialBasicCenters.add(c);
 				break;
-			}
+			
+			case 15:
+				if (FlagUsePhosphoricGroups)
+				{
+					IAcidicCenter pg = PhosphoricGroup.getCenter(molecule, atom);
+					if (pg != null)
+						initialAcidicCenters.add(pg);
+				}
+				break;
+				
+			case 16:
+				if (FlagUseSulfonicAndSulfinicGroups)
+				{
+					IAcidicCenter sg = SulfGroup.getCenter(molecule, atom);
+					if (sg != null)
+						initialAcidicCenters.add(sg);
+				}
+				break;	
+			}	
 		}
 		
 	}
