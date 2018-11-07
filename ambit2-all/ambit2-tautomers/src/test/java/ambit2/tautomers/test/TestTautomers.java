@@ -46,6 +46,7 @@ import ambit2.tautomers.ranking.EnergyRanking;
 import ambit2.tautomers.ranking.TautomerStringCode;
 import ambit2.tautomers.rules.EnergyRule;
 import ambit2.tautomers.rules.JsonRuleParser;
+import ambit2.tautomers.zwitterion.ZwitterionManager;
 
 public class TestTautomers {
 	public static Logger logger = Logger.getLogger(TestTautomers.class.getName());
@@ -195,7 +196,7 @@ public class TestTautomers {
 		// tt.visualTest("O(C=1C(NC(=O)C=NN#N)=CC(OC)=CC1)C");
 		// tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=[N+]=[N-]");
 		// tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=N#N");
-		tt.visualTest("CC1CN(CC(O1)C)C2=NC3=CC=CC=C3N=C2C(C#N)S(=O)(=O)C4=CC=CC(=C4)C");
+		//tt.visualTest("CC1CN(CC(O1)C)C2=NC3=CC=CC=C3N=C2C(C#N)S(=O)(=O)C4=CC=CC(=C4)C");
 
 		// tt.visualTest("OC(=O)CCC=CN");
 
@@ -261,6 +262,11 @@ public class TestTautomers {
 		// tt.testCACTVSRank("c1ccccc1CCC=O");
 
 		// tt.testEnergyRules();
+		
+		tt.testZwitterion("NCCCC(O)=O");
+		tt.testZwitterion("NCCCNCCCC(O)=O");
+		tt.testZwitterion("NCCCNCCC(C(O)=O)CCCC(O)=O");
+		
 	}
 
 	public void performTestCases() throws Exception {
@@ -915,6 +921,28 @@ public class TestTautomers {
 			}
 		}
 		return smi;
+	}
+	
+	void testZwitterion(String smi) throws Exception
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		
+		System.out.println("Target: " + smi);
+
+		ZwitterionManager zwittMan = new ZwitterionManager();
+		zwittMan.setStructure(mol);
+
+		List<IAtomContainer> zwList = zwittMan.generateZwitterions();
+
+		if (zwList.isEmpty())
+			System.out.println("No zwitterions");
+		else
+		{
+			System.out.println("Zwitterions:");
+			for (int i = 0; i < zwList.size(); i++)
+				System.out.println(SmartsHelper.moleculeToSMILES(zwList.get(i), true));
+		}
 	}
 
 }
