@@ -12,6 +12,8 @@ import ambit2.tautomers.zwitterion.AminoGroup;
 import ambit2.tautomers.zwitterion.CarboxylicGroup;
 import ambit2.tautomers.zwitterion.IAcidicCenter;
 import ambit2.tautomers.zwitterion.IBasicCenter;
+import ambit2.tautomers.zwitterion.PhosphoricGroup;
+import ambit2.tautomers.zwitterion.SulfGroup;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -47,6 +49,30 @@ public class TestAcidBaseGroups extends TestCase
 		assertEquals("Amino group positions ", expectedPositions.size(), centerList.size());
 		
 		for (CarboxylicGroup g : centerList)
+		{
+			IAtom atoms[] = g.getAtoms();
+			chechGroupPositions(smi, mol, atoms, expectedPositions);
+		}
+	}
+	
+	void checkPhosphoricGroup(String smi, IAtomContainer mol, 
+			List<PhosphoricGroup> centerList, List<int[]> expectedPositions )
+	{
+		assertEquals("Phosphoric group positions ", expectedPositions.size(), centerList.size());
+		
+		for (PhosphoricGroup g : centerList)
+		{
+			IAtom atoms[] = g.getAtoms();
+			chechGroupPositions(smi, mol, atoms, expectedPositions);
+		}
+	}
+	
+	void checkSulfGroup(String smi, IAtomContainer mol, 
+			List<SulfGroup> centerList, List<int[]> expectedPositions )
+	{
+		assertEquals("Sulf group positions ", expectedPositions.size(), centerList.size());
+		
+		for (SulfGroup g : centerList)
 		{
 			IAtom atoms[] = g.getAtoms();
 			chechGroupPositions(smi, mol, atoms, expectedPositions);
@@ -127,6 +153,39 @@ public class TestAcidBaseGroups extends TestCase
 		List<int[]> expectedPositions = new ArrayList<int[]>();
 		expectedPositions.add(new int[] {3,4,5});
 		checkCarboxylicGroup(smi, mol, centerList, expectedPositions);
+	}
+	
+	public void test31() throws Exception 
+	{
+		String smi = "S(=O)(=O)(O)CCCS(O)=O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<SulfGroup> centerList = SulfGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		expectedPositions.add(new int[] {0,3,1});
+		expectedPositions.add(new int[] {7,8,9});
+		checkSulfGroup(smi, mol, centerList, expectedPositions);
+	}
+	
+	public void test32() throws Exception 
+	{
+		String smi = "S(=O)(=O)(O)CCCS([O-])=O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<SulfGroup> centerList = SulfGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		expectedPositions.add(new int[] {0,3,1});
+		expectedPositions.add(new int[] {7,8,9});
+		checkSulfGroup(smi, mol, centerList, expectedPositions);
+	}
+	
+	public void test33() throws Exception 
+	{
+		String smi = "S(=O)(=O)(O)CCCS(O[H])=O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<SulfGroup> centerList = SulfGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		expectedPositions.add(new int[] {0,3,1});
+		expectedPositions.add(new int[] {7,8,10,9}); //9 is the explicit H atom
+		checkSulfGroup(smi, mol, centerList, expectedPositions);
 	}
 	
 	public void test101() throws Exception 

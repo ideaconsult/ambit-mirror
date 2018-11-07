@@ -17,6 +17,7 @@ public class SulfGroup implements IAcidicCenter
 	IAtom sulfur = null;
 	IAtom oxygen1 = null; //S-OH   
 	IAtom oxygen2 = null; //S=O
+	IAtom oxygen2B = null; //Second S=O
 	IAtom hydrogen = null;
 	IAtomContainer molecule = null;
 	boolean explicitH = false;
@@ -84,6 +85,7 @@ public class SulfGroup implements IAcidicCenter
 				
 		IAtom o1 = null;
 		IAtom o2 = null;
+		IAtom o2B = null;
 		IAtom h = null;
 		State st = State.NEUTRAL;
 		boolean explH = false;
@@ -142,7 +144,12 @@ public class SulfGroup implements IAcidicCenter
 			}
 			else
 				if (bo.getOrder() == IBond.Order.DOUBLE)
-					o2 = at; //S=O	
+				{	
+					if (o2 == null)
+						o2 = at; //S=O
+					else
+						o2B = at; //second S=O
+				}	
 		}
 		
 		if ((o1 != null) && (o2 != null))
@@ -151,6 +158,7 @@ public class SulfGroup implements IAcidicCenter
 			sg.sulfur = atom;
 			sg.oxygen1 = o1;
 			sg.oxygen2 = o2;
+			sg.oxygen2B = o2B;
 			sg.hydrogen = h;
 			sg.state = st;
 			sg.explicitH = explH;
@@ -173,7 +181,8 @@ public class SulfGroup implements IAcidicCenter
 	}
 
 	@Override
-	public IAtom[] getAtoms() {		
+	public IAtom[] getAtoms() 
+	{		
 		IAtom[] atoms;
 		if (explicitH && hydrogen != null)
 			atoms = new IAtom[4];
