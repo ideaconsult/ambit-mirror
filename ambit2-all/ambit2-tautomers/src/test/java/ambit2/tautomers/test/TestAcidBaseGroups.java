@@ -188,6 +188,17 @@ public class TestAcidBaseGroups extends TestCase
 		checkSulfGroup(smi, mol, centerList, expectedPositions);
 	}
 	
+	public void test41() throws Exception 
+	{
+		String smi = "P(=O)(O)(O)CCCP(C)(O)=O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<PhosphoricGroup> centerList = PhosphoricGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		expectedPositions.add(new int[] {0,3,1});
+		expectedPositions.add(new int[] {7,9,10});
+		checkPhosphoricGroup(smi, mol, centerList, expectedPositions);
+	}
+	
 	public void test101() throws Exception 
 	{	
 		String smi = "CCCCN";
@@ -249,6 +260,86 @@ public class TestAcidBaseGroups extends TestCase
 		
 		assertEquals("Testing carboxylic group state shift", "CCCC(=O)[O-]", newSmi);
 		assertEquals("Testing carboxylic group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
+	public void test301() throws Exception 
+	{	
+		String smi = "CCCS(=O)O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<SulfGroup> centerList = SulfGroup.findAllCenters(mol);
+		SulfGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing sulf group state shift", "CCCS(=O)[O-]", newSmi);
+		assertEquals("Testing sulf group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
+	public void test302() throws Exception 
+	{	
+		String smi = "CCCS(=O)(=O)O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<SulfGroup> centerList = SulfGroup.findAllCenters(mol);
+		SulfGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing sulf group state shift", "CCCS(=O)(=O)[O-]", newSmi);
+		assertEquals("Testing sulf group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
+	public void test401() throws Exception 
+	{	
+		String smi = "CCCP(=O)(C)O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<PhosphoricGroup> centerList = PhosphoricGroup.findAllCenters(mol);
+		PhosphoricGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing Phosphoric group state shift", "CCCP(=O)(C)[O-]", newSmi);
+		assertEquals("Testing Phosphoric group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
+	public void test402() throws Exception 
+	{	
+		String smi = "CCCP(=O)(Cl)O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<PhosphoricGroup> centerList = PhosphoricGroup.findAllCenters(mol);
+		PhosphoricGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing Phosphoric group state shift", "CCCP(=O)(Cl)[O-]", newSmi);
+		assertEquals("Testing Phosphoric group double state shift", smi, newSmi2);
+		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
+	}
+	
+	public void test403() throws Exception 
+	{	
+		String smi = "CCCP(=O)(O)O";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<PhosphoricGroup> centerList = PhosphoricGroup.findAllCenters(mol);
+		PhosphoricGroup g = centerList.get(0);
+		g.shiftState();
+		String newSmi = SmartsHelper.moleculeToSMILES(mol, true);
+		g.shiftState();
+		String newSmi2 = SmartsHelper.moleculeToSMILES(mol, true);
+		
+		assertEquals("Testing Phosphoric group state shift", "CCCP(=O)(O)[O-]", newSmi);
+		assertEquals("Testing Phosphoric group double state shift", smi, newSmi2);
 		//System.out.println(smi + " --> " + newSmi + " --> " + newSmi2);		
 	}
 	
