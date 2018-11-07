@@ -37,17 +37,21 @@ public class ZwitterionManager
 		
 	
 	public ZwitterionManager() 
-	{
-		init();
+	{	
 	}
 	
 	void init() 
-	{	
+	{
+		initialAcidicCenters.clear();
+		initialBasicCenters.clear();
+		acidicCenters.clear();
+		basicCenters.clear();
 	}
 	
 	public void setStructure(IAtomContainer str) throws Exception {		
 		originalMolecule = str;
 		molecule = (IAtomContainer) originalMolecule.clone();
+		init();
 	}	
 	
 	public List<IAtomContainer> generateZwitterions() throws Exception {
