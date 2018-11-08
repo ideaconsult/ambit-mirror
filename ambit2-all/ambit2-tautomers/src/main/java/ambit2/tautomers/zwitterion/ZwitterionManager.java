@@ -1,7 +1,9 @@
 package ambit2.tautomers.zwitterion;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -28,7 +30,8 @@ public class ZwitterionManager
 	int status = TautomerConst.STATUS_NONE;
 	List<int[]> prevAcidComb = null;
 	List<int[]> prevBaseComb = null;
-		
+	public Map<Integer,Integer> zwitterionCounts = new HashMap<Integer,Integer>(); 
+	
 	public boolean FlagUseCarboxylicGroups = true;
 	public boolean FlagUseSulfonicAndSulfinicGroups = true;	
 	public boolean FlagUsePhosphoricGroups = true;
@@ -45,6 +48,7 @@ public class ZwitterionManager
 		initialBasicCenters.clear();
 		acidicCenters.clear();
 		basicCenters.clear();
+		zwitterionCounts.clear();
 	}
 	
 	public void setStructure(IAtomContainer str) throws Exception {		
@@ -90,6 +94,7 @@ public class ZwitterionManager
 			setAllToNeutralState();
 			List<IAtomContainer> zw = getZwitterionCombinations(i);
 			zwittList.addAll(zw);
+			zwitterionCounts.put(i, zw.size());
 		}
 		return zwittList;
 	}
