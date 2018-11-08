@@ -263,9 +263,9 @@ public class TestTautomers {
 
 		// tt.testEnergyRules();
 		
-		tt.testZwitterion("NCCCC(O)=O");
-		tt.testZwitterion("NCCCNCCCC(O)=O");
-		tt.testZwitterion("NCCCNCCC(C(O)=O)CCCC(O)=O");
+		tt.testZwitterion("NC(N)CCC(O)=O");
+		//tt.testZwitterion("NCCCNCCCC(O)=O");
+		//tt.testZwitterion("NCCCNCCC(C(O)=O)CCCC(O)=O");
 		
 	}
 
@@ -931,6 +931,7 @@ public class TestTautomers {
 		System.out.println("Target: " + smi);
 
 		ZwitterionManager zwittMan = new ZwitterionManager();
+		zwittMan.FlagFilterDuplicates = false;
 		zwittMan.setStructure(mol);
 
 		List<IAtomContainer> zwList = zwittMan.generateZwitterions();

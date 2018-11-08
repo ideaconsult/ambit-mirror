@@ -2,14 +2,20 @@ package ambit2.tautomers.zwitterion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
+import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.tautomers.TautomerConst;
+import net.sf.jniinchi.INCHI_OPTION;
+import net.sf.jniinchi.INCHI_RET;
 
 
 
@@ -24,8 +30,11 @@ public class ZwitterionManager
 	List<IBasicCenter> initialBasicCenters = new ArrayList<IBasicCenter>();	
 	List<IAcidicCenter> acidicCenters = new ArrayList<IAcidicCenter>();
 	List<IBasicCenter> basicCenters = new ArrayList<IBasicCenter>();
-		
+	
+	List<INCHI_OPTION> options = new ArrayList<INCHI_OPTION>();
+	InChIGeneratorFactory igf = null;
 	List<String> errors = new ArrayList<String>();
+	Set<String> registeredInchies = new HashSet<String>();
 	int numOfRegistrations = 0;
 	int status = TautomerConst.STATUS_NONE;
 	List<int[]> prevAcidComb = null;
@@ -46,6 +55,22 @@ public class ZwitterionManager
 		
 	public ZwitterionManager() 
 	{	
+		inchiSetup();
+	}
+	
+	void inchiSetup()
+	{
+		options.add(INCHI_OPTION.FixedH);
+		options.add(INCHI_OPTION.SAbs);
+		options.add(INCHI_OPTION.SAsXYZ);
+		options.add(INCHI_OPTION.SPXYZ);
+		options.add(INCHI_OPTION.FixSp3Bug);
+		options.add(INCHI_OPTION.AuxNone);		
+		try	{
+			igf = InChIGeneratorFactory.getInstance();
+		}
+		catch (Exception x) {
+		}
 	}
 	
 	void init() 
@@ -55,6 +80,7 @@ public class ZwitterionManager
 		acidicCenters.clear();
 		basicCenters.clear();
 		zwitterionCounts.clear();
+		registeredInchies.clear();
 		numOfGeneratedZwitterions = 0;
 	}
 	
@@ -125,8 +151,26 @@ public class ZwitterionManager
 					bc.shiftState();
 					try {
 						IAtomContainer newZwitt = molecule.clone();
-						zwList.add(newZwitt);
-						numOfGeneratedZwitterions++;
+						
+						if (FlagFilterDuplicates)
+						{
+							try {
+								String inchiKey = getInchiKey(newZwitt);								
+								if (!registeredInchies.contains(inchiKey))
+								{
+									zwList.add(newZwitt);
+									numOfGeneratedZwitterions++;
+									registeredInchies.add(inchiKey);
+								}
+							}
+							catch (Exception x) {
+							}
+						}
+						else
+						{	
+							zwList.add(newZwitt);
+							numOfGeneratedZwitterions++;
+						}	
 						
 						if (numOfGeneratedZwitterions >= MaxNumberOfRegisteredZwitterions)
 							return zwList;
@@ -166,8 +210,25 @@ public class ZwitterionManager
 
 				try {
 					IAtomContainer newZwitt = molecule.clone();
-					zwList.add(newZwitt);
-					numOfGeneratedZwitterions++;
+					
+					if (FlagFilterDuplicates)
+					{
+						try {
+							String inchiKey = getInchiKey(newZwitt);
+							if (!registeredInchies.contains(inchiKey))
+							{
+								zwList.add(newZwitt);
+								numOfGeneratedZwitterions++;
+								registeredInchies.add(inchiKey);
+							}
+						}
+						catch (Exception x) {}
+					}
+					else
+					{	
+						zwList.add(newZwitt);
+						numOfGeneratedZwitterions++;
+					}
 					
 					if (numOfGeneratedZwitterions >= MaxNumberOfRegisteredZwitterions)
 						return zwList;
@@ -300,5 +361,17 @@ public class ZwitterionManager
 			
 		}
 		return combList;
+	}
+	
+	String getInchiKey(IAtomContainer mol) throws Exception
+	{
+		InChIGenerator ig = igf.getInChIGenerator(mol, options);
+		INCHI_RET returnCode = ig.getReturnStatus();
+		if (INCHI_RET.ERROR == returnCode) {
+			System.out.println("inchi error " + ig.getMessage());
+			return null;
+		}
+		
+		return ig.getInchiKey();
 	}
 }
