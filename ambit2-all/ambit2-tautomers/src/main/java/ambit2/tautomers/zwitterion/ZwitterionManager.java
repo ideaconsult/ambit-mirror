@@ -31,6 +31,7 @@ public class ZwitterionManager
 	List<int[]> prevAcidComb = null;
 	List<int[]> prevBaseComb = null;
 	public Map<Integer,Integer> zwitterionCounts = new HashMap<Integer,Integer>(); 
+	public int numOfGeneratedZwitterions = 0;
 	
 	//Configuration flags
 	public boolean FlagUseCarboxylicGroups = true;
@@ -40,7 +41,7 @@ public class ZwitterionManager
 	public boolean FlagUseSecondaryAmines = true;	
 	public boolean FlagUseTertiaryAmines = true;
 	public boolean FlagFilterDuplicates = false;
-	public int MaxNumberZwitterionicPairs = 100;
+	public int MaxNumberOfZwitterionicPairs = 100;
 	public int MaxNumberOfRegisteredZwitterions = 10000;
 		
 	public ZwitterionManager() 
@@ -54,6 +55,7 @@ public class ZwitterionManager
 		acidicCenters.clear();
 		basicCenters.clear();
 		zwitterionCounts.clear();
+		numOfGeneratedZwitterions = 0;
 	}
 	
 	public void setStructure(IAtomContainer str) throws Exception {		
@@ -85,8 +87,8 @@ public class ZwitterionManager
 		if (basicCenters.size() < minZC)
 			minZC = basicCenters.size();
 		
-		if (minZC > MaxNumberZwitterionicPairs)
-			minZC = MaxNumberZwitterionicPairs;
+		if (minZC > MaxNumberOfZwitterionicPairs)
+			minZC = MaxNumberOfZwitterionicPairs;
 		
 		if (minZC == 0)
 			return zwittList; //Nothing to be generated
@@ -96,6 +98,8 @@ public class ZwitterionManager
 		
 		for (int i = 1; i <= minZC; i++)
 		{				
+			if (numOfGeneratedZwitterions >= MaxNumberOfRegisteredZwitterions)
+				break;
 			setAllToNeutralState();
 			List<IAtomContainer> zw = getZwitterionCombinations(i);
 			zwittList.addAll(zw);
@@ -122,6 +126,10 @@ public class ZwitterionManager
 					try {
 						IAtomContainer newZwitt = molecule.clone();
 						zwList.add(newZwitt);
+						numOfGeneratedZwitterions++;
+						
+						if (numOfGeneratedZwitterions >= MaxNumberOfRegisteredZwitterions)
+							return zwList;
 					}
 					catch (Exception x) {
 						errors.add(x.getMessage());
@@ -159,6 +167,10 @@ public class ZwitterionManager
 				try {
 					IAtomContainer newZwitt = molecule.clone();
 					zwList.add(newZwitt);
+					numOfGeneratedZwitterions++;
+					
+					if (numOfGeneratedZwitterions >= MaxNumberOfRegisteredZwitterions)
+						return zwList;
 				}
 				catch (Exception x) {
 					errors.add(x.getMessage());
