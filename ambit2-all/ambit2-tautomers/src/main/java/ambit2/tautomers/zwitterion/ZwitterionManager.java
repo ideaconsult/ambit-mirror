@@ -32,11 +32,16 @@ public class ZwitterionManager
 	List<int[]> prevBaseComb = null;
 	public Map<Integer,Integer> zwitterionCounts = new HashMap<Integer,Integer>(); 
 	
+	//Configuration flags
 	public boolean FlagUseCarboxylicGroups = true;
 	public boolean FlagUseSulfonicAndSulfinicGroups = true;	
-	public boolean FlagUsePhosphoricGroups = true;
-	
-	public int MaxNumberZwitterions = 1000000;
+	public boolean FlagUsePhosphoricGroups = true;	
+	public boolean FlagUsePrimaryAmines = true;
+	public boolean FlagUseSecondaryAmines = true;	
+	public boolean FlagUseTertiaryAmines = true;
+	public boolean FlagFilterDuplicates = false;
+	public int MaxNumberZwitterionicPairs = 100;
+	public int MaxNumberOfRegisteredZwitterions = 10000;
 		
 	public ZwitterionManager() 
 	{	
@@ -80,8 +85,8 @@ public class ZwitterionManager
 		if (basicCenters.size() < minZC)
 			minZC = basicCenters.size();
 		
-		if (minZC > MaxNumberZwitterions)
-			minZC = MaxNumberZwitterions;
+		if (minZC > MaxNumberZwitterionicPairs)
+			minZC = MaxNumberZwitterionicPairs;
 		
 		if (minZC == 0)
 			return zwittList; //Nothing to be generated
