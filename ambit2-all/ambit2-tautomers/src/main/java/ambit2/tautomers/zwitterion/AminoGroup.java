@@ -94,7 +94,12 @@ public class AminoGroup implements IBasicCenter
 				}
 			}
 			else
+			{	
 				heavyAtCount++;
+				IBond bo = mol.getBond(atom, at);
+				if (bo.getOrder().numeric() > 1)
+					return null; //sp2 or sp3 nitrogen
+			}	
 		}
 		
 		if (atom.getFormalCharge() == +1)

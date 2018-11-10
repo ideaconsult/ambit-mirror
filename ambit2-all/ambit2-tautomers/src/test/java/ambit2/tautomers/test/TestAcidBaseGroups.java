@@ -135,6 +135,17 @@ public class TestAcidBaseGroups extends TestCase
 		checkAminoGroup(smi, mol, centerList, expectedPositions);
 	}
 	
+	public void test03() throws Exception 
+	{
+		String smi = "N=CCCCN";
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+		List<AminoGroup> centerList = AminoGroup.findAllCenters(mol);
+		List<int[]> expectedPositions = new ArrayList<int[]>();
+		//imino group (atom 0) is excluded 
+		expectedPositions.add(new int[] {5});
+		checkAminoGroup(smi, mol, centerList, expectedPositions);
+	}
+	
 	public void test11() throws Exception 
 	{
 		String smi = "CCCC(O)=O";
