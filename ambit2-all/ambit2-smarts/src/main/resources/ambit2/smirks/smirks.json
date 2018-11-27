@@ -351,7 +351,7 @@
 			"NAME": "Si",
 			"CLASS": "metals",
 			"SMIRKS": "[Si]>>",
-			"USE": true,
+			"USE": false,
 			"order": 26,
 			"precondition": {
 				"atom": [
