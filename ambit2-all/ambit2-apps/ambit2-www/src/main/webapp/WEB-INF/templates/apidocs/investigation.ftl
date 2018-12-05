@@ -54,7 +54,7 @@
 							    "paramType": "query",
 							    "allowMultiple": false,
 							    "defaultValue": ""
-							}							
+							},							
 							<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
 			            "responseMessages": [
