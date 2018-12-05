@@ -42,8 +42,10 @@
 							    "enum" : [
 							       "byinvestigation",
 							       "bysubstance",
-							       "bystructure",
-							       "byidchemical"
+							       "byprovider",
+							       "bycitation",
+							       "bystudytype",
+							       "bystructure"
 							    ]
 							},	
 							{
@@ -52,8 +54,8 @@
 							    "required": false,
 							    "type": "string",
 							    "paramType": "query",
-							    "allowMultiple": false,
-							    "defaultValue": ""
+							    "allowMultiple": true,
+							    "defaultValue": "YUYCVXFAYWRXLS-UHFFFAOYSA-N"
 							},							
 							<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
@@ -70,8 +72,8 @@
 							<#include "/apidocs/error_500.ftl" >			                
 			            ]
 			        }
+			        ]
 			 }
-			        
 				
     ],
     "models" : {
