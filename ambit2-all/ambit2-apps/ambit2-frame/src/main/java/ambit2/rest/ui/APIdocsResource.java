@@ -22,7 +22,7 @@ public class APIdocsResource extends FreeMarkerResource {
 	public static final String key2 = "key2";
 
 	private enum apidoc {
-		compound, dataset, feature, algorithm, model, task, substance, property, study, query, substanceowner, bundle, myaccount
+		compound, dataset, feature, algorithm, model, task, substance, property, study, query, substanceowner, bundle, myaccount, investigation
 	}
 
 	public APIdocsResource() {
