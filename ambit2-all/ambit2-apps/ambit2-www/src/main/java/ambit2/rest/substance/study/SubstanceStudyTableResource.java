@@ -86,19 +86,33 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 			SubstanceStudyFlatQuery q = null;
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			String search = null;
+			String[] inchikey = null;
+			String[] smiles = null;
 			try {
 				search = form.getFirstValue("search");
 				if (search == null)
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			} catch (Exception x) {
 			}
+
+			try {
+				inchikey = form.getValuesArray("inchikey");
+			} catch (Exception x) {
+			}
+			try {
+				smiles = form.getValuesArray("smiles");
+				//tbd convert ot inchikeys
+			} catch (Exception x) {
+			}			
+			
 			_QUERY_TYPE qtype = _QUERY_TYPE.bysubstance;
 			try {
 				qtype = _QUERY_TYPE.valueOf(form.getFirstValue("type"));
 			} catch (Exception x) {
 				qtype = null;
 			}
-			if (qtype==null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			if (qtype == null)
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 			switch (qtype) {
 			case byinvestigation: {
 				ProtocolApplication papp = new ProtocolApplication(null);
@@ -107,11 +121,11 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 				break;
 			}
 			case byprovider: {
-				q = new SubstanceStudyFlatQuery(qtype,search);
+				q = new SubstanceStudyFlatQuery(qtype, search);
 				break;
 			}
 			case bycitation: {
-				q = new SubstanceStudyFlatQuery(qtype,search);
+				q = new SubstanceStudyFlatQuery(qtype, search);
 				break;
 			}
 			case bystudytype: {
@@ -125,6 +139,20 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 				record.setSubstanceUUID(search);
 				q = new SubstanceStudyFlatQuery(record);
 				break;
+			}
+			case bystructure: {
+				if (inchikey != null)
+					try {
+						Protocol._categories category = Protocol._categories.valueOf(search);
+						Protocol p = new Protocol(null);
+						p.setCategory(category.name());
+						p.setTopCategory(category.getTopCategory());
+						q = new SubstanceStudyFlatQuery(p, inchikey);
+						break;
+					} catch (Exception x) {
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					}
+
 			}
 			default: {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);

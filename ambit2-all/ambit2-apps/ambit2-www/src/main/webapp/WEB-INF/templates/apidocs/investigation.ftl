@@ -6,10 +6,10 @@
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "text/csv"
     ],		
-    "resourcePath": "/investigatione",
+    "resourcePath": "/investigation",
 	"apis": [
 			{
-			    "path": "/investigatione",
+			    "path": "/investigation",
 			    "operations": [
 			        {
 			            "method": "GET",
@@ -41,9 +41,20 @@
 							    "defaultValue": "byinvestigation",
 							    "enum" : [
 							       "byinvestigation",
-							       "bysubstance"
+							       "bysubstance",
+							       "bystructure",
+							       "byidchemical"
 							    ]
 							},	
+							{
+							    "name": "inchikey",
+							    "description": "Search parameter, InChI key(s) of the substance component(s), comma delimited",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": false,
+							    "defaultValue": ""
+							}							
 							<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
 			            "responseMessages": [

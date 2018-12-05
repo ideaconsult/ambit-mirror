@@ -57,7 +57,11 @@
         {
             "path": "/myaccount",
             "description": "Local user"
-        }        
+        },
+        {
+            "path": "/investigation",
+            "description": "Details of multiple studies"
+        }                
         
                                  
     ],

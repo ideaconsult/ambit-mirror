@@ -14,7 +14,7 @@ $(document).ready(function() {
 	//loadHelp("${ambit_root}","feature");
 	var oTable = defineInvestigationTable("${ambit_root}","${ambit_request_json}","#investigation",false,"<Fif>rtp");
 	
-	$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/investigation'><input type='radio' checked name='type' id='type_byinvestigation' value='byinvestigation' title='Investigation UUID'>Investigation<input type='radio' name='type' id='type_byprovider' value='byprovider'>Data provider <input type='radio' name='type' id='type_bycitation'  value='bycitation'>Reference <input type='radio' name='type' id='type_bystudytype'  value='bystudytype'>Study type <input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
+	$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/investigation'><input type='radio' checked name='type' id='type_byinvestigation' value='byinvestigation' title='Investigation UUID'>Investigation<input type='radio' name='type' id='type_byprovider' value='byprovider'>Data provider <input type='radio' name='type' id='type_bycitation'  value='bycitation'>Reference <input type='radio' name='type' id='type_bystudytype'  value='bystudytype'>Study type <input type='radio' name='type' id='type_bystructure'  value='bystructure'>Structure<input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
 	
 	var purl = $.url();
 		$('.search').attr('value',purl.param('search')===undefined?'':purl.param('search'));

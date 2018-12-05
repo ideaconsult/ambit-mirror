@@ -18,14 +18,13 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.q.query.SQLFileQuery;
 
-public class SQLFileQueryParams extends SQLFileQuery<ObjectNode> implements
-		IJSONQueryParams {
+public class SQLFileQueryParams extends SQLFileQuery<ObjectNode> implements IJSONQueryParams {
 	public enum _fields {
 		name, connection, params, sql, order, value, processor
 	};
 
 	private enum _supportedprmtypes {
-		STRING, INTEGER, INT, LONG, DOUBLE, FLOAT, BOOLEAN
+		STRING, INTEGER, INT, LONG, DOUBLE, FLOAT, BOOLEAN, ARRAY_STRING, ARRAY_INT
 	};
 
 	protected List<QueryParam> queryParams;
@@ -41,14 +40,12 @@ public class SQLFileQueryParams extends SQLFileQuery<ObjectNode> implements
 	 */
 	private static final long serialVersionUID = -2420284940751695905L;
 
-	public SQLFileQueryParams(File sqlFile, ObjectNode params)
-			throws IOException {
+	public SQLFileQueryParams(File sqlFile, ObjectNode params) throws IOException {
 		super(sqlFile);
 		setValue(params);
 	}
 
-	public SQLFileQueryParams(String resourceName, ObjectNode params)
-			throws IOException {
+	public SQLFileQueryParams(String resourceName, ObjectNode params) throws IOException {
 		super(resourceName);
 		setValue(params);
 	}
@@ -74,64 +71,86 @@ public class SQLFileQueryParams extends SQLFileQuery<ObjectNode> implements
 			pnames.add(param);
 			int index = sql.indexOf(param.getKey());
 			if (index > 0) // ignore parameters not in sql
-				((ObjectNode) param.getValue())
-						.put(_fields.order.name(), index);
-			psql = psql.replace(param.getKey(), "?");
+				((ObjectNode) param.getValue()).put(_fields.order.name(), index);
+			
 		}
 		Collections.sort(pnames, new Comparator<Entry<String, JsonNode>>() {
 			@Override
-			public int compare(Entry<String, JsonNode> o1,
-					Entry<String, JsonNode> o2) {
-				return ((ObjectNode) o1.getValue()).get(_fields.order.name())
-						.asInt()
-						- ((ObjectNode) o2.getValue())
-								.get(_fields.order.name()).asInt();
+			public int compare(Entry<String, JsonNode> o1, Entry<String, JsonNode> o2) {
+				return ((ObjectNode) o1.getValue()).get(_fields.order.name()).asInt()
+						- ((ObjectNode) o2.getValue()).get(_fields.order.name()).asInt();
 			}
 		});
 		List<QueryParam> queryParams = null;
 		for (Entry<String, JsonNode> param : pnames) {
+			String psql_param = "?";
 			if (queryParams == null)
 				queryParams = new ArrayList<QueryParam>();
 			ObjectNode qparam = ((ObjectNode) param.getValue());
 			_supportedprmtypes type = _supportedprmtypes.STRING;
 			try {
-				type = _supportedprmtypes.valueOf(qparam.get("type").asText()
-						.toUpperCase());
+				type = _supportedprmtypes.valueOf(qparam.get("type").asText().toUpperCase());
 			} catch (Exception x) {
 				x.printStackTrace();
 			}
 			switch (type) {
 			case STRING: {
-				queryParams.add(new QueryParam<String>(String.class, qparam
-						.get("value").asText().trim()));
+				queryParams.add(new QueryParam<String>(String.class, qparam.get("value").asText().trim()));
 				break;
 			}
 			case INTEGER: {
-				queryParams.add(new QueryParam<Integer>(Integer.class, qparam
-						.get("value").asInt()));
+				queryParams.add(new QueryParam<Integer>(Integer.class, qparam.get("value").asInt()));
 				break;
 			}
 			case LONG: {
-				queryParams.add(new QueryParam<Long>(Long.class, qparam.get(
-						"value").asLong()));
+				queryParams.add(new QueryParam<Long>(Long.class, qparam.get("value").asLong()));
 				break;
 			}
 			case DOUBLE: {
-				queryParams.add(new QueryParam<Double>(Double.class, qparam
-						.get("value").asDouble()));
+				queryParams.add(new QueryParam<Double>(Double.class, qparam.get("value").asDouble()));
 				break;
 			}
 			case BOOLEAN: {
-				queryParams.add(new QueryParam<Boolean>(Boolean.class, qparam
-						.get("value").asBoolean()));
+				queryParams.add(new QueryParam<Boolean>(Boolean.class, qparam.get("value").asBoolean()));
+				break;
+			}
+			case ARRAY_STRING: {
+				try {
+					String[] values = qparam.get("value").asText().split(",");
+					psql_param ="";
+					String delimiter="";
+					for (String a : values) {
+						queryParams.add(new QueryParam<String>(String.class, a.trim()));
+						psql_param = String.format("%s%s?",psql_param,delimiter);
+						delimiter=",";
+					}
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+				break;
+			}
+			case ARRAY_INT: {
+				try {
+					String[] values = qparam.get("value").asText().split(",");
+					psql_param ="";
+					String delimiter="";
+
+					for (String a : values) {
+						queryParams.add(new QueryParam<Integer>(Integer.class, Integer.parseInt(a.trim())));
+						psql_param = String.format("%s%s?",psql_param,delimiter);
+						delimiter=",";
+					}
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
 				break;
 			}
 			default: {
-				queryParams.add(new QueryParam<String>(String.class, qparam
-						.get("value").asText()));
+				queryParams.add(new QueryParam<String>(String.class, qparam.get("value").asText()));
 			}
 			}
-
+			psql = psql.replace(param.getKey(), psql_param);
+			
 		}
 		return queryParams;
 	}
