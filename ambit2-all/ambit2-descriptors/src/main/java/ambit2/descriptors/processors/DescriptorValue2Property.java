@@ -33,9 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -50,6 +47,8 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.core.data.AbstractDescriptorResultType;
 import ambit2.core.data.ArrayResult;
 import ambit2.descriptors.VerboseDescriptorResult;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 public class DescriptorValue2Property extends DefaultAmbitProcessor<DescriptorValue, IStructureRecord> {
 	/**

@@ -2,8 +2,6 @@ package ambit2.descriptors.test;
 
 import java.util.Locale;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
@@ -11,12 +9,13 @@ import org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor;
 import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
 import ambit2.descriptors.MolecularWeight;
 import ambit2.descriptors.processors.DescriptorResultFormatter;
+import ambit2.descriptors.processors.test.MoleculeFactory;
+import junit.framework.Assert;
 
 public class MolecularWeightDescriptorTest {
 	@Test

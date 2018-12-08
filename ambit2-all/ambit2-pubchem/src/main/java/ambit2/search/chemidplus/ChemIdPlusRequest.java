@@ -17,7 +17,7 @@ public class ChemIdPlusRequest extends AbstractSearchRequest<String> {
 	 * 
 	 */
 	private static final long serialVersionUID = 4023235628557946550L;
-	public static final String CHEMIDPLUS_URL = "http://chem.sis.nlm.nih.gov/chemidplus/mol3d/%s" ;
+	public static final String CHEMIDPLUS_URL = "https://chem.sis.nlm.nih.gov/chemidplus/mol3d/%s" ;
 			
 	
 	public String process(String target) throws AmbitException {

@@ -2057,6 +2057,7 @@ public class TestUtilities {
 			// Create an atoms and connect it to the first atom
 			IAtom a = new Atom();
 			a.setSymbol("C");
+			a.setAtomicNumber(6);
 			mol.addAtom(a);
 
 			IBond b = MoleculeTools.newBond(mol.getBuilder());
@@ -3264,9 +3265,6 @@ public class TestUtilities {
 		//tu.testSmartsManagerBoolSearch("C[C@H](Cl)N","C[C@@H](N)Cl");
 		
 		//tu.testSmartsManagerBoolSearch("[#6]-:[#6]","c1ccccc1");
-		//tu.testSmartsManagerBoolSearch("[#6][$([NX3H0])]([#6])[#6]","CN(C)C");
-		//tu.testSmartsManagerBoolSearch("[$([NX3H2])][#6]","NCCCC");
-		tu.testSmartsManagerBoolSearch("[#6][CX3](=O)[$([NX3H0]([#6])[#6]),$([NX3H2]),$([NX3H])]","CCNC(=O)C=CCCC=CCC");
 		
 		//tu.testIsomorphismAllMappings("[#6]-&:[#6]","c1ccccc1");
 		//tu.testSmartsToQueryToSmarts("[#6][#6]");
@@ -3297,8 +3295,8 @@ public class TestUtilities {
 		//tu.testSmartsIsomorphismAllMappings("*C~C", "C~C*C~CCC~C*");
 		//tu.testSmartsIsomorphism("C=*", "CC=*");
 		//tu.testReactionSearch("CC>>C=C", "CCC>>CC=C");
-		//tu.testReactionSearch("CC[*:1]>>C=C[*:1]", "CCC[*:1]>>CC=C[*:1]");
-		//tu.testReactionSearch("CC*>>C=C*", "CCC*>>CC=C*");
+		tu.testReactionSearch("CC[*:1]>>C=C[*:1]", "CCC[*:1]>>CC=C[*:1]");
+		tu.testReactionSearch("CC*>>C=C*", "CCC*>>CC=C*");
 		
 	}
 

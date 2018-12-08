@@ -94,6 +94,8 @@ public class Transformations {
 		for (int i = 0; i < numH; i++) {
 			IAtom ha = MoleculeTools.newAtom(target.getBuilder());
 			ha.setSymbol("H");
+			ha.setAtomicNumber(1);
+			ha.setImplicitHydrogenCount(0);
 			target.addAtom(ha);
 			IBond b = MoleculeTools.newBond(target.getBuilder());
 			b.setAtoms(new IAtom[] { atom, ha });

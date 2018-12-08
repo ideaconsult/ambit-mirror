@@ -1,7 +1,5 @@
 package ambit2.descriptors;
 
-import net.sf.jniinchi.INCHI_RET;
-
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -14,6 +12,7 @@ import org.openscience.cdk.qsar.result.IDescriptorResult;
 import ambit2.base.data.Property;
 import ambit2.core.data.StringArrayResult;
 import ambit2.core.processors.structure.InchiProcessor;
+import net.sf.jniinchi.INCHI_RET;
 
 public class InChI implements IMolecularDescriptor {
 	protected InchiProcessor processor;

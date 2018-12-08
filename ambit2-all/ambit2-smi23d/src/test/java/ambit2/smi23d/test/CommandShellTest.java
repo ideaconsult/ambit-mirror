@@ -2,8 +2,6 @@ package ambit2.smi23d.test;
 
 import java.io.File;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
@@ -22,6 +20,7 @@ import ambit2.core.smiles.SmilesParserWrapper;
 import ambit2.core.smiles.SmilesParserWrapper.SMILES_PARSER;
 import ambit2.smi23d.ShellMengine;
 import ambit2.smi23d.ShellSmi2SDF;
+import junit.framework.Assert;
 
 public class CommandShellTest {
 	protected CommandShell shell;

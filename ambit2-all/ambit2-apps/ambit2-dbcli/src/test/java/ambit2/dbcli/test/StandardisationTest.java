@@ -6,13 +6,14 @@ import java.net.URL;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.iterator.IteratingSDFReader;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
+import ambit2.core.io.FileInputState;
 import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.dbcli.AmbitCli;
 import ambit2.dbcli.CliOptions;
@@ -43,8 +44,10 @@ public class StandardisationTest {
 	@Test
 	public void test_xv5_sh() throws Exception {
 		try (InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/dbcli/test/xv5.sdf")) {
-			//IteratingSDFReader reader = new IteratingSDFReader(in, SilentChemObjectBuilder.getInstance());
-			InteractiveIteratingMDLReader reader = new InteractiveIteratingMDLReader(in, SilentChemObjectBuilder.getInstance());
+			// IteratingSDFReader reader = new IteratingSDFReader(in,
+			// SilentChemObjectBuilder.getInstance());
+			InteractiveIteratingMDLReader reader = new InteractiveIteratingMDLReader(in,
+					SilentChemObjectBuilder.getInstance());
 			StructureStandardizer z = new StructureStandardizer();
 			z.setImplicitHydrogens(true);
 			z.setNeutralise(false);
@@ -55,20 +58,19 @@ public class StandardisationTest {
 			z.setSplitFragments(false);
 			z.setClearIsotopes(true);
 			z.setGenerateInChI(true);
-			
+
 			CDKHydrogenAdder h = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 			while (reader.hasNext()) {
 				IAtomContainer mol = reader.next();
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-				
-				h.addImplicitHydrogens(mol);
 
+				h.addImplicitHydrogens(mol);
 
 				System.out.println(SmilesGenerator.generic().create(mol));
 				mol = z.process(mol);
-				
-				//mol = AtomContainerManipulator.suppressHydrogens(mol);
-				//System.out.println(SmilesGenerator.generic().create(mol));
+
+				// mol = AtomContainerManipulator.suppressHydrogens(mol);
+				// System.out.println(SmilesGenerator.generic().create(mol));
 				System.out.println(mol.getProperties().get(Property.getSMILESInstance()));
 			}
 		}
@@ -152,6 +154,43 @@ public class StandardisationTest {
 	}
 
 	@Test
+	public void test_T128() throws Exception {
+		URL in = getClass().getClassLoader().getResource("ambit2/dbcli/test/T128.original.txt");
+		Assert.assertNotNull(in);
+		String out = String.format("%s/t128.txt", System.getProperty("java.io.tmpdir"));
+		String[] args = new String[] { "-a", "standardize", "-i", in.getFile(), "-m", "post", "-o", out, "-d",
+				"smiles=true", "-d", "inchi=true", "-d", "tautomers=true", "-d", "tag_smiles=SMILES","-d","tag_tokeep=PUBCHEM_CID"};
+		CliOptions options = new CliOptions();
+		if (options.parse(args))
+			try {
+				AmbitCli cli = new AmbitCli(options);
+				cli.go(options.getCmd(), options.getSubcommand().name());
+				File outfile = new File(out);
+
+				Assert.assertTrue(outfile.exists());
+				int count=0;
+				IIteratingChemObjectReader<IAtomContainer> reader = FileInputState.getReader(outfile);
+				try {
+					while (reader.hasNext()) {
+						IAtomContainer mol = reader.next();
+						Assert.assertNull(mol.getProperty("ERROR"));
+						Assert.assertTrue(mol.getAtomCount()>0);
+						Assert.assertNotNull(mol.getProperty("SMILES"));
+						Assert.assertNotNull(mol.getProperty("InChIKey"));
+						count++;
+					}
+				} catch(Exception x) {
+					x.printStackTrace();
+				} finally {
+					Assert.assertEquals(8, count);
+					reader.close();
+				}
+			} finally {
+				//(new File(out)).delete();
+			}
+	}
+
+	@Test
 	public void fptest() throws Exception {
 		URL in = getClass().getClassLoader().getResource("ambit2/dbcli/test/testfp.txt");
 		Assert.assertNotNull(in);
@@ -180,17 +219,20 @@ public class StandardisationTest {
 			try {
 				AmbitCli cli = new AmbitCli(options);
 				cli.go(options.getCmd(), options.getSubcommand().name());
-				simmatrix(new File(out + "org.openscience.cdk.fingerprint.CircularFingerprinter.hashed.csv"));
+				boolean sparse = true;
+				simmatrix(new File(out + "org.openscience.cdk.fingerprint.CircularFingerprinter.hashed.csv"), sparse,
+						true);
 			} finally {
 				// (new File(out)).delete();
 			}
 	}
 
-	public void simmatrix(File input) throws Exception {
+	public void simmatrix(File input, boolean sparse, boolean bitset) throws Exception {
 
 		String out = String.format("%s/simmatrix", System.getProperty("java.io.tmpdir"));
 		String[] args = new String[] { "-a", "simmatrix", "-i", input.getAbsolutePath(), "-m", "post", "-o", out, "-d",
-				"threshold=0.1", "-d", "sparse=TRUE" };
+				"threshold=0.1", "-d", "sparse=" + Boolean.toString(sparse), "-d",
+				"bitset=" + Boolean.toString(bitset) };
 		CliOptions options = new CliOptions();
 		if (options.parse(args))
 			try {

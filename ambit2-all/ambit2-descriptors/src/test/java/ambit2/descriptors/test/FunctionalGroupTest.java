@@ -29,16 +29,15 @@
 
 package ambit2.descriptors.test;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.descriptors.FunctionalGroup;
 import ambit2.descriptors.VerboseDescriptorResult;
+import ambit2.descriptors.processors.test.MoleculeFactory;
+import junit.framework.Assert;
 
 public class FunctionalGroupTest {
 
@@ -52,16 +51,16 @@ public class FunctionalGroupTest {
 
 	@Test
 	public void testProcess() throws Exception {
-		String smarts="CC";
-		FunctionalGroup group = new FunctionalGroup(smarts,smarts,smarts);
+		String smarts = "CC";
+		FunctionalGroup group = new FunctionalGroup(smarts, smarts, smarts);
 		group.setVerboseMatch(true);
-		Assert.assertEquals(smarts,group.getSmarts());
+		Assert.assertEquals(smarts, group.getSmarts());
 		VerboseDescriptorResult result = group.process(MoleculeFactory.makeAlkane(3));
-		//System.out.println(result.getResult());
-		
+		// System.out.println(result.getResult());
+
 		Assert.assertNotNull(result.getExplanation());
 		Assert.assertNotNull(result.getExplanation() instanceof IAtomContainer);
-		//System.out.println(((IAtomContainer)result.getExplanation()).getAtomCount());
+		// System.out.println(((IAtomContainer)result.getExplanation()).getAtomCount());
 	}
 
 }

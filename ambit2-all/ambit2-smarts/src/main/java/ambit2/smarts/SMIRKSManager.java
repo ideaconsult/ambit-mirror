@@ -34,6 +34,7 @@ import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
 import ambit2.smarts.SmartsConst.HandleHAtoms;
 import ambit2.smarts.SmartsConst.SSM_MODE;
+import ambit2.smarts.smirks.StereoTransformation;
 import ambit2.smarts.smirks.Transformations;
 
 public class SMIRKSManager {
@@ -1430,11 +1431,13 @@ public class SMIRKSManager {
     			IStereoElement element, StereoChange stereoChange)
     {
     	if (element instanceof DoubleBondStereochemistry)
-    		return StereoChemUtils.deleteAtom(deletedAt, (DoubleBondStereochemistry)element, stereoChange);
+    		return StereoTransformation.deleteAtom(deletedAt, (DoubleBondStereochemistry)element, stereoChange);
     	
     	if (element instanceof TetrahedralChirality)
-    		return StereoChemUtils.deleteAtom(deletedAt, (TetrahedralChirality)element);
+    		return StereoTransformation.deleteAtom(deletedAt, (TetrahedralChirality)element, stereoChange);
     		
+    	
+    	//TODO use StereoTransformation instead of StereoChemUtils
     	if (element instanceof ExtendedTetrahedral)
     		return StereoChemUtils.deleteAtom(deletedAt, (ExtendedTetrahedral)element);
 		
@@ -1474,7 +1477,7 @@ public class SMIRKSManager {
 				stereoChanges.remove(element);
 				
     			DoubleBondStereochemistry dbsc = 
-    					StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+    					StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
     							updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
 				
     			if (dbsc == null)
@@ -1505,18 +1508,31 @@ public class SMIRKSManager {
 
 			if (element instanceof TetrahedralChirality)
 			{
+				StereoChange stChange = stereoChanges.get(element);
+				stereoChanges.remove(element);
+				
 				TetrahedralChirality thc = 
-						StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-								updatedBondOrder, target, (TetrahedralChirality)element);
+						StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
+								updatedBondOrder, target, (TetrahedralChirality)element, stChange);
 				
 				if (thc == null)
 					continue;
 				
+				stereoChanges.put(thc, stChange);
+				
+				//validity check
+    			if (stChange.isValidStereoElement())
+    				newElements.add(thc);  //valid
+    			else
+    				newInvalidEl.add(thc); //invalid
+				
+				/*
 				//quick validity check 
 				if (StereoChemUtils.isInvalidated(thc))
 					newInvalidEl.add(thc); //invalid
 				else
 					newElements.add(thc);  //valid
+				*/
 				
 				continue;
 			}
@@ -1551,7 +1567,7 @@ public class SMIRKSManager {
 				stereoChanges.remove(element);
 				
 				DoubleBondStereochemistry dbsc = 
-						StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
+						StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
 								updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
 				
 				if (dbsc == null)
@@ -1582,18 +1598,31 @@ public class SMIRKSManager {
 
 			if (element instanceof TetrahedralChirality)
 			{
+				StereoChange stChange = stereoChanges.get(element);
+				stereoChanges.remove(element);
+				
 				TetrahedralChirality thc = 
-						StereoChemUtils.bondChange(targetAt1, targetAt2, initialBondOrder, 
-								updatedBondOrder, target, (TetrahedralChirality)element);
+						StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
+								updatedBondOrder, target, (TetrahedralChirality)element, stChange);
 				
 				if (thc == null)
     				continue;
 				
+				stereoChanges.put(thc, stChange);
+				
+				//validity check
+    			if (stChange.isValidStereoElement())
+    				newElements.add(thc);  //valid
+    			else
+    				newInvalidEl.add(thc); //invalid
+				
+    			/*
 				//quick validity check 
 				if (StereoChemUtils.isInvalidated(thc))
 					newInvalidEl.add(thc); //invalid
 				else
 					newElements.add(thc);  //valid
+				*/
 				
 				continue;
 			}

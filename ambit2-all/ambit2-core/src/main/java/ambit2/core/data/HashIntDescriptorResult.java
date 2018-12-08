@@ -48,6 +48,8 @@ public class HashIntDescriptorResult extends HashDescriptorResult<Integer>
 	public HashIntDescriptorResult(Map<String, Integer> map) throws Exception {
 		super(map);
 	}
+	
+	
 
 	@Override
 	public IBitFingerprint getBitFingerprint(IAtomContainer container)
@@ -131,6 +133,16 @@ public class HashIntDescriptorResult extends HashDescriptorResult<Integer>
 	@Override
 	public String toString() {
 		return expandedString();
+	}
+
+	@Override
+	public BitSet getFingerprint(IAtomContainer arg0) throws CDKException {
+		throw new CDKException("not implemented yet");
+	}
+
+	@Override
+	public String getVersionDescription() {
+		return null;
 	}
 
 }

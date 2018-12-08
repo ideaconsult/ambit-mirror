@@ -2,8 +2,6 @@ package ambit2.descriptors.processors;
 
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -17,6 +15,7 @@ import ambit2.core.data.HashIntDescriptorResult;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AbstractPropertyGenerator;
 import ambit2.descriptors.AtomEnvironentMatrix;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 /**
  * A processor to generate atom environments. Uses

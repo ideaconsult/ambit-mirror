@@ -1,7 +1,5 @@
 package ambit2.namestructure.test;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,13 +8,14 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
+import ambit2.core.processors.structure.HydrogenAdderProcessor;
+import ambit2.namestructure.Name2StructureProcessor;
+import junit.framework.Assert;
 import uk.ac.cam.ch.wwmm.opsin.NameToInchi;
 import uk.ac.cam.ch.wwmm.opsin.NameToStructure;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult;
 import uk.ac.cam.ch.wwmm.opsin.OpsinResult.OPSIN_RESULT_STATUS;
-import ambit2.core.helper.CDKHueckelAromaticityDetector;
-import ambit2.core.processors.structure.HydrogenAdderProcessor;
-import ambit2.namestructure.Name2StructureProcessor;
 
 public class Name2StructureProcessorTest {
 

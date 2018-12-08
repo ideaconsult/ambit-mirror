@@ -27,10 +27,6 @@ package ambit2.descriptors;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-
-import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
@@ -47,6 +43,8 @@ import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.query.ISmartsPattern;
 import ambit2.smarts.query.SMARTSException;
 import ambit2.smarts.query.SmartsPatternFactory;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 
 public class FunctionalGroup extends AmbitBean implements
 		IProcessor<IAtomContainer, VerboseDescriptorResult> {

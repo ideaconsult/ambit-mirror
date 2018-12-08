@@ -26,14 +26,14 @@ package ambit2.descriptors.processors;
 
 import java.util.List;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-
 import org.openscience.cdk.IImplementationSpecification;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorEngine;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 /**
  * Calculates descriptors found in cdk jars. Uses {@link DescriptorEngine}

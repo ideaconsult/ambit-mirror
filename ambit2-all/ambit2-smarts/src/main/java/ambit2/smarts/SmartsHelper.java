@@ -54,6 +54,7 @@ import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
@@ -270,17 +271,20 @@ public class SmartsHelper {
 					AromaticSymbolQueryAtom newAt = new AromaticSymbolQueryAtom(
 							ac.getBuilder());
 					newAt.setSymbol(a.getSymbol());
+					newAt.setAtomicNumber(PeriodicTable.getAtomicNumber(a.getSymbol()));
 					query.addAtom(newAt);
 				} else {
 					AliphaticSymbolQueryAtom newAt = new AliphaticSymbolQueryAtom(
 							ac.getBuilder());
 					newAt.setSymbol(a.getSymbol());
+					newAt.setAtomicNumber(PeriodicTable.getAtomicNumber(a.getSymbol()));
 					query.addAtom(newAt);
 				}
 			} else {
 				SymbolQueryAtomAromaticityNotSpecified newAt = new SymbolQueryAtomAromaticityNotSpecified(
 						ac.getBuilder());
 				newAt.setSymbol(a.getSymbol());
+				newAt.setAtomicNumber(PeriodicTable.getAtomicNumber(a.getSymbol()));
 				query.addAtom(newAt);
 			}
 		}
@@ -639,6 +643,8 @@ public class SmartsHelper {
 		for (int i = 0; i < mol.getAtomCount(); i++) {
 			IAtom at = mol.getAtom(i);
 			at.setSymbol("C");
+			at.setAtomicNumber(6);
+			at.setImplicitHydrogenCount(0);
 			at.setFormalCharge(0);
 			at.setMassNumber(0);
 		}

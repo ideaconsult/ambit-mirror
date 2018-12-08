@@ -274,6 +274,8 @@ public class SmartsToChemObject extends
 		if (a instanceof AliphaticSymbolQueryAtom) {
 			IAtom atom = builder.newInstance(IAtom.class);
 			atom.setSymbol(a.getSymbol());
+			atom.setAtomicNumber(PeriodicTable.getAtomicNumber(a.getSymbol()));
+			atom.setImplicitHydrogenCount(0);
 			atom.setFlag(CDKConstants.ISAROMATIC, false);
 			return (atom);
 		}
@@ -281,6 +283,8 @@ public class SmartsToChemObject extends
 		if (a instanceof AromaticSymbolQueryAtom) {
 			IAtom atom = builder.newInstance(IAtom.class);
 			atom.setSymbol(a.getSymbol());
+			atom.setAtomicNumber(PeriodicTable.getAtomicNumber(a.getSymbol()));
+			atom.setImplicitHydrogenCount(0);
 			atom.setFlag(CDKConstants.ISAROMATIC, true);
 			return (atom);
 		}
@@ -361,6 +365,8 @@ public class SmartsToChemObject extends
 			IAtom atom = SilentChemObjectBuilder.getInstance().newInstance(
 					IAtom.class);
 			atom.setSymbol(PeriodicTable.getSymbol(atType));
+			atom.setAtomicNumber(atType);
+			atom.setImplicitHydrogenCount(0);
 
 			// Setting the aromaticity (when it is defied)
 			if (isArom != -1) {

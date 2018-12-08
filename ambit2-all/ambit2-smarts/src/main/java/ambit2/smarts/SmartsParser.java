@@ -1,7 +1,7 @@
 /*
-Copyright (C) 2007-2008  
+Copyright (C) 2007-2018  
 
-Contact: nina@acad.bg
+Contact: support@ieaconsult.net
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public License
@@ -47,7 +47,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.stereo.DoubleBondStereochemistry;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.smarts.DoubleBondStereoInfo.DBStereo;
 
@@ -80,12 +80,11 @@ public class SmartsParser {
 	public boolean mSupportOpenEyeExtension = true;
 	public boolean mSupportOpenBabelExtension = true;
 	public boolean mSupportSmirksSyntax = false;
-	
+
 	// by default "=" is DoubleNonAromaticBond
-	public boolean mSupportDoubleBondAromaticityNotSpecified = false; 
+	public boolean mSupportDoubleBondAromaticityNotSpecified = false;
 	// by default "-" is SingleNonAromaticBond
-	public boolean mSupportSingleBondAromaticityNotSpecified = false; 
-	
+	public boolean mSupportSingleBondAromaticityNotSpecified = false;
 
 	// Work variables for Component Level Grouping
 	boolean FlagCLG = false;
@@ -111,8 +110,7 @@ public class SmartsParser {
 
 	public IQueryAtomContainer parse(String sm) {
 		smarts = sm;
-		container = new QueryAtomContainer(
-				SilentChemObjectBuilder.getInstance());
+		container = new QueryAtomContainer(SilentChemObjectBuilder.getInstance());
 		errors.clear();
 		nullifyDataFlags();
 		init();
@@ -171,19 +169,16 @@ public class SmartsParser {
 		// Handle chirality info
 		List<SmartsAtomExpression> caList = new ArrayList<SmartsAtomExpression>();
 		for (int i = 0; i < container.getAtomCount(); i++)
-			if (container.getAtom(i) instanceof SmartsAtomExpression) 
-			{
-				SmartsAtomExpression sa = (SmartsAtomExpression) container
-						.getAtom(i);
+			if (container.getAtom(i) instanceof SmartsAtomExpression) {
+				SmartsAtomExpression sa = (SmartsAtomExpression) container.getAtom(i);
 				handleChirality(sa);
-				
-				if (sa.stereoTokenIndices != null)
-				{	
+
+				if (sa.stereoTokenIndices != null) {
 					checkChirality(sa, i);
 					caList.add(sa);
-				}	
+				}
 			}
-		
+
 		if (!caList.isEmpty())
 			container.setProperty("ChiralAtoms", caList);
 
@@ -199,8 +194,7 @@ public class SmartsParser {
 		// Handle recursive smarts
 		for (int i = 0; i < container0.getAtomCount(); i++) {
 			if (container0.getAtom(i) instanceof SmartsAtomExpression) {
-				SmartsAtomExpression sa = (SmartsAtomExpression) container0
-						.getAtom(i);
+				SmartsAtomExpression sa = (SmartsAtomExpression) container0.getAtom(i);
 				for (int j = 0; j < sa.recSmartsStrings.size(); j++) {
 					hasRecursiveSmarts = true;
 					smarts = sa.recSmartsStrings.get(j);
@@ -213,8 +207,7 @@ public class SmartsParser {
 					// and component level groping do not make sense,
 					// however in the current version the parser will parse this
 					// information, but it will not be stored any where
-					container = new QueryAtomContainer(
-							SilentChemObjectBuilder.getInstance());
+					container = new QueryAtomContainer(SilentChemObjectBuilder.getInstance());
 					fragments = new ArrayList<IQueryAtomContainer>();
 					fragmentComponents = new ArrayList<Integer>();
 
@@ -275,22 +268,17 @@ public class SmartsParser {
 	public void setNeededDataFlags() {
 		for (int i = 0; i < container.getAtomCount(); i++) {
 			if (container.getAtom(i) instanceof SmartsAtomExpression) {
-				SmartsAtomExpression sa = (SmartsAtomExpression) container
-						.getAtom(i);
+				SmartsAtomExpression sa = (SmartsAtomExpression) container.getAtom(i);
 				for (int j = 0; j < sa.tokens.size(); j++) {
-					SmartsExpressionToken tok = (SmartsExpressionToken) sa.tokens
-							.get(j);
+					SmartsExpressionToken tok = (SmartsExpressionToken) sa.tokens.get(j);
 					if (tok.type == SmartsConst.AP_H)
 						mNeedExplicitHData = true;
 
-					if ((tok.type == SmartsConst.AP_D)
-							|| (tok.type == SmartsConst.AP_X)
-							|| (tok.type == SmartsConst.AP_H)
-							|| (tok.type == SmartsConst.AP_h))
+					if ((tok.type == SmartsConst.AP_D) || (tok.type == SmartsConst.AP_X)
+							|| (tok.type == SmartsConst.AP_H) || (tok.type == SmartsConst.AP_h))
 						mNeedNeighbourData = true;
 					else {
-						if ((tok.type == SmartsConst.AP_iMOE)
-								|| (tok.type == SmartsConst.AP_vMOE)
+						if ((tok.type == SmartsConst.AP_iMOE) || (tok.type == SmartsConst.AP_vMOE)
 								|| (tok.type == SmartsConst.AP_OB_Hybr))
 							mNeedParentMoleculeData = true;
 						else if (tok.type == SmartsConst.AP_x) {
@@ -299,12 +287,10 @@ public class SmartsParser {
 						} else {
 							if (tok.type == SmartsConst.AP_v)
 								mNeedValencyData = true;
-							else if ((tok.type == SmartsConst.AP_R)
-									|| (tok.type == SmartsConst.AP_r))
-							{
+							else if ((tok.type == SmartsConst.AP_R) || (tok.type == SmartsConst.AP_r)) {
 								mNeedRingData = true;
 								mNeedRingData2 = true;
-							}	
+							}
 						}
 					}
 				}
@@ -315,8 +301,7 @@ public class SmartsParser {
 		if (mNeedRingData2 == false) {
 			for (int i = 0; i < container.getBondCount(); i++) {
 				if (container.getBond(i) instanceof SmartsBondExpression) {
-					SmartsBondExpression sb = (SmartsBondExpression) container
-							.getBond(i);
+					SmartsBondExpression sb = (SmartsBondExpression) container.getBond(i);
 					for (int j = 0; j < sb.tokens.size(); j++) {
 						if (sb.tokens.get(j).intValue() == SmartsConst.BT_RING) {
 							mNeedRingData2 = true;
@@ -336,8 +321,7 @@ public class SmartsParser {
 	void newError(String msg, int pos, String param) {
 		SmartsParserError err;
 		if (insideRecSmarts)
-			err = new SmartsParserError(smarts, "Inside recursive Smarts: "
-					+ msg, pos, param);
+			err = new SmartsParserError(smarts, "Inside recursive Smarts: " + msg, pos, param);
 		else
 			err = new SmartsParserError(smarts, msg, pos, param);
 		errors.add(err);
@@ -358,8 +342,7 @@ public class SmartsParser {
 	void newFragment() {
 		numFragments++; // A new fragments is started. It is inside
 						// "current component"
-		curFragment = new QueryAtomContainer(
-				SilentChemObjectBuilder.getInstance());
+		curFragment = new QueryAtomContainer(SilentChemObjectBuilder.getInstance());
 		fragments.add(curFragment);
 		fragmentComponents.add(new Integer(curComponent));
 	}
@@ -377,8 +360,7 @@ public class SmartsParser {
 
 		if (mSupportSmirksSyntax) {
 			if (curSmirksMapIndex > -1)
-				atom.setProperty("SmirksMapIndex", new Integer(
-						curSmirksMapIndex));
+				atom.setProperty("SmirksMapIndex", new Integer(curSmirksMapIndex));
 
 			// resetting for the next atom
 			curSmirksMapIndex = -1;
@@ -397,7 +379,7 @@ public class SmartsParser {
 				curBond = new AnyOrderQueryBond(atom0.getBuilder());
 				break;
 			case SmartsConst.BT_SINGLE:
-				if(mSupportSingleBondAromaticityNotSpecified)
+				if (mSupportSingleBondAromaticityNotSpecified)
 					curBond = new SingleBondAromaticityNotSpecified(atom0.getBuilder());
 				else
 					curBond = new SingleNonAromaticBond(atom0.getBuilder());
@@ -409,8 +391,7 @@ public class SmartsParser {
 					curBond = new DoubleNonAromaticBond(atom0.getBuilder());
 				break;
 			case SmartsConst.BT_TRIPLE:
-				curBond = new OrderQueryBond(IBond.Order.TRIPLE,
-						atom0.getBuilder());
+				curBond = new OrderQueryBond(IBond.Order.TRIPLE, atom0.getBuilder());
 				break;
 			/*
 			 * case SmartsConst.BT_DOUBLE: curBond = new DoubleStereoBond();
@@ -429,8 +410,7 @@ public class SmartsParser {
 				// Directional bond is treated as a single bond.
 				// Additionally this bond is stored in contaner directionaBonds
 				// for further processing
-				curBond = new OrderQueryBond(IBond.Order.SINGLE,
-						atom0.getBuilder());
+				curBond = new OrderQueryBond(IBond.Order.SINGLE, atom0.getBuilder());
 				directionalBonds.add(curBond);
 				directions.add(new Integer(curBondType));
 				break;
@@ -469,7 +449,9 @@ public class SmartsParser {
 		case 'p':
 			char ch = Character.toUpperCase(smarts.charAt(curChar));
 			curAtom = new AromaticSymbolQueryAtom(SilentChemObjectBuilder.getInstance());
-			curAtom.setSymbol(Character.toString(ch));
+			String atom = Character.toString(ch);
+			curAtom.setSymbol(atom);
+			curAtom.setAtomicNumber(PeriodicTable.getAtomicNumber(atom));
 			curChar++;
 			break;
 
@@ -484,6 +466,7 @@ public class SmartsParser {
 			}
 			curAtom = new AliphaticSymbolQueryAtom(SilentChemObjectBuilder.getInstance());
 			curAtom.setSymbol(symb);
+			curAtom.setAtomicNumber(PeriodicTable.getAtomicNumber(symb));
 			break;
 
 		case 'B':
@@ -572,7 +555,8 @@ public class SmartsParser {
 			else {
 				// This is no longer treated as an error as it was previously
 				// (since 30.07.2013)
-				// newError("Use of a bond expression for the first appearance of atom index",curChar+1,"");
+				// newError("Use of a bond expression for the first appearance
+				// of atom index",curChar+1,"");
 				SmartsBondExpression sbe = (SmartsBondExpression) curBond;
 				rc1.firstBond = curBondType;
 				rc1.firstBondExpression = sbe;
@@ -600,26 +584,19 @@ public class SmartsParser {
 						addBond(rc.firstAtom, prevAtom);
 					} else {
 						// The closing bond type is not a bond expression
-						newError(
-								"Ring closure index "
-										+ n
-										+ " is associated with a bond expression and a bond type",
+						newError("Ring closure index " + n + " is associated with a bond expression and a bond type",
 								-1, "");
 					}
 				} else {
 					// compare the opening and closing bond expressions --> they
 					// must be identical
-					if (rc.firstBondExpression
-							.isIdenticalTo((SmartsBondExpression) curBond)) {
+					if (rc.firstBondExpression.isIdenticalTo((SmartsBondExpression) curBond)) {
 						addBond(rc.firstAtom, prevAtom);
 					} else {
 						// The closing and opening bond expressions are not
 						// identical
-						newError(
-								"Ring closure index "
-										+ n
-										+ " is associated with two different bond expressions",
-								-1, "");
+						newError("Ring closure index " + n + " is associated with two different bond expressions", -1,
+								"");
 					}
 				}
 
@@ -656,11 +633,8 @@ public class SmartsParser {
 							// Both index positions have bond types - they must
 							// be equal
 							if (rc.firstBond != curBondType) {
-								newError(
-										"Ring closure index "
-												+ n
-												+ " is associated with two different bond types",
-										-1, "");
+								newError("Ring closure index " + n + " is associated with two different bond types", -1,
+										"");
 							} else {
 								addBond(rc.firstAtom, prevAtom);
 								// Reseting the "current" bond data
@@ -672,15 +646,12 @@ public class SmartsParser {
 						// Closing the ring at the second index position with a
 						// bond expression
 						// Then error is reported
-						newError(
-								"Ring closure index "
-										+ n
-										+ " is associated with a bond type and a bond expression",
+						newError("Ring closure index " + n + " is associated with a bond type and a bond expression",
 								-1, "");
 					}
 				}
 
-			}// if (rc.firstBondExpression != null)
+			} // if (rc.firstBondExpression != null)
 
 			// This index is made available for another usage for ring closure
 			// definitions
@@ -693,8 +664,7 @@ public class SmartsParser {
 	void parseSpecialSymbol() {
 		switch (smarts.charAt(curChar)) {
 		case '*': // Any atom
-			IQueryAtom curAtom = new AnyAtom(
-					SilentChemObjectBuilder.getInstance());
+			IQueryAtom curAtom = new AnyAtom(SilentChemObjectBuilder.getInstance());
 			curChar++;
 			addAtom(curAtom);
 			break;
@@ -720,8 +690,7 @@ public class SmartsParser {
 			if (prevAtom == null) {
 				if (FlagCLG) {
 					if (curComponent > 0) {
-						newError("Incorrect nested componet brackets",
-								curChar + 1, "");
+						newError("Incorrect nested componet brackets", curChar + 1, "");
 					} else {
 						brackets.push(prevAtom);
 						maxCompNumber++;
@@ -729,9 +698,7 @@ public class SmartsParser {
 					}
 
 				} else
-					newError(
-							"Component Level Grouping is off: incorrect openning brackect",
-							curChar + 1, "");
+					newError("Component Level Grouping is off: incorrect openning brackect", curChar + 1, "");
 			} else
 				brackets.push(prevAtom);
 
@@ -771,9 +738,8 @@ public class SmartsParser {
 				curBond = null;
 				curBondType = SmartsConst.BT_UNDEFINED;
 			} else
-				newError(
-						"Zero bond order (disclosure) is not allowed. Component Level Grouping is off.",
-						curChar + 1, "");
+				newError("Zero bond order (disclosure) is not allowed. Component Level Grouping is off.", curChar + 1,
+						"");
 			break;
 
 		default:
@@ -783,31 +749,25 @@ public class SmartsParser {
 	}
 
 	void parseBondExpression() {
-		 //System.out.println("** curChar = " + curChar+"  " +
-		 //smarts.charAt(curChar));
-		 
+		// System.out.println("** curChar = " + curChar+" " +
+		// smarts.charAt(curChar));
+
 		SmartsBondExpression sbe;
 		int lo = -1;
 		int bo = SmartsConst.getBondCharNumber(smarts.charAt(curChar));
-		if (bo != -1) 
-		{
+		if (bo != -1) {
 			curChar++;
 			if (curChar == nChars) {
-				newError(
-						"Smarts string ends incorrectly with a bond expression",
-						curChar, "");
+				newError("Smarts string ends incorrectly with a bond expression", curChar, "");
 				return;
 			}
 			curBondType = bo;
 			// Checking for bond types /? \?
 			if (((curBondType == SmartsConst.BT_UP) || (curBondType == SmartsConst.BT_DOWN))
-					&& (smarts.charAt(curChar) == '?')) 
-			{
+					&& (smarts.charAt(curChar) == '?')) {
 				curChar++;
 				if (curChar == nChars) {
-					newError(
-							"Smarts string ends incorrectly with a bond expression",
-							curChar, "");
+					newError("Smarts string ends incorrectly with a bond expression", curChar, "");
 					return;
 				}
 
@@ -818,16 +778,14 @@ public class SmartsParser {
 			}
 
 			if ((SmartsConst.getBondCharNumber(smarts.charAt(curChar)) == -1)
-					&& (SmartsConst.getLogOperationCharNumber(smarts
-							.charAt(curChar)) == -1)) {
+					&& (SmartsConst.getLogOperationCharNumber(smarts.charAt(curChar)) == -1)) {
 				return; // This is one symbol bond expression
 			}
 
 			curBond = new SmartsBondExpression(SilentChemObjectBuilder.getInstance());
 			sbe = (SmartsBondExpression) curBond;
 			sbe.tokens.add(new Integer(bo));
-		} 
-		else // First symbol from the bond expression is a logical operation
+		} else // First symbol from the bond expression is a logical operation
 		{
 			lo = SmartsConst.getLogOperationCharNumber(smarts.charAt(curChar));
 			if (lo == SmartsConst.LO_NOT) {
@@ -840,22 +798,18 @@ public class SmartsParser {
 			}
 			curChar++;
 			if (curChar == nChars) {
-				newError(
-						"Smarts string ends incorrectly with a bond expression",
-						curChar, "");
+				newError("Smarts string ends incorrectly with a bond expression", curChar, "");
 				return;
 			}
 		}
-		//System.out.println("sbe" + sbe.toString());
-		
-		//Setting bo and lo for the first while-cycle iteration
+		// System.out.println("sbe" + sbe.toString());
+
+		// Setting bo and lo for the first while-cycle iteration
 		bo = SmartsConst.getBondCharNumber(smarts.charAt(curChar));
 		// Checking for bond types /? \?
 		if ((bo == SmartsConst.BT_UP) || (bo == SmartsConst.BT_DOWN)) {
 			if (curChar + 1 == nChars) {
-				newError(
-						"Smarts string ends incorrectly with a bond expression",
-						curChar + 1, "");
+				newError("Smarts string ends incorrectly with a bond expression", curChar + 1, "");
 				return;
 			}
 			if (smarts.charAt(curChar + 1) == '?') {
@@ -871,61 +825,46 @@ public class SmartsParser {
 			lo = SmartsConst.getLogOperationCharNumber(smarts.charAt(curChar));
 		else
 			lo = -1;
-		
-		//Handling all the remaining tokens in the bond expression
-		while ((bo != -1) || (lo != -1)) 
-		{
-			int prevToken = ((Integer) sbe.tokens.get(sbe.tokens.size()-1)).intValue();
-			//System.out.println("prevToken = " + prevToken);
-			//System.out.println("sbe" + sbe.toString());
+
+		// Handling all the remaining tokens in the bond expression
+		while ((bo != -1) || (lo != -1)) {
+			int prevToken = ((Integer) sbe.tokens.get(sbe.tokens.size() - 1)).intValue();
+			// System.out.println("prevToken = " + prevToken);
+			// System.out.println("sbe" + sbe.toString());
 			if (bo != -1) {
-				if (prevToken < SmartsConst.LO) 
-				{
-					// Previous token is not a logical operation that is why 
+				if (prevToken < SmartsConst.LO) {
+					// Previous token is not a logical operation that is why
 					// adding default HI_AND (&) before current token
-					sbe.tokens.add(new Integer(SmartsConst.LO
-							+ SmartsConst.LO_AND));
+					sbe.tokens.add(new Integer(SmartsConst.LO + SmartsConst.LO_AND));
 				}
 				sbe.tokens.add(new Integer(bo));
-			} 
-			else 
-			{
-				if (prevToken >= SmartsConst.LO) 
-				{
+			} else {
+				if (prevToken >= SmartsConst.LO) {
 					if (lo != SmartsConst.LO_NOT) {
-						newError(
-								"Incorrect bond expression - no oprenad between logical operation",
-								curChar + 1, "");
+						newError("Incorrect bond expression - no oprenad between logical operation", curChar + 1, "");
 						return;
 					}
-				}
-				else
-				{
-					//Previous token is not a logical operation that is why 
-					//adding default HI_AND (&) before negation
+				} else {
+					// Previous token is not a logical operation that is why
+					// adding default HI_AND (&) before negation
 					if (lo == SmartsConst.LO_NOT)
-						sbe.tokens.add(new Integer(SmartsConst.LO
-								+ SmartsConst.LO_AND));
+						sbe.tokens.add(new Integer(SmartsConst.LO + SmartsConst.LO_AND));
 				}
 				sbe.tokens.add(new Integer(SmartsConst.LO + lo));
 			}
 
 			curChar++;
 			if (curChar == nChars) {
-				newError(
-						"Smarts string ends incorrectly with a bond expression",
-						curChar, "");
+				newError("Smarts string ends incorrectly with a bond expression", curChar, "");
 				return;
 			}
-			
-			//Setting bo and lo for the next cycle iteration
+
+			// Setting bo and lo for the next cycle iteration
 			bo = SmartsConst.getBondCharNumber(smarts.charAt(curChar));
 			// Checking for bond types /? \?
 			if ((bo == SmartsConst.BT_UP) || (bo == SmartsConst.BT_DOWN)) {
 				if (curChar + 1 == nChars) {
-					newError(
-							"Smarts string ends incorrectly with a bond expression",
-							curChar + 1, "");
+					newError("Smarts string ends incorrectly with a bond expression", curChar + 1, "");
 					return;
 				}
 				if (smarts.charAt(curChar + 1) == '?') {
@@ -938,8 +877,7 @@ public class SmartsParser {
 			}
 
 			if (bo == -1)
-				lo = SmartsConst.getLogOperationCharNumber(smarts
-						.charAt(curChar));
+				lo = SmartsConst.getLogOperationCharNumber(smarts.charAt(curChar));
 			else
 				lo = -1;
 		}
@@ -970,17 +908,18 @@ public class SmartsParser {
 																// not added
 																// here
 			else if (lastTok >= SmartsConst.LO)
-				newError(
-						"Atom expression incorrectly ends with logical operation. Operand is missing",
-						curChar, ""); // curChar+1 is not added here
+				newError("Atom expression incorrectly ends with logical operation. Operand is missing", curChar, ""); // curChar+1
+																														// is
+																														// not
+																														// added
+																														// here
 		}
 
 		if (errors.size() > 0)
 			return;
 
 		if (openBrackets > 0)
-			newError("Incorrect atom expression - [] block is not closed",
-					curChar, "");
+			newError("Incorrect atom expression - [] block is not closed", curChar, "");
 		else
 			addAtom(curAtExpr);
 	}
@@ -988,8 +927,7 @@ public class SmartsParser {
 	public void testForDefaultAND() {
 		int tok = getLastAtomToken();
 		if (tok >= 0 && tok < SmartsConst.LO)
-			curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO
-					+ SmartsConst.LO_AND, 0));
+			curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_AND, 0));
 	}
 
 	public int testFor2CharElement() {
@@ -999,11 +937,9 @@ public class SmartsParser {
 				curChar += 2;
 				int par = SmartsConst.getElementNumber(symbol);
 				if (par == -1)
-					newError("Incorrect atom type in atom expression", curChar,
-							"");
+					newError("Incorrect atom type in atom expression", curChar, "");
 				else
-					curAtExpr.tokens.add(new SmartsExpressionToken(
-							SmartsConst.AP_A, par));
+					curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_A, par));
 				return (1);
 			}
 		}
@@ -1013,8 +949,7 @@ public class SmartsParser {
 	public int getLastAtomToken() {
 		if (curAtExpr.tokens.size() == 0)
 			return (-1);
-		SmartsExpressionToken tok = (SmartsExpressionToken) (curAtExpr.tokens
-				.get(curAtExpr.tokens.size() - 1));
+		SmartsExpressionToken tok = (SmartsExpressionToken) (curAtExpr.tokens.get(curAtExpr.tokens.size() - 1));
 		return (tok.type);
 	}
 
@@ -1023,8 +958,7 @@ public class SmartsParser {
 			switch (smarts.charAt(curChar)) {
 			case 'a':
 				testForDefaultAND();
-				curAtExpr.tokens.add(new SmartsExpressionToken(
-						SmartsConst.AP_a, 0));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_a, 0));
 				curChar++;
 				break;
 			case 'A':
@@ -1108,16 +1042,14 @@ public class SmartsParser {
 				break;
 			case '*':
 				testForDefaultAND();
-				curAtExpr.tokens.add(new SmartsExpressionToken(
-						SmartsConst.AP_ANY, 0));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_ANY, 0));
 				curChar++;
 				break;
 			case '^':
 				if (mSupportOpenBabelExtension)
 					parseAP_OpenBabel_Hybridization();
 				else {
-					newError("Incorrect symbol in atom expression",
-							curChar + 1, "");
+					newError("Incorrect symbol in atom expression", curChar + 1, "");
 					curChar++;
 				}
 				break;
@@ -1125,8 +1057,7 @@ public class SmartsParser {
 				if (mSupportSmirksSyntax)
 					parseAP_SmirksMaping();
 				else {
-					newError("Smirks mapping is not switched on!", curChar + 1,
-							"");
+					newError("Smirks mapping is not switched on!", curChar + 1, "");
 					curChar++;
 				}
 				break;
@@ -1144,11 +1075,9 @@ public class SmartsParser {
 			int par = SmartsConst.getElementNumberFromChar(symbol);
 			curChar++;
 			if (par == -1)
-				newError("Incorrect aromatic atom type in atom expression",
-						curChar, "");
+				newError("Incorrect aromatic atom type in atom expression", curChar, "");
 			else
-				curAtExpr.tokens.add(new SmartsExpressionToken(
-						SmartsConst.AP_a, par));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_a, par));
 
 		} else {
 			int n = 1;
@@ -1160,34 +1089,27 @@ public class SmartsParser {
 			curChar += n;
 			int par = SmartsConst.getElementNumber(symbol);
 			if (par == -1)
-				newError("Incorrect aliphatic atom type in atom expression",
-						curChar, "");
+				newError("Incorrect aliphatic atom type in atom expression", curChar, "");
 			else
-				curAtExpr.tokens.add(new SmartsExpressionToken(
-						SmartsConst.AP_A, par));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_A, par));
 		}
 	}
 
 	void parseAP_NOT() {
 		testForDefaultAND();
-		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO
-				+ SmartsConst.LO_NOT, 0));
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_NOT, 0));
 		curChar++;
 	}
 
 	void parseAP_LogOperation(int logOp) {
 		int prevTok = getLastAtomToken();
 		if (prevTok < 0)
-			newError(
-					"Atom expression incorrectly starts with logical opreation",
-					curChar + 1, "");
+			newError("Atom expression incorrectly starts with logical opreation", curChar + 1, "");
 		else {
 			if (prevTok >= SmartsConst.LO)
-				newError("Incorrect expression - missing operand", curChar + 1,
-						"");
+				newError("Incorrect expression - missing operand", curChar + 1, "");
 			else
-				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO
-						+ logOp, 0));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + logOp, 0));
 		}
 		curChar++;
 	}
@@ -1195,8 +1117,7 @@ public class SmartsParser {
 	void parseAP_AtomMass() {
 		testForDefaultAND();
 		int mass = getInteger();
-		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Mass,
-				mass));
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Mass, mass));
 	}
 
 	void parseAP_A() {
@@ -1221,8 +1142,7 @@ public class SmartsParser {
 				if (isHydrogenAtom(symbolPos)) {
 					// This token is treated as hydrogen atom
 					// not as atom attribute "number of attached H atoms"
-					curAtExpr.tokens.add(new SmartsExpressionToken(
-							SmartsConst.AP_A, 1));
+					curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_A, 1));
 					return;
 				}
 			par = 1;
@@ -1244,8 +1164,7 @@ public class SmartsParser {
 			return (true);
 		if (prevCh == '&') {
 			if (curAtExpr.tokens.size() > 0) {
-				SmartsExpressionToken tok = curAtExpr.tokens
-						.get(curAtExpr.tokens.size() - 1);
+				SmartsExpressionToken tok = curAtExpr.tokens.get(curAtExpr.tokens.size() - 1);
 				if (tok.type == SmartsConst.AP_Mass)
 					return (true);
 			}
@@ -1276,8 +1195,7 @@ public class SmartsParser {
 			par = 1;
 		} else {
 			if (par < 3)
-				newError("Incorrect integer value for r-primitive!", curChar,
-						"");
+				newError("Incorrect integer value for r-primitive!", curChar, "");
 		}
 		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_r, par));
 	}
@@ -1301,8 +1219,7 @@ public class SmartsParser {
 		testForDefaultAND();
 		curChar++;
 		int par = 0;
-		curAtExpr.tokens
-				.add(new SmartsExpressionToken(SmartsConst.AP_iMOE, par));
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_iMOE, par));
 	}
 
 	void parseAP_AtomNumber() {
@@ -1324,8 +1241,7 @@ public class SmartsParser {
 			if ((par < 1) || (par >= SmartsConst.elSymbols.length))
 				newError("Incorrect atomic number after #", curChar, "");
 			else
-				curAtExpr.tokens.add(new SmartsExpressionToken(
-						SmartsConst.AP_AtNum, par));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_AtNum, par));
 		}
 	}
 
@@ -1340,8 +1256,7 @@ public class SmartsParser {
 			if ((par < 1) || (par > 3))
 				newError("Incorrect hybridization after ^", curChar, "");
 			else
-				curAtExpr.tokens.add(new SmartsExpressionToken(
-						SmartsConst.AP_OB_Hybr, par));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_OB_Hybr, par));
 		}
 	}
 
@@ -1358,9 +1273,7 @@ public class SmartsParser {
 			else {
 				// System.out.println("Map Index " + par);
 				if (curSmirksMapIndex > 0) {
-					newError(
-							"Smirks Mapping index is specified more than once per atom ",
-							curChar, "");
+					newError("Smirks Mapping index is specified more than once per atom ", curChar, "");
 				} else
 					curSmirksMapIndex = par;
 			}
@@ -1378,20 +1291,17 @@ public class SmartsParser {
 				if ((par < 1) || (par > 8))
 					newError("Incorrect atomic number after #G", curChar, "");
 				else
-					curAtExpr.tokens.add(new SmartsExpressionToken(
-							SmartsConst.AP_GMOE, par));
+					curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_GMOE, par));
 
 			}
 			return (true);
 		} else if (smarts.charAt(curChar) == 'N') {
 			curChar++;
-			curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_NMOE,
-					0));
+			curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_NMOE, 0));
 			return (true);
 		} else if (smarts.charAt(curChar) == 'X') {
 			curChar++;
-			curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_XMOE,
-					0));
+			curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_XMOE, 0));
 			return (true);
 		}
 
@@ -1408,8 +1318,7 @@ public class SmartsParser {
 		else
 			par = SmartsConst.ChC_AntiClock;
 
-		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Chiral,
-				par));
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Chiral, par));
 	}
 
 	void parseAP_Charge(int sign) {
@@ -1430,8 +1339,7 @@ public class SmartsParser {
 		}
 
 		if (num > 1)
-			curAtExpr.tokens.add(new SmartsExpressionToken(
-					SmartsConst.AP_Charge, sign * num));
+			curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Charge, sign * num));
 		else {
 			if (curChar < nChars) {
 				if (Character.isDigit(smarts.charAt(curChar))) {
@@ -1439,14 +1347,11 @@ public class SmartsParser {
 					if (par == -1)
 						newError("Incorrect charge ", curChar, "");
 					else
-						curAtExpr.tokens.add(new SmartsExpressionToken(
-								SmartsConst.AP_Charge, sign * par));
+						curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Charge, sign * par));
 				} else
-					curAtExpr.tokens.add(new SmartsExpressionToken(
-							SmartsConst.AP_Charge, sign));
+					curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Charge, sign));
 			} else
-				curAtExpr.tokens.add(new SmartsExpressionToken(
-						SmartsConst.AP_Charge, sign));
+				curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Charge, sign));
 		}
 	}
 
@@ -1474,18 +1379,14 @@ public class SmartsParser {
 		}
 
 		if ((curChar >= nChars) && (openBrackets > 0)) {
-			newError(
-					"Incorrect recursive smarts. String end is reached within $(expression)",
-					curChar, "");
+			newError("Incorrect recursive smarts. String end is reached within $(expression)", curChar, "");
 			return;
 		}
 
 		if (firstChar == curChar - 1)
 			newError("Empty recursive smarts", curChar, "");
-		curAtExpr.tokens.add(new SmartsExpressionToken(
-				SmartsConst.AP_Recursive, curAtExpr.recSmartsStrings.size()));
-		curAtExpr.recSmartsStrings
-				.add(smarts.substring(firstChar, curChar - 1));
+		curAtExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_Recursive, curAtExpr.recSmartsStrings.size()));
+		curAtExpr.recSmartsStrings.add(smarts.substring(firstChar, curChar - 1));
 	}
 
 	int getAbsoluteChirality(IAtom atom, int relChirality) {
@@ -1576,8 +1477,7 @@ public class SmartsParser {
 				if (tok.type == SmartsConst.AP_ANY)
 					return (-1);
 
-				if ((tok.type == SmartsConst.AP_A)
-						|| (tok.type == SmartsConst.AP_a)
+				if ((tok.type == SmartsConst.AP_A) || (tok.type == SmartsConst.AP_a)
 						|| (tok.type == SmartsConst.AP_AtNum)) {
 					if (i > 0)
 						if (at.tokens.get(i - 1).type == (SmartsConst.LO + SmartsConst.LO_NOT))
@@ -1593,8 +1493,7 @@ public class SmartsParser {
 			}
 		}
 
-		if ((atom instanceof AliphaticSymbolQueryAtom)
-				|| (atom instanceof AromaticSymbolQueryAtom)) {
+		if ((atom instanceof AliphaticSymbolQueryAtom) || (atom instanceof AromaticSymbolQueryAtom)) {
 			return (SmartsConst.getElementNumber(atom.getSymbol()));
 		}
 
@@ -1615,7 +1514,6 @@ public class SmartsParser {
 		return (1);
 	}
 
-	
 	int getBondType(IBond bond) {
 		if (bond instanceof OrderQueryBond)
 			return (getBondType(bond.getOrder()));
@@ -1629,8 +1527,8 @@ public class SmartsParser {
 			return (2);
 		if (bond instanceof DoubleBondAromaticityNotSpecified)
 			return (2);
-		//if (bond instanceof DoubleStereoBond)
-		//	return (2);
+		// if (bond instanceof DoubleStereoBond)
+		// return (2);
 		return (-1);
 	}
 
@@ -1657,8 +1555,7 @@ public class SmartsParser {
 		return result;
 	}
 
-	List<IAtom> addLayerToCode(List<Integer> code, List<IAtom> layer,
-			List<IAtom> usedAtoms) {
+	List<IAtom> addLayerToCode(List<Integer> code, List<IAtom> layer, List<IAtom> usedAtoms) {
 		if (layer == null)
 			return null;
 
@@ -1716,232 +1613,197 @@ public class SmartsParser {
 		return (false);
 	}
 
-	void handleChirality(SmartsAtomExpression atom) 
-	{
+	void handleChirality(SmartsAtomExpression atom) {
 		List<Integer> stereoTokens = new ArrayList<Integer>();
-		
+
 		for (int i = 0; i < atom.tokens.size(); i++) {
 			SmartsExpressionToken tok = atom.tokens.get(i);
 			if (tok.type == SmartsConst.AP_Chiral) {
 				stereoTokens.add(i);
-				//tok.param = getAbsoluteChirality(atom, tok.param);
+				// tok.param = getAbsoluteChirality(atom, tok.param);
 				// System.out.println("chirality = " + tok.param);
 			}
 		}
-		
-		if (!stereoTokens.isEmpty())
-		{
+
+		if (!stereoTokens.isEmpty()) {
 			atom.stereoTokenIndices = new int[stereoTokens.size()];
 			for (int i = 0; i < stereoTokens.size(); i++)
 				atom.stereoTokenIndices[i] = stereoTokens.get(i);
-			
+
 			setStereoLigands(atom);
-		}	
-	}
-	
-	void setStereoLigands(SmartsAtomExpression atom)
-	{
-		List<IAtom> ligands = container.getConnectedAtomsList(atom);
-		if (ligands.size() == 2)
-		{	
-			//Check for extended tetrahedral chirality
-			//L1-[terminal1](-L2)=[center]=[terminal2](-L3)(-L4)
-			
-			List<IBond> bonds = container.getConnectedBondsList(atom);
-			if (SmartsHelper.isQueryDoubleBond(bonds.get(0))
-					&& SmartsHelper.isQueryDoubleBond(bonds.get(1)))
-					{
-						atom.extChirInfo = new ExtendedChiralityInfo();
-						
-						//Ligands become terminals
-						atom.extChirInfo.terminal1 = ligands.get(0);
-						atom.extChirInfo.terminal2 = ligands.get(1);
-						
-						//New ligands are searched as peripheral to
-						//the terminal atoms
-						ligands.clear();
-						List<IAtom> neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal1);
-						for (IAtom a: neigh)
-							if (a != atom)
-								ligands.add(a);
-						
-						neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal2);
-						for (IAtom a: neigh)
-							if (a != atom)
-								ligands.add(a);
-					}
 		}
-		
+	}
+
+	void setStereoLigands(SmartsAtomExpression atom) {
+		List<IAtom> ligands = container.getConnectedAtomsList(atom);
+		if (ligands.size() == 2) {
+			// Check for extended tetrahedral chirality
+			// L1-[terminal1](-L2)=[center]=[terminal2](-L3)(-L4)
+
+			List<IBond> bonds = container.getConnectedBondsList(atom);
+			if (SmartsHelper.isQueryDoubleBond(bonds.get(0)) && SmartsHelper.isQueryDoubleBond(bonds.get(1))) {
+				atom.extChirInfo = new ExtendedChiralityInfo();
+
+				// Ligands become terminals
+				atom.extChirInfo.terminal1 = ligands.get(0);
+				atom.extChirInfo.terminal2 = ligands.get(1);
+
+				// New ligands are searched as peripheral to
+				// the terminal atoms
+				ligands.clear();
+				List<IAtom> neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal1);
+				for (IAtom a : neigh)
+					if (a != atom)
+						ligands.add(a);
+
+				neigh = container.getConnectedAtomsList(atom.extChirInfo.terminal2);
+				for (IAtom a : neigh)
+					if (a != atom)
+						ligands.add(a);
+			}
+		}
+
 		atom.stereoLigands = ligands;
 	}
-	
-	int checkChirality(SmartsAtomExpression atom, int atomIndex)
-	{
+
+	int checkChirality(SmartsAtomExpression atom, int atomIndex) {
 		int nerr = 0;
-		if (atom.extChirInfo == null)
-		{
-			if ((atom.stereoLigands.size() <3) || (atom.stereoLigands.size() >4) )
-			{	
-				newError("Incorrect number of lingands (" + atom.stereoLigands.size() 
-						+ " ligands) atached to the chiral center atom "+ (atomIndex+1),
-						-1, "");
+		if (atom.extChirInfo == null) {
+			if ((atom.stereoLigands.size() < 3) || (atom.stereoLigands.size() > 4)) {
+				newError("Incorrect number of lingands (" + atom.stereoLigands.size()
+						+ " ligands) atached to the chiral center atom " + (atomIndex + 1), -1, "");
 				nerr++;
-			}	
-			
-			if (atom.stereoLigands.size() == 3)
-			{	 
-				//TODO check for implicit H token which must be the fourth ligand
-				
-				//Adding the chiral center atom as fourth ligand 
-				//at the proper position
+			}
+
+			if (atom.stereoLigands.size() == 3) {
+				// TODO check for implicit H token which must be the fourth
+				// ligand
+
+				// Adding the chiral center atom as fourth ligand
+				// at the proper position
 				int centerIndex = container.getAtomNumber(atom);
 				boolean FlagAdded = false;
 				List<IAtom> ligands = new ArrayList<IAtom>();
-				for (int i = 0; i < 3; i++)
-				{
-					IAtom lig =  atom.stereoLigands.get(i);
+				for (int i = 0; i < 3; i++) {
+					IAtom lig = atom.stereoLigands.get(i);
 					int ligIndex = container.getAtomNumber(lig);
 					if (centerIndex < ligIndex)
-						if (!FlagAdded)
-						{
+						if (!FlagAdded) {
 							ligands.add(atom);
 							FlagAdded = true;
-						}	
+						}
 					ligands.add(lig);
 				}
-				
+
 				if (!FlagAdded)
-					ligands.add(atom); 
+					ligands.add(atom);
 				atom.stereoLigands = ligands;
 				atom.hasImplicitHStereoLigand = true;
 			}
-			
-			for (int i = 0; i < atom.stereoLigands.size(); i++)
-			{
+
+			for (int i = 0; i < atom.stereoLigands.size(); i++) {
 				if (atom.hasImplicitHStereoLigand)
 					if (atom.stereoLigands.get(i) == atom)
 						continue;
-				
-				IBond bo = container.getBond(atom,  atom.stereoLigands.get(i));
-				if (bo == null)
-				{	
-					//This error should never occur
-					newError("Ligand " + (i+1) + " to chiral center atom "+ (atomIndex+1) 
-							+ " is not connected to the chiral center",	-1, "");
+
+				IBond bo = container.getBond(atom, atom.stereoLigands.get(i));
+				if (bo == null) {
+					// This error should never occur
+					newError("Ligand " + (i + 1) + " to chiral center atom " + (atomIndex + 1)
+							+ " is not connected to the chiral center", -1, "");
 					nerr++;
-				}	
-				else
-				{
-					if (!SmartsHelper.isSingleBondOrExpression(bo))
-					{	
-						newError("Ligand " + (i+1) + " to chiral center atom "+ (atomIndex+1) 
-								+ " is connected with incorrect bond",	-1, "");
+				} else {
+					if (!SmartsHelper.isSingleBondOrExpression(bo)) {
+						newError("Ligand " + (i + 1) + " to chiral center atom " + (atomIndex + 1)
+								+ " is connected with incorrect bond", -1, "");
 						nerr++;
-					}	
+					}
 				}
 			}
-		}
-		else
-		{
-			//Checking extended tethrahedral 
+		} else {
+			// Checking extended tethrahedral
 			if (atom.stereoLigands.size() != 4)
-				newError("Incorrect total number of peripherials/lingands (" + atom.stereoLigands.size() 
-						+ " peripherials) for extended tethrahedral chiral atom "+ (atomIndex+1),
-						-1, "");
-			
+				newError("Incorrect total number of peripherials/lingands (" + atom.stereoLigands.size()
+						+ " peripherials) for extended tethrahedral chiral atom " + (atomIndex + 1), -1, "");
+
 			int term1Connections = 0;
 			int term2Connections = 0;
-			
-			for (int i = 0; i < atom.stereoLigands.size(); i++)
-			{
+
+			for (int i = 0; i < atom.stereoLigands.size(); i++) {
 				IAtom preripherial = atom.stereoLigands.get(i);
 				IBond bo = container.getBond(preripherial, atom.extChirInfo.terminal1);
-				
+
 				if (bo != null)
 					term1Connections++;
-				else
-				{	
+				else {
 					bo = container.getBond(preripherial, atom.extChirInfo.terminal2);
 					if (bo != null)
 						term2Connections++;
-				}	
-				
+				}
+
 				if (bo == null)
-					//This error should never occur
-					newError("Peripherial " + (i+1) + " to extended tethrahedral chiral center atom "+ (atomIndex+1) 
-							+ " is not connected to the terminal",	-1, "");
-				else
-				{
+					// This error should never occur
+					newError("Peripherial " + (i + 1) + " to extended tethrahedral chiral center atom "
+							+ (atomIndex + 1) + " is not connected to the terminal", -1, "");
+				else {
 					if (!SmartsHelper.isSingleBondOrExpression(bo))
-						newError("Peripherial " + (i+1) + " to extended tethrahedral chiral center atom "+ (atomIndex+1) 
-								+ " is connected to the terminal with incorrect bond",	-1, "");
-				}	
+						newError(
+								"Peripherial " + (i + 1) + " to extended tethrahedral chiral center atom "
+										+ (atomIndex + 1) + " is connected to the terminal with incorrect bond",
+								-1, "");
+				}
 			}
-			
-			if (term1Connections != 2)
-			{
-				newError("Incorrect number of peripherials/lingands (" + term1Connections  
-						+ " peripherials) atached to the terminal1 (atom "   
-						+ container.getAtomNumber(atom.extChirInfo.terminal1) 
-						+ ") of the extended tethrahedral chiral atom "+ (atomIndex+1),
-						-1, "");
+
+			if (term1Connections != 2) {
+				newError("Incorrect number of peripherials/lingands (" + term1Connections
+						+ " peripherials) atached to the terminal1 (atom "
+						+ container.getAtomNumber(atom.extChirInfo.terminal1)
+						+ ") of the extended tethrahedral chiral atom " + (atomIndex + 1), -1, "");
 			}
-			
-			if (term2Connections != 2)
-			{
-				newError("Incorrect number of peripherials/lingands (" + term2Connections  
-						+ " peripherials) atached to the terminal2 (atom "   
-						+ container.getAtomNumber(atom.extChirInfo.terminal2) 
-						+ ") of the extended tethrahedral chiral atom "+ (atomIndex+1),
-						-1, "");
+
+			if (term2Connections != 2) {
+				newError("Incorrect number of peripherials/lingands (" + term2Connections
+						+ " peripherials) atached to the terminal2 (atom "
+						+ container.getAtomNumber(atom.extChirInfo.terminal2)
+						+ ") of the extended tethrahedral chiral atom " + (atomIndex + 1), -1, "");
 			}
 		}
-		
-		
+
 		return nerr;
 	}
-	
-	
 
-	void setDoubleBondsStereoInfo() 
-	{
+	void setDoubleBondsStereoInfo() {
 		processedDirBonds.clear();
 		processedDoubleBonds.clear();
-		
-		for (int i = 0; i < directionalBonds.size(); i++) 
-		{
+
+		for (int i = 0; i < directionalBonds.size(); i++) {
 			SMARTSBond dirBond = directionalBonds.get(i);
-			
-			//System.out.println("Dir: "+ SmartsHelper.bondAtomNumbersToString(container, dirBond) + "  " 
-			//		+ SmartsConst.bondDirectionToString(directions.get(i)));
-			
+
+			// System.out.println("Dir: "+
+			// SmartsHelper.bondAtomNumbersToString(container, dirBond) + " "
+			// + SmartsConst.bondDirectionToString(directions.get(i)));
+
 			if (isBondProcessed(dirBond, processedDirBonds))
 				continue;
-			
+
 			IAtom at0 = dirBond.getAtom(0);
 			IAtom at1 = dirBond.getAtom(1);
 
 			SMARTSBond dBo = getNeighborDoubleBond(dirBond, 0);
-			if (dBo != null)
-			{	
+			if (dBo != null) {
 				if (!isBondProcessed(dBo, processedDoubleBonds))
-					setDoubleBondStereoElement(dBo, at0, at1, dirBond, directions
-							.get(i).intValue(), 0);
-			}
-			else
-			{		
+					setDoubleBondStereoElement(dBo, at0, at1, dirBond, directions.get(i).intValue(), 0);
+			} else {
 				dBo = getNeighborDoubleBond(dirBond, 1);
 				if (dBo != null)
 					if (!isBondProcessed(dBo, processedDoubleBonds))
-						setDoubleBondStereoElement(dBo, at1, at0, dirBond, directions
-								.get(i).intValue(), 1);
+						setDoubleBondStereoElement(dBo, at1, at0, dirBond, directions.get(i).intValue(), 1);
 			}
 
 			processedDirBonds.add(dirBond);
 		}
-		
-		if (!processedDoubleBonds.isEmpty())
-		{
+
+		if (!processedDoubleBonds.isEmpty()) {
 			List<SMARTSBond> dbList = new ArrayList<SMARTSBond>();
 			dbList.addAll(processedDoubleBonds);
 			container.setProperty("StereoDoubleBonds", dbList);
@@ -1950,30 +1812,22 @@ public class SmartsParser {
 
 	boolean isDirectionalBond(SMARTSBond bond) {
 		for (int i = 0; i < directionalBonds.size(); i++)
-			if (directionalBonds.get(i) == bond)	
+			if (directionalBonds.get(i) == bond)
 				return (true);
 		return false;
 	}
 
 	/*
-	boolean isAtomForStereoDoubleBond(IAtom atom) {
-		// Following elements could participate in a stereo double bond: C, N,
-		// P, Si
-		
-		if (atom.getSymbol() == null)
-			return false;  //This is a temporary code
-		
-		if (atom.getSymbol().equals("C"))
-			return true;
-		if (atom.getSymbol().equals("N"))
-			return true;
-		if (atom.getSymbol().equals("P"))
-			return true;
-		if (atom.getSymbol().equals("Si"))
-			return true;
-		return false;
-	}
-	*/
+	 * boolean isAtomForStereoDoubleBond(IAtom atom) { // Following elements
+	 * could participate in a stereo double bond: C, N, // P, Si
+	 * 
+	 * if (atom.getSymbol() == null) return false; //This is a temporary code
+	 * 
+	 * if (atom.getSymbol().equals("C")) return true; if
+	 * (atom.getSymbol().equals("N")) return true; if
+	 * (atom.getSymbol().equals("P")) return true; if
+	 * (atom.getSymbol().equals("Si")) return true; return false; }
+	 */
 
 	boolean isBondProcessed(SMARTSBond bond, List<SMARTSBond> processedBonds) {
 		for (IQueryBond bo : processedBonds) {
@@ -1985,34 +1839,30 @@ public class SmartsParser {
 
 	SMARTSBond getNeighborDoubleBond(SMARTSBond bond, int atNum) {
 		// bond is a directional single bond
-		// the neighbor double is search among the "atNum" neighbors 
+		// the neighbor double is search among the "atNum" neighbors
 		IAtom at = bond.getAtom(atNum);
 		java.util.List ca = container.getConnectedAtomsList(at);
 		for (int k = 0; k < ca.size(); k++) {
 			IBond bo = container.getBond(at, (IAtom) ca.get(k));
-			if (bo != bond)
-			{	
-				if (bo instanceof DoubleNonAromaticBond)					
-						return (SMARTSBond) bo;
-				if (bo instanceof DoubleBondAromaticityNotSpecified)					
+			if (bo != bond) {
+				if (bo instanceof DoubleNonAromaticBond)
 					return (SMARTSBond) bo;
-				if (bo instanceof SmartsBondExpression)
-				{
-					SmartsToChemObject stco = 
-							new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
-					IBond bondFromExpr = stco.smartsExpressionToBond((SmartsBondExpression)bo);
+				if (bo instanceof DoubleBondAromaticityNotSpecified)
+					return (SMARTSBond) bo;
+				if (bo instanceof SmartsBondExpression) {
+					SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
+					IBond bondFromExpr = stco.smartsExpressionToBond((SmartsBondExpression) bo);
 					if (bondFromExpr != null)
 						if (bondFromExpr.getOrder() == IBond.Order.DOUBLE)
 							return (SMARTSBond) bo;
 				}
-			}	
+			}
 		}
 		return (null);
 	}
-	
-	void setDoubleBondStereoElement(SMARTSBond doubleBond, IAtom atom, IAtom at0,
-			SMARTSBond dirBond, int direction, int atomPos) 
-	{
+
+	void setDoubleBondStereoElement(SMARTSBond doubleBond, IAtom atom, IAtom at0, SMARTSBond dirBond, int direction,
+			int atomPos) {
 		// Input defines a fragment of the type "a0--atom=="
 		// Direction of bond "a0--atom" is defined by parameters: direction and
 		// atPos
@@ -2023,136 +1873,115 @@ public class SmartsParser {
 		// the stereo configuration is not determined.
 		//
 		// The remaining part of this fragment is determined first
-		// at0 			at2
+		// at0 at2
 		// \ doubleBond /
 		// atom == atom1
-		// / 			\
-		// at1 			at3
-		
+		// / \
+		// at1 at3
+
 		// Determining only atoms: atom1 and at2
 		// atoms at1 and at3 are not needed for storing the stereo element
-		
-		//System.out.println("*** setDoubleBondStereoElement");
+
+		// System.out.println("*** setDoubleBondStereoElement");
 		IAtom atom1;
 		IAtom at2 = null;
 		IBond dirBond2 = null;
-		
+
 		if (doubleBond.getAtom(0) == atom)
 			atom1 = doubleBond.getAtom(1);
 		else
 			atom1 = doubleBond.getAtom(0);
-		
+
 		java.util.List ca = container.getConnectedAtomsList(atom1);
-		for (int k = 0; k < ca.size(); k++) 
-		{
+		for (int k = 0; k < ca.size(); k++) {
 			IAtom otherAt = (IAtom) ca.get(k);
 			if (otherAt == atom)
 				continue;
 			IBond bo = container.getBond(atom1, otherAt);
-			if (at2 == null) 
-			{	
-				if (isDirectionalBond((SMARTSBond) bo))
-				{
+			if (at2 == null) {
+				if (isDirectionalBond((SMARTSBond) bo)) {
 					at2 = otherAt;
 					dirBond2 = bo;
 					break;
 				}
-			} 
+			}
 		}
-		
+
 		if (at2 == null)
-			return; //Stereo element is not complete
-		
-		//The stereo info object is created
+			return; // Stereo element is not complete
+
+		// The stereo info object is created
 		DoubleBondStereoInfo dbsi = new DoubleBondStereoInfo();
 		dbsi.ligand1 = at0;
 		dbsi.ligand2 = at2;
-		
-		//Get stored direction for the second direction bond
+
+		// Get stored direction for the second direction bond
 		int dirBond2Index = directionalBonds.indexOf(dirBond2);
 		int direction2 = directions.get(dirBond2Index).intValue();
-		
-		//Get normalized directions
+
+		// Get normalized directions
 		int norm_dir = getNormalizedBondDirection(direction, atom, at0);
 		int norm_dir2 = getNormalizedBondDirection(direction2, atom1, at2);
-		 
-		boolean isUp = (norm_dir == SmartsConst.BT_UP)
-				|| (norm_dir == SmartsConst.BT_UPUNSPEC);
-		
-		boolean isUp2 = (norm_dir2 == SmartsConst.BT_UP)
-				|| (norm_dir2 == SmartsConst.BT_UPUNSPEC);
-		
-		boolean isUndefined = (norm_dir == SmartsConst.BT_UPUNSPEC) 
-				|| (norm_dir == SmartsConst.BT_DOWNUNSPEC)
-				|| (norm_dir2 == SmartsConst.BT_UPUNSPEC) 
-				|| (norm_dir2 == SmartsConst.BT_DOWNUNSPEC);
-		
-		if (isUp == isUp2) 
-		{	
-			if (isUndefined) 
+
+		boolean isUp = (norm_dir == SmartsConst.BT_UP) || (norm_dir == SmartsConst.BT_UPUNSPEC);
+
+		boolean isUp2 = (norm_dir2 == SmartsConst.BT_UP) || (norm_dir2 == SmartsConst.BT_UPUNSPEC);
+
+		boolean isUndefined = (norm_dir == SmartsConst.BT_UPUNSPEC) || (norm_dir == SmartsConst.BT_DOWNUNSPEC)
+				|| (norm_dir2 == SmartsConst.BT_UPUNSPEC) || (norm_dir2 == SmartsConst.BT_DOWNUNSPEC);
+
+		if (isUp == isUp2) {
+			if (isUndefined)
 				dbsi.conformation = DBStereo.TOGETHER_OR_UNDEFINED;
 			else
 				dbsi.conformation = DBStereo.TOGETHER;
-		}
-		else
-		{
-			if (isUndefined) 
+		} else {
+			if (isUndefined)
 				dbsi.conformation = DBStereo.OPPOSITE_OR_UNDEFINED;
 			else
 				dbsi.conformation = DBStereo.OPPOSITE;
 		}
-		
-		//System.out.println("db stereo: " + dbsi.conformation.toString());
-		
-		if (doubleBond instanceof DoubleNonAromaticBond)
-		{
-			DoubleNonAromaticBond db = (DoubleNonAromaticBond)doubleBond;
+
+		// System.out.println("db stereo: " + dbsi.conformation.toString());
+
+		if (doubleBond instanceof DoubleNonAromaticBond) {
+			DoubleNonAromaticBond db = (DoubleNonAromaticBond) doubleBond;
 			db.setStereoInfo(dbsi);
 			processedDoubleBonds.add(doubleBond);
-			processedDirBonds.add((SMARTSBond)dirBond2);
-		}
-		else
-		{
-			if (doubleBond instanceof DoubleBondAromaticityNotSpecified)
-			{
-				DoubleBondAromaticityNotSpecified db = (DoubleBondAromaticityNotSpecified)doubleBond;
+			processedDirBonds.add((SMARTSBond) dirBond2);
+		} else {
+			if (doubleBond instanceof DoubleBondAromaticityNotSpecified) {
+				DoubleBondAromaticityNotSpecified db = (DoubleBondAromaticityNotSpecified) doubleBond;
 				db.setStereoInfo(dbsi);
 				processedDoubleBonds.add(doubleBond);
-				processedDirBonds.add((SMARTSBond)dirBond2);
+				processedDirBonds.add((SMARTSBond) dirBond2);
+			} else if (doubleBond instanceof SmartsBondExpression) {
+				SmartsBondExpression db = (SmartsBondExpression) doubleBond;
+				db.setStereoInfo(dbsi);
+				processedDoubleBonds.add(doubleBond);
+				processedDirBonds.add((SMARTSBond) dirBond2);
 			}
-			else
-				if (doubleBond instanceof SmartsBondExpression)
-				{
-					SmartsBondExpression db = (SmartsBondExpression)doubleBond;
-					db.setStereoInfo(dbsi);
-					processedDoubleBonds.add(doubleBond);
-					processedDirBonds.add((SMARTSBond)dirBond2);
-				}
 		}
 	}
-	
+
 	/**
-	 * Determines the bond direction as "it is seen" 
-	 * from the double bond atom (a1) toward the ligand atom (a2)
-	 *  a=a1-a2
+	 * Determines the bond direction as "it is seen" from the double bond atom
+	 * (a1) toward the ligand atom (a2) a=a1-a2
 	 * 
-	 * The result depends on the atom indexing of a1 and a2 given by SmartsParser.
-	 * which depends on the atoms appearance in the smarts string.
+	 * The result depends on the atom indexing of a1 and a2 given by
+	 * SmartsParser. which depends on the atoms appearance in the smarts string.
 	 * 
 	 * @return normalized direction
 	 */
-	int getNormalizedBondDirection(int direction, IAtom doubleBondAtom, IAtom ligandAtom)
-	{
+	int getNormalizedBondDirection(int direction, IAtom doubleBondAtom, IAtom ligandAtom) {
 		if (container.getAtomNumber(doubleBondAtom) < container.getAtomNumber(ligandAtom))
-			return direction; 
+			return direction;
 		else
-			return switchDirection(direction);	
+			return switchDirection(direction);
 	}
-	
-	int switchDirection(int direction)
-	{
-		switch (direction)
-		{
+
+	int switchDirection(int direction) {
+		switch (direction) {
 		case SmartsConst.BT_UP:
 			return SmartsConst.BT_DOWN;
 		case SmartsConst.BT_DOWN:
@@ -2162,15 +1991,13 @@ public class SmartsParser {
 		case SmartsConst.BT_DOWNUNSPEC:
 			return SmartsConst.BT_UPUNSPEC;
 		}
-		
-		//Unknown constant - nothing is done 
+
+		// Unknown constant - nothing is done
 		return direction;
 	}
-	
 
-	void setDoubleStereoBond0(SMARTSBond doubleBond, IAtom atom, IAtom at0,
-			SMARTSBond dirBond, int direction, int atomPos) 
-	{
+	void setDoubleStereoBond0(SMARTSBond doubleBond, IAtom atom, IAtom at0, SMARTSBond dirBond, int direction,
+			int atomPos) {
 		// Input defines a fragment of the type "a0--atom=="
 		// Direction of bond "a0--atom" is defined by parameters: direction and
 		// atPos
@@ -2181,11 +2008,11 @@ public class SmartsParser {
 		// the stereo configuration is not determined.
 		//
 		// (1)The remaining part of this fragment is determined first
-		// at0 			at2
+		// at0 at2
 		// \ doubleBond /
 		// atom == atom1
-		// / 			\
-		// at1 			at3
+		// / \
+		// at1 at3
 		// (2) The Priorities of atoms at0, at1, at2, at3 are determined
 		// (3) The absolute stereo configuration is determined from the
 		// priorities and
@@ -2220,7 +2047,9 @@ public class SmartsParser {
 			}
 		}
 
-		/* System.out.println("   atom1 = " + container.getAtomNumber(atom1)); */
+		/*
+		 * System.out.println("   atom1 = " + container.getAtomNumber(atom1));
+		 */
 
 		boolean FlagDir2 = false; // These flags indicate which atom (at2 or
 									// at3)
@@ -2305,14 +2134,13 @@ public class SmartsParser {
 		 * SmartsHelper.bondAtomNumbersToString(container, dirBond2));
 		 */
 		// "UP/DOWN" is interpreted as a direction from the double bond atom
-		// toward the outside atom 
-		//(!!!! this could be a problem since it does not take the order of atoms in the SMARTS)
+		// toward the outside atom
+		// (!!!! this could be a problem since it does not take the order of
+		// atoms in the SMARTS)
 		// For example atom-->at0, atom1-->at2
 		boolean isUp, isUp2;
-		isUp = (direction == SmartsConst.BT_UP)
-				|| (direction == SmartsConst.BT_UPUNSPEC);
-		isUp2 = (direction2 == SmartsConst.BT_UP)
-				|| (direction2 == SmartsConst.BT_UPUNSPEC);
+		isUp = (direction == SmartsConst.BT_UP) || (direction == SmartsConst.BT_UPUNSPEC);
+		isUp2 = (direction2 == SmartsConst.BT_UP) || (direction2 == SmartsConst.BT_UPUNSPEC);
 		isCis = (isUp == isUp2);
 
 		// Additionl checks for the directions are done
@@ -2352,47 +2180,37 @@ public class SmartsParser {
 				isCis = !isCis;
 		}
 
-		isUnspecified = (direction == SmartsConst.BT_UPUNSPEC)
-				|| (direction == SmartsConst.BT_DOWNUNSPEC)
-				|| (direction2 == SmartsConst.BT_UPUNSPEC)
-				|| (direction2 == SmartsConst.BT_DOWNUNSPEC);
+		isUnspecified = (direction == SmartsConst.BT_UPUNSPEC) || (direction == SmartsConst.BT_DOWNUNSPEC)
+				|| (direction2 == SmartsConst.BT_UPUNSPEC) || (direction2 == SmartsConst.BT_DOWNUNSPEC);
 
 		/*
-		// (4) Registering a new Double Stereo bond
-		DoubleStereoBond stereoBond = new DoubleStereoBond(SilentChemObjectBuilder.getInstance());
-		stereoBond.setAtom(atom, 0);
-		stereoBond.setAtom(atom1, 1);
-		if (isCis) {
-			if (isUnspecified)
-				stereoBond.stereoParameter = SmartsConst.BT_CISUNSPEC;
-			else
-				stereoBond.stereoParameter = SmartsConst.BT_CIS;
-		} else {
-			if (isUnspecified)
-				stereoBond.stereoParameter = SmartsConst.BT_TRANSUNSPEC;
-			else
-				stereoBond.stereoParameter = SmartsConst.BT_TRANS;
-		}
-		processedDoubleBonds.add(doubleBond);
-		newStereoDoubleBonds.add(stereoBond);
-		*/
+		 * // (4) Registering a new Double Stereo bond DoubleStereoBond
+		 * stereoBond = new
+		 * DoubleStereoBond(SilentChemObjectBuilder.getInstance());
+		 * stereoBond.setAtom(atom, 0); stereoBond.setAtom(atom1, 1); if (isCis)
+		 * { if (isUnspecified) stereoBond.stereoParameter =
+		 * SmartsConst.BT_CISUNSPEC; else stereoBond.stereoParameter =
+		 * SmartsConst.BT_CIS; } else { if (isUnspecified)
+		 * stereoBond.stereoParameter = SmartsConst.BT_TRANSUNSPEC; else
+		 * stereoBond.stereoParameter = SmartsConst.BT_TRANS; }
+		 * processedDoubleBonds.add(doubleBond);
+		 * newStereoDoubleBonds.add(stereoBond);
+		 */
 
 		// Registering the second directional bonds as a processed one
 		processedDirBonds.add(dirBond2);
 	}
-	
-	
+
 	public void setSMARTSData(IAtomContainer container) throws Exception {
-		//System.out.println("mNeedRingData = " + mNeedRingData + " mNeedRingData2 = " + mNeedRingData2);
-		prepareTargetForSMARTSSearch(mNeedNeighbourData, mNeedValencyData,
-				mNeedRingData, mNeedRingData2, mNeedExplicitHData,
-				mNeedParentMoleculeData, container);
+		// System.out.println("mNeedRingData = " + mNeedRingData + "
+		// mNeedRingData2 = " + mNeedRingData2);
+		prepareTargetForSMARTSSearch(mNeedNeighbourData, mNeedValencyData, mNeedRingData, mNeedRingData2,
+				mNeedExplicitHData, mNeedParentMoleculeData, container);
 	}
 
-	static public void prepareTargetForSMARTSSearch(boolean neighbourData,
-			boolean valenceData, boolean ringData, boolean ringData2,
-			boolean explicitHData, boolean parentMoleculeData,
-			IAtomContainer container) throws Exception {
+	static public void prepareTargetForSMARTSSearch(boolean neighbourData, boolean valenceData, boolean ringData,
+			boolean ringData2, boolean explicitHData, boolean parentMoleculeData, IAtomContainer container)
+			throws Exception {
 		if (neighbourData)
 			setNeighbourData(container);
 
@@ -2409,8 +2227,7 @@ public class SmartsParser {
 			setParentMoleculeData(container);
 	}
 
-	static public void prepareTargetForSMARTSSearch(SmartsFlags flags,
-			IAtomContainer container) {
+	static public void prepareTargetForSMARTSSearch(SmartsFlags flags, IAtomContainer container) {
 		if (flags.mNeedNeighbourData)
 			setNeighbourData(container);
 
@@ -2450,8 +2267,8 @@ public class SmartsParser {
 		for (int i = 0; i < container.getAtomCount(); i++) {
 			IAtom at = container.getAtom(i);
 			/*
-			 * https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=
-			 * 20024&atid=120024 hci = at.getHydrogenCount();
+			 * https://sourceforge.net/tracker/?func=detail&aid=3020065&
+			 * group_id= 20024&atid=120024 hci = at.getHydrogenCount();
 			 */
 			hci = at.getImplicitHydrogenCount();
 			hc = 0;
@@ -2483,8 +2300,7 @@ public class SmartsParser {
 				if (ha == null)
 					at.setProperty(CMLUtilities.ExplicitH, new Integer(1));
 				else
-					at.setProperty(CMLUtilities.ExplicitH,
-							new Integer(1 + ha.intValue()));
+					at.setProperty(CMLUtilities.ExplicitH, new Integer(1 + ha.intValue()));
 			}
 			if (bo.getAtom(1).getSymbol().equals("H")) {
 				IAtom at = bo.getAtom(0);
@@ -2492,8 +2308,7 @@ public class SmartsParser {
 				if (ha == null)
 					at.setProperty(CMLUtilities.ExplicitH, new Integer(1));
 				else
-					at.setProperty(CMLUtilities.ExplicitH,
-							new Integer(1 + ha.intValue()));
+					at.setProperty(CMLUtilities.ExplicitH, new Integer(1 + ha.intValue()));
 			}
 		}
 	}
@@ -2517,12 +2332,11 @@ public class SmartsParser {
 		return (numH);
 	}
 
-	static public void setRingData(IAtomContainer container, boolean rData,
-			boolean rData2) {
+	static public void setRingData(IAtomContainer container, boolean rData, boolean rData2) {
 		IRingSet ringSet = Cycles.sssr(container).toRingSet();
 		IRingSet atomRings;
-		//RingData is an array with the sizes of the rings
-		//which this atom participates in
+		// RingData is an array with the sizes of the rings
+		// which this atom participates in
 		if (rData) {
 			for (int i = 0; i < container.getAtomCount(); i++) {
 				IAtom atom = container.getAtom(i);
@@ -2531,16 +2345,15 @@ public class SmartsParser {
 				if (n > 0) {
 					int ringData[] = new int[n];
 					for (int k = 0; k < n; k++) {
-						ringData[k] = atomRings.getAtomContainer(k)
-								.getAtomCount();
+						ringData[k] = atomRings.getAtomContainer(k).getAtomCount();
 					}
 					atom.setProperty(CMLUtilities.RingData, ringData);
 				}
 			}
 		} // end of ringData
 
-		//RingData2 is an array with the indices of the rings
-		//which this atom participates in
+		// RingData2 is an array with the indices of the rings
+		// which this atom participates in
 		if (rData2) {
 			for (int i = 0; i < container.getAtomCount(); i++) {
 				IAtom atom = container.getAtom(i);
@@ -2549,8 +2362,7 @@ public class SmartsParser {
 				if (n > 0) {
 					int ringData2[] = new int[n];
 					for (int k = 0; k < n; k++) {
-						ringData2[k] = getRingNumberInRingSet(
-								atomRings.getAtomContainer(k), ringSet);
+						ringData2[k] = getRingNumberInRingSet(atomRings.getAtomContainer(k), ringSet);
 					}
 					atom.setProperty(CMLUtilities.RingData2, ringData2);
 				}
@@ -2559,8 +2371,7 @@ public class SmartsParser {
 
 	}
 
-	static public List<int[]> getRindData(IAtomContainer container,
-			IRingSet ringSet) {
+	static public List<int[]> getRindData(IAtomContainer container, IRingSet ringSet) {
 		List<int[]> v = new ArrayList<int[]>();
 		IRingSet atomRings;
 		for (int i = 0; i < container.getAtomCount(); i++) {
@@ -2578,8 +2389,7 @@ public class SmartsParser {
 		return (v);
 	}
 
-	static public List<int[]> getRindData2(IAtomContainer container,
-			IRingSet ringSet) {
+	static public List<int[]> getRindData2(IAtomContainer container, IRingSet ringSet) {
 		List<int[]> v = new ArrayList<int[]>();
 		IRingSet atomRings;
 		for (int i = 0; i < container.getAtomCount(); i++) {
@@ -2589,8 +2399,7 @@ public class SmartsParser {
 			if (n > 0) {
 				int ringData2[] = new int[n];
 				for (int k = 0; k < n; k++)
-					ringData2[k] = getRingNumberInRingSet(
-							atomRings.getAtomContainer(k), ringSet);
+					ringData2[k] = getRingNumberInRingSet(atomRings.getAtomContainer(k), ringSet);
 				v.add(ringData2);
 			} else
 				v.add(null);

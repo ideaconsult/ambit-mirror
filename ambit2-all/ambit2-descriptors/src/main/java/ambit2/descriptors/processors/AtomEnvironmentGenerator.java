@@ -2,8 +2,6 @@ package ambit2.descriptors.processors;
 
 import java.util.logging.Level;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -16,6 +14,7 @@ import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AbstractPropertyGenerator;
 import ambit2.descriptors.AtomEnvironment;
 import ambit2.descriptors.AtomEnvironmentDescriptor;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 
 /**
