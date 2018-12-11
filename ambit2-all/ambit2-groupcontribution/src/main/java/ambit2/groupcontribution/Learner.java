@@ -387,8 +387,15 @@ public class Learner
 		}
 		else
 		{
-			errors.add("There is linear dependency in the data !!! "+
-					"The model can not be built!");
+			errors.add("There is linear dependency in the data! "+
+					"The model can not be built!\n"
+					+ "Linear dependency might be caused:\n"
+					+ "  -there are too few chemical objects\n"
+					+ "  -the number of fragments is too big due to the combinatorial explosion of high order scheme and too many local descriptors\n"
+					+ "  -there are some very rare fragments, functional groups or 'exotic' molecules\n"
+					+ "  -the order of the additive scheme is higher than what is needed\n"
+					+ "  -corresction factors or external descriptors are colinear with fragment columns\n"
+					+ "Rare fragment columns can be cleared by setting appropriate (higher) filtration threshold values (-r option)" );
 			return(-1);
 		}		
 		return(0);
@@ -486,7 +493,7 @@ public class Learner
 			double rmse = Statistics.rmsError(b, modeled_b);
 			double mae = Statistics.meanAbsoluteError(b, modeled_b);
 			
-			out_s = "r^2  = " + df.format(r2) + "  (PPMC)" + endline +
+			out_s = "r^2  = " + df.format(r2) + "  (PPMCC)" + endline +
 					"R^2  = " + df.format(R2) + "  (1-RSS/TSS)" + endline +
 					"RMSE = " + df.format(rmse) + endline + 
 					"MAE  = " + df.format(mae) + endline + endline;
