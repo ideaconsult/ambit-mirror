@@ -557,6 +557,14 @@ public class GroupContributionCli
 		
 		//Setup additional config info
 		DataSet trainDataSet = new DataSet(new File(addConfigInfo.trainingSetFile));
+		if (trainDataSet.nErrors != 0)
+		{	
+			System.out.println("Errors on training dataset reading:");
+			System.out.println(trainDataSet.reportErrorsAsString());
+			return -1;
+		}	
+		
+
 				
 		if (addConfigInfo.gcmTypeString != null)
 		{

@@ -56,8 +56,23 @@ public class DataSet
 			{
 				IAtomContainer molecule  = reader.next();
 				records_read++;
+				
 				if (molecule==null) {
 					records_error++;
+					DataSetObject dso = new DataSetObject();
+					dso.molecule = null;
+					dso.error = "Unable to read chemical object";
+					dataObjects.add(dso);
+					continue;
+				}
+				
+				if (molecule.getAtomCount() == 0)
+				{
+					records_error++;
+					DataSetObject dso = new DataSetObject();
+					dso.molecule = null;
+					dso.error = "Empty chemical object. Problem on object creation.";
+					dataObjects.add(dso);
 					continue;
 				}
 				
@@ -81,7 +96,7 @@ public class DataSet
 			try { reader.close(); } catch (Exception x) {}
 		}
 		
-		//TODO use basic Ambit io utils
+		nErrors = records_error;
 	}
 	
 	protected IIteratingChemObjectReader<IAtomContainer> getReader(InputStream in, String extension) throws CDKException, AmbitIOException {
@@ -158,7 +173,7 @@ public class DataSet
 			sb.append("#");
 			sb.append(i+1);
 			sb.append("  ");
-			if (dso.molNotation == null)
+			if (dso.molNotation != null)
 				sb.append (dso.molNotation);
 			else
 			{
