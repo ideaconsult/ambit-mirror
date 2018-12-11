@@ -227,7 +227,7 @@ public class Learner
 		}
 		catch(Exception e)
 		{
-			errors.add("Error while generating target endpoint column-matrix" + e.getMessage());
+			errors.add("Error while generating target endpoint column-matrix: " + e.getMessage());
 		}
 		
 		if (model.getDescriptors() != null)
@@ -242,7 +242,7 @@ public class Learner
 			}
 			catch(Exception e)
 			{
-				errors.add("Error while generating descriptor matrix " + e.getMessage());
+				errors.add("Error while generating descriptor matrix: " + e.getMessage());
 			}
 		}
 	}
@@ -617,7 +617,7 @@ public class Learner
 		
 		out_s =	"RMSE = "+df.format(rmsError) + endline
 				+ "MAE = "+df.format(mae) + endline
-				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (PPMC)" + endline
+				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (PPMCC)" + endline
 				+ "Rc^2 = "+df.format(concordCorCoeff*concordCorCoeff)  + "   (concordance cor. coef.)" + endline
 				+ "Q^2  = "+df.format(Q2_LOO) + endline + endline;
 		
@@ -674,7 +674,7 @@ public class Learner
 		}
 		catch(Exception e)
 		{
-			errors.add("Error while generating target endpoint column-matrix" + e.getMessage());
+			errors.add("Error while generating target endpoint column-matrix: " + e.getMessage());
 			return;
 		}
 				
@@ -711,7 +711,7 @@ public class Learner
 		
 		out_s =	"RMSE = "+df.format(rmsError) + endline
 				+ "MAE = "+df.format(mae) + endline
-				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (PPMC)" + endline
+				+ "R^2  = "+df.format(corCoeff*corCoeff)  + "   (PPMCC)" + endline
 				+ "Rc^2 = "+df.format(concordCorCoeff*concordCorCoeff)  + "   (concordance cor. coef.)" + endline
 				+ "Q^2  = "+df.format(Q2_external) + endline + endline;
 		
@@ -933,7 +933,7 @@ public class Learner
 		}
 		if (repCfg.FlagBufferOutput)
 		{	
-			model.addToReport("Fragmentation errors::\n");
+			model.addToReport("Fragmentation errors:\n");
 			model.addToReport(dataSet.reportErrorsAsString());
 			model.addToReport("\n");
 		}
