@@ -24,17 +24,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
 package ambit2.db.processors;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
-
-import net.idea.modbcum.i.IDBProcessor;
-import net.idea.modbcum.i.batch.IBatchStatistics;
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.i.processors.ProcessorsChain;
-import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 import org.apache.commons.csv.CSVFormat;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
@@ -49,6 +44,12 @@ import ambit2.core.io.RawIteratingFolderReader;
 import ambit2.core.io.RawIteratingMOLReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.RawIteratingWrapper;
+import net.idea.modbcum.i.IDBProcessor;
+import net.idea.modbcum.i.batch.IBatchStatistics;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
+import net.idea.modbcum.i.processors.ProcessorsChain;
+import net.idea.modbcum.p.batch.AbstractBatchProcessor;
 
 /**
  * Reads file
@@ -57,8 +58,7 @@ import ambit2.core.io.RawIteratingWrapper;
  * 
  * @param <ItemOutput>
  */
-public class BatchDBProcessor<ITEMTYPE> extends
-		AbstractBatchProcessor<IInputState, ITEMTYPE> {
+public class BatchDBProcessor<ITEMTYPE> extends AbstractBatchProcessor<IInputState, ITEMTYPE> {
 
 	/**
 	 * 
@@ -77,14 +77,12 @@ public class BatchDBProcessor<ITEMTYPE> extends
 	public BatchDBProcessor() {
 	}
 
-	public BatchDBProcessor(
-			ProcessorsChain<ITEMTYPE, IBatchStatistics, IProcessor> processor) {
+	public BatchDBProcessor(ProcessorsChain<ITEMTYPE, IBatchStatistics, IProcessor> processor) {
 		super(processor);
 
 	}
 
-	public Iterator<ITEMTYPE> getIterator(IInputState target)
-			throws AmbitException {
+	public Iterator<ITEMTYPE> getIterator(IInputState target) throws AmbitException {
 		if (target instanceof FileInputState)
 			try {
 				File file = ((FileInputState) target).getFile();
@@ -96,75 +94,47 @@ public class BatchDBProcessor<ITEMTYPE> extends
 					};
 					return new RawIteratingFolderReader(file.listFiles(filter));
 				} else {
+					FileInputStream stream = new FileInputStream(file);
+					
 					if (FileInputState._FILE_TYPE.SDF_INDEX.hasExtension(file)) {
-						RawIteratingSDFReader reader = new RawIteratingSDFReader(
-								new FileReader(file));
+						RawIteratingSDFReader reader = new RawIteratingSDFReader(new InputStreamReader(stream));
 						if (getReference() == null)
-							reader.setReference(LiteratureEntry.getInstance(
-									file.getName(), file.getAbsolutePath()));
+							reader.setReference(LiteratureEntry.getInstance(file.getName(), file.getAbsolutePath()));
 						else
 							reader.setReference(getReference());
 						return reader;
-					} else if (FileInputState._FILE_TYPE.MOL_INDEX
-							.hasExtension(file)) {
-						RawIteratingMOLReader reader = new RawIteratingMOLReader(
-								new FileReader(file));
+					} else if (FileInputState._FILE_TYPE.MOL_INDEX.hasExtension(file)) {
+						RawIteratingMOLReader reader = new RawIteratingMOLReader(new InputStreamReader(stream));
 						if (getReference() == null)
-							reader.setReference(LiteratureEntry.getInstance(
-									file.getName(), file.getAbsolutePath()));
+							reader.setReference(LiteratureEntry.getInstance(file.getName(), file.getAbsolutePath()));
 						else
 							reader.setReference(getReference());
 						return reader;
 						/* TEST and replace the wrapper with this */
-					} else if (FileInputState._FILE_TYPE.CSV_INDEX
-							.hasExtension(file)) {
-						RawIteratingCSVReader reader = new RawIteratingCSVReader(
-								new FileReader(file), CSVFormat.EXCEL);
-						reader.setKeeprawrecord(false);
-						reader.setOptionalSMILESHeader(((FileInputState) target)
-								.getOptionalSMILESHeader());
-						reader.setOptionalInChIHeader(((FileInputState) target)
-								.getOptionalInChIHeader());
-						reader.setOptionalInChIKeyHeader(((FileInputState) target)
-								.getOptionalInChIKeyHeader());
-						if (getReference() == null)
-							reader.setReference(LiteratureEntry.getInstance(
-									file.getName(), file.getAbsolutePath()));
-						else
-							reader.setReference(getReference());
+					} else if (FileInputState._FILE_TYPE.CSV_INDEX.hasExtension(file)) {
+						RawIteratingCSVReader reader = new RawIteratingCSVReader(new InputStreamReader(stream), CSVFormat.EXCEL);
+						configureReader(reader, target, file);
 						return reader;
-					} else if (FileInputState._FILE_TYPE.TXT_INDEX
-							.hasExtension(file)) {
-						RawIteratingCSVReader reader = new RawIteratingCSVReader(
-								new FileReader(file),
+					} else if (FileInputState._FILE_TYPE.TXT_INDEX.hasExtension(file)) {
+						RawIteratingCSVReader reader = new RawIteratingCSVReader(new InputStreamReader(stream),
 								CSVFormat.TDF.withCommentMarker('#'));
-						reader.setKeeprawrecord(false);
-						reader.setOptionalSMILESHeader(((FileInputState) target)
-								.getOptionalSMILESHeader());
-						reader.setOptionalInChIHeader(((FileInputState) target)
-								.getOptionalInChIHeader());
-						reader.setOptionalInChIKeyHeader(((FileInputState) target)
-								.getOptionalInChIKeyHeader());
-						if (getReference() == null)
-							reader.setReference(LiteratureEntry.getInstance(
-									file.getName(), file.getAbsolutePath()));
-						else
-							reader.setReference(getReference());
+						configureReader(reader, target, file);
 						return reader;
 					} else {
-						IIteratingChemObjectReader ir = FileInputState
-								.getReader(file, ((FileInputState) target)
-										.getFileFormat());
+						IIteratingChemObjectReader ir = FileInputState.getReader(stream,
+								file.getName());
 						if (ir == null)
-							throw new AmbitException("Unsupported format "
-									+ file.getName());
+							throw new AmbitException("Unsupported format " + file.getName());
 						else {
-							RawIteratingWrapper reader = new RawIteratingWrapper(
-									ir);
+
+							if (ir instanceof RawIteratingCSVReader) {
+								configureReader(((RawIteratingCSVReader)ir), target, file);
+							}
+							RawIteratingWrapper reader = new RawIteratingWrapper(ir);
+							
 							if (getReference() == null)
-								reader.setReference(LiteratureEntry
-										.getInstance(file.getName(),
-												file.getAbsolutePath()));
+								reader.setReference(
+										LiteratureEntry.getInstance(file.getName(), file.getAbsolutePath()));
 							else
 								reader.setReference(getReference());
 							return reader;
@@ -180,9 +150,18 @@ public class BatchDBProcessor<ITEMTYPE> extends
 			throw new AmbitException("Not a file");
 	}
 
+	protected void configureReader(RawIteratingCSVReader reader, IInputState target, File file) {
+		reader.setKeeprawrecord(false);
+		reader.setOptionalSMILESHeader(((FileInputState) target).getOptionalSMILESHeader());
+		reader.setOptionalInChIHeader(((FileInputState) target).getOptionalInChIHeader());
+		reader.setOptionalInChIKeyHeader(((FileInputState) target).getOptionalInChIKeyHeader());
+		if (getReference() == null)
+			reader.setReference(LiteratureEntry.getInstance(file.getName(), file.getAbsolutePath()));
+		else
+			reader.setReference(getReference());
+	}
 	@Override
-	public void afterProcessing(IInputState target, Iterator<ITEMTYPE> iterator)
-			throws AmbitException {
+	public void afterProcessing(IInputState target, Iterator<ITEMTYPE> iterator) throws AmbitException {
 
 		try {
 			if (iterator instanceof IIteratingChemObjectReader)
