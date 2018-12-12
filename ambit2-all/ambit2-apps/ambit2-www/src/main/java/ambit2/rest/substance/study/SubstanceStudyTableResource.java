@@ -86,8 +86,8 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 			SubstanceStudyFlatQuery q = null;
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 			String search = null;
-			String[] inchikey = null;
-			String[] smiles = null;
+
+			String[] names = null;
 			try {
 				search = form.getFirstValue("search");
 				if (search == null)
@@ -96,15 +96,18 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 			}
 
 			try {
-				inchikey = form.getValuesArray("inchikey");
+				names = form.getValuesArray("id");
 			} catch (Exception x) {
 			}
+			// inchikeys will overwrite names
 			try {
-				smiles = form.getValuesArray("smiles");
-				//tbd convert ot inchikeys
+				String[] inchikeys = form.getValuesArray("inchikey");
+				if (inchikeys != null & inchikeys.length>0)
+					names = inchikeys;
 			} catch (Exception x) {
-			}			
-			
+			}
+
+
 			_QUERY_TYPE qtype = _QUERY_TYPE.bysubstance;
 			try {
 				qtype = _QUERY_TYPE.valueOf(form.getFirstValue("type"));
@@ -140,18 +143,40 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 				q = new SubstanceStudyFlatQuery(record);
 				break;
 			}
-			case bystructure: {
-				if (inchikey != null)
+			case bysubstance_name: {
+				if (names != null)
 					try {
 						Protocol._categories category = Protocol._categories.valueOf(search);
 						Protocol p = new Protocol(null);
 						p.setCategory(category.name());
 						p.setTopCategory(category.getTopCategory());
-						q = new SubstanceStudyFlatQuery(p, inchikey);
+						q = new SubstanceStudyFlatQuery(qtype, p, new String[]{names[0]} );
 						break;
 					} catch (Exception x) {
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 					}
+				break;
+			}
+			case bystructure_smiles: 
+				//TODO smiles ot inchikey
+			case bystructure_name:
+				// same code as below
+			case bysubstance_type: 
+				//go down
+			case bystructure_inchikey: {
+				if (names != null)
+					try {
+						Protocol._categories category = Protocol._categories.valueOf(search);
+						Protocol p = new Protocol(null);
+						p.setCategory(category.name());
+						p.setTopCategory(category.getTopCategory());
+						q = new SubstanceStudyFlatQuery(qtype, p, names);
+						break;
+					} catch (Exception x) {
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					}
+
+				break;
 
 			}
 			default: {
