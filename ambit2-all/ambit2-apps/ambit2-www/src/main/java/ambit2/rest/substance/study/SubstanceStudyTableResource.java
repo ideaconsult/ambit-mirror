@@ -59,6 +59,10 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 		if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
 			BucketCSVReporter cmpreporter = new BucketCSVReporter();
 			return new OutputWriterConvertor(cmpreporter, MediaType.TEXT_CSV);
+		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
+				BucketCSVReporter cmpreporter = new BucketCSVReporter();
+				cmpreporter.setDelimiter("\t");
+				return new OutputWriterConvertor(cmpreporter, MediaType.TEXT_PLAIN);			
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback == null)
