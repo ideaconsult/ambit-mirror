@@ -111,25 +111,26 @@ public class RepositoryWriterTest extends DbUnitTest {
 		property = c.createQueryTable("EXPECTED",
 				"SELECT * FROM catalog_references");
 		Assert.assertEquals(17, property.getRowCount());
-
+		int n=36; //was 37
 		property = c
 				.createQueryTable("EXPECTED",
 						"SELECT name,count(idreference) as c FROM properties  group by name");
-		Assert.assertEquals(37, property.getRowCount());
-		for (int i = 0; i < 37; i++) {
+		Assert.assertEquals(n, property.getRowCount());
+		for (int i = 0; i < n; i++) {
 			Assert.assertEquals(new BigInteger("14"), property.getValue(i, "c"));
 		}
 
 		property = c.createQueryTable("EXPECTED", "SELECT * FROM properties");
-		Assert.assertEquals(518, property.getRowCount());
+		//was 518
+		Assert.assertEquals(504, property.getRowCount());
 		property_values = c.createQueryTable("EXPECTED",
 				"SELECT * FROM property_values");
-		Assert.assertEquals(28 * 37, property_values.getRowCount());
+		Assert.assertEquals(28 * n, property_values.getRowCount());
 		srcdataset = c
 				.createQueryTable(
 						"EXPECTED",
 						"SELECT * FROM src_dataset join template_def using(idtemplate) where name='TEST INPUT'");
-		Assert.assertEquals(518, srcdataset.getRowCount());
+		Assert.assertEquals(504, srcdataset.getRowCount());
 		c.close();
 		/**
 		 * Removing redundant properties insert ignore into property_values

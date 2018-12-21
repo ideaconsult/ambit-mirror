@@ -45,7 +45,11 @@
 							       "byprovider",
 							       "bycitation",
 							       "bystudytype",
-							       "bystructure"
+							       "bystructure_inchikey",
+							       "bystructure_smiles",
+							       "bystructure_name",
+							       "bysubstance_name",
+							       "bysubstance_type"
 							    ]
 							},	
 							{
@@ -56,7 +60,16 @@
 							    "paramType": "query",
 							    "allowMultiple": true,
 							    "defaultValue": "YUYCVXFAYWRXLS-UHFFFAOYSA-N"
-							},							
+							},				
+							{
+							    "name": "id",
+							    "description": "Search parameter, chemical structure or substance identifier(s), comma delimited",
+							    "required": false,
+							    "type": "string",
+							    "paramType": "query",
+							    "allowMultiple": true,
+							    "defaultValue": ""
+							},			
 							<#include "/apidocs/parameters_page.ftl" >			            
 			            ],
 			            "responseMessages": [

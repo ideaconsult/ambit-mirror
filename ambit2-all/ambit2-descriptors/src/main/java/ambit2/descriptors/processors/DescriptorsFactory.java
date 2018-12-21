@@ -32,9 +32,12 @@ package ambit2.descriptors.processors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.Atom;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
-import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.ILiteratureEntry._type;
 import ambit2.base.data.LiteratureEntry;
@@ -68,6 +71,16 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 		return new Template();
 	}
 
+    private static IAtomContainer makeAlkane(int chainLength) {
+        IAtomContainer currentChain = new AtomContainer();
+        currentChain.addAtom(new Atom("C"));
+        for (int atomCount = 1; atomCount < chainLength; atomCount++) {
+            currentChain.addAtom(new Atom("C"));
+            currentChain.addBond(atomCount, atomCount - 1, IBond.Order.SINGLE);
+        }
+
+        return currentChain;
+    }
 	public static synchronized List<Property> createDescriptor2Properties(String className) throws Exception {
 		Class clazz = DescriptorsFactory.class.getClassLoader().loadClass(className);
 		Object o = clazz.newInstance();
@@ -82,7 +95,7 @@ public class DescriptorsFactory extends AbstractDescriptorFactory<Profile<Proper
 			} catch (Exception x) {
 				// x.printStackTrace();
 			}
-			DescriptorValue value = ((IMolecularDescriptor) o).calculate(MoleculeFactory.makeAlkane(2));
+			DescriptorValue value = ((IMolecularDescriptor) o).calculate(makeAlkane(2));
 			for (String name : value.getNames()) {
 				p.add(descriptorValue2Property(descriptor, name, value));
 			}

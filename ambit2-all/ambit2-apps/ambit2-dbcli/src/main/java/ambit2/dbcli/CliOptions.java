@@ -48,7 +48,7 @@ public class CliOptions {
 	};
 
 	public enum _fields {
-		name, connection, params, sql, order, value, processor
+		name, connection, params, sql, order, value, processor, sparse, bitset
 	};
 
 	public enum _preprocessingoptions {

@@ -14,7 +14,7 @@ $(document).ready(function() {
 	//loadHelp("${ambit_root}","feature");
 	var oTable = defineInvestigationTable("${ambit_root}","${ambit_request_json}","#investigation",false,"<Fif>rtp");
 	
-	$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/investigation'><input type='radio' checked name='type' id='type_byinvestigation' value='byinvestigation' title='Investigation UUID'>Investigation<input type='radio' name='type' id='type_byprovider' value='byprovider'>Data provider <input type='radio' name='type' id='type_bycitation'  value='bycitation'>Reference <input type='radio' name='type' id='type_bystudytype'  value='bystudytype'>Study type <input type='radio' name='type' id='type_bystructure'  value='bystructure'>Structure<input name='search' class='search' value='' id='search'> <input type='submit' value='Search'></form>");
+	$("#_searchdiv").html("<form class='remove-bottom' action='${ambit_root}/investigation'><select id='type' name='type'><option value='byinvestigation'>Investigation</option><option value='bysubstance'>Substance UUID</option><option value='byprovider'>Data provider</option><option value='bycitation'>Reference</option><option value='bystudytype'>Study type</option><option value='bystructure_inchikey'>Study type and InChI key</option><option value='bystructure_smiles'>Study type and SMILES</option> <option value='bystructure_name'>Study type and name</option><option value='bysubstance_name'>Study type and substance name</option> <option value='bysubstance_type'>Study type and substance type</option></select><input name='search' value='' id='search'><input name='id' value='' id='id'><input type='submit' value='Search'></form>");
 	
 	var purl = $.url();
 		$('.search').attr('value',purl.param('search')===undefined?'':purl.param('search'));
@@ -24,7 +24,7 @@ $(document).ready(function() {
         $("#selecttype option").each(function (a, b) {
 	          if ($(this).val() == typeToSelect ) $(this).attr("selected", "selected");
 	    });
-        $("#type_"+typeToSelect).prop("checked", true);
+        $("#"+typeToSelect).prop("selected", true);
 
 });
 </script>
@@ -44,7 +44,9 @@ $(document).ready(function() {
 	<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 	<a href='#' id='json' target=_blank><img src='${ambit_root}/images/json.png' alt='json' title='Download as JSON'></a>
 	<a href='#' id='csv' target=_blank><img src='${ambit_root}/images/csv64.png' alt='csv' title='Download as CSV'></a>
+<!--	
 	<a href='#' id='xlsx' target=_blank><img src='${ambit_root}/images/xlsx.png' alt='xlsx' title='Download as XLSX'></a>
+	-->
 	</div>
 
 </div>

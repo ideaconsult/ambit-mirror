@@ -2,8 +2,6 @@ package ambit2.core.external.test;
 
 import java.io.File;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -14,6 +12,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import ambit2.base.external.CommandShell;
 import ambit2.core.external.ShellSDFoutput;
 import ambit2.core.smiles.OpenBabelShell;
+import junit.framework.Assert;
 
 public class CommandShellTest {
 	protected CommandShell shell;

@@ -13,20 +13,16 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tautomers.InChITautomerGenerator;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.exceptions.AmbitIOException;
-import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.io.FileInputState;
 import ambit2.core.processors.structure.HydrogenAdderProcessor;
@@ -52,7 +48,7 @@ public class TestTautomers {
 	public static Logger logger = Logger.getLogger(TestTautomers.class.getName());
 	public TautomerManager tman = new TautomerManager();
 	public TautomerRanking tautomerRanking = new TautomerRanking();
-	public InChITautomerGenerator itg = new InChITautomerGenerator();
+	// public InChITautomerGenerator itg = new InChITautomerGenerator();
 	// public RuleStructureFactory rsf = new RuleStructureFactory();
 	public ChemObjectFactory cof = new ChemObjectFactory(SilentChemObjectBuilder.getInstance());
 	public boolean FlagExplicitHydrogens = false;
@@ -196,7 +192,7 @@ public class TestTautomers {
 		// tt.visualTest("O(C=1C(NC(=O)C=NN#N)=CC(OC)=CC1)C");
 		// tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=[N+]=[N-]");
 		// tt.visualTest("COC1=CC(=C(C=C1)OC)NC(=O)CN=N#N");
-		//tt.visualTest("CC1CN(CC(O1)C)C2=NC3=CC=CC=C3N=C2C(C#N)S(=O)(=O)C4=CC=CC(=C4)C");
+		// tt.visualTest("CC1CN(CC(O1)C)C2=NC3=CC=CC=C3N=C2C(C#N)S(=O)(=O)C4=CC=CC(=C4)C");
 
 		// tt.visualTest("OC(=O)CCC=CN");
 
@@ -262,11 +258,11 @@ public class TestTautomers {
 		// tt.testCACTVSRank("c1ccccc1CCC=O");
 
 		// tt.testEnergyRules();
-		
+
 		tt.testZwitterion("NC(N)CCC(O)=O");
-		//tt.testZwitterion("NCCCNCCCC(O)=O");
-		//tt.testZwitterion("NCCCNCCC(C(O)=O)CCCC(O)=O");
-		
+		// tt.testZwitterion("NCCCNCCCC(O)=O");
+		// tt.testZwitterion("NCCCNCCC(C(O)=O)CCCC(O)=O");
+
 	}
 
 	public void performTestCases() throws Exception {
@@ -512,29 +508,31 @@ public class TestTautomers {
 		}
 	}
 
-	public void visualTestInChI(String smi) throws Exception {
-		logger.log(Level.INFO, "Visual Testing of InChI algorithm: " + smi);
-		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
-
-		// Pre-processing (although aromaticity and implicit atoms should be
-		// handle from Smiles)
-		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-		CDKHueckelAromaticityDetector.detectAromaticity(mol);
-
-		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
-		adder.addImplicitHydrogens(mol);
-		MoleculeTools.convertImplicitToExplicitHydrogens(mol);
-
-		List<IAtomContainer> resultTautomers = itg.getTautomers(mol);
-
-		logger.log(Level.INFO, "\n  Result tautomers: ");
-		for (int i = 0; i < resultTautomers.size(); i++)
-			logger.log(Level.FINE, "   " + SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
-
-		TestStrVisualizer tsv = new TestStrVisualizer(resultTautomers, "InChI");
-
-	}
-
+	/*
+	 * public void visualTestInChI(String smi) throws Exception {
+	 * logger.log(Level.INFO, "Visual Testing of InChI algorithm: " + smi);
+	 * IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
+	 * 
+	 * // Pre-processing (although aromaticity and implicit atoms should be //
+	 * handle from Smiles)
+	 * AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+	 * CDKHueckelAromaticityDetector.detectAromaticity(mol);
+	 * 
+	 * CDKHydrogenAdder adder =
+	 * CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
+	 * adder.addImplicitHydrogens(mol);
+	 * MoleculeTools.convertImplicitToExplicitHydrogens(mol);
+	 * 
+	 * List<IAtomContainer> resultTautomers = itg.getTautomers(mol);
+	 * 
+	 * logger.log(Level.INFO, "\n  Result tautomers: "); for (int i = 0; i <
+	 * resultTautomers.size(); i++) logger.log(Level.FINE, "   " +
+	 * SmartsHelper.moleculeToSMILES(resultTautomers.get(i), false));
+	 * 
+	 * TestStrVisualizer tsv = new TestStrVisualizer(resultTautomers, "InChI");
+	 * 
+	 * }
+	 */
 	public static int testCase(String smi, String expectedTautomers[], boolean FlagPrintTautomers,
 			TautomerManager tManager) throws Exception {
 		logger.log(Level.INFO, "Testing: " + smi);
@@ -648,83 +646,63 @@ public class TestTautomers {
 		return nErrors;
 	}
 
-	public void testAdenine() throws CDKException, CloneNotSupportedException {
-		InChITautomerGenerator tautomerGenerator = new InChITautomerGenerator();
-		IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-		IAtomContainer mol = builder.newInstance(IAtomContainer.class);
-		IAtom a1 = builder.newInstance(IAtom.class, "N");
-		mol.addAtom(a1);
-		IAtom a2 = builder.newInstance(IAtom.class, "N");
-		mol.addAtom(a2);
-		IAtom a3 = builder.newInstance(IAtom.class, "N");
-		mol.addAtom(a3);
-		IAtom a4 = builder.newInstance(IAtom.class, "N");
-		mol.addAtom(a4);
-		IAtom a5 = builder.newInstance(IAtom.class, "N");
-		mol.addAtom(a5);
-		IAtom a6 = builder.newInstance(IAtom.class, "C");
-		mol.addAtom(a6);
-		IAtom a7 = builder.newInstance(IAtom.class, "C");
-		mol.addAtom(a7);
-		IAtom a8 = builder.newInstance(IAtom.class, "C");
-		mol.addAtom(a8);
-		IAtom a9 = builder.newInstance(IAtom.class, "C");
-		mol.addAtom(a9);
-		IAtom a10 = builder.newInstance(IAtom.class, "C");
-		mol.addAtom(a10);
-		IAtom a11 = builder.newInstance(IAtom.class, "H");
-		mol.addAtom(a11);
-		IAtom a12 = builder.newInstance(IAtom.class, "H");
-		mol.addAtom(a12);
-		IAtom a13 = builder.newInstance(IAtom.class, "H");
-		mol.addAtom(a13);
-		IAtom a14 = builder.newInstance(IAtom.class, "H");
-		mol.addAtom(a14);
-		IAtom a15 = builder.newInstance(IAtom.class, "H");
-		mol.addAtom(a15);
-		IBond b1 = builder.newInstance(IBond.class, a1, a6, IBond.Order.SINGLE);
-		mol.addBond(b1);
-		IBond b2 = builder.newInstance(IBond.class, a1, a9, IBond.Order.SINGLE);
-		mol.addBond(b2);
-		IBond b3 = builder.newInstance(IBond.class, a1, a11, IBond.Order.SINGLE);
-		mol.addBond(b3);
-		IBond b4 = builder.newInstance(IBond.class, a2, a7, IBond.Order.SINGLE);
-		mol.addBond(b4);
-		IBond b5 = builder.newInstance(IBond.class, a2, a9, IBond.Order.DOUBLE);
-		mol.addBond(b5);
-		IBond b6 = builder.newInstance(IBond.class, a3, a7, IBond.Order.DOUBLE);
-		mol.addBond(b6);
-		IBond b7 = builder.newInstance(IBond.class, a3, a10, IBond.Order.SINGLE);
-		mol.addBond(b7);
-		IBond b8 = builder.newInstance(IBond.class, a4, a8, IBond.Order.SINGLE);
-		mol.addBond(b8);
-		IBond b9 = builder.newInstance(IBond.class, a4, a10, IBond.Order.DOUBLE);
-		mol.addBond(b9);
-		IBond b10 = builder.newInstance(IBond.class, a5, a8, IBond.Order.SINGLE);
-		mol.addBond(b10);
-		IBond b11 = builder.newInstance(IBond.class, a5, a14, IBond.Order.SINGLE);
-		mol.addBond(b11);
-		IBond b12 = builder.newInstance(IBond.class, a5, a15, IBond.Order.SINGLE);
-		mol.addBond(b12);
-		IBond b13 = builder.newInstance(IBond.class, a6, a7, IBond.Order.SINGLE);
-		mol.addBond(b13);
-		IBond b14 = builder.newInstance(IBond.class, a6, a8, IBond.Order.DOUBLE);
-		mol.addBond(b14);
-		IBond b15 = builder.newInstance(IBond.class, a9, a12, IBond.Order.SINGLE);
-		mol.addBond(b15);
-		IBond b16 = builder.newInstance(IBond.class, a10, a13, IBond.Order.SINGLE);
-		mol.addBond(b16);
-
-		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-
-		List<IAtomContainer> tautomers = tautomerGenerator.getTautomers(mol);
-		// Assert.assertEquals(8, tautomers.size());
-		System.out.println("tautomers.size() = " + tautomers.size());
-
-		TestStrVisualizer tsv = new TestStrVisualizer(tautomers, "InChI - algorithm");
-
-	}
-
+	/*
+	 * public void testAdenine() throws CDKException, CloneNotSupportedException
+	 * { InChITautomerGenerator tautomerGenerator = new
+	 * InChITautomerGenerator(); IChemObjectBuilder builder =
+	 * SilentChemObjectBuilder.getInstance(); IAtomContainer mol =
+	 * builder.newInstance(IAtomContainer.class); IAtom a1 =
+	 * builder.newInstance(IAtom.class, "N"); mol.addAtom(a1); IAtom a2 =
+	 * builder.newInstance(IAtom.class, "N"); mol.addAtom(a2); IAtom a3 =
+	 * builder.newInstance(IAtom.class, "N"); mol.addAtom(a3); IAtom a4 =
+	 * builder.newInstance(IAtom.class, "N"); mol.addAtom(a4); IAtom a5 =
+	 * builder.newInstance(IAtom.class, "N"); mol.addAtom(a5); IAtom a6 =
+	 * builder.newInstance(IAtom.class, "C"); mol.addAtom(a6); IAtom a7 =
+	 * builder.newInstance(IAtom.class, "C"); mol.addAtom(a7); IAtom a8 =
+	 * builder.newInstance(IAtom.class, "C"); mol.addAtom(a8); IAtom a9 =
+	 * builder.newInstance(IAtom.class, "C"); mol.addAtom(a9); IAtom a10 =
+	 * builder.newInstance(IAtom.class, "C"); mol.addAtom(a10); IAtom a11 =
+	 * builder.newInstance(IAtom.class, "H"); mol.addAtom(a11); IAtom a12 =
+	 * builder.newInstance(IAtom.class, "H"); mol.addAtom(a12); IAtom a13 =
+	 * builder.newInstance(IAtom.class, "H"); mol.addAtom(a13); IAtom a14 =
+	 * builder.newInstance(IAtom.class, "H"); mol.addAtom(a14); IAtom a15 =
+	 * builder.newInstance(IAtom.class, "H"); mol.addAtom(a15); IBond b1 =
+	 * builder.newInstance(IBond.class, a1, a6, IBond.Order.SINGLE);
+	 * mol.addBond(b1); IBond b2 = builder.newInstance(IBond.class, a1, a9,
+	 * IBond.Order.SINGLE); mol.addBond(b2); IBond b3 =
+	 * builder.newInstance(IBond.class, a1, a11, IBond.Order.SINGLE);
+	 * mol.addBond(b3); IBond b4 = builder.newInstance(IBond.class, a2, a7,
+	 * IBond.Order.SINGLE); mol.addBond(b4); IBond b5 =
+	 * builder.newInstance(IBond.class, a2, a9, IBond.Order.DOUBLE);
+	 * mol.addBond(b5); IBond b6 = builder.newInstance(IBond.class, a3, a7,
+	 * IBond.Order.DOUBLE); mol.addBond(b6); IBond b7 =
+	 * builder.newInstance(IBond.class, a3, a10, IBond.Order.SINGLE);
+	 * mol.addBond(b7); IBond b8 = builder.newInstance(IBond.class, a4, a8,
+	 * IBond.Order.SINGLE); mol.addBond(b8); IBond b9 =
+	 * builder.newInstance(IBond.class, a4, a10, IBond.Order.DOUBLE);
+	 * mol.addBond(b9); IBond b10 = builder.newInstance(IBond.class, a5, a8,
+	 * IBond.Order.SINGLE); mol.addBond(b10); IBond b11 =
+	 * builder.newInstance(IBond.class, a5, a14, IBond.Order.SINGLE);
+	 * mol.addBond(b11); IBond b12 = builder.newInstance(IBond.class, a5, a15,
+	 * IBond.Order.SINGLE); mol.addBond(b12); IBond b13 =
+	 * builder.newInstance(IBond.class, a6, a7, IBond.Order.SINGLE);
+	 * mol.addBond(b13); IBond b14 = builder.newInstance(IBond.class, a6, a8,
+	 * IBond.Order.DOUBLE); mol.addBond(b14); IBond b15 =
+	 * builder.newInstance(IBond.class, a9, a12, IBond.Order.SINGLE);
+	 * mol.addBond(b15); IBond b16 = builder.newInstance(IBond.class, a10, a13,
+	 * IBond.Order.SINGLE); mol.addBond(b16);
+	 * 
+	 * AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+	 * 
+	 * List<IAtomContainer> tautomers = tautomerGenerator.getTautomers(mol); //
+	 * Assert.assertEquals(8, tautomers.size());
+	 * System.out.println("tautomers.size() = " + tautomers.size());
+	 * 
+	 * TestStrVisualizer tsv = new TestStrVisualizer(tautomers,
+	 * "InChI - algorithm");
+	 * 
+	 * }
+	 */
 	public void testInChIGenerator(String smi) throws Exception {
 		logger.log(Level.INFO, "Testing: " + smi);
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi, true);
@@ -922,12 +900,11 @@ public class TestTautomers {
 		}
 		return smi;
 	}
-	
-	void testZwitterion(String smi) throws Exception
-	{
+
+	void testZwitterion(String smi) throws Exception {
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smi);
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-		
+
 		System.out.println("Target: " + smi);
 
 		ZwitterionManager zwittMan = new ZwitterionManager();
@@ -938,8 +915,7 @@ public class TestTautomers {
 
 		if (zwList.isEmpty())
 			System.out.println("No zwitterions");
-		else
-		{
+		else {
 			System.out.println("Zwitterions:");
 			for (int i = 0; i < zwList.size(); i++)
 				System.out.println(SmartsHelper.moleculeToSMILES(zwList.get(i), true));

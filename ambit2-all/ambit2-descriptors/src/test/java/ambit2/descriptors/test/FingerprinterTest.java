@@ -2,8 +2,6 @@ package ambit2.descriptors.test;
 
 import java.util.BitSet;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.openscience.cdk.fingerprint.CircularFingerprinter;
 import org.openscience.cdk.fingerprint.IBitFingerprint;
@@ -15,7 +13,6 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.similarity.Tanimoto;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -30,6 +27,8 @@ import ambit2.descriptors.fingerprints.KlekotaRothFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.MACCSFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.PubChemFingerprinterWrapper;
 import ambit2.descriptors.fingerprints.SubstructureFingerprinterWrapper;
+import ambit2.descriptors.processors.test.MoleculeFactory;
+import junit.framework.Assert;
 
 public class FingerprinterTest {
 	@Test

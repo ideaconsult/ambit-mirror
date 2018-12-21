@@ -54,9 +54,12 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 	public Map<String, Integer> getRawFingerprint(IAtomContainer arg0) throws CDKException {
 		return null;
 	}
-	/** CDK 1.5.15
-	@Override
-	*/
+
+	/**
+	 * CDK 1.5.15
+	 * 
+	 * @Override
+	 */
 	public BitSet getFingerprint(IAtomContainer atomContainer) throws CDKException {
 		generateFp(atomContainer);
 		BitSet fp = new BitSet(FP_SIZE);
@@ -3134,11 +3137,10 @@ public class PubChemFingerprinterAmbitSmarts implements IFingerprinter {
 		if (cs.countSubstructure("Br[#6]1[#6](Br)[#6][#6][#6]1") > 0)
 			fp[b >> 3] |= MASK[b % 8];
 	}
-	/** CDK 1.5.15
+
 	@Override
 	public String getVersionDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "1.0";
 	}
-	*/
+
 }

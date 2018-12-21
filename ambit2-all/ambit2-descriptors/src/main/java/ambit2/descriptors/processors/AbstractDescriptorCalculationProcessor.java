@@ -1,14 +1,12 @@
 package ambit2.descriptors.processors;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.p.DefaultAmbitProcessor;
-
 import org.openscience.cdk.qsar.DescriptorSpecification;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IDescriptor;
 
-import ambit2.base.data.Property;
 import ambit2.core.data.AbstractDescriptorResultType;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 
 public abstract class AbstractDescriptorCalculationProcessor<ITEM, DESCRIPTOR extends IDescriptor> extends DefaultAmbitProcessor<ITEM, DescriptorValue>  {

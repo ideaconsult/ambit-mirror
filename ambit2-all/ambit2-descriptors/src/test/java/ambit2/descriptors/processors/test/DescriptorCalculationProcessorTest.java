@@ -37,7 +37,7 @@ import org.junit.Test;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor;
 import org.openscience.cdk.qsar.result.IntegerResult;
-import org.openscience.cdk.templates.MoleculeFactory;
+
 
 import ambit2.descriptors.processors.DescriptorCalculationProcessor;
 
@@ -58,7 +58,8 @@ public class DescriptorCalculationProcessorTest {
 		p.setDescriptor(new AtomCountDescriptor());
 		DescriptorValue value = p.process(MoleculeFactory.makeAlkane(10));
 		Assert.assertNotNull(value);
-		Assert.assertEquals(10,((IntegerResult)value.getValue()).intValue());
+		//H atoms are counted as well
+		Assert.assertEquals(32,((IntegerResult)value.getValue()).intValue());
 	}
 
 }

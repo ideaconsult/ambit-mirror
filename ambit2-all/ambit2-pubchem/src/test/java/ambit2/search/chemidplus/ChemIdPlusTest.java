@@ -9,7 +9,7 @@ public class ChemIdPlusTest {
 	@Test
 	public void testFormatCas() throws Exception {
 		ChemIdPlusRequest r = new ChemIdPlusRequest();
-		Assert.assertEquals("0000050000",r.formatCAS("50-00-0"));
+		Assert.assertEquals("50-00-0",r.formatCAS("50-00-0"));
 	}
 	
 	@Test

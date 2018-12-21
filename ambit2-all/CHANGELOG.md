@@ -1,5 +1,8 @@
 #CHANGELOG
 
+## AMBIT2 4.0.0-SNAPSHOT
+branch with cdk 2.1
+
 ## AMBIT2 3.3.0-SNAPSHOT
 current version at trunk
 

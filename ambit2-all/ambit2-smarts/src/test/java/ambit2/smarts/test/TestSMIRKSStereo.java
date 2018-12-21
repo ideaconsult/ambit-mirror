@@ -194,7 +194,7 @@ public class TestSMIRKSStereo extends TestCase
 		boolean FlagExplicitH = false;
 		
 		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
-		assertEquals("Exptected reaction " + smirks + " not applicable for " + target, null, resultProduct);
+		assertEquals("Expected reaction " + smirks + " not applicable for " + target, null, resultProduct);
 	}
 	
 	public void test04() throws Exception 

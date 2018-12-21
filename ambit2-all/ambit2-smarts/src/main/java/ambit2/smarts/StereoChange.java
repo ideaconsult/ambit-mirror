@@ -18,6 +18,12 @@ public class StereoChange
 	}
 	
 	public StereoElementType elementType = StereoElementType.UNKNOWN;
+	
+	//info is used for all stereo elements except stereo double bond
+	public List<IAtom> addLigandsAtoms = new ArrayList<IAtom>(); 
+	public boolean ligandAtomDeleted = false;
+	
+	//info is used only for stereo double bond elements
 	public List<IBond> addLigands0 = new ArrayList<IBond>(); 
 	public List<IBond> addLigands1 = new ArrayList<IBond>(); 
 	public boolean ligand0Deleted = false;
@@ -39,10 +45,24 @@ public class StereoChange
 	
 	public boolean isValidStereoElement()
 	{
-		if (ligand0Deleted)
-			return false;
-		if (ligand1Deleted)
-			return false;
+		if (elementType == StereoElementType.STEREO_DB)
+		{	
+			if (ligand0Deleted)
+				return false;
+			if (ligand1Deleted)
+				return false;
+			if (!addLigands0.isEmpty())
+				return false;
+			if (!addLigands1.isEmpty())
+				return false;
+		}
+		else
+		{
+			if (ligandAtomDeleted)
+				return false;
+			if (!addLigandsAtoms.isEmpty())
+				return false;
+		}
 		
 		return true;
 	}

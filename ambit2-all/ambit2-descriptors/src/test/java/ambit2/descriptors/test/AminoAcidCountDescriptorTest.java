@@ -2,8 +2,6 @@ package ambit2.descriptors.test;
 
 import java.net.URL;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAminoAcid;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -13,7 +11,10 @@ import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.templates.AminoAcids;
-import org.openscience.cdk.templates.MoleculeFactory;
+
+import ambit2.descriptors.processors.test.MoleculeFactory;
+import junit.framework.Assert;
+
 
 public class AminoAcidCountDescriptorTest {
 

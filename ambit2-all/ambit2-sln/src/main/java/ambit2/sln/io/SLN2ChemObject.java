@@ -16,6 +16,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.sln.SLNAtom;
 import ambit2.sln.SLNBond;
@@ -234,6 +235,7 @@ public class SLN2ChemObject
         	{	
         		IAtom atom = new Atom();
         		atom.setSymbol(SLNConst.elSymbols[slnAt.atomType]);
+        		atom.setAtomicNumber(PeriodicTable.getAtomicNumber(SLNConst.elSymbols[slnAt.atomType]));
         		atom.setImplicitHydrogenCount(0);
         		//TODO handle H atoms, charge, isotope
         		return atom;

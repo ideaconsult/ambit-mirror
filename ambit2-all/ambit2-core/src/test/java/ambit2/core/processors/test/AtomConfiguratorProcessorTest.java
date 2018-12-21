@@ -30,8 +30,6 @@
 package ambit2.core.processors.test;
 
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +38,7 @@ import org.openscience.cdk.interfaces.IAtomType.Hybridization;
 import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.core.processors.structure.AtomConfigurator;
+import junit.framework.Assert;
 
 public class AtomConfiguratorProcessorTest {
 

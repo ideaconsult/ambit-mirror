@@ -3,9 +3,9 @@ package ambit2.descriptors.processors;
 import java.io.InputStream;
 import java.util.List;
 
+import ambit2.base.data.ClassHolder;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
-import ambit2.base.data.ClassHolder;
 
 public abstract class AbstractDescriptorFactory<Result> extends DefaultAmbitProcessor<String,Result> {
 

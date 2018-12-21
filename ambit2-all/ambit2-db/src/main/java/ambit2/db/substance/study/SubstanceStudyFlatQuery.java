@@ -94,8 +94,79 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			}
 
 		},
-		bystructure {
-
+		bysubstance_name {
+			public String queryParams(String... params) {
+				// expected topcategory, endpointcategory, structure identifier
+				if (params == null || params.length < 3)
+					return null;
+				else
+					try {
+						return String.format(
+								"{\"params\" : {\":_topcategory\" : { \"type\" : \"String\", \"value\":\"%s\"}, \":_endpointcategory\" : { \"type\" : \"String\", \"value\":\"%s\"}, \":_name1\" : { \"type\" : \"ARRAY_STRING\", \"value\":\"%s\"}, \":_name2\" : { \"type\" : \"ARRAY_STRING\", \"value\":\"%s\"}	}}",
+								params[0], params[1], params[2], params[2]);
+					} catch (Exception x) {
+						return null;
+					}
+			}
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_bysubstance_name.sql";
+			}			
+		},		
+		bysubstance_type {
+			public String queryParams(String... params) {
+				// expected topcategory, endpointcategory, structure identifier
+				if (params == null || params.length < 3)
+					return null;
+				else
+					try {
+						return String.format(
+								"{\"params\" : {\":_topcategory\" : { \"type\" : \"String\", \"value\":\"%s\"}, \":_endpointcategory\" : { \"type\" : \"String\", \"value\":\"%s\"}, \":_name\" : { \"type\" : \"ARRAY_STRING\", \"value\":\"%s\"}	}}",
+								params[0], params[1], params[2]);
+					} catch (Exception x) {
+						return null;
+					}
+			}
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_bysubstance_type.sql";
+			}			
+		},		
+		bystructure_name {
+			public String queryParams(String... params) {
+				// expected topcategory, endpointcategory, structure identifier
+				if (params == null || params.length < 3)
+					return null;
+				else
+					try {
+						return String.format(
+								"{\"params\" : {\":_topcategory\" : { \"type\" : \"String\", \"value\":\"%s\"}, \":_endpointcategory\" : { \"type\" : \"String\", \"value\":\"%s\"}, \":_name\" : { \"type\" : \"ARRAY_STRING\", \"value\":\"%s\"}	}}",
+								params[0], params[1], params[2]);
+					} catch (Exception x) {
+						return null;
+					}
+			}
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_bystructure_name.sql";
+			}			
+		},
+		bystructure_smiles {
+			@Override
+			public boolean preprocessing() {
+				return true;
+			}
+			@Override
+			public String queryParams(String... params) {
+				return _QUERY_TYPE.bystructure_inchikey.queryParams(params);
+			}
+			@Override
+			public String getSQL() {
+				// TODO Auto-generated method stub
+				return _QUERY_TYPE.bystructure_inchikey.getSQL();
+			}
+		},		
+		bystructure_inchikey {
 			public String queryParams(String... params) {
 				// expected topcategory, endpointcategory, inchikey
 				if (params == null || params.length < 3)
@@ -111,11 +182,10 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			}
 			@Override
 			public String getSQL() {
-				return "ambit2/db/q/substance_study_bystructure.sql";
+				return "ambit2/db/q/substance_study_bystructure_inchi.sql";
 			}
 		},
 		byidchemical {
-
 			public String queryParams(String... params) {
 				// expected topcategory, endpointcategory, idchemical (chemicals table)
 				if (params == null || params.length < 3)
@@ -149,6 +219,10 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 		public String getSQL() {
 			return "ambit2/db/q/substance_study_flat.sql";
 		}
+		
+		public boolean preprocessing() {
+			return false;
+		}
 
 	};
 
@@ -171,19 +245,22 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			setValue((ObjectNode) node);
 	}
 
-	public SubstanceStudyFlatQuery(Protocol papp, String[] inchikeys) throws IOException {
-		this(_QUERY_TYPE.bystructure);
-		if (papp.getTopCategory() == null || papp.getCategory() == null || inchikeys==null || inchikeys.length==0)
+	public SubstanceStudyFlatQuery(Protocol papp, String[] search_query) throws IOException {
+		this(_QUERY_TYPE.bystructure_inchikey);
+	}
+	public SubstanceStudyFlatQuery(_QUERY_TYPE querytype, Protocol papp, String[] search_query) throws IOException {
+		this(querytype);
+		if (papp.getTopCategory() == null || papp.getCategory() == null || search_query==null || search_query.length==0)
 			throw new IOException("Required parameters missing");
 		JsonNode node = null;
 		try {
 			StringBuilder b = new StringBuilder();
-			for (int i = 0; i < inchikeys.length; i++) {
+			for (int i = 0; i < search_query.length; i++) {
 				if (i > 0)
 					b.append(",");
-				b.append(inchikeys[i]);
+				b.append(search_query[i]);
 			}
-			node = json2params(_QUERY_TYPE.bystructure.queryParams(papp.getTopCategory().toString(),
+			node = json2params(querytype.queryParams(papp.getTopCategory().toString(),
 					papp.getCategory().toString(), b.toString()));
 		} catch (Exception x) {
 			throw new IOException("Bad request");

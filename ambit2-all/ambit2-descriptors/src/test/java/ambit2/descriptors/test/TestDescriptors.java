@@ -17,7 +17,6 @@ import org.openscience.cdk.qsar.result.IntegerResult;
 import org.openscience.cdk.signature.MoleculeSignature;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.descriptors.constitutional.AtomCountHybridizationDescriptor;
@@ -27,6 +26,7 @@ import ambit2.descriptors.constitutional.CubicRootMolecularWeightDescriptor;
 import ambit2.descriptors.constitutional.HeteroAtomCountDescriptor;
 import ambit2.descriptors.constitutional.RotatableBondFractionDescriptor;
 import ambit2.descriptors.constitutional.SquareRootMolecularWeightDescriptor;
+import ambit2.descriptors.processors.test.MoleculeFactory;
 import junit.framework.Assert;
 
 public class TestDescriptors {

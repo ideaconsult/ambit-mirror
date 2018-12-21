@@ -29,19 +29,16 @@
 
 package ambit2.descriptors.processors.test;
 
-
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.result.IntegerResult;
-import org.openscience.cdk.templates.MoleculeFactory;
 
 import ambit2.base.data.Property;
 import ambit2.core.data.StringArrayResult;
 import ambit2.descriptors.processors.PropertyCalculationProcessor;
+import junit.framework.Assert;
 
 public class PropertyCalculationProcessorTest {
 
@@ -52,23 +49,25 @@ public class PropertyCalculationProcessorTest {
 	@After
 	public void tearDown() throws Exception {
 	}
+
 	@Test
 	public void testProcess() throws Exception {
 		PropertyCalculationProcessor p = new PropertyCalculationProcessor();
-		Property prop = Property.getInstance("Count","Descriptors");
+		Property prop = Property.getInstance("Count", "Descriptors");
 		prop.setLabel("Count");
 		prop.setClazz(Class.forName("org.openscience.cdk.qsar.descriptors.molecular.AtomCountDescriptor"));
 		p.setProperty(prop);
 		DescriptorValue value = p.process(MoleculeFactory.makeAlkane(10));
 		Assert.assertNotNull(value);
-		Assert.assertEquals(10,((IntegerResult)value.getValue()).intValue());
+		//H atoms are counted as well
+		Assert.assertEquals(32, ((IntegerResult) value.getValue()).intValue());
 	}
-	
+
 	@Test
 	public void testInChI() throws Exception {
 		PropertyCalculationProcessor p = new PropertyCalculationProcessor();
-		
-		Property prop = Property.getInstance("Count","Descriptors");
+
+		Property prop = Property.getInstance("Count", "Descriptors");
 		prop.setLabel("Count");
 		prop.setClazz(Class.forName("ambit2.descriptors.InChI"));
 		p.setProperty(prop);
@@ -77,9 +76,10 @@ public class PropertyCalculationProcessorTest {
 		Assert.assertTrue(value.getValue() instanceof StringArrayResult);
 		StringArrayResult r = (StringArrayResult) value.getValue();
 		Assert.assertEquals("InChI=1S/C10H22/c1-3-5-7-9-10-8-6-4-2/h3-10H2,1-2H3", r.get(0));
-		//Assert.assertEquals("AuxInfo=1/0/N:1,10,2,9,3,8,4,7,5,6/E:(1,2)(3,4)(5,6)(7,8)(9,10)/rA:10CCCCCCCCCC/rB:s1;s2;s3;s4;s5;s6;s7;s8;s9;/rC:;;;;;;;;;;", r.get(1));
-		//we discarded AuxInfo
+		// Assert.assertEquals("AuxInfo=1/0/N:1,10,2,9,3,8,4,7,5,6/E:(1,2)(3,4)(5,6)(7,8)(9,10)/rA:10CCCCCCCCCC/rB:s1;s2;s3;s4;s5;s6;s7;s8;s9;/rC:;;;;;;;;;;",
+		// r.get(1));
+		// we discarded AuxInfo
 		Assert.assertNull(r.get(1));
 		Assert.assertEquals("DIOQZVSQGTUSAI-UHFFFAOYSA-N", r.get(2));
-	}	
+	}
 }

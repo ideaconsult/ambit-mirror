@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>ambit2-all</artifactId>
-    <groupId>ambit</groupId>
-    <version>3.3.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>ambit2-sln</artifactId>
-  <name>ambit2-sln</name>
-  <description>SYBYL line notation support</description>
-  <dependencies>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-core</artifactId>
-      <version>${project.version}</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>ambit</groupId>
-      <artifactId>ambit2-smarts</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>ambit2-all</artifactId>
+		<groupId>ambit</groupId>
+		<version>4.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>ambit2-sln</artifactId>
+	<name>ambit2-sln</name>
+	<description>SYBYL line notation support</description>
+	<dependencies>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-core</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-smarts</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<skip>false</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

@@ -1691,12 +1691,12 @@ public class RepositoryWriterTest extends DbUnitTest {
 		property_values = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT * FROM property_values join properties using(idproperty) where name = '1^Activity Summary^STRING^^^^'");
+						"SELECT * FROM property_values join properties using(idproperty) where name = '1^Activity_Summary^STRING^^^^'");
 		Assert.assertEquals(3, property_values.getRowCount());
 		property_values = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT * FROM property_values join properties using(idproperty) where name = '2^ATAD5 Activity^STRING^^^^'");
+						"SELECT * FROM property_values join properties using(idproperty) where name = '2^ATAD5_Activity^STRING^^^^'");
 		Assert.assertEquals(3, property_values.getRowCount());
 		property_values = c
 				.createQueryTable(
@@ -1706,27 +1706,27 @@ public class RepositoryWriterTest extends DbUnitTest {
 		property_values = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT * FROM property_values join properties using(idproperty) where name = '4^ATAD5 Efficacy (%)^FLOAT^%^^^'");
+						"SELECT * FROM property_values join properties using(idproperty) where name = '4^ATAD5_Efficacy_(_)^FLOAT^_^^^'");
 		Assert.assertEquals(3, property_values.getRowCount());
 		property_values = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT * FROM property_values join properties using(idproperty) where name = '5^Viability Activity^STRING^^^^'");
+						"SELECT * FROM property_values join properties using(idproperty) where name = '5^Viability_Activity^STRING^^^^'");
 		Assert.assertEquals(3, property_values.getRowCount());
 		property_values = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT * FROM property_values join properties using(idproperty) where name = '6^Viability Potency (uM)^FLOAT^uM^^^'");
+						"SELECT * FROM property_values join properties using(idproperty) where name = '6^Viability_Potency (uM)^FLOAT^uM^^^'");
 		Assert.assertEquals(0, property_values.getRowCount());
 		property_values = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT * FROM property_values join properties using(idproperty) where name = '7^Viability Efficacy (%)^FLOAT^%^^^'");
+						"SELECT * FROM property_values join properties using(idproperty) where name = '7^Viability_Efficacy_(_)^FLOAT^_^^^'");
 		Assert.assertEquals(3, property_values.getRowCount());
 		property_values = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT * FROM property_values join properties using(idproperty) where name = '8^Sample Source^STRING^^^^'");
+						"SELECT * FROM property_values join properties using(idproperty) where name = '8^Sample_Source^STRING^^^^'");
 		Assert.assertEquals(3, property_values.getRowCount());
 
 		// Assert.assertEquals(57+9*3,property_values.getRowCount());

@@ -131,7 +131,8 @@ public class TautomerTestCases extends AbstractTautomerTest {
 
 	@Test
 	public void test_Rule_AmidineImidine_02() throws Exception {
-		int res = TestTautomers.testCase("n1=cc=cn=c1", new String[] { "n1=cc=cn=c1" }, FlagPrintTautomers, tman);
+		//int res = TestTautomers.testCase("n1=cc=cn=c1", new String[] { "n1=cc=cn=c1" }, FlagPrintTautomers, tman);
+		int res = TestTautomers.testCase("n1cccnc1", new String[] { "n1=cc=cn=c1" }, FlagPrintTautomers, tman);
 
 		Assert.assertEquals(0, res);
 	}
@@ -139,7 +140,8 @@ public class TautomerTestCases extends AbstractTautomerTest {
 	@Test
 	public void test_Rule_AmidineImidine_02_noIsoCheck() throws Exception {
 		tman.tautomerFilter.setFlagApplyDuplicationCheckIsomorphism(false);
-		int res = TestTautomers.testCase("n1=cc=cn=c1", new String[] { "n1=cc=cn=c1", "n1c=cc=nc=1" },
+		//int res = TestTautomers.testCase("n1=cc=cn=c1", new String[] { "n1=cc=cn=c1", "n1c=cc=nc=1" },
+		int res = TestTautomers.testCase("n1cccnc1", new String[] { "n1cccnc1", "n1cccnc1" },
 				FlagPrintTautomers, tman);
 
 		tman.tautomerFilter.setFlagApplyDuplicationCheckIsomorphism(true); // default
