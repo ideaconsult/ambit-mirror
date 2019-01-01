@@ -1,10 +1,15 @@
-#CHANGELOG
+# CHANGELOG
 
-## AMBIT2 4.0.0-SNAPSHOT
-branch with cdk 2.1
+## AMBIT2 4.0.0-SNAPSHOT (Dec 2018)
+
+* with `cdk 2.1`
+* current version at master
+* multiple dependency updates
+* project `ambit2-apps` moved to top folder
 
 ## AMBIT2 3.3.0-SNAPSHOT
-current version at trunk
+
+* Latest tag with cdk 1.5.13
 
 ## AMBIT2 3.2.0 (May 2018)
 
