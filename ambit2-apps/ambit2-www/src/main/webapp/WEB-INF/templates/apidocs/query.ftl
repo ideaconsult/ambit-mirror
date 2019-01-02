@@ -81,6 +81,31 @@
             ]
      	},   
      	{
+            "path": "/query/data_availability",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Study summaries",
+                    "notes": "Quick overview of the data availability",
+                    "type": "Facet",
+                    "nickname": "getDataAvailability",
+                     <#include "/apidocs/authz.ftl" >
+                    "parameters": [
+						<#include "/apidocs/parameters_page.ftl" >				            			            
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "Not found"
+                        },
+						<#include "/apidocs/error_aa.ftl" >,
+						<#include "/apidocs/error_500.ftl" >                            
+                    ]
+                }
+            ]
+     	},      	
+     	
+     	{
             "path": "/query/consensuslabel",
             "operations": [
                 {
