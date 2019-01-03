@@ -88,7 +88,7 @@ public class DepictionResource<DQ extends DepictQuery> extends CatalogResource<D
 				params = getResourceRef(getRequest()).getQueryAsForm();
 			// if POST, the form should be already initialized
 			else
-				params = getRequest().getEntityAsForm();
+				params = new Form(getRequest().getEntity());
 
 		return params;
 	}

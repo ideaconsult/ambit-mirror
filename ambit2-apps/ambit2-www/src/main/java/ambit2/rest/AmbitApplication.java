@@ -24,7 +24,7 @@ import org.restlet.data.Method;
 import org.restlet.data.Parameter;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
-import org.restlet.engine.security.SslContextFactory;
+import org.restlet.engine.ssl.SslContextFactory;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;

@@ -427,11 +427,13 @@
 			<artifactId>commons-fileupload</artifactId>
 			 <version>[1.3.3,)</version>
 		</dependency>
+		<!--  
 		<dependency>
 			<groupId>org.restlet.jee</groupId>
 			<artifactId>org.restlet.ext.ssl</artifactId>
 			<version>${restlet.version}</version>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -710,7 +712,7 @@
 	</reporting>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<restlet.version>2.0-M6</restlet.version>
+		<restlet.version>2.3.12</restlet.version>
 		<junit.version>4.8.1</junit.version>
 	</properties>
 </project>

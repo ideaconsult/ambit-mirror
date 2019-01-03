@@ -356,7 +356,7 @@ public class SubstanceLookup<Q extends IQueryRetrieval<SubstanceRecord>, T exten
 			}
 			// if POST, the form should be already initialized
 			else
-				params = getRequest().getEntityAsForm();
+				params = new Form(getRequest().getEntity());
 		return params;
 	}
 }

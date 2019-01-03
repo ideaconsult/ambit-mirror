@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
-import net.idea.restnet.i.task.ICallableTask;
-import net.idea.restnet.i.task.ITask;
-import net.idea.restnet.i.task.ITaskApplication;
-import net.idea.restnet.i.task.ITaskStorage;
-
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
@@ -17,9 +12,14 @@ import org.restlet.representation.OutputRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
+import org.restlet.util.Series;
 
 import ambit2.rest.OpenTox;
 import ambit2.rest.ProtectedResource;
+import net.idea.restnet.i.task.ICallableTask;
+import net.idea.restnet.i.task.ITask;
+import net.idea.restnet.i.task.ITaskApplication;
+import net.idea.restnet.i.task.ITaskStorage;
 
 public class LauncherResource extends ProtectedResource {
 	protected String dataset_uri;
@@ -129,7 +129,7 @@ public class LauncherResource extends ProtectedResource {
 	
 	protected String getUserToken(String tag) {
 		try {
-			Form headers = (Form) getRequest().getAttributes().get("org.restlet.http.headers");  
+			Series headers = (Series) getRequest().getAttributes().get("org.restlet.http.headers");  
 			if (headers==null) return null;
 			return headers.getFirstValue(tag);
 		} catch (Exception x) {

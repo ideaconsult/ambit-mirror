@@ -87,7 +87,7 @@ public class AbstractDepict extends ProtectedResource {
 				params = getResourceRef(getRequest()).getQueryAsForm();
 			// if POST, the form should be already initialized
 			else
-				params = getRequest().getEntityAsForm();
+				params = new Form(getRequest().getEntity());
 		try {
 			headless = Boolean.parseBoolean(params.getFirstValue("headless"));
 		} catch (Exception x) {
@@ -430,7 +430,7 @@ public class AbstractDepict extends ProtectedResource {
 				params = request.getResourceRef().getQueryAsForm();
 			// if POST, the form should be already initialized
 			else
-				params = request.getEntityAsForm();
+				params = new Form(request.getEntity());
 		return params;
 	}
 

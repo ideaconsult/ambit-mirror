@@ -6,20 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-import net.idea.modbcum.i.reporter.Reporter;
-import net.idea.restnet.c.ResourceDoc;
-import net.idea.restnet.c.html.HTMLBeauty;
-import net.idea.restnet.c.task.CallableProtectedTask;
-import net.idea.restnet.c.task.FactoryTaskConvertor;
-import net.idea.restnet.c.task.TaskCreator;
-import net.idea.restnet.db.DBConnection;
-import net.idea.restnet.i.task.ITaskStorage;
-import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
-import net.idea.restnet.user.DBUser;
-import net.idea.restnet.user.db.ReadUser;
-import net.idea.restnet.user.resource.UserURIReporter;
-
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -35,6 +21,19 @@ import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.user.rest.AdminResetCallable;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.reporter.Reporter;
+import net.idea.restnet.c.ResourceDoc;
+import net.idea.restnet.c.html.HTMLBeauty;
+import net.idea.restnet.c.task.CallableProtectedTask;
+import net.idea.restnet.c.task.FactoryTaskConvertor;
+import net.idea.restnet.c.task.TaskCreator;
+import net.idea.restnet.db.DBConnection;
+import net.idea.restnet.i.task.ITaskStorage;
+import net.idea.restnet.rdf.FactoryTaskConvertorRDF;
+import net.idea.restnet.user.DBUser;
+import net.idea.restnet.user.db.ReadUser;
+import net.idea.restnet.user.resource.UserURIReporter;
 
 
 public class PwdResetResource<T> extends MyAccountResource<T> {
@@ -168,7 +167,7 @@ public class PwdResetResource<T> extends MyAccountResource<T> {
 				}
 			}	
 			//if POST, the form should be already initialized
-			else params = getRequest().getEntityAsForm();
+			else params = new Form(getRequest().getEntity());
 		return params;
 	}
 	

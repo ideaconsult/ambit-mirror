@@ -128,8 +128,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		return "";
 	}
 
-	protected String getDefaultTemplateURI(Context context, Request request,
-			Response response) {
+	protected String getDefaultTemplateURI(Context context, Request request, Response response) {
 		return null;// return
 	}
 
@@ -137,8 +136,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		return null;
 	}
 
-	protected void setGroupProperties(Context context, Request request,
-			Response response) throws ResourceException {
+	protected void setGroupProperties(Context context, Request request, Response response) throws ResourceException {
 		Form form = getParams();
 		String[] gp = OpenTox.params.sameas.getValuesArray(form);
 		if (gp == null || gp.length == 0)
@@ -146,8 +144,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		if (gp != null) {
 			groupProperties = new Profile();
 			for (String g : gp) {
-				if (!g.startsWith("http://")
-						&& !g.toString().startsWith("https://"))
+				if (!g.startsWith("http://") && !g.toString().startsWith("https://"))
 					g = String.format("%s%s", OT.NS, g);
 				Property p = new Property(g);
 				p.setEnabled(true);
@@ -158,8 +155,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 	}
 
-	protected Template createTemplate(Context context, Request request,
-			Response response) throws ResourceException {
+	protected Template createTemplate(Context context, Request request, Response response) throws ResourceException {
 		Form form = getParams();
 		return createTemplate(form);
 	}
@@ -169,8 +165,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		return null;
 	}
 
-	protected String retrieveLicense(Context context, Request request,
-			Integer id_srcdataset) throws ResourceException {
+	protected String retrieveLicense(Context context, Request request, Integer id_srcdataset) throws ResourceException {
 		if (id_srcdataset == null)
 			return null;
 		if (id_srcdataset.intValue() <= 0)
@@ -221,32 +216,22 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
-				ChemicalMediaType.CHEMICAL_MDLSDF,
-				ChemicalMediaType.CHEMICAL_MDLMOL,
-				ChemicalMediaType.CHEMICAL_SMILES,
-				ChemicalMediaType.CHEMICAL_INCHI,
-				ChemicalMediaType.CHEMICAL_CML, MediaType.APPLICATION_PDF,
-				MediaType.TEXT_URI_LIST, MediaType.TEXT_PLAIN,
-				ChemicalMediaType.WEKA_ARFF, ChemicalMediaType.THREECOL_ARFF,
-				MediaType.APPLICATION_JSON, MediaType.TEXT_CSV,
-				MediaType.APPLICATION_RDF_XML,
-				MediaType.APPLICATION_RDF_TURTLE,
-				MediaType.APPLICATION_RDF_TRIG, MediaType.APPLICATION_RDF_TRIX,
-				MediaType.TEXT_RDF_N3, MediaType.TEXT_RDF_NTRIPLES,
-				ChemicalMediaType.APPLICATION_JSONLD,
-				MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.APPLICATION_JAVASCRIPT, ChemicalMediaType.IMAGE_JSON
+		customizeVariants(new MediaType[] { MediaType.TEXT_HTML, ChemicalMediaType.CHEMICAL_MDLSDF,
+				ChemicalMediaType.CHEMICAL_MDLMOL, ChemicalMediaType.CHEMICAL_SMILES, ChemicalMediaType.CHEMICAL_INCHI,
+				ChemicalMediaType.CHEMICAL_CML, MediaType.APPLICATION_PDF, MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_PLAIN, ChemicalMediaType.WEKA_ARFF, ChemicalMediaType.THREECOL_ARFF,
+				MediaType.APPLICATION_JSON, MediaType.TEXT_CSV, MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE, MediaType.APPLICATION_RDF_TRIG, MediaType.APPLICATION_RDF_TRIX,
+				MediaType.TEXT_RDF_N3, MediaType.TEXT_RDF_NTRIPLES, ChemicalMediaType.APPLICATION_JSONLD,
+				MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_JAVASCRIPT, ChemicalMediaType.IMAGE_JSON
 
 		});
 
 	}
 
 	protected CSVReporter createTXTReporter() {
-		CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef()
-				.toString(), getTemplate(), groupProperties,
-				String.format("%s%s", getRequest().getRootRef(),
-						getCompoundInDatasetPrefix()));
+		CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef().toString(), getTemplate(), groupProperties,
+				String.format("%s%s", getRequest().getRootRef(), getCompoundInDatasetPrefix()));
 		csvreporter.setSeparator("\t");
 		csvreporter.setNumberofHeaderLines(0);
 		csvreporter.setWriteCompoundURI(false);
@@ -255,13 +240,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 	protected CSVReporter createCSVReporter() {
 		Form form = getParams();
-		CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef()
-				.toString(), getTemplate(), groupProperties,
-				String.format("%s%s", getRequest().getRootRef(),
-						getCompoundInDatasetPrefix()));
+		CSVReporter csvreporter = new CSVReporter(getRequest().getRootRef().toString(), getTemplate(), groupProperties,
+				String.format("%s%s", getRequest().getRootRef(), getCompoundInDatasetPrefix()));
 		try {
-			csvreporter.setNumberofHeaderLines(Integer.parseInt(form
-					.getFirstValue("headerlines")));
+			csvreporter.setNumberofHeaderLines(Integer.parseInt(form.getFirstValue("headerlines")));
 		} catch (Exception x) {
 			csvreporter.setNumberofHeaderLines(1);
 		}
@@ -269,11 +251,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 	}
 
 	@Override
-	public RepresentationConvertor createConvertor(Variant variant)
-			throws AmbitException, ResourceException {
+	public RepresentationConvertor createConvertor(Variant variant) throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
-		if ((queryObject == null)
-				&& !(variant.getMediaType().equals(MediaType.TEXT_HTML)))
+		if ((queryObject == null) && !(variant.getMediaType().equals(MediaType.TEXT_HTML)))
 			throw new NotFoundException();
 
 		setTemplate(template);
@@ -285,130 +265,96 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLSDF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(template,
-							getGroupProperties(), changeLineSeparators),
+					new SDFReporter<QueryStructureByID>(template, getGroupProperties(), changeLineSeparators),
 					ChemicalMediaType.CHEMICAL_MDLSDF, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.CHEMICAL_MDLMOL)) {
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_MDLMOL)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(new Template(),
-							getGroupProperties(), true, changeLineSeparators),
+					new SDFReporter<QueryStructureByID>(new Template(), getGroupProperties(), true,
+							changeLineSeparators),
 					ChemicalMediaType.CHEMICAL_MDLMOL, filenamePrefix);
-		} else if (variant.getMediaType()
-				.equals(ChemicalMediaType.CHEMICAL_CML)) {
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_CML)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CMLReporter<QueryStructureByID>(),
-					ChemicalMediaType.CHEMICAL_CML, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.CHEMICAL_SMILES)) {
+					new CMLReporter<QueryStructureByID>(), ChemicalMediaType.CHEMICAL_CML, filenamePrefix);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_SMILES)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SmilesReporter<QueryStructureByID>(true, getTemplate()),
-					ChemicalMediaType.CHEMICAL_SMILES, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.CHEMICAL_INCHI)) {
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SmilesReporter<QueryStructureByID>(false, Mode.InChI,
-							getTemplate()), ChemicalMediaType.CHEMICAL_INCHI,
+					new SmilesReporter<QueryStructureByID>(true, getTemplate()), ChemicalMediaType.CHEMICAL_SMILES,
 					filenamePrefix);
+		} else if (variant.getMediaType().equals(ChemicalMediaType.CHEMICAL_INCHI)) {
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
+					new SmilesReporter<QueryStructureByID>(false, Mode.InChI, getTemplate()),
+					ChemicalMediaType.CHEMICAL_INCHI, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_PDF)) {
 			return new PDFConvertor<IStructureRecord, QueryStructureByID, PDFReporter<QueryStructureByID>>(
-					new PDFReporter<QueryStructureByID>(getTemplate(),
-							getGroupProperties()), filenamePrefix);
+					new PDFReporter<QueryStructureByID>(getTemplate(), getGroupProperties()), filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					createTXTReporter(), MediaType.TEXT_PLAIN);
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(createTXTReporter(),
+					MediaType.TEXT_PLAIN);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			ConformerURIReporter<QueryStructureByID> reporter = new ConformerURIReporter<QueryStructureByID>(
-					getCompoundInDatasetPrefix(), getRequest(),
-					queryObject.isPrescreen());
-			return new StringConvertor(reporter, MediaType.TEXT_URI_LIST,
-					filenamePrefix);
+					getCompoundInDatasetPrefix(), getRequest(), queryObject.isPrescreen());
+			return new StringConvertor(reporter, MediaType.TEXT_URI_LIST, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
-			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-					new ImageReporter<QueryStructureByID>(
-							MediaType.IMAGE_PNG.getMainType(),
-							MediaType.IMAGE_PNG.getSubType()),
-					MediaType.IMAGE_PNG);
+			return new ImageConvertor<IStructureRecord, QueryStructureByID>(new ImageReporter<QueryStructureByID>(
+					MediaType.IMAGE_PNG.getMainType(), MediaType.IMAGE_PNG.getSubType()), MediaType.IMAGE_PNG);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_GIF)) {
-			return new ImageConvertor<IStructureRecord, QueryStructureByID>(
-					new ImageReporter<QueryStructureByID>(
-							MediaType.IMAGE_GIF.getMainType(),
-							MediaType.IMAGE_GIF.getSubType()),
-					MediaType.IMAGE_GIF);
+			return new ImageConvertor<IStructureRecord, QueryStructureByID>(new ImageReporter<QueryStructureByID>(
+					MediaType.IMAGE_GIF.getMainType(), MediaType.IMAGE_GIF.getSubType()), MediaType.IMAGE_GIF);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JSON)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),
-							getGroupProperties(), folders, bundles,
-							getRequest(), getRequest().getRootRef().toString()
-									+ getCompoundInDatasetPrefix(), includeMol,
-							null), MediaType.APPLICATION_JSON, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_JAVASCRIPT)) {
+					new CompoundJSONReporter(getTemplate(), getGroupProperties(), folders, bundles, getRequest(),
+							getRequest().getRootRef().toString() + getCompoundInDatasetPrefix(), includeMol, null),
+					MediaType.APPLICATION_JSON, filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			String jsonpcallback = getParams().getFirstValue("jsonp");
 			if (jsonpcallback == null)
 				jsonpcallback = getParams().getFirstValue("callback");
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new CompoundJSONReporter(getTemplate(),
-							getGroupProperties(), folders, bundles,
-							getRequest(), getRequest().getRootRef().toString()
-									+ getCompoundInDatasetPrefix(), includeMol,
-							jsonpcallback), MediaType.APPLICATION_JAVASCRIPT,
-					filenamePrefix);
+					new CompoundJSONReporter(getTemplate(), getGroupProperties(), folders, bundles, getRequest(),
+							getRequest().getRootRef().toString() + getCompoundInDatasetPrefix(), includeMol,
+							jsonpcallback),
+					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 		} else if (variant.getMediaType().equals(ChemicalMediaType.WEKA_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFFResourceReporter(getTemplate(),
-							getGroupProperties(), getRequest(), String.format(
-									"%s%s", getRequest().getRootRef(),
-									getCompoundInDatasetPrefix())),
+					new ARFFResourceReporter(getTemplate(), getGroupProperties(), getRequest(),
+							String.format("%s%s", getRequest().getRootRef(), getCompoundInDatasetPrefix())),
 					ChemicalMediaType.WEKA_ARFF, filenamePrefix);
-		} else if (variant.getMediaType().equals(
-				ChemicalMediaType.THREECOL_ARFF)) {
+		} else if (variant.getMediaType().equals(ChemicalMediaType.THREECOL_ARFF)) {
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new ARFF3ColResourceReporter(getTemplate(),
-							getGroupProperties(), getRequest(), String.format(
-									"%s%s", getRequest().getRootRef(),
-									getCompoundInDatasetPrefix())),
+					new ARFF3ColResourceReporter(getTemplate(), getGroupProperties(), getRequest(),
+							String.format("%s%s", getRequest().getRootRef(), getCompoundInDatasetPrefix())),
 					ChemicalMediaType.THREECOL_ARFF, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					createCSVReporter(), MediaType.TEXT_CSV, filenamePrefix);
+			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(createCSVReporter(),
+					MediaType.TEXT_CSV, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)) {
 			switch (rdfwriter) {
 			case stax: {
 				return new RDFStaXConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-						new DatasetRDFStaxReporter(
-								getCompoundInDatasetPrefix(), getRequest(),
-								getTemplate(), getGroupProperties()),
+						new DatasetRDFStaxReporter(getCompoundInDatasetPrefix(), getRequest(), getTemplate(),
+								getGroupProperties()),
 						filenamePrefix);
 			}
 			default: { // jena
 				return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-						new DatasetRDFReporter(getCompoundInDatasetPrefix(),
-								getRequest(), variant.getMediaType(),
+						new DatasetRDFReporter(getCompoundInDatasetPrefix(), getRequest(), variant.getMediaType(),
 								getTemplate(), getGroupProperties()),
 						variant.getMediaType(), filenamePrefix);
 
 			}
 			}
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_RDF_TURTLE)
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
-				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIG)
-				|| variant.getMediaType()
-						.equals(MediaType.APPLICATION_RDF_TRIX)
-				|| variant.getMediaType().equals(
-						ChemicalMediaType.APPLICATION_JSONLD)) {
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIG)
+				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TRIX)
+				|| variant.getMediaType().equals(ChemicalMediaType.APPLICATION_JSONLD)) {
 			return new RDFJenaConvertor<IStructureRecord, IQueryRetrieval<IStructureRecord>>(
-					new DatasetRDFReporter(getCompoundInDatasetPrefix(),
-							getRequest(), variant.getMediaType(),
+					new DatasetRDFReporter(getCompoundInDatasetPrefix(), getRequest(), variant.getMediaType(),
 							getTemplate(), getGroupProperties()),
 					variant.getMediaType(), filenamePrefix);
 		} else
 			return new OutputWriterConvertor<IStructureRecord, QueryStructureByID>(
-					new SDFReporter<QueryStructureByID>(template,
-							getGroupProperties(), changeLineSeparators),
+					new SDFReporter<QueryStructureByID>(template, getGroupProperties(), changeLineSeparators),
 					ChemicalMediaType.CHEMICAL_MDLSDF, filenamePrefix);
 	}
 
@@ -428,7 +374,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		try {
 			rq = new Request();
 			Client client = new Client(Protocol.HTTP);
-			client.setConnectTimeout(5 * 60 * 1000); // 5 min
+			// https://stackoverflow.com/questions/24520847/restlet-timeout
+			client.getContext().getParameters().add("socketTimeout", Integer.toString(5 * 60 * 1000));
+			// client.setConnectTimeout(5 * 60 * 1000); // 5 min
 			rq.setResourceRef(uri);
 			rq.setMethod(Method.GET);
 			// rq.getClientInfo().getAcceptedMediaTypes().clear();
@@ -444,11 +392,9 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 		} catch (Exception x) {
 			if ((System.currentTimeMillis() - now) > (5 * 60 * 1000))
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						"Timeout 5 min exceeded");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Timeout 5 min exceeded");
 			else
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-						x.getMessage(), x);
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 		} finally {
 			try {
 				resp.release();
@@ -471,30 +417,24 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			rq.setResourceRef(uri);
 			rq.setMethod(Method.GET);
 			rq.getClientInfo().getAcceptedMediaTypes().clear();
-			rq.getClientInfo()
-					.getAcceptedMediaTypes()
-					.add(new Preference<MediaType>(
-							ChemicalMediaType.CHEMICAL_MDLSDF));
+			rq.getClientInfo().getAcceptedMediaTypes()
+					.add(new Preference<MediaType>(ChemicalMediaType.CHEMICAL_MDLSDF));
 			Response resp = client.handle(rq);
 			if (resp.getStatus().equals(Status.SUCCESS_OK)) {
 				reader = new InputStreamReader(resp.getEntity().getStream());
 				IAtomContainer mol = MoleculeTools.readMolfile(reader);
-				AtomContainerManipulator
-						.percieveAtomTypesAndConfigureAtoms(mol);
-				CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(mol
-						.getBuilder());
+				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+				CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(mol.getBuilder());
 				adder.addImplicitHydrogens(mol);
 				return mol;
 			} else
 				return null;
 		} catch (InvalidSmilesException | ArrayIndexOutOfBoundsException x) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					String.format("Invalid smiles %s", getRequest()
-							.getAttributes().get("smiles")), x);
+					String.format("Invalid smiles %s", getRequest().getAttributes().get("smiles")), x);
 
 		} catch (Exception x) {
-			throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-					x.getMessage(), x);
+			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 		} finally {
 			try {
 				reader.close();
@@ -504,12 +444,10 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 		}
 	}
 
-	protected String getSMILES(Form form, boolean aromatic)
-			throws ResourceException {
+	protected String getSMILES(Form form, boolean aromatic) throws ResourceException {
 		String query_smiles;
 		String search_arg = form.getFirstValue(QueryResource.search_param);
-		String searchb64_arg = form
-				.getFirstValue(QueryResource.b64search_param);
+		String searchb64_arg = form.getFirstValue(QueryResource.b64search_param);
 		QueryType query_type = getQueryType(form, search_arg);
 
 		switch (query_type) {
@@ -523,14 +461,12 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 				IAtomContainer ac = MoleculeTools.readMolfile(query_smiles);
 				AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
 				if (hadder == null) {
-					hadder = CDKHydrogenAdder
-							.getInstance(SilentChemObjectBuilder.getInstance());
+					hadder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
 				}
 				hadder.addImplicitHydrogens(ac);
 				return SmilesGenerator.generic().create(ac);
 			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						x.getMessage(), x);
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 			}
 		}
 		case smiles: {
@@ -549,20 +485,17 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					return null;
 				query_smiles = search_arg.trim();
 				if (query_smiles == null)
-					throw new ResourceException(
-							Status.CLIENT_ERROR_BAD_REQUEST, "Empty query");
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty query");
 				IAtomContainer mol = getFromURI(query_smiles.trim());
 				AtomConfigurator c = new AtomConfigurator();
 				mol = c.process(mol);
-				ambit2.core.helper.CDKHueckelAromaticityDetector
-						.detectAromaticity(mol);
+				ambit2.core.helper.CDKHueckelAromaticityDetector.detectAromaticity(mol);
 				SmilesGenerator g = SmilesGenerator.generic();
 				if (aromatic)
 					g = g.aromatic();
 				return g.create(mol);
 			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						x.getMessage(), x);
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 			}
 		default:
 			return null;
@@ -587,8 +520,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 
 		String query_smiles = "";
 		String search_arg = form.getFirstValue(QueryResource.search_param);
-		String searchb64_arg = form
-				.getFirstValue(QueryResource.b64search_param);
+		String searchb64_arg = form.getFirstValue(QueryResource.b64search_param);
 		QueryType query_type = getQueryType(form, search_arg);
 		switch (query_type) {
 		case mol: {
@@ -600,8 +532,7 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					query_smiles = search_arg;
 				return MoleculeTools.readMolfile(query_smiles);
 			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						x.getMessage(), x);
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 			}
 		}
 		case smiles:
@@ -613,44 +544,32 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 					query_smiles = search_arg;
 
 				if (query_smiles == null)
-					throw new ResourceException(
-							Status.CLIENT_ERROR_BAD_REQUEST, "Empty smiles");
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty smiles");
 
 				if (query_smiles.startsWith(AmbitCONSTANTS.INCHI)) {
-					InChIGeneratorFactory f = InChIGeneratorFactory
-							.getInstance();
-					InChIToStructure c = f.getInChIToStructure(query_smiles,
-							SilentChemObjectBuilder.getInstance());
+					InChIGeneratorFactory f = InChIGeneratorFactory.getInstance();
+					InChIToStructure c = f.getInChIToStructure(query_smiles, SilentChemObjectBuilder.getInstance());
 
-					if ((c == null) || (c.getAtomContainer() == null)
-							|| (c.getAtomContainer().getAtomCount() == 0))
-						throw new ResourceException(
-								Status.CLIENT_ERROR_BAD_REQUEST,
-								"Empty molecule");
+					if ((c == null) || (c.getAtomContainer() == null) || (c.getAtomContainer().getAtomCount() == 0))
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty molecule");
 					else
 						return c.getAtomContainer();
 				} else if (CASProcessor.isValidFormat(query_smiles)) {
-					throw new ResourceException(
-							Status.CLIENT_ERROR_BAD_REQUEST,
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 							"SMILES, InChI or chemical name expected");
 				} else {
 
 					try {
 						return MoleculeTools.getMolecule(query_smiles);
-					} catch (InvalidSmilesException
-							| ArrayIndexOutOfBoundsException x) {
-						NameToStructure nameToStructure = NameToStructure
-								.getInstance();
+					} catch (InvalidSmilesException | ArrayIndexOutOfBoundsException x) {
+						NameToStructure nameToStructure = NameToStructure.getInstance();
 
 						try {
-							String smiles = nameToStructure
-									.parseToSmiles(query_smiles);
+							String smiles = nameToStructure.parseToSmiles(query_smiles);
 							return MoleculeTools.getMolecule(smiles);
 						} catch (Exception xx) {
-							throw new ResourceException(
-									Status.CLIENT_ERROR_BAD_REQUEST,
-									String.format("Invalid smiles %s",
-											query_smiles), x);
+							throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+									String.format("Invalid smiles %s", query_smiles), x);
 						}
 					}
 
@@ -658,15 +577,13 @@ public abstract class StructureQueryResource<Q extends IQueryRetrieval<IStructur
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-						x.getMessage(), x);
+				throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 			}
 
 		case url: {
 			query_smiles = search_arg;
 			if (query_smiles == null)
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						"Empty query");
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty query");
 			return getFromURI(query_smiles);
 
 		}

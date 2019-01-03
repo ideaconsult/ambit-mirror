@@ -22,16 +22,15 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
-import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
+import org.restlet.routing.TemplateRoute;
 import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.security.Enroler;
 import org.restlet.security.MapVerifier;
@@ -56,6 +55,7 @@ import ambit2.user.rest.resource.DBRoles;
 import net.idea.restnet.aa.opensso.policy.CallablePolicyCreator;
 import net.idea.restnet.aa.opensso.users.OpenSSOUserResource;
 import net.idea.restnet.c.ChemicalMediaType;
+import net.idea.restnet.c.filter.RESTnetTunnelFilter;
 import net.idea.restnet.i.task.ICallableTask;
 import net.idea.restnet.i.task.ITaskResult;
 
@@ -153,6 +153,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	}
 
 	protected boolean similarityOrder = true;
+
 	public AmbitFreeMarkerApplication(boolean standalone) {
 		this.standalone = standalone;
 		openToxAAEnabled = isOpenToxAAEnabled();
@@ -197,7 +198,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		setTunnelService(new TunnelService(true, true) {
 			@Override
 			public Filter createInboundFilter(Context context) {
-				return new AmbitTunnelFilter(context);
+				return new RESTnetTunnelFilter(context);
 			}
 		});
 		getTunnelService().setUserAgentTunnel(true);
@@ -541,7 +542,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			return false;
 		}
 	}
-	
+
 	protected TaskStorage<O> createTaskStorage() {
 		return new TaskStorage<O>(getName(), getLogger()) {
 
@@ -563,7 +564,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			}
 		};
 	}
-	
 
 	public enum _staticfile {
 		meta {
@@ -608,9 +608,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			router.attach(dir.getPath(), dir.getDirectory(getContext()));
 		}
 
-
 	}
-
 
 	protected Restlet addOriginFilter(Restlet router) {
 		String allowedOrigins = getAllowedOrigins();
@@ -698,7 +696,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		authZ.setNext(router);
 		return authN;
 	}
-	
 
 	public static String printRoutes(Restlet re, String delimiter, StringWriter b) {
 
@@ -715,14 +712,15 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			else if (re instanceof Router) {
 				b.append('\n');
 				RouteList list = ((Router) re).getRoutes();
-				for (Route r : list) {
-
-					b.append(delimiter);
-					b.append(r.getTemplate().getPattern());
-					b.append('\t');
-					b.append(r.getTemplate().getVariableNames().toString());
-					printRoutes(r.getNext(), '\t' + delimiter + r.getTemplate().getPattern(), b);
-				}
+				for (Route r : list)
+					if (r instanceof TemplateRoute) {
+						TemplateRoute tr = (TemplateRoute) r;
+						b.append(delimiter);
+						b.append(tr.getTemplate().getPattern());
+						b.append('\t');
+						b.append(tr.getTemplate().getVariableNames().toString());
+						printRoutes(r.getNext(), '\t' + delimiter + tr.getTemplate().getPattern(), b);
+					}
 
 				break;
 			} else {
@@ -734,12 +732,11 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		return b.toString();
 
 	}
-	
+
 	public static void shutdown(Component component) throws Exception {
 		component.stop();
 		Logger logger = Logger.getLogger(AmbitFreeMarkerApplication.class.getName());
 		logger.log(Level.INFO, "Server stopped");
 	}
-
 
 }

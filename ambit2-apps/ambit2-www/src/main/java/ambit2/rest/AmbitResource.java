@@ -316,7 +316,7 @@ public class AmbitResource extends FreeMarkerResource {
 		try {
 			if (variant.getMediaType().equals(MediaType.TEXT_PLAIN)) {
 			     StringWriter w = new StringWriter();
-			     AmbitApplication.printRoutes(getApplication().getRoot(),">",w);
+			     AmbitApplication.printRoutes(getApplication().getInboundRoot(),">",w);
 				return new StringRepresentation(w.toString());		
 			
 			} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
@@ -538,7 +538,7 @@ public class AmbitResource extends FreeMarkerResource {
 				params = request.getResourceRef().getQueryAsForm();
 			//if POST, the form should be already initialized
 			else 
-				params = request.getEntityAsForm();
+				params = new Form(request.getEntity());
 		return params;
 	}
 	public static void writeSearchForm(Writer w,String title,Request request ,Reference resourceRef,String meta,Method method) throws IOException {

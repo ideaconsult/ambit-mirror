@@ -20,6 +20,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.restlet.Context;
+import org.restlet.data.Disposition;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.representation.OutputRepresentation;
@@ -126,9 +127,10 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 
 	protected void setDisposition(Representation rep) {
 		if (getFileExtension() != null) {
-			rep.setDownloadable(true);
-			rep.setDownloadName(
+			Disposition d = new Disposition(Disposition.TYPE_ATTACHMENT);
+			d.setFilename(
 					String.format("%s.%s", fileNamePrefix == null ? "download" : fileNamePrefix, getFileExtension()));
+			rep.setDisposition(d);
 		}
 	}
 

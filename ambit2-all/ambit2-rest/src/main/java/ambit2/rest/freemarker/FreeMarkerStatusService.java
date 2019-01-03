@@ -7,13 +7,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
-import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
-
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.CacheDirective;
-import org.restlet.data.Form;
+import org.restlet.data.Header;
 import org.restlet.data.MediaType;
 import org.restlet.data.ServerInfo;
 import org.restlet.data.Status;
@@ -21,8 +18,11 @@ import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.service.StatusService;
+import org.restlet.util.Series;
 
 import ambit2.base.config.AMBITConfig;
+import net.idea.restnet.i.freemarker.IFreeMarkerApplication;
+import net.idea.restnet.i.freemarker.IFreeMarkerSupport;
 
 public class FreeMarkerStatusService extends StatusService implements
 		IFreeMarkerSupport {
@@ -87,7 +87,7 @@ public class FreeMarkerStatusService extends StatusService implements
 		map.put(AMBITConfig.ambit_root.name(), request.getRootRef().toString());
 		map.put("status_code", status.getCode());
 		map.put("status_uri", status.getUri());
-		map.put("status_name", status.getName());
+		map.put("status_name", status.getReasonPhrase());
 		map.put("status_error_name", errName);
 		map.put("status_error_description", errDescription);
 		map.put("status_details", details);
@@ -106,10 +106,10 @@ public class FreeMarkerStatusService extends StatusService implements
 	public Representation getRepresentation(Status status, Request request,
 			Response response) {
 
-		Form headers = (Form) response.getAttributes().get(
+		Series headers = (Series) response.getAttributes().get(
 				"org.restlet.http.headers");
 		if (headers == null) {
-			headers = new Form();
+			headers = new Series(Header.class);
 			response.getAttributes().put("org.restlet.http.headers", headers);
 		}
 
@@ -136,12 +136,12 @@ public class FreeMarkerStatusService extends StatusService implements
 						status.getThrowable());
 			}
 		}
-		Form rq_headers = (Form) request.getAttributes().get(
+		Series rq_headers = (Series) request.getAttributes().get(
 				"org.restlet.http.headers");
 		Object accept = rq_headers == null ? null : rq_headers
 				.getFirstValue("accept");
 		if (accept != null && accept.toString().indexOf("text/html") >= 0)
-			return getHTMLByTemplate(status, status.getName(),
+			return getHTMLByTemplate(status, status.getReasonPhrase(),
 					status.getDescription(),
 					details == null ? null : details.toString(), request);
 		else

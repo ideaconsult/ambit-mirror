@@ -152,21 +152,7 @@ public class SimpleTaskResource<USERID>
 		Object id = request.getAttributes().get(resourceKey);
 
 		try {
-			/*
-			 * Form responseHeaders = (Form)
-			 * getResponse().getAttributes().get("org.restlet.http.headers"); if
-			 * (responseHeaders == null) { responseHeaders = new Form();
-			 * getResponse().getAttributes().put("org.restlet.http.headers",
-			 * responseHeaders); } responseHeaders.add("Cache-Control",
-			 * "no-store, no-cache, must-revalidate"); //HTTP 1.1
-			 * responseHeaders.add("Cache-Control",
-			 * "post-check=0, pre-check=0"); responseHeaders.add("Pragma",
-			 * "no-cache"); //HTTP 1.0 responseHeaders.add("Expires", "0");
-			 * //prevents caching at the proxy server
-			 * //responseHeaders.add("Refresh"
-			 * ,String.format("60; url=%s",task.getReference()));
-			 * //response.setLocationRef(task.getReference());
-			 */
+
 			response.getCacheDirectives().add(CacheDirective.noCache());
 
 			if (id == null) {
