@@ -6,7 +6,7 @@
 	<artifactId>ambit2-apps</artifactId>
 	<packaging>pom</packaging>
 	<name>Ambit2 applications</name>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.1.0-SNAPSHOT</version>
 	<distributionManagement>
 		<site>
 			<id>website_ambit</id>
