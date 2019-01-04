@@ -114,7 +114,7 @@ public class UserRouter extends MyRouter {
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
 
-		CookieAuthenticator cookieAuth = new CookieAuthenticatorWrapper(context, usersdbname,
+		CookieAuthenticatorWrapper cookieAuth = new CookieAuthenticatorWrapper(context, usersdbname,
 				(secret == null ? UUID.randomUUID().toString() : secret).getBytes()) ;
 		cookieAuth.setCookieName("ambitdb");
 		if (sessionLength < 600000)
