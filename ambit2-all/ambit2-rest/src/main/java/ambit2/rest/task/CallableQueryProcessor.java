@@ -83,7 +83,7 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends Cal
 			} catch (Exception x) {
 
 			}
-		this.sourceReference = dataset == null ? null : new Reference(dataset.toString().trim());
+		this.sourceReference = (dataset == null || "".equals(dataset.toString().trim()))? null : new Reference(dataset.toString().trim());
 	}
 
 	@Override
