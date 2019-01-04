@@ -25,6 +25,7 @@ import org.restlet.data.Parameter;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.engine.ssl.SslContextFactory;
+import org.restlet.representation.ObjectRepresentation;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
@@ -158,7 +159,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 	public AmbitApplication(boolean standalone) {
 		super(standalone);
-
+		ObjectRepresentation.VARIANT_OBJECT_BINARY_SUPPORTED = true;
 	}
 
 	@Override

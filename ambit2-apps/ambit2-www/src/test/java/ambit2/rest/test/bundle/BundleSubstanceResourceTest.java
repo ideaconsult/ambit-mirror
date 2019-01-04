@@ -49,7 +49,7 @@ public class BundleSubstanceResourceTest extends ProtectedResourceTest {
 	@Test
 	public void testRDF() throws Exception {
 		setUpDatabaseFromResource(dbFile);
-		testGet(getTestURI() + "?media=application/rdf+xml",
+		testGet(getTestURI() + "?media=application/rdf%2Bxml",
 				MediaType.APPLICATION_RDF_XML);
 	}
 

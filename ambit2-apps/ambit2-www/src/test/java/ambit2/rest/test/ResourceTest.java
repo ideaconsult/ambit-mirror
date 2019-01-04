@@ -18,7 +18,6 @@ import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.Server;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Form;
@@ -72,12 +71,8 @@ public abstract class ResourceTest extends DbUnitTest {
 		context.getParameters().add(AmbitFreeMarkerApplication.LOCAL_AA_ENABLED, "false");
 		context.getParameters().add(AmbitFreeMarkerApplication.OPENTOX_AA_ENABLED, "false");
 
-		// Create a component
 		component = new AmbitComponent(context);
-		Server server = component.getServers().add(Protocol.HTTP, port);
-		component.getServers().add(Protocol.HTTPS, port);
-
-		server.getContext().getParameters().set("tracing", "true", true);
+		component.getServers().add(Protocol.HTTP, port);
 		component.start();
 	}
 
