@@ -211,13 +211,13 @@ public class CallableFileImport<USERID> extends CallableProtectedTask<USERID> {
 			String extension = getExtension(input.getMediaType());
 			File file = null;
 			String description = null;
-			
-			if (input.getDisposition().getFilename() == null) {
+			String filename=input.getDisposition()==null?null:input.getDisposition().getFilename();
+			if (filename == null) {
 				description = UUID.randomUUID().toString();
 				file = File.createTempFile(String.format("_ambit2_%s", description), extension);
 				file.deleteOnExit();
 			} else {
-				description = input.getDisposition().getFilename();
+				description = filename;
 				file = new File(String.format("%s/%s", System.getProperty("java.io.tmpdir"), UUID.randomUUID()));
 				file.deleteOnExit();
 			}

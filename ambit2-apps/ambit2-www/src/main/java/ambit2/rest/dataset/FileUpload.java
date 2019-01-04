@@ -182,10 +182,13 @@ public class FileUpload<USERID> {
 						connection, reporter, compoundReporter, firstCompoundOnly, token);
 
 				callable.setPropertyOnly(propertyOnly);
+				
+				String filename=entity.getDisposition()==null?null:entity.getDisposition().getFilename();
+				
 				ITask<ITaskResult, Object> task = ((AmbitApplication) getApplication()).addTask(
 
 						String.format("File import %s [%d]",
-								entity.getDisposition().getFilename() == null ? entity.getMediaType() : entity.getDisposition().getFilename(),
+								filename == null ? entity.getMediaType() : filename,
 								entity.getSize()),
 						callable, getRequest().getRootRef(), token == null ? null : token.toString());
 				ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();

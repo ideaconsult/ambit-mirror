@@ -3,6 +3,7 @@ package ambit2.rest.test.substance;
 import java.net.URL;
 import java.util.UUID;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -48,8 +49,9 @@ public class SubstancePropertyresourceTest extends ResourceTest {
 	
 
 	URL url = getClass().getClassLoader().getResource("feature.rdf");
+	Assert.assertNotNull(url);
 	FileRepresentation rep = new FileRepresentation(url.getFile(), MediaType.APPLICATION_RDF_XML, 0);
-
+	Assert.assertNotNull(rep);
 	testAsyncPoll(new Reference(getTestURI()), MediaType.TEXT_URI_LIST, rep, Method.POST,
 		new Reference(String.format("http://localhost:%d/property/ECOTOX/EC_DAPHNIATOX_SECTION/EC10/%s/NOTSPECIFIED/%s",
 				port,key.toUpperCase(),protocol_uuid)));
