@@ -6,8 +6,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ClientInfo;
+import org.restlet.ext.crypto.CookieAuthenticator;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.security.User;
@@ -31,7 +30,7 @@ import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
 import ambit2.user.rest.resource.UserDBResource;
-import net.idea.restnet.aa.cookie.CookieAuthenticator;
+import net.idea.restnet.aa.cookie.CookieAuthenticatorWrapper;
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
 import net.idea.restnet.c.routers.MyRouter;
@@ -54,7 +53,7 @@ public class UserRouter extends MyRouter {
 		 */
 	}
 
-	public Restlet attachLocalDBAuthNZ(Router router, Context context, String secret, long sessionLength) {
+	public Restlet attachLocalDBAuthNZ(Router router, Context context, String secret, int sessionLength) {
 		String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
@@ -109,18 +108,19 @@ public class UserRouter extends MyRouter {
 	}
 
 	public static Filter createCookieAuthenticator(Context context, String default_userdb, String config, String secret,
-			long sessionLength) {
+			int sessionLength) {
 
 		String usersdbname = context.getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
 
-		CookieAuthenticator cookieAuth = new CookieAuthenticator(context, usersdbname,
+		CookieAuthenticator cookieAuth = new CookieAuthenticatorWrapper(context, usersdbname,
 				(secret == null ? UUID.randomUUID().toString() : secret).getBytes()) ;
 		cookieAuth.setCookieName("ambitdb");
 		if (sessionLength < 600000)
 			sessionLength = 600000; // 10 min in case the config is broken
-		cookieAuth.setSessionLength(sessionLength);
+		cookieAuth.setMaxCookieAge(sessionLength);
+		//cookieAuth.setSessionLength(sessionLength);
 		cookieAuth.setLoginFormPath("/login");
 		cookieAuth.setLoginPath("/provider/signin");
 		cookieAuth.setLogoutPath("/provider/signout");

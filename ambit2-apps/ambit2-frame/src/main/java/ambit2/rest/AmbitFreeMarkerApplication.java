@@ -672,9 +672,9 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected Restlet createDBProtectedResource(String usersdbname, Restlet router, String prefix) {
 		String secret = getProperty(AMBITConfig.secret.name(), configProperties);
-		long sessionLength = 1000 * 60 * 45L; // 45 min in milliseconds
+		int sessionLength = 1000 * 60 * 45; // 45 min in milliseconds
 		try {
-			sessionLength = Long.parseLong(getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
+			sessionLength = Integer.parseInt(getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
 		} catch (Exception x) {
 		}
 
