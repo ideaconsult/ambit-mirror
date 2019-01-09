@@ -3459,3 +3459,121 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 
 					});
 }
+
+
+function defineAppsTable(root, url, selector, jQueryUI, dom) {
+
+	return $(selector)
+			.dataTable(
+					{
+					      "bPaginate": false,
+					        "bFilter": false,
+					        "bInfo": false,
+						"sAjaxDataProp" : "apps",
+						"sAjaxSource" : url,
+						"sSearch" : "Filter:",
+						"bJQueryUI" : jQueryUI,
+						"bSearchable" : true,
+						"bProcessing" : true,
+						"sDom" : dom == null ? '<"help remove-bottom"i><"help"p>Trt<"help"lf>'
+								: dom,
+						"bPaginate" : true,
+						// "sPaginationType" : "full_numbers",
+						// "sPaginate" : ".dataTables_paginate _paging",
+						"oLanguage" : {
+							"sProcessing" : "<img src='" + root
+									+ "/images/24x24_ambit.gif' border='0'>",
+							"sLoadingRecords" : "No results found.",
+							"sZeroRecords" : "No results found.",
+							"sEmptyTable" : "No results available.",
+							"sInfo" : "Showing _TOTAL_ results(s) (_START_ to _END_)",
+							"sLengthMenu" : 'Display <select>'
+									+ '<option value="10">10</option>'
+									+ '<option value="20">20</option>'
+									+ '<option value="50">50</option>'
+									+ '<option value="100">100</option>'
+									+ '<option value="-1">all</option>'
+									+ '</select> results.'
+						},
+						"aoColumnDefs" : [
+							{
+								"bSortable" : true,
+								"mDataProp" : "name",
+								"sTitle" : "App name",
+								"sWidth" : "20%",
+								"aTargets" : [ 0 ],
+								"bUseRendered" : false,
+								"fnRender" : function(o, val) {
+									var sOut = val;
+
+									return sOut;
+								}
+							},
+							{
+								"bSortable" : true,
+								"mDataProp" : "token",
+								"sTitle" : "Access token",
+								"aTargets" : [ 1 ],
+								"sWidth" : "20%",
+								"bUseRendered" : false,
+								"fnRender" : function(o, val) {
+									var sOut = "<a href='#' onclick=showToken('"+val+"')>"+val.substring(0,10)+" ...</a>";
+
+									return sOut;
+								}
+							},
+							{
+								"sTitle" : "Referer",
+								"bSortable" : true,
+								"mDataProp" : "referer",
+								"aTargets" : [2 ],
+								"bUseRendered" : false,
+								"fnRender" : function(o, val) {
+									var sOut = val;
+
+									return sOut;
+								}
+							},					
+							{
+								"sTitle" : "Expire",
+								"bSortable" : true,
+								"mDataProp" : "expire",
+								"aTargets" : [3 ],
+								"bUseRendered" : false,
+								"fnRender" : function(o, val) {
+									var options = {  year: 'numeric', month: 'long', day: 'numeric' , hour : 'numeric' , minute: 'numeric', timeZoneName : 'short'};
+									var sOut = new Date(val).toLocaleDateString("en-US", options);
+									return sOut;
+								}
+							},	
+							{
+								"sTitle" : "",
+								"bSortable" : true,
+								"mDataProp" : "token",
+								"aTargets" : [ 4 ],
+								"sWidth" : "2%",
+								"bUseRendered" : false,
+								"fnRender" : function(o, val) {
+									sOut = "<button onclick='removeToken(";
+									sOut += '\"' + root + '\"';
+									sOut += ",";
+									sOut += '\"' +val+'\"';
+									sOut += ")'>Remove</button>";
+									return sOut;
+								}
+							}								
+						]
+
+					});
+}
+
+function removeToken(url,value) {
+	alert(value);
+
+}
+function generateToken(url) {
+	alert("TBD");
+}
+function showToken(value) {
+	alert(value);
+}

@@ -13,6 +13,7 @@ public class Resources {
 	public static final String project = "/project";
 	public static final String organisation = "/organisation";
 	public static final String user = "/user";
+	public static final String apps = "/apps";
 	public static final String role = "/role";
 	public static final String restpolicy = "/restpolicy";
 	public static final String versions = "/versions";

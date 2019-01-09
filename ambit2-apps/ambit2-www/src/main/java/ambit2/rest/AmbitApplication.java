@@ -131,6 +131,7 @@ import ambit2.user.groups.OrganisationRouter;
 import ambit2.user.groups.ProjectRouter;
 import ambit2.user.rest.UserRouter;
 import ambit2.user.rest.resource.AMBITRegistrationNotifyResource;
+import ambit2.user.rest.resource.MyAccountAppsResource;
 import ambit2.user.rest.resource.MyAccountPwdResetResource;
 import ambit2.user.rest.resource.MyAccountResource;
 import ambit2.user.rest.resource.PwdForgottenConfirmResource;
@@ -142,6 +143,7 @@ import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
+import net.idea.restnet.db.aalocal.ChallengeAuthenticatorTokenLocal;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in
@@ -400,6 +402,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 			router.attach(QueryResource.query_resource, createAuthenticatedOpenResource(queryRouter));
 		} else
 			router.attach(QueryResource.query_resource, queryRouter);
+
 		queryRouter.attach(SmartsQueryResource.resource, smartsRouter);
 		queryRouter.attach(SimilarityResource.resource, similarityRouter);
 		queryRouter.attach(ExactStructureQueryResource.resource, ExactStructureQueryResource.class);
@@ -410,6 +413,14 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		 */
 		queryRouter.attach(QueryStructureRelationResource.resource, createRelationsRouter());
 
+		if (attachInvestigationRouter()) {
+			Filter tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), false, usersdbname,
+					"ambit2/rest/config/config.prop");
+			tokenAuth.setNext(new InvestigationRouter(getContext()));
+			router.attach(String.format("/api/{%s}",SubstanceStudyTableResource.investigation), tokenAuth);
+		}
+
+		
 		/**
 		 * API extensions from this point on
 		 */
@@ -526,11 +537,13 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				MyRouter myAccountRouter = new MyRouter(getContext());
 				myAccountRouter.attachDefault(MyAccountResource.class);
 				myAccountRouter.attach(ambit2.user.rest.resource.Resources.reset, MyAccountPwdResetResource.class);
+				myAccountRouter.attach(Resources.apps, MyAccountAppsResource.class);
 				myAccountRouter.attach(Resources.bundle, MyBundlesResource.class);
 
 				myAccountRouter.attach("/users", UserByURIResource.class);
 
 				router.attach(ambit2.user.rest.resource.Resources.myaccount, myAccountRouter);
+
 				router.attach(ambit2.user.rest.resource.Resources.user,
 						new UserRouter(getContext(), org_router, projectRouter));
 				router.attach(ambit2.user.rest.resource.Resources.register, RegistrationResource.class);
@@ -565,6 +578,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
 						"ambit2/rest/config/config.prop", secret, sessionLength);
+
 				// UserAuthorizer authz = new UserAuthorizer();
 				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
 						"ambit2/rest/config/config.prop", getBaseURLDepth());
@@ -800,70 +814,6 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		// DBCreateAllowedGuard sameIPguard = new DBCreateAllowedGuard();
 		// sameIPguard.setNext(adminRouter);
 		return adminRouter;
-	}
-
-	/**
-	 * An attempt to retrieve datasets by an optimized query Not used currently
-	 * 
-	 * @return
-	 */
-	protected Restlet createFastDatasetResource() {
-		/*
-		 * Router fastDatasetRouter = new MyRouter(getContext());
-		 * 
-		 * fastDatasetRouter.attachDefault(FastDatasetStructuresResource.class);
-		 * router
-		 * .attach(String.format("%s",FastDatasetStructuresResource.resource),
-		 * FastDatasetStructuresResource.class);
-		 * router.attach(String.format("%s/{%s}"
-		 * ,FastDatasetStructuresResource.resource,DatasetResource.datasetKey),
-		 * fastDatasetRouter); router.attach(String.format("%s/{%s}/metadata",
-		 * FastDatasetStructuresResource.resource,DatasetResource.datasetKey),
-		 * DatasetsResource.class);
-		 * 
-		 * 
-		 * fastDatasetRouter.attach(PropertiesByDatasetResource.featuredef,
-		 * PropertiesByDatasetResource.class);
-		 * fastDatasetRouter.attach(String.format
-		 * ("%s/{%s}",PropertiesByDatasetResource
-		 * .featuredef,PropertiesByDatasetResource
-		 * .idfeaturedef),PropertiesByDatasetResource.class);
-		 */
-		return null;
-	}
-
-	/**
-	 * Resource protection via local MySQL/ Ambit database users. Not used
-	 * currenty;
-	 * 
-	 * @return
-	 */
-	protected Restlet createLocalUsersGuard() {
-
-		//
-
-		/**
-		 * // These are users from the DB // /user DBVerifier verifier = new
-		 * DBVerifier(this); Router usersRouter = new MyRouter(getContext());
-		 * usersRouter.attachDefault(UserResource.class); // /user/{userid}
-		 * Router userRouter = new MyRouter(getContext());
-		 * userRouter.attachDefault(UserResource.class);
-		 * usersRouter.attach(UserResource.resourceID,userRouter); //
-		 * authentication mandatory for users resource Filter guard =
-		 * createGuard(verifier,false); // Simple authorizer MethodAuthorizer
-		 * authorizer = new MethodAuthorizer();
-		 * authorizer.getAnonymousMethods().add(Method.GET);
-		 * authorizer.getAnonymousMethods().add(Method.HEAD);
-		 * authorizer.getAnonymousMethods().add(Method.OPTIONS);
-		 * authorizer.getAuthenticatedMethods().add(Method.PUT);
-		 * authorizer.getAuthenticatedMethods().add(Method.DELETE);
-		 * authorizer.getAuthenticatedMethods().add(Method.POST);
-		 * authorizer.getAuthenticatedMethods().add(Method.OPTIONS);
-		 * authorizer.setNext(usersRouter); guard.setNext(authorizer);
-		 * router.attach(UserResource.resource, guard);
-		 * router.attach(UserResource.resource, usersRouter);
-		 */
-		return null;
 	}
 
 	/**

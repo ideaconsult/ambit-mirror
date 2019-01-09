@@ -6,8 +6,6 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ClientInfo;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.security.User;
@@ -21,6 +19,7 @@ import ambit2.user.bundle.BundlePolicyAuthorizer;
 import ambit2.user.groups.OrganisationRouter;
 import ambit2.user.groups.ProjectRouter;
 import ambit2.user.rest.resource.AMBITRegistrationNotifyResource;
+import ambit2.user.rest.resource.MyAccountAppsResource;
 import ambit2.user.rest.resource.MyAccountPwdResetResource;
 import ambit2.user.rest.resource.MyAccountResource;
 import ambit2.user.rest.resource.PwdForgottenConfirmResource;
@@ -37,6 +36,7 @@ import net.idea.restnet.aa.local.UserLogoutPOSTResource;
 import net.idea.restnet.c.routers.MyRouter;
 import net.idea.restnet.db.aalocal.DBVerifier;
 import net.idea.restnet.db.aalocal.DbEnroller;
+import net.idea.restnet.db.aalocal.user.UserAuth;
 
 public class UserRouter extends MyRouter {
 
@@ -73,9 +73,11 @@ public class UserRouter extends MyRouter {
 		// AlertRouter alertRouter = new AlertRouter(context);
 		// myAccountRouter.attach(Resources.alert,alertRouter);
 		myAccountRouter.attach(Resources.reset, MyAccountPwdResetResource.class);
+		myAccountRouter.attach(Resources.apps, MyAccountAppsResource.class);
 		// myAccountRouter.attach(Resources.protocol,MyObservationsResource.class);
 		setCookieUserRouter.attach(Resources.myaccount, myAccountRouter);
 		setCookieUserRouter.attach(Resources.user, new UserRouter(context, null, null));
+		
 
 		/*
 		 * setCookieUserRouter.attach(String.format("%s/{%s}",Resources.dataset,
@@ -125,7 +127,7 @@ public class UserRouter extends MyRouter {
 		cookieAuth.setLoginPath("/provider/signin");
 		cookieAuth.setLogoutPath("/provider/signout");
 
-		cookieAuth.setVerifier(new DBVerifier(context, config, usersdbname) {
+		cookieAuth.setVerifier(new DBVerifier<UserAuth>(context, config, usersdbname,new UserAuth()) {
 			@Override
 			public int verify(Request request, Response response) {
 				if (request.getResourceRef().toString().indexOf("/provider/") >= 0)

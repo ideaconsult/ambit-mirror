@@ -243,6 +243,13 @@ public class AmbitPolicyAuthorizer extends PolicyAuthorizer<PolicyQuery> {
 			boolean isProtected(Method method) {
 				return false;
 			}
+		},
+		api {
+			//there is different protection
+			@Override
+			boolean isProtected(Method method) {
+				return false;
+			}
 		};
 		boolean isProtected(Method method) {
 			return true;
