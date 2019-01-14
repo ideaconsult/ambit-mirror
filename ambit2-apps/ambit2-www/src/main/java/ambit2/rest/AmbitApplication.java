@@ -20,6 +20,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
 import org.restlet.Server;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.data.Method;
 import org.restlet.data.Parameter;
 import org.restlet.data.Protocol;
@@ -28,6 +29,7 @@ import org.restlet.engine.security.SslContextFactory;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.routing.Template;
+import org.restlet.security.ChallengeAuthenticator;
 import org.restlet.util.Series;
 
 import ambit2.base.config.AMBITConfig;
@@ -144,6 +146,8 @@ import ambit2.user.rest.resource.Resources;
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
 import net.idea.restnet.db.aalocal.ChallengeAuthenticatorTokenLocal;
+import net.idea.restnet.db.aalocal.DBVerifier;
+import net.idea.restnet.db.aalocal.user.TokenAuth;
 
 /**
  * AMBIT implementation of OpenTox REST services as described in
@@ -416,7 +420,10 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		if (attachInvestigationRouter()) {
 			Filter tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), false, usersdbname,
 					"ambit2/rest/config/config.prop");
-			tokenAuth.setNext(new InvestigationRouter(getContext()));
+			Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
+					configProperties, getBaseURLDepth());
+			tokenAuth.setNext(authz);
+			authz.setNext(new InvestigationRouter(getContext()));
 			router.attach(String.format("/api/{%s}",SubstanceStudyTableResource.investigation), tokenAuth);
 		}
 
@@ -576,15 +583,21 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 				router.attach("/provider", protectedRouter);
 
+				
 				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
-						"ambit2/rest/config/config.prop", secret, sessionLength);
+						configProperties, secret, sessionLength);
+				/*
+				Filter tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true, usersdbname,
+						configProperties);				
+				*/
 
-				// UserAuthorizer authz = new UserAuthorizer();
 				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
-						"ambit2/rest/config/config.prop", getBaseURLDepth());
+						configProperties, getBaseURLDepth());
+
 				dbAuth.setNext(authz);
 				authz.setNext(router);
 				return addOriginFilter(dbAuth);
+
 
 			} else if (isSimpleSecretAAEnabled()) {
 
