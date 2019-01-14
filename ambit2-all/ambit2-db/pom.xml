@@ -208,24 +208,7 @@
 		</pluginManagement>
 	</build>
 	<profiles>
-		<profile>
-			<id>JRE5</id>
-			<activation>
-				<jdk>1.5</jdk>
-			</activation>
-			<properties>
-				<dbcpVersion>1.3</dbcpVersion>
-			</properties>
-		</profile>
-		<profile>
-			<id>JRE6</id>
-			<activation>
-				<jdk>1.6</jdk>
-			</activation>
-			<properties>
-				<dbcpVersion>1.4</dbcpVersion>
-			</properties>
-		</profile>
+		
 		<profile>
 			<id>JRE7</id>
 			<activation>
