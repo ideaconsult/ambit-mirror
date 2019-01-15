@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ambit2.structure2name.rules.CarbonData;
 import ambit2.structure2name.rules.IUPACRuleDataBase;
 
 public class JSONRuleParser 
@@ -47,9 +48,53 @@ public class JSONRuleParser
 
 		}
 		
-		//TODO
+		IUPACRuleDataBase irdb = new IUPACRuleDataBase();
 		
-		return null;
+		//Section CARBONS
+		JsonNode carbonsNode = rootNode.path("CARBONS");
+		if (carbonsNode.isMissingNode()) 
+			addError("Section CARBONS is missing!");		 
+		else if (!carbonsNode.isArray()) 
+			addError("Section CARBONS is not array!");
+		else { 
+			CarbonData carbData[] = extractCarbonData(carbonsNode);
+			irdb.carbonData = carbData;
+		}
+		
+		return irdb;
+	}
+	
+	CarbonData[] extractCarbonData(JsonNode carbonsNode)
+	{
+		int n = carbonsNode.size();
+		CarbonData cd[] = new CarbonData[n];
+		for (int i = 0; i < n; i++)
+		{
+			cd[i] = new CarbonData();
+			JsonNode node = carbonsNode.get(i);
+			
+			//number
+			if (node.path("number").isMissingNode()) {
+				addError("Keyword \"number\" is mising in CARBONS element " + i);
+			} else {
+				Integer iObj = extractIntKeyword(node, "number", false);
+				if (iObj == null)
+					addError("Error in keyword \"number\" in CARBONS element " + i + ": " + error);
+				else
+					cd[i].number = iObj;
+			}
+			
+			//prefix
+			if (!node.path("prefix").isMissingNode()) 
+			{	
+				String s =  extractStringKeyword(node, "prefix", false);
+				if (s == null)
+					addError("Error in keyword \"prefix\" in CARBONS element " + i + ": " + error);
+				else
+					cd[i].prefix = s;
+			}
+		}
+		return cd;
 	}
 	
 	// Helper functions
