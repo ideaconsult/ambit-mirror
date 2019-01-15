@@ -6,6 +6,7 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
+import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Filter;
 import org.restlet.routing.Router;
 import org.restlet.security.User;
@@ -59,7 +60,7 @@ public class UserRouter extends MyRouter {
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
 		Filter auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret,
-				sessionLength);
+				sessionLength,false);
 		Router setCookieUserRouter = new MyRouter(context);
 		/*
 		 * Filter authz = new ProtocolAuthorizer(testAuthZ,DBRoles.adminRole);
@@ -93,7 +94,7 @@ public class UserRouter extends MyRouter {
 		protectedRouter.attach(String.format("/%s", UserLoginPOSTResource.resource), AMBITLoginPOSTResource.class);
 		protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource), AMBITLogoutPOSTResource.class);
 
-		auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret, sessionLength);
+		auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret, sessionLength,false);
 		auth.setNext(protectedRouter);
 		router.attach("/protected", auth);
 
@@ -111,7 +112,7 @@ public class UserRouter extends MyRouter {
 	}
 
 	public static Filter createCookieAuthenticator(Context context, String default_userdb, String config, String secret,
-			long sessionLength) {
+			long sessionLength, boolean multiAuthenticating) {
 
 		String usersdbname = context.getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname == null)
@@ -119,6 +120,7 @@ public class UserRouter extends MyRouter {
 
 		CookieAuthenticator cookieAuth = new CookieAuthenticator(context, usersdbname,
 				(secret == null ? UUID.randomUUID().toString() : secret).getBytes()) ;
+		cookieAuth.setMultiAuthenticating(multiAuthenticating);
 		cookieAuth.setCookieName("ambitdb");
 		if (sessionLength < 600000)
 			sessionLength = 600000; // 10 min in case the config is broken
@@ -134,7 +136,7 @@ public class UserRouter extends MyRouter {
 					return super.verify(request, response);
 				else { // just check the cookie
 					int result = RESULT_VALID;
-					if (request.getChallengeResponse() != null) {
+					if ((request.getChallengeResponse() != null) && ChallengeScheme.HTTP_COOKIE.equals(request.getChallengeResponse().getScheme())) {
 						String identifier = getIdentifier(request, response);
 						request.getClientInfo().setUser(new User(identifier));
 					}

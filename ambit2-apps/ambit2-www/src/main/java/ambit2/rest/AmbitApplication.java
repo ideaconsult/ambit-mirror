@@ -416,7 +416,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		 * /query/relation/compound/has_tautomer?dataset_uri=
 		 */
 		queryRouter.attach(QueryStructureRelationResource.resource, createRelationsRouter());
-
+		/*
 		if (attachInvestigationRouter()) {
 			Filter tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), false, usersdbname,
 					"ambit2/rest/config/config.prop");
@@ -426,7 +426,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 			authz.setNext(new InvestigationRouter(getContext()));
 			router.attach(String.format("/api/{%s}",SubstanceStudyTableResource.investigation), tokenAuth);
 		}
-
+		*/
 		
 		/**
 		 * API extensions from this point on
@@ -583,20 +583,22 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 				router.attach("/provider", protectedRouter);
 
+				//optional challenge authenticator
+				ChallengeAuthenticatorTokenLocal tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true, usersdbname,
+						configProperties);				
+								
 				
 				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
-						configProperties, secret, sessionLength);
-				/*
-				Filter tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true, usersdbname,
-						configProperties);				
-				*/
+						configProperties, secret, sessionLength,true);
 
+				
 				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
 						configProperties, getBaseURLDepth());
-
+				tokenAuth.setNext(dbAuth);
 				dbAuth.setNext(authz);
 				authz.setNext(router);
-				return addOriginFilter(dbAuth);
+				//dbAuth.setNext(router);
+				return addOriginFilter(tokenAuth);
 
 
 			} else if (isSimpleSecretAAEnabled()) {

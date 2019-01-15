@@ -681,9 +681,9 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		}
 
 		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
-				"ambit2/rest/config/config.prop", secret, sessionLength);
+				configProperties, secret, sessionLength,false);
 		// UserAuthorizer authz = new UserAuthorizer();
-		Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, "ambit2/rest/config/config.prop",
+		Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, configProperties,
 				getBaseURLDepth());
 		dbAuth.setNext(authz);
 		authz.setNext(router);
