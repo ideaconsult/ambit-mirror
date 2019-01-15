@@ -76,13 +76,15 @@ public class MyAccountAppsResource<T> extends AmbitDBQueryResource<ReadApp, DBUA
 		if (Method.POST.equals(method)) {
 			// just one record is fine
 			ReadApp q = createQuery(context, request, response);
+			q.setHowMany(3);
 			q.setPage(0);
 			q.setPageSize(1);
 			return q;
-		} else if (Method.DELETE.equals(method)) {
-			// set the token as param
+		} else if (Method.PUT.equals(method)) {
+			// takes the username only, token as form parameter
 			ReadApp q = createQuery(context, request, response);
-			// q.setValue("xx");
+			q.setPage(0);
+			q.setPageSize(1);
 			return q;
 		}
 		throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);

@@ -3556,12 +3556,17 @@ function defineAppsTable(root, url, selector, jQueryUI, dom) {
 								"sWidth" : "2%",
 								"bUseRendered" : false,
 								"fnRender" : function(o, val) {
-									sOut = "<button onclick='removeToken(";
-									sOut += '\"' + root + '\"';
-									sOut += ",";
-									sOut += '\"' +val+'\"';
-									sOut += ")'>Remove</button>";
+									if (o.aData.enabled) {
+										sOut = "<button onclick='removeToken(";
+										sOut += '\"' + root + '\"';
+										sOut += ",";
+										sOut += '\"' +val+'\"';
+										sOut += ")'>Remove</button>";
+									} else {
+										sOut="Inactive";
+									}
 									return sOut;
+									
 								}
 							}								
 						]
@@ -3570,7 +3575,16 @@ function defineAppsTable(root, url, selector, jQueryUI, dom) {
 }
 
 function removeToken(url,value) {
-	alert(value);
+	data = {}
+	data['username'] = $("#username").val();
+	data['token'] = value;
+	$.ajax({
+		  type: "PUT",
+		  url: url + "/myaccount/apps",
+		  data: data
+		}).always(function() {
+			location.reload();
+			});
 
 }
 function generateToken(url) {
