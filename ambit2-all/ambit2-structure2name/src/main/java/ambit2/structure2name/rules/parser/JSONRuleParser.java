@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ambit2.structure2name.IUPACRuleDataBase;
+import ambit2.structure2name.rules.IUPACRuleDataBase;
 
 public class JSONRuleParser 
 {

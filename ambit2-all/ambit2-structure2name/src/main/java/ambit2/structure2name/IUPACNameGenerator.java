@@ -6,6 +6,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.structure2name.components.IIUPACComponent;
+import ambit2.structure2name.rules.IUPACRuleDataBase;
 
 public class IUPACNameGenerator 
 {	
