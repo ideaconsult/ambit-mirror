@@ -15,7 +15,7 @@ public class IUPACNameGenerator
 	protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
 	
-	public IUPACNameGenerator()
+	public IUPACNameGenerator() throws Exception
 	{
 		ruleDataBase = IUPACRuleDataBase.getDefaultRuleDataBase();
 	}

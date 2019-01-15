@@ -1,10 +1,16 @@
 package ambit2.structure2name.rules;
 
+import java.net.URL;
+
+import ambit2.structure2name.rules.parser.JSONRuleParser;
+
 public class IUPACRuleDataBase 
 {
-	public static IUPACRuleDataBase getDefaultRuleDataBase()
+	public static IUPACRuleDataBase getDefaultRuleDataBase() throws Exception
 	{
-		//TODO
-		return new IUPACRuleDataBase();
+		JSONRuleParser jrp = new JSONRuleParser();		
+		URL resource = jrp.getClass().getClassLoader().getResource("ambit2/structure2name/rules/BasicRules.json");
+		IUPACRuleDataBase iupacRuleDB = jrp.loadIUPACRuleDataBase(resource.getFile());
+		return iupacRuleDB;
 	}
 }
