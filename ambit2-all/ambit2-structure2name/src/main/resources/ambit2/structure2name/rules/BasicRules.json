@@ -1,14 +1,63 @@
 {
+	"TOKENS" : 
+	{
+		
+	},
+	
+	
 	"CARBONS":
 	[
 		{
 			"number" : 0
-		},
-		
+		},		
 		{
 			"number"  : 1,
 			"prefix"  : "meth",
 			"alcohol_name" : "methyl" 
+		},
+		{
+			"number" : 2,
+			"prefix" : "eth"
+		},
+		{
+			"number" : 3,
+			"prefix" : "prop"
+		},
+		{
+			"number" : 4,
+			"prefix" : "but"
+		},
+		{
+			"number" : 5,
+			"prefix" : "pent"
+		},
+		{
+			"number" : 6,
+			"prefix" : "hex"
+		},
+		{
+			"number" : 7,
+			"prefix" : "hept"
+		},
+		{
+			"number" : 8,
+			"prefix" : "oct"
+		},
+		{
+			"number" : 9,
+			"prefix" : "non"
+		},
+		{
+			"number" : 10,
+			"prefix" : "dec"
+		},
+		{
+			"number" : 11,
+			"prefix" : "undec"
+		},
+		{
+			"number" : 12,
+			"prefix" : "dodec"
 		}
 		
 	],
