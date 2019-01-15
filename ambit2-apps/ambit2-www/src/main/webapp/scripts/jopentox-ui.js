@@ -3500,7 +3500,7 @@ function defineAppsTable(root, url, selector, jQueryUI, dom) {
 								"bSortable" : true,
 								"mDataProp" : "name",
 								"sTitle" : "App name",
-								"sWidth" : "20%",
+								
 								"aTargets" : [ 0 ],
 								"bUseRendered" : false,
 								"fnRender" : function(o, val) {
@@ -3522,6 +3522,7 @@ function defineAppsTable(root, url, selector, jQueryUI, dom) {
 									return sOut;
 								}
 							},
+							/*
 							{
 								"sTitle" : "Referer",
 								"bSortable" : true,
@@ -3533,12 +3534,13 @@ function defineAppsTable(root, url, selector, jQueryUI, dom) {
 
 									return sOut;
 								}
-							},					
+							},
+							*/					
 							{
 								"sTitle" : "Expire",
 								"bSortable" : true,
 								"mDataProp" : "expire",
-								"aTargets" : [3 ],
+								"aTargets" : [2 ],
 								"bUseRendered" : false,
 								"fnRender" : function(o, val) {
 									var options = {  year: 'numeric', month: 'long', day: 'numeric' , hour : 'numeric' , minute: 'numeric', timeZoneName : 'short'};
@@ -3550,7 +3552,7 @@ function defineAppsTable(root, url, selector, jQueryUI, dom) {
 								"sTitle" : "",
 								"bSortable" : true,
 								"mDataProp" : "token",
-								"aTargets" : [ 4 ],
+								"aTargets" : [ 3 ],
 								"sWidth" : "2%",
 								"bUseRendered" : false,
 								"fnRender" : function(o, val) {
@@ -3572,7 +3574,13 @@ function removeToken(url,value) {
 
 }
 function generateToken(url) {
-	alert("TBD");
+	data = {}
+	data['username'] = $("#username").val();
+	$.ajax({
+		  type: "POST",
+		  url: url + "/myaccount/apps",
+		  data: data
+		}).always(function() {location.reload();});
 }
 function showToken(value) {
 	alert(value);

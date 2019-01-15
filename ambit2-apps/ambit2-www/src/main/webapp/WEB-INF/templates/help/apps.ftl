@@ -23,9 +23,8 @@ API access tokens
     </p>
   </div>
   <div id="hnewtoken">
-   
-    <button onclick="generateToken('${ambit_root}')">Generate</button>
-    
+				<input type='hidden' size='40' id='username' name='username' value='${username}'/>
+				<button onclick="generateToken('${ambit_root}')">Generate</button>
     </p>
   </div>      
 </div>

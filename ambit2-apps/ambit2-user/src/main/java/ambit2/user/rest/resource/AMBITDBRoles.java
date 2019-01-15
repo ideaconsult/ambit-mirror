@@ -80,7 +80,22 @@ public enum AMBITDBRoles {
 		public String getHint() {
 			return "System administration";
 		}
-	};
+	},
+	ambit_apps {
+		//tokens
+		@Override
+		public String getURI() {
+			return Resources.apps;
+		}	
+		@Override
+		public String toString() {
+			return "Apps";
+		}		
+		@Override
+		public String getHint() {
+			return "Apps";
+		}
+	};	
 	public String getURI() {return null;}
 	public String getHint() { return toString();}
 
