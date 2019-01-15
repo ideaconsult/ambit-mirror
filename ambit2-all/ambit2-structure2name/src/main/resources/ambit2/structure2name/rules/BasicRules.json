@@ -1,4 +1,18 @@
 {
+	"CARBONS":
+	[
+		{
+			"number" : 0
+		},
+		
+		{
+			"number"  : 1,
+			"prefix"  : "meth",
+			"alcohol_name" : "methyl" 
+		}
+		
+	]
+	
 	"TOKEN_RULES" : 
 	[
 		{	
@@ -10,7 +24,7 @@
 	"STRATEGY_RULES" : 
 	[
 	
-	],
+	]
 
 
 }
