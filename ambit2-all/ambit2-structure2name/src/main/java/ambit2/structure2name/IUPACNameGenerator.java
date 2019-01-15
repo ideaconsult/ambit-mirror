@@ -6,6 +6,7 @@ import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.structure2name.components.IIUPACComponent;
+import ambit2.structure2name.rules.IUPACRuleDataBase;
 
 public class IUPACNameGenerator 
 {	
@@ -14,7 +15,7 @@ public class IUPACNameGenerator
 	protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
 	
-	public IUPACNameGenerator()
+	public IUPACNameGenerator() throws Exception
 	{
 		ruleDataBase = IUPACRuleDataBase.getDefaultRuleDataBase();
 	}
