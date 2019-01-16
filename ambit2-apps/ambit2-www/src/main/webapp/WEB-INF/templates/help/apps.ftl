@@ -1,6 +1,10 @@
-<div class='helptitle' style='font-weight:bold;'>My account</div>
+<div class='helptitle' style='font-weight:bold;'>API access tokens</div>
 <div class='helpcontent'>
-API access tokens
+Application Programming Interface (API) access tokens.   
+<br/>
+The legal notice accepted on log in applies to all access methods (e.g. web browser or API).
+<br/>
+You may generate new tokens or inactivate existing ones.  
 <ul> 
 <li>New token<a href='#' class='chelp hnewtoken'>?</a> </li>
 </ul>

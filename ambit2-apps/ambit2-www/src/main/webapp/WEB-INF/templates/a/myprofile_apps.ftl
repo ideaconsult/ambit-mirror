@@ -6,7 +6,7 @@
 jQuery(document).ready(function()
 {
 	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount" id="breadCrumbUser" title="User">My account</a></li>');
-	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount/apps" id="breadCrumbUser" title="API Keys">API Keys</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/myaccount/apps" id="breadCrumbUser" title="API Access tokens">API tokens</a></li>');
     jQuery("#breadCrumb").jBreadCrumb();
     loadHelp("${ambit_root}","apps");
     var oTable = defineAppsTable("${ambit_root}","${ambit_request_json}","#apps",false,"<Fif>rt");
@@ -21,10 +21,18 @@ jQuery(document).ready(function()
 <!-- banner -->
 <#include "/banner_crumbs.ftl">
 
+		
+		<#if menu_profile?? && menu_profile=='lri'>
+			
+  			<#include "/menu/profile/lri/agreement.ftl">
+  		</#if>	
+  		
 <div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;" >
 &nbsp;
 </div>
 		
+
+  				
 		<!-- Page Content
 		================================================== -->
 		<div class="twelve columns add-bottom" >
