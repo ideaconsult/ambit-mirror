@@ -12,5 +12,9 @@ public class TestIUPACUtils
 	public static void testIUPACRuleDB() throws Exception
 	{
 		IUPACRuleDataBase rdb = IUPACRuleDataBase.getDefaultRuleDataBase();
+		for (int i = 0; i < rdb.carbonData.length; i++)
+		{
+			System.out.println(rdb.carbonData[i].toString());
+		}
 	}
 }
