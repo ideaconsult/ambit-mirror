@@ -8,4 +8,15 @@ public class CarbonData
 	public String aldehydeName = null;
 	public String acidName = null;
 	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(number);		
+		if (prefix != null)
+		{
+			sb.append("  ");
+			sb.append(prefix);
+		}
+		return sb.toString();
+	}
+	
 }
