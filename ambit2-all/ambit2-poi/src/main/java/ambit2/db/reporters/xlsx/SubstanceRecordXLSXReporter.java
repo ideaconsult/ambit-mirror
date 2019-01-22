@@ -6,11 +6,15 @@ import java.util.Comparator;
 import java.util.logging.Level;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import ambit2.base.data.Profile;
 import ambit2.base.data.SubstanceRecord;
@@ -53,7 +57,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 			row = sheet.createRow(rowIndex + record);
 		Cell cell = row.createCell(column);
 		cell.setCellStyle(tableStyle);
-		cell.setCellType(Cell.CELL_TYPE_STRING);
+		cell.setCellType(CellType.STRING);
 		cell.setCellValue(value);
 	}
 
@@ -68,7 +72,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 			row = sheet.createRow(rowIndex + record);
 		Cell cell = row.createCell(column);
 		cell.setCellStyle(tableStyle);
-		cell.setCellType(Cell.CELL_TYPE_STRING);
+		cell.setCellType(CellType.STRING);
 
 		if (studyResultType == null)
 			cell.setCellValue(value);
@@ -127,16 +131,16 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 
 		hstyle = workbook.createCellStyle();
 		hstyle.setWrapText(true);
-		hstyle.setAlignment(CellStyle.ALIGN_LEFT);
-		hstyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+		hstyle.setAlignment(HorizontalAlignment.LEFT);
+		hstyle.setVerticalAlignment(VerticalAlignment.TOP);
 		Font headerFont = workbook.createFont();
-		headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		headerFont.setBold(true);
 		hstyle.setFont(headerFont);
 
 		sectionStyle = workbook.createCellStyle();
 		sectionStyle.setWrapText(true);
-		sectionStyle.setAlignment(CellStyle.ALIGN_LEFT);
-		sectionStyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+		sectionStyle.setAlignment(HorizontalAlignment.LEFT);
+		sectionStyle.setVerticalAlignment(VerticalAlignment.TOP);
 		blackFont = workbook.createFont();
 		blackFont.setItalic(true);
 		blackFont.setColor(IndexedColors.BLACK.getIndex());
@@ -144,12 +148,12 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 
 		tableStyle = workbook.createCellStyle();
 		tableStyle.setWrapText(true);
-		tableStyle.setAlignment(CellStyle.ALIGN_LEFT);
-		tableStyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);
-		tableStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-		tableStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-		tableStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-		tableStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		tableStyle.setAlignment(HorizontalAlignment.LEFT);
+		tableStyle.setVerticalAlignment(VerticalAlignment.TOP);
+		tableStyle.setBorderBottom(BorderStyle.THIN);
+		tableStyle.setBorderLeft(BorderStyle.THIN);
+		tableStyle.setBorderRight(BorderStyle.THIN);
+		tableStyle.setBorderTop(BorderStyle.THIN);
 
 		blueFont = workbook.createFont();
 		blueFont.setColor(IndexedColors.BLUE.getIndex());
@@ -164,7 +168,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 
 		Cell cell = row.createCell(0);
 		cell.setCellStyle(hstyle);
-		cell.setCellType(Cell.CELL_TYPE_STRING);
+		cell.setCellType(CellType.STRING);
 		cell.setCellValue("Annex 1 Experimental data");
 		rowIndex++;
 		/*
@@ -183,13 +187,13 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 			Row row = sheet.createRow(rowIndex);
 			Cell cell = row.createCell(0);
 			cell.setCellStyle(hstyle);
-			cell.setCellType(Cell.CELL_TYPE_STRING);
+			cell.setCellType(CellType.STRING);
 			cell.setCellValue(String.format("Substance %d:",
 					(substanceIndex + 1)));
 
 			cell = row.createCell(1);
 			cell.setCellStyle(hstyle);
-			cell.setCellType(Cell.CELL_TYPE_STRING);
+			cell.setCellType(CellType.STRING);
 			cell.setCellValue(record.getPublicName() == null ? record
 					.getSubstanceName() : record.getPublicName());
 			rowIndex++;
@@ -228,7 +232,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 						row = sheet.createRow(rowIndex);
 						cell = row.createCell(0);
 						cell.setCellStyle(sectionStyle);
-						cell.setCellType(Cell.CELL_TYPE_STRING);
+						cell.setCellType(CellType.STRING);
 						cell.setCellValue(caption_category);
 						current_category = caption_category;
 						rowIndex++;
@@ -243,7 +247,7 @@ public class SubstanceRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 					// uuid
 					row = sheet.createRow(rowIndex);
 					cell = row.createCell(0);
-					cell.setCellType(Cell.CELL_TYPE_STRING);
+					cell.setCellType(CellType.STRING);
 					cell.setCellValue(pa.getDocumentUUID());
 
 					rowIndex += formatter.format(pa, this);

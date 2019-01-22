@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
@@ -495,7 +496,7 @@ public class SubstanceDatasetResource<Q extends IQueryRetrieval<SubstanceRecord>
 						Cell hcell = sheet.getRow(0)
 								.createCell(last + afterCol);
 						hcell.setCellStyle(hstyle);
-						hcell.setCellType(Cell.CELL_TYPE_STRING);
+						hcell.setCellType(CellType.STRING);
 						hcell.setCellValue(section.getNumber() + ". "
 								+ section.getTitle());
 

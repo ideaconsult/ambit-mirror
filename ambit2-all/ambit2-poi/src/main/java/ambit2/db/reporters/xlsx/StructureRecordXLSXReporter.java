@@ -12,13 +12,17 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
@@ -97,16 +101,16 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 
 		style = workbook.createCellStyle();
 		style.setWrapText(true);
-		style.setAlignment(CellStyle.ALIGN_LEFT);
-		style.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+		style.setAlignment(HorizontalAlignment.LEFT);
+		style.setVerticalAlignment(VerticalAlignment.TOP);
 		blackFont = workbook.createFont();
 		blackFont.setColor(IndexedColors.BLACK.getIndex());
 		style.setFont(blackFont);
 
 		blueStyle = workbook.createCellStyle();
 		blueStyle.setWrapText(true);
-		blueStyle.setAlignment(CellStyle.ALIGN_LEFT);
-		blueStyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+		blueStyle.setAlignment(HorizontalAlignment.LEFT);
+		blueStyle.setVerticalAlignment(VerticalAlignment.TOP);
 		blueFont = workbook.createFont();
 		blueFont.setColor(IndexedColors.BLUE.getIndex());
 		blueStyle.setFont(blueFont);
@@ -115,14 +119,14 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 
 		hstyle = workbook.createCellStyle();
 		hstyle.setWrapText(true);
-		hstyle.setAlignment(CellStyle.ALIGN_LEFT);
-		hstyle.setVerticalAlignment(CellStyle.VERTICAL_TOP);
-		hstyle.setBorderBottom(HSSFCellStyle.BORDER_THICK);
-		hstyle.setBorderLeft(HSSFCellStyle.BORDER_THICK);
-		hstyle.setBorderRight(HSSFCellStyle.BORDER_THICK);
-		hstyle.setBorderTop(HSSFCellStyle.BORDER_THICK);
+		hstyle.setAlignment(HorizontalAlignment.LEFT);
+		hstyle.setVerticalAlignment(VerticalAlignment.TOP);
+		hstyle.setBorderBottom(BorderStyle.THICK);
+		hstyle.setBorderLeft(BorderStyle.THICK);
+		hstyle.setBorderRight(BorderStyle.THICK);
+		hstyle.setBorderTop(BorderStyle.THICK);
 		Font headerFont = workbook.createFont();
-		headerFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		headerFont.setBold(true);
 		hstyle.setFont(headerFont);
 	}
 
@@ -157,7 +161,7 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 
 		for (_columns col : _columns.values()) {
 			Cell cell = row.createCell(col.ordinal());
-			cell.setCellType(Cell.CELL_TYPE_STRING);
+			cell.setCellType(CellType.STRING);
 			cell.setCellStyle(hstyle);
 			cell.setCellValue(col.toString());
 
@@ -241,12 +245,12 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 		if (item instanceof SubstanceRecord) {
 			SubstanceRecord record = (SubstanceRecord) item;
 			Cell cell = row.createCell(_columns.tag.ordinal());
-			cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+			cell.setCellType(CellType.NUMERIC);
 			cell.setCellStyle(style);
 			cell.setCellValue(rowIndex);
 
 			cell = row.createCell(_columns.name.ordinal());
-			cell.setCellType(Cell.CELL_TYPE_STRING);
+			cell.setCellType(CellType.STRING);
 			cell.setCellStyle(style);
 			try {
 				Object name = record
@@ -273,11 +277,11 @@ public class StructureRecordXLSXReporter<Q extends IQueryRetrieval<IStructureRec
 								+ _columns.component.ordinal() + 1);
 
 						pcell.setCellStyle(blueStyle);
-						pcell.setCellType(Cell.CELL_TYPE_STRING);
+						pcell.setCellType(CellType.STRING);
 
 						Cell hcell = sheet.getRow(0).createCell(
 								colIndex + _columns.component.ordinal() + 1);
-						hcell.setCellType(Cell.CELL_TYPE_STRING);
+						hcell.setCellType(CellType.STRING);
 						hcell.setCellStyle(hstyle);
 						String h = p.getLabel().replace(prefix, "");
 						try {

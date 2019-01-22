@@ -93,6 +93,7 @@ public class StdzBatchProcessor extends DefaultAmbitProcessor<IStructureRecord, 
 				return record;
 			}
 		} catch (Exception x) {
+			x.printStackTrace();
 			logger.log(Level.SEVERE, "MSG_ERR_MOLREAD", new Object[] { getIds(record), x.toString() });
 			return record;
 		} finally {

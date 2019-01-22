@@ -36,6 +36,7 @@ import java.util.logging.Level;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -165,22 +166,22 @@ public class IteratingXLSReader extends
 				Object value = null;
 				if (cell != null)
 					switch (cell.getCellType()) {
-					case Cell.CELL_TYPE_BOOLEAN:
+					case BOOLEAN:
 						value = cell.getBooleanCellValue();
 						break;
-					case Cell.CELL_TYPE_NUMERIC:
+					case NUMERIC:
 						value = cell.getNumericCellValue();
 						break;
-					case Cell.CELL_TYPE_STRING:
+					case STRING:
 						value = cell.getStringCellValue();
 						break;
-					case Cell.CELL_TYPE_BLANK:
+					case BLANK:
 						value = "";
 						break;
-					case Cell.CELL_TYPE_ERROR:
+					case ERROR:
 						value = "";
 						break;
-					case Cell.CELL_TYPE_FORMULA:
+					case FORMULA:
 						try {
 							value = cell.getStringCellValue();
 							break;

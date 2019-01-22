@@ -71,10 +71,10 @@ public class ToxCastOntologyBuilder {
 				Cell top = header.getCell(cell.getColumnIndex());
 
 				switch (cell.getCellType()) {
-				case Cell.CELL_TYPE_BOOLEAN:
+				case BOOLEAN:
 					value = cell.getBooleanCellValue();
 					break;
-				case Cell.CELL_TYPE_NUMERIC:
+				case NUMERIC:
 					value = cell.getNumericCellValue();
 					/*
 					jenaModel.createLiteralStatement(a, hasValue, cell
@@ -88,7 +88,7 @@ public class ToxCastOntologyBuilder {
 					} else 
 						value = value.toString();
 					break;
-				case Cell.CELL_TYPE_STRING:
+				case STRING:
 					value = cell.getStringCellValue();
 					
 					if (top.getStringCellValue().equals("SOURCE_NAME_AID") && (!"NA".equals(value))) {
@@ -118,13 +118,13 @@ public class ToxCastOntologyBuilder {
 						}
 					} 					
 					break;
-				case Cell.CELL_TYPE_BLANK:
+				case BLANK:
 					value = "";
 					break;
-				case Cell.CELL_TYPE_ERROR:
+				case ERROR:
 					value = "";
 					break;
-				case Cell.CELL_TYPE_FORMULA:
+				case FORMULA:
 					try {
 						value = cell.getStringCellValue();
 						break;

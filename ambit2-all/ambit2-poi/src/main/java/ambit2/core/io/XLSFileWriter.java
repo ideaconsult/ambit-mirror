@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -117,16 +118,16 @@ public class XLSFileWriter extends FileWithHeaderWriter {
 
 					if (value instanceof Number) {
 						cell.setCellStyle(style);
-						cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+						cell.setCellType(CellType.NUMERIC);
 						cell.setCellValue(((Number) value).doubleValue());
 					} else {
 						try {
 							double d = Double.parseDouble(value.toString());
 							cell.setCellStyle(style);
-							cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+							cell.setCellType(CellType.NUMERIC);
 							cell.setCellValue(d);
 						} catch (Exception x) {
-							cell.setCellType(Cell.CELL_TYPE_STRING);
+							cell.setCellType(CellType.STRING);
 							cell.setCellValue(value.toString());
 						}
 					}

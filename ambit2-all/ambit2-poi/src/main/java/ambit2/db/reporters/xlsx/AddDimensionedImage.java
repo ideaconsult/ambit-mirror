@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -206,7 +207,7 @@ public class AddDimensionedImage {
 		// note
 		// above regarding the behaviour of image resizing.
 		// anchor.setAnchorType(ClientAnchor.MOVE_AND_RESIZE);
-		anchor.setAnchorType(ClientAnchor.MOVE_DONT_RESIZE);
+		anchor.setAnchorType(AnchorType.MOVE_DONT_RESIZE);
 
 		int index = sheet.getWorkbook().addPicture(imageBytes, imageType);
 		drawing.createPicture(anchor, index);
