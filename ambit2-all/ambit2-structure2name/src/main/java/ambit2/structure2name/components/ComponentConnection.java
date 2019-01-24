@@ -10,10 +10,10 @@ public class ComponentConnection
 	}
 	
 	public ConType type = ConType.ATOM_ATOM;
-	public IIUPACComponent component;
+	public IIUPACComponent components[] = new IIUPACComponent[2];
+	
 	//connection elements
-	public IAtom currentAtom = null;
-	public IAtom partnerAtom = null;
+	public IAtom componentAtoms[] = new IAtom[2];	
 	public IBond.Order connectionBondOrder = IBond.Order.SINGLE;
 	public IBond fusedBond = null;
 	

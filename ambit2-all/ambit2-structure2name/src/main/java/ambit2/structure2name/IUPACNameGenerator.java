@@ -8,9 +8,11 @@ import java.util.Map;
 import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IRingSet;
 
 import ambit2.structure2name.components.AcyclicComponent;
+import ambit2.structure2name.components.ComponentConnection;
 import ambit2.structure2name.components.CyclicComponent;
 import ambit2.structure2name.components.IIUPACComponent;
 import ambit2.structure2name.rules.IUPACRuleDataBase;
@@ -30,6 +32,7 @@ public class IUPACNameGenerator
 	protected List<CyclicComponent> cyclicComponents = new ArrayList<CyclicComponent>();
 	protected List<AcyclicComponent> acyclicComponents = new ArrayList<AcyclicComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
+	protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
 	
 	public IUPACNameGenerator() throws Exception
 	{
@@ -62,6 +65,7 @@ public class IUPACNameGenerator
 		cyclicComponents.clear();
 		acyclicComponents.clear();
 		components.clear();
+		connections.clear();
 		cycles = null;
 		ringSet = null;
 		atomRingNumbers.clear();
@@ -143,7 +147,56 @@ public class IUPACNameGenerator
 			comp.ringNumbers.add(i);
 		}
 		
+		//Fill cyclic component atoms
+		for (CyclicComponent c : cyclicComponents) 
+		{
+			//TODO
+		}
+		
+		 
+		//handle spiro connected rings !!!
+		//Use preliminary detection of spiro atoms 
+		//TODO
+		
 		//Generate acyclic components
+		for (CyclicComponent c : cyclicComponents) 
+		{
+			List<IAtom> atoms = c.getAtoms();
+			for (IAtom at : atoms)
+			{
+				//Searching for ring substituents
+				List<IAtom> conAtoms = molecule.getConnectedAtomsList(at);
+				for (IAtom conAt : conAtoms)
+				{
+					if (atoms.contains(conAt))
+						continue;
+					
+					CyclicComponent c0 = getCyclicComponentForAtom(conAt);
+					if (c0 == null)
+					{
+						//Detect new acyclic component
+						//TODO
+					}
+					else
+					{
+						//conAt is part of another cyclic system
+						//Registering new connection
+						ComponentConnection con = new ComponentConnection();
+						con.components[0] = c0;
+						con.components[1] = c;
+						con.componentAtoms[0] = conAt;
+						con.componentAtoms[1] = at;
+						IBond bo = molecule.getBond(at, conAt);
+						con.connectionBondOrder = bo.getOrder();						
+						connections.add(con);
+					}
+					
+				}
+			}
+			
+		}
+		
+		//Check for component connection anomalies (sophisticated ring systems??)
 		//TODO
 	}
 	
@@ -158,6 +211,16 @@ public class IUPACNameGenerator
 					if (c.ringNumbers.contains(ringNums[i]))
 						return c;
 			}	
+		}
+		return null;
+	}
+	
+	protected CyclicComponent getCyclicComponentForAtom(IAtom at)
+	{
+		for (CyclicComponent c : cyclicComponents) 
+		{
+			if (c.getAtoms().contains(at))
+				return c;
 		}
 		return null;
 	}
