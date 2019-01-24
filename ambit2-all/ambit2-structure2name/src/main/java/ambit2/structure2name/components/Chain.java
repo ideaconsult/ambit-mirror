@@ -8,7 +8,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.structure2name.components.ComponentUtils.Comparison;
 
-public class Chain implements IIUPACComponent 
+public class Chain extends AbstractComponent 
 {
 	protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
 	protected long rank = -1;
@@ -26,22 +26,7 @@ public class Chain implements IIUPACComponent
 	public CompType getType() {
 		return CompType.CHAIN;
 	}
-
-	@Override
-	public long getRank() {
-		return rank;
-	}
-
-	@Override
-	public void setRank(long rank) {
-		this.rank = rank;
-	}
-
-	@Override
-	public List<IAtom> getAtoms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	/*
 	

@@ -6,31 +6,14 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 
-public class FunctionalGroup implements IIUPACComponent 
+public class FunctionalGroup extends AbstractComponent
 {
 
 	@Override
 	public CompType getType() {
 		return CompType.FUNCTIONAL_GROUP;
 	}
-
-	@Override
-	public long getRank() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setRank(long rank) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<IAtom> getAtoms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	/*
 	
