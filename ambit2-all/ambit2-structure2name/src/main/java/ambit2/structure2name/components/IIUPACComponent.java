@@ -7,10 +7,16 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 public interface IIUPACComponent 
 {
+	public static enum CompState {
+		INITIAL, FINAL
+	}
+	
 	public static enum CompType {
 		CHAIN, CYCLE, FUNCTIONAL_GROUP, ACYCLIC_COMPONENT, CYCLIC_COMPONENT
 	}
 	
+	public CompState getState();
+	public void setState(CompState state);
 	public CompType getType();
 	public long getRank();
 	public void setRank(long rank);
