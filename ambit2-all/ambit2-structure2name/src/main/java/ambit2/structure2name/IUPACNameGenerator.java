@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IRingSet;
 
 import ambit2.structure2name.components.AcyclicComponent;
+import ambit2.structure2name.components.CyclicComponent;
 import ambit2.structure2name.components.IIUPACComponent;
 import ambit2.structure2name.rules.IUPACRuleDataBase;
 
@@ -25,7 +26,9 @@ public class IUPACNameGenerator
 	protected IRingSet ringSet = null;
 	protected Map<IAtom,int[]> atomRingNumbers = new HashMap<IAtom,int[]>(); 
 		
-	protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
+	//protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
+	protected List<CyclicComponent> cyclicComponents = new ArrayList<CyclicComponent>();
+	protected List<AcyclicComponent> acyclicComponents = new ArrayList<AcyclicComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
 	
 	public IUPACNameGenerator() throws Exception
@@ -55,7 +58,9 @@ public class IUPACNameGenerator
 	
 	protected void nullify()
 	{
-		initialComponents.clear();
+		//initialComponents.clear();
+		cyclicComponents.clear();
+		acyclicComponents.clear();
 		components.clear();
 		cycles = null;
 		ringSet = null;
@@ -110,11 +115,11 @@ public class IUPACNameGenerator
 			for (IAtom a : molecule.atoms())
 				atoms.add(a);
 			acomp.setAtoms(atoms);
-			initialComponents.add(acomp);
+			acyclicComponents.add(acomp);
 		}
 		else
 		{
-			//The molecule/fragment contains at least one cycle
+			//The molecule contains at least one cycle
 			findCyclicAndAcyclicComponets();			
 		}
 		
@@ -125,7 +130,27 @@ public class IUPACNameGenerator
 
 	protected void findCyclicAndAcyclicComponets()
 	{
+		//Generate cyclic components
+		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
+		{
+			IAtomContainer ring = ringSet.getAtomContainer(i);
+			CyclicComponent comp = getCyclicComponentForRing(i);
+			if (comp == null)
+				comp = new CyclicComponent();
+			comp.ringNumbers.add(i);
+		}
+		
+		//Generate acyclic components
 		//TODO
+	}
+	
+	protected CyclicComponent getCyclicComponentForRing(int ringIndex)
+	{
+		for (CyclicComponent c : cyclicComponents) {
+			if (c.ringNumbers.contains(ringIndex))
+				return c;
+		}
+		return null;
 	}
 	
 	protected void processAcyclicComponets()
@@ -134,10 +159,12 @@ public class IUPACNameGenerator
 		//TODO
 	}
 	
+	/*
 	protected void makeComponentLogicalRelations()
 	{
 		//TODO
 	}
+	*/
 	
 	protected IIUPACComponent getBestRankComponent()
 	{
