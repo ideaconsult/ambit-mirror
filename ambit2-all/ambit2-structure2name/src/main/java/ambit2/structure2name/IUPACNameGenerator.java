@@ -12,6 +12,9 @@ public class IUPACNameGenerator
 {	
 	protected IUPACRuleDataBase ruleDataBase = null;
 	
+	protected IAtomContainer originalMolecule = null;
+	protected IAtomContainer molecule = null;
+	
 	protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
 	
@@ -28,18 +31,24 @@ public class IUPACNameGenerator
 	{
 		initialComponents.clear();
 		components.clear();
+		originalMolecule = mol;
+		molecule = mol;
 				
-		findCyclicAndAcyclicComponets();
+		generateComponents(molecule);
 		
-		processAcyclicComponets();
-		
-		makeComponentLogicalRelations();
 		
 		IIUPACComponent mainComp = getBestRankComponent();
 		
 		String iupac = mainComp.getMainToken();
 		
 		return iupac;
+	}
+	
+	protected void generateComponents(IAtomContainer mol)
+	{
+		//findCyclicAndAcyclicComponets();
+		//processAcyclicComponets();
+		//makeComponentLogicalRelations();
 	}
 
 	protected void findCyclicAndAcyclicComponets()
