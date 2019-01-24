@@ -134,9 +134,12 @@ public class IUPACNameGenerator
 		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
 		{
 			IAtomContainer ring = ringSet.getAtomContainer(i);
-			CyclicComponent comp = getCyclicComponentForRing(i);
+			CyclicComponent comp = getCyclicComponentForRing(ring);
 			if (comp == null)
+			{	
 				comp = new CyclicComponent();
+				cyclicComponents.add(comp);
+			}	
 			comp.ringNumbers.add(i);
 		}
 		
@@ -144,11 +147,17 @@ public class IUPACNameGenerator
 		//TODO
 	}
 	
-	protected CyclicComponent getCyclicComponentForRing(int ringIndex)
+	protected CyclicComponent getCyclicComponentForRing(IAtomContainer ring)
 	{
-		for (CyclicComponent c : cyclicComponents) {
-			if (c.ringNumbers.contains(ringIndex))
-				return c;
+		for (CyclicComponent c : cyclicComponents) 
+		{
+			for (IAtom atom : ring.atoms())
+			{	
+				int ringNums[] = atomRingNumbers.get(atom);
+				for (int i = 0; i < ringNums.length; i++)
+					if (c.ringNumbers.contains(ringNums[i]))
+						return c;
+			}	
 		}
 		return null;
 	}
