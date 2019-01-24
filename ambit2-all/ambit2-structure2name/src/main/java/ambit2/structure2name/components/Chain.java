@@ -10,8 +10,17 @@ import ambit2.structure2name.components.ComponentUtils.Comparison;
 
 public class Chain extends AbstractComponent 
 {
+	
+	@Override
+	public CompType getType() {
+		return CompType.CHAIN;
+	}
+	
+
+	/*
+	  
 	protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
-	protected long rank = -1;
+	
 	protected int size = 1;
 	
 	public int getSize() {
@@ -20,15 +29,7 @@ public class Chain extends AbstractComponent
 
 	public void setSize(int size) {
 		this.size = size;
-	}
-
-	@Override
-	public CompType getType() {
-		return CompType.CHAIN;
-	}
-	
-
-	/*
+	}  
 	
 	@Override
 	public IAtomContainer getSubstructure() {
