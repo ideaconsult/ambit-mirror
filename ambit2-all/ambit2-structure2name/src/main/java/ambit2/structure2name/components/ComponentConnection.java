@@ -6,7 +6,7 @@ import org.openscience.cdk.interfaces.IBond;
 public class ComponentConnection 
 {
 	public static enum ConType {
-		ATOM_ATOM, SPIRO, BOND_FUSE, IS_SUB_COMPONENT, IS_SUPER_COMPONENT
+		ATOM_ATOM, SPIRO, COMMON_ATOM, BOND_FUSE, IS_SUB_COMPONENT, IS_SUPER_COMPONENT
 	}
 	
 	public ConType type = ConType.ATOM_ATOM;
