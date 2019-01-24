@@ -3,8 +3,10 @@ package ambit2.structure2name;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.structure2name.components.AcyclicComponent;
 import ambit2.structure2name.components.IIUPACComponent;
 import ambit2.structure2name.rules.IUPACRuleDataBase;
 
@@ -14,6 +16,7 @@ public class IUPACNameGenerator
 	
 	protected IAtomContainer originalMolecule = null;
 	protected IAtomContainer molecule = null;
+	protected int cyclomaticNum = 0;
 	
 	protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
@@ -33,9 +36,10 @@ public class IUPACNameGenerator
 		components.clear();
 		originalMolecule = mol;
 		molecule = mol;
-				
-		generateComponents(molecule);
 		
+		init();
+		
+		generateComponents();
 		
 		IIUPACComponent mainComp = getBestRankComponent();
 		
@@ -44,10 +48,34 @@ public class IUPACNameGenerator
 		return iupac;
 	}
 	
-	protected void generateComponents(IAtomContainer mol)
+	protected void init()
 	{
-		//findCyclicAndAcyclicComponets();
-		//processAcyclicComponets();
+		cyclomaticNum = molecule.getBondCount() - molecule.getAtomCount() + 1;
+		
+		//Prepare ring data
+		//TODO
+	}
+	
+	protected void generateComponents()
+	{		
+		if (cyclomaticNum == 0)
+		{
+			//This is an acyclic component
+			AcyclicComponent acomp = new AcyclicComponent();
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			for (IAtom a : molecule.atoms())
+				atoms.add(a);
+			acomp.setAtoms(atoms);
+			initialComponents.add(acomp);
+		}
+		else
+		{
+			//The molecule/fragment contains at least one cycle
+			findCyclicAndAcyclicComponets();			
+		}
+		
+		processAcyclicComponets();
+		
 		//makeComponentLogicalRelations();
 	}
 
@@ -58,6 +86,7 @@ public class IUPACNameGenerator
 	
 	protected void processAcyclicComponets()
 	{
+		
 		//TODO
 	}
 	
