@@ -3,6 +3,7 @@ package ambit2.structure2name.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.structure2name.components.ComponentUtils.Comparison;
@@ -37,11 +38,19 @@ public class Chain implements IIUPACComponent
 	}
 
 	@Override
-	public IAtomContainer getSubstructure() {
+	public List<IAtom> getAtoms() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/*
+	
+	@Override
+	public IAtomContainer getSubstructure() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public List<Integer> getIUPACAtomNumbering() {
 		// TODO Auto-generated method stub
@@ -85,5 +94,6 @@ public class Chain implements IIUPACComponent
 		
 		return sb.toString();
 	}
+	*/
 
 }

@@ -39,7 +39,7 @@ public class IUPACNameGenerator
 		
 		IIUPACComponent mainComp = getBestRankComponent();
 		
-		String iupac = mainComp.getMainToken();
+		String iupac = ""; //mainComp.getMainToken();
 		
 		return iupac;
 	}

@@ -2,6 +2,7 @@ package ambit2.structure2name.components;
 
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 
@@ -26,11 +27,19 @@ public class FunctionalGroup implements IIUPACComponent
 	}
 
 	@Override
-	public IAtomContainer getSubstructure() {
+	public List<IAtom> getAtoms() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/*
+	
+	@Override
+	public IAtomContainer getSubstructure() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public List<Integer> getIUPACAtomNumbering() {
 		// TODO Auto-generated method stub
@@ -66,5 +75,6 @@ public class FunctionalGroup implements IIUPACComponent
 		// TODO Auto-generated method stub
 		return null;
 	}
+	*/
 	
 }
