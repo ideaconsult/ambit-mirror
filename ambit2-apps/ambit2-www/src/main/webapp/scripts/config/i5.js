@@ -651,7 +651,27 @@ var config_i5 = {
 			}
 		},
 		"conditions" : {
-			"bVisible" : false
+			"bVisible" : false,
+			"doses/concentrations" : {
+				"iOrder" : -8,
+				"inMatrix" : true,
+				"bVisible" : true
+			},
+			"group" : {
+				"iOrder" : -7,
+				"inMatrix" : true,
+				"bVisible" : true
+			},
+			"sampling time" : {
+				"iOrder" : -6,
+				"inMatrix" : true,
+				"bVisible" : true
+			},
+			"total no in group" : {
+				"iOrder" : -5,
+				"inMatrix" : true,
+				"bVisible" : true
+			}
 		}
 	},
 	"TO_REPEATED_ORAL_SECTION" : {
