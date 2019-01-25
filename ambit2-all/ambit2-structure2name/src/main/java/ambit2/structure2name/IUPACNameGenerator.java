@@ -171,7 +171,23 @@ public class IUPACNameGenerator
 		//Fill cyclic component atoms
 		for (CyclicComponent c : cyclicComponents) 
 		{
-			//TODO
+			List<IAtom> atoms = new ArrayList<IAtom>();
+			for (int k : c.ringNumbers)
+			{
+				IAtomContainer ring = ringSet.getAtomContainer(k);
+				for (IAtom at : ring.atoms())
+				{
+					int ringNums[] = atomRingNumbers.get(at);
+					if (ringNums.length == 1)
+						atoms.add(at);
+					else
+					{
+						if (!atoms.contains(at))
+							atoms.add(at);
+					}
+				}
+			}
+			c.setAtoms(atoms);
 		}
 		
 		//Handle spiro connected rings !!!
@@ -194,11 +210,15 @@ public class IUPACNameGenerator
 					CyclicComponent c0 = getCyclicComponentForAtom(conAt);
 					if (c0 == null)
 					{
-						//Detect new acyclic component
+						//Detect a new acyclic component
+						//Mark acyclic atoms as scanned
 						//TODO
 					}
 					else
 					{
+						//Check for connection duplication !!! 
+						//TODO
+						
 						//conAt is part of another cyclic system
 						//Registering new connection
 						ComponentConnection con = new ComponentConnection();
@@ -208,7 +228,7 @@ public class IUPACNameGenerator
 						con.componentAtoms[1] = at;
 						IBond bo = molecule.getBond(at, conAt);
 						con.connectionBondOrder = bo.getOrder();						
-						connections.add(con);
+						connections.add(con); 
 					}
 					
 				}
