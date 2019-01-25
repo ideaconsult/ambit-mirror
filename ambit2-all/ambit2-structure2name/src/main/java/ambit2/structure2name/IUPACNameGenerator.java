@@ -27,6 +27,7 @@ public class IUPACNameGenerator
 	protected Cycles cycles = null;
 	protected IRingSet ringSet = null;
 	protected Map<IAtom,int[]> atomRingNumbers = new HashMap<IAtom,int[]>(); 
+	protected List<IAtom> spiroAtoms = new ArrayList<IAtom>();
 		
 	//protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<CyclicComponent> cyclicComponents = new ArrayList<CyclicComponent>();
@@ -69,6 +70,7 @@ public class IUPACNameGenerator
 		cycles = null;
 		ringSet = null;
 		atomRingNumbers.clear();
+		spiroAtoms.clear();
 	}
 	
 	protected void init()
@@ -81,6 +83,7 @@ public class IUPACNameGenerator
 			cycles = Cycles.sssr(molecule);
 			ringSet = cycles.toRingSet();
 			makeRindData();
+			findSpiroAtoms();
 		}
 	}
 	
@@ -97,6 +100,24 @@ public class IUPACNameGenerator
 					ringNumbers[k] = getRingNumber(atomRings.getAtomContainer(k));
 				atomRingNumbers.put(atom,ringNumbers);
 			}
+		}
+	}
+	
+	protected void findSpiroAtoms()
+	{
+		for (IAtom at: molecule.atoms())
+		{
+			int ringNums[] = atomRingNumbers.get(at);
+			if (ringNums == null)
+				continue;
+			if (ringNums.length != 2)
+				continue;
+						
+			if (molecule.getConnectedBondsCount(at) == 4)
+			{	
+				//This check is correct only for molecules with implicit hydrogens
+				spiroAtoms.add(at);
+			}	
 		}
 	}
 	
@@ -153,8 +174,7 @@ public class IUPACNameGenerator
 			//TODO
 		}
 		
-		 
-		//handle spiro connected rings !!!
+		//Handle spiro connected rings !!!
 		//Use preliminary detection of spiro atoms 
 		//TODO
 		
