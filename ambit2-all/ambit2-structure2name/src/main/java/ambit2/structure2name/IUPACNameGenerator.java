@@ -29,6 +29,7 @@ public class IUPACNameGenerator
 	protected Map<IAtom,int[]> atomRingNumbers = new HashMap<IAtom,int[]>(); 
 	protected List<IAtom> spiroAtoms = new ArrayList<IAtom>();
 	protected List<IAtom> acyclicAtoms = new ArrayList<IAtom>();
+	protected List<IAtom> cyclicAtoms = new ArrayList<IAtom>();
 		
 	//protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<CyclicComponent> cyclicComponents = new ArrayList<CyclicComponent>();
@@ -73,6 +74,7 @@ public class IUPACNameGenerator
 		atomRingNumbers.clear();
 		spiroAtoms.clear();
 		acyclicAtoms.clear();
+		cyclicAtoms.clear();
 	}
 	
 	protected void init()
@@ -96,12 +98,16 @@ public class IUPACNameGenerator
 			IAtom atom = molecule.getAtom(i);
 			atomRings = ringSet.getRings(atom);
 			int n = atomRings.getAtomContainerCount();
-			if (n > 0) {
+			if (n > 0) 
+			{	
 				int ringNumbers[] = new int[n];
 				for (int k = 0; k < n; k++)
 					ringNumbers[k] = getRingNumber(atomRings.getAtomContainer(k));
 				atomRingNumbers.put(atom,ringNumbers);
+				cyclicAtoms.add(atom);
 			}
+			else
+				acyclicAtoms.add(atom);
 		}
 	}
 	
