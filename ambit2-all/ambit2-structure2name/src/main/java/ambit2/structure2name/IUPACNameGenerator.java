@@ -106,8 +106,8 @@ public class IUPACNameGenerator
 				atomRingNumbers.put(atom,ringNumbers);
 				cyclicAtoms.add(atom);
 			}
-			else
-				acyclicAtoms.add(atom);
+			//Acyclic atom are filled on acyclic component generation
+			//acyclicAtoms.add(atom);
 		}
 	}
 	
@@ -213,15 +213,9 @@ public class IUPACNameGenerator
 				for (IAtom conAt : conAtoms)
 				{
 					if (atoms.contains(conAt))
-						continue;
+						continue; //conAt is part of the same cyclic system
 					
-					if (acyclicAtoms.contains(conAt))					
-					{
-						//Detect a new acyclic component
-						//Mark acyclic atoms as scanned
-						//TODO
-					}
-					else
+					if (cyclicAtoms.contains(conAt))					
 					{
 						//conAt is part of another cyclic system
 						CyclicComponent c0 = getCyclicComponentForAtom(conAt);
@@ -231,7 +225,7 @@ public class IUPACNameGenerator
 						if (con != null)
 							continue;
 						
-						//registering new connection
+						//registering a new connection
 						con = new ComponentConnection();
 						con.components[0] = c0;
 						con.components[1] = c;
@@ -241,17 +235,79 @@ public class IUPACNameGenerator
 						con.connectionBondOrder = bo.getOrder();						
 						connections.add(con); 
 					}
-					
+					else
+					{
+						if (acyclicAtoms.contains(conAt))
+							continue; //Atom is already regstered in another acyclic component
+						
+						//Generate a new acyclic component
+						//all atoms from the component are registered in acyclicAtoms
+						//component connections are also registered
+						AcyclicComponent acomp = generateAcyclicComponent(conAt);
+						acyclicComponents.add(acomp);
+					}
 				}
 			}
 			
 		}
 		
-		//Check for component connection anomalies (sophisticated ring systems??)
+		//Check for component connection anomalies if neede (sophisticated ring systems??)
 		//TODO
 	}
 	
 	
+	protected AcyclicComponent generateAcyclicComponent(IAtom startAtom)
+	{
+		AcyclicComponent acomp = new AcyclicComponent();
+		List<IAtom> atomList = new ArrayList<IAtom>();
+		List<IAtom> curLayer = new ArrayList<IAtom>();
+		atomList.add(startAtom);
+		curLayer.add(startAtom);
+		
+		//Scanning all layers around startAtom. 
+		//Layer expanding is stopped when reaching cyclic atoms "border"
+		while (!curLayer.isEmpty())
+		{	
+			List<IAtom> nextLayer = new ArrayList<IAtom>();
+			
+			//Generate next layer from the neighbors of curLayer atoms 
+			for (IAtom at : curLayer)
+			{
+				List<IAtom> neighAtoms = molecule.getConnectedAtomsList(at);
+				for (IAtom na : neighAtoms)
+				{
+					if (atomList.contains(na))
+						continue; //na is from previous layers
+					if (curLayer.contains(na))
+						continue; //na is from the current layer
+					
+					if (cyclicAtoms.contains(na))
+					{
+						CyclicComponent cc = getCyclicComponentForAtom(na);
+						//Each cyclic atom defines a connection 
+						//between this component and a cyclic component
+						ComponentConnection con = new ComponentConnection();
+						con.components[0] = acomp;
+						con.components[1] = cc;
+						con.componentAtoms[0] = at;
+						con.componentAtoms[1] = na;
+						connections.add(con);
+					}
+					else
+					{
+						//This is an atom from the next layer
+						nextLayer.add(na);
+					}
+				}
+			}
+			
+			curLayer = nextLayer;
+		}
+		
+		acomp.setAtoms(atomList);
+		acyclicAtoms.addAll(atomList);
+		return acomp;
+	}
 	
 	protected CyclicComponent getCyclicComponentFusedToRing(IAtomContainer ring)
 	{
