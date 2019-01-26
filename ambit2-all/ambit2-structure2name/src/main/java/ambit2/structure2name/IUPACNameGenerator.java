@@ -28,6 +28,7 @@ public class IUPACNameGenerator
 	protected IRingSet ringSet = null;
 	protected Map<IAtom,int[]> atomRingNumbers = new HashMap<IAtom,int[]>(); 
 	protected List<IAtom> spiroAtoms = new ArrayList<IAtom>();
+	protected List<IAtom> acyclicAtoms = new ArrayList<IAtom>();
 		
 	//protected List<IIUPACComponent> initialComponents = new ArrayList<IIUPACComponent>();
 	protected List<CyclicComponent> cyclicComponents = new ArrayList<CyclicComponent>();
@@ -71,6 +72,7 @@ public class IUPACNameGenerator
 		ringSet = null;
 		atomRingNumbers.clear();
 		spiroAtoms.clear();
+		acyclicAtoms.clear();
 	}
 	
 	protected void init()
@@ -134,7 +136,7 @@ public class IUPACNameGenerator
 	{		
 		if (cyclomaticNum == 0)
 		{
-			//This is an acyclic component
+			//This is an acyclic molecule
 			AcyclicComponent acomp = new AcyclicComponent();
 			List<IAtom> atoms = new ArrayList<IAtom>();
 			for (IAtom a : molecule.atoms())
@@ -191,10 +193,10 @@ public class IUPACNameGenerator
 		}
 		
 		//Handle spiro connected rings !!!
-		//Use preliminary detection of spiro atoms 
+		//Use preliminary detected spiro atoms 
 		//TODO
 		
-		//Generate acyclic components
+		//Generate acyclic components		
 		for (CyclicComponent c : cyclicComponents) 
 		{
 			List<IAtom> atoms = c.getAtoms();
@@ -216,12 +218,14 @@ public class IUPACNameGenerator
 					}
 					else
 					{
-						//Check for connection duplication !!! 
-						//TODO
+						//Check for connection duplication ! 
+						ComponentConnection con = getConnection(c,c0);
+						if (con != null)
+							continue;
 						
 						//conAt is part of another cyclic system
-						//Registering new connection
-						ComponentConnection con = new ComponentConnection();
+						//registering new connection
+						con = new ComponentConnection();
 						con.components[0] = c0;
 						con.components[1] = c;
 						con.componentAtoms[0] = conAt;
@@ -239,6 +243,8 @@ public class IUPACNameGenerator
 		//Check for component connection anomalies (sophisticated ring systems??)
 		//TODO
 	}
+	
+	
 	
 	protected CyclicComponent getCyclicComponentForRing(IAtomContainer ring)
 	{
@@ -261,6 +267,18 @@ public class IUPACNameGenerator
 		{
 			if (c.getAtoms().contains(at))
 				return c;
+		}
+		return null;
+	}
+	
+	
+	protected ComponentConnection getConnection(IIUPACComponent c0, IIUPACComponent c1)
+	{
+		for (ComponentConnection con: connections)
+		{
+			if ((c0 == con.components[0] && c1 == con.components[1])
+				||(c0 == con.components[1] && c1 == con.components[0]))
+				return con;
 		}
 		return null;
 	}
