@@ -167,7 +167,7 @@ public class IUPACNameGenerator
 		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
 		{
 			IAtomContainer ring = ringSet.getAtomContainer(i);
-			CyclicComponent comp = getCyclicComponentForRing(ring);
+			CyclicComponent comp = getCyclicComponentFusedToRing(ring);
 			if (comp == null)
 			{	
 				comp = new CyclicComponent();
@@ -176,7 +176,7 @@ public class IUPACNameGenerator
 			comp.ringNumbers.add(i);
 		}
 		
-		//Fill cyclic component atoms
+		//Fill cyclic components atoms
 		for (CyclicComponent c : cyclicComponents) 
 		{
 			List<IAtom> atoms = new ArrayList<IAtom>();
@@ -215,8 +215,7 @@ public class IUPACNameGenerator
 					if (atoms.contains(conAt))
 						continue;
 					
-					CyclicComponent c0 = getCyclicComponentForAtom(conAt);
-					if (c0 == null)
+					if (acyclicAtoms.contains(conAt))					
 					{
 						//Detect a new acyclic component
 						//Mark acyclic atoms as scanned
@@ -224,12 +223,14 @@ public class IUPACNameGenerator
 					}
 					else
 					{
-						//Check for connection duplication ! 
+						//conAt is part of another cyclic system
+						CyclicComponent c0 = getCyclicComponentForAtom(conAt);
+						
+						//Check for connection duplication 
 						ComponentConnection con = getConnection(c,c0);
 						if (con != null)
 							continue;
 						
-						//conAt is part of another cyclic system
 						//registering new connection
 						con = new ComponentConnection();
 						con.components[0] = c0;
@@ -252,7 +253,7 @@ public class IUPACNameGenerator
 	
 	
 	
-	protected CyclicComponent getCyclicComponentForRing(IAtomContainer ring)
+	protected CyclicComponent getCyclicComponentFusedToRing(IAtomContainer ring)
 	{
 		for (CyclicComponent c : cyclicComponents) 
 		{
@@ -261,7 +262,7 @@ public class IUPACNameGenerator
 				int ringNums[] = atomRingNumbers.get(atom);
 				for (int i = 0; i < ringNums.length; i++)
 					if (c.ringNumbers.contains(ringNums[i]))
-						return c;
+						return c; //c is fused to ring
 			}	
 		}
 		return null;
