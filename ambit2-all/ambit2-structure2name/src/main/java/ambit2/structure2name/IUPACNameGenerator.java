@@ -13,6 +13,7 @@ import org.openscience.cdk.interfaces.IRingSet;
 
 import ambit2.structure2name.components.AcyclicComponent;
 import ambit2.structure2name.components.ComponentConnection;
+import ambit2.structure2name.components.ComponentUtils;
 import ambit2.structure2name.components.CyclicComponent;
 import ambit2.structure2name.components.IIUPACComponent;
 import ambit2.structure2name.rules.IUPACRuleDataBase;
@@ -378,5 +379,33 @@ public class IUPACNameGenerator
 		
 		return components.get(maxIndex);
 	}
+	
+	public String getComponentDataAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		if (!cyclicComponents.isEmpty())
+		{
+			sb.append("Cyclic components:\n");
+			for (CyclicComponent c : cyclicComponents)
+			{
+				sb.append(ComponentUtils.getComponentString(c.getAtoms(), molecule));
+				sb.append(" nAtoms = " + c.getAtoms().size());
+				sb.append("\n");
+			}
+		}
+		if (!acyclicComponents.isEmpty())
+		{
+			sb.append("Acyclic components:\n");
+			for (AcyclicComponent c : acyclicComponents)
+			{
+				sb.append(ComponentUtils.getComponentString(c.getAtoms(), molecule));
+				sb.append(" nAtoms = " + c.getAtoms().size());
+				sb.append("\n");
+			}
+		}
+		
+		return sb.toString();
+	}
+	
 	
 }
