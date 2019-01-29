@@ -259,7 +259,8 @@ public abstract class AbstractImportTest extends DbUnitTest {
 		}
 		if (!dryRun)
 			return verifyFiles(count);
-		else return count;
+		else
+			return count;
 	}
 
 	protected File getJsonDataName(File file, String jsonname) {
@@ -300,7 +301,7 @@ public abstract class AbstractImportTest extends DbUnitTest {
 	}
 
 	protected abstract int importFile(File spreadsheet, File json, String prefix, boolean resetdb, String release)
-			throws Exception ;
+			throws Exception;
 
 	protected String[] getImportOptions(File spreadsheet, File json, String prefix, String release) {
 		URL propertiesFile = this.getClass().getClassLoader().getResource("config/ambit.properties");
@@ -340,31 +341,31 @@ public abstract class AbstractImportTest extends DbUnitTest {
 		}
 	}
 
-
 	protected void testParams(IDatabaseConnection c, String prmname, int expected) throws Exception {
 		testParams(c, prmname, expected, false);
 	}
-	
-	protected void testConditions(IDatabaseConnection c, String prmname, int expected, boolean numeric) throws Exception {
-		ITable table = c.createQueryTable("EXPECTED",
-				String.format(
-						"SELECT count(*) c,JSON_EXTRACT(replace(conditions,'E.','E_'),'$.%s') ref FROM substance_experiment e group by ref",
-						prmname.replace("E.", "E_")));
+
+	protected void testConditions(IDatabaseConnection c, String prmname, int expected, boolean numeric)
+			throws Exception {
+		String query = String.format(
+				"SELECT count(*) c,JSON_EXTRACT(replace(conditions,'E.','E_'),'$.%s') ref FROM substance_experiment e group by ref",
+				prmname.replace("E.", "E_"));
+		ITable table = c.createQueryTable("EXPECTED", query);
+		System.out.println(query);
 		if (!numeric)
 			for (int i = 0; i < table.getRowCount(); i++) {
-				Object animal = table.getValue(i, "ref");
-				if (animal != null)
-					Assert.assertFalse(animal.toString(), animal.toString().indexOf("loValue") >= 0);
+				Object item = table.getValue(i, "ref");
+				if (item != null)
+					Assert.assertFalse(item.toString(), item.toString().indexOf("loValue") >= 0);
 			}
 		Assert.assertEquals(expected, table.getRowCount());
 	}
 
-	
 	protected void testParams(IDatabaseConnection c, String prmname, int expected, boolean numeric) throws Exception {
-		ITable table = c.createQueryTable("EXPECTED",
-				String.format(
-						"SELECT count(*) c,JSON_EXTRACT(replace(params,'E.','E_'),'$.%s') ref FROM substance s join substance_protocolapplication p on uuid=substance_uuid join substance_experiment e using(document_uuid) group by ref",
-						prmname.replace("E.", "E_")));
+		String query = String.format(
+				"SELECT count(*) c,JSON_EXTRACT(replace(params,'E.','E_'),'$.%s') ref FROM substance s join substance_protocolapplication p on uuid=substance_uuid join substance_experiment e using(document_uuid) group by ref",
+				prmname.replace("E.", "E_"));
+		ITable table = c.createQueryTable("EXPECTED", query);
 		if (!numeric)
 			for (int i = 0; i < table.getRowCount(); i++) {
 				Object animal = table.getValue(i, "ref");
@@ -373,8 +374,6 @@ public abstract class AbstractImportTest extends DbUnitTest {
 			}
 		Assert.assertEquals(expected, table.getRowCount());
 	}
-
-	
 
 	protected void testPublicnames(IDatabaseConnection c) throws Exception {
 		ITable table = c.createQueryTable("EXPECTED",
