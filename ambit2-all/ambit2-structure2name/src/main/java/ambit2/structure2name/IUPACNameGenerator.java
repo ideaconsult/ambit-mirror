@@ -36,7 +36,8 @@ public class IUPACNameGenerator
 	protected List<CyclicComponent> cyclicComponents = new ArrayList<CyclicComponent>();
 	protected List<AcyclicComponent> acyclicComponents = new ArrayList<AcyclicComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
-	protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
+	protected List<ComponentConnection> initialConnections = new ArrayList<ComponentConnection>();
+	//protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
 	
 	public IUPACNameGenerator() throws Exception
 	{
@@ -69,7 +70,8 @@ public class IUPACNameGenerator
 		cyclicComponents.clear();
 		acyclicComponents.clear();
 		components.clear();
-		connections.clear();
+		initialConnections.clear();
+		//connections.clear();
 		cycles = null;
 		ringSet = null;
 		atomRingNumbers.clear();
@@ -157,7 +159,8 @@ public class IUPACNameGenerator
 			findCyclicAndAcyclicComponets();			
 		}
 		
-		processAcyclicComponets();
+		for (AcyclicComponent acomp : acyclicComponents)
+			processAcyclicComponent(acomp);
 		
 		//makeComponentLogicalRelations();
 	}
@@ -222,7 +225,7 @@ public class IUPACNameGenerator
 						CyclicComponent c0 = getCyclicComponentForAtom(conAt);
 						
 						//Check for connection duplication 
-						ComponentConnection con = getConnection(c,c0);
+						ComponentConnection con = getInitialConnection(c,c0);
 						if (con != null)
 							continue;
 						
@@ -234,7 +237,7 @@ public class IUPACNameGenerator
 						con.componentAtoms[1] = at;
 						IBond bo = molecule.getBond(at, conAt);
 						con.connectionBondOrder = bo.getOrder();						
-						connections.add(con); 
+						initialConnections.add(con); 
 					}
 					else
 					{
@@ -252,7 +255,7 @@ public class IUPACNameGenerator
 			
 		}
 		
-		//Check for component connection anomalies if neede (sophisticated ring systems??)
+		//Check for component connection anomalies if needed (sophisticated ring systems??)
 		//TODO
 	}
 	
@@ -292,7 +295,7 @@ public class IUPACNameGenerator
 						con.components[1] = cc;
 						con.componentAtoms[0] = at;
 						con.componentAtoms[1] = na;
-						connections.add(con);
+						initialConnections.add(con);
 					}
 					else
 					{
@@ -337,9 +340,9 @@ public class IUPACNameGenerator
 	}
 	
 	
-	protected ComponentConnection getConnection(IIUPACComponent c0, IIUPACComponent c1)
+	protected ComponentConnection getInitialConnection(IIUPACComponent c0, IIUPACComponent c1)
 	{
-		for (ComponentConnection con: connections)
+		for (ComponentConnection con: initialConnections)
 		{
 			if ((c0 == con.components[0] && c1 == con.components[1])
 				||(c0 == con.components[1] && c1 == con.components[0]))
@@ -348,7 +351,7 @@ public class IUPACNameGenerator
 		return null;
 	}
 	
-	protected void processAcyclicComponets()
+	protected void processAcyclicComponent(AcyclicComponent acomp)
 	{
 		
 		//TODO

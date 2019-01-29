@@ -64,9 +64,29 @@
 	"FUNCTIONAL_GROUPS" : 
 	[
 		{
-				
+			"atom_symbol" : "N"
+		},
+		{
+			"atom_symbol" : "O"
+		},
+		{
+			"atom_symbol" : "S"
+		},
+		{
+			"atom_symbol" : "P"
+		},
+		{
+			"atom_symbol" : "Cl"
+		},
+		{
+			"atom_symbol" : "Br"
+		},
+		{
+			"atom_symbol" : "F"
+		},
+		{
+			"atom_symbol" : "I"
 		}
-	
 	],
 	
 	"TOKEN_RULES" : 
