@@ -163,7 +163,7 @@ public class IUPACNameGenerator
 	}
 
 	protected void findCyclicAndAcyclicComponets()
-	{
+	{	
 		//Generate cyclic components
 		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
 		{
@@ -175,7 +175,7 @@ public class IUPACNameGenerator
 				cyclicComponents.add(comp);
 			}	
 			comp.ringNumbers.add(i);
-		}
+		}		
 		
 		//Fill cyclic components atoms
 		for (CyclicComponent c : cyclicComponents) 
@@ -264,7 +264,7 @@ public class IUPACNameGenerator
 		List<IAtom> curLayer = new ArrayList<IAtom>();
 		atomList.add(startAtom);
 		curLayer.add(startAtom);
-		
+				
 		//Scanning all layers around startAtom. 
 		//Layer expanding is stopped when reaching cyclic atoms "border"
 		while (!curLayer.isEmpty())
@@ -298,6 +298,7 @@ public class IUPACNameGenerator
 					{
 						//This is an atom from the next layer
 						nextLayer.add(na);
+						atomList.add(na);
 					}
 				}
 			}

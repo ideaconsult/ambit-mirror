@@ -10,7 +10,7 @@ public class TestIUPACUtils
 	public static void main(String[] args) throws Exception 
 	{
 		//testIUPACRuleDB();
-		testIUPACNameGen("CCCCC");
+		testIUPACNameGen("CCCCC1CCC1");
 	}
 	
 	public static void testIUPACRuleDB() throws Exception
