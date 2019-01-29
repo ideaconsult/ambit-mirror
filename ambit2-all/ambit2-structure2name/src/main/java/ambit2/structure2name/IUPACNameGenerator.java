@@ -13,6 +13,7 @@ import org.openscience.cdk.interfaces.IRingSet;
 
 import ambit2.structure2name.components.AcyclicComponent;
 import ambit2.structure2name.components.ComponentConnection;
+import ambit2.structure2name.components.ComponentUtils;
 import ambit2.structure2name.components.CyclicComponent;
 import ambit2.structure2name.components.IIUPACComponent;
 import ambit2.structure2name.rules.IUPACRuleDataBase;
@@ -35,7 +36,8 @@ public class IUPACNameGenerator
 	protected List<CyclicComponent> cyclicComponents = new ArrayList<CyclicComponent>();
 	protected List<AcyclicComponent> acyclicComponents = new ArrayList<AcyclicComponent>();
 	protected List<IIUPACComponent> components = new ArrayList<IIUPACComponent>();
-	protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
+	protected List<ComponentConnection> initialConnections = new ArrayList<ComponentConnection>();
+	//protected List<ComponentConnection> connections = new ArrayList<ComponentConnection>();
 	
 	public IUPACNameGenerator() throws Exception
 	{
@@ -68,7 +70,8 @@ public class IUPACNameGenerator
 		cyclicComponents.clear();
 		acyclicComponents.clear();
 		components.clear();
-		connections.clear();
+		initialConnections.clear();
+		//connections.clear();
 		cycles = null;
 		ringSet = null;
 		atomRingNumbers.clear();
@@ -156,13 +159,14 @@ public class IUPACNameGenerator
 			findCyclicAndAcyclicComponets();			
 		}
 		
-		processAcyclicComponets();
+		for (AcyclicComponent acomp : acyclicComponents)
+			processAcyclicComponent(acomp);
 		
 		//makeComponentLogicalRelations();
 	}
 
 	protected void findCyclicAndAcyclicComponets()
-	{
+	{	
 		//Generate cyclic components
 		for (int i = 0; i < ringSet.getAtomContainerCount(); i++)
 		{
@@ -174,7 +178,7 @@ public class IUPACNameGenerator
 				cyclicComponents.add(comp);
 			}	
 			comp.ringNumbers.add(i);
-		}
+		}		
 		
 		//Fill cyclic components atoms
 		for (CyclicComponent c : cyclicComponents) 
@@ -221,7 +225,7 @@ public class IUPACNameGenerator
 						CyclicComponent c0 = getCyclicComponentForAtom(conAt);
 						
 						//Check for connection duplication 
-						ComponentConnection con = getConnection(c,c0);
+						ComponentConnection con = getInitialConnection(c,c0);
 						if (con != null)
 							continue;
 						
@@ -233,7 +237,7 @@ public class IUPACNameGenerator
 						con.componentAtoms[1] = at;
 						IBond bo = molecule.getBond(at, conAt);
 						con.connectionBondOrder = bo.getOrder();						
-						connections.add(con); 
+						initialConnections.add(con); 
 					}
 					else
 					{
@@ -251,7 +255,7 @@ public class IUPACNameGenerator
 			
 		}
 		
-		//Check for component connection anomalies if neede (sophisticated ring systems??)
+		//Check for component connection anomalies if needed (sophisticated ring systems??)
 		//TODO
 	}
 	
@@ -263,7 +267,7 @@ public class IUPACNameGenerator
 		List<IAtom> curLayer = new ArrayList<IAtom>();
 		atomList.add(startAtom);
 		curLayer.add(startAtom);
-		
+				
 		//Scanning all layers around startAtom. 
 		//Layer expanding is stopped when reaching cyclic atoms "border"
 		while (!curLayer.isEmpty())
@@ -291,12 +295,13 @@ public class IUPACNameGenerator
 						con.components[1] = cc;
 						con.componentAtoms[0] = at;
 						con.componentAtoms[1] = na;
-						connections.add(con);
+						initialConnections.add(con);
 					}
 					else
 					{
 						//This is an atom from the next layer
 						nextLayer.add(na);
+						atomList.add(na);
 					}
 				}
 			}
@@ -335,9 +340,9 @@ public class IUPACNameGenerator
 	}
 	
 	
-	protected ComponentConnection getConnection(IIUPACComponent c0, IIUPACComponent c1)
+	protected ComponentConnection getInitialConnection(IIUPACComponent c0, IIUPACComponent c1)
 	{
-		for (ComponentConnection con: connections)
+		for (ComponentConnection con: initialConnections)
 		{
 			if ((c0 == con.components[0] && c1 == con.components[1])
 				||(c0 == con.components[1] && c1 == con.components[0]))
@@ -346,7 +351,7 @@ public class IUPACNameGenerator
 		return null;
 	}
 	
-	protected void processAcyclicComponets()
+	protected void processAcyclicComponent(AcyclicComponent acomp)
 	{
 		
 		//TODO
@@ -378,5 +383,45 @@ public class IUPACNameGenerator
 		
 		return components.get(maxIndex);
 	}
+	
+	public String getComponentDataAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		int totalAtomSum = 0;
+		if (!cyclicComponents.isEmpty())
+		{
+			sb.append("Cyclic components:\n");
+			for (CyclicComponent c : cyclicComponents)
+			{
+				sb.append(ComponentUtils.getComponentString(c.getAtoms(), molecule));
+				sb.append(" nAtoms = " + c.getAtoms().size());
+				sb.append("\n");
+				totalAtomSum += c.getAtoms().size();
+			}
+		}
+		if (!acyclicComponents.isEmpty())
+		{
+			sb.append("Acyclic components:\n");
+			for (AcyclicComponent c : acyclicComponents)
+			{
+				sb.append(ComponentUtils.getComponentString(c.getAtoms(), molecule));
+				sb.append(" nAtoms = " + c.getAtoms().size());
+				sb.append("\n");
+				totalAtomSum += c.getAtoms().size();
+			}
+		}
+		
+		if (!spiroAtoms.isEmpty())
+		{
+			sb.append("Spiro atoms: \n");
+			sb.append(ComponentUtils.getAtomListAsString(spiroAtoms, molecule));
+		}
+		
+		sb.append("Molecule atoms: " + molecule.getAtomCount() + "\n");
+		sb.append("Component total atom sum: " + totalAtomSum + "\n");
+		
+		return sb.toString();
+	}
+	
 	
 }
