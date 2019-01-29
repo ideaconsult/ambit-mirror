@@ -383,6 +383,7 @@ public class IUPACNameGenerator
 	public String getComponentDataAsString()
 	{
 		StringBuffer sb = new StringBuffer();
+		int totalAtomSum = 0;
 		if (!cyclicComponents.isEmpty())
 		{
 			sb.append("Cyclic components:\n");
@@ -391,6 +392,7 @@ public class IUPACNameGenerator
 				sb.append(ComponentUtils.getComponentString(c.getAtoms(), molecule));
 				sb.append(" nAtoms = " + c.getAtoms().size());
 				sb.append("\n");
+				totalAtomSum += c.getAtoms().size();
 			}
 		}
 		if (!acyclicComponents.isEmpty())
@@ -401,8 +403,18 @@ public class IUPACNameGenerator
 				sb.append(ComponentUtils.getComponentString(c.getAtoms(), molecule));
 				sb.append(" nAtoms = " + c.getAtoms().size());
 				sb.append("\n");
+				totalAtomSum += c.getAtoms().size();
 			}
 		}
+		
+		if (!spiroAtoms.isEmpty())
+		{
+			sb.append("Spiro atoms: \n");
+			sb.append(ComponentUtils.getAtomListAsString(spiroAtoms, molecule));
+		}
+		
+		sb.append("Molecule atoms: " + molecule.getAtomCount() + "\n");
+		sb.append("Component total atom sum: " + totalAtomSum + "\n");
 		
 		return sb.toString();
 	}
