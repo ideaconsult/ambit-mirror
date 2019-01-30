@@ -3335,7 +3335,7 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 
 	var col = [ 'substanceType', 'name', 'publicname', 'investigation',
 			'reference', 'reference_owner', 'reference_year', 'topcategory',
-			'endpointcategory', 'guidance', 'effectendpoint', 'unit',
+			'endpointcategory', 'guidance', 'effectendpoint','resulttype', 'unit',
 			'loQualifier', 'loValue', 'upQualifier', 'upValue', 'errQualifier',
 			'err', 'textValue', 's_uuid', 'document_uuid', 'owner_name' ];
 
@@ -3347,6 +3347,7 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		"reference_owner" : "Study provider",
 		"reference_year" : "Study year",
 		"effectendpoint" : "endpoint",
+		"resulttype" : "result type",
 		"loQualifier" : "=, >= ,>",
 		"loValue" : "value",
 		"upQualifier" : "<, <=",

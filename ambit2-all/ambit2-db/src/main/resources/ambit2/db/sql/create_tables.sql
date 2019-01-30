@@ -397,6 +397,7 @@ CREATE TABLE `bundle_substance_experiment` (
   `copied` tinyint(4) DEFAULT '0',
   `deleted` tinyint(4) DEFAULT '0',
   `remarks` varchar(45) DEFAULT NULL,
+  `resulttype` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`idresult`,`idbundle`),
   KEY `bdocument_id` (`idbundle`,`document_uuid`,`document_prefix`),
   KEY `bendpoint` (`endpoint`),
@@ -405,10 +406,9 @@ CREATE TABLE `bundle_substance_experiment` (
   KEY `bcategory-x` (`topcategory`,`endpointcategory`,`endpoint`,`endpointhash`),
   KEY `bsubstance-x` (`substance_prefix`,`substance_uuid`),
   KEY `idb_idx` (`idbundle`),
-  CONSTRAINT `idb` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `bdocument-x` FOREIGN KEY (`idbundle`, `document_prefix`, `document_uuid`) REFERENCES `bundle_substance_protocolapplication` (`idbundle`, `document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+  CONSTRAINT `bdocument-x` FOREIGN KEY (`idbundle`, `document_prefix`, `document_uuid`) REFERENCES `bundle_substance_protocolapplication` (`idbundle`, `document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idb` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
@@ -482,6 +482,7 @@ CREATE TABLE `bundle_final_experiment` (
   `copied` tinyint(4) DEFAULT '0',
   `deleted` tinyint(4) DEFAULT '0',
   `remarks` varchar(45) DEFAULT NULL,
+  `resulttype` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`idresult`,`idbundle`),
   KEY `fdocument_id` (`idbundle`,`document_uuid`,`document_prefix`),
   KEY `fendpoint` (`endpoint`),

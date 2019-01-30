@@ -31,7 +31,7 @@ public class CreateMatrixFromBundle extends AbstractObjectUpdate<SubstanceEndpoi
 	    + "and e.topcategory=p.topcategory and p.endpointcategory=e.endpointcategory";
 
     private static String _insert_exp = "insert into bundle_substance_experiment SELECT e.idbundle,null,document_prefix,document_uuid,p.topcategory,p.endpointcategory,p.endpointhash,endpoint,\n"
-	    + "conditions,unit,loQualifier,loValue,upQualifier,upvalue,textvalue,errQualifier,err,p.substance_prefix,p.substance_uuid,1,0,null\n"
+	    + "conditions,unit,loQualifier,loValue,upQualifier,upvalue,textvalue,errQualifier,err,p.substance_prefix,p.substance_uuid,1,0,null,resulttype\n"
 	    + "FROM substance_experiment p join bundle_endpoints e join bundle_substance s\n"
 	    + "where e.idbundle=s.idbundle and e.idbundle=? and s.substance_prefix = p.substance_prefix and p.substance_uuid=s.substance_uuid\n"
 	    + "and e.topcategory=p.topcategory and p.endpointcategory=e.endpointcategory \n";
@@ -42,7 +42,7 @@ public class CreateMatrixFromBundle extends AbstractObjectUpdate<SubstanceEndpoi
 	    + "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,copied,deleted,remarks,investigation_uuid\n"
 	    + "from bundle_substance_protocolapplication p where idbundle=?";
     private static String final_exp = "insert into bundle_final_experiment SELECT e.idbundle,null,document_prefix,document_uuid,e.topcategory,e.endpointcategory,e.endpointhash,endpoint,\n"
-	    + "conditions,unit,loQualifier,loValue,upQualifier,upvalue,textvalue,errQualifier,err,e.substance_prefix,e.substance_uuid,copied,deleted,remarks\n"
+	    + "conditions,unit,loQualifier,loValue,upQualifier,upvalue,textvalue,errQualifier,err,e.substance_prefix,e.substance_uuid,copied,deleted,remarks,resulttype\n"
 	    + "from bundle_substance_experiment e where idbundle=?";
     private static String _delete_papp_final = "delete from bundle_final_protocolapplication where idbundle=?";
     private static String _delete_exp_final = "delete from bundle_final_experiment where idbundle=?";

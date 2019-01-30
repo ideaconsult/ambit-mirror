@@ -58,6 +58,15 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 	}
 
 	protected ENDPOINT endpoint;
+	protected String endpointType;
+
+	public String getEndpointType() {
+		return endpointType;
+	}
+
+	public void setEndpointType(String endpointType) {
+		this.endpointType = endpointType;
+	}
 
 	public ENDPOINT getEndpoint() {
 		return endpoint;
@@ -159,7 +168,7 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 	}
 
 	public static enum _fields {
-		endpoint, conditions, result, unit, loQualifier, loValue, upQualifier, upValue, errQualifier, errorValue, textValue;
+		endpoint, conditions, result, unit, loQualifier, loValue, upQualifier, upValue, errQualifier, errorValue, textValue, endpointtype;
 
 		public String toJSON() {
 			return "\"" + name() + "\":";
@@ -176,6 +185,15 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 		b.append(endpoint == null ? null : JSONUtils.jsonQuote(JSONUtils
 				.jsonEscape(endpoint.toString())));
 		b.append(",\n");
+		
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.endpointtype
+				.name())));
+		b.append(":\t");
+		b.append(getEndpointType() == null ? null : JSONUtils.jsonQuote(JSONUtils
+				.jsonEscape(getEndpointType())));
+		b.append(",\n");
+
+		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.conditions
 				.name())));
 		b.append(":\t");
