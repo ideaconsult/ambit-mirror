@@ -1,0 +1,3 @@
+					"basicAuth":{
+						"type": "basicAuth"
+					}

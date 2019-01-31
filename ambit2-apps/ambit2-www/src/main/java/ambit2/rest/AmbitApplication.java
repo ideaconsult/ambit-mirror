@@ -124,6 +124,7 @@ import ambit2.rest.substance.study.SubstanceStudyTableResource;
 import ambit2.rest.substance.templates.InputTemplatesResource;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.WarmupTask;
+import ambit2.rest.ui.API2docsResource;
 import ambit2.rest.ui.UIResource;
 import ambit2.rest.wrapper.WrappedService;
 import ambit2.user.aa.AMBITLoginFormResource;
@@ -219,6 +220,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		};
 
 		router.attach("/api-docs", new APIDocsRouter(getContext()));
+		router.attach("/swagger2", API2docsResource.class);
 
 		/**
 		 * Points to the Ontology service /sparqlendpoint
