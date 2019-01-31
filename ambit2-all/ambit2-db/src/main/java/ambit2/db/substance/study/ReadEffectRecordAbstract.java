@@ -17,7 +17,7 @@ public abstract class ReadEffectRecordAbstract<F, ER extends EffectRecord<String
 	 * 
 	 */
     private static final long serialVersionUID = 2277250526632665919L;
-    protected final static String sql = "SELECT idresult,endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier,loValue,upQualifier,upValue,errQualifier,err,textValue,resulttype from substance_experiment where document_prefix =? and document_uuid =unhex(?)";
+    protected final static String sql = "SELECT idresult,endpoint as effectendpoint,hex(endpointhash) as hash,conditions,unit,loQualifier,loValue,upQualifier,upValue,errQualifier,err,textValue,resulttype,resultgroup from substance_experiment where document_prefix =? and document_uuid =unhex(?)";
 
     @Override
     public String getSQL() throws AmbitException {
@@ -57,6 +57,12 @@ public abstract class ReadEffectRecordAbstract<F, ER extends EffectRecord<String
 		record.setEndpointType(null);
 	    logger.log(Level.WARNING,x.getMessage());
 	}	
+	try {
+	    record.setEndpointGroup(rs.getInt("resultgroup"));
+	} catch (Exception x) {
+		record.setEndpointGroup(null);
+	    logger.log(Level.WARNING,x.getMessage());
+	}		
 	return record;
     }
 

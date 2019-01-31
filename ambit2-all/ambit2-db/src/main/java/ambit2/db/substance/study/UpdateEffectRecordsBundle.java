@@ -21,8 +21,8 @@ public class UpdateEffectRecordsBundle extends UpdateEffectRecords {
 	}
 	
 	private static final String[] create_sql_bundle = {
-		"INSERT INTO bundle_substance_experiment (idbundle,document_prefix,document_uuid,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue,errQualifier,err,endpointhash,topcategory,endpointcategory,substance_prefix,substance_uuid)\n"+
-		"values(?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,unhex(sha1(concat(ifnull(?,''),ifnull(?,''),ifnull(?,'')))),?,?,?,unhex(replace(?,'-','')))"
+		"INSERT INTO bundle_substance_experiment (idbundle,document_prefix,document_uuid,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue,errQualifier,err,endpointhash,topcategory,endpointcategory,substance_prefix,substance_uuid,resulttype,resultgroup)\n"+
+		"values(?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,unhex(sha1(concat(ifnull(?,''),ifnull(?,''),ifnull(?,'')))),?,?,?,unhex(replace(?,'-','')),?,?)"
 	};
 	
 	public String[] getSQL() throws AmbitException {

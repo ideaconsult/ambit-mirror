@@ -192,6 +192,7 @@ CREATE TABLE `substance_protocolapplication` (
   `purposeFlag` varchar(32) DEFAULT NULL,
   `studyResultType` varchar(128) DEFAULT NULL COMMENT 'experimental result\nestimated by calculation\nread-across\n(Q)SAR',
   `investigation_uuid` varbinary(16) DEFAULT NULL COMMENT 'groups protocol applications into investigations',
+  `assay_uuid` varbinary(16) DEFAULT NULL,
   PRIMARY KEY (`document_prefix`,`document_uuid`),
   KEY `substance` (`substance_prefix`,`substance_uuid`),
   KEY `endpoint` (`endpoint`),
@@ -201,8 +202,11 @@ CREATE TABLE `substance_protocolapplication` (
   KEY `topcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `xse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `xinvestication` (`investigation_uuid`),
+  KEY `xassay` (`topcategory`,`endpointcategory`,`assay_uuid`),
   CONSTRAINT `substance-x` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- -----------------------------------------------------
 -- Table `substance_experiment`
 -- this is intentionally denormalized table
@@ -357,6 +361,7 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   `deleted` tinyint(4) DEFAULT '0',
   `remarks` varchar(45) DEFAULT NULL,
   `investigation_uuid` varbinary(16) DEFAULT NULL COMMENT 'groups protocol applications into investigations',
+  `assay_uuid` varbinary(16) DEFAULT NULL,
   PRIMARY KEY (`idbundle`,`document_prefix`,`document_uuid`),
   KEY `bsubstance` (`substance_prefix`,`substance_uuid`),
   KEY `bendpoint` (`endpoint`),
@@ -366,6 +371,7 @@ CREATE TABLE `bundle_substance_protocolapplication` (
   KEY `btopcategory` (`topcategory`,`endpointcategory`,`interpretation_result`),
   KEY `bxse` (`substance_prefix`,`substance_uuid`,`topcategory`,`endpointcategory`),
   KEY `idbundle_idx` (`idbundle`),
+  KEY `bxassay` (`topcategory`,`endpointcategory`,`assay_uuid`),
   CONSTRAINT `bsubstance-p` FOREIGN KEY (`substance_prefix`, `substance_uuid`) REFERENCES `substance` (`prefix`, `uuid`) ON UPDATE CASCADE,
   CONSTRAINT `idbundle` FOREIGN KEY (`idbundle`) REFERENCES `bundle` (`idbundle`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -398,6 +404,7 @@ CREATE TABLE `bundle_substance_experiment` (
   `deleted` tinyint(4) DEFAULT '0',
   `remarks` varchar(45) DEFAULT NULL,
   `resulttype` varchar(32) DEFAULT NULL,
+  `resultgroup` int(11) DEFAULT NULL,
   PRIMARY KEY (`idresult`,`idbundle`),
   KEY `bdocument_id` (`idbundle`,`document_uuid`,`document_prefix`),
   KEY `bendpoint` (`endpoint`),
@@ -1493,7 +1500,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (10,0,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (10,1,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings

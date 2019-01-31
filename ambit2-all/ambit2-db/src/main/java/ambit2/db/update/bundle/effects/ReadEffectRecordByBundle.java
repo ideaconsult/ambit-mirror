@@ -17,7 +17,7 @@ public class ReadEffectRecordByBundle extends ReadEffectRecordBySubstance {
 	private String b_sql = 
 		"select p.document_prefix,hex(p.document_uuid) u,\n"+
 		"p.topcategory,p.endpointcategory,guidance,params,reference,studyResultType,idresult,interpretation_result,\n"+
-		"e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint\n"+ 
+		"e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,resulttype,resultgroup\n"+ 
 		"from substance s join substance_protocolapplication p on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"+
 		"left join substance_experiment e on p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"+
 		"join bundle_endpoints b on b.topcategory=p.topcategory and b.endpointcategory=p.endpointcategory\n"+

@@ -25,14 +25,14 @@ public class ReadEffectRecordByBundleMatrix extends ReadEffectRecordBySubstance 
 
 	private static String sql_working = "select p.document_prefix,hex(p.document_uuid) u,\n"
 			+ "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
-			+ "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks,p.copied as pcopied,p.deleted as pdeleted,p.remarks as premarks\n"
+			+ "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks,p.copied as pcopied,p.deleted as pdeleted,p.remarks as premarks,resulttype,resultgroup\n"
 			+ "from bundle_substance_protocolapplication p\n"
 			+ "left join bundle_substance_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
 			+ "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";
 
 	private static String sql_final = "select p.document_prefix,hex(p.document_uuid) u,\n"
 			+ "p.topcategory,p.endpointcategory,guidance,params,reference,idresult,studyResultType,interpretation_result,\n"
-			+ "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks,p.copied as pcopied,p.deleted as pdeleted,p.remarks as premarks\n"
+			+ "e.endpoint as effectendpoint,hex(e.endpointhash) as hash,conditions,unit,loQualifier, loValue, upQualifier, upValue, textValue, err, errQualifier,p.endpoint as pendpoint,e.copied,e.deleted,e.remarks,p.copied as pcopied,p.deleted as pdeleted,p.remarks as premarks,resulttype,resultgroup\n"
 			+ "from bundle_final_protocolapplication p\n"
 			+ "left join bundle_final_experiment e on p.idbundle=e.idbundle and p.document_prefix=e.document_prefix and p.document_uuid=e.document_uuid\n"
 			+ "where p.substance_prefix =? and p.substance_uuid =unhex(?) and p.idbundle=?";

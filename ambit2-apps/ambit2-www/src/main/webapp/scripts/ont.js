@@ -6809,5 +6809,7 @@ var ontlookup = {
 	"ENM_8000223_SECTION" : "Aerosol characterisation",
 	"ENM_0000037_SECTION" : "Oxidative Stress",
 	"ENM_0000044_SECTION" : "Barrier integrity",
-	"ENM_0000068_SECTION" : "Cell Viability"
+	"ENM_0000068_SECTION" : "Cell Viability",
+	"ANALYTICAL_METHODS_SECTION" : "Analytical methods",
+	"IMPURITY_SECTION" : "Impurity"
 }

@@ -41,6 +41,7 @@
 							    "defaultValue": "byinvestigation",
 							    "enum" : [
 							       "byinvestigation",
+							       "byassay",
 							       "bysubstance",
 							       "byprovider",
 							       "bycitation",

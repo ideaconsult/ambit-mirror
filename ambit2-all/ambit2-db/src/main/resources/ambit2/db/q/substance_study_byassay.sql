@@ -7,7 +7,4 @@ reliability,purposeFlag,studyResultType,isRobustStudy,isUsedforClassification,is
 FROM substance
 join substance_protocolapplication p on p.substance_prefix=prefix and p.substance_uuid=uuid
 left join substance_experiment e on e.document_prefix=p.document_prefix and e.document_uuid=p.document_uuid 
-where p.topcategory=:_topcategory and p.endpointcategory=:_endpointcategory and idsubstance in (
-SELECT idsubstance from substance_relation 
-join property_values  using(idchemical) join property_string using(idvalue_string) where value in (:_name)
-) 
+where (assay_uuid=unhex(replace(:a_uuid,'-',''))) 

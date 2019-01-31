@@ -105,6 +105,9 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 	protected String companyUUID;
 	protected String documentUUID;
 	protected UUID investigationUUID;
+	protected UUID assayUUID;
+
+
 	protected Date updated = null;
 
 	public static final SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -139,6 +142,27 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 		this.investigationUUID = investigationUUID;
 	}
 
+	public UUID getAssayUUID() {
+		return assayUUID;
+	}
+
+	public void setAssayUUID(UUID assayUUID) {
+		this.assayUUID = assayUUID;
+	}	
+	public void setAssayUUID(String assayUUID) {
+		if (assayUUID == null)
+			this.assayUUID = null;
+		else
+			try {
+				if (assayUUID.indexOf("-") <= 0)
+					this.assayUUID = UUID.fromString(I5Utils.addDashes(assayUUID).toLowerCase());
+				else
+					this.assayUUID = UUID.fromString(assayUUID);
+			} catch (Exception x) {
+				this.assayUUID = UUID.nameUUIDFromBytes(assayUUID.getBytes());
+			}
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(getSubstanceUUID(), getProtocol(), reference, getParameters(),
@@ -214,7 +238,7 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 	}
 
 	public static enum _fields {
-		uuid, owner, company, name, substance, referencesubstanceuuid, protocol, citation, parameters, effects, interpretation, result, criteria, reliability, investigation_uuid, updated
+		uuid, owner, company, name, substance, referencesubstanceuuid, protocol, citation, parameters, effects, interpretation, result, criteria, reliability, investigation_uuid, assay_uuid, updated
 	}
 
 	public ProtocolApplication(PROTOCOL protocol) {
@@ -377,6 +401,12 @@ public class ProtocolApplication<PROTOCOL, PARAMS, ENDPOINT, CONDITIONS, UNIT> i
 		b.append(":\t");
 		b.append(getInvestigationUUID() == null ? null
 				: JSONUtils.jsonQuote(JSONUtils.jsonEscape(getInvestigationUUID().toString())));
+		b.append(",\n");
+		
+		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.assay_uuid.name())));
+		b.append(":\t");
+		b.append(getAssayUUID() == null ? null
+				: JSONUtils.jsonQuote(JSONUtils.jsonEscape(getAssayUUID().toString())));
 		b.append(",\n");
 
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.owner.name())));

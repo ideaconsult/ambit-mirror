@@ -6,6 +6,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -94,6 +95,18 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			}
 
 		},
+		byassay {
+			@Override
+			public String getField() {
+				return "a_uuid";
+			}
+
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_byassay.sql";
+			}
+
+		},		
 		bysubstance_name {
 			public String queryParams(String... params) {
 				// expected topcategory, endpointcategory, structure identifier
@@ -291,10 +304,26 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 	}
 	
 	public SubstanceStudyFlatQuery(ProtocolApplication papp) throws IOException {
-		this(_QUERY_TYPE.byinvestigation);
-		if (papp.getInvestigationUUID() == null)
-			throw new IOException("No investigation");
-		JsonNode node = json2params(_QUERY_TYPE.byinvestigation.queryParams(papp.getInvestigationUUID().toString()));
+		this(papp,_QUERY_TYPE.byinvestigation);
+	}
+	public SubstanceStudyFlatQuery(ProtocolApplication papp, _QUERY_TYPE qtype) throws IOException {
+		this(qtype);
+		UUID search = null;
+		switch(qtype) {
+		case byinvestigation: {
+			search = papp.getInvestigationUUID();
+			break;
+		}
+		case byassay: {
+			search = papp.getAssayUUID();
+			break;
+		}
+		default:
+			break;
+		}
+		if (search == null)
+			throw new IOException("Empty query");
+		JsonNode node = json2params(qtype.queryParams(search.toString()));
 		if (node != null && node instanceof ObjectNode)
 			setValue((ObjectNode) node);
 	}

@@ -3333,11 +3333,11 @@ function loadBundleSummary(bundle) {
 
 function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 
-	var col = [ 'substanceType', 'name', 'publicname', 'investigation',
+	var col = [ 'substanceType', 'name', 'publicname', 
 			'reference', 'reference_owner', 'reference_year', 'topcategory',
-			'endpointcategory', 'guidance', 'effectendpoint','resulttype', 'unit',
-			'loQualifier', 'loValue', 'upQualifier', 'upValue', 'errQualifier',
-			'err', 'textValue', 's_uuid', 'document_uuid', 'owner_name' ];
+			'endpointcategory', 'guidance', 'effectendpoint','resulttype', 'textValue',
+			'loQualifier', 'loValue', 'upQualifier', 'upValue',  'unit','errQualifier',
+			'err', , 's_uuid', 'owner_name' , 'document_uuid', 'assay','investigation'];
 
 	var headers = {
 		"substanceType" : "Material Type",
@@ -3348,16 +3348,16 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		"reference_year" : "Study year",
 		"effectendpoint" : "endpoint",
 		"resulttype" : "result type",
+		"textValue" : "text value",
 		"loQualifier" : "=, >= ,>",
 		"loValue" : "value",
 		"upQualifier" : "<, <=",
 		"upValue" : "value",
 		"errQualifier" : "Uncertainty Type",
 		"err" : "Uncertainty",
-		"textValue" : "text value",
-		"s_uuid" : "Substance UUID",
+		"s_uuid" : "Link to substance",
 		"owner_name" : "Supplier",
-		"document_uuid" : "Study identifier",
+		"document_uuid" : "Experiment identifier",
 
 	};
 
@@ -3377,13 +3377,30 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		}
 	}
 	var linkrender_i = function(o, val) {
-		return "<a href='" + root
+		if (val === undefined || val==null || val=="")
+			return "";
+		else
+			return "<a href='" + root
 				+ "/investigation?type=byinvestigation&search=" + val + "'>"
-				+ val + "</a>";
+				+ val.substring(1,6) + "...</a>";
 	}
+	var linkrender_a = function(o, val) {
+		if (val === undefined || val==null || val=="")
+			return "";
+		else
+			return "<a href='" + root
+					+ "/investigation?type=byassay&search=" + val + "'>"
+					+ val.substring(1,6) + "...</a>";
+	}	
+	var linkrender_d = function(o, val) {
+		if (val === undefined || val==null || val=="")
+			return "";
+		else
+			return val.substring(1,6) + "...";
+	}	
 	var linkrender_s = function(o, val) {
-		return "<a href='" + root + "/investigation?type=bysubstance&search="
-				+ val + "'>" + val + "</a>";
+		var sOut = "<a href='" + root + "/substance/" + val + "' target='material' title='All data for this material'>as tabs</a> | "; 
+		return sOut + "<a href='" + root + "/investigation?type=bysubstance&search=" + val + "' target='material' title='All data for this material in table form'>as table</a>";
 	}
 	var linkrender_category = function(o, val) {
 		v = ontlookup[val];
@@ -3405,7 +3422,9 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 	}
 	var fnlist = {
 		"investigation" : linkrender_i,
+		"assay" : linkrender_a,
 		"s_uuid" : linkrender_s,
+		"document_uuid" : linkrender_d,
 		"substanceType" : ontrender,
 		"endpointcategory" : linkrender_category,
 		"reference" : linkrender_reference,

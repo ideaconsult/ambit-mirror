@@ -73,11 +73,10 @@ public class DBBundleStudyWriter extends DBSubstanceWriter {
 				found = rq.getObject(rs);
 			}
 		} catch (Exception x) {
-			x.printStackTrace();
 			if (rs != null) rs.close();
 		}
 		if (found==null) {
-	     	throw new Exception("Not found");
+	     	throw new Exception(String.format("%s\tNot found",substance.getSubstanceUUID()));
 		} else {
 			substance.setIdsubstance(found.getIdsubstance());
 			importedRecord.setSubstanceUUID(found.getSubstanceUUID());

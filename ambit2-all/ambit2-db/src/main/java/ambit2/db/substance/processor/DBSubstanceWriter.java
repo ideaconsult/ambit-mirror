@@ -231,7 +231,11 @@ public class DBSubstanceWriter extends AbstractDBProcessor<IStructureRecord, ISt
 							qeffr.setGroup(papp);
 							qeffr.setObject((EffectRecord) effect);
 						}
-						x.process(qeffr);
+						try {
+							x.process(qeffr);
+						} catch (Exception e) {
+							throw new Exception(String.format("%s\t%s",qeffr.getClass().getName(),e.getMessage()));
+						}
 					}
 		}
 	}

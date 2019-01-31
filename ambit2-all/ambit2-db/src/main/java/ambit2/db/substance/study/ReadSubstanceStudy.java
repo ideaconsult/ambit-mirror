@@ -32,7 +32,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol, String,
 	private final static String sql = "SELECT document_prefix,hex(document_uuid) u,topcategory,endpointcategory,endpoint,guidance,substance_prefix,hex(substance_uuid) su,"
 			+ "params,interpretation_result,interpretation_criteria,reference,reference_year,reference_owner,"
 			+ "owner_prefix,hex(owner_uuid) ou,idsubstance,hex(rs_prefix),hex(rs_uuid) rsu,owner_name,"
-			+ "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,if(investigation_uuid is null,null,hex(investigation_uuid)) as iuuid,updated\n"
+			+ "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,if(investigation_uuid is null,null,hex(investigation_uuid)) as iuuid,if(assay_uuid is null,null,hex(assay_uuid)) as auuid,updated\n"
 			+ "from substance_protocolapplication p\n"
 			+ "left join substance s on s.prefix=p.substance_prefix and s.uuid=p.substance_uuid\n"
 			+ "where substance_prefix =? and substance_uuid = unhex(?) ";
@@ -175,7 +175,12 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol, String,
 			} catch (Exception x) {
 				record.setInvestigationUUID((String) null);
 			}
-
+			try {
+				String auuid = rs.getString("auuid");
+				record.setAssayUUID(auuid);
+			} catch (Exception x) {
+				record.setAssayUUID((String) null);
+			}
 			try {
 				record.setUpdated(new Date(rs.getTimestamp("updated").getTime()));
 			} catch (Exception x) {
