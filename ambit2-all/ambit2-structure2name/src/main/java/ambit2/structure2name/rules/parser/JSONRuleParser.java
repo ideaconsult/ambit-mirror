@@ -7,7 +7,9 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ambit2.structure2name.components.FunctionalGroup;
 import ambit2.structure2name.rules.CarbonData;
+import ambit2.structure2name.rules.FunctionalGroupData;
 import ambit2.structure2name.rules.IUPACRuleDataBase;
 
 public class JSONRuleParser 
@@ -34,7 +36,7 @@ public class JSONRuleParser
 			sb.append(err + "\n");
 		return sb.toString();
 	}
-	
+
 	public IUPACRuleDataBase loadIUPACRuleDataBase (String jsonFileName) throws Exception 
 	{
 		ObjectMapper mapper = new ObjectMapper();
@@ -47,9 +49,9 @@ public class JSONRuleParser
 		} finally {
 
 		}
-		
+
 		IUPACRuleDataBase irdb = new IUPACRuleDataBase();
-		
+
 		//Section CARBONS
 		JsonNode carbonsNode = rootNode.path("CARBONS");
 		if (carbonsNode.isMissingNode()) 
@@ -61,9 +63,20 @@ public class JSONRuleParser
 			irdb.carbonData = carbData;
 		}
 		
+		//Section FUNCTIONAL_GROUPS
+		JsonNode fgNode = rootNode.path("FUNCTIONAL_GROUPS");
+		if (fgNode.isMissingNode()) 
+			addError("Section FUNCTIONAL_GROUPS is missing!");		 
+		else if (!fgNode.isArray()) 
+			addError("Section FUNCTIONAL_GROUPS is not array!");
+		else { 
+			FunctionalGroupData fgData[] = extractFunctionalGroupData(fgNode);
+			irdb.functionalGroups = fgData;
+		}
+
 		return irdb;
 	}
-	
+
 	CarbonData[] extractCarbonData(JsonNode carbonsNode)
 	{
 		int n = carbonsNode.size();
@@ -72,87 +85,109 @@ public class JSONRuleParser
 		{
 			cd[i] = new CarbonData();
 			JsonNode node = carbonsNode.get(i);
-			
+
 			//number
 			if (node.path("number").isMissingNode()) {
-				addError("Keyword \"number\" is mising in CARBONS element " + i);
+				addError("Keyword \"number\" is mising in CARBONS element " + i+1);
 			} else {
 				Integer iObj = extractIntKeyword(node, "number", false);
 				if (iObj == null)
-					addError("Error in keyword \"number\" in CARBONS element " + i + ": " + error);
+					addError("Error in keyword \"number\" in CARBONS element " + (i+1) + ": " + error);
 				else
 					cd[i].number = iObj;
 			}
-			
+
 			//prefix
 			if (!node.path("prefix").isMissingNode()) 
 			{	
 				String s =  extractStringKeyword(node, "prefix", false);
 				if (s == null)
-					addError("Error in keyword \"prefix\" in CARBONS element " + i + ": " + error);
+					addError("Error in keyword \"prefix\" in CARBONS element " + (i+1) + ": " + error);
 				else
 					cd[i].prefix = s;
 			}
 		}
 		return cd;
 	}
-	
+
+	FunctionalGroupData[] extractFunctionalGroupData(JsonNode funGrpNode)
+	{
+		int n = funGrpNode.size();
+		FunctionalGroupData fgd[] = new FunctionalGroupData[n];
+		for (int i = 0; i < n; i++)
+		{
+			fgd[i] = new FunctionalGroupData();
+			JsonNode node = funGrpNode.get(i);
+
+			//atom_symbol
+			if (!node.path("atom_symbol").isMissingNode()) 
+			{	
+				String s =  extractStringKeyword(node, "atom_symbol", false);
+				if (s == null)
+					addError("Error in keyword \"atom_symbol\" in FUNCTIONAL_GROUPS element " + (i+1) + ": " + error);
+				else
+					fgd[i].atomSymbol = s;
+			}
+		}
+		return fgd;
+	}
+
 	// Helper functions
 
-		public String extractStringKeyword(JsonNode node, String keyword, boolean isRequired) {
-			error = "";
-			JsonNode keyNode = node.path(keyword);
-			if (keyNode.isMissingNode()) {
-				if (isRequired) {
-					error = "Keyword " + keyword + " is missing!";
-					return null;
-				}
-				return "";
-			}
-
-			if (keyNode.isTextual()) {
-				return keyNode.asText();
-			} else {
-				error = "Keyword " + keyword + " is not of type text!";
+	public String extractStringKeyword(JsonNode node, String keyword, boolean isRequired) {
+		error = "";
+		JsonNode keyNode = node.path(keyword);
+		if (keyNode.isMissingNode()) {
+			if (isRequired) {
+				error = "Keyword " + keyword + " is missing!";
 				return null;
 			}
+			return "";
 		}
 
-		public Double extractDoubleKeyword(JsonNode node, String keyword, boolean isRequired) {
-			error = "";
-			JsonNode keyNode = node.path(keyword);
-			if (keyNode.isMissingNode()) {
-				if (isRequired) {
-					error = "Keyword " + keyword + " is missing!";
-					return null;
-				}
-				return null;
-			}
+		if (keyNode.isTextual()) {
+			return keyNode.asText();
+		} else {
+			error = "Keyword " + keyword + " is not of type text!";
+			return null;
+		}
+	}
 
-			if (keyNode.isDouble()) {
-				return keyNode.asDouble();
-			} else {
-				error = "Keyword " + keyword + " is not of type Int!";
+	public Double extractDoubleKeyword(JsonNode node, String keyword, boolean isRequired) {
+		error = "";
+		JsonNode keyNode = node.path(keyword);
+		if (keyNode.isMissingNode()) {
+			if (isRequired) {
+				error = "Keyword " + keyword + " is missing!";
 				return null;
 			}
+			return null;
 		}
 
-		public Integer extractIntKeyword(JsonNode node, String keyword, boolean isRequired) {
-			error = "";
-			JsonNode keyNode = node.path(keyword);
-			if (keyNode.isMissingNode()) {
-				if (isRequired) {
-					error = "Keyword " + keyword + " is missing!";
-					return null;
-				}
-				return null;
-			}
-
-			if (keyNode.isInt()) {
-				return keyNode.asInt();
-			} else {
-				error = "Keyword " + keyword + " is not of type Int!";
-				return null;
-			}
+		if (keyNode.isDouble()) {
+			return keyNode.asDouble();
+		} else {
+			error = "Keyword " + keyword + " is not of type Int!";
+			return null;
 		}
+	}
+
+	public Integer extractIntKeyword(JsonNode node, String keyword, boolean isRequired) {
+		error = "";
+		JsonNode keyNode = node.path(keyword);
+		if (keyNode.isMissingNode()) {
+			if (isRequired) {
+				error = "Keyword " + keyword + " is missing!";
+				return null;
+			}
+			return null;
+		}
+
+		if (keyNode.isInt()) {
+			return keyNode.asInt();
+		} else {
+			error = "Keyword " + keyword + " is not of type Int!";
+			return null;
+		}
+	}
 }

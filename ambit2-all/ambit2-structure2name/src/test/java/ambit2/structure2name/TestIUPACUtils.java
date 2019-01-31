@@ -9,17 +9,21 @@ public class TestIUPACUtils
 {
 	public static void main(String[] args) throws Exception 
 	{
-		//testIUPACRuleDB();
-		testIUPACNameGen("CCCCC1CCC1");
+		testIUPACRuleDB();
+		//testIUPACNameGen("CCCCC1CCC1");
 	}
 	
 	public static void testIUPACRuleDB() throws Exception
 	{
 		IUPACRuleDataBase rdb = IUPACRuleDataBase.getDefaultRuleDataBase();
+		System.out.println("Carbon data:");
 		for (int i = 0; i < rdb.carbonData.length; i++)
-		{
 			System.out.println(rdb.carbonData[i].toString());
-		}
+		System.out.println("Functional groups data:");
+		for (int i = 0; i < rdb.functionalGroups.length; i++)
+			System.out.println(rdb.functionalGroups[i].toString());
+		
+		
 	}
 	
 	public static void testIUPACNameGen(String smiles) throws Exception

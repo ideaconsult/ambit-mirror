@@ -12,7 +12,9 @@ public class IUPACRuleDataBase
 	public String substituentSufix = "yl";
 		
 	public CarbonData carbonData[] = null;
-	public Map<String,FunctionalGroupData> functionalGroups = new HashMap<String,FunctionalGroupData>();
+	public FunctionalGroupData functionalGroups[] = null;
+	//public Map<String,FunctionalGroupData> functionalGroups = new HashMap<String,FunctionalGroupData>();
+	
 	
 	
 	public static IUPACRuleDataBase getDefaultRuleDataBase() throws Exception
