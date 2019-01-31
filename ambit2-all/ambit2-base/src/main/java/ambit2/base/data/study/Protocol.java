@@ -3049,7 +3049,8 @@ public class Protocol {
 			}
 			@Override
 			public String getNumber() {
-				return ""; 
+				//return "ncit:C79333";
+				return "_";
 			}
 
 			@Override
@@ -3062,11 +3063,37 @@ public class Protocol {
 				return 1013;
 			}
 			public String getOntologyURI() {
-				return null;
+				return 	null;
+						//ncit:C79333;
 			}
 	
 		},
+		ANALYTICAL_METHODS_SECTION {
+			@Override
+			public String toString() {
+				return "Analytical Methods";
+			}
+			@Override
+			public String getNumber() {
+				//return "ncit:C79333";
+				return "87";
+			}
 
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+			
+			@Override
+			public int getSortingOrder() {
+				return 1013;
+			}
+			public String getOntologyURI() {
+				return 	null;
+						//ncit:C79333;
+			}
+	
+		},
 		EXPOSURE_SECTION {
 			@Override
 			public String getNumber() {

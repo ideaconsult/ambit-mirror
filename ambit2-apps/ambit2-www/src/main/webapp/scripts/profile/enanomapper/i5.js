@@ -449,7 +449,7 @@ var config_i5 = {
 				"inMatrix" : true
 			},
 			"text" : {
-				"sTitle" : "Result",
+				"sTitle" : "Element / Func. group",
 				"iOrder" : -7,
 				"bVisible" : true,
 				"inMatrix" : true
@@ -634,12 +634,55 @@ var config_i5 = {
 		"interpretation" : config_bao["interpretation"]
 
 	},
-	"IMPURITY_SECTION" : {
+	"ANALYTICAL_METHODS_SECTION" : {
 		"parameters" : config_bao["parameters"],
-		"effects" : config_bao["effects"],
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"]		
+		"interpretation" : config_bao["interpretation"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Element / Func. group",
+				"iOrder" : -7,
+				"bVisible" : true,
+				"inMatrix" : true
+			}
+
+		}
+	},	
+	"IMPURITY_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Element / Func. group",
+				"iOrder" : -7,
+				"bVisible" : true,
+				"inMatrix" : true
+			}
+
+		}
 	},
 	"EXPOSURE_SECTION" : {
 		"parameters" : config_bao["parameters"],

@@ -2485,6 +2485,31 @@ var config_i5 = {
 			}
 		}
 	},
+	"ANALYTICAL_METHODS_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Element / Func. group",
+				"iOrder" : -7,
+				"bVisible" : true,
+				"inMatrix" : true
+			}
+
+		}
+	},		
 	"SURFACE_CHEMISTRY_SECTION" : {
 		"parameters" : {
 			"type of method" : {

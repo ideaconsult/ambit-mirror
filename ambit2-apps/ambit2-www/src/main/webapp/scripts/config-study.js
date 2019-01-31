@@ -303,7 +303,50 @@ var config_study = {
 		},
 		"IMPURITY_SECTION" : {
 			"parameters" : config_bao["parameters"],
-			"effects" : config_bao["effects"],
+			"effects" : {
+				"endpoint" : {
+					"iOrder" : -9,
+					"bVisible" : true,
+					"inMatrix" : true
+				},
+				"result" : {
+					"iOrder" : -8,
+					"bVisible" : true,
+					"inMatrix" : true
+				},
+				"text" : {
+					"sTitle" : "Element / Func. group",
+					"iOrder" : -7,
+					"bVisible" : true,
+					"inMatrix" : true
+				}
+
+			},
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+		},		
+		"ANALYTICAL_METHODS_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : {
+				"endpoint" : {
+					"iOrder" : -9,
+					"bVisible" : true,
+					"inMatrix" : true
+				},
+				"result" : {
+					"iOrder" : -8,
+					"bVisible" : true,
+					"inMatrix" : true
+				},
+				"text" : {
+					"sTitle" : "Element / Func. group",
+					"iOrder" : -7,
+					"bVisible" : true,
+					"inMatrix" : true
+				}
+
+			},
 			"conditions" : config_bao["conditions"],
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
