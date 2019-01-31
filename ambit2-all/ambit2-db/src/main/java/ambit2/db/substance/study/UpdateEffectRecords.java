@@ -23,8 +23,8 @@ public class UpdateEffectRecords extends AbstractUpdate<ProtocolApplication<Prot
 	}
 	
 	private static final String[] create_sql = {
-		"INSERT INTO substance_experiment (document_prefix,document_uuid,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue,errQualifier,err,endpointhash,topcategory,endpointcategory,substance_prefix,substance_uuid)\n"+
-		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,unhex(sha1(concat(ifnull(?,''),ifnull(?,''),ifnull(?,'')))),?,?,?,unhex(replace(?,'-','')))"
+		"INSERT INTO substance_experiment (document_prefix,document_uuid,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upValue,textValue,errQualifier,err,endpointhash,topcategory,endpointcategory,substance_prefix,substance_uuid,resulttype,resultgroup)\n"+
+		"values(?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,unhex(sha1(concat(ifnull(?,''),ifnull(?,''),ifnull(?,'')))),?,?,?,unhex(replace(?,'-','')),?,?)"
 	};
 	
 
@@ -98,5 +98,10 @@ public class UpdateEffectRecords extends AbstractUpdate<ProtocolApplication<Prot
 		params1.add(new QueryParam<String>(String.class, subst_uuid[0]));
 		params1.add(new QueryParam<String>(String.class, subst_uuid[1]));
 
+		String endpointType = getObject().getEndpointType() ==null?null:truncate(getObject().getEndpointType().toString(),32);
+		params1.add(new QueryParam<String>(String.class, endpointType));
+		
+		Integer endpointGroup = getObject().getEndpointGroup() ==null?null:getObject().getEndpointGroup();
+		params1.add(new QueryParam<Integer>(Integer.class, endpointGroup));
 	}
 }

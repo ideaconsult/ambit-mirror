@@ -28,6 +28,7 @@ public class EffectRecord_crud_test
 		IParams params = new Params();
 		params.put("Exposure", "96");
 		record.setConditions(params);
+		record.setEndpointType("TEST");
 		record.setEndpoint("LC50");
 		record.setUnit("mg/L");
 		record.setLoValue(83.1);
@@ -43,6 +44,8 @@ public class EffectRecord_crud_test
 		params = new Params();
 		params.put("Temperature", "25 \u2103C");
 		record.setConditions(params);
+		record.setEndpointType("TEST");
+		record.setEndpointGroup(314);
 		record.setEndpoint("log Pow");
 		record.setLoValue(0.35);
 		record.setErrQualifier("RDS %");
@@ -57,6 +60,7 @@ public class EffectRecord_crud_test
 		v.setUnits("d");
 		v.setLoValue(7.0);
 		params.put("Sampling time", v);
+		record.setEndpointType("TEST");
 		record.setConditions(params);
 		record.setEndpoint("% Degradation");
 		record.setLoValue(90);
@@ -71,6 +75,7 @@ public class EffectRecord_crud_test
 		params.put("Temperature", "25 \u2103C");
 		params.put("Sex", "male");
 		record.setConditions(params);
+		record.setEndpointType("TEST");
 		record.setEndpoint("LD50");
 		record.setLoValue(260);
 		record.setUpValue(320);
@@ -102,7 +107,7 @@ public class EffectRecord_crud_test
 		ITable table = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT document_prefix,hex(document_uuid) u,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue,topcategory,endpointcategory from substance_experiment");
+						"SELECT document_prefix,hex(document_uuid) u,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue,topcategory,endpointcategory,resulttype from substance_experiment");
 		Assert.assertEquals(5, table.getRowCount());
 		Assert.assertEquals("IUC4-7adb0d03-f69b-32a9-9efe-86b4a8577893",
 				I5Utils.getPrefixedUUID(table.getValue(0, "document_prefix"),
@@ -195,13 +200,13 @@ public class EffectRecord_crud_test
 		ITable table = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT document_prefix,hex(document_uuid) u,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue,topcategory,endpointcategory from substance_experiment where topcategory is null or endpointcategory is null");
+						"SELECT document_prefix,hex(document_uuid) u,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue,topcategory,endpointcategory,resulttype from substance_experiment where topcategory is null or endpointcategory is null");
 		Assert.assertEquals(0, table.getRowCount());
 
 		table = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT document_prefix,hex(document_uuid) u,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue,topcategory,endpointcategory from substance_experiment where substance_prefix is null or substance_uuid is null");
+						"SELECT document_prefix,hex(document_uuid) u,endpoint,conditions,unit,loQualifier,loValue,upQualifier,upvalue,topcategory,endpointcategory,resulttype from substance_experiment where substance_prefix is null or substance_uuid is null");
 		Assert.assertEquals(0, table.getRowCount());
 
 		c.close();

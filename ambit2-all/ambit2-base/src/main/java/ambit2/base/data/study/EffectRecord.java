@@ -41,6 +41,16 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 	protected Double errValue = null;
 	
     protected int idresult = -1;
+    protected Integer endpointGroup = null; 
+
+
+	public Integer getEndpointGroup() {
+		return endpointGroup;
+	}
+
+	public void setEndpointGroup(Integer endpointGroup) {
+		this.endpointGroup = endpointGroup;
+	}
 
 	@Override
 	public int hashCode() {
