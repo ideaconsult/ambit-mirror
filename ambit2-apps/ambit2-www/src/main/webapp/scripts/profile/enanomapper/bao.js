@@ -106,22 +106,22 @@ var config_bao = {
 				}
 
 				iuuid = full["investigation_uuid"];
+				auuid = full["assay_uuid"];
 
+				if (auuid === undefined || (auuid == null))
+					;
+				else {
+					sOut += "<br/><a href='../../investigation?type=byassay&search="
+						+ auuid
+						+ "' class='chelp' title='This experiment in table form'>This experiment</a>"
+				}				
 				if (iuuid === undefined || (iuuid == null))
 					;
 				else {
-					sOut += "<br/><br/>"
-							+ jT.ui
-									.shortenedData(
-											"<a href='../../investigation?type=byinvestigation&search="
+					sOut += "<br/><a href='../../investigation?type=byinvestigation&search="
 													+ iuuid
-													+ "' class='chelp' title='Related experiments'> "
-													+ iuuid + "</a>",
-											"Related experiments, press to copy the UUID in the clipboard",
-											iuuid);
-
+													+ "' class='chelp' title='Related experiments in table form'>Related experiments</a>"
 				}
-
 				try {
 					if (full["reliability"]["r_value"] != undefined)
 						sOut += "<br/><span class='chelp' style='color:#FF0000;' title='curation comment'>"
