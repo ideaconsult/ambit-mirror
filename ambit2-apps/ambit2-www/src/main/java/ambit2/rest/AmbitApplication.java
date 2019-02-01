@@ -220,12 +220,12 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		};
 
 		router.attach("/api-docs", new APIDocsRouter(getContext()));
-		router.attach("/swagger2", API2docsResource.class);
+		router.attach("/openapi3", API2docsResource.class);
 
 		/**
 		 * Points to the Ontology service /sparqlendpoint
 		 */
-		router.attach(SPARQLPointerResource.resource, SPARQLPointerResource.class);
+		//router.attach(SPARQLPointerResource.resource, SPARQLPointerResource.class);
 
 		/**
 		 * * /admin Various admin tasks, like database creation
