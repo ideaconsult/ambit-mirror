@@ -12,8 +12,19 @@ public class IUPACRuleDataBase
 	public String substituentSufix = "yl";
 		
 	public CarbonData carbonData[] = null;
-	public Map<String,FunctionalGroupData> functionalGroups = new HashMap<String,FunctionalGroupData>();
+	public FunctionalGroupData functionalGroups[] = null;
+	//public Map<String,FunctionalGroupData> functionalGroups = new HashMap<String,FunctionalGroupData>();
 	
+	public FunctionalGroupData getFunctionalGroupByAtomSymbol(String atomSymbol)
+	{
+		for (FunctionalGroupData fgd : functionalGroups)
+		{
+			if (fgd.atomSymbol != null)
+				if (fgd.atomSymbol.equals(atomSymbol))
+					return fgd;
+		}
+		return null;
+	}
 	
 	public static IUPACRuleDataBase getDefaultRuleDataBase() throws Exception
 	{
