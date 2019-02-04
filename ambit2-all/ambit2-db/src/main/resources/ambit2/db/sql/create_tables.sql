@@ -974,6 +974,7 @@ DELIMITER $
 -- -----------------------------------------------------
 -- Trigger to create template entry for a dataset
 -- -----------------------------------------------------
+DROP TRIGGER IF EXISTS insert_dataset_template$
 CREATE DEFINER = CURRENT_USER TRIGGER insert_dataset_template BEFORE INSERT ON src_dataset
  FOR EACH ROW BEGIN
     INSERT IGNORE INTO template (name) values (NEW.name);
