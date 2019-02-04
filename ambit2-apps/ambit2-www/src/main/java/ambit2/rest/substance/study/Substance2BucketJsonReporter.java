@@ -77,7 +77,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	private static final String[][] study_headers = new String[][] { { "name", "publicname", "owner_name", "s_uuid",
 			"substanceType", "_childDocuments_", "type_s", "nmcode_hs", "nmcode_s", "ChemicalName.CONSTITUENT",
 			"ChemicalName.ADDITIVE", "ChemicalName.IMPURITY", "ChemicalName.CORE", "ChemicalName.COATING",
-			"ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content_hss",
+			"ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content_hss", 
+			
+			"investigation_uuid","assay_uuid",
 
 			"TradeName.CONSTITUENT", "TradeName.ADDITIVE", "TradeName.IMPURITY", "TradeName.CORE", "TradeName.COATING",
 			"TradeName.FUNCTIONALISATION", "TradeName.DOPING",
@@ -93,8 +95,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 			"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
 			"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
-			{ "id", "document_uuid", "type_s", "topcategory", "endpointcategory", "guidance", "endpoint",
-					"effectendpoint", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
+			{ "id", "document_uuid",  "investigation_uuid","assay_uuid","type_s", "topcategory", "endpointcategory", "guidance", "endpoint",
+					"effectendpoint","effectendpoint_type", "effectendpoint_group", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
 					"upQualifier", "upValue", "err", "errQualifier", "conditions", "params", "textValue",
 					"interpretation_result", "unit", "category", "idresult", "updated", "r_value", "r_purposeFlag",
 					"r_studyResultType" },
@@ -116,8 +118,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"content_hss", header_dbtag, "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs",
 			"substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", header_component, "ChemicalName_s",
 			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
-			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s", "reference_owner_s",
-			"reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
+			"investigation_uuid_s","assay_uuid_s",
+			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s",
+			 "effectendpoint_type_s", "effectendpoint_group_d",  
+			"reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
 			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
 			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", "updated_s", "E.method_s", "E.cell_type_s",
 			header_reliability, header_studyResultType, header_purposeFlag, header_summary_results, header_summary_refs,
@@ -208,7 +212,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 								_childDocuments_.add(params);
 							}
 
-							effectrecord2bucket(papp.getProtocol(), e, effect, false);
+							effectrecord2bucket(papp, e, effect, false);
 
 							// "P-CHEM/PC_GRANULOMETRY_SECTION/SIZE"
 							if (summaryMeasurement != null)
@@ -368,7 +372,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 							protocol2Bucket(papp.getProtocol(), study, suffix);
 							reference2Bucket(papp, study, suffix);
-							effectrecord2bucket(papp.getProtocol(), e, study, suffix);
+							effectrecord2bucket(papp, e, study, suffix);
 
 							if (e.getConditions() != null) {
 								IParams prmc = null;
@@ -584,6 +588,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected void protocolapplication2Bucket(ProtocolApplication<Protocol, Object, String, Object, String> papp,
 			Bucket bucket, boolean suffix) {
 		bucket.put(ns("document_uuid", suffix, "_s"), papp.getDocumentUUID());
+		if (papp.getInvestigationUUID()!=null)
+			bucket.put(ns("investigation_uuid", suffix, "_s"), papp.getInvestigationUUID());
+		if (papp.getAssayUUID()!=null)
+			bucket.put(ns("assay_uuid", suffix, "_s"), papp.getAssayUUID());
 		bucket.put("type_s", "study");
 		if (papp.getUpdated() != null)
 			bucket.put("updated_s", dateformatter.format(papp.getUpdated()));
@@ -647,10 +655,20 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		}
 	}
 
-	protected void effectrecord2bucket(Protocol protocol, EffectRecord<String, Object, String> e, Bucket bucket,
+	protected void effectrecord2bucket(ProtocolApplication papp, EffectRecord<String, Object, String> e, Bucket bucket,
 			boolean suffix) {
+
+		if (papp.getInvestigationUUID()!=null)
+			bucket.put(ns("investigation_uuid", suffix, "_s"), papp.getInvestigationUUID());
+		if (papp.getAssayUUID()!=null)
+			bucket.put(ns("assay_uuid", suffix, "_s"), papp.getAssayUUID());
+		
 		if (e.getEndpoint() != null)
 			bucket.put(ns("effectendpoint", suffix, "_s"), e.getEndpoint().toUpperCase());
+		if (e.getEndpointType() != null)
+			bucket.put(ns("effectendpoint_type", suffix, "_s"), e.getEndpointType().toUpperCase());
+		if (e.getEndpointGroup() != null)
+			bucket.put(ns("effectendpoint_group", suffix, "_s"), e.getEndpointGroup());		
 		bucket.put(ns("unit", suffix, "_s"), e.getUnit() == null ? "" : e.getUnit());
 
 		if (e.getLoValue() != null || e.getUpValue() != null) {
