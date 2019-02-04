@@ -41,7 +41,7 @@ public class SearchStoredQueriesTest extends QueryTest<SearchStoredQueries> {
 	protected SearchStoredQueries createQuery() throws Exception {
 		SearchStoredQueries q = new SearchStoredQueries();
 		q.setValue("test");
-		Assert.assertEquals("select idquery,count(idstructure) as rows,name,content from query_results join query using(idquery) join sessions using (idsessions) where user_name=SUBSTRING_INDEX(user(),'@',1)  and name regexp ? group by idquery order by idquery desc",q.getSQL());
+		Assert.assertEquals("select idquery,count(idstructure) as `rows`,name,content from query_results join query using(idquery) join sessions using (idsessions) where user_name=SUBSTRING_INDEX(user(),'@',1)  and name regexp ? group by idquery order by idquery desc",q.getSQL());
 		Assert.assertEquals("^test",q.getValue());
 		return q;
 	}
