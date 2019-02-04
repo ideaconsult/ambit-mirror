@@ -3075,8 +3075,7 @@ public class Protocol {
 			}
 			@Override
 			public String getNumber() {
-				//return "ncit:C79333";
-				return "87";
+				return "CHMO_0001075";
 			}
 
 			@Override
@@ -3089,8 +3088,7 @@ public class Protocol {
 				return 1013;
 			}
 			public String getOntologyURI() {
-				return 	null;
-						//ncit:C79333;
+				return 	"http://purl.obolibrary.org/obo/CHMO_0001075";
 			}
 	
 		},
