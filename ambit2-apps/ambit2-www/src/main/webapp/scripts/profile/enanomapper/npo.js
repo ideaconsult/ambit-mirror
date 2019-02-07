@@ -77,7 +77,7 @@ var config_npo = {
 			"mRender" : function(data, type, full) {
 				var sOut = "";
 				var uri = (data["title"] != undefined)
-						&& (data["title"].indexOf("http") == 0);
+						&& (data["title"].indexOf("http") >= 0);
 				if (uri) {
 					sOut = (data["year"] == null || data["year"] == 0) ? "URL"
 							: data["year"];
@@ -85,25 +85,36 @@ var config_npo = {
 							+ data["title"] + "' target='_doi' >" + sOut
 							+ "</a>";
 				} else {
-					// var quri = "?type=citation&search=";
 					sOut = (data["year"] == null || data["year"] == 0) ? ""
 							: ("<br/>(" + data["year"] + ")");
 					sOut = (data["title"] + sOut);
 				}
-				iuuid = full["investigation_uuid"];
-				if (iuuid === undefined || (iuuid == null))
-					return sOut;
-				else {
 
-					return sOut
-							+ "<br/><br/>"
-							+ jT.ui
-									.shortenedData(
-											"<a href='#' class='chelp' title='Related experiments'> "
-													+ iuuid + "</a>",
-											"Related experiments, press to copy the UUID in the clipboard",
-											iuuid);
+				iuuid = full["investigation_uuid"];
+				auuid = full["assay_uuid"];
+
+				if (auuid === undefined || (auuid == null))
+					;
+				else {
+					sOut += "<br/><a href='../../investigation?type=byassay&search="
+						+ auuid
+						+ "' class='chelp' title='This experiment in table form'>This experiment</a>"
+				}				
+				if (iuuid === undefined || (iuuid == null))
+					;
+				else {
+					sOut += "<br/><a href='../../investigation?type=byinvestigation&search="
+													+ iuuid
+													+ "' class='chelp' title='Related experiments in table form'>Related experiments</a>"
 				}
+				try {
+					if (full["reliability"]["r_value"] != undefined)
+						sOut += "<br/><span class='chelp' style='color:#FF0000;' title='curation comment'>"
+								+ full["reliability"]["r_value"] + "</span>"
+
+				} catch (err) {
+				}
+				return sOut;
 			}
 		}
 	},
