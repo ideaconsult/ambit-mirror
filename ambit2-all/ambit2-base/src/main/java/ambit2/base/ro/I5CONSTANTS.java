@@ -2,8 +2,14 @@ package ambit2.base.ro;
 
 public class I5CONSTANTS {
 	public static final String I5_STUDY_SECTION = "eu.europa.echa.schemas.iuclid5._%s.studyrecord.%s_SECTION";
-    public final String Physstate = "Physical state";
+    public static final String Physstate = "Physical state";
+    public static final String Color = "Color";
+    public static final String Odor = "Odor";
+    public static final String Form = "Form";
 
+    public static final String eRadicalFormation_Observations="RADICAL_FORMATION_OBSERVATION";
+    public static final String eRadicalFormation_Quantitative="RADICAL_FORMATION_QUANTITATIVE";
+    
     public static final String cSpecies = "Species";
     public static final String cSex = "Sex";
 
@@ -101,12 +107,16 @@ public class I5CONSTANTS {
     public static final String eAGGLO_AGGR_DIAM = "AGGLOMERATION AGGREGATION DIAMETER";
     public static final String eAGGLO_AGGR_SIZE = "AGGLOMERATION AGGREGATION SIZE";
     public static final String eAGGLO_AGGR_SIZE_DIST = "AGGLOMERATION AGGREGATION SIZE DIST";
-    public static final String eAGGLO_AGGREGATION_ID = "AGGLOMERATION AGGREGATION ID";
+    public static final String eAGGLO_AGGR_DISTRIBUTION = "AGGLOMERATION AGGREGATION SIZE DISTRIBUTION";
+
+    public static final String eAGGLO_AGGREGATION_ID = "AGGLOMERATION AGGREGATION INDEX";
 
     public static final String pDISTRIBUTION_TYPE = "DISTRIBUTION_TYPE";
     public static final String pDISTRIBUTION = "DISTRIBUTION";
     public static final String pMMD = "MASS MEDIAN DIAMETER";
-    public static final String pMMAD = "MASS MEDIAN AERODYNAMIC DIAMETER";
+    public static final String pMMAD = "MASS_MEDIAN_AERODYNAMIC_DIAMETER";
+    public static final String eAERODYNAMIC_DIAMETER = "AERODYNAMIC_DIAMETER";
+    
     public static final String pGSD = "GEOMETRIC STANDARD DEVIATION";
     public static final String pPARTICLESIZE = "PARTICLE SIZE";
     
@@ -121,16 +131,19 @@ public class I5CONSTANTS {
     public static final String pELEMENT_OR_GROUP = "ELEMENT_OR_GROUP";
     public static final String eZETA_POTENTIAL = "ZETA POTENTIAL";
     public static final String eISOELECTRIC_POINT = "ISOELECTRIC POINT";
+    //element composition 
+    public static final String eFRACTION = "CONTRIBUTION";
 
-    public static final String eSHAPE = "SHAPE";
-    public static final String eSHAPE_DESCRIPTIVE = "SHAPE_DESCRIPTIVE";
+    public static final String eSHAPE = "SHAPE_PERCENTAGE";
+    public static final String eSHAPE_DESCRIPTIVE = "SHAPE";
     public static final String eASPECT_RATIO = "ASPECT RATIO";
     public static final String eASPECT_RATIO_X = "X";
     public static final String eASPECT_RATIO_Y = "Y";
     public static final String eASPECT_RATIO_Z = "Z";
     public static final String eDUSTINEX = "DUSTINESS INDEX";
     public static final String ePOROSITY = "POROSITY";
-    public static final String eSPECIFIC_PORE_VOLUME = "SPECIFIC PORE VOLUME";
+    public static final String eSPECIFIC_PORE_VOLUME = "SPECIFIC_PORE_VOLUME";
+    public static final String eMODAL_PORE_VOLUME = "MODAL_PORE_VOLUME";
     public static final String ePOUR_DENSITY = "POUR DENSITY";
     public static final String eCATALYTIC_ACTIVITY = "CATALYTIC ACTIVITY";
     public static final String ePHOTOCATALYTIC_ACTIVITY = "PHOTOCATALYTIC ACTIVITY";
@@ -143,10 +156,12 @@ public class I5CONSTANTS {
     public static final String rCRYSTALLINE_PHASE_POINT_GROUP = "POINT GROUP";
     public static final String rCRYSTALLINE_PHASE_SPACE_GROUP = "SPACE GROUP";
     public static final String rCRYSTALLINE_PHASE_CRYSTGRPH_PLANES = "CRYSTALLOGRAPHIC PLANES";
+    
+    public static final String eCRYSTALLITE_SIZE = "CRYSTALLITE_SIZE";
 
     public static final String rSTD_DEV = "STD_DEV";
 
-    public static final String cPERCENTILE = "PHRASEOTHER_PERCENTILE";
+    public static final String cPERCENTILE = "PERCENTILE";
     public static final String rPERCENTILE_DT50 = "DT50";
     public static final String cSEQ_NUM = "SEQ_NUM";
 
@@ -176,4 +191,11 @@ public class I5CONSTANTS {
     public static final String Organ = "Organ";
     public static final String System = "System";
 
+    public static final String endpoint_type_MEAN="MEAN";
+    public static final String endpoint_type_PERCENT="PERCENT";
+    public static final String endpoint_type_MEDIAN="MEDIAN";
+    public static final String endpoint_type_MEDIAN_MASS="MEDIAN MASS";
+    public static final String effect_stdev="sd";
+    
 }
+
