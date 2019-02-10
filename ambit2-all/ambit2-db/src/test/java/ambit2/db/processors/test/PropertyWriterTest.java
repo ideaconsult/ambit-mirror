@@ -78,7 +78,11 @@ public class PropertyWriterTest  extends DbUnitTest {
         
 		names = 	c.createQueryTable("expected_fields","SELECT name,value,status FROM values_string where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
-		Assert.assertEquals(b.toString(),names.getValue(0,"value"));
+		Object o = names.getValue(0,"value");
+		if (o instanceof String)
+			Assert.assertEquals(b.toString(), (String) o);
+		else
+			Assert.assertEquals(b.toString(),new String((byte[])o));
 		Assert.assertEquals("TRUNCATED",names.getValue(0,"status"));		
 	
 		record.setRecordProperty(Property.getInstance("Property1","Reference 1"),"Value1");
@@ -92,7 +96,12 @@ public class PropertyWriterTest  extends DbUnitTest {
 
 		names = 	c.createQueryTable("expected_fields","SELECT name,value,status FROM values_string  where idstructure=100211 and name='Property1'");
 		Assert.assertEquals(1,names.getRowCount());
-		Assert.assertEquals("Value1",names.getValue(0,"value"));
+		o = names.getValue(0,"value");
+		if (o instanceof String)
+			Assert.assertEquals("Value1", (String) o);
+		else
+			Assert.assertEquals("Value1",new String((byte[])o));
+		
 		Assert.assertEquals("UNKNOWN",names.getValue(0,"status"));		
 	
 		names = 	c.createQueryTable("expected_fields","SELECT name,value_num FROM property_values join properties using(idproperty) where idstructure=100211 and name='Property2'");

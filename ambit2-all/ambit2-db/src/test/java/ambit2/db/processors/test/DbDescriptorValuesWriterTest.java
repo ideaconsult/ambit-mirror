@@ -228,7 +228,12 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		values = c.createQueryTable("EXPECTED_VALUES",
 				"SELECT value FROM values_string WHERE idstructure=100214");
 		Assert.assertEquals(1, values.getRowCount());
-		Assert.assertEquals("TESTVALUE", values.getValue(0, "value"));
+		
+		Object o = values.getValue(0,"value");
+		if (o instanceof String)
+			Assert.assertEquals("TESTVALUE", (String) o);
+		else
+			Assert.assertEquals("TESTVALUE",new String((byte[])o));
 		c.close();
 	}
 
