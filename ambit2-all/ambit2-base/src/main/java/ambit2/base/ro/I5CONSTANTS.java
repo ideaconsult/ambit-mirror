@@ -145,17 +145,17 @@ public class I5CONSTANTS {
     public static final String eSPECIFIC_PORE_VOLUME = "SPECIFIC_PORE_VOLUME";
     public static final String eMODAL_PORE_VOLUME = "MODAL_PORE_VOLUME";
     public static final String ePOUR_DENSITY = "POUR DENSITY";
-    public static final String eCATALYTIC_ACTIVITY = "CATALYTIC ACTIVITY";
-    public static final String ePHOTOCATALYTIC_ACTIVITY = "PHOTOCATALYTIC ACTIVITY";
-    public static final String eTURNOVERFREQUENCY = "TURN OVER FREQUENCY";
-    public static final String eCRYSTALLINE_PHASE = "CRYSTALLINE PHASE";
+    public static final String eCATALYTIC_ACTIVITY = "CATALYTIC_ACTIVITY";
+    public static final String ePHOTOCATALYTIC_ACTIVITY = "PHOTOCATALYTIC_ACTIVITY";
+    public static final String eTURNOVERFREQUENCY = "TURN_OVER_FREQUENCY";
+    public static final String eCRYSTALLINE_PHASE = "CRYSTALLINE_PHASE";
 
     public static final String rCRYSTALLINE_PHASE_COMMON_NAME = "COMMON NAME";
-    public static final String rCRYSTALLINE_PHASE_CRYSTAL_SYSTEM = "CRYSTAL SYSTEM";
-    public static final String rCRYSTALLINE_PHASE_BRAVAIS_LATTICE = "BRAVAIS LATTICE";
-    public static final String rCRYSTALLINE_PHASE_POINT_GROUP = "POINT GROUP";
-    public static final String rCRYSTALLINE_PHASE_SPACE_GROUP = "SPACE GROUP";
-    public static final String rCRYSTALLINE_PHASE_CRYSTGRPH_PLANES = "CRYSTALLOGRAPHIC PLANES";
+    public static final String rCRYSTALLINE_PHASE_CRYSTAL_SYSTEM = "CRYSTAL_SYSTEM";
+    public static final String rCRYSTALLINE_PHASE_BRAVAIS_LATTICE = "BRAVAIS_LATTICE";
+    public static final String rCRYSTALLINE_PHASE_POINT_GROUP = "POINT_GROUP";
+    public static final String rCRYSTALLINE_PHASE_SPACE_GROUP = "SPACE_GROUP";
+    public static final String rCRYSTALLINE_PHASE_CRYSTGRPH_PLANES = "CRYSTALLOGRAPHIC_PLANES";
     
     public static final String eCRYSTALLITE_SIZE = "CRYSTALLITE_SIZE";
 

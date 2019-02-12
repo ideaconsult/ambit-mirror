@@ -3185,7 +3185,13 @@ var config_i5 = {
 				"bVisible" : false,
 				"iOrder" : -11,
 				"inMatrix" : true
-			}
+			},
+			"text" : {
+				"sTitle" : "Result",
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			}			
 		},
 		"protocol" : {
 			"guideline" : {

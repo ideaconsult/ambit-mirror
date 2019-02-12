@@ -485,15 +485,18 @@ var config_study = {
 				"endpoint" : {
 					"bVisible" : true,
 					"inMatrix" : true,
+					"iOrder" : -9
 				},
 				"result" : {
-					"bVisible" : false,
+					"bVisible" : true,
 					"inMatrix" : true,
+					"iOrder" : -7
 				},
 				"text" : {
 					"sTitle" : "Result",
 					"bVisible" : true,
 					"inMatrix" : true,
+					"iOrder" : -8
 				}
 			},
 			"conditions" : config_bao["conditions"],
