@@ -569,6 +569,13 @@
 		</dependency>
 		<dependency>
 			<groupId>toxtree</groupId>
+			<artifactId>toxtree-cramer3</artifactId>
+			<version>${toxtree.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>		
+		<dependency>
+			<groupId>toxtree</groupId>
 			<artifactId>toxtree-mutant</artifactId>
 			<version>${toxtree.version}</version>
 			<type>jar</type>

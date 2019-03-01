@@ -232,6 +232,14 @@
 		<div class='three columns omega help'>A <a href='http://toxtree.sf.net' class='qxternal' >Toxtree</a> module</div>
 	</div>		
 	  <#break>
+ <#case 'toxtree_rcdt'>
+	<div class='row remove-bottom'>
+		<label class='five columns alpha' for="doc">Documentation and references</label>
+		<a href='http://toxtree.sourceforge.net/cramer3.html' target=_blank class='eight columns alpha half-bottom'>
+		Revised Cramer Decision Tree</a>
+		<div class='three columns omega help'>A <a href='http://toxtree.sf.net' class='qxternal' >Toxtree</a> module</div>
+	</div>		
+	  <#break>	  
   <#case 'toxtreemic'>
 	<div class='row remove-bottom'>
 		<label class='five columns alpha' for="doc">Documentation and references</label>

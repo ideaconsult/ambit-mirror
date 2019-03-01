@@ -314,7 +314,7 @@ function getID() {
 
 function runAlgorithms(root,statusSelector) {
 	var algs = [
-    "toxtreecramer","toxtreecramer2","toxtreeverhaar","toxtreeverhaar2",
+    "toxtreecramer","toxtreecramer2","toxtree_rcdt","toxtreeverhaar","toxtreeverhaar2",
 	"toxtreeeye","toxtreeskinirritation","toxtreemic","toxtreeames",
 	"toxtreeskinsens","toxtreednabinding","toxtreeproteinbinding",
 	"toxtreecarc","toxtreebiodeg","toxtreesmartcyp","pka","ambit2.descriptors.MolecularWeight",
