@@ -1075,6 +1075,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 		Reference ref = testAsyncTask(String.format("http://localhost:%d/algorithm/toxtree_rcdt", port), headers,
 				Status.SUCCESS_OK, null);
+		
 		String modeluri = getModelURI("ToxTree: Revised Cramer Decision Tree", port, true);
 		Assert.assertEquals(modeluri, ref.toString());
 
@@ -1085,28 +1086,30 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED",
-				"SELECT count(*) c,group_concat(distinct(status)) s FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure=100211 group by idstructure,`status`");
+				"SELECT count(*) c,group_concat(distinct(status)) s FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Revised Cramer Decision Tree' where idstructure=100211 group by idstructure,`status`");
 		Assert.assertEquals(1, table.getRowCount());
 		Assert.assertEquals("ERROR", table.getValue(0, "s"));
-		Assert.assertEquals(new BigInteger("6") /* WTF */, table.getValue(0, "c"));
+		Assert.assertEquals(new BigInteger("1") /* WTF */, table.getValue(0, "c"));
 		table = c.createQueryTable("EXPECTED",
-				"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: In vitro mutagenicity (Ames test) alerts by ISS' where idstructure!=100211 group by `status` order by `status`");
+				"SELECT count(*) c,group_concat(distinct(status)) s  FROM property_values v join template_def t using(idproperty) join models on t.idtemplate=models.predicted and name='ToxTree: Revised Cramer Decision Tree' where idstructure!=100211 group by `status` order by `status`");
 		Assert.assertEquals(2, table.getRowCount());
 		Assert.assertEquals("OK", table.getValue(0, "s"));
-		Assert.assertEquals(new BigInteger("18"), table.getValue(0, "c"));
+		Assert.assertEquals(new BigInteger("3"), table.getValue(0, "c"));
 		// the explanation field
 		Assert.assertEquals("TRUNCATED", table.getValue(1, "s"));
 		Assert.assertEquals(new BigInteger("3"), table.getValue(1, "c"));
 
 		table = c.createQueryTable("p",
 				"SELECT count(*) c,predicate,object FROM property_annotation join properties using(idproperty) group by object order by object");
-		Assert.assertEquals(2, table.getRowCount());
+		Assert.assertEquals(3, table.getRowCount());
 		Assert.assertEquals("acceptValue", table.getValue(0, "predicate"));
 		Assert.assertEquals("acceptValue", table.getValue(1, "predicate"));
-		Assert.assertEquals("NO", table.getValue(0, "object"));
-		Assert.assertEquals("YES", table.getValue(1, "object"));
-		Assert.assertEquals(new BigInteger("6"), table.getValue(0, "c"));
-		Assert.assertEquals(new BigInteger("6"), table.getValue(1, "c"));
+		Assert.assertEquals("High (Class III)", table.getValue(0, "object"));
+		Assert.assertEquals("Intermediate (Class II)", table.getValue(1, "object"));
+		Assert.assertEquals("Low (Class I)", table.getValue(2, "object"));
+		Assert.assertEquals(new BigInteger("1"), table.getValue(0, "c"));
+		Assert.assertEquals(new BigInteger("1"), table.getValue(1, "c"));
+		Assert.assertEquals(new BigInteger("1"), table.getValue(2, "c"));
 
 		c.close();
 
