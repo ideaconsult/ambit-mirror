@@ -35,7 +35,7 @@ import org.restlet.data.Reference;
 import ambit2.rest.SimpleTaskResource;
 
 public class TaskStorage<USERID> implements ITaskStorage<USERID> {
-	protected Logger logger;
+	protected transient Logger logger;
 	protected String name;
 	protected TimeUnit taskCleanupUnit = TimeUnit.MINUTES;
 	protected long taskCleanupRate = 120; //30 min

@@ -22,7 +22,7 @@ public abstract class SimpleGuard extends Authorizer {
 		public abstract SimpleGuard getGuard(String[] allowed, Logger logger);
 	};
 	String[] allowed = null;
-	protected Logger logger;
+	protected transient Logger logger;
 	
 	public SimpleGuard(Logger logger) {
 		this(null,logger);

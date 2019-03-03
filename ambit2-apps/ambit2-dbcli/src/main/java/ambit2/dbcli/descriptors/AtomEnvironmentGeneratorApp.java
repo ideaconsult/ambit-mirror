@@ -27,7 +27,7 @@ import ambit2.core.io.FileInputState;
 import ambit2.descriptors.AtomEnvironentMatrix;
 
 public class AtomEnvironmentGeneratorApp {
-	static Logger logger;
+	static transient Logger logger;
 	protected CDKHydrogenAdder hAdder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());;
 	protected boolean hydrogens = false;
 	protected Aromaticity aromaticity = new Aromaticity(ElectronDonation.cdk(), Cycles.cdkAromaticSet());

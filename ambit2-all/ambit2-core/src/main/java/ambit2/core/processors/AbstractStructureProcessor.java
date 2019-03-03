@@ -20,7 +20,7 @@ import com.google.common.collect.Sets.SetView;
  */
 public abstract class AbstractStructureProcessor implements
 		IProcessor<IAtomContainer, IAtomContainer> {
-	protected Logger logger;
+	protected transient Logger logger;
 	protected static final String at_property = "AtomTypes";
 	protected static final String at_property_added = "AtomTypes.added";
 	protected static final String at_property_removed = "AtomTypes.removed";

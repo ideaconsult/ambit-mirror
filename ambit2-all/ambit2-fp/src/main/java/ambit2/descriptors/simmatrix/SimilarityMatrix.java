@@ -39,7 +39,7 @@ public abstract class SimilarityMatrix<T> {
 		this.delimiter = delimiter;
 	}
 
-	protected Logger logger;
+	protected transient Logger logger;
 
 	public Logger getLogger() {
 		return logger;

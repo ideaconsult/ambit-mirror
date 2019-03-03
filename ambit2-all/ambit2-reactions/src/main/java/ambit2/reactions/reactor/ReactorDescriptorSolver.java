@@ -8,7 +8,7 @@ import ambit2.rules.conditions.AbstractDescriptorSolver;
 
 public class ReactorDescriptorSolver extends AbstractDescriptorSolver
 {
-	private static Logger logger;
+	private static transient Logger logger;
 	protected ReactorInfoPack rInfo = null;
 	
 	public ReactorDescriptorSolver()
