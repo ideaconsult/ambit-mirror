@@ -51,8 +51,8 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 						"MEDIUM.ionictrength_mM_s", "MEDIUM.CO2_concentration_m", "MEDIUM.O2_concentration_%v/v",
 						"Vial_s", "E.sop_reference_s", "E.method_s", "E.cell_type_s", "E.exposure_time_hour_s",
 						"Dose_s" },
-				new String[] { "s_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "reference_owner_s",
-						"reference_year_s", "reference_s", "effectendpoint_s", "loQualifier_s", "loValue_d",
+				new String[] { "s_uuid_s","assay_uuid_s","investigation_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "reference_owner_s",
+						"reference_year_s", "reference_s", "effectendpoint_s", "effectendpoint_type_s","loQualifier_s", "loValue_d",
 						"upQualifier_s", "upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
 				new String[] { "replicate_s", "material_s" });
 

@@ -20,12 +20,12 @@ public class BucketJson2CSVConvertorTest {
 				"substance_uuid" };
 		//String[] paramHeaders = { "document_uuid_s", "Dispersion protocol_s", "MEDIUM_s", "Vial_s" };
 		String[] paramHeaders = {  "Dispersion protocol_s", "MEDIUM_s", "Vial_s" };
-		String[] studyHeaders = {"s_uuid_s","topcategory_s",
-				"endpointcategory_s","guidance_s","effectendpoint_s","reference_owner_s","reference_year_s","reference_s","loQualifier_s","loValue_d","upQualifier_s","upValue_d","unit_s","err_d","errQualifier_s","textValue_s"};
+		String[] studyHeaders = {"s_uuid_s","topcategory_s","assay_uuid_s",
+				"endpointcategory_s","guidance_s","effectendpoint_s","effectendpoint_type_s","reference_owner_s","reference_year_s","reference_s","loQualifier_s","loValue_d","upQualifier_s","upValue_d","unit_s","err_d","errQualifier_s","textValue_s"};
 		String[] conditionHeaders = {"DATA_GATHERING_INSTRUMENTS_s","size_measurement_s","size_measurement_type_s"};
 		BucketJson2CSVConvertor c = new BucketJson2CSVConvertor(headers, paramHeaders,studyHeaders,conditionHeaders);
 		File temp = File.createTempFile("json2tsv", ".tsv");
-		temp.deleteOnExit();
+		//temp.deleteOnExit();
 
 		try (FileOutputStream out = new FileOutputStream(temp)) {
 			c.setOut(out);
