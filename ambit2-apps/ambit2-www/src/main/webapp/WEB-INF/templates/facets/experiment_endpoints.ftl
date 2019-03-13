@@ -12,11 +12,10 @@ $(document).ready(function() {
 	$( "#tabs" ).tabs();	
 	var oTable = defineExperimentEndpointsTable("${ambit_root}","${ambit_request_json}","#facet");
 
-	jQuery("#breadCrumb ul").append('<li><a href="#" title="Summary">Summary</a></li>');
-	jQuery("#breadCrumb ul").append('<li><a id="pchem" href="${ambit_root}/query/experiment_endpoints?top=P-CHEM">P-CHEM</a></li>');
-	jQuery("#breadCrumb ul").append('<li><a id="tox" href="${ambit_root}/query/experiment_endpoints?top=TOX">TOX</a></li>');
-	jQuery("#breadCrumb ul").append('<li><a id="ecotox" href="${ambit_root}/query/experiment_endpoints?top=ECOTOX">ECOTOX </a></li>');
-	jQuery("#breadCrumb ul").append('<li><a id="envfate" href="${ambit_root}/query/experiment_endpoints?top=ENV%20FATE">ENV FATE </a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/query/experiment_endpoints?top=TOX" title="TOX">TOX</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/query/experiment_endpoints?top=ECOTOX" title="ECOTOX">ECOTOX</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/query/experiment_endpoints?top=ENV%20FATE" title="Environmental fate">ENV FATE</a></li>');
+	jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/query/experiment_endpoints?top=P-CHEM" title="Phys-chem">P-CHEM</a></li>');
 	jQuery("#breadCrumb").jBreadCrumb();
 	
 	downloadForm("${ambit_request}");
@@ -65,7 +64,7 @@ $(document).ready(function() {
 		<th>Result endpoint</th>
 		<th>Qualifier</th>
 		<th>Units</th>
-		<th>Number of entries</th>
+		<th>Number of data points</th>
 		</tr>
 		</thead>
 		<tbody></tbody>

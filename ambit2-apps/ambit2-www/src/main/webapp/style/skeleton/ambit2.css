@@ -4,7 +4,7 @@ body {
 }
 
 h1, h2, h3 {
-	color: #729203;
+	color: #27475c;
 	font-weight: bold; }
 		
 h4, h5, h6 {
@@ -20,7 +20,7 @@ h4, h5, h6 {
 .h6 { font-size: 14px; line-height: 21px; }
 
 .h1, .h2, .h3 {
-	color: #729203;
+	color: #27475c;
 	font-weight: bold; }
 		
 .h4, .h5, .h6 {
@@ -140,7 +140,7 @@ div#header {
 .help {
 	font-size: 0.75em;
 	font-weight: bold italic !important;
-	color: #729203;
+	color: #27475c;
 }
 
 .chelp {
@@ -149,7 +149,7 @@ div#header {
 }
 
 .help  a {
-	color: #729203;
+	color: #27475c;
 }
 
 .details {
@@ -291,7 +291,7 @@ a.qxternal {
 	 border:1px solid #cccccc;
      overflow: hidden;
 	 background : #F5F2EB;
-	 color : #729203;
+	 color : #27475c;
 	 font-weight: bold;
 }
 

@@ -53,6 +53,18 @@
 		<#include "/menu/profile/enanomapper/model_menu.ftl">
 	</li>	
 	</ul>
+	<li><a href="#">Overview</a>		
+	<ul>
+	<li>
+		<a href="${ambit_root}/query/experiment_endpoints" title="Endpoints overview">Endpoints</a>
+	</li>
+	<li>
+		<a href="${ambit_root}/query/study" title="Study overview">Studies</a>
+	</li>
+	<li>
+		<a href="${ambit_root}/query/data_availability" title="Data availability">Data availability</a>
+	</li>			
+	</ul>
 	</ul>
 </li>
 <li>

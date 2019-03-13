@@ -2352,6 +2352,7 @@ function defineExperimentEndpointsTable(root, url, selector) {
 				"aoColumnDefs" : [
 						{
 							"mData" : "top",
+							"sWidth" : "5%",
 							"asSorting" : [ "asc", "desc" ],
 							"aTargets" : [ 0 ],
 							"bSearchable" : true,
@@ -2363,7 +2364,15 @@ function defineExperimentEndpointsTable(root, url, selector) {
 							"aTargets" : [ 1 ],
 							"bSearchable" : true,
 							"bUseRendered" : false,
-							"bSortable" : true
+							"bSortable" : true,
+							"fnRender" : function(o, val) {
+								try {
+									return val.replace("_SECTION", "");
+								} catch(err) {
+									return val;
+								}
+							}
+							
 						}, {
 							"mData" : "value",
 							"asSorting" : [ "asc", "desc" ],
