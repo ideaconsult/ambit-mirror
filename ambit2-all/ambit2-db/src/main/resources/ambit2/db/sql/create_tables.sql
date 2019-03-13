@@ -231,18 +231,17 @@ CREATE TABLE `substance_experiment` (
   `err` double DEFAULT NULL,
   `substance_prefix` varchar(6) DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
-  `resulttype` varchar(32) DEFAULT NULL,
+  `resulttype` enum('RAW','DOSERESPONSE','AGGREGATED','NOTSPECIFIED') DEFAULT 'NOTSPECIFIED',
   `resultgroup` int(11) DEFAULT NULL,
   PRIMARY KEY (`idresult`),
   KEY `document_id` (`document_uuid`,`document_prefix`),
   KEY `endpoint` (`endpoint`),
   KEY `document-x` (`document_prefix`,`document_uuid`),
   KEY `hash-x` (`endpointhash`),
-  KEY `category-x` (`topcategory`,`endpointcategory`,`endpoint`,`endpointhash`),
   KEY `substance-x` (`substance_prefix`,`substance_uuid`),
+  KEY `category-x` (`topcategory`,`endpointcategory`,`endpoint`,`unit`,`resulttype`,`endpointhash`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- -----------------------------------------------------
 -- A collection of substances and endpoints 
@@ -1501,7 +1500,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (10,1,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (10,2,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
