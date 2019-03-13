@@ -2342,6 +2342,93 @@ function defineDataAvailabilityTable(root, url, selector) {
 	return oTable;
 }
 
+function defineExperimentEndpointsTable(root, url, selector) {
+	var oTable = $(selector).dataTable(
+			{
+				"sAjaxDataProp" : "facet",
+				"bProcessing" : true,
+				"bServerSide" : false,
+				"bStateSave" : false,
+				"aoColumnDefs" : [
+						{
+							"mData" : "top",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 0 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true
+						}, {
+							"mData" : "category",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 1 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true
+						}, {
+							"mData" : "value",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 2 ],
+							"bSearchable" : true,
+							"bUseRendered" : false,
+							"bSortable" : true
+						}, 
+						  {
+							"mDataProp" : "endpoint",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 3 ],
+
+							"bSearchable" : true,
+							"bSortable" : true,
+							"fnRender" : function(o, val) {
+								return "<a target='_endpoint' href='" + root
+										+ "/substance?type=endpoint&search=" +  encodeURIComponent(val) 
+										+ "'>"+val+"</a>";
+							}
+						
+						},		
+						  {
+							"mDataProp" : "endpointtype",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 4 ],
+
+							"bSearchable" : true,
+							"bSortable" : true
+						},					
+						  {
+							"mDataProp" : "unit",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 5 ],
+
+							"bSearchable" : true,
+							"bSortable" : true
+						},								
+						{
+							"mDataProp" : "count",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 6 ],
+							"sWidth" : "10%",
+							"bSearchable" : true,
+							"bSortable" : true
+						}
+				],
+				"sDom" : '<"help remove-bottom"i><"help"p>Trt<"help"lf>',
+				"bJQueryUI" : true,
+				"bPaginate" : true,
+				"sPaginationType" : "full_numbers",
+				"sPaginate" : ".dataTables_paginate _paging",
+				"bDeferRender" : true,
+				"bSearchable" : true,
+				"sAjaxSource" : url,
+				"oLanguage" : {
+					"sSearch" : "Filter:",
+					"sProcessing" : "<img src='" + root
+							+ "/images/24x24_ambit.gif' border='0'>",
+					"sLoadingRecords" : "No records found."
+				}
+			});
+	return oTable;
+}
+
 function defineSubstanceOwnerTable(root, url, selector) {
 	var oTable = $(selector)
 			.dataTable(

@@ -20,6 +20,10 @@ Statistics
 </div>
 
 <div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
+<a href="${ambit_root}/admin/stats/experiment_endpoints">Result endpoints</a>
+</div>
+
+<div class='row' id='download' style='background: #F2F0E6;margin: 3px; padding: 0.4em; font-size: 1em; '>
 <a href="${ambit_root}/substanceowner">Substance owners</a>
 </div>
 

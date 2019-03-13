@@ -76,6 +76,9 @@ public class StatisticsResource<FACET extends IFacet<String>, Q extends QueryCou
 			public String getURL() {
 				return "/substance";
 			}
+			public String getTemplateName() {
+				return "facets/experiment_endpoints.ftl";
+			}
 		},
 		protocol_applications {
 			@Override

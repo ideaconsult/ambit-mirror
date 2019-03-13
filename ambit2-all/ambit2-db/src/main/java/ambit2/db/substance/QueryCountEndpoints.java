@@ -37,7 +37,7 @@ public class QueryCountEndpoints<E extends EffectRecord<String,Object,String>>  
 	 */
 	
 	private static String sql = 
-		"SELECT topcategory,count(*),endpointcategory,endpoint FROM substance_experiment e\n" +
+		"SELECT topcategory,count(*),endpointcategory,endpoint,group_concat(distinct(resulttype)),group_concat(distinct(unit)) FROM substance_experiment e\n" +
 		"where topcategory=? %s %s\n"+
 		"group by topcategory,endpointcategory,endpoint";
 	private static String sql_endpointcategory = "and endpointcategory=?";
@@ -64,6 +64,10 @@ public class QueryCountEndpoints<E extends EffectRecord<String,Object,String>>  
 		try {
 			facet.getResult().clear();
 			facet.getResult().setEndpoint(rs.getString(4));
+			
+			facet.getResult().setEndpointType(rs.getString(5));
+			facet.getResult().setUnit(rs.getString(6));
+			
 			//facet.getEffect().setSampleID(rs.getString(5));
 			//facet.getEffect().setUnit(rs.getString(6));
 			//facet.getEffect().setConditions(rs.getString(7));
@@ -71,6 +75,7 @@ public class QueryCountEndpoints<E extends EffectRecord<String,Object,String>>  
 			facet.setSubcategoryTitle(rs.getString(1));
 			facet.setValue(rs.getString(3));
 			facet.setCount(rs.getInt(2));
+			
 			return facet;
 		} catch (SQLException x) {
 			throw new AmbitException(x);
