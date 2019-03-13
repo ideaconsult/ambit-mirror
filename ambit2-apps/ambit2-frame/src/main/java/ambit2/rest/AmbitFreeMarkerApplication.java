@@ -109,6 +109,8 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected static final String solr_basic_user = "solr.basic.user.%d";
 	protected static final String solr_basic_password = "solr.basic.password.%d";
 	protected static final String solr_filter = "solr.filter";
+	
+	protected static final String map_folder = "map.folder";
 
 	protected boolean standalone = false;
 	protected boolean openToxAAEnabled = false;
@@ -323,6 +325,17 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			return null;
 		}
 	}
+	
+	public synchronized String getMapFolder() {
+		try {
+			String v = getProperty(map_folder, ambitProperties);
+			if ("".equals(v))
+				return null;
+			return v;
+		} catch (Exception x) {
+			return null;
+		}
+	}
 
 	protected synchronized String getAllowedOrigins() {
 		try {
@@ -405,6 +418,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 						getPropertyWithDefault(String.format(solr_basic_user, i), ambitProperties, null),
 						getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties, null)));
 				solr.setFilterConfig(getPropertyWithDefault(solr_filter, ambitProperties, null));
+				
 				services.put(name, solr);
 			}
 

@@ -1,11 +1,13 @@
 package ambit2.base.data.study;
 
 import java.io.Serializable;
-
-import net.idea.modbcum.i.JSONSerializable;
-import ambit2.base.json.JSONUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.base.Objects;
+
+import ambit2.base.json.JSONUtils;
+import net.idea.modbcum.i.JSONSerializable;
 
 /**
  * Effect record. Modelled like IUCLID5 effects level
@@ -42,7 +44,19 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 	
     protected int idresult = -1;
     protected Integer endpointGroup = null; 
+    protected List<String> endpointSynonyms = null;
 
+	
+
+	public List<String> getEndpointSynonyms() {
+		return endpointSynonyms;
+	}
+
+	public void addEndpointSynonym(String endpointSynonym) {
+		if (endpointSynonyms==null)
+			endpointSynonyms = new ArrayList<String>();
+		endpointSynonyms.add(endpointSynonym);
+	}
 
 	public Integer getEndpointGroup() {
 		return endpointGroup;
@@ -66,7 +80,19 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 	public void setSampleID(String sampleID) {
 		this.sampleID = sampleID;
 	}
-
+	
+/*
+   public String createHashedIdentifier(IParams conditions) {
+	HashFunction hf = Hashing.sha1();
+	StringBuilder b = new StringBuilder();
+	b.append(getName() == null ? "" : getName());
+	b.append(getUnits() == null ? "" : getUnits());
+	b.append(conditions == null ? "" : conditions.toString());
+	
+	HashCode hc = hf.newHasher().putString(b.toString(), Charsets.UTF_8).hash();
+	return hc.toString().toUpperCase();
+    } 	
+ */
 	protected ENDPOINT endpoint;
 	protected String endpointType;
 
@@ -178,7 +204,7 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 	}
 
 	public static enum _fields {
-		endpoint, conditions, result, unit, loQualifier, loValue, upQualifier, upValue, errQualifier, errorValue, textValue, endpointtype;
+		endpoint, conditions, result, unit, loQualifier, loValue, upQualifier, upValue, errQualifier, errorValue, textValue, endpointtype, synonym;
 
 		public String toJSON() {
 			return "\"" + name() + "\":";
@@ -202,7 +228,21 @@ public class EffectRecord<ENDPOINT, CONDITIONS, UNIT> implements Serializable,
 		b.append(getEndpointType() == null ? null : JSONUtils.jsonQuote(JSONUtils
 				.jsonEscape(getEndpointType())));
 		b.append(",\n");
-
+		
+		if (getEndpointSynonyms()!=null) {
+			b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.synonym
+					.name())));
+			b.append(":\t[");
+			String d = "";
+			for (String synonym : getEndpointSynonyms()) {
+				b.append(d);
+				b.append(JSONUtils.jsonQuote(JSONUtils
+						.jsonEscape(synonym)));
+				d= ",";
+			}
+			b.append("]");
+			b.append(",\n");
+		}	
 		
 		b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.conditions
 				.name())));

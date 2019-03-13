@@ -96,7 +96,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
 			"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
 			{ "id", "document_uuid",  "investigation_uuid","assay_uuid","type_s", "topcategory", "endpointcategory", "guidance", "endpoint",
-					"effectendpoint","effectendpoint_type", "effectendpoint_group", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
+					"effectendpoint","effectendpoint_type","effectendpoint_synonym", "effectendpoint_group", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
 					"upQualifier", "upValue", "err", "errQualifier", "conditions", "params", "textValue",
 					"interpretation_result", "unit", "category", "idresult", "updated", "r_value", "r_purposeFlag",
 					"r_studyResultType" },
@@ -120,7 +120,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
 			"investigation_uuid_s","assay_uuid_s",
 			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s",
-			 "effectendpoint_type_s", "effectendpoint_group_d",  
+			 "effectendpoint_type_s","effectendpoint_synonym_s", "effectendpoint_group_d",  
 			"reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
 			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
 			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", "updated_s", "E.method_s", "E.cell_type_s",
@@ -665,6 +665,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		
 		if (e.getEndpoint() != null)
 			bucket.put(ns("effectendpoint", suffix, "_s"), e.getEndpoint().toUpperCase());
+		if (e.getEndpointSynonyms() != null) {
+			bucket.put(ns("effectendpoint_synonym", suffix, "_s"), e.getEndpointSynonyms());
+		}
+		
 		if (e.getEndpointType() != null)
 			bucket.put(ns("effectendpoint_type", suffix, "_s"), e.getEndpointType().toUpperCase());
 		if (e.getEndpointGroup() != null)
