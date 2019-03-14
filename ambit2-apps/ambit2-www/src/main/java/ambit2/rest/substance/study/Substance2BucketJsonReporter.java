@@ -120,7 +120,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
 			"investigation_uuid_s","assay_uuid_s",
 			"topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s", "effectendpoint_s",
-			 "effectendpoint_type_s","effectendpoint_synonym_s", "effectendpoint_group_d",  
+			 "effectendpoint_type_s","effectendpoint_synonym_ss", "effectendpoint_group_d",  
 			"reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
 			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
 			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", "updated_s", "E.method_s", "E.cell_type_s",
@@ -666,7 +666,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		if (e.getEndpoint() != null)
 			bucket.put(ns("effectendpoint", suffix, "_s"), e.getEndpoint().toUpperCase());
 		if (e.getEndpointSynonyms() != null) {
-			bucket.put(ns("effectendpoint_synonym", suffix, "_s"), e.getEndpointSynonyms());
+			bucket.put(ns("effectendpoint_synonym", suffix, "_ss"), e.getEndpointSynonyms());
 		}
 		
 		if (e.getEndpointType() != null)
