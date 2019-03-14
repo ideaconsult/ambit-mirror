@@ -65,6 +65,7 @@ public class JSONUtils {
 		StringBuilder b = new StringBuilder();
 		b.append("[");
 		String d="";
+		if (values!=null)
 		for (Object value : values)
 			if (value != null) {
 				b.append(d);
