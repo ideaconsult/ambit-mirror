@@ -59,9 +59,9 @@ $(document).ready(function() {
 		<thead>	
 		<tr>
 		<th>Top category</th>		
-		<th>Category identifier</th>
-		<th>Category label</th>
-		<th>Result endpoint</th>
+		<th>Endpoint Category</th>
+		<th>Endpoint Result</th>
+		<th>Synonyms</th>
 		<th>Qualifier</th>
 		<th>Units</th>
 		<th>Number of data points</th>

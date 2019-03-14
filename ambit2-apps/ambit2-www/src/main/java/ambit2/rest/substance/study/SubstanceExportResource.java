@@ -124,7 +124,7 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 		ProcessorsChain chain = new ProcessorsChain<>();
 		chain.add(new SubstanceStudyDetailsProcessor());
 		chain.add(
-				new SubstanceRecordAnnotationProcessor(new File(((AmbitFreeMarkerApplication) getApplication()).getMapFolder())));
+				new SubstanceRecordAnnotationProcessor(new File(((AmbitFreeMarkerApplication) getApplication()).getMapFolder()),false));
 		getCompositionProcessors(chain);
 		return new OutputWriterConvertor<SubstanceRecord, Q>(
 				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(command, chain,

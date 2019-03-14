@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -59,6 +60,19 @@ public class JSONUtils {
 		 * feed U+000C %x6E / ; n line feed U+000A %x72 / ; r carriage return
 		 * U+000D %x74 / ; t tab U+0009 %x75 4HEXDIG ) ; uXXXX U+XXXX
 		 */
+	}
+	public static String jsonFormat(List values) {
+		StringBuilder b = new StringBuilder();
+		b.append("[");
+		String d="";
+		for (Object value : values)
+			if (value != null) {
+				b.append(d);
+				b.append(jsonQuote(jsonEscape(value.toString())));
+				d=",";
+			}
+		b.append("]");
+		return b.toString();
 	}
 
 	/**

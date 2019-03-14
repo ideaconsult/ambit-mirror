@@ -29,13 +29,15 @@ public class ResultsCountFacet<E> extends SubstanceByCategoryFacet {
 	@Override
 	public String toJSON(String uri, String subcategory) {
 		if (result instanceof EffectRecord)
-			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"endpoint\":%s,\n\t\"endpointtype\":%s,\n\t\"unit\":%s,\n\t\"count\":%s\n\t}",
+			return String.format("\n\t{\n\t\"top\":%s,\n\t\"category\":%s,\n\t\"value\":%s,\n\t\"endpoint\":%s,\n\t\"endpointtype\":%s,\n\t\"unit\":%s,\n\t\"synonyms\":%s,\n\t\"count\":%s\n\t}",
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
 					endpoint==null?"null":JSONUtils.jsonQuote(JSONUtils.jsonEscape(endpoint.name())),
 					getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(((EffectRecord<String,Object,String>)result).getEndpoint())),
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(((EffectRecord<String,Object,String>)result).getEndpointType())),
 					JSONUtils.jsonQuote(JSONUtils.jsonEscape(((EffectRecord<String,Object,String>)result).getUnit())),
+					JSONUtils.jsonFormat(((EffectRecord<String,Object,String>)result).getEndpointSynonyms()),
+					
 					JSONUtils.jsonNumber(getCount())
 					);
 		else if (result instanceof ProtocolApplication) {

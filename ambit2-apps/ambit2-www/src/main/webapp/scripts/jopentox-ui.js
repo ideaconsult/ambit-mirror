@@ -2342,6 +2342,20 @@ function defineDataAvailabilityTable(root, url, selector) {
 	return oTable;
 }
 
+
+function formatOntoLink(term) {
+	try {
+		if (term.startsWith("http")) {
+			var onto = term.split("/");
+			return "<a href='http://bioportal.bioontology.org/ontologies/ENM/?p=classes&conceptid="+encodeURIComponent(term)+"' target=_onto>"+onto[onto.length-1]+"</a>";	
+		} else 
+			return term;
+		
+	} catch(e) {
+		
+	}		
+}
+
 function defineExperimentEndpointsTable(root, url, selector) {
 	var oTable = $(selector).dataTable(
 			{
@@ -2367,34 +2381,42 @@ function defineExperimentEndpointsTable(root, url, selector) {
 							"bSortable" : true,
 							"fnRender" : function(o, val) {
 								try {
-									return val.replace("_SECTION", "");
+									return "<span>" + o.aData['value'] + "</span><br><span class='help'>" + val.replace("_SECTION", "") + "</span>";
 								} catch(err) {
 									return val;
 								}
 							}
 							
-						}, {
-							"mData" : "value",
-							"asSorting" : [ "asc", "desc" ],
-							"aTargets" : [ 2 ],
-							"bSearchable" : true,
-							"bUseRendered" : false,
-							"bSortable" : true
-						}, 
+						},  
 						  {
 							"mDataProp" : "endpoint",
 							"asSorting" : [ "asc", "desc" ],
-							"aTargets" : [ 3 ],
+							"aTargets" : [ 2 ],
 
 							"bSearchable" : true,
 							"bSortable" : true,
 							"fnRender" : function(o, val) {
-								return "<a target='_endpoint' href='" + root
+								return "<a target='_endpoint' title='click for data' href='" + root
 										+ "/substance?type=endpoint&search=" +  encodeURIComponent(val) 
 										+ "'>"+val+"</a>";
 							}
 						
 						},		
+						  {
+							"mDataProp" : "synonyms",
+							"asSorting" : [ "asc", "desc" ],
+							"aTargets" : [ 3 ],
+							"sWidth" : "15%",
+							"bSearchable" : true,
+							"bSortable" : true,
+							"fnRender" : function(o, val) {
+								var out = "";
+								for (var v of val)
+									out = out + "<br>" + "<span class='help'>" + formatOntoLink(v) + "</span>";
+								return out;
+							}
+						
+						},							
 						  {
 							"mDataProp" : "endpointtype",
 							"asSorting" : [ "asc", "desc" ],
