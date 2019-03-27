@@ -489,7 +489,6 @@ var config_i5 = {
 	},
 	"PC_GRANULOMETRY_SECTION" : {
 		"parameters" : config_bao["parameters"],
-		"effects" : config_bao["effects"],
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
 		"interpretation" : {
@@ -508,7 +507,27 @@ var config_i5 = {
 							+ data + "'>" + data + "</span>";
 				}
 			}
+		},
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Result",
+				"iOrder" : -7,
+				"bVisible" : true,
+				"inMatrix" : true
+			}
+
 		}
+		
 
 	},
 	"CRYSTALLITE_AND_GRAIN_SIZE_SECTION" : {
