@@ -50,6 +50,30 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 	protected Map<String, WrappedService<UsernamePasswordCredentials>> solrServices;
 	protected WrappedService<UsernamePasswordCredentials> solrService;
 	protected boolean json2tsv = false;
+	protected enum _sep  {
+			tab {
+				public String toString() {
+					return "\t";
+				}				
+			},
+			comma {
+				@Override
+				public String toString() {
+					return ",";
+				}
+				@Override
+				public String getExt() {
+					return "csv";
+				}
+			};
+			public String toString() {
+				return "\t";
+			}
+			public String getExt() {
+				return "txt";
+			}
+	}
+	protected _sep sep=_sep.tab;
 
 	public ProxyResource() {
 		super();
@@ -81,7 +105,7 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 				getRequest().getMethod(), (json2tsv) ? MediaType.TEXT_TSV : variant.getMediaType()) {
 			@Override
 			public String getFileExtension() {
-				return json2tsv ? "txt" : super.getFileExtension();
+				return json2tsv ? sep.getExt() : super.getFileExtension();
 			}
 
 			@Override
@@ -92,7 +116,7 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 			@Override
 			protected void processStream(InputStream in, OutputStream stream) throws IOException {
 				if (json2tsv) {
-					BucketJson2CSVConvertor bj = new BucketJson2CSVConvertor();
+					BucketJson2CSVConvertor bj = new BucketJson2CSVConvertor(sep.toString());
 					bj.setOut(stream);
 					try {
 						bj.process(in);
@@ -136,6 +160,18 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 				json2tsv = false;
 			}
 
+			try {
+				sep=_sep.tab;
+				String prm = query.getFirstValue("sep");
+				if (prm != null) {
+					if (",".equals(prm))
+						sep = _sep.comma;
+					query.remove("sep");
+				}
+			} catch (Exception x) {
+				sep=_sep.tab;
+			}
+			
 			solrService.setQuery(query.encode());
 
 			ByteArrayOutputStream bout = null;

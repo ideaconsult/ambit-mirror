@@ -33,6 +33,14 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 	 * 
 	 */
 	private static final long serialVersionUID = -4805381027500815039L;
+	protected String delimiter="\t";
+	public String getDelimiter() {
+		return delimiter;
+	}
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
+	}
+
 	protected ObjectMapper dx = new ObjectMapper();
 	protected OutputStream out;
 	protected List<String> headers;
@@ -43,7 +51,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 	protected static ResourceBundle labels = ResourceBundle.getBundle("rest/study/bucketexport", Locale.ENGLISH,
 			BucketJson2CSVConvertor.class.getClassLoader());
 
-	public BucketJson2CSVConvertor() {
+	public BucketJson2CSVConvertor(String delimiter) {
 		this(new String[] { "dbtag_hss", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs",
 				"substance_uuid" },
 				new String[] { "document_uuid_s", "Dispersion protocol_s", "MEDIUM_s", "MEDIUM.composition_s",
@@ -54,12 +62,16 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				new String[] { "s_uuid_s","assay_uuid_s","investigation_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "reference_owner_s",
 						"reference_year_s", "reference_s", "effectendpoint_s", "effectendpoint_type_s","loQualifier_s", "loValue_d",
 						"upQualifier_s", "upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
-				new String[] { "replicate_s", "material_s" });
+				new String[] { "replicate_s", "material_s" },delimiter);
 
 	}
-
 	public BucketJson2CSVConvertor(String[] header, String[] paramHeaders, String[] studyHeaders,
 			String[] conditionHeaders) {
+		this(header,paramHeaders,studyHeaders,conditionHeaders,"\t");
+	}
+	public BucketJson2CSVConvertor(String[] header, String[] paramHeaders, String[] studyHeaders,
+			String[] conditionHeaders, String delimiter) {
+		this.delimiter=delimiter;
 		this.headers = Arrays.asList(header);
 		this.paramHeaders = Arrays.asList(paramHeaders);
 		this.studyHeaders = Arrays.asList(studyHeaders);
@@ -93,7 +105,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				h = header.replace("_s", "").replace("_hs", "").replace("_d", "");
 			}
 			out.write(h.getBytes(StandardCharsets.UTF_8));
-			out.write("\t".getBytes());
+			out.write(delimiter.getBytes());
 		}
 	}
 
@@ -146,7 +158,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				}
 				d = " ";
 			}
-			out.write("\t".getBytes());
+			out.write(delimiter.getBytes());
 		}
 
 	}
