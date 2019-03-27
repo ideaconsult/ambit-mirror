@@ -318,7 +318,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 							createAuthenticatedOpenMethodResource(new InvestigationRouter(getContext())));
 				}
 
-				router.attach(Resources.proxy, createAuthenticatedOpenMethodResource(new ProxyRouter(getContext())));
+				router.attach(Resources.proxy, createAuthenticatedOpenMethodResource(new ProxyRouter(getContext()),Method.GET,Method.POST));
 
 			} else {
 				Filter authz = null;
@@ -783,12 +783,16 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 	}
 
 	protected Restlet createAuthenticatedOpenMethodResource(Router router) {
+		return createAuthenticatedOpenMethodResource(router,Method.GET);
+	}
+	protected Restlet createAuthenticatedOpenMethodResource(Router router, final Method... methods) {
 		Filter authN = new OpenSSOAuthenticator(getContext(), false, "opentox.org", new OpenSSOVerifierSetUser(false));
 		OpenSSOAuthorizer authZ = new OpenSSOMethodAuthorizer() {
 			@Override
 			protected boolean authorize(Request request, Response response) {
-				if (Method.GET.equals(request.getMethod()))
-					return true;
+				for (Method method : methods )
+					if (method.equals(request.getMethod()))
+						return true;
 				return super.authorize(request, response);
 			}
 
