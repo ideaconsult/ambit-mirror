@@ -318,7 +318,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 							createAuthenticatedOpenMethodResource(new InvestigationRouter(getContext())));
 				}
 
-				router.attach(Resources.proxy, createProtectedResource(new ProxyRouter(getContext()), null));
+				router.attach(Resources.proxy, createAuthenticatedOpenMethodResource(new ProxyRouter(getContext())));
 
 			} else {
 				Filter authz = null;
