@@ -1520,6 +1520,10 @@ public class Protocol {
 			public String getTopCategory() {
 				return "P-CHEM";
 			}
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000090";
+			}
 		},
 		DUSTINESS_SECTION {
 			@Override
