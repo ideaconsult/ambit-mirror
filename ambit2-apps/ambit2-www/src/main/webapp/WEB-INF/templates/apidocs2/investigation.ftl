@@ -1,7 +1,10 @@
   /investigation:
     get:
       operationId: getInvestigationResults
-      summary: Query protocol applications
+      summary: Details of multiple studies
+      description: Multiple studies in tabular form
+      tags:
+        - Studies      
       parameters:
         - in: query
           name: type
@@ -55,7 +58,5 @@
                   $ref: '#/components/schemas/Investigation'
         '404':
           description: Entries not found
-      externalDocs:
-          description: Learn more about operations provided by this API.
-          url: http://ambit.sf.net          
+
             

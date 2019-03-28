@@ -7,9 +7,7 @@
       summary: Apache Solr powered search
       description: ''
       operationId: solrquery_get
-      responses:
-        default:
-          description: Default error sample response
+
       parameters:
         - in: path
           name: id
@@ -63,23 +61,50 @@
             enum: [',','\t']
           required: false
           example: ","          
+      responses:
+        '200':
+          description: |-
+            Query performed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolrResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SolrResponse'
+        '400':
+          description: |-
+            BAD_REQUEST
+        '401':
+          description: |-
+            UNAUTHORIZED
+        '403':
+          description: |-
+            FORBIDDEN
+        '404':
+          description: |-
+            NOT_FOUND
+        '409':
+          description: |-
+            CONFLICT
+        '415':
+          description: |-
+            UNSUPPORTED_MEDIA_TYPE
+        '500':
+          description: |-
+            SERVER_ERROR
+        '503':
+          description: |-
+            SERVICE_UNAVAILABLE
+        '510':
+          description: |-
+            INVALID_STATE          
     post:
       summary: Apache Solr powered search
+ 
       description: ''
       operationId: solrquery_post
-      responses:
-        default:
-          description: response
-      requestBody:
-        description: https://lucene.apache.org/solr/guide/7_1/json-request-api.html
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SolrQuery'
-          text/plain:
-            schema:
-              type: string          
+      
       parameters:
         - in: path
           name: id
@@ -111,4 +136,44 @@
             type: string
             enum: [',','\t']
           required: false
-          example: ","            
+          example: ","    
+      requestBody:
+          $ref: '#/components/requestBodies/QueryBody'                  
+      responses:
+        '200':
+          description: |-
+            Query performed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolrResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SolrResponse'
+        '400':
+          description: |-
+            BAD_REQUEST
+        '401':
+          description: |-
+            UNAUTHORIZED
+        '403':
+          description: |-
+            FORBIDDEN
+        '404':
+          description: |-
+            NOT_FOUND
+        '409':
+          description: |-
+            CONFLICT
+        '415':
+          description: |-
+            UNSUPPORTED_MEDIA_TYPE
+        '500':
+          description: |-
+            SERVER_ERROR
+        '503':
+          description: |-
+            SERVICE_UNAVAILABLE
+        '510':
+          description: |-
+            INVALID_STATE          

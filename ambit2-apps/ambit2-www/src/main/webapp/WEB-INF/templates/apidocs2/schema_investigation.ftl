@@ -1,4 +1,4 @@
-    Investigation:      # Object definition
+    Investigation:      
       type: object
       properties:
         substanceType:

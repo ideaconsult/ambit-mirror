@@ -11,4 +11,4 @@
           schema:
             type: integer
           required: false
-          example: 10     
+          example: 10

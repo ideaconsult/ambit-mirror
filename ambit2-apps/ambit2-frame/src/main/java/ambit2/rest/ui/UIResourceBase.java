@@ -130,6 +130,9 @@ public class UIResourceBase extends FreeMarkerResource {
 			public boolean enablePOST() {
 				return true;
 			}
+		},
+		annotation {
+			
 		};
 		public String getTemplateName() {
 			return name();

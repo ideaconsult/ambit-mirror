@@ -1,6 +1,6 @@
 info:
-  title: eNanoMapper database API
-  description:  AMBIT REST web services ${ambit_version_short} [with ${menu_profile} profile] by ${creator}.  More \n  at <a href=\"${ambit_root}\">${ambit_root}</a>   
+  title: ${custom_title!"eNanoMapper database"} 
+  description: ${custom_description!"AMBIT REST web services"} [with ${menu_profile} profile] by ${creator}    
   version: ${ambit_version_short}
     
   termsOfService: 'http://ambit.sf.net'
@@ -8,4 +8,4 @@ info:
     email: support@ideaconsult.net
   license:
     name: License
-    url: 'http://www.gnu.org/licenses/lgpl.html'    
+    url: ${custom_license!'http://www.gnu.org/licenses/lgpl.html'}    
