@@ -6,3 +6,10 @@ servers:
 
 paths:
 <#include "/apidocs2/investigation.ftl" >
+<#include "/apidocs2/solr.ftl" >
+
+components:
+  schemas:
+<#include "/apidocs2/schema_investigation.ftl" >
+<#include "/apidocs2/schema_substance.ftl" >
+<#include "/apidocs2/schema_solr.ftl" >
