@@ -1,33 +1,48 @@
 {
     "type": "object",
     "$schema": "http://json-schema.org/draft-03/schema",
-    "id": "http://jsonschema.opentox.org",
+    "id": "http://jsonschema.ambit.sf.net/",
     "required": false,
     "properties": {
         "loQualifier": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/loQualifier",
+            "id": "http://jsonschema.ambit.sf.net/loQualifier",
             "required": false
         },
         "loValue": {
             "type": "number",
-            "id": "http://jsonschema.opentox.org/loValue",
+            "id": "http://jsonschema.ambit.sf.net/loValue",
             "required": false
         },
         "unit": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/unit",
+            "id": "http://jsonschema.ambit.sf.net/unit",
             "required": false
         },
         "upQualifier": {
             "type": "string",
-            "id": "http://jsonschema.opentox.org/upQualifier",
+            "id": "http://jsonschema.ambit.sf.net/upQualifier",
             "required": false
         },
         "upValue": {
             "type": "number",
-            "id": "http://jsonschema.opentox.org/upValue",
+            "id": "http://jsonschema.ambit.sf.net/upValue",
             "required": false
-        }
+        },
+        "errQualifier": {
+            "type": "string",
+            "id": "http://jsonschema.ambit.sf.net/upQualifier",
+            "required": false
+        }, 
+        "errorValue": {
+            "type": "number",
+            "id": "http://jsonschema.ambit.sf.net/errorValue",
+            "required": false
+        }  ,
+        "textValue": {
+            "type": "string",
+            "id": "http://jsonschema.ambit.sf.net/textValue",
+            "required": false
+        }                     
     }
 }
