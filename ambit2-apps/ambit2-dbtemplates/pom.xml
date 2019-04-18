@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ambit</groupId>
+		<artifactId>ambit2-apps</artifactId>
+		<version>4.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>ambit2-dbtemplates</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>${dbunit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-db</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-rest</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ambit</groupId>
+			<artifactId>ambit2-db</artifactId>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- <dependency> <groupId>net.ideaconsult</groupId> <artifactId>loom-tox21</artifactId> 
+			<version>${net.idea.loom.version}</version> <type>jar</type> </dependency> -->
+		<dependency>
+			<groupId>net.ideaconsult</groupId>
+			<artifactId>loom-pubchemrest-cli</artifactId>
+			<version>${net.idea.loom.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.enanomapper</groupId>
+			<artifactId>enmexcelparser</artifactId>
+			<version>${nmparser.version}</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

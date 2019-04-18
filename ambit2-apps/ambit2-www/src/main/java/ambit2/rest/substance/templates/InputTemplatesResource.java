@@ -34,6 +34,7 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 		setHtmlbyTemplate(true);
 
 	}
+
 	@Override
 	public String getTemplateName() {
 		return "template_placeholder.ftl";
@@ -43,6 +44,7 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(new MediaType[] { MediaType.APPLICATION_MSOFFICE_XLSX });
+		//getJSONConfig
 
 	}
 
@@ -55,14 +57,15 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 
 		String endpoint = form.getFirstValue("endpoint");
 		if (endpoint == null)
-			endpoint = "PCHEM_IEP.xlsx";
+			endpoint = "isoelectric point zeta potential";
 		String assayname = form.getFirstValue("assay");
 		if (assayname == null)
 			assayname = "isoElectric point";
 		ts.setEndpointname(endpoint);
 		ts.setAssayname(assayname);
 		q.add(ts);
-		filename = String.format("datatemplate_%s_%s", endpoint.replaceAll(".xlsx",""), assayname.replaceAll(" ", "_"));
+		filename = String.format("datatemplate_%s_%s", endpoint.replaceAll(".xlsx", ""),
+				assayname.replaceAll(" ", "_"));
 		return q.iterator();
 	}
 
@@ -76,7 +79,7 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 		}
 		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 	}
-	
+
 }
 
 class TemplateReporter extends AbstractReporter<Iterator<TemplateMakerSettings>, OutputStream> {
@@ -88,25 +91,35 @@ class TemplateReporter extends AbstractReporter<Iterator<TemplateMakerSettings>,
 
 	@Override
 	public OutputStream process(Iterator<TemplateMakerSettings> ts) throws Exception {
-
+		Workbook workbook= null;
 		while (ts.hasNext()) {
-			TemplateMaker maker = new TemplateMaker();
-			TemplateMakerSettings settings = ts.next();
-			settings.setTemplatesCommand(_TEMPLATES_CMD.generate);
-			settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
+			try {
+				TemplateMaker maker = new TemplateMaker();
+				TemplateMakerSettings settings = ts.next();
+				settings.setTemplatesCommand(_TEMPLATES_CMD.generate);
+				settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
 
-			// FIXME no input for generation needed, this is a placeholder
-			File tmpdir = new File(System.getProperty("java.io.tmpdir"));
-			settings.setInputfolder(tmpdir);
-			settings.setOutputfolder(tmpdir);
+				// FIXME no input for generation needed, this is a placeholder
+				File tmpdir = new File(System.getProperty("java.io.tmpdir"));
+				settings.setInputfolder(tmpdir);
+				settings.setOutputfolder(tmpdir);
 
-			Workbook workbook = maker.generateJRCTemplates(settings);
-			workbook.write(output);
-			workbook.close();
-			break;
+				workbook = maker.generateJRCTemplates(settings);
+				workbook.write(output);
+				
+				break;
+			} catch (Exception x) {
+				throw x;
+			} finally {
+				if (workbook!=null)
+					workbook.close();
+				
+			}
+
 		}
 		return output;
 	}
+
 	@Override
 	public String getFileExtension() {
 		return "xlsx";

@@ -1,0 +1,12 @@
+#ambit2.rest.test.CreateAmbitDatabaseProcessor
+#Thu Jan 31 18:35:38 EET 2019
+Host=localhost
+Scheme=jdbc\:mysql
+Port=3306
+Database=ambit-test
+defaultDir=
+MAXRECORDS=2000
+DriverClassName=com.mysql.jdbc.Driver
+User=guest
+timeout=60000
+startMySQL=true

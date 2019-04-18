@@ -1,0 +1,19 @@
+#ambit2.db.processors.DbCreateDatabase
+#Wed Apr 17 16:23:42 EEST 2019
+generate2D=true
+remotelookup_uri=https\://apps.ideaconsult.net/ambit2/query/compound/search/all?search\=%s&max\=1&media\=chemical%%2Fx-mdl-sdfile
+smi2sdf.smiles.generate=true
+Host=localhost
+showAromaticity=true
+FASTSMARTS=true
+Scheme=jdbc\:mysql
+remotelookup=false
+smilesParser=false
+Port=3306
+Database=ambit-test
+defaultDir=
+MAXRECORDS=2000
+atomtypes.stop=false
+User=guest
+timeout=60000
+startMySQL=true

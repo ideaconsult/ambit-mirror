@@ -380,6 +380,7 @@
 		<module>ambit2-dbcli</module>
 		<!-- <module>ambit2-export</module> -->
 		<module>ambit2-frame</module>
+		<module>ambit2-dbtemplates</module>
 	</modules>
 	<dependencies>
 		<!-- Ambit -->

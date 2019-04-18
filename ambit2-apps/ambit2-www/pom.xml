@@ -341,6 +341,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
+			<artifactId>ambit2-dbtemplates</artifactId>
+			<version>${ambit.version}</version>
+		</dependency>		
+		<dependency>
+			<groupId>ambit</groupId>
 			<artifactId>ambit2-db</artifactId>
 			<version>${project.version}</version>
 			<classifier>tests</classifier>

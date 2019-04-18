@@ -1,0 +1,2 @@
+SELECT `endpoint`,`assay`,`row`,`col`,`idtemplate`,`module`,`level1`,`level2`,`level3`,	`value`,`value_clean`,`header1`,`hint`,`unit`,`annotation`,`file`,`folder`,`sheet`,`visible` FROM assay_template
+where endpoint = (:_endpoint)

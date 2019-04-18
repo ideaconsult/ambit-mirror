@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.dbtemplates
+
+Name: ambit2/dbtemplates/
+Specification-Title: ambit2.dbtemplates
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: ambit2.dbsubstance
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.dbtemplates
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.

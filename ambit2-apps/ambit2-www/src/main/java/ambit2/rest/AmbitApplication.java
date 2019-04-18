@@ -118,6 +118,7 @@ import ambit2.rest.substance.owner.OwnerSubstanceFacetResource;
 import ambit2.rest.substance.property.SubstanceCategoryProperty;
 import ambit2.rest.substance.property.SubstancePropertyResource;
 import ambit2.rest.substance.study.SubstanceStudyTableResource;
+import ambit2.rest.substance.templates.AssayTemplateResource;
 import ambit2.rest.substance.templates.InputTemplatesResource;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.WarmupTask;
@@ -220,7 +221,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		/**
 		 * Points to the Ontology service /sparqlendpoint
 		 */
-		//router.attach(SPARQLPointerResource.resource, SPARQLPointerResource.class);
+		// router.attach(SPARQLPointerResource.resource,
+		// SPARQLPointerResource.class);
 
 		/**
 		 * * /admin Various admin tasks, like database creation
@@ -318,7 +320,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 							createAuthenticatedOpenMethodResource(new InvestigationRouter(getContext())));
 				}
 
-				router.attach(Resources.proxy, createAuthenticatedOpenMethodResource(new ProxyRouter(getContext()),Method.GET,Method.POST));
+				router.attach(Resources.proxy,
+						createAuthenticatedOpenMethodResource(new ProxyRouter(getContext()), Method.GET, Method.POST));
 
 			} else {
 				Filter authz = null;
@@ -414,17 +417,16 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		 */
 		queryRouter.attach(QueryStructureRelationResource.resource, createRelationsRouter());
 		/*
-		if (attachInvestigationRouter()) {
-			Filter tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), false, usersdbname,
-					"ambit2/rest/config/config.prop");
-			Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
-					configProperties, getBaseURLDepth());
-			tokenAuth.setNext(authz);
-			authz.setNext(new InvestigationRouter(getContext()));
-			router.attach(String.format("/api/{%s}",SubstanceStudyTableResource.investigation), tokenAuth);
-		}
-		*/
-		
+		 * if (attachInvestigationRouter()) { Filter tokenAuth = new
+		 * ChallengeAuthenticatorTokenLocal(getContext(), false, usersdbname,
+		 * "ambit2/rest/config/config.prop"); Filter authz =
+		 * UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
+		 * configProperties, getBaseURLDepth()); tokenAuth.setNext(authz);
+		 * authz.setNext(new InvestigationRouter(getContext()));
+		 * router.attach(String.format("/api/{%s}",SubstanceStudyTableResource.
+		 * investigation), tokenAuth); }
+		 */
+
 		/**
 		 * API extensions from this point on
 		 */
@@ -454,6 +456,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 					DepictionResource.class);
 		}
 		router.attach("/datatemplate", InputTemplatesResource.class);
+		router.attach("/assaytemplate", AssayTemplateResource.class);
 
 		/**
 		 * Images, styles, favicons, applets
@@ -580,23 +583,20 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 				router.attach("/provider", protectedRouter);
 
-				//optional challenge authenticator
-				ChallengeAuthenticatorTokenLocal tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true, usersdbname,
-						configProperties);				
-								
-				
-				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
-						configProperties, secret, sessionLength,true);
+				// optional challenge authenticator
+				ChallengeAuthenticatorTokenLocal tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true,
+						usersdbname, configProperties);
 
-				
-				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
-						configProperties, getBaseURLDepth());
+				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname, configProperties,
+						secret, sessionLength, true);
+
+				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, configProperties,
+						getBaseURLDepth());
 				tokenAuth.setNext(dbAuth);
 				dbAuth.setNext(authz);
 				authz.setNext(router);
-				//dbAuth.setNext(router);
+				// dbAuth.setNext(router);
 				return addOriginFilter(tokenAuth);
-
 
 			} else if (isSimpleSecretAAEnabled()) {
 
@@ -783,14 +783,15 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 	}
 
 	protected Restlet createAuthenticatedOpenMethodResource(Router router) {
-		return createAuthenticatedOpenMethodResource(router,Method.GET);
+		return createAuthenticatedOpenMethodResource(router, Method.GET);
 	}
+
 	protected Restlet createAuthenticatedOpenMethodResource(Router router, final Method... methods) {
 		Filter authN = new OpenSSOAuthenticator(getContext(), false, "opentox.org", new OpenSSOVerifierSetUser(false));
 		OpenSSOAuthorizer authZ = new OpenSSOMethodAuthorizer() {
 			@Override
 			protected boolean authorize(Request request, Response response) {
-				for (Method method : methods )
+				for (Method method : methods)
 					if (method.equals(request.getMethod()))
 						return true;
 				return super.authorize(request, response);
