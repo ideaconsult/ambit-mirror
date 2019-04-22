@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -30,12 +29,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.core.io.FileState;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.dbsubstance.DBSubstanceImport;
+import net.enanomapper.maker.TemplateMakerSettings;
+import net.idea.templates.extraction.AssayTemplatesParser;
+import net.idea.templates.extraction.IProcessPair;
 
 public abstract class AbstractImportTest extends DbUnitTest {
-
+	protected AssayTemplatesParser parser;
 	static final String loggingProperties = "config/logging.properties";
 	static final String log4jProperties = "config/log4j.properties";
 	protected boolean addDefaultComposition = false;
@@ -57,6 +58,20 @@ public abstract class AbstractImportTest extends DbUnitTest {
 
 	@Before
 	public void init() throws Exception {
+		parser = new AssayTemplatesParser() {
+			@Override
+			protected int verifyFiles(int count) throws Exception {
+				Assert.assertTrue(count > 0);
+				return count;
+			}
+
+			@Override
+			protected int processFile(File spreadsheet, File json, String prefix, boolean resetdb, String release)
+					throws Exception {
+				return importFile(spreadsheet, json, prefix, resetdb, release);
+			}
+		};
+
 		InputStream in = null;
 		try {
 			URL url = getClass().getClassLoader().getResource(loggingProperties);
@@ -91,18 +106,14 @@ public abstract class AbstractImportTest extends DbUnitTest {
 		dataResources = getNanoDataProperties();
 	}
 
-	private static final String _root = "root";
-	private static final String _singledb = "singledb";
-	private static final String _release = "release";
-
 	@Test
 	public void test() throws Exception {
 		if (dataResources != null)
-			testResources(dataResources, getPrefix());
+			parser.parseResources(dataResources, getPrefix());
 	}
 
 	public int testResources(ResourceBundle nanodataResources) throws Exception {
-		return testResources(nanodataResources, getPrefix());
+		return parser.parseResources(nanodataResources, getPrefix());
 	}
 
 	protected List<File> allFiles = null;
@@ -124,10 +135,13 @@ public abstract class AbstractImportTest extends DbUnitTest {
 			throw new Exception("Undefined resources");
 		int c = 0;
 		String root = null;
-		try (BufferedWriter log = new BufferedWriter(new FileWriter(String.format("../import_%s.log", getPrefix())))) {
+		File logfile = new File(String.format("../import_%s.log", getPrefix()));
+
+		logger.info(logfile.getAbsolutePath());
+		try (BufferedWriter log = new BufferedWriter(new FileWriter(logfile))) {
 			for (String resource : resources) {
 				ResourceBundle nanodataResources = getNanoDataProperties(resource);
-				root = nanodataResources.getString(_root);
+				root = nanodataResources.getString(parser.getRoot());
 				if (allFiles == null)
 					allFiles = (List<File>) FileUtils.listFiles(new File(root, getDirPrefix()), filefilter,
 							new IOFileFilter() {
@@ -144,7 +158,7 @@ public abstract class AbstractImportTest extends DbUnitTest {
 								}
 							});
 
-				c += testResources(nanodataResources, getPrefix(), true, new IProcessPair() {
+				c += parser.parseResources(nanodataResources, getPrefix(), true, new IProcessPair() {
 					@Override
 					public void process(String prefix, String root, File spreadsheet, File json) {
 						try {
@@ -187,103 +201,6 @@ public abstract class AbstractImportTest extends DbUnitTest {
 
 	}
 
-	public int testResources(ResourceBundle nanodataResources, String prefix) throws Exception {
-		return testResources(nanodataResources, prefix, false, null);
-	}
-
-	public int testResources(ResourceBundle nanodataResources, String prefix, boolean dryRun, IProcessPair processpair)
-			throws Exception {
-		Assert.assertNotNull(nanodataResources);
-		final String root = nanodataResources.getString(_root);
-		boolean singledb = Boolean.parseBoolean(nanodataResources.getString(_singledb));
-		String release = nanodataResources.getString(_release);
-		Enumeration<String> enumeration = nanodataResources.getKeys();
-
-		int count = 0;
-		int substance = 0;
-		while (enumeration.hasMoreElements()) {
-			String key = enumeration.nextElement();
-
-			if (_root.equals(key))
-				continue;
-			if (_singledb.equals(key))
-				continue;
-			if (_release.equals(key))
-				continue;
-			// hack to have one file with multiple json configs - the keys
-			// should be unique, but files the same
-			int ix = key.indexOf("#");
-			File file = new File(root, (ix > 0) ? key.substring(0, ix) : key);
-			if (file.exists()) {
-				logger.log(Level.INFO, String.format("Directory:%s\t%s%s\t%s", file.isDirectory(), root, key,
-						nanodataResources.getString(key)));
-				if (file.isDirectory()) {
-					if (new File(file, "donotimport.properties").exists())
-						continue;
-					File json = new File(file, nanodataResources.getString(key));
-					if (!json.exists()) {
-						logger.log(Level.WARNING, String.format("%s not found", json.getAbsolutePath()));
-						json = null;
-					}
-					for (File data : file.listFiles())
-						if (acceptDataFile(data))
-							if (dryRun && processpair != null)
-								processpair.process(prefix, root, data,
-										json == null ? getJsonDataName(data, nanodataResources.getString(key)) : json);
-							else
-								try {
-									substance += importFile(data, json == null
-											? getJsonDataName(data, nanodataResources.getString(key)) : json, prefix,
-											!singledb, release);
-								} catch (Exception x) {
-									logger.log(Level.WARNING, x.getMessage(), x);
-								}
-				} else {
-					if (acceptDataFile(file)) {
-						File json = getJsonDataName(file.getParentFile(), nanodataResources.getString(key));
-						if (json == null)
-							continue;
-						if (!json.exists()) {
-							logger.log(Level.WARNING, String.format("%s not found", json.getAbsolutePath()));
-						} else {
-							if (dryRun)
-								processpair.process(prefix, root, file, json);
-							else
-								substance += importFile(file, json, prefix, !singledb, release);
-						}
-					}
-				}
-				count++;
-			} else
-				logger.log(Level.WARNING, String.format("%s\t%s", file.getAbsolutePath(), "not found"));
-		}
-		if (!dryRun)
-			return verifyFiles(count);
-		else
-			return count;
-	}
-
-	protected File getJsonDataName(File file, String jsonname) {
-		File json = new File(file, jsonname);
-		if (!json.exists()) {
-			json = changeFileExtension(file, ".json");
-		}
-		return json;
-	}
-
-	protected boolean acceptDataFile(File data) {
-		return (FileState._FILE_TYPE.XLS_INDEX.hasExtension(data)
-				|| FileState._FILE_TYPE.XLSX_INDEX.hasExtension(data));
-	}
-
-	protected File changeFileExtension(File data, String newextension) {
-		if (FileState._FILE_TYPE.XLS_INDEX.hasExtension(data))
-			return new File(data.getAbsolutePath().replaceAll(".xls", newextension));
-		else if (FileState._FILE_TYPE.XLS_INDEX.hasExtension(data))
-			return new File(data.getAbsolutePath().replaceAll(".xlsx", newextension));
-		return null;
-	}
-
 	protected int verifyImport(File spreadsheet, File json, IDatabaseConnection c) throws Exception {
 		try {
 
@@ -310,11 +227,6 @@ public abstract class AbstractImportTest extends DbUnitTest {
 		return new String[] { "-i", spreadsheet.getAbsolutePath(), "-j", json.getAbsolutePath(), "-c",
 				propertiesFile.getFile(), "-m", "false", "-t", "true", "-p", "xls", "-e", prefix, "-d",
 				Boolean.toString(addDefaultComposition), "-a", release };
-	}
-
-	protected int verifyFiles(int count) throws Exception {
-		Assert.assertTrue(count > 0);
-		return count;
 	}
 
 	protected void storeUndefined(Properties properties, String type, String comments) {
@@ -390,8 +302,44 @@ public abstract class AbstractImportTest extends DbUnitTest {
 		Assert.assertEquals(0, empty);
 	}
 
-}
+	@Test
+	public void extractTemplateFields() throws Exception {
 
-interface IProcessPair {
-	public void process(String prefix, String root, File spreadsheet, File json);
+		class TemplateProcessor implements IProcessPair {
+			final TemplateMakerSettings settings;
+
+			public TemplateProcessor() {
+				settings = new TemplateMakerSettings();
+			}
+
+			@Override
+			public void process(String prefix, String root, File spreadsheet, File json) {
+
+				/*
+				 * Tools.readJRCExcelTemplate(spreadsheet,
+				 * settings.getInputfolder().getName(), file.getName(),
+				 * histogram, stats, settings.getAnnotator(), rownum);
+				 */
+			}
+		}
+		;
+		TemplateProcessor tp = new TemplateProcessor();
+		extractTemplateFields(null, null, tp);
+	}
+
+	public void extractTemplateFields(String folder, String resource, IProcessPair pp) throws Exception {
+
+		ResourceBundle nanodataResources = null;
+		int count = 0;
+		if (resource == null) {
+			for (String r : getResourcesList()) {
+				nanodataResources = getNanoDataProperties(r);
+				count += parser.parseResources(nanodataResources, getPrefix(), true, pp);
+			}
+		} else {
+			nanodataResources = getNanoDataProperties(folder + resource);
+			count = parser.parseResources(nanodataResources, getPrefix(), true, pp);
+		}
+
+	}
 }
