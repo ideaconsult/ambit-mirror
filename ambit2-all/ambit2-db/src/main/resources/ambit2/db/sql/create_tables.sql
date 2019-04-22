@@ -231,7 +231,7 @@ CREATE TABLE `substance_experiment` (
   `err` double DEFAULT NULL,
   `substance_prefix` varchar(6) DEFAULT NULL,
   `substance_uuid` varbinary(16) DEFAULT NULL,
-  `resulttype` enum('RAW','DOSERESPONSE','AGGREGATED','NOTSPECIFIED') DEFAULT 'NOTSPECIFIED',
+  `resulttype` varchar(32) DEFAULT NULL,
   `resultgroup` int(11) DEFAULT NULL,
   PRIMARY KEY (`idresult`),
   KEY `document_id` (`document_uuid`,`document_prefix`),
@@ -241,7 +241,7 @@ CREATE TABLE `substance_experiment` (
   KEY `substance-x` (`substance_prefix`,`substance_uuid`),
   KEY `category-x` (`topcategory`,`endpointcategory`,`endpoint`,`unit`,`resulttype`,`endpointhash`),
   CONSTRAINT `document-x` FOREIGN KEY (`document_prefix`, `document_uuid`) REFERENCES `substance_protocolapplication` (`document_prefix`, `document_uuid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- -----------------------------------------------------
 -- A collection of substances and endpoints 
@@ -965,6 +965,34 @@ CREATE TABLE  `src_dataset` (
   CONSTRAINT `FK_src_dataset_3` FOREIGN KEY (`idtemplate`) REFERENCES `template` (`idtemplate`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+-- -----------------------------------------------------
+-- Table `assay_template` 
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `assay_template`;
+CREATE TABLE `assay_template` (
+  `endpoint` varchar(64) DEFAULT NULL,
+  `assay` varchar(45) DEFAULT NULL,
+  `row` int(11) DEFAULT NULL,
+  `col` int(11) DEFAULT NULL,
+  `idtemplate` varchar(45) DEFAULT NULL,
+  `module` varchar(16) DEFAULT NULL,
+  `level1` varchar(32) DEFAULT NULL,
+  `level2` varchar(32) DEFAULT NULL,
+  `level3` varchar(32) DEFAULT NULL,
+  `value` varchar(192) DEFAULT NULL,
+  `value_clean` varchar(192) DEFAULT NULL,
+  `header1` varchar(80) DEFAULT NULL,
+  `hint` varchar(160) DEFAULT NULL,
+  `unit` varchar(32) DEFAULT NULL,
+  `annotation` varchar(64) DEFAULT NULL,
+  `file` varchar(32) DEFAULT NULL,
+  `folder` varchar(32) DEFAULT NULL,
+  `sheet` varchar(32) DEFAULT NULL,
+  `visible` tinyint(4) DEFAULT '1',
+  KEY `primary_index` (`endpoint`,`assay`,`row`,`col`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 -- ------------------------------------------------------------------------------------------
 -- Triggers to duplicate info of properties used in a dataset via template/template_def table
 -- ------------------------------------------------------------------------------------------
@@ -1489,6 +1517,8 @@ DELIMITER $
  END $
 DELIMITER ;
 
+
+
 -- -----------------------------------------------------
 -- Table `version` Version
 -- -----------------------------------------------------
@@ -1500,7 +1530,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (10,2,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (10,3,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
