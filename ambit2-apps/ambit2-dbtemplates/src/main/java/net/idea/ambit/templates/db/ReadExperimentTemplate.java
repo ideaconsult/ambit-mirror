@@ -49,7 +49,7 @@ public class ReadExperimentTemplate implements IQueryObject<TR>,
 			TR.hix.endpoint.set(record, rs.getString("endpoint"));
 			TR.hix.Row.set(record, rs.getInt("row"));
 			TR.hix.Column.set(record, rs.getInt("col"));
-			TR.hix.ID.set(record, rs.getString("idtemplate"));
+			TR.hix.id.set(record, rs.getString("idtemplate"));
 			TR.hix.JSON_LEVEL1.set(record, rs.getString("level1"));
 			TR.hix.JSON_LEVEL2.set(record, rs.getString("level2"));
 			TR.hix.JSON_LEVEL3.set(record, rs.getString("level3"));

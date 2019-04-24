@@ -13,7 +13,7 @@ public class ExperimentTemplateQueryTest extends QueryTest<ExperimentTemplateQue
 	@Override
 	protected ExperimentTemplateQuery createQuery() throws Exception {
 		TemplateMakerSettings settings = new TemplateMakerSettings();
-		settings.setEndpointname("genotoxicity");
+		settings.setQueryEndpoint("genotoxicity");
 		ExperimentTemplateQuery q = new ExperimentTemplateQuery(settings);
 
 		return q;

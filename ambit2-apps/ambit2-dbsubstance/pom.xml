@@ -72,6 +72,11 @@
 			<version>${nmparser.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>net.enanomapper</groupId>
+			<artifactId>enmtemplategen</artifactId>
+			<version>${nmparser.version}</version>
+		</dependency>		
+		<dependency>
 			<groupId>net.idea</groupId>
 			<artifactId>iuclid_5_5-io</artifactId>
 			<version>${i5.version}</version>

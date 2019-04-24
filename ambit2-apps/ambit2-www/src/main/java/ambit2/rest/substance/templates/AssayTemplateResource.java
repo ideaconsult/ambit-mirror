@@ -27,7 +27,7 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 	
 	@Override
 	public String getTemplateName() {
-		return "assaytemplate.ftl";
+		return "jsonplaceholder.ftl";
 	}
 	@Override
 	public IProcessor<Q, Representation> createConvertor(Variant variant) throws AmbitException,
@@ -40,11 +40,11 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 	@Override
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
 		TemplateMakerSettings settings = new TemplateMakerSettings();
-		settings.setEndpointname("genotoxicity");
+		settings.setQueryEndpoint("genotoxicity");
 		Form p = getParams();
 		try {
 			if (p.getFirstValue("endpoint") != null)
-				settings.setEndpointname(p.getFirstValue("endpoint"));
+				settings.setQueryEndpoint(p.getFirstValue("endpoint"));
 		} catch (Exception x) {
 
 		}

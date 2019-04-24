@@ -14,7 +14,7 @@ public class ReadExperimentTemplateTest extends QueryTest<ReadExperimentTemplate
 	protected ReadExperimentTemplate createQuery() throws Exception {
 		ReadExperimentTemplate q = new ReadExperimentTemplate();
 		TemplateMakerSettings settings = new TemplateMakerSettings();
-		settings.setEndpointname("genotoxicity");
+		settings.setQueryEndpoint("genotoxicity");
 		q.setFieldname(settings);
 		return q;
 	}

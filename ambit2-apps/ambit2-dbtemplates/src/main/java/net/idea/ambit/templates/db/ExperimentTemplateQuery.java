@@ -53,7 +53,7 @@ public class ExperimentTemplateQuery extends SQLFileQueryParams {
 
 	
 	public ExperimentTemplateQuery(TemplateMakerSettings settings) throws IOException {
-		this(_QUERY_TYPE_TEMPLATE.byendpoint.getSQL(),_QUERY_TYPE_TEMPLATE.byendpoint.queryParams(new String[] {settings.getEndpointname()}));
+		this(_QUERY_TYPE_TEMPLATE.byendpoint.getSQL(),_QUERY_TYPE_TEMPLATE.byendpoint.queryParams(new String[] {settings.getQueryEndpoint()}));
 	}
 
 	public ExperimentTemplateQuery(_QUERY_TYPE_TEMPLATE queryType) throws IOException {

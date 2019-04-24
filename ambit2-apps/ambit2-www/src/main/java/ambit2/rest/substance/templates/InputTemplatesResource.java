@@ -28,7 +28,7 @@ import net.idea.modbcum.r.AbstractReporter;
 
 public class InputTemplatesResource extends CatalogResource<TemplateMakerSettings> {
 	protected String filename = "datatemplate";
-	
+
 	public InputTemplatesResource() {
 		super();
 		setHtmlbyTemplate(true);
@@ -44,7 +44,7 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 	protected void doInit() throws ResourceException {
 		super.doInit();
 		customizeVariants(new MediaType[] { MediaType.APPLICATION_MSOFFICE_XLSX });
-		//getJSONConfig
+		// getJSONConfig
 
 	}
 
@@ -54,18 +54,29 @@ public class InputTemplatesResource extends CatalogResource<TemplateMakerSetting
 		ArrayList<TemplateMakerSettings> q = new ArrayList<TemplateMakerSettings>();
 		TemplateMakerSettings ts = new TemplateMakerSettings();
 		Form form = getRequest().getResourceRef().getQueryAsForm();
-
-		String endpoint = form.getFirstValue("endpoint");
-		if (endpoint == null)
-			endpoint = "isoelectric point zeta potential";
-		String assayname = form.getFirstValue("assay");
-		if (assayname == null)
-			assayname = "isoElectric point";
-		ts.setEndpointname(endpoint);
-		ts.setAssayname(assayname);
+		Object idtemplate = getRequest().getAttributes().get("idtemplate");
+		if (idtemplate != null) {
+			ts.setSinglefile(false);
+			ts.setQueryTemplateid(idtemplate.toString());
+			try {
+				filename = ts.getOutputFile(idtemplate.toString(), _TEMPLATES_TYPE.jrc).getName();
+			} catch (Exception x) {
+				filename = "template.xlsx";
+			}
+		} else {
+			ts.setSinglefile(true);
+			String endpoint = form.getFirstValue("endpoint");
+			if (endpoint == null)
+				endpoint = "isoelectric point zeta potential";
+			String assayname = form.getFirstValue("assay");
+			if (assayname == null)
+				assayname = "isoElectric point";
+			ts.setQueryEndpoint(endpoint);
+			ts.setQueryAssay(assayname);
+			filename = String.format("datatemplate_%s_%s", endpoint.replaceAll(".xlsx", ""),
+					assayname.replaceAll(" ", "_"));
+		}
 		q.add(ts);
-		filename = String.format("datatemplate_%s_%s", endpoint.replaceAll(".xlsx", ""),
-				assayname.replaceAll(" ", "_"));
 		return q.iterator();
 	}
 
@@ -91,7 +102,7 @@ class TemplateReporter extends AbstractReporter<Iterator<TemplateMakerSettings>,
 
 	@Override
 	public OutputStream process(Iterator<TemplateMakerSettings> ts) throws Exception {
-		Workbook workbook= null;
+		Workbook workbook = null;
 		while (ts.hasNext()) {
 			try {
 				TemplateMaker maker = new TemplateMaker();
@@ -103,17 +114,18 @@ class TemplateReporter extends AbstractReporter<Iterator<TemplateMakerSettings>,
 				File tmpdir = new File(System.getProperty("java.io.tmpdir"));
 				settings.setInputfolder(tmpdir);
 				settings.setOutputfolder(tmpdir);
+				settings.setSinglefile(true);
 
-				workbook = maker.generateJRCTemplates(settings);
+				workbook = maker.generate(settings);
 				workbook.write(output);
-				
+
 				break;
 			} catch (Exception x) {
 				throw x;
 			} finally {
-				if (workbook!=null)
+				if (workbook != null)
 					workbook.close();
-				
+
 			}
 
 		}
