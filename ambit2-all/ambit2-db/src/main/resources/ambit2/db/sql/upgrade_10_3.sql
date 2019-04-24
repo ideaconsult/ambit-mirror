@@ -19,7 +19,8 @@ CREATE TABLE `assay_template` (
   `folder` varchar(32) DEFAULT NULL,
   `sheet` varchar(32) DEFAULT NULL,
   `visible` tinyint(4) DEFAULT '1',
-  KEY `primary_index` (`endpoint`,`assay`,`row`,`col`)
+  KEY `primary_index` (`idtemplate`,`row`,`col`),
+  KEY `endpointx` (`endpoint`,`assay`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 insert into version (idmajor,idminor,comment) values (10,3,"Assay templates");
