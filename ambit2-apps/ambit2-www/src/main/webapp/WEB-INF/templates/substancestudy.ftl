@@ -79,6 +79,7 @@
 		<!-- Page Content
 		================================================== -->
 <div class="jtox-toolkit remove-bottom" 
+    data-error-default="" 
 	data-kit="study" 
 	data-tab="P-CHEM"
 	data-substance-uri="${ambit_root}/substance/${substanceUUID}"
