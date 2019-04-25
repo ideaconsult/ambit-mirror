@@ -16,7 +16,7 @@ $().ready(function() {
 			'username': {
 				required : true,
 				minlength: 3,
-				maxlength: 16
+				maxlength: 32
 			},		
 			'firstname': {
 				required : true
