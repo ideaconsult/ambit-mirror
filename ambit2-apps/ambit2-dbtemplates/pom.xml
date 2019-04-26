@@ -31,7 +31,11 @@
 			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>net.ideaconsult.restnet</groupId>
+			<artifactId>restnet-userdb</artifactId>
+			<version>${restnet.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-db</artifactId>
