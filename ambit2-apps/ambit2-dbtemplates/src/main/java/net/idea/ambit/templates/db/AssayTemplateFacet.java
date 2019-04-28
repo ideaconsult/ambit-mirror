@@ -4,8 +4,9 @@ import ambit2.base.facet.AbstractFacet;
 import net.enanomapper.maker.TR;
 
 public class AssayTemplateFacet extends AbstractFacet<String> {
-		
+
 	protected TR record;
+
 	public TR getRecord() {
 		return record;
 	}
@@ -31,7 +32,13 @@ public class AssayTemplateFacet extends AbstractFacet<String> {
 
 	@Override
 	public String getSubcategoryTitle() {
-		return TR.hix.endpoint.get(record).toString();
+		try {
+			Object o = TR.hix.endpoint.get(record);
+			return o == null ? null : o.toString();
+		} catch (Exception x) {
+			return null;
+		}
+
 	}
 
 }
