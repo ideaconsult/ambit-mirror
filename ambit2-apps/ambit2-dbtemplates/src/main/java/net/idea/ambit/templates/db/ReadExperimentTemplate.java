@@ -12,9 +12,11 @@ import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.query.QueryParam;
 import net.idea.modbcum.q.conditions.EQCondition;
+import net.idea.restnet.db.aalocal.user.IDBConfig;
 
 public class ReadExperimentTemplate implements IQueryObject<TR>,
-		IParameterizedQuery<TemplateMakerSettings, TR, IQueryCondition>, IQueryRetrieval<TR> {
+		IParameterizedQuery<TemplateMakerSettings, TR, IQueryCondition>, IQueryRetrieval<TR>, IDBConfig {
+	protected String dbname = null;
 	/**
 	 * 
 	 */
@@ -30,7 +32,7 @@ public class ReadExperimentTemplate implements IQueryObject<TR>,
 
 	@Override
 	public String getSQL() throws AmbitException {
-		return flatQuery == null ? null : flatQuery.getSQL();
+		return flatQuery == null ? null : String.format(flatQuery.getSQL(), getDatabaseName());
 	}
 
 	@Override
@@ -160,5 +162,16 @@ public class ReadExperimentTemplate implements IQueryObject<TR>,
 	@Override
 	public boolean supportsPaging() {
 		return flatQuery == null ? null : flatQuery.supportsPaging();
+	}
+
+	@Override
+	public void setDatabaseName(String name) {
+		this.dbname = name;
+
+	}
+
+	@Override
+	public String getDatabaseName() {
+		return dbname;
 	}
 }

@@ -13,6 +13,7 @@ public enum AMBITConfig {
 	ambit_version_long,
 	Database,
 	users_dbname,
+	templates_dbname,
 	secret,
 	sessiontimeout,
 	ambit_reg_confirmed,

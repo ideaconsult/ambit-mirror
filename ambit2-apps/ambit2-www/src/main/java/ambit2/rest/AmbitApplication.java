@@ -204,6 +204,12 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
 		getContext().getParameters().add(AMBITConfig.users_dbname.name(), usersdbname);
+		
+		//templates - use ambit db if not specified
+		String templatesdbname = getProperty(AMBITConfig.templates_dbname.name(), ambitProperties);
+		if (templatesdbname == null)
+			templatesdbname = getProperty(AMBITConfig.Database.name(), ambitProperties);
+		getContext().getParameters().add(AMBITConfig.templates_dbname.name(), templatesdbname);		
 
 		Router router = new MyRouter(this.getContext()) {
 			public void handle(Request request, Response response) {

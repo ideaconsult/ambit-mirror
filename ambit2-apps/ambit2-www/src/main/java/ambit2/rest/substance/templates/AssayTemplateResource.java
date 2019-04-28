@@ -9,6 +9,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfig;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMakerSettings;
@@ -48,8 +49,10 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 		} catch (Exception x) {
 
 		}
+		String templatesdbname = getContext().getParameters().getFirstValue(
+				AMBITConfig.templates_dbname.name());
 		ReadExperimentTemplate q = new ReadExperimentTemplate();
-
+		q.setDatabaseName(templatesdbname);
 		q.setFieldname(settings);
 		return (Q) q;
 	}
