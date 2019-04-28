@@ -16,9 +16,9 @@ Database=${ambit.db}
 User=${ambit.db.user.test}
 Password=${ambit.db.user.test.password}
 ##### data entry templates (optional)
-Database.templates=${templates.db}
-User.templates=${ambit.db.user.test}
-Password.templates=${ambit.db.user.test.password}
+templates_dbname=${templates_dbname}
+templates_user=${ambit.db.user.test}
+templates_password=${ambit.db.user.test.password}
 ############################################################
 #Only for running JUnit tests on compile, the web application does not use it
 #MySQL test db, user and pass
