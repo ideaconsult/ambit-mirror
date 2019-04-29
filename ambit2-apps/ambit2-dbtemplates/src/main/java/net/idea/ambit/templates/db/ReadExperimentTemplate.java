@@ -16,12 +16,13 @@ import net.idea.restnet.db.aalocal.user.IDBConfig;
 
 public class ReadExperimentTemplate implements IQueryObject<TR>,
 		IParameterizedQuery<TemplateMakerSettings, TR, IQueryCondition>, IQueryRetrieval<TR>, IDBConfig {
-	protected String dbname = null;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8662401515570688215L;
 	protected ExperimentTemplateQuery flatQuery;
+	
 	// protected ReadEffectRecord effectQuery = new ReadEffectRecord();
 	// protected ReadSubstanceStudy paQuery = new ReadSubstanceStudy();
 	protected TemplateMakerSettings fieldname;
@@ -166,12 +167,12 @@ public class ReadExperimentTemplate implements IQueryObject<TR>,
 
 	@Override
 	public void setDatabaseName(String name) {
-		this.dbname = name;
+		flatQuery.setDatabaseName(name);
 
 	}
 
 	@Override
 	public String getDatabaseName() {
-		return dbname;
+		return flatQuery.getDatabaseName();
 	}
 }

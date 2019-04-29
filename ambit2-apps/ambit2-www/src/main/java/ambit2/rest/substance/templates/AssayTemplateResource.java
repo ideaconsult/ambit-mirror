@@ -5,6 +5,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
@@ -33,27 +34,23 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 	@Override
 	public IProcessor<Q, Representation> createConvertor(Variant variant) throws AmbitException,
 			ResourceException {
-
 			return new StringConvertor(new AssayTemplateEntryJSONReporter(getRequest()),
 					MediaType.APPLICATION_JSON, null);
 	}	
 
 	@Override
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
+		Object idtemplate = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
+		if (idtemplate==null)
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 		TemplateMakerSettings settings = new TemplateMakerSettings();
-		settings.setQueryEndpoint("genotoxicity");
-		Form p = getParams();
-		try {
-			if (p.getFirstValue("endpoint") != null)
-				settings.setQueryEndpoint(p.getFirstValue("endpoint"));
-		} catch (Exception x) {
-
-		}
+		settings.setQueryTemplateid(idtemplate.toString());
+		
 		String templatesdbname = getContext().getParameters().getFirstValue(
 				AMBITConfig.templates_dbname.name());
 		ReadExperimentTemplate q = new ReadExperimentTemplate();
-		q.setDatabaseName(templatesdbname);
 		q.setFieldname(settings);
+		q.setDatabaseName(templatesdbname);
 		return (Q) q;
 	}
 

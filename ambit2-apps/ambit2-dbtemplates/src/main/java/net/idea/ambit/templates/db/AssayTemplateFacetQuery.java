@@ -59,6 +59,7 @@ public class AssayTemplateFacetQuery extends AbstractFacetQuery<TR, String, Stri
 			AssayTemplateFacet facet = createFacet(null);
 			TR record = new TR();
 			facet.setValue(rs.getString("idtemplate"));
+			facet.setRecord(record);
 			TR.hix.id.set(record, facet.getValue());
 			TR.hix.endpoint.set(record, rs.getString("endpoint"));
 			TR.hix.Sheet.set(record, rs.getString("assay"));

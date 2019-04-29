@@ -9,18 +9,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ambit2.db.search.SQLFileQueryParams;
 import net.enanomapper.maker.TemplateMakerSettings;
+import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.restnet.db.aalocal.user.IDBConfig;
 
-public class ExperimentTemplateQuery extends SQLFileQueryParams {
-
+public class ExperimentTemplateQuery extends SQLFileQueryParams implements IDBConfig {
+	protected String dbname = null;
 	protected ObjectMapper dx = new ObjectMapper();
 	//private static String _params = "{\"params\" : {\":all\" : { \"type\" : \"boolean\", \"value\": %s}, \":s_prefix\" : { \"type\" : \"String\", \"value\": \"%s\"},\":s_uuid\" : { \"type\" : \"String\", \"value\":\"%s\"}	}}";
 	private static String _params_i = "{\"params\" : {\":%s\" : { \"type\" : \"String\", \"value\":\"%s\"}	}}";
 
 	public enum _QUERY_TYPE_TEMPLATE {
-		byendpoint {
+		byidtemplate {
 			@Override
 			public String getField() {
-				return "_endpoint";
+				return "_idtemplate";
 			}
 
 			@Override	
@@ -53,7 +55,7 @@ public class ExperimentTemplateQuery extends SQLFileQueryParams {
 
 	
 	public ExperimentTemplateQuery(TemplateMakerSettings settings) throws IOException {
-		this(_QUERY_TYPE_TEMPLATE.byendpoint.getSQL(),_QUERY_TYPE_TEMPLATE.byendpoint.queryParams(new String[] {settings.getQueryEndpoint()}));
+		this(_QUERY_TYPE_TEMPLATE.byidtemplate.getSQL(),_QUERY_TYPE_TEMPLATE.byidtemplate.queryParams(new String[] {settings.getQueryTemplateId()}));
 	}
 
 	public ExperimentTemplateQuery(_QUERY_TYPE_TEMPLATE queryType) throws IOException {
@@ -79,7 +81,6 @@ public class ExperimentTemplateQuery extends SQLFileQueryParams {
 	
 	public ExperimentTemplateQuery(String resourceName, ObjectNode params) throws IOException {
 		super(resourceName, params);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -87,4 +88,20 @@ public class ExperimentTemplateQuery extends SQLFileQueryParams {
 	 */
 	private static final long serialVersionUID = 7508405780091117532L;
 
+	@Override
+	public void setDatabaseName(String name) {
+		this.dbname = name;
+		
+	}
+
+	@Override
+	public String getDatabaseName() {
+		return dbname;
+	}
+
+	@Override
+	public String getSQL() throws AmbitException {
+		String sql =  String.format(super.getSQL(), getDatabaseName()==null?"":String.format(".%s",getDatabaseName()));
+		return sql;
+	}
 }

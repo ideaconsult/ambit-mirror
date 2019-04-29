@@ -9,11 +9,11 @@ import net.idea.ambit.templates.db.ExperimentTemplateQuery;
 import net.idea.modbcum.i.bucket.Bucket;
 
 public class ExperimentTemplateQueryTest extends QueryTest<ExperimentTemplateQuery> {
-
+	
 	@Override
 	protected ExperimentTemplateQuery createQuery() throws Exception {
 		TemplateMakerSettings settings = new TemplateMakerSettings();
-		settings.setQueryEndpoint("genotoxicity");
+		settings.setQueryTemplateid("3e16dff8");
 		ExperimentTemplateQuery q = new ExperimentTemplateQuery(settings);
 
 		return q;
