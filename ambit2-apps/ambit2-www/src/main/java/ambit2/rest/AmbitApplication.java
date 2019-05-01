@@ -206,7 +206,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		getContext().getParameters().add(AMBITConfig.users_dbname.name(), usersdbname);
 		
 		//templates - use ambit db if not specified
-		String templatesdbname = getProperty(AMBITConfig.templates_dbname.name(), ambitProperties);
+		String templatesdbname = getProperty(AMBITConfig.Database.name(), templateProperties);
 		if (templatesdbname == null)
 			templatesdbname = getProperty(AMBITConfig.Database.name(), ambitProperties);
 		getContext().getParameters().add(AMBITConfig.templates_dbname.name(), templatesdbname);		

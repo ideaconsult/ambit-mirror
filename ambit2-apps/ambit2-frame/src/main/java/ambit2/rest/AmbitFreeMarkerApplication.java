@@ -86,6 +86,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected static final String version_build = "ambit.build";
 	protected static final String version_timestamp = "ambit.build.timestamp";
 	protected static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
+	protected static final String templateProperties = "ambit2/rest/config/ambit2.assay.properties";
 	protected static final String configProperties = "ambit2/rest/config/config.prop";
 	protected static final String loggingProperties = "ambit2/rest/config/logging.prop";
 

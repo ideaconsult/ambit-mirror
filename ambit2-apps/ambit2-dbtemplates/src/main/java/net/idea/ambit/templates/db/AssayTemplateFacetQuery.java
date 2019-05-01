@@ -17,7 +17,7 @@ public class AssayTemplateFacetQuery extends AbstractFacetQuery<TR, String, Stri
 	 * 
 	 */
 	private static final long serialVersionUID = 3158355313226120851L;
-	protected final static String _sql = "SELECT idtemplate,endpoint,assay,module,count(*) c FROM %s.assay_template group by idtemplate";
+	protected final static String _sql = "SELECT idtemplate,endpoint,assay,module,count(*) c FROM %sassay_template group by idtemplate";
 	public AssayTemplateFacetQuery(String facetURL) {
 		super(facetURL);
 	}
@@ -50,7 +50,10 @@ public class AssayTemplateFacetQuery extends AbstractFacetQuery<TR, String, Stri
 
 	@Override
 	public String getSQL() throws AmbitException {
-		return String.format(_sql,getDatabaseName());
+		if (getDatabaseName()==null)
+			return String.format(_sql,"");
+		else	
+			return String.format(_sql,String.format(".%s", getDatabaseName()));
 	}
 
 	@Override
