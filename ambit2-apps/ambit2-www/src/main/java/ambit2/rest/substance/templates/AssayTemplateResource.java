@@ -18,7 +18,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
-import ambit2.rest.StreamConvertor;
+import ambit2.rest.OutputStreamConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMaker;
@@ -29,7 +29,7 @@ import net.idea.ambit.templates.db.ReadExperimentTemplate;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.r.AbstractReporter;
+import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.StringConvertor;
 
 public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitDBQueryResource<Q, TR> {
@@ -79,8 +79,9 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 			variant.setMediaType(new MediaType(media));
 
 		if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
-			AssayTemplateReporter reporter = new AssayTemplateReporter();
-			return new StreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, "datatemplate");
+			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter();
+			
+			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, "datatemplate");
 
 		} else { // json by default
 			return new StringConvertor(new AssayTemplateEntryJSONReporter(getRequest()), MediaType.APPLICATION_JSON,
@@ -95,66 +96,4 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 	}
 }
 
-class AssayTemplateReporter extends AbstractReporter<Iterator<TR>, OutputStream> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8291124965964253731L;
-
-	public static <T> Iterable<T> iteratorToIterable(Iterator<T> iterator) {
-		return new Iterable<T>() {
-			@Override
-			public Iterator<T> iterator() {
-				return iterator;
-			}
-		};
-	}
-
-	@Override
-	public OutputStream process(Iterator<TR> ts) throws Exception {
-		HashSet<String> templateids = new HashSet<String>();
-		List<TR> records = new ArrayList<TR>();
-		while (ts.hasNext()) {
-			TR record = ts.next();
-			templateids.add(TR.hix.id.get(record).toString());
-			records.add(record);
-		}
-		TemplateMakerSettings settings = new TemplateMakerSettings() {
-			public java.lang.Iterable<TR> getTemplateRecords() throws Exception {
-				return records;
-			};
-		};
-
-		Workbook workbook = null;
-		try {
-			TemplateMaker maker = new TemplateMaker();
-			settings.setTemplatesCommand(_TEMPLATES_CMD.generate);
-			settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
-			settings.setSinglefile(true);
-			// FIXME no input for generation needed, this is a placeholder
-			File tmpdir = new File(System.getProperty("java.io.tmpdir"));
-			settings.setInputfolder(tmpdir);
-			settings.setOutputfolder(tmpdir);
-			settings.setSinglefile(true);
-
-			workbook = maker.generate(settings, templateids);
-			workbook.write(output);
-			return output;
-
-		} catch (Exception x) {
-			throw x;
-		} finally {
-			if (workbook != null)
-				workbook.close();
-
-		}
-
-	}
-
-	@Override
-	public String getFileExtension() {
-		return "xlsx";
-	}
-
-}

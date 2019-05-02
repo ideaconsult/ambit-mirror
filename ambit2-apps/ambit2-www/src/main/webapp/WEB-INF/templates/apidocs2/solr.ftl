@@ -50,9 +50,9 @@
           description: Convert JSON to table format (AMBIT specific)
           schema:
             type: string
-            enum: [true,false]
+            enum: [false,true]
           required: false
-          example: true          
+          example: false          
         - in: query
           name: sep
           description: separator if json2tsv=true (AMBIT specific)
@@ -126,9 +126,9 @@
           description: Convert JSON to table format (AMBIT specific)
           schema:
             type: string
-            enum: [true,false]
+            enum: [false,true]
           required: false
-          example: true          
+          example: false          
         - in: query
           name: sep
           description: separator if json2tsv=true (AMBIT specific)
