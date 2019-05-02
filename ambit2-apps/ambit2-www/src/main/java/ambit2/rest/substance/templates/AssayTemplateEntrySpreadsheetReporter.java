@@ -34,6 +34,15 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 		return item;
 	}
 	@Override
+	public OutputStream process(Q arg0) throws Exception {
+		return super.process(arg0);
+	}
+	@Override
+	public void close() throws Exception {
+		// TODO Auto-generated method stub
+		super.close();
+	}
+	@Override
 	public void footer(OutputStream output, Q query) {
 		TemplateMakerSettings settings = new TemplateMakerSettings() {
 			public java.lang.Iterable<TR> getTemplateRecords() throws Exception {
@@ -48,11 +57,13 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 					workbook.close();
 				}
 				return null;
-			}			
+			}		
+			
 		};
 
 		try {
 			TemplateMaker maker = new TemplateMaker();
+			
 			settings.setTemplatesCommand(_TEMPLATES_CMD.generate);
 			settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
 			settings.setSinglefile(true);
@@ -77,4 +88,5 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 	public void header(OutputStream output, Q query) {
 		
 	}
+	
 }

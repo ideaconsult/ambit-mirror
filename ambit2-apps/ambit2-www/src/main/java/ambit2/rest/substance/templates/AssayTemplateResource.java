@@ -1,13 +1,5 @@
 package ambit2.rest.substance.templates;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.poi.ss.usermodel.Workbook;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -21,19 +13,15 @@ import org.restlet.resource.ResourceException;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 import net.enanomapper.maker.TR;
-import net.enanomapper.maker.TemplateMaker;
 import net.enanomapper.maker.TemplateMakerSettings;
-import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_CMD;
-import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_TYPE;
 import net.idea.ambit.templates.db.ReadExperimentTemplate;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
-import net.idea.modbcum.r.QueryReporter;
 import net.idea.restnet.c.StringConvertor;
 
 public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitDBQueryResource<Q, TR> {
-
+	protected TemplateMakerSettings settings = new TemplateMakerSettings();
 	public AssayTemplateResource() {
 		super();
 		setHtmlbyTemplate(true);
@@ -56,9 +44,8 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 		Object idtemplate = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
 		if (idtemplate == null)
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-		TemplateMakerSettings settings = new TemplateMakerSettings();
+		settings.getQuery().clear();
 		settings.setQueryTemplateid(idtemplate.toString());
-
 		ReadExperimentTemplate q = new ReadExperimentTemplate();
 		q.setFieldname(settings);
 		/*
@@ -81,7 +68,12 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 		if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
 			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter();
 			
-			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, "datatemplate");
+			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, settings.getOutputFileName()) {
+				protected void setDisposition(Representation rep) {
+					super.setDisposition(rep);
+				    rep.setDownloadName(settings.getOutputFileName());
+				};
+			};
 
 		} else { // json by default
 			return new StringConvertor(new AssayTemplateEntryJSONReporter(getRequest()), MediaType.APPLICATION_JSON,
