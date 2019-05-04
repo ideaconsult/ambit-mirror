@@ -203,6 +203,32 @@ public class Protocol {
 				return "http://semanticscience.org/resource/CHEMINF_000419";
 			}
 		},
+		SURFACE_TENSION_SECTION {
+			@Override
+			public String toString() {
+				return "Surface tension";
+			}
+
+			@Override
+			public String getNumber() {
+				return "4.10";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 4100;
+			}
+
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				// http://purl.obolibrary.org/obo/CHMO_0002119
+				return "http://semanticscience.org/resource/CHEMINF_000420";
+			}
+		},		
 		PC_PARTITION_SECTION {
 			@Override
 			public String toString() {
