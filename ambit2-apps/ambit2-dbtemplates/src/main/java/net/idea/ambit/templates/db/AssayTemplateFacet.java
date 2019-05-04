@@ -1,6 +1,7 @@
 package net.idea.ambit.templates.db;
 
 import ambit2.base.facet.AbstractFacet;
+import ambit2.base.json.JSONUtils;
 import net.enanomapper.maker.TR;
 
 public class AssayTemplateFacet extends AbstractFacet<String> {
@@ -40,5 +41,13 @@ public class AssayTemplateFacet extends AbstractFacet<String> {
 		}
 
 	}
-
+	@Override
+	public String toJSON(String uri,String subcategory) {
+		return String.format("\n\t{\n\t\"value\":%s,\n\t\"count\":%s,\n\t\"subcategory\":%s,\t\"title\":%s\n\t}",
+			getValue()==null?null:JSONUtils.jsonQuote(JSONUtils.jsonEscape(getValue().toString())),
+			JSONUtils.jsonNumber(getCount()),
+			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getSubcategoryTitle())),	
+			JSONUtils.jsonQuote(JSONUtils.jsonEscape(getTitle()))
+			);
+	}
 }

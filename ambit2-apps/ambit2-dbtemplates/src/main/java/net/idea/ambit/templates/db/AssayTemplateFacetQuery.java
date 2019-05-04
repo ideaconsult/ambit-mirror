@@ -17,7 +17,7 @@ public class AssayTemplateFacetQuery extends AbstractFacetQuery<TR, String, Stri
 	 * 
 	 */
 	private static final long serialVersionUID = 3158355313226120851L;
-	protected final static String _sql = "SELECT idtemplate,endpoint,assay,module,count(*) c FROM %sassay_template group by idtemplate";
+	protected final static String _sql = "SELECT idtemplate,trim(group_concat(distinct(endpoint) SEPARATOR ' ')) as endpoints,assay,module,count(*) c FROM %sassay_template group by idtemplate";
 	public AssayTemplateFacetQuery(String facetURL) {
 		super(facetURL);
 	}
@@ -64,7 +64,7 @@ public class AssayTemplateFacetQuery extends AbstractFacetQuery<TR, String, Stri
 			facet.setValue(rs.getString("idtemplate"));
 			facet.setRecord(record);
 			TR.hix.id.set(record, facet.getValue());
-			TR.hix.endpoint.set(record, rs.getString("endpoint"));
+			TR.hix.endpoint.set(record, rs.getString("endpoints"));
 			TR.hix.Sheet.set(record, rs.getString("assay"));
 			facet.setCount(rs.getInt("c"));
 			return facet;
