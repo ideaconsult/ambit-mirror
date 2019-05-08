@@ -38,49 +38,48 @@ public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<Substa
 		return record;
 	}
 
-	public String[] annotateConditions(IParams conditions, String key)
-			throws Exception {
+	public String[] annotateConditions(String condition) {
 		try {
-			return annotate(lookup.get(_dictionaries.conditions.name()), conditions.get(key).toString());
+			return annotate(lookup.get(_dictionaries.conditions.name()), condition);
 		} catch (Exception x) {
 		}
 		return null;
-	}	
-	public String[] annotateUnits(String unit, String key)
-			throws Exception {
+	}
+
+	public String[] annotateUnits(String unit) throws Exception {
 		try {
 			return annotate(lookup.get(_dictionaries.units.name()), unit);
 		} catch (Exception x) {
 		}
 		return null;
-	}		
-	public String[] annotateEndpoint(String endpoint)  {
-		return annotate(lookup.get(_dictionaries.endpoint.name()), endpoint);
+	}
 
+	public String[] annotateEndpoint(String endpoint) {
+		try {
+			return annotate(lookup.get(_dictionaries.endpoint.name()), endpoint);
+		} catch (Exception x) {
+			return null;
+		}
 
 	}
 
-	public String[] annotateGuideline(ProtocolApplication<Protocol, IParams, String, IParams, String> papp)
-			throws Exception {
+	public String[] annotateGuideline(String guideline) {
 		try {
-			for (String g : papp.getProtocol().getGuideline())
-				return annotate(lookup.get(_dictionaries.guideline.name()), g);
+			return annotate(lookup.get(_dictionaries.guideline.name()), guideline);
 		} catch (Exception x) {
 		}
 		return null;
 	}
 
-	public String[] annotateParam(IParams params, String key)
-			throws Exception {
+	public String[] annotateParam(String param) {
 		try {
-			return annotate(lookup.get(_dictionaries.params.name()), params.get(key).toString());
+			return annotate(lookup.get(_dictionaries.params.name()), param);
 		} catch (Exception x) {
 		}
 		return null;
 	}
 
-	public String[] annotateSubstance(SubstanceRecord record, String key)
-			throws Exception {
+	public String[] annotateSubstance(SubstanceRecord record, String key) {
 		try {
 			return annotate(lookup.get(_dictionaries.substance.name()), record.getPublicName());
 		} catch (Exception x) {

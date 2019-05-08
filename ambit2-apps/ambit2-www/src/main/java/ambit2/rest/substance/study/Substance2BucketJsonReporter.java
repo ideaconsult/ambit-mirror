@@ -3,6 +3,7 @@ package ambit2.rest.substance.study;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -109,7 +110,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
 			"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
 			{ "id", "document_uuid", "investigation_uuid", "assay_uuid", "type_s", "topcategory", "endpointcategory",
-					"guidance", "endpoint", "effectendpoint", "effectendpoint_type", "effectendpoint_synonym",
+					"guidance","guidance_synonym", "endpoint", "effectendpoint", "effectendpoint_type", "effectendpoint_synonym",
 					"effectendpoint_group", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
 					"upQualifier", "upValue", "err", "errQualifier", "conditions", "params", "textValue",
 					"interpretation_result", "unit", "category", "idresult", "updated", "r_value", "r_purposeFlag",
@@ -132,7 +133,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"content_hss", header_dbtag, "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs",
 			"substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", header_component, "ChemicalName_s",
 			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
-			"investigation_uuid_s", "assay_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "endpoint_s",
+			"investigation_uuid_s", "assay_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s","guidance_synonym_ss", "endpoint_s",
 			"effectendpoint_s", "effectendpoint_type_s", "effectendpoint_synonym_ss", "effectendpoint_group_d",
 			"reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s",
 			"upValue_d", "err_d", "errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s",
@@ -379,9 +380,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									prm.put("topcategory_s", papp.getProtocol().getTopCategory());
 									prm.put("endpointcategory_s", papp.getProtocol().getCategory());
 									if (papp.getProtocol().getGuideline() != null
-											&& !papp.getProtocol().getGuideline().isEmpty())
+											&& !papp.getProtocol().getGuideline().isEmpty()) {
+										
 										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0));
-									else
+			
+									} else
 										prm.put("guidance_s", "Not specified");
 
 								}
@@ -397,8 +400,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							protocolapplication2Bucket(papp, study, suffix);
 							if (cell != null)
 								study.put("E.cell_type_s", cell.toString());
-							if (method != null)
+							
+							String[] terms_method = null;
+							if (method != null) {
 								study.put("E.method_s", method.toString());
+								terms_method = annotator.annotateParam(method.toString());
+								study.put(ns("method_synonym", suffix, "_ss"), Arrays.asList(terms_method));
+							}	
 
 							study.setHeader(study_headers_combined[0]);
 
@@ -428,8 +436,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0));
 											if (cell != null)
 												prmc.put("E.cell_type_s", cell.toString());
-											if (method != null)
+											if (method != null) {
 												prmc.put("E.method_s", method.toString());
+												
+												if (terms_method != null) {
+													prmc.put(ns("method_synonym", suffix, "_ss"), Arrays.asList(terms_method));
+												}												
+											}	
 										}
 										_childParams_.add(prmc);
 									}
@@ -653,8 +666,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		if (protocol.getEndpoint() != null)
 			bucket.put(ns("endpoint", suffix, "_s"), protocol.getEndpoint().toUpperCase());
 		if (protocol.getGuideline() != null && protocol.getGuideline().get(0) != null
-				&& !"".equals(protocol.getGuideline().get(0)))
+				&& !"".equals(protocol.getGuideline().get(0))) {
 			bucket.put(ns("guidance", suffix, "_s"), protocol.getGuideline().get(0).toUpperCase());
+			String[] terms = annotator.annotateGuideline(protocol.getGuideline().get(0));
+			if (terms != null) {
+				bucket.put(ns("guidance_synonym", suffix, "_ss"), Arrays.asList(terms));
+			}
+		}	
 	}
 
 	protected void summarymeasurement2bucket(Protocol protocol, EffectRecord<String, Object, String> e, Bucket bucket) {
@@ -691,7 +709,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		
 		String[] terms = annotator.annotateEndpoint(e.getEndpoint());
 		if (terms != null) {
-			bucket.put(ns("effectendpoint_synonym", suffix, "_ss"), terms);
+			bucket.put(ns("effectendpoint_synonym", suffix, "_ss"), Arrays.asList(terms));
 		}
 
 		if (e.getEndpointType() != null)

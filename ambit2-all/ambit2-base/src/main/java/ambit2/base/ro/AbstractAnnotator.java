@@ -49,7 +49,9 @@ public abstract class AbstractAnnotator<U, V> extends DefaultAmbitProcessor<U, V
 	public String[] annotate(Properties lookup, String endpoint) {
 		if (lookup == null)
 			return null;
+		if (endpoint==null) return null;
 		String[] terms = lookup.getProperty(endpoint.toUpperCase().replaceAll(" ", "_")).split(";");
+		if (terms ==null) return null;
 		if (!fulllinks)
 			for (int i = 0; i < terms.length; i++)
 				terms[i] = ontolink2id(terms[i]);
