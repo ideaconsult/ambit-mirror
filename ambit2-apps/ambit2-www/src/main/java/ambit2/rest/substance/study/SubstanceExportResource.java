@@ -123,12 +123,12 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 		}
 		ProcessorsChain chain = new ProcessorsChain<>();
 		chain.add(new SubstanceStudyDetailsProcessor());
-		chain.add(
-				new SubstanceRecordAnnotationProcessor(new File(((AmbitFreeMarkerApplication) getApplication()).getMapFolder()),false));
 		getCompositionProcessors(chain);
+		SubstanceRecordAnnotationProcessor annotator = new SubstanceRecordAnnotationProcessor(new File(((AmbitFreeMarkerApplication) getApplication()).getMapFolder()),
+				false);
 		return new OutputWriterConvertor<SubstanceRecord, Q>(
 				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(command, chain,
-						jsonmode, summaryMeasurement, dbTag),
+						jsonmode, summaryMeasurement, dbTag,annotator),
 				jsonpcallback == null ? MediaType.APPLICATION_JSON : MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 
 	}

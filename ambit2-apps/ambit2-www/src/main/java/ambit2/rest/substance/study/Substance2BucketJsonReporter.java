@@ -23,6 +23,7 @@ import ambit2.base.data.study.ProtocolApplication;
 import ambit2.base.data.study.Value;
 import ambit2.base.data.substance.ExternalIdentifier;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.base.ro.SubstanceRecordAnnotationProcessor;
 import ambit2.core.io.json.SubstanceStudyParser;
 import net.idea.modbcum.i.bucket.Bucket;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
@@ -43,14 +44,24 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected String dbTag = "ENM";
 	protected boolean searchfriendly = true;
 	public static final SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+	
 
 	public enum _JSON_MODE {
 		experiment, substance
 	}
+	protected SubstanceRecordAnnotationProcessor annotator ;
+	public SubstanceRecordAnnotationProcessor getAnnotator() {
+		return annotator;
+	}
+
+	public void setAnnotator(SubstanceRecordAnnotationProcessor annotator) {
+		this.annotator = annotator;
+	}
 
 	public Substance2BucketJsonReporter(String command, ProcessorsChain chain, _JSON_MODE jsonmode,
-			String summaryMeasurement, String dbTag) {
+			String summaryMeasurement, String dbTag, SubstanceRecordAnnotationProcessor annotator) {
 		super(command, null, null);
+		setAnnotator(annotator);
 		this.summaryMeasurement = summaryMeasurement;
 		this.jsonmode = jsonmode;
 		this.dbTag = dbTag;
@@ -135,8 +146,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 	}
 
+	
 	@Override
 	public Bucket transform(SubstanceRecord record) {
+		
 
 		switch (jsonmode) {
 		case experiment: {
@@ -675,8 +688,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 		if (e.getEndpoint() != null)
 			bucket.put(ns("effectendpoint", suffix, "_s"), e.getEndpoint().toUpperCase());
-		if (e.getEndpointSynonyms() != null) {
-			bucket.put(ns("effectendpoint_synonym", suffix, "_ss"), e.getEndpointSynonyms());
+		
+		String[] terms = annotator.annotateEndpoint(e.getEndpoint());
+		if (terms != null) {
+			bucket.put(ns("effectendpoint_synonym", suffix, "_ss"), terms);
 		}
 
 		if (e.getEndpointType() != null)

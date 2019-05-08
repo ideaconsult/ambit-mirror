@@ -9,15 +9,18 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import junit.framework.Assert;
-import net.idea.i5.io.I5_ROOT_OBJECTS;
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.junit.Test;
 import org.restlet.data.MediaType;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.ResIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import ambit2.base.data.I5Utils;
 import ambit2.base.data.SubstanceRecord;
@@ -32,12 +35,7 @@ import ambit2.core.io.RawIteratingCSVReader;
 import ambit2.rest.substance.RDFTermsSubstance;
 import ambit2.rest.substance.study.Substance2BucketJsonReporter;
 import ambit2.rest.test.ResourceTest;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.ResIterator;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDF;
+import junit.framework.Assert;
 
 /**
  * https://sourceforge.net/p/ambit/feature-requests/99/
@@ -106,7 +104,7 @@ public class SubstanceStudyReporterTest extends ResourceTest {
 	public static void main(String[] args) {
 		Substance2BucketJsonReporter reporter = new Substance2BucketJsonReporter(
 				null, null, Substance2BucketJsonReporter._JSON_MODE.substance,
-				null,null);
+				null,null,null);
 		Reader in = null;
 
 		try {

@@ -8,7 +8,7 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
 
-public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<SubstanceRecord> {
+public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<SubstanceRecord, SubstanceRecord> {
 
 	/**
 	 * 
@@ -16,18 +16,21 @@ public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<Substa
 	private static final long serialVersionUID = 5447660472718234256L;
 
 	public SubstanceRecordAnnotationProcessor(File lookupfolder, boolean fulllinks) {
-		super(lookupfolder, fulllinks);
+		super(lookupfolder, new String[] { _dictionaries.endpoints.name(), _dictionaries.guideline.name(),
+				_dictionaries.params.name(), _dictionaries.conditions.name() }, fulllinks);
 	}
 
 	@Override
-	public SubstanceRecord process(SubstanceRecord record) throws Exception {
+	public SubstanceRecord process(SubstanceRecord record) {
 		if (record != null && record.getMeasurements() != null)
 			for (ProtocolApplication<Protocol, IParams, String, IParams, String> papp : record.getMeasurements()) {
-				annotate(papp);
 				for (EffectRecord<String, IParams, String> effect : papp.getEffects())
 					try {
-						if (endpoints_lookup != null)
-							annotate(effect);
+						String[] terms = annotateEndpoint(effect.getEndpoint());
+						if (terms != null)
+							for (String term : terms) {
+								effect.addEndpointSynonym(term);
+							}
 					} catch (Exception x) {
 
 					}
@@ -35,4 +38,53 @@ public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<Substa
 		return record;
 	}
 
+	public String[] annotateConditions(IParams conditions, String key)
+			throws Exception {
+		try {
+			return annotate(lookup.get(_dictionaries.conditions.name()), conditions.get(key).toString());
+		} catch (Exception x) {
+		}
+		return null;
+	}	
+	public String[] annotateUnits(String unit, String key)
+			throws Exception {
+		try {
+			return annotate(lookup.get(_dictionaries.units.name()), unit);
+		} catch (Exception x) {
+		}
+		return null;
+	}		
+	public String[] annotateEndpoint(String endpoint)  {
+		return annotate(lookup.get(_dictionaries.endpoints.name()), endpoint);
+
+
+	}
+
+	public String[] annotateGuideline(ProtocolApplication<Protocol, IParams, String, IParams, String> papp)
+			throws Exception {
+		try {
+			for (String g : papp.getProtocol().getGuideline())
+				return annotate(lookup.get(_dictionaries.guideline.name()), g);
+		} catch (Exception x) {
+		}
+		return null;
+	}
+
+	public String[] annotateParam(IParams params, String key)
+			throws Exception {
+		try {
+			return annotate(lookup.get(_dictionaries.params.name()), params.get(key).toString());
+		} catch (Exception x) {
+		}
+		return null;
+	}
+
+	public String[] annotateSubstance(SubstanceRecord record, String key)
+			throws Exception {
+		try {
+			return annotate(lookup.get(_dictionaries.substance.name()), record.getPublicName());
+		} catch (Exception x) {
+		}
+		return null;
+	}
 }
