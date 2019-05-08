@@ -36,7 +36,7 @@ public class FacetAnnotator extends AbstractAnnotator<IFacet,IFacet> {
 	}
 	
 	public String[] annotate(EffectRecord<String, IParams, String> effect) throws Exception {
-		String[] terms = annotate(lookup.get(_dictionaries.endpoints.name()), effect.getEndpoint());
+		String[] terms = annotate(lookup.get(_dictionaries.endpoint.name()), effect.getEndpoint());
 		if (terms != null)
 			for (String term : terms) {
 				effect.addEndpointSynonym(term);

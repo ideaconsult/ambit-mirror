@@ -18,13 +18,14 @@ public class FacetJSONReporter<Q extends IQueryRetrieval<IFacet>> extends QueryR
 	protected QueryURIReporter<IFacet, IQueryRetrieval<IFacet>> uriReporter;
 	protected String jsonp = null;
 	protected String comma = null;
-	protected AbstractAnnotator<IFacet> annotator = null;
+	AbstractAnnotator <IFacet,IFacet> annotator;
+	//protected AbstractAnnotator<IFacet,IFacet> annotator = null;
 
-	public AbstractAnnotator<IFacet> getAnnotator() {
+	public AbstractAnnotator<IFacet,IFacet> getAnnotator() {
 		return annotator;
 	}
 
-	public void setAnnotator(AbstractAnnotator<IFacet> annotator) {
+	public void setAnnotator(AbstractAnnotator<IFacet,IFacet> annotator) {
 		this.annotator = annotator;
 	}
 

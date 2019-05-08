@@ -16,7 +16,7 @@ public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<Substa
 	private static final long serialVersionUID = 5447660472718234256L;
 
 	public SubstanceRecordAnnotationProcessor(File lookupfolder, boolean fulllinks) {
-		super(lookupfolder, new String[] { _dictionaries.endpoints.name(), _dictionaries.guideline.name(),
+		super(lookupfolder, new String[] { _dictionaries.endpoint.name(), _dictionaries.guideline.name(),
 				_dictionaries.params.name(), _dictionaries.conditions.name() }, fulllinks);
 	}
 
@@ -55,7 +55,7 @@ public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<Substa
 		return null;
 	}		
 	public String[] annotateEndpoint(String endpoint)  {
-		return annotate(lookup.get(_dictionaries.endpoints.name()), endpoint);
+		return annotate(lookup.get(_dictionaries.endpoint.name()), endpoint);
 
 
 	}
