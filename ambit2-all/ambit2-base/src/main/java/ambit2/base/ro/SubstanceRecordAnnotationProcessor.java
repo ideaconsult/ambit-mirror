@@ -17,7 +17,7 @@ public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<Substa
 
 	public SubstanceRecordAnnotationProcessor(File lookupfolder, boolean fulllinks) {
 		super(lookupfolder, new String[] { _dictionaries.endpoint.name(), _dictionaries.guideline.name(),
-				_dictionaries.params.name(), _dictionaries.conditions.name() }, fulllinks);
+				_dictionaries.params.name(), _dictionaries.conditions.name(), _dictionaries.substance.name() }, fulllinks);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class SubstanceRecordAnnotationProcessor extends AbstractAnnotator<Substa
 		return null;
 	}
 
-	public String[] annotateSubstance(SubstanceRecord record, String key) {
+	public String[] annotateSubstance(SubstanceRecord record) {
 		try {
 			return annotate(lookup.get(_dictionaries.substance.name()), record.getPublicName());
 		} catch (Exception x) {

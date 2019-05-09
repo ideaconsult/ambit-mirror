@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.base.data.Property;
@@ -45,12 +47,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	protected String dbTag = "ENM";
 	protected boolean searchfriendly = true;
 	public static final SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-	
 
 	public enum _JSON_MODE {
 		experiment, substance
 	}
-	protected SubstanceRecordAnnotationProcessor annotator ;
+
+	protected SubstanceRecordAnnotationProcessor annotator;
+
 	public SubstanceRecordAnnotationProcessor getAnnotator() {
 		return annotator;
 	}
@@ -88,33 +91,34 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 	}
 
-	private static final String[][] study_headers = new String[][] { { "name", "publicname", "owner_name", "s_uuid",
-			"substanceType", "_childDocuments_", "type_s", "nmcode_hs", "nmcode_s", "ChemicalName.CONSTITUENT",
-			"ChemicalName.ADDITIVE", "ChemicalName.IMPURITY", "ChemicalName.CORE", "ChemicalName.COATING",
-			"ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content_hss",
+	private static final String[][] study_headers = new String[][] {
+			{ "name", "publicname", "owner_name", "s_uuid", "substanceType", "_childDocuments_", "type_s", "nmcode_hs",
+					"substance_annotation_hss", "substance_annotation_ss", "nmcode_s", "ChemicalName.CONSTITUENT",
+					"ChemicalName.ADDITIVE", "ChemicalName.IMPURITY", "ChemicalName.CORE", "ChemicalName.COATING",
+					"ChemicalName.FUNCTIONALISATION", "ChemicalName.DOPING", "content_hss",
 
-			"investigation_uuid", "assay_uuid",
+					"investigation_uuid", "assay_uuid",
 
-			"TradeName.CONSTITUENT", "TradeName.ADDITIVE", "TradeName.IMPURITY", "TradeName.CORE", "TradeName.COATING",
-			"TradeName.FUNCTIONALISATION", "TradeName.DOPING",
+					"TradeName.CONSTITUENT", "TradeName.ADDITIVE", "TradeName.IMPURITY", "TradeName.CORE",
+					"TradeName.COATING", "TradeName.FUNCTIONALISATION", "TradeName.DOPING",
 
-			"CASRN.CONSTITUENT", "CASRN.ADDITIVE", "CASRN.IMPURITY", "CASRN.CORE", "CASRN.COATING",
-			"CASRN.FUNCTIONALISATION", "CASRN.DOPING",
+					"CASRN.CONSTITUENT", "CASRN.ADDITIVE", "CASRN.IMPURITY", "CASRN.CORE", "CASRN.COATING",
+					"CASRN.FUNCTIONALISATION", "CASRN.DOPING",
 
-			"EINECS.CONSTITUENT", "EINECS.ADDITIVE", "EINECS.IMPURITY", "EINECS.CORE", "EINECS.COATING",
-			"EINECS.FUNCTIONALISATION", "EINECS.DOPING",
+					"EINECS.CONSTITUENT", "EINECS.ADDITIVE", "EINECS.IMPURITY", "EINECS.CORE", "EINECS.COATING",
+					"EINECS.FUNCTIONALISATION", "EINECS.DOPING",
 
-			"IUCLID5_UUID.CONSTITUENT", "IUCLID5_UUID.ADDITIVE", "IUCLID5_UUID.IMPURITY", "IUCLID5_UUID.CORE",
-			"IUCLID5_UUID.COATING", "IUCLID5_UUID.FUNCTIONALISATION", "IUCLID5_UUID.DOPING",
+					"IUCLID5_UUID.CONSTITUENT", "IUCLID5_UUID.ADDITIVE", "IUCLID5_UUID.IMPURITY", "IUCLID5_UUID.CORE",
+					"IUCLID5_UUID.COATING", "IUCLID5_UUID.FUNCTIONALISATION", "IUCLID5_UUID.DOPING",
 
-			"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
-			"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
+					"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
+					"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
 			{ "id", "document_uuid", "investigation_uuid", "assay_uuid", "type_s", "topcategory", "endpointcategory",
-					"guidance","guidance_synonym", "endpoint", "effectendpoint", "effectendpoint_type", "effectendpoint_synonym",
-					"effectendpoint_group", "reference_owner", "reference_year", "reference", "loQualifier", "loValue",
-					"upQualifier", "upValue", "err", "errQualifier", "conditions", "params", "textValue",
-					"interpretation_result", "unit", "category", "idresult", "updated", "r_value", "r_purposeFlag",
-					"r_studyResultType" },
+					"guidance", "guidance_synonym", "endpoint", "effectendpoint", "effectendpoint_type",
+					"effectendpoint_synonym", "effectendpoint_group", "reference_owner", "reference_year", "reference",
+					"loQualifier", "loValue", "upQualifier", "upValue", "err", "errQualifier", "conditions", "params",
+					"textValue", "interpretation_result", "unit", "category", "idresult", "updated", "r_value",
+					"r_purposeFlag", "r_studyResultType" },
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
@@ -133,11 +137,12 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"content_hss", header_dbtag, "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs",
 			"substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", header_component, "ChemicalName_s",
 			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
-			"investigation_uuid_s", "assay_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s","guidance_synonym_ss", "endpoint_s",
-			"effectendpoint_s", "effectendpoint_type_s", "effectendpoint_synonym_ss", "effectendpoint_group_d",
-			"reference_owner_s", "reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s",
-			"upValue_d", "err_d", "errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s",
-			"interpretation_result_s", "unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", "updated_s",
+			"investigation_uuid_s", "assay_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s",
+			"guidance_synonym_ss", "endpoint_s", "effectendpoint_s", "effectendpoint_type_s",
+			"effectendpoint_synonym_ss", "effectendpoint_group_d", "reference_owner_s", "reference_year_s",
+			"reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d", "errQualifier_s",
+			"conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s", "unit_s", "category_s",
+			"idresult", "nmcode_hs", "nmcode_s", "substance_annotation_hss", "substance_annotation_ss", "updated_s",
 			"E.method_s", "E.cell_type_s", header_reliability, header_studyResultType, header_purposeFlag,
 			header_summary_results, header_summary_refs, header_summary_refowner, "" } };
 
@@ -147,10 +152,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 	}
 
-	
 	@Override
 	public Bucket transform(SubstanceRecord record) {
-		
 
 		switch (jsonmode) {
 		case experiment: {
@@ -293,11 +296,14 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			}
 
 			String nmcode = null;
+			Bucket bucket_ids = new Bucket();
 			if (record.getExternalids() != null) {
 				List<String> xids = new ArrayList<String>();
-				Bucket bucket_ids = new Bucket();
+
 				Set<String> keys = new TreeSet<String>();
-				keys.add("type_s");keys.add("id");keys.add("s_uuid_hs");
+				keys.add("type_s");
+				keys.add("id");
+				keys.add("s_uuid_hs");
 				for (ExternalIdentifier id : record.getExternalids()) {
 					// these should not be in external ids in first place
 					if ("Has_Identifier".equals(id.getSystemDesignator()))
@@ -327,10 +333,10 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 					// ids.add();
 				}
+
 				if (bucket_ids.size() > 0) {
-					
-					bucket_ids.setHeaders(
-							new String[][] { keys.toArray(new String[keys.size()]) });
+
+					bucket_ids.setHeaders(new String[][] { keys.toArray(new String[keys.size()]) });
 					bucket_ids.put("id", String.format("%s/id", record.getSubstanceUUID()));
 					bucket_ids.put("s_uuid_hs", record.getSubstanceUUID());
 					bucket_ids.put("type_s", "identifier");
@@ -381,9 +387,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									prm.put("endpointcategory_s", papp.getProtocol().getCategory());
 									if (papp.getProtocol().getGuideline() != null
 											&& !papp.getProtocol().getGuideline().isEmpty()) {
-										
+
 										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0));
-			
+
 									} else
 										prm.put("guidance_s", "Not specified");
 
@@ -400,13 +406,14 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							protocolapplication2Bucket(papp, study, suffix);
 							if (cell != null)
 								study.put("E.cell_type_s", cell.toString());
-							
+
 							String[] terms_method = null;
 							if (method != null) {
 								study.put("E.method_s", method.toString());
 								terms_method = annotator.annotateParam(method.toString());
-								study.put(ns("method_synonym", suffix, "_ss"), Arrays.asList(terms_method));
-							}	
+								if (terms_method != null)
+									study.put(ns("method_synonym", suffix, "_ss"), Arrays.asList(terms_method));
+							}
 
 							study.setHeader(study_headers_combined[0]);
 
@@ -438,11 +445,12 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 												prmc.put("E.cell_type_s", cell.toString());
 											if (method != null) {
 												prmc.put("E.method_s", method.toString());
-												
+
 												if (terms_method != null) {
-													prmc.put(ns("method_synonym", suffix, "_ss"), Arrays.asList(terms_method));
-												}												
-											}	
+													prmc.put(ns("method_synonym", suffix, "_ss"),
+															Arrays.asList(terms_method));
+												}
+											}
 										}
 										_childParams_.add(prmc);
 									}
@@ -618,6 +626,12 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 				}
 		}
 
+		String[] terms_substance = annotator.annotateSubstance(record);
+		if (terms_substance != null) {
+			String key = ns("substance_annotation", hasSuffix, suffix + "s");
+			bucket.put(key, Arrays.asList(terms_substance));
+		}
+
 		// bucket.put(ns("content", hasSuffix, suffix), record.getContent());
 	}
 
@@ -668,11 +682,28 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 		if (protocol.getGuideline() != null && protocol.getGuideline().get(0) != null
 				&& !"".equals(protocol.getGuideline().get(0))) {
 			bucket.put(ns("guidance", suffix, "_s"), protocol.getGuideline().get(0).toUpperCase());
-			String[] terms = annotator.annotateGuideline(protocol.getGuideline().get(0));
-			if (terms != null) {
-				bucket.put(ns("guidance_synonym", suffix, "_ss"), Arrays.asList(terms));
-			}
-		}	
+		}
+		annotateGuidance(protocol, bucket, suffix);
+	}
+
+	protected void annotateGuidance(Protocol protocol, Bucket bucket, boolean suffix) {
+		String[] terms = null;
+		if (protocol.getGuideline() != null && protocol.getGuideline().get(0) != null
+				&& !"".equals(protocol.getGuideline().get(0))) {
+			bucket.put(ns("guidance", suffix, "_s"), protocol.getGuideline().get(0).toUpperCase());
+			terms = annotator.annotateGuideline(protocol.getGuideline().get(0));
+		}
+		if (protocol.getEndpoint() != null) {
+			String[] terms_endpoint = annotator.annotateGuideline(protocol.getEndpoint());
+			if (terms == null)
+				terms = terms_endpoint;
+			else if (terms_endpoint != null)
+				terms = ArrayUtils.addAll(terms, terms_endpoint);
+
+		}
+		if (terms != null)
+			bucket.put(ns("guidance_synonym", suffix, "_ss"), Arrays.asList(terms));
+
 	}
 
 	protected void summarymeasurement2bucket(Protocol protocol, EffectRecord<String, Object, String> e, Bucket bucket) {
@@ -706,7 +737,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 		if (e.getEndpoint() != null)
 			bucket.put(ns("effectendpoint", suffix, "_s"), e.getEndpoint().toUpperCase());
-		
+
 		String[] terms = annotator.annotateEndpoint(e.getEndpoint());
 		if (terms != null) {
 			bucket.put(ns("effectendpoint_synonym", suffix, "_ss"), Arrays.asList(terms));
