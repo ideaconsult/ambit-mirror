@@ -61,7 +61,6 @@ import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.InterpretationResultSearchResource;
 import ambit2.rest.dataset.filtered.StudySearchResource;
 import ambit2.rest.dataset.filtered.SubstanceTypeSearchResource;
-import ambit2.rest.facet.AmbitFacetResource;
 import ambit2.rest.facet.CompoundsByPropertyValueInDatasetResource;
 import ambit2.rest.facet.DatasetChemicalsQualityStatsResource;
 import ambit2.rest.facet.DatasetStrucTypeStatsResource;
@@ -121,7 +120,6 @@ import ambit2.rest.substance.property.SubstancePropertyResource;
 import ambit2.rest.substance.study.SubstanceStudyTableResource;
 import ambit2.rest.substance.templates.AssayTemplateResource;
 import ambit2.rest.substance.templates.AssayTemplatesFacetResource;
-import ambit2.rest.substance.templates.InputTemplatesResource;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.WarmupTask;
 import ambit2.rest.ui.API2docsResource;
@@ -463,9 +461,10 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 			router.attach(String.format("%s/{%s}", DepictionResource.resource, DepictionResource.resourceKey),
 					DepictionResource.class);
 		}
-		router.attach("/datatemplate", InputTemplatesResource.class);
-		router.attach("/datatemplate/{idtemplate}", InputTemplatesResource.class);
+		//router.attach("/datatemplate", InputTemplatesResource.class);
+		//router.attach("/datatemplate/{idtemplate}", InputTemplatesResource.class);
 		router.attach(AssayTemplatesFacetResource.assaytemplate_key, AssayTemplateResource.class);
+		router.attach(AssayTemplatesFacetResource.assaytemplate_filter, AssayTemplateResource.class);
 		router.attach(AssayTemplatesFacetResource.assaytemplate_facet, AssayTemplatesFacetResource.class);
 
 		/**

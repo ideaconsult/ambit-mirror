@@ -13,8 +13,10 @@ import net.idea.modbcum.i.IQueryRetrieval;
 public class AssayTemplatesFacetResource<Q extends IQueryRetrieval<AssayTemplateFacet>>
 		extends AmbitFacetResource<AssayTemplateFacet, Q> {
 	public static final String idassaytemplate = "idassaytemplate";
-	public static final String assaytemplate_facet = "/assaytemplate";
-	public static final String assaytemplate_key = String.format("%s/{%s}", assaytemplate_facet, idassaytemplate);
+	public static final String templatefilter = "templatefilter";
+	public static final String assaytemplate_facet = "/datatemplate";
+	public static final String assaytemplate_filter = String.format("%s/{%s}", assaytemplate_facet,templatefilter);
+	public static final String assaytemplate_key = String.format("%s/{%s}/{%s}", assaytemplate_facet,templatefilter, idassaytemplate);
 
 	public AssayTemplatesFacetResource() {
 		super();
@@ -22,7 +24,7 @@ public class AssayTemplatesFacetResource<Q extends IQueryRetrieval<AssayTemplate
 	}
 	@Override
 	public String getTemplateName() {
-		return "jsonplaceholder.ftl";
+		return "facets/assaytemplates.ftl";
 	}
 	
 

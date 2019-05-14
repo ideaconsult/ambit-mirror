@@ -6811,5 +6811,6 @@ var ontlookup = {
 	"ENM_0000044_SECTION" : "Barrier integrity",
 	"ENM_0000068_SECTION" : "Cell Viability",
 	"ANALYTICAL_METHODS_SECTION" : "Analytical methods",
+	"PC_DENSITY_SECTION" : "Density",
 	"IMPURITY_SECTION" : "Impurity"
 }

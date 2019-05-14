@@ -22,9 +22,14 @@ import net.idea.restnet.c.StringConvertor;
 
 public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitDBQueryResource<Q, TR> {
 	protected TemplateMakerSettings settings = new TemplateMakerSettings();
+
 	public AssayTemplateResource() {
 		super();
 		setHtmlbyTemplate(true);
+	}
+
+	enum _template_filter {
+		id, endpoint
 	}
 
 	@Override
@@ -41,11 +46,31 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 
 	@Override
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
-		Object idtemplate = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
-		if (idtemplate == null)
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		_template_filter tf = _template_filter.id;
+		try {
+			tf = _template_filter
+					.valueOf(request.getAttributes().get(AssayTemplatesFacetResource.templatefilter).toString());
+		} catch (Exception x) {
+			tf = _template_filter.id;
+		}
 		settings.getQuery().clear();
-		settings.setQueryTemplateid(idtemplate.toString());
+		switch (tf) {
+		case id: {
+			Object idtemplate = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
+			if (idtemplate != null)
+				settings.setQueryTemplateid(idtemplate.toString());
+			break;
+		}
+		case endpoint: {
+			Object endpoint = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
+			if (endpoint != null)
+				settings.setQueryEndpoint(endpoint.toString());
+			break;
+		}
+
+		default:
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+		}
 		ReadExperimentTemplate q = new ReadExperimentTemplate();
 		q.setFieldname(settings);
 		/*
@@ -67,11 +92,12 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 
 		if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
 			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter();
-			
-			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX, settings.getOutputFileName()) {
+
+			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX,
+					settings.getOutputFileName()) {
 				protected void setDisposition(Representation rep) {
 					super.setDisposition(rep);
-				    rep.setDownloadName(settings.getOutputFileName());
+					rep.setDownloadName(settings.getOutputFileName());
 				};
 			};
 
@@ -87,5 +113,3 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 		return "ambit2/rest/config/ambit2.assay.properties";
 	}
 }
-
-
