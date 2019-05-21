@@ -145,7 +145,6 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				if (dnode == null)
 					continue;
 				String value = _quote(dnode, getDelimiter());
-				out.write(value.getBytes(StandardCharsets.UTF_8));
 				if (dnode instanceof ArrayNode) {
 					ArrayNode aNode = (ArrayNode) dnode;
 					StringBuilder b = new StringBuilder();
