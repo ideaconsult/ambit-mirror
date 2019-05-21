@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import ambit2.base.data.study.Protocol;
+import ambit2.base.json.JSONUtils;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, OutputStream> {
@@ -33,10 +34,12 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 	 * 
 	 */
 	private static final long serialVersionUID = -4805381027500815039L;
-	protected String delimiter="\t";
+	protected String delimiter = "\t";
+
 	public String getDelimiter() {
 		return delimiter;
 	}
+
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
@@ -59,19 +62,22 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 						"MEDIUM.ionictrength_mM_s", "MEDIUM.CO2_concentration_m", "MEDIUM.O2_concentration_%v/v",
 						"Vial_s", "E.sop_reference_s", "E.method_s", "E.cell_type_s", "E.exposure_time_hour_s",
 						"Dose_s" },
-				new String[] { "s_uuid_s","assay_uuid_s","investigation_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s", "reference_owner_s",
-						"reference_year_s", "reference_s", "effectendpoint_s", "effectendpoint_type_s","loQualifier_s", "loValue_d",
-						"upQualifier_s", "upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
-				new String[] { "replicate_s", "material_s" },delimiter);
+				new String[] { "s_uuid_s", "assay_uuid_s", "investigation_uuid_s", "topcategory_s",
+						"endpointcategory_s", "guidance_s", "reference_owner_s", "reference_year_s", "reference_s",
+						"effectendpoint_s", "effectendpoint_type_s", "loQualifier_s", "loValue_d", "upQualifier_s",
+						"upValue_d", "unit_s", "err_d", "errQualifier_s", "textValue_s" },
+				new String[] { "replicate_s", "material_s" }, delimiter);
 
 	}
+
 	public BucketJson2CSVConvertor(String[] header, String[] paramHeaders, String[] studyHeaders,
 			String[] conditionHeaders) {
-		this(header,paramHeaders,studyHeaders,conditionHeaders,"\t");
+		this(header, paramHeaders, studyHeaders, conditionHeaders, "\t");
 	}
+
 	public BucketJson2CSVConvertor(String[] header, String[] paramHeaders, String[] studyHeaders,
 			String[] conditionHeaders, String delimiter) {
-		this.delimiter=delimiter;
+		this.delimiter = delimiter;
 		this.headers = Arrays.asList(header);
 		this.paramHeaders = Arrays.asList(paramHeaders);
 		this.studyHeaders = Arrays.asList(studyHeaders);
@@ -138,21 +144,26 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				JsonNode dnode = doc == null ? null : doc.get(header);
 				if (dnode == null)
 					continue;
-				out.write(d.getBytes());
+				String value = _quote(dnode, getDelimiter());
+				out.write(value.getBytes(StandardCharsets.UTF_8));
 				if (dnode instanceof ArrayNode) {
 					ArrayNode aNode = (ArrayNode) dnode;
+					StringBuilder b = new StringBuilder();
 					for (int i = 0; i < aNode.size(); i++) {
 						if (i > 0)
-							out.write(" ".getBytes());
-						out.write(aNode.get(i).asText().getBytes(StandardCharsets.UTF_8));
+							b.append(" ");
+						
+						b.append(_quote(aNode.get(i),getDelimiter()));
 					}
+					out.write(b.toString().getBytes(StandardCharsets.UTF_8));
 				} else {
-					String value = dnode.asText();
+					value = _quote(dnode, getDelimiter());
+
 					if ("endpointcategory_s".equals(header))
 						try {
 							value = Protocol._categories.valueOf(value).toString();
 						} catch (Exception x) {
-							x.printStackTrace();
+							logger.warning(x.getMessage());
 						}
 					out.write(value.getBytes(StandardCharsets.UTF_8));
 				}
@@ -161,6 +172,21 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 			out.write(delimiter.getBytes());
 		}
 
+	}
+
+	protected static String _quote(JsonNode node, String delimiter) {
+		if (node.isNumber())
+			return node.asText();
+		else
+			try {
+				String value = node.asText();
+				if (value.indexOf(delimiter) >= 0)
+					return JSONUtils.jsonQuote(value);
+				else
+					return value;
+			} catch (Exception x) {
+				return "";	
+			}
 	}
 
 	@Override
@@ -173,17 +199,19 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				JsonNode node = dx.readTree(rin);
 				ArrayNode docs = (ArrayNode) node.get("response").get("docs");
 				for (JsonNode doc : docs) {
-					
-					Map<String, JsonNode> params = lookup((ArrayNode) doc.get("_childDocuments_"), "params","document_uuid_s");
-					Map<String, JsonNode> study = lookup((ArrayNode) doc.get("_childDocuments_"), "study","id");
-					Map<String, JsonNode> conditions = lookup((ArrayNode) doc.get("_childDocuments_"), "conditions","id");
+
+					Map<String, JsonNode> params = lookup((ArrayNode) doc.get("_childDocuments_"), "params",
+							"document_uuid_s");
+					Map<String, JsonNode> study = lookup((ArrayNode) doc.get("_childDocuments_"), "study", "id");
+					Map<String, JsonNode> conditions = lookup((ArrayNode) doc.get("_childDocuments_"), "conditions",
+							"id");
 
 					Iterator<Entry<String, JsonNode>> fields = study.entrySet().iterator();
 					while (fields.hasNext()) {
 						Entry<String, JsonNode> field = fields.next();
 						String docuuid = field.getValue().get("document_uuid_s").asText();
 						JsonNode pdoc = docuuid == null ? null : params == null ? null : params.get(docuuid);
-						
+
 						String id = field.getKey();
 						JsonNode cdoc = id == null ? null : conditions == null ? null : conditions.get(id);
 						printValues(fout, headers, new JsonNode[] { doc });
@@ -215,7 +243,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		if (subdocs != null)
 			for (JsonNode doc : subdocs)
 				if (type_s.equals(doc.get("type_s").asText())) {
-					//docuuid is same for effect records ...
+					// docuuid is same for effect records ...
 					String docuuid = doc.get(key).asText().replace("/cn", "");
 					map.put(docuuid, doc);
 				}
