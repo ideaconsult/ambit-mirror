@@ -43,6 +43,7 @@ public class GroupContributionCli
 	public String gcmType = null;
 	public String validation = null;
 	public String corFactors = null;
+	public String resultBufferOutFile = null;
 	public boolean FlagFragmenationOnly = false;
 	public int fractionDigits = -1;
 	
@@ -95,6 +96,21 @@ public class GroupContributionCli
 			@Override
 			public String getShortName() {
 				return "o";
+			}
+		},
+		
+		result_buffer_out {
+			@Override
+			public String getArgName() {
+				return "out-file";
+			}
+			@Override
+			public String getDescription() {
+				return "Output result buffer to a file";
+			}
+			@Override
+			public String getShortName() {
+				return "b";
 			}
 		},
 		
@@ -341,6 +357,12 @@ public class GroupContributionCli
 			outputGCMFile = argument;
 			break;
 		}
+		case result_buffer_out: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			resultBufferOutFile = argument;
+			break;
+		}
 		case local_descriptors: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -457,6 +479,9 @@ public class GroupContributionCli
 			gcm = new GroupContributionModel();
 			addConfigInfo = gcm.getAdditionalConfig();
 			
+			if (resultBufferOutFile != null)
+				gcm.getReportConfig().FlagBufferOutput = true;
+				
 			if (trainSetFile == null)
 				throw new Exception("Training set file not assigned! Use -t command line option.");
 			
@@ -672,6 +697,7 @@ public class GroupContributionCli
 		}
 		
 		saveOutputGCMToFile(gcm);
+		saveResultBufferToFile(gcm);
 		return 0;
 	}
 	
@@ -699,6 +725,31 @@ public class GroupContributionCli
 		}
 		catch (Exception x) {
 			System.out.println("Error on creating GCM output json file: " 
+				+ x.getMessage());
+		}
+	}
+	
+	
+	void saveResultBufferToFile(GroupContributionModel gcm)
+	{
+		if (resultBufferOutFile == null)
+			return;
+		
+		String out_buffer = gcm.getReport();
+		if (out_buffer == null)
+			return;
+		
+		try 
+		{
+			File file = new File (resultBufferOutFile);
+			RandomAccessFile f = new RandomAccessFile(file, "rw");
+			f.setLength(0);
+			
+			f.write(out_buffer.getBytes());
+			f.close();
+		}
+		catch (Exception x) {
+			System.out.println("Error on creating result buffer out file: " 
 				+ x.getMessage());
 		}
 	}
