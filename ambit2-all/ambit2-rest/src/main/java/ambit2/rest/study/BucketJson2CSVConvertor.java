@@ -10,12 +10,14 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.io.IOUtils;
@@ -139,34 +141,35 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				}
 
 		for (String header : headers) {
-			String d = "";
+			Set<String> b = new HashSet<String>();
+			//can get more than one node for the same header, e.g. for the repeated fields (category, method)
 			for (JsonNode doc : docs) {
 				JsonNode dnode = doc == null ? null : doc.get(header);
 				if (dnode == null)
 					continue;
-				String value = _quote(dnode, getDelimiter());
+
 				if (dnode instanceof ArrayNode) {
 					ArrayNode aNode = (ArrayNode) dnode;
-					StringBuilder b = new StringBuilder();
-					for (int i = 0; i < aNode.size(); i++) {
-						if (i > 0)
-							b.append(" ");
-						
-						b.append(_quote(aNode.get(i),getDelimiter()));
-					}
-					out.write(b.toString().getBytes(StandardCharsets.UTF_8));
+					for (int i = 0; i < aNode.size(); i++) 
+						b.add(_quote(aNode.get(i), getDelimiter()));
 				} else {
-					value = _quote(dnode, getDelimiter());
-
+					String value = _quote(dnode, getDelimiter());
 					if ("endpointcategory_s".equals(header))
 						try {
-							value = Protocol._categories.valueOf(value).toString();
+							b.add(Protocol._categories.valueOf(value).toString());
 						} catch (Exception x) {
 							logger.warning(x.getMessage());
 						}
-					out.write(value.getBytes(StandardCharsets.UTF_8));
+					else b.add(value);
 				}
-				d = " ";
+
+			}
+			Iterator<String> i = b.iterator();
+			String v = null;
+			while (i.hasNext()) {
+				if (v!=null) out.write(v.getBytes());
+				out.write(i.next().toString().getBytes(StandardCharsets.UTF_8));
+				v=" ";
 			}
 			out.write(delimiter.getBytes());
 		}
@@ -184,7 +187,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 				else
 					return value;
 			} catch (Exception x) {
-				return "";	
+				return "";
 			}
 	}
 
