@@ -92,15 +92,15 @@ public class SLN2Substance
 	}
 	
 	
-	public List<CompositionRelation> slnToSubstanceComposition(SLNSubstance slnContSet)
+	public List<CompositionRelation> slnToSubstanceComposition(SLNSubstance slnSubst)
 	{
-		if (slnContSet == null)
+		if (slnSubst == null)
 			return null;
 		
 		List<CompositionRelation> composition = new ArrayList<CompositionRelation>();
-		for (int i = 0; i < slnContSet.containers.size(); i++)
+		for (int i = 0; i < slnSubst.containers.size(); i++)
 		{
-			SLNContainer slnContainer = slnContSet.containers.get(i);
+			SLNContainer slnContainer = slnSubst.containers.get(i);
 			CompositionRelation compRel = slnContainerToCompositionRelation(slnContainer);
 			composition.add(compRel);
 		}
@@ -110,14 +110,14 @@ public class SLN2Substance
 	
 	public SLNSubstance substanceCompositionToSln(List<CompositionRelation> composition)
 	{
-		SLNSubstance slnContSet = new SLNSubstance();
+		SLNSubstance slnSubst = new SLNSubstance();
 		for (int i = 0; i < composition.size(); i++)
 		{
 			CompositionRelation compRel = composition.get(i);
 			SLNContainer slnContainer = compositionRelationToSLNContainer(compRel);
-			slnContSet.containers.add(slnContainer);
+			slnSubst.containers.add(slnContainer);
 		}
-		return slnContSet;
+		return slnSubst;
 	}
 	
 	
