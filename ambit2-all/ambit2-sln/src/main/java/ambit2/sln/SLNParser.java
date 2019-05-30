@@ -19,6 +19,7 @@ public class SLNParser {
 
 	String sln;
 	SLNContainer container;
+	SLNSubstance slnSubstance;
 	SLNDictionary globalDictionary = null;
 	Stack<SLNAtom> brackets = new Stack<SLNAtom>();
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
@@ -74,7 +75,23 @@ public class SLNParser {
 		parse();
 		return container;
 	}
-
+	
+	public SLNSubstance parseSLNSubstance(String sln) {
+		this.sln = sln;
+		slnSubstance = new SLNSubstance();
+		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
+		container.setGlobalDictionary(globalDictionary);
+		errors.clear();
+		init();
+		parse();
+		
+		//If the slnSubstance contains more than one container, 
+		//previous containers are already added 
+		slnSubstance.containers.add(container);
+		
+		return slnSubstance;
+	}
+	
 	void init() {
 		nChars = sln.length();
 		prevAtom = null;

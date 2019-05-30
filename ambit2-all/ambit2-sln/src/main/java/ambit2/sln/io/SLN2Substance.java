@@ -11,7 +11,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.base.relation.composition.Proportion;
 import ambit2.sln.SLNContainer;
-import ambit2.sln.SLNContainerSet;
+import ambit2.sln.SLNSubstance;
 import ambit2.smarts.SmartsHelper;
 
 public class SLN2Substance 
@@ -92,15 +92,15 @@ public class SLN2Substance
 	}
 	
 	
-	public List<CompositionRelation> slnToSubstanceComposition(SLNContainerSet slnContSet)
+	public List<CompositionRelation> slnToSubstanceComposition(SLNSubstance slnSubst)
 	{
-		if (slnContSet == null)
+		if (slnSubst == null)
 			return null;
 		
 		List<CompositionRelation> composition = new ArrayList<CompositionRelation>();
-		for (int i = 0; i < slnContSet.containers.size(); i++)
+		for (int i = 0; i < slnSubst.containers.size(); i++)
 		{
-			SLNContainer slnContainer = slnContSet.containers.get(i);
+			SLNContainer slnContainer = slnSubst.containers.get(i);
 			CompositionRelation compRel = slnContainerToCompositionRelation(slnContainer);
 			composition.add(compRel);
 		}
@@ -108,16 +108,16 @@ public class SLN2Substance
 		return composition;
 	}
 	
-	public SLNContainerSet substanceCompositionToSln(List<CompositionRelation> composition)
+	public SLNSubstance substanceCompositionToSln(List<CompositionRelation> composition)
 	{
-		SLNContainerSet slnContSet = new SLNContainerSet();
+		SLNSubstance slnSubst = new SLNSubstance();
 		for (int i = 0; i < composition.size(); i++)
 		{
 			CompositionRelation compRel = composition.get(i);
 			SLNContainer slnContainer = compositionRelationToSLNContainer(compRel);
-			slnContSet.containers.add(slnContainer);
+			slnSubst.containers.add(slnContainer);
 		}
-		return slnContSet;
+		return slnSubst;
 	}
 	
 	
