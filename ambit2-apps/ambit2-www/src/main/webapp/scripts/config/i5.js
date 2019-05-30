@@ -718,7 +718,7 @@ var config_i5 = {
 			"criticaleffectsobserved" : {
 				"iOrder" : -4,
 				"bVisible" : true,
-				"sTitle": "Critical Effects Observed"
+				"sTitle" : "Critical Effects Observed"
 			},
 			"organ" : {
 				"iOrder" : -4,
@@ -803,7 +803,7 @@ var config_i5 = {
 			"criticaleffectsobserved" : {
 				"iOrder" : -4,
 				"bVisible" : true,
-				"sTitle": "Critical Effects Observed"
+				"sTitle" : "Critical Effects Observed"
 			}
 		},
 		"effects" : {
@@ -878,8 +878,7 @@ var config_i5 = {
 			"sex" : {
 				"iOrder" : -4,
 				"bVisible" : true
-			}
-			,
+			},
 			"organ" : {
 				"iOrder" : -4,
 				"bVisible" : true,
@@ -888,7 +887,7 @@ var config_i5 = {
 			"criticaleffectsobserved" : {
 				"iOrder" : -4,
 				"bVisible" : true,
-				"sTitle": "Critical Effects Observed"
+				"sTitle" : "Critical Effects Observed"
 			}
 		},
 		"effects" : {
@@ -1120,8 +1119,7 @@ var config_i5 = {
 			},
 			"toxicity" : {
 				"bVisible" : false
-			}
-			,
+			},
 			"organ" : {
 				"iOrder" : -4,
 				"bVisible" : true,
@@ -1130,7 +1128,7 @@ var config_i5 = {
 			"criticaleffectsobserved" : {
 				"iOrder" : -4,
 				"bVisible" : true,
-				"sTitle": "Critical Effects Observed"
+				"sTitle" : "Critical Effects Observed"
 			}
 		},
 		"effects" : {
@@ -1199,11 +1197,11 @@ var config_i5 = {
 				"iOrder" : -8,
 				"bVisible" : true
 			},
-			
+
 			"reproductiveeffectsobserved" : {
 				"iOrder" : -7,
 				"bVisible" : true,
-				"sTitle" : "Reproductive Effects Observed" 
+				"sTitle" : "Reproductive Effects Observed"
 			},
 			"relationtoothertoxiceffects" : {
 				"iOrder" : -6,
@@ -1276,13 +1274,13 @@ var config_i5 = {
 			"developmentaleffectsobserved" : {
 				"iOrder" : -7,
 				"bVisible" : true,
-				"sTitle" : "Developmental Effects Observed" 
+				"sTitle" : "Developmental Effects Observed"
 			},
 			"relationtoothertoxiceffects" : {
 				"iOrder" : -6,
 				"bVisible" : true,
 				"sTitle" : "Relation To Other Toxic Effects"
-			}			
+			}
 		},
 		"effects" : {
 			"endpoint" : {
@@ -1383,7 +1381,7 @@ var config_i5 = {
 				"bVisible" : false
 			}
 		}
-	},	
+	},
 	"TO_HYDROLYSIS_SECTION" : {
 		"parameters" : {
 			"bVisible" : false
@@ -1502,7 +1500,7 @@ var config_i5 = {
 			}
 		},
 		"effects" : {
-			
+
 			"endpoint" : {
 				"sTitle" : "Half-life",
 				"inMatrix" : true,
@@ -1523,7 +1521,7 @@ var config_i5 = {
 	"EN_STABILITY_IN_SOIL_SECTION" : {
 		"parameters" : {
 			"bVisible" : false,
-		
+
 			"test type" : {
 				"comment" : "copied to conditions",
 				"iOrder" : -9,
@@ -1533,7 +1531,7 @@ var config_i5 = {
 		},
 		"conditions" : {
 			"bVisible" : false,
-		
+
 			"test type" : {
 				"iOrder" : -9,
 				"inMatrix" : true,
@@ -2232,7 +2230,7 @@ var config_i5 = {
 	"EC_HONEYBEESTOX_SECTION" : {
 		"parameters" : {
 			"bVisible" : false,
-		
+
 			"test medium" : {
 				"iOrder" : -8
 			},
@@ -2243,7 +2241,7 @@ var config_i5 = {
 		},
 		"conditions" : {
 			"bVisible" : false,
-		
+
 			"exposure" : {
 				"iOrder" : -5,
 				"inMatrix" : true
@@ -2509,7 +2507,7 @@ var config_i5 = {
 			}
 
 		}
-	},		
+	},
 	"SURFACE_CHEMISTRY_SECTION" : {
 		"parameters" : {
 			"type of method" : {
@@ -3191,7 +3189,7 @@ var config_i5 = {
 				"iOrder" : -8,
 				"bVisible" : true,
 				"inMatrix" : true
-			}			
+			}
 		},
 		"protocol" : {
 			"guideline" : {
@@ -3215,10 +3213,28 @@ var config_i5 = {
 	},
 	"EXPOSURE_SECTION" : {
 		"parameters" : config_bao["parameters"],
-		"effects" : config_bao["effects"],
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"]
+		"interpretation" : config_bao["interpretation"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Result",
+				"inMatrix" : true,
+				"bVisible" : true,
+				"iOrder" : -7
+			}
+
+		}
 
 	},
 	"IMPURITY_SECTION" : {
@@ -3226,7 +3242,7 @@ var config_i5 = {
 		"effects" : config_bao["effects"],
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"]		
+		"interpretation" : config_bao["interpretation"]
 	},
 	"RISKASSESSMENT_SECTION" : {
 		"protocol" : {
@@ -3243,33 +3259,32 @@ var config_i5 = {
 					}
 					sOut += "<br/>";
 					sOut += "<br/><ul>";
-					$
-							.each(full.parameters,
-									function(k, v) {
+					$.each(full.parameters,
+							function(k, v) {
 
-										var title = k;
-										try {
-											title = config_bao.parameters[k
-													.toLowerCase()]["sTitle"];
+								var title = k;
+								try {
+									title = config_bao.parameters[k
+											.toLowerCase()]["sTitle"];
 
-											if (title === undefined)
-												title = k;
-										} catch (err) {
-										}
-										if ((v === undefined) || (v == null)
-												|| ("-" == v))
-											return "";
-										sOut += "<li>" + title + ": ";
-										try {
-											if (v.loValue == undefined)
-												sOut += v;
-											else
-												sOut += v.loValue + " " + v.unit;
-										} catch (err) {
-											sOut += v;
-										}
-										"</li>";
-									});
+									if (title === undefined)
+										title = k;
+								} catch (err) {
+								}
+								if ((v === undefined) || (v == null)
+										|| ("-" == v))
+									return "";
+								sOut += "<li>" + title + ": ";
+								try {
+									if (v.loValue == undefined)
+										sOut += v;
+									else
+										sOut += v.loValue + " " + v.unit;
+								} catch (err) {
+									sOut += v;
+								}
+								"</li>";
+							});
 					sOut += "</ul>";
 					return sOut;
 				}
@@ -3279,7 +3294,7 @@ var config_i5 = {
 			},
 			"owner" : {
 				"bVisible" : false
-			},			
+			},
 			"citation" : {
 				"bVisible" : true,
 				"iOrder" : 30,
@@ -3287,7 +3302,7 @@ var config_i5 = {
 				"mRender" : function(data, type, full) {
 
 					var uri = (data["title"] != undefined)
-							&& (data["title"].indexOf("http")==0);
+							&& (data["title"].indexOf("http") == 0);
 					if (uri) {
 						var sOut = (data["year"] == null || data["year"] == 0) ? full["citation"]["owner"]
 								: data["year"];
@@ -3305,14 +3320,13 @@ var config_i5 = {
 				"bVisible" : false
 			}
 		},
-	
 
 		"parameters" : {
 			"bVisible" : false
 		},
 		"conditions" : {
 			"bVisible" : true
-			
+
 		},
 		"effects" : {
 			"endpoint" : {

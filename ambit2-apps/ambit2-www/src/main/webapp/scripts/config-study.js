@@ -325,7 +325,7 @@ var config_study = {
 			"conditions" : config_bao["conditions"],
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
-		},		
+		},
 		"ANALYTICAL_METHODS_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : {
@@ -350,7 +350,7 @@ var config_study = {
 			"conditions" : config_bao["conditions"],
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
-		},		
+		},
 		"TO_PHOTOTRANS_AIR_SECTION" : config_i5["TO_PHOTOTRANS_AIR_SECTION"],
 
 		"TO_HYDROLYSIS_SECTION" : config_i5["TO_HYDROLYSIS_SECTION"],
@@ -527,7 +527,7 @@ var config_study = {
 					"inMatrix" : false
 				}
 
-			},			
+			},
 		},
 		"PROTEOMICS_SECTION" : {
 			"parameters" : {
@@ -991,28 +991,47 @@ var config_study = {
 		},
 		"EXPOSURE_SECTION" : {
 			"parameters" : config_bao["parameters"],
-			"effects" : config_bao["effects"],
+			"effects" : {
+				"endpoint" : {
+					"iOrder" : -9,
+					"bVisible" : true,
+					"inMatrix" : true
+				},
+				"result" : {
+					"iOrder" : -8,
+					"bVisible" : true,
+					"inMatrix" : true
+				},
+				"text" : {
+					"sTitle" : "Result",
+					"inMatrix" : true,
+					"bVisible" : true,
+					"iOrder" : -7
+				}
+
+			},
+
 			"conditions" : {
 				"bVisible" : false,
-				"sampling specification": {
+				"sampling specification" : {
 					"iOrder" : -7,
 					"bVisible" : true,
 					"inMatrix" : true,
 					"sTitle" : "Sampling specification"
-				},				
-				"time start": {
+				},
+				"time start" : {
 					"iOrder" : -6,
 					"bVisible" : true,
 					"inMatrix" : true,
 					"sTitle" : "Time start"
 				},
-				"time stop": {
+				"time stop" : {
 					"iOrder" : -5,
 					"bVisible" : true,
 					"inMatrix" : true,
 					"sTitle" : "Time stop"
 				}
-			},	
+			},
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
 

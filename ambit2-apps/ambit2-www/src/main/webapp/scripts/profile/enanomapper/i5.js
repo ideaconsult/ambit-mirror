@@ -705,10 +705,28 @@ var config_i5 = {
 	},
 	"EXPOSURE_SECTION" : {
 		"parameters" : config_bao["parameters"],
-		"effects" : config_bao["effects"],
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"]
+		"interpretation" : config_bao["interpretation"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Result",
+				"inMatrix" : true,
+				"bVisible" : true,
+				"iOrder" : -7
+			}
+
+		}
 
 	}
 
