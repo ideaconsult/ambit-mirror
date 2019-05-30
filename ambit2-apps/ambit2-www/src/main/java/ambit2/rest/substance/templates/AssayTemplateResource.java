@@ -14,6 +14,7 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMakerSettings;
+import net.idea.ambit.templates.db.ExperimentTemplateQuery._QUERY_TYPE_TEMPLATE;
 import net.idea.ambit.templates.db.ReadExperimentTemplate;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -57,28 +58,35 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 		switch (tf) {
 		case id: {
 			Object idtemplate = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
-			if (idtemplate != null)
+			if (idtemplate != null) {
 				settings.setQueryTemplateid(idtemplate.toString());
-			break;
+				ReadExperimentTemplate q = new ReadExperimentTemplate();
+				q.setFieldname(settings);
+				return (Q) q;
+			} else {
+				settings.setQueryTemplateid(null);
+				ReadExperimentTemplate q = new ReadExperimentTemplate();
+				q.setFieldname(settings);
+				return (Q) q;
+			}
 		}
 		case endpoint: {
 			Object endpoint = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
-			if (endpoint != null)
+			if (endpoint != null) {
 				settings.setQueryEndpoint(endpoint.toString());
-			break;
+				ReadExperimentTemplate q = new ReadExperimentTemplate();
+				q.setFieldname(settings);
+				return (Q) q;
+			}	
+
 		}
 
 		default:
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+			
 		}
-		ReadExperimentTemplate q = new ReadExperimentTemplate();
-		q.setFieldname(settings);
-		/*
-		 * String templatesdbname = getContext().getParameters().getFirstValue(
-		 * AMBITConfig.templates_dbname.name());
-		 * q.setDatabaseName(templatesdbname);
-		 */
-		return (Q) q;
+		
+		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+
 	}
 
 	@Override

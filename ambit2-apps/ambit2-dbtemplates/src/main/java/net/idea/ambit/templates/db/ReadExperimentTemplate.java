@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMakerSettings;
+import net.idea.ambit.templates.db.ExperimentTemplateQuery._QUERY_TYPE_TEMPLATE;
 import net.idea.modbcum.i.IParameterizedQuery;
 import net.idea.modbcum.i.IQueryCondition;
 import net.idea.modbcum.i.IQueryObject;
@@ -27,6 +28,7 @@ public class ReadExperimentTemplate implements IQueryObject<TR>,
 	// protected ReadSubstanceStudy paQuery = new ReadSubstanceStudy();
 	protected TemplateMakerSettings fieldname;
 
+	
 	public ReadExperimentTemplate() {
 		flatQuery = null;
 	}
@@ -107,9 +109,12 @@ public class ReadExperimentTemplate implements IQueryObject<TR>,
 	}
 
 	@Override
-	public void setFieldname(TemplateMakerSettings fieldname) {
+	public void setFieldname(TemplateMakerSettings settings) {
 		try {
-			flatQuery = new ExperimentTemplateQuery(fieldname);
+			if (settings.getQueryTemplateId()==null)
+				flatQuery = new ExperimentTemplateQuery(settings,_QUERY_TYPE_TEMPLATE.all,null);
+			else	
+				flatQuery = new ExperimentTemplateQuery(settings);
 		} catch (Exception x) {
 			flatQuery = null;
 		}

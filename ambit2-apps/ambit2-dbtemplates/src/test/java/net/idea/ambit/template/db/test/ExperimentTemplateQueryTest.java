@@ -14,8 +14,9 @@ public class ExperimentTemplateQueryTest extends QueryTest<ExperimentTemplateQue
 	protected ExperimentTemplateQuery createQuery() throws Exception {
 		TemplateMakerSettings settings = new TemplateMakerSettings();
 		settings.setQueryTemplateid("3e16dff8");
+		//settings.setQueryTemplateid(null);
 		ExperimentTemplateQuery q = new ExperimentTemplateQuery(settings);
-
+		
 		return q;
 	}
 

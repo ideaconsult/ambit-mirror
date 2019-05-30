@@ -19,6 +19,17 @@ public class ExperimentTemplateQuery extends SQLFileQueryParams implements IDBCo
 	private static String _params_i = "{\"params\" : {\":%s\" : { \"type\" : \"String\", \"value\":\"%s\"}	}}";
 
 	public enum _QUERY_TYPE_TEMPLATE {
+		all {
+			@Override
+			public String queryParams(String... params) {
+				return null;
+			}
+			@Override	
+			public String getSQL() {
+				return "net/idea/ambit/templates/db/template_all.sql";
+			}
+			
+		},
 		byidtemplate {
 			@Override
 			public String getField() {
@@ -53,9 +64,11 @@ public class ExperimentTemplateQuery extends SQLFileQueryParams implements IDBCo
 
 	};
 
-	
 	public ExperimentTemplateQuery(TemplateMakerSettings settings) throws IOException {
-		this(_QUERY_TYPE_TEMPLATE.byidtemplate.getSQL(),_QUERY_TYPE_TEMPLATE.byidtemplate.queryParams(new String[] {settings.getQueryTemplateId()}));
+		this(settings,settings.getQueryTemplateId()==null?_QUERY_TYPE_TEMPLATE.all:_QUERY_TYPE_TEMPLATE.byidtemplate,settings.getQueryTemplateId()==null?null:new String[] {settings.getQueryTemplateId()});
+	}
+	public ExperimentTemplateQuery(TemplateMakerSettings settings, _QUERY_TYPE_TEMPLATE query,String[] params) throws IOException {
+		this(query.getSQL(),query.queryParams(params));
 	}
 
 	public ExperimentTemplateQuery(_QUERY_TYPE_TEMPLATE queryType) throws IOException {
