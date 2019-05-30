@@ -1,10 +1,11 @@
 package ambit2.sln;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class SLNSubstance 
+import java.util.HashMap;
+import java.util.Map;
+
+public class SLNSubstance extends SLNCompositeObject
 {
-	public List<SLNContainer> containers = new ArrayList<SLNContainer>();
+	public Map<String,String> substanceAttributes = new HashMap<String,String>();
 	
 }
