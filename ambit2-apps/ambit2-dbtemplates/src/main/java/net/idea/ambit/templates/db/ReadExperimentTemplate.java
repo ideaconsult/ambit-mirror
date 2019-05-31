@@ -65,6 +65,8 @@ public class ReadExperimentTemplate implements IQueryObject<TR>,
 			TR.hix.Folder.set(record, rs.getString("folder"));
 			TR.hix.File.set(record, rs.getString("file"));
 			TR.hix.Annotation.set(record, rs.getString("annotation"));
+			TR.hix.unit.set(record, rs.getString("unit"));
+			TR.hix.hint.set(record, rs.getString("hint"));
 		} catch (Exception x) {
 			x.printStackTrace();
 		}

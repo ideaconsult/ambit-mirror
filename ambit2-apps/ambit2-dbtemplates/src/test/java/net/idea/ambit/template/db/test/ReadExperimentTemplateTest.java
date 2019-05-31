@@ -22,12 +22,14 @@ public class ReadExperimentTemplateTest extends QueryTest<ReadExperimentTemplate
 	@Override
 	protected void verify(ReadExperimentTemplate query, ResultSet rs) throws Exception {
 		int count = 0;
-		
+		int units = 0;
 		while (rs.next()) {
 			count++;
 			TR tr= query.getObject(rs);
 			System.out.println(tr);
+			if (tr.get("unit")!=null) units++;
 		}
+		Assert.assertTrue("No units - are your sure?",units>0);
 		Assert.assertEquals(102, count);
 
 	}
