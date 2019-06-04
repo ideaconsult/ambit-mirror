@@ -12,6 +12,7 @@ public class DataSetObject
 	public IAtomContainer molecule = null;
 	//public Map<String, Object> externalProperties = new HashMap<String, Object>();
 	public Fragmentation fragmentation = null;
+	//public Map<String, Object> externalProperties = new HashMap<String, Object>();
 	public String molNotation = null;
 	public String error = null;
 	

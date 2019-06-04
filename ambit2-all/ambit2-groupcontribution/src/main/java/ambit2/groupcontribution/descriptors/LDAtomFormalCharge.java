@@ -11,6 +11,13 @@ public class LDAtomFormalCharge implements ILocalDescriptor {
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
 		return atom.getFormalCharge();
 	}
+	
+	@Override
+	public Double calcForAtoms(IAtom[] atoms, IAtomContainer mol) {
+		if (atoms.length == 1)
+			return (double) calcForAtom(atoms[0], mol);
+		return null;
+	}
 
 	@Override
 	public String getDesignation(int value) {
@@ -45,5 +52,5 @@ public class LDAtomFormalCharge implements ILocalDescriptor {
 	@Override
 	public void setIsUsed(boolean used) {
 		FlagUsed = used;
-	}
+	}	
 }

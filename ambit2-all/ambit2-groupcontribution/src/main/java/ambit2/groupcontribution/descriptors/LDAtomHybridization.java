@@ -11,6 +11,13 @@ public class LDAtomHybridization implements ILocalDescriptor
 	public int calcForAtom(IAtom atom, IAtomContainer mol) {
 		return atom.getHybridization().ordinal();
 	}
+	
+	@Override
+	public Double calcForAtoms(IAtom[] atoms, IAtomContainer mol) {
+		if (atoms.length == 1)
+			return (double) calcForAtom(atoms[0], mol);
+		return null;
+	}
 
 	@Override
 	public String getDesignation(int value) {

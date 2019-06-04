@@ -11,6 +11,7 @@ public interface ILocalDescriptor
 	}
 	
 	public int calcForAtom(IAtom atom, IAtomContainer mol);
+	public Double calcForAtoms(IAtom atoms[], IAtomContainer mol);
 	public String getDesignation(int value);
 	public String getShortName();
 	public String getName();
