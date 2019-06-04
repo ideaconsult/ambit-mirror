@@ -3,6 +3,7 @@ package ambit2.groupcontribution.dataset;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.groupcontribution.fragmentation.Fragmentation;
@@ -12,7 +13,7 @@ public class DataSetObject
 	public IAtomContainer molecule = null;
 	//public Map<String, Object> externalProperties = new HashMap<String, Object>();
 	public Fragmentation fragmentation = null;
-	//public Map<String, Object> externalProperties = new HashMap<String, Object>();
+	public Map<Object, double[]> localDescriptors = new HashMap<Object, double[]>();
 	public String molNotation = null;
 	public String error = null;
 	
