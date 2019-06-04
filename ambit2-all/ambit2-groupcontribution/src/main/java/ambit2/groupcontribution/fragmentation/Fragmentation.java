@@ -437,6 +437,69 @@ public class Fragmentation
 		//TODO
 	}
 	
+	public static void calculateLocalDescriptors(DataSetObject dso, GroupContributionModel gcm)
+	{	
+		dso.localDescriptors = new HashMap<Object, double[]>();
+		List<ILocalDescriptor> locDescr = gcm.getLocalDescriptors();
+		
+		switch (gcm.getModelType())
+		{
+		case ATOM_LOCAL_PROPERTY:
+			for (IAtom atom : dso.molecule.atoms())
+			{
+				IAtom ats[] = new IAtom[] {atom};
+				double descriptors[] = new double[locDescr.size()];
+				for (int i = 0; i < locDescr.size(); i++)
+				{	
+					Double value = locDescr.get(i).calcForAtoms(ats, dso.molecule);
+					if (value != null)
+						descriptors[i] = value;
+				}
+				dso.localDescriptors.put(atom, descriptors);
+			}			
+			break;
+
+		case BOND_LOCAL_PROPERTY:
+			for (IBond bond : dso.molecule.bonds())
+			{
+				IAtom ats[] = new IAtom[] {bond.getAtom(0), bond.getAtom(1)};
+				double descriptors[] = new double[locDescr.size()];
+				for (int i = 0; i < locDescr.size(); i++)
+				{	
+					Double value = locDescr.get(i).calcForAtoms(ats, dso.molecule);
+					if (value != null)
+						descriptors[i] = value;
+				}
+				dso.localDescriptors.put(bond, descriptors);
+			}			
+			break;
+		
+		case ATOM_PAIR_LOCAL_PROPERTY:
+			int n = dso.molecule.getAtomCount();
+			for (int k = 0; k < n; k++)
+				for (int j = k+1; j < n; j++)
+				{
+					IAtom ats[] = new IAtom[] 
+							{dso.molecule.getAtom(k), dso.molecule.getAtom(j)};
+					
+					double descriptors[] = new double[locDescr.size()];
+					for (int i = 0; i < locDescr.size(); i++)
+					{	
+						Double value = locDescr.get(i).calcForAtoms(ats, dso.molecule);
+						if (value != null)
+							descriptors[i] = value;
+					}
+					dso.localDescriptors.put(ats, descriptors);
+				}			
+			break;
+	
+	
+		default:
+			break;
+		}
+		
+	}	
+	
 	
 	public static Map<IAtom, int[]> calcAtomLocalDescriptors(IAtomContainer molecule, 
 												List<ILocalDescriptor> locDescr)
