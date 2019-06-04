@@ -762,7 +762,15 @@ public class GroupContributionCli
 			return GroupContributionModel.Type.BOND_BASED;
 		if (s.equalsIgnoreCase("second_order"))
 			return GroupContributionModel.Type.SECOND_ORDER;
-		//...		
+		//...
+		
+		if (s.equalsIgnoreCase("atom_local_property"))
+			return GroupContributionModel.Type.ATOM_LOCAL_PROPERTY;
+		if (s.equalsIgnoreCase("bond_local_property"))
+			return GroupContributionModel.Type.BOND_LOCAL_PROPERTY;
+		if (s.equalsIgnoreCase("atom_pair_local_property"))
+			return GroupContributionModel.Type.ATOM_PAIR_LOCAL_PROPERTY;
+				
 		return null;
 	}
 	
