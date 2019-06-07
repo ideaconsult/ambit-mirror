@@ -192,6 +192,19 @@ public class GroupContributionModel
 	public void setAdditionalConfig(GCMConfigInfo additionalConfig) {
 		this.additionalConfig = additionalConfig;
 	}
+	
+	public boolean isLocalPropertyModel() {
+		switch (modelType) {
+		case ATOM_LOCAL_PROPERTY:
+			return true;
+		case BOND_LOCAL_PROPERTY:
+			return true;
+		case ATOM_PAIR_LOCAL_PROPERTY:
+			return true;
+		default:
+			return false;
+		}
+	}
 
 	
 	/*
