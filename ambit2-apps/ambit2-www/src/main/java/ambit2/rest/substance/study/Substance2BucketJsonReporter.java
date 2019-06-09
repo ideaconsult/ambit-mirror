@@ -450,11 +450,6 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 												prmc.put(FIELD_CELLTYPE, cell.toString());
 											if (method != null) {
 												prmc.put(FIELD_METHOD, method.toString());
-
-												if (terms_method != null) {
-													prmc.put(FIELD_METHOD_SYNONYM,
-															Arrays.asList(terms_method));
-												}
 											}
 										}
 										_childParams_.add(prmc);
@@ -542,16 +537,15 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					if (unit != null) {
 						newprm.put(String.format("%s_UNIT_s", key.toString()), unit.toString());
 					}
-					if (v.getLoValue() != null) {
+					if (v.getLoValue() != null && v.getUpValue() != null)  {
 						newprm.put(String.format("%s_LOVALUE_d", key.toString()), v.getLoValue());
 						if (v.getLoQualifier() != null && !"".equals(v.getLoQualifier().trim()))
 							newprm.put(String.format("%s_LOQUALIFIER_s", key.toString()), v.getLoQualifier());
-					}
-
-					if (v.getUpValue() != null) {
 						newprm.put(String.format("%s_UPVALUE_d", key.toString()), v.getUpValue());
 						if (v.getUpQualifier() != null && !"".equals(v.getUpQualifier().trim()))
-							newprm.put(String.format("%s_UPQUALIFIER_s", key.toString()), v.getUpQualifier());
+							newprm.put(String.format("%s_UPQUALIFIER_s", key.toString()), v.getUpQualifier());						
+					} else if (v.getLoValue() != null) {
+						newprm.put(String.format("%s_d", key.toString()), v.getLoValue());
 					}
 				} else
 					newprm.put(key.toString() + "_s", value.toString());
