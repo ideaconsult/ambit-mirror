@@ -24,7 +24,7 @@ public class BucketJson2CSVConvertorTest {
 		BucketJson2CSVConvertor c = new BucketJson2CSVConvertor(delimiter);
 		
 		File temp = File.createTempFile("json2tsv", ext);
-		//temp.deleteOnExit();
+		temp.deleteOnExit();
 
 		try (FileOutputStream out = new FileOutputStream(temp)) {
 			c.setOut(out);
