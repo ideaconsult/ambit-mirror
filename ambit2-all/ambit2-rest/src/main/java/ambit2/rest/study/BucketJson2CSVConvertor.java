@@ -181,7 +181,7 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 			while (i.hasNext()) {
 				if (v != null)
 					out.write(v.getBytes());
-				out.write(i.next().toString().getBytes(StandardCharsets.UTF_8));
+				out.write(i.next().toString().replace("\n", " ").replace("\r", " ").getBytes(StandardCharsets.UTF_8));
 				v = " ";
 			}
 			out.write(delimiter.getBytes());
