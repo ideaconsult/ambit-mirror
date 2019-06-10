@@ -59,8 +59,8 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 			"endpointcategory_s", "guidance_s" ,"name_s","name_hss","publicname_s","publicname_hs","document_uuid_s","E.method_s","E.cell_type_s"};
 
 	public BucketJson2CSVConvertor(String delimiter) {
-		this(new String[] { "dbtag_hss", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs",
-				"substance_uuid" },
+		this(new String[] { "dbtag_hss", "name_hs", "publicname_hs", "owner_name_hs", "substanceType_hs"
+				 },
 				new String[] { "document_uuid_s", "Dispersion protocol_s", 
 						"Vial_s", "E.sop_reference_s",  "E.cell_type_s"},
 				new String[] { "s_uuid_s", "assay_uuid_s", "investigation_uuid_s", "topcategory_s",
@@ -103,14 +103,18 @@ public class BucketJson2CSVConvertor extends DefaultAmbitProcessor<InputStream, 
 		this.out = out;
 	}
 
+	protected String cleanHeader(String header) {
+		String h = header;
+		try {
+			h = labels.getString(header);
+		} catch (Exception x) {
+			h = header.replace("_s", "").replace("_hs", "").replace("_d", "").replace("_ss", "");
+		}
+		return h;
+	}
 	protected void printHeaders(OutputStream out, List<String> headers) throws Exception {
 		for (String header : headers) {
-			String h = header;
-			try {
-				h = labels.getString(header);
-			} catch (Exception x) {
-				h = header.replace("_s", "").replace("_hs", "").replace("_d", "").replace("_ss", "");
-			}
+			String h = cleanHeader(header);
 			out.write(h.getBytes(StandardCharsets.UTF_8));
 			out.write(delimiter.getBytes());
 		}
