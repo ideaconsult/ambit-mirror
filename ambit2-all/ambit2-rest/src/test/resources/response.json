@@ -3639,7 +3639,7 @@
 						"studyResultType_s": "Measured"
 					},
 					{
-						"Dispersion protocol_s": "NANOGENOTOX for dispersion",
+						"Dispersion protocol_s": "NANOGENOTOX \r\nfor dispersion",
 						"MEDIUM.CO2_concentration_UNIT_s": "%v/v",
 						"MEDIUM.CO2_concentration_d": 5.0,
 						"MEDIUM.O2_concentration_UNIT_s": "%v/v",
@@ -3711,7 +3711,7 @@
 						"MEDIUM.CO2_concentration_d": 5.0,
 						"MEDIUM.O2_concentration_UNIT_s": "%v/v",
 						"MEDIUM.O2_concentration_d": 0.0,
-						"MEDIUM.composition_s": "DMEM High Glucose (Thermofisher) 88.00 %v/v,FBS (Hyclone) 10.00 %v/v,Antibiotic/Antimicotic mixture (Thermofisher) 1.00 %v/v,Glutamine (Thermofisher) 1.00 %v/v",
+						"MEDIUM.composition_s": "DMEM High Glucose (Thermofisher) 88.00 %v/v,FBS (Hyclone) 10.00 %v/v,\nAntibiotic/Antimicotic mixture (Thermofisher) 1.00 %v/v,Glutamine (Thermofisher) 1.00 %v/v",
 						"MEDIUM.ionic_strength_UNIT_s": "mM",
 						"MEDIUM.ionic_strength_d": 150.0,
 						"MEDIUM.ph_LOQUALIFIER_s": ">=",
