@@ -194,7 +194,7 @@ public class SubstanceStudyFlatQueryTest extends QueryTest<SubstanceStudyFlatQue
 					});
 			executor.setConnection(c.getConnection());
 			executor.open();
-			System.out.println(q.getSQL());
+			
 			rs = executor.process(q);
 			Assert.assertNotNull(rs);
 			browse(q, rs, 1);

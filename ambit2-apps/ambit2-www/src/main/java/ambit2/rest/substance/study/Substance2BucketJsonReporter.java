@@ -534,7 +534,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 				if (value instanceof Value) {
 					Value v = (Value) value;
 					Object unit = v.getUnits();
-					if (unit != null) {
+					if (unit != null && !"".equals(unit.toString().trim())) {
 						newprm.put(String.format("%s_UNIT_s", key.toString()), unit.toString());
 					}
 					if (v.getLoValue() != null && v.getUpValue() != null)  {
