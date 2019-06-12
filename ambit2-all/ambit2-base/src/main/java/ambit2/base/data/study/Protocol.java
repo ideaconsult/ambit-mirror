@@ -3201,7 +3201,7 @@ public class Protocol {
 	public void addGuideline(String guide) {
 		if (this.guideline == null)
 			this.guideline = new ArrayList<String>();
-		this.guideline.add(guide);
+		this.guideline.add(guide==null?null:guide.trim());
 	}
 
 	public Protocol(String endpoint) {
