@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `src_dataset`;
+DROP TABLE IF EXISTS `assay_template`;
 CREATE TABLE `assay_template` (
   `endpoint` varchar(64) DEFAULT NULL,
   `assay` varchar(45) DEFAULT NULL,
