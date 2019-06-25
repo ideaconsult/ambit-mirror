@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.base.CaseFormat;
 
+import ambit2.base.data.study.Protocol._categories;
 import ambit2.base.json.JSONUtils;
 
 /**
@@ -3125,7 +3126,7 @@ public class Protocol {
 		EXPOSURE_SECTION {
 			@Override
 			public String getNumber() {
-				return "";
+				return "3.5.0";
 			}
 			@Override
 			public String getTopCategory() {
@@ -3133,9 +3134,124 @@ public class Protocol {
 			}
 			@Override
 			public String toString() {
-				return "Exposure";
+				return "Use and exposure information";
 			}
-		}		
+			@Override
+			public int getSortingOrder() {
+				return 3500;
+			}
+			
+		},
+		EXPOSURE_MANUFACTURE_SECTION {
+			@Override
+			public String getNumber() {
+				return "3.5.1";
+			}
+			@Override
+			public String getTopCategory() {
+				return "EXPOSURE";
+			}
+			@Override
+			public String toString() {
+				return "Use and exposure information. Manufacture";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 3510;
+			}
+			
+		},
+		EXPOSURE_FORMULATION_REPACKAGING_SECTION {
+			@Override
+			public String getNumber() {
+				return "3.5.2";
+			}
+			@Override
+			public String getTopCategory() {
+				return "EXPOSURE";
+			}
+			@Override
+			public String toString() {
+				return "Use and exposure information. Formulation or re-packing";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 3520;
+			}
+		},
+		EXPOSURE_INDUSTRIAL_SITES_SECTION {
+			@Override
+			public String getNumber() {
+				return "3.5.3";
+			}
+			@Override
+			public String getTopCategory() {
+				return "EXPOSURE";
+			}
+			@Override
+			public String toString() {
+				return "Use and exposure information. Uses at industrial sites";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 3530;
+			}			
+		},
+		EXPOSURE_PROFESSIONAL_WORKERS_SECTION {
+			@Override
+			public String getNumber() {
+				return "3.5.4";
+			}
+			@Override
+			public String getTopCategory() {
+				return "EXPOSURE";
+			}
+			@Override
+			public String toString() {
+				return "Use and exposure information. Widespread use by industrial workers";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 3540;
+			}			
+		},
+		EXPOSURE_CONSUMER_USE_SECTION {
+			@Override
+			public String getNumber() {
+				return "3.5.5";
+			}
+			@Override
+			public String getTopCategory() {
+				return "EXPOSURE";
+			}
+			@Override
+			public String toString() {
+				return "Use and exposure information. Consumer use";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 3550;
+			}			
+		},		
+		EXPOSURE_SERVICE_LIFE_SECTION {
+			@Override
+			public String getNumber() {
+				return "3.5.6";
+			}
+			@Override
+			public String getTopCategory() {
+				return "EXPOSURE";
+			}
+			@Override
+			public String toString() {
+				return "Use and exposure information. Service Life";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 3560;
+			}			
+		}			
+		
 		;
 		public String getTopCategory() {
 			return "P-CHEM";
