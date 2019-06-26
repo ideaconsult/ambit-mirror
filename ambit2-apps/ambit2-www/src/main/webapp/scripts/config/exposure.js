@@ -70,6 +70,7 @@ var config_exposure = {
 
 				sOut += "<div class='tabs_params'>";
 				sOut += "<ul> <li><a href='#tabs_usedescriptors'>ECHA Use descriptors</a></li>";
+				sOut += "<li><a href='#tabs_matrix'>Matrix characteristics</a></li>";
 				sOut += "<li><a href='#tabs_scenario'>Contributing Exposure Scenario/Activity</a></li>";
 				sOut += "<li><a href='#tabs_controlmeasures'>Exposure control measures</a></li>";
 				sOut += "<li><a href='#tabs_premises'>Premises</a></li>";
@@ -109,6 +110,14 @@ var config_exposure = {
 				sOut += wrapper_end;
 				sOut += "</div>";
 
+				sOut += "<div id='tabs_matrix'>";
+				sOut += wrapper_start;
+				$.each(full.parameters, function(k, v) {
+					sOut += config_exposure.render_param(k, v, "MATRIX_CHARACTERISTICS.",row_start,row_end,key_start,key_end,value_start,value_end)
+				});
+				sOut += wrapper_end;
+				sOut += "</div>";
+				
 				sOut += "</div>";
 
 				jQuery(".tabs_params").tabs();
@@ -291,7 +300,31 @@ var config_exposure = {
 		},
 		"e.method" : {
 			"bVisible" : false
-		}
+		},
+		"matrix_characteristics.type": {
+			"sTitle" : "Type",
+			"bVisible" : false
+		},
+		"matrix_characteristics.material_content": {
+			"sTitle" : "Material content",
+			"bVisible" : false
+		},
+		"matrix_characteristics.physical_state": {
+			"sTitle" : "Physical state",
+			"bVisible" : false
+		},
+		"matrix_characteristics.binder": {
+			"sTitle" : "Binder",
+			"bVisible" : false
+		},
+		"matrix_characteristics.coating": {
+			"sTitle" : "Coating",
+			"bVisible" : false
+		},
+		"matrix_characteristics.spatial_distribution": {
+			"sTitle" : "Spatial distribution",
+			"bVisible" : false
+		}		
 
 	},
 	"effects" : {
@@ -315,6 +348,18 @@ var config_exposure = {
 	},
 	"conditions" : {
 		"bVisible" : false,
+		"t.instrument" : {
+			"iOrder" : -4,
+			"bVisible" : true,
+			"inMatrix" : false,
+			"sTitle" : "Instrument"			
+		},
+		"t.measurement_type" : {
+			"iOrder" : -3,
+			"bVisible" : true,
+			"inMatrix" : false,
+			"sTitle" : "Measurement type"			
+		},		
 		"sampling specification" : {
 			"iOrder" : -7,
 			"bVisible" : true,
