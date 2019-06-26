@@ -114,7 +114,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
 					"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
 			{ "id", "document_uuid", "investigation_uuid", "assay_uuid", "type_s", "topcategory", "endpointcategory",
-					"guidance", "guidance_synonym", "endpoint", "effectendpoint", "effectendpoint_type",
+					"guidance", "guidance_synonym", "E.method_synonym","E.cell_type_synonym","endpoint", "effectendpoint", "effectendpoint_type",
 					"effectendpoint_synonym", "effectendpoint_group", "reference_owner", "reference_year", "reference",
 					"loQualifier", "loValue", "upQualifier", "upValue", "err", "errQualifier", "conditions", "params",
 					"textValue", "interpretation_result", "unit", "category", "idresult", "updated", "r_value",
@@ -133,17 +133,22 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 	private static final String header_component = "component_s";
 
+	private static String FIELD_METHOD = "E.method_s";
+	private static String FIELD_METHOD_SYNONYM = "E.method_synonym_ss";
+	private static String FIELD_CELLTYPE = "E.cell_type_s";
+	private static String FIELD_CELLTYPE_SYNONYM = "E.cell_type_synonym_ss";
+		
 	private final String[][] study_headers_combined = new String[][] { { "id", "name_s", "publicname_s", "owner_name_s",
 			"content_hss", header_dbtag, "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs",
 			"substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", header_component, "ChemicalName_s",
 			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
 			"investigation_uuid_s", "assay_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s",
-			"guidance_synonym_ss", "endpoint_s", "effectendpoint_s", "effectendpoint_type_s",
+			"guidance_synonym_ss", FIELD_METHOD_SYNONYM,FIELD_CELLTYPE_SYNONYM,"endpoint_s", "effectendpoint_s", "effectendpoint_type_s",
 			"effectendpoint_synonym_ss", "effectendpoint_group_d", "reference_owner_s", "reference_year_s",
 			"reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d", "errQualifier_s",
 			"conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s", "unit_s", "category_s",
 			"idresult", "nmcode_hs", "nmcode_s", "substance_annotation_hss", "substance_annotation_ss", "updated_s",
-			"E.method_s", "E.cell_type_s", header_reliability, header_studyResultType, header_purposeFlag,
+			FIELD_METHOD, FIELD_CELLTYPE, header_reliability, header_studyResultType, header_purposeFlag,
 			header_summary_results, header_summary_refs, header_summary_refowner, "" } };
 
 	@Override
@@ -369,8 +374,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							prm = SubstanceStudyParser.parseConditions(dx, papp.getParameters().toString());
 					}
 					prm = solarize(prm);
-					Object cell = prm.get("E.cell_type_s");
-					Object method = prm.get("E.method_s");
+					Object cell = prm.get(FIELD_CELLTYPE);
+					Object method = prm.get(FIELD_METHOD);
 
 					if (papp.getEffects() != null)
 						for (EffectRecord<String, Object, String> e : papp.getEffects()) {
@@ -388,7 +393,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									if (papp.getProtocol().getGuideline() != null
 											&& !papp.getProtocol().getGuideline().isEmpty()) {
 
-										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0));
+										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0).toUpperCase());
 
 									} else
 										prm.put("guidance_s", "Not specified");
@@ -405,14 +410,14 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							study.remove("id");
 							protocolapplication2Bucket(papp, study, suffix);
 							if (cell != null)
-								study.put("E.cell_type_s", cell.toString());
+								study.put(FIELD_CELLTYPE, cell.toString());
 
 							String[] terms_method = null;
 							if (method != null) {
-								study.put("E.method_s", method.toString());
+								study.put(FIELD_METHOD, method.toString());
 								terms_method = annotator.annotateParam(method.toString());
 								if (terms_method != null)
-									study.put(ns("method_synonym", suffix, "_ss"), Arrays.asList(terms_method));
+									study.put(FIELD_METHOD_SYNONYM, Arrays.asList(terms_method));
 							}
 
 							study.setHeader(study_headers_combined[0]);
@@ -440,16 +445,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 											prmc.put("endpointcategory_s", papp.getProtocol().getCategory());
 											if (papp.getProtocol().getGuideline() != null
 													&& !papp.getProtocol().getGuideline().isEmpty())
-												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0));
+												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0).toUpperCase());
 											if (cell != null)
-												prmc.put("E.cell_type_s", cell.toString());
+												prmc.put(FIELD_CELLTYPE, cell.toString());
 											if (method != null) {
-												prmc.put("E.method_s", method.toString());
-
-												if (terms_method != null) {
-													prmc.put(ns("method_synonym", suffix, "_ss"),
-															Arrays.asList(terms_method));
-												}
+												prmc.put(FIELD_METHOD, method.toString());
 											}
 										}
 										_childParams_.add(prmc);
@@ -476,9 +476,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						substance2Bucket(record, study, suffix);
 						protocolapplication2Bucket(papp, study, suffix);
 						if (cell != null)
-							study.put("E.cell_type_s", cell.toString());
+							study.put(FIELD_CELLTYPE, cell.toString());
 						if (method != null)
-							study.put("E.method_s", method.toString());
+							study.put(FIELD_METHOD, method.toString());
 						study.setHeader(study_headers_combined[0]);
 
 						protocol2Bucket(papp.getProtocol(), study, suffix);
@@ -534,8 +534,19 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 				if (value instanceof Value) {
 					Value v = (Value) value;
 					Object unit = v.getUnits();
-					value = v.getLoValue();
-					newprm.put(String.format("%s%s_s", key.toString(), unit == null ? "" : ("_" + unit)), value);
+					if (unit != null && !"".equals(unit.toString().trim())) {
+						newprm.put(String.format("%s_UNIT_s", key.toString()), unit.toString());
+					}
+					if (v.getLoValue() != null && v.getUpValue() != null)  {
+						newprm.put(String.format("%s_LOVALUE_d", key.toString()), v.getLoValue());
+						if (v.getLoQualifier() != null && !"".equals(v.getLoQualifier().trim()))
+							newprm.put(String.format("%s_LOQUALIFIER_s", key.toString()), v.getLoQualifier());
+						newprm.put(String.format("%s_UPVALUE_d", key.toString()), v.getUpValue());
+						if (v.getUpQualifier() != null && !"".equals(v.getUpQualifier().trim()))
+							newprm.put(String.format("%s_UPQUALIFIER_s", key.toString()), v.getUpQualifier());						
+					} else if (v.getLoValue() != null) {
+						newprm.put(String.format("%s_d", key.toString()), v.getLoValue());
+					}
 				} else
 					newprm.put(key.toString() + "_s", value.toString());
 
