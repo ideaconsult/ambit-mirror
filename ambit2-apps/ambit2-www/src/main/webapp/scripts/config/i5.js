@@ -3212,31 +3212,55 @@ var config_i5 = {
 		}
 	},
 	"EXPOSURE_SECTION" : {
-		"parameters" : config_bao["parameters"],
-		"conditions" : config_bao["conditions"],
-		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"],
-		"effects" : {
-			"endpoint" : {
-				"iOrder" : -9,
-				"bVisible" : true,
-				"inMatrix" : true
-			},
-			"result" : {
-				"iOrder" : -8,
-				"bVisible" : true,
-				"inMatrix" : true
-			},
-			"text" : {
-				"sTitle" : "Result",
-				"inMatrix" : true,
-				"bVisible" : true,
-				"iOrder" : -7
-			}
-
-		}
-
+		"parameters" : config_exposure["parameters"],
+		"effects" : config_exposure["effects"],
+		"conditions" : config_exposure["conditions"],
+		"protocol" : config_exposure["protocol"],
+		"interpretation" : config_exposure["interpretation"]
 	},
+	"EXPOSURE_MANUFACTURE_SECTION" : {
+		"parameters" : config_exposure["parameters"],
+		"effects" : config_exposure["effects"],
+		"conditions" : config_exposure["conditions"],
+		"protocol" : config_exposure["protocol"],
+		"interpretation" : config_exposure["interpretation"]
+	},
+	"EXPOSURE_FORMULATION_REPACKAGING_SECTION" : {
+		"parameters" : config_exposure["parameters"],
+		"effects" : config_exposure["effects"],
+		"conditions" : config_exposure["conditions"],
+		"protocol" : config_exposure["protocol"],
+		"interpretation" : config_exposure["interpretation"]
+	},
+	"EXPOSURE_INDUSTRIAL_SITES_SECTION" : {
+		"parameters" : config_exposure["parameters"],
+		"effects" : config_exposure["effects"],
+		"conditions" : config_exposure["conditions"],
+		"protocol" : config_exposure["protocol"],
+		"interpretation" : config_exposure["interpretation"]
+	},
+	"EXPOSURE_PROFESSIONAL_WORKERS_SECTION" : {
+		"parameters" : config_exposure["parameters"],
+		"effects" : config_exposure["effects"],
+		"conditions" : config_exposure["conditions"],
+		"protocol" : config_exposure["protocol"],
+		"interpretation" : config_exposure["interpretation"]
+	},
+	"EXPOSURE_CONSUMER_USE_SECTION" : {
+		"parameters" : config_exposure["parameters"],
+		"effects" : config_exposure["effects"],
+		"conditions" : config_exposure["conditions"],
+		"protocol" : config_exposure["protocol"],
+		"interpretation" : config_exposure["interpretation"]
+	},
+	"EXPOSURE_SERVICE_LIFE_SECTION" : {
+		"parameters" : config_exposure["parameters"],
+		"effects" : config_exposure["effects"],
+		"conditions" : config_exposure["conditions"],
+		"protocol" : config_exposure["protocol"],
+		"interpretation" : config_exposure["interpretation"]
+	},		
+	
 	"IMPURITY_SECTION" : {
 		"parameters" : config_bao["parameters"],
 		"effects" : config_bao["effects"],

@@ -7,6 +7,7 @@
 <script type='text/javascript' src='${ambit_root}/scripts/facet/substance.js'></script>
 
 <script type='text/javascript' src='${ambit_root}/scripts/config/bao.js'></script>
+<script type='text/javascript' src='${ambit_root}/scripts/config/exposure.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/i5.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
@@ -39,6 +40,9 @@ $(document).ready(function() {
 			"#facet_envfate");
 	facet.defineStudySearchFacets("${ambit_root}",
 			"${ambit_root}/query/study?topcategory=P-CHEM&media=application/json",
+			"#facet_pchem","${c_selected}");
+	facet.defineStudySearchFacets("${ambit_root}",
+			"${ambit_root}/query/study?topcategory=EXPOSURE&media=application/json",
 			"#facet_pchem","${c_selected}");	
 	loadHelp("${ambit_root}","endpoint_search");
 	$( "#accordion" ).accordion( {

@@ -10,16 +10,20 @@
 <script type='text/javascript' src='${ambit_root}/scripts/jtoxkit.js'></script>
 <script type='text/javascript' src='${ambit_root}/jquery/purl.js'></script>
 
+
 <#if menu_profile?? && menu_profile=='enanomapper'>
+	<script type='text/javascript' src='${ambit_root}/scripts/config/exposure.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/profile/${menu_profile}/npo.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/profile/${menu_profile}/bao.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/profile/${menu_profile}/i5.js'></script>
 <#else>
+	<script type='text/javascript' src='${ambit_root}/scripts/config/exposure.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/config/npo.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/config/bao.js'></script>
 	<script type='text/javascript' src='${ambit_root}/scripts/config/i5.js'></script>
 
 </#if>
+
 <script type='text/javascript' src='${ambit_root}/scripts/config/ce.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config/toxcast.js'></script>
 <script type='text/javascript' src='${ambit_root}/scripts/config-study.js'></script>
@@ -62,6 +66,8 @@
 	  		jQuery("#breadCrumb ul").append('<li><a href="${ambit_root}/substance/${substanceUUID}/study" title="Substances">Study</a></li>');
 	  	</#if>
 	  	jQuery("#breadCrumb").jBreadCrumb();
+
+		
 	});
 	</script>
 

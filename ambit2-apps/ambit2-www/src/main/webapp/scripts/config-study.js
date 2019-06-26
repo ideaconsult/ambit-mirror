@@ -1,4 +1,5 @@
 var config_study = {
+
 	"columns" : {
 		"_" : {
 			"main" : {
@@ -991,50 +992,53 @@ var config_study = {
 		},
 		"EXPOSURE_SECTION" : {
 			"parameters" : config_bao["parameters"],
-			"effects" : {
-				"endpoint" : {
-					"iOrder" : -9,
-					"bVisible" : true,
-					"inMatrix" : true
-				},
-				"result" : {
-					"iOrder" : -8,
-					"bVisible" : true,
-					"inMatrix" : true
-				},
-				"text" : {
-					"sTitle" : "Result",
-					"inMatrix" : true,
-					"bVisible" : true,
-					"iOrder" : -7
-				}
-
-			},
-
-			"conditions" : {
-				"bVisible" : false,
-				"sampling specification" : {
-					"iOrder" : -7,
-					"bVisible" : true,
-					"inMatrix" : true,
-					"sTitle" : "Sampling specification"
-				},
-				"time start" : {
-					"iOrder" : -6,
-					"bVisible" : true,
-					"inMatrix" : true,
-					"sTitle" : "Time start"
-				},
-				"time stop" : {
-					"iOrder" : -5,
-					"bVisible" : true,
-					"inMatrix" : true,
-					"sTitle" : "Time stop"
-				}
-			},
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
-
-		}
+		},
+		"EXPOSURE_MANUFACTURE_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},
+		"EXPOSURE_FORMULATION_REPACKAGING_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},
+		"EXPOSURE_INDUSTRIAL_SITES_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},
+		"EXPOSURE_PROFESSIONAL_WORKERS_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},
+		"EXPOSURE_CONSUMER_USE_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},
+		"EXPOSURE_SERVICE_LIFE_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		}		
+		
 	}
 }
