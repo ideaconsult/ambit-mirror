@@ -358,6 +358,32 @@ public class Protocol {
 			}
 
 		},
+		PC_VISCOSITY_SECTION {
+			@Override
+			public String toString() {
+				return "Viscosity";
+			}
+
+			@Override
+			public String getNumber() {
+				return "4.22";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 4220;
+			}
+
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.bioontology.org/ontology/npo#NPO_1852";
+			}
+
+		},		
 		PC_UNKNOWN_SECTION {
 			@Override
 			public String toString() {
