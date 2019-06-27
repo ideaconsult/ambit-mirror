@@ -982,7 +982,7 @@ CREATE TABLE `assay_template` (
   `value` varchar(192) DEFAULT NULL,
   `value_clean` varchar(192) DEFAULT NULL,
   `header1` varchar(80) DEFAULT NULL,
-  `hint` varchar(160) DEFAULT NULL,
+  `hint` text,
   `unit` varchar(32) DEFAULT NULL,
   `annotation` varchar(64) DEFAULT NULL,
   `file` varchar(32) DEFAULT NULL,
@@ -992,6 +992,7 @@ CREATE TABLE `assay_template` (
   KEY `primary_index` (`idtemplate`,`row`,`col`),
   KEY `endpointx` (`endpoint`,`assay`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 -- ------------------------------------------------------------------------------------------
