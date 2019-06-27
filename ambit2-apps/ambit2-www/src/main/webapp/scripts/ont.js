@@ -6812,5 +6812,15 @@ var ontlookup = {
 	"ENM_0000068_SECTION" : "Cell Viability",
 	"ANALYTICAL_METHODS_SECTION" : "Analytical methods",
 	"PC_DENSITY_SECTION" : "Density",
-	"IMPURITY_SECTION" : "Impurity"
+	"IMPURITY_SECTION" : "Impurity",
+	"PC_VISCOSITY_SECTION" : "Viscosity",
+	"EXPOSURE_SECTION" : "Use and exposure information",
+	"EXPOSURE_MANUFACTURE_SECTION" : "Use and exposure information. Manufacture",
+	"EXPOSURE_FORMULATION_REPACKAGING_SECTION" : "Use and exposure information. Formulation or re-packing",
+	"EXPOSURE_INDUSTRIAL_SITES_SECTION" : "Use and exposure information. Uses at industrial sites",
+	"EXPOSURE_PROFESSIONAL_WORKERS_SECTION" : "Use and exposure information. Widespread use by industrial workers",
+	"EXPOSURE_CONSUMER_USE_SECTION" : "Use and exposure information. Consumer use",
+	"EXPOSURE_SERVICE_LIFE_SECTION" : "Use and exposure information. Service Life"
+	
+	
 }
