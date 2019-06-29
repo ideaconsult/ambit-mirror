@@ -11,7 +11,7 @@ public class DataSetObject
 	public Fragmentation fragmentation = null;
 	public Map<Object, double[]> localDescriptors = null;
 	public Map<Object, Double> targetLocalProperty = null;
-	public Map<Object, Double> externalLocalProperties = null;
+	public Map<Object, double[]> externalLocalProperties = null;
 	public String molNotation = null;
 	public String error = null;
 	
