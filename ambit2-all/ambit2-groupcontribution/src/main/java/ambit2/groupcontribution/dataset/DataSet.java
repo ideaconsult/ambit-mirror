@@ -99,7 +99,7 @@ public class DataSet
 		nErrors = records_error;
 	}
 	
-	protected IIteratingChemObjectReader<IAtomContainer> getReader(InputStream in, String extension) throws CDKException, AmbitIOException {
+	static public IIteratingChemObjectReader<IAtomContainer> getReader(InputStream in, String extension) throws CDKException, AmbitIOException {
 		FileInputState instate = new FileInputState();
 		IIteratingChemObjectReader<IAtomContainer> reader ;
 		if (extension.endsWith(FileInputState._FILE_TYPE.SDF_INDEX.getExtension())) {
