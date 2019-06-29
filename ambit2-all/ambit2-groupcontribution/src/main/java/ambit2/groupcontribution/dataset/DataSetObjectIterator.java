@@ -36,14 +36,44 @@ public class DataSetObjectIterator implements Iterator<DataSetObject>
 	
 	@Override
 	public boolean hasNext() {
-		// TODO 
-		return false;
+		boolean molReaderHasNext = molReader.hasNext();
+		if (molReaderHasNext)
+		{
+			return true;
+			//TODO handle localProperties reader 
+		}
+		else
+			return false;
 	}
 
 	@Override
-	public DataSetObject next() {
-		// TODO 
-		return null;
+	public DataSetObject next() 
+	{
+		IAtomContainer molecule  = molReader.next();
+		DataSetObject dso = new DataSetObject();		
+		
+		if (molecule==null) {
+			dso.molecule = null;
+			dso.error = "Unable to read chemical object";			
+		}
+		else
+		{
+			if (molecule.getAtomCount() == 0)
+			{	
+				dso.molecule = null;
+				dso.error = "Empty chemical object. Problem on object creation.";
+			}
+			else
+			{	
+				try {
+					DataSet.processMolecule(molecule);
+				}
+				catch (Exception e) {}
+				dso.molecule = molecule;				
+			}
+		}
+		
+		return dso;
 	}
 	
 	public void close()

@@ -135,7 +135,7 @@ public class DataSet
 	}
 	
 	
-	void processMolecule(IAtomContainer molecule) throws Exception
+	public static void processMolecule(IAtomContainer molecule) throws Exception
 	{
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(molecule);
 		CDKHueckelAromaticityDetector.detectAromaticity(molecule);
