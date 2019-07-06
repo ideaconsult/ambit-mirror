@@ -12,9 +12,12 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import ambit2.groupcontribution.dataset.LocalProperties.Type;
+
 public class LocalPropertiesIterator implements Iterator<LocalProperties> 
 {
 	protected File file = null;
+	protected Type locPropType = null;
 	protected CSVParser parser = null;
 	protected Iterator<CSVRecord> iterator = null;
 	protected CSVFormat format = null;
@@ -22,22 +25,32 @@ public class LocalPropertiesIterator implements Iterator<LocalProperties>
 	protected CSVRecord curCSVRecord = null;
 	protected String curMolId = null;
 	
-	
+	protected String propertyNames[] = null;
 	protected int numOfProperties = 1;
-	protected int locPropNumAtoms = 1;
 	protected int molIdColIndex = 0;
 	protected int atomColIndices[] = null;
+	protected int propertyColIndices[] = null;
 	
 	public LocalPropertiesIterator(File file) throws Exception
 	{
 		this.file = file;
+		this.locPropType = Type.ATOM; 
 		format = CSVFormat.DEFAULT.withDelimiter(',').withQuote('\"');
 		init();
 	}
 	
-	public LocalPropertiesIterator(File file, CSVFormat format) throws Exception
+	public LocalPropertiesIterator(File file, Type locPropType) throws Exception
 	{
 		this.file = file;
+		this.locPropType = locPropType; 
+		format = CSVFormat.DEFAULT.withDelimiter(',').withQuote('\"');
+		init();
+	}
+	
+	public LocalPropertiesIterator(File file, CSVFormat format, Type locPropType) throws Exception
+	{
+		this.file = file;
+		this.locPropType = locPropType;
 		this.format = format;
 		init();
 	}
@@ -51,9 +64,30 @@ public class LocalPropertiesIterator implements Iterator<LocalProperties>
 		setDefaultColumnIndices();
 	}
 	
+	public String[] getPropertyNames() {
+		return propertyNames;		
+	}
+	
+	public Type getLocalPropertyType() {
+		return locPropType;
+	}
+	
 	protected void setDefaultColumnIndices()
 	{
-		//TODO
+		int nAtomColumns = 1;
+		switch (locPropType){
+		case BOND:
+		case ATOM_PAIR:
+			nAtomColumns = 2;
+		}
+
+		atomColIndices = new int[nAtomColumns];
+		for (int i = 0; i < nAtomColumns; i++)
+			atomColIndices[i] = i+1;
+		
+		int propFirstIndex = nAtomColumns + 1;
+		propertyColIndices = new int[1];
+		propertyColIndices[0] = propFirstIndex;
 	}
 	
 	@Override
