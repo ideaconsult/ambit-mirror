@@ -1,6 +1,7 @@
 package ambit2.groupcontribution.dataset;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -14,6 +15,37 @@ public class LocalProperties
 	
 	public Type type = Type.ATOM;
 	public Map<Object, double[]> properties = null;
+	
+	
+	public String toString(IAtomContainer mol)
+	{
+		StringBuffer sb = new StringBuffer();
+		Set<Object> keys = properties.keySet();
+		for (Object obj : keys)
+		{
+			int ind[] = (int[]) obj;
+			IAtom atoms[] = indicesToAtoms(ind, mol);
+			for (int i = 0; i < ind.length; i++)
+			{	
+				sb.append(atoms[i].getSymbol());
+				sb.append(ind[i]);
+				sb.append(" ");
+			}
+			sb.append(" ");
+			
+			double props[] = properties.get(obj);
+			if (props != null)
+				for (int i = 0; i < props.length; i++)
+				{
+					sb.append(props[i]);
+					sb.append(" ");
+				}
+			
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
 	
 	
 	public static IAtom[] indicesToAtoms(int ind[], IAtomContainer mol)
