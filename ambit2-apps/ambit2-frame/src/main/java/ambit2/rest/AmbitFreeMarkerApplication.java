@@ -62,7 +62,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	public static final String BASE_URL = "BASE_URL";
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitFreeMarkerApplication.class.getName());
-	protected AMBITConfigProperties properties = new AMBITConfigProperties();
+	protected AMBITConfigProperties properties = new AMBITConfigProperties(null,null);
 	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
 	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
 	public static final String DB_AA_ENABLED = "aa.db.enabled";
