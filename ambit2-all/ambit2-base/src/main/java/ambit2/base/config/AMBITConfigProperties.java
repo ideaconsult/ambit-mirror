@@ -36,13 +36,14 @@ public class AMBITConfigProperties {
 	}
 
 	public AMBITConfigProperties() {
-		this(null,null);
-	}
-	public AMBITConfigProperties(String context) {
-		this(context,getConfigOverrideDir());
+		this(null, null);
 	}
 
-	public AMBITConfigProperties(String context,File overridePath) {
+	public AMBITConfigProperties(String context) {
+		this(context, getConfigOverrideDir());
+	}
+
+	public AMBITConfigProperties(String context, File overridePath) {
 		this.overridePath = overridePath;
 		setContext(context);
 	}
@@ -60,13 +61,14 @@ public class AMBITConfigProperties {
 				if (overridePath != null) {
 					String[] segments = config.split("/");
 					File contextdir = overridePath;
-					if (context!=null) {
-						contextdir = new File(overridePath,context);
-					}  
-					File file = new File(contextdir, segments[segments.length - 1]);
-					try (InputStream in = new FileInputStream(file)) {
-						p.load(in);
+					if (context != null) {
+						contextdir = new File(overridePath, context);
 					}
+					File file = new File(contextdir, segments[segments.length - 1]);
+					if (file.exists())
+						try (InputStream in = new FileInputStream(file)) {
+							p.load(in);
+						}
 				}
 				properties.put(config, p);
 			}

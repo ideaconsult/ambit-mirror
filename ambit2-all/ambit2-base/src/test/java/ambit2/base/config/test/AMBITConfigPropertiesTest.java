@@ -10,6 +10,7 @@ import junit.framework.Assert;
 
 public class AMBITConfigPropertiesTest {
 	protected static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
+	protected static final String aaProperties = "ambit2/rest/config/config.properties";
 	protected static final String overrideProperties = "ambit2/rest/config/override";
 	protected static final String key4test="custom.title";
 	@Test
@@ -43,5 +44,11 @@ public class AMBITConfigPropertiesTest {
 		Assert.assertNull(p.get("test"));
 	}
 
-	
+	@Test
+	public void testOverrideFileMissing() throws Exception {
+		String overridePath = this.getClass().getClassLoader().getResource(overrideProperties).getFile();
+		Assert.assertNotNull(overridePath);
+		AMBITConfigProperties p = new AMBITConfigProperties(null,new File(overridePath));
+		Assert.assertEquals("XXX", p.getProperty(key4test,aaProperties));
+	}		
 }
