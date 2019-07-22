@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
@@ -62,7 +61,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	public static final String BASE_URL = "BASE_URL";
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitFreeMarkerApplication.class.getName());
-	protected AMBITConfigProperties properties = new AMBITConfigProperties(null,null);
+	protected AMBITConfigProperties properties = new AMBITConfigProperties(null);
 	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
 	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
 	public static final String DB_AA_ENABLED = "aa.db.enabled";
@@ -157,6 +156,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected boolean similarityOrder = true;
 
 	public AmbitFreeMarkerApplication(boolean standalone) {
+		super();
 		this.standalone = standalone;
 		openToxAAEnabled = isOpenToxAAEnabled();
 		localAAEnabled = isSimpleSecretAAEnabled();
@@ -167,7 +167,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		versionLong = readVersionLong();
 		gaCode = readGACode();
 		HOMEPAGE_DEPTH = getBaseURLDepth();
-
 		setSimilarityOrder(getSimilarityOrderOption());
 		ajaxTimeout = getAjaxTimeoutOption();
 		setEnableEmailVerification(getEnableEmailVerificationOption());
@@ -180,21 +179,15 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");
 
-		InputStream in = null;
 		try {
 			URL url = getClass().getClassLoader().getResource(loggingProperties);
 			System.setProperty("java.util.logging.config.file", url.getFile());
-			in = new FileInputStream(new File(url.getFile()));
-			LogManager.getLogManager().readConfiguration(in);
-			logger.log(Level.INFO, String.format("Logging configuration loaded from %s", url.getFile()));
+			try (InputStream in = new FileInputStream(new File(url.getFile()))) {
+				LogManager.getLogManager().readConfiguration(in);
+				logger.log(Level.INFO, String.format("Logging configuration loaded from %s", url.getFile()));
+			}
 		} catch (Exception x) {
 			System.err.println("logging configuration failed " + x.getMessage());
-		} finally {
-			try {
-				if (in != null)
-					in.close();
-			} catch (Exception x) {
-			}
 		}
 		setStatusService(new FreeMarkerStatusService(this, getStatusReportLevel()));
 		setTunnelService(new TunnelService(true, true) {
@@ -414,10 +407,12 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 				WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
 				solr.setName(name);
-				solr.setURI(new URI(properties.getPropertyWithDefault(String.format(solr_url, i), ambitProperties, null)));
+				solr.setURI(
+						new URI(properties.getPropertyWithDefault(String.format(solr_url, i), ambitProperties, null)));
 				solr.setCredentials(new UsernamePasswordCredentials(
 						properties.getPropertyWithDefault(String.format(solr_basic_user, i), ambitProperties, null),
-						properties.getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties, null)));
+						properties.getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties,
+								null)));
 				solr.setFilterConfig(properties.getPropertyWithDefault(solr_filter, ambitProperties, null));
 
 				services.put(name, solr);
@@ -448,9 +443,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			return defaultValue;
 		}
 	}
-
-
-
 
 	public synchronized String getCustomTitle() {
 		return properties.getPropertyWithDefault(custom_title, ambitProperties, "AMBIT");
