@@ -22,11 +22,9 @@ import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
-import org.restlet.Server;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
 import org.restlet.resource.Directory;
 import org.restlet.resource.Finder;
 import org.restlet.routing.Filter;
@@ -39,6 +37,7 @@ import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
 
 import ambit2.base.config.AMBITConfig;
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.config.Preferences;
 import ambit2.rest.aa.UpdateAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
@@ -63,7 +62,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	public static final String BASE_URL = "BASE_URL";
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitFreeMarkerApplication.class.getName());
-	protected Hashtable<String, Properties> properties = new Hashtable<String, Properties>();
+	protected AMBITConfigProperties properties = new AMBITConfigProperties();
 	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
 	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
 	public static final String DB_AA_ENABLED = "aa.db.enabled";
@@ -110,7 +109,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected static final String solr_basic_user = "solr.basic.user.%d";
 	protected static final String solr_basic_password = "solr.basic.password.%d";
 	protected static final String solr_filter = "solr.filter";
-	
+
 	protected static final String map_folder = "map.folder";
 
 	protected boolean standalone = false;
@@ -156,6 +155,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	}
 
 	protected boolean similarityOrder = true;
+
 	public AmbitFreeMarkerApplication(boolean standalone) {
 		this.standalone = standalone;
 		openToxAAEnabled = isOpenToxAAEnabled();
@@ -174,8 +174,8 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 		setProfile(getMenuProfile());
 
-		setName(getPropertyWithDefault(custom_title, ambitProperties, "AMBIT"));
-		setDescription(getPropertyWithDefault(custom_title, ambitProperties,
+		setName(properties.getPropertyWithDefault(custom_title, ambitProperties, "AMBIT"));
+		setDescription(properties.getPropertyWithDefault(custom_title, ambitProperties,
 				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"));
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");
@@ -218,7 +218,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean isDBAAEnabled() {
 		try {
-			String aaadmin = getProperty(DB_AA_ENABLED, configProperties);
+			String aaadmin = properties.getProperty(DB_AA_ENABLED, configProperties);
 			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {
 			return false;
@@ -227,7 +227,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized int getBaseURLDepth() {
 		try {
-			String val = getProperty(BASEURL_DEPTH, ambitProperties);
+			String val = properties.getProperty(BASEURL_DEPTH, ambitProperties);
 			return val == null ? 1 : Integer.parseInt(val);
 		} catch (Exception x) {
 			return 1;
@@ -236,7 +236,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean isSimpleSecretAAEnabled() {
 		try {
-			String aaadmin = getProperty(LOCAL_AA_ENABLED, configProperties);
+			String aaadmin = properties.getProperty(LOCAL_AA_ENABLED, configProperties);
 			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {
 			return false;
@@ -245,7 +245,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean isWarmupEnabled() {
 		try {
-			String warmup = getProperty(WARMUP_ENABLED, configProperties);
+			String warmup = properties.getProperty(WARMUP_ENABLED, configProperties);
 			return warmup == null ? null : Boolean.parseBoolean(warmup);
 		} catch (Exception x) {
 			return false;
@@ -254,7 +254,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean getSimilarityOrderOption() {
 		try {
-			String order = getProperty(SIMILARITY_ORDER, ambitProperties);
+			String order = properties.getProperty(SIMILARITY_ORDER, ambitProperties);
 			return order == null ? true : Boolean.parseBoolean(order);
 		} catch (Exception x) {
 			return true;
@@ -263,7 +263,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean getEnableEmailVerificationOption() {
 		try {
-			String order = getProperty(AMBITConfig.enableEmailVerification.name(), configProperties);
+			String order = properties.getProperty(AMBITConfig.enableEmailVerification.name(), configProperties);
 			return order == null ? true : Boolean.parseBoolean(order);
 		} catch (Exception x) {
 			return true;
@@ -272,7 +272,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized String getAjaxTimeoutOption() {
 		try {
-			String order = getProperty(AJAX_TIMEOUT, ambitProperties);
+			String order = properties.getProperty(AJAX_TIMEOUT, ambitProperties);
 			return order == null ? "10000" : order.trim();
 		} catch (Exception x) {
 			return "10000";
@@ -281,7 +281,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized SimpleGuards isSimpleGuardEnabled() {
 		try {
-			String guard = getProperty(GUARD_ENABLED, configProperties);
+			String guard = properties.getProperty(GUARD_ENABLED, configProperties);
 			return guard == null ? null : SimpleGuards.valueOf(guard);
 		} catch (Exception x) {
 			return null;
@@ -290,7 +290,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected String[] getGuardListAllowed() {
 		try {
-			String list = getProperty(GUARD_LIST, configProperties);
+			String list = properties.getProperty(GUARD_LIST, configProperties);
 			return list.split(" ");
 		} catch (Exception x) {
 			return null;
@@ -299,7 +299,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	public synchronized String readVersionShort() {
 		try {
-			return getProperty(version, ambitProperties);
+			return properties.getProperty(version, ambitProperties);
 		} catch (Exception x) {
 			return "Unknown";
 		}
@@ -307,9 +307,9 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	public synchronized String readVersionLong() {
 		try {
-			String v1 = getProperty(version, ambitProperties);
-			String v2 = getProperty(version_build, ambitProperties);
-			String v3 = getProperty(version_timestamp, ambitProperties);
+			String v1 = properties.getProperty(version, ambitProperties);
+			String v2 = properties.getProperty(version_build, ambitProperties);
+			String v3 = properties.getProperty(version_timestamp, ambitProperties);
 			return String.format("%s r%s built %s", v1, v2, new Date(Long.parseLong(v3)));
 		} catch (Exception x) {
 			return "Unknown";
@@ -318,7 +318,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	public synchronized String readGACode() {
 		try {
-			String ga = getProperty(googleAnalytics, ambitProperties);
+			String ga = properties.getProperty(googleAnalytics, ambitProperties);
 			if ("".equals(ga))
 				return null;
 			return ga;
@@ -326,10 +326,10 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			return null;
 		}
 	}
-	
+
 	public synchronized String getMapFolder() {
 		try {
-			String v = getProperty(map_folder, ambitProperties);
+			String v = properties.getProperty(map_folder, ambitProperties);
 			if ("".equals(v))
 				return null;
 			return v;
@@ -340,7 +340,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized String getAllowedOrigins() {
 		try {
-			return getProperty(ALLOWED_ORIGINS, configProperties);
+			return properties.getProperty(ALLOWED_ORIGINS, configProperties);
 		} catch (Exception x) {
 			return null;
 		}
@@ -348,7 +348,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean isOpenToxAAEnabled() {
 		try {
-			String aaadmin = getProperty(OPENTOX_AA_ENABLED, configProperties);
+			String aaadmin = properties.getProperty(OPENTOX_AA_ENABLED, configProperties);
 			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {
 			return false;
@@ -357,7 +357,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean protectAdminResource() {
 		try {
-			String aaadmin = getProperty(adminAAEnabled, ambitProperties);
+			String aaadmin = properties.getProperty(adminAAEnabled, ambitProperties);
 			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
 		} catch (Exception x) {
 			return false;
@@ -365,7 +365,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	}
 
 	public synchronized String getMenuProfile() {
-		String prefix = getProperty("ambit.profile", ambitProperties);
+		String prefix = properties.getProperty("ambit.profile", ambitProperties);
 		if (prefix == null || "".equals(prefix) || prefix.contains("${"))
 			prefix = "default";
 		return prefix;
@@ -373,7 +373,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean protectCompoundResource() {
 		try {
-			String aacompound = getProperty(compoundAAEnabled, ambitProperties);
+			String aacompound = properties.getProperty(compoundAAEnabled, ambitProperties);
 			return aacompound == null ? null : Boolean.parseBoolean(aacompound);
 		} catch (Exception x) {
 			return false;
@@ -382,7 +382,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean protectFeatureResource() {
 		try {
-			String aafeature = getProperty(featureAAEnabled, ambitProperties);
+			String aafeature = properties.getProperty(featureAAEnabled, ambitProperties);
 			return aafeature == null ? null : Boolean.parseBoolean(aafeature);
 		} catch (Exception x) {
 			return false;
@@ -406,7 +406,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			Map<String, WrappedService<UsernamePasswordCredentials>> services = null;
 
 			for (int i = 1; i < 10; i++) {
-				String name = getPropertyWithDefault(String.format(solr_service, i), ambitProperties, null);
+				String name = properties.getPropertyWithDefault(String.format(solr_service, i), ambitProperties, null);
 				if (name == null)
 					continue;
 				if (services == null)
@@ -414,12 +414,12 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 				WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
 				solr.setName(name);
-				solr.setURI(new URI(getPropertyWithDefault(String.format(solr_url, i), ambitProperties, null)));
+				solr.setURI(new URI(properties.getPropertyWithDefault(String.format(solr_url, i), ambitProperties, null)));
 				solr.setCredentials(new UsernamePasswordCredentials(
-						getPropertyWithDefault(String.format(solr_basic_user, i), ambitProperties, null),
-						getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties, null)));
-				solr.setFilterConfig(getPropertyWithDefault(solr_filter, ambitProperties, null));
-				
+						properties.getPropertyWithDefault(String.format(solr_basic_user, i), ambitProperties, null),
+						properties.getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties, null)));
+				solr.setFilterConfig(properties.getPropertyWithDefault(solr_filter, ambitProperties, null));
+
 				services.put(name, solr);
 			}
 
@@ -440,7 +440,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected synchronized boolean getBooleanPropertyWithDefault(String name, String config, boolean defaultValue) {
 		try {
-			String attach = getProperty(name, config);
+			String attach = properties.getProperty(name, config);
 			if (attach != null && attach.startsWith("${"))
 				return defaultValue;
 			return attach == null ? defaultValue : Boolean.parseBoolean(attach);
@@ -449,74 +449,46 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		}
 	}
 
-	protected synchronized String getProperty(String name, String config) {
-		try {
-			Properties p = properties.get(config);
-			if (p == null) {
-				p = new Properties();
-				InputStream in = this.getClass().getClassLoader().getResourceAsStream(config);
-				p.load(in);
-				in.close();
-				properties.put(config, p);
-			}
-			return p.getProperty(name);
 
-		} catch (Exception x) {
-			return null;
-		}
-	}
 
-	protected synchronized String getPropertyWithDefault(String name, String config, String defaultValue) {
-		try {
-			String value = getProperty(name, config);
-			if (value == null)
-				return defaultValue;
-			else if (value != null && value.startsWith("${"))
-				return defaultValue;
-			else
-				return value;
-		} catch (Exception x) {
-			return defaultValue;
-		}
-	}
 
 	public synchronized String getCustomTitle() {
-		return getPropertyWithDefault(custom_title, ambitProperties, "AMBIT");
+		return properties.getPropertyWithDefault(custom_title, ambitProperties, "AMBIT");
 	}
 
 	public synchronized String getCustomDescription() {
-		return getPropertyWithDefault(custom_description, ambitProperties,
+		return properties.getPropertyWithDefault(custom_description, ambitProperties,
 				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API");
 	}
 
 	public synchronized String getCustomQuery() {
-		return getPropertyWithDefault(custom_query, ambitProperties, "formaldehyde");
+		return properties.getPropertyWithDefault(custom_query, ambitProperties, "formaldehyde");
 	}
 
 	public synchronized String getCustomStructureQuery() {
-		return getPropertyWithDefault(custom_structurequery, ambitProperties, "formaldehyde");
+		return properties.getPropertyWithDefault(custom_structurequery, ambitProperties, "formaldehyde");
 	}
 
 	public synchronized String getCustomLogo() {
-		String logo = getPropertyWithDefault(custom_logo, ambitProperties, null);
+		String logo = properties.getPropertyWithDefault(custom_logo, ambitProperties, null);
 		if ("".equals(logo))
 			logo = null;
 		return logo;
 	}
 
 	public synchronized String getCustomLicense() {
-		return getPropertyWithDefault(custom_license, ambitProperties, "AMBIT");
+		return properties.getPropertyWithDefault(custom_license, ambitProperties, "AMBIT");
 	}
 
 	public synchronized String getSearchServiceURI() {
 		String rootUrl = getContext().getParameters().getFirstValue(BASE_URL);
-		return getPropertyWithDefault(custom_search, ambitProperties, rootUrl + "/ui/_search");
+		return properties.getPropertyWithDefault(custom_search, ambitProperties, rootUrl + "/ui/_search");
 	}
 
 	protected ConcurrentMap<String, char[]> getLocalSecrets() throws Exception {
 
-		String identifier = getProperty(identifierKey, configProperties);
-		String pass = getProperty(identifierPass, configProperties);
+		String identifier = properties.getProperty(identifierKey, configProperties);
+		String pass = properties.getProperty(identifierPass, configProperties);
 		if ((identifier == null) || "".equals(identifier) || identifier.indexOf("${") > -1)
 			throw new Exception(
 					String.format("Property %s not set. The web application will be READ ONLY!", identifierKey));
@@ -537,7 +509,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected FreeMarkerStatusService.REPORT_LEVEL getStatusReportLevel() {
 		try {
 			FreeMarkerStatusService.REPORT_LEVEL aa = FreeMarkerStatusService.REPORT_LEVEL
-					.valueOf(getProperty(FreeMarkerStatusService.report_level, ambitProperties));
+					.valueOf(properties.getProperty(FreeMarkerStatusService.report_level, ambitProperties));
 			if ((getContext() != null) && (getContext().getParameters() != null)
 					&& (getContext().getParameters().getFirstValue(FreeMarkerStatusService.report_level)) != null)
 				aa = FreeMarkerStatusService.REPORT_LEVEL
@@ -550,13 +522,13 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	protected boolean getConfigChangeLineSeparator() {
 		try {
-			String attach = getProperty(config_changeLineSeparators, ambitProperties);
+			String attach = properties.getProperty(config_changeLineSeparators, ambitProperties);
 			return attach == null ? null : Boolean.parseBoolean(attach);
 		} catch (Exception x) {
 			return false;
 		}
 	}
-	
+
 	protected TaskStorage<O> createTaskStorage() {
 		return new TaskStorage<O>(getName(), getLogger()) {
 
@@ -578,7 +550,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			}
 		};
 	}
-	
 
 	public enum _staticfile {
 		meta {
@@ -623,9 +594,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			router.attach(dir.getPath(), dir.getDirectory(getContext()));
 		}
 
-
 	}
-
 
 	protected Restlet addOriginFilter(Restlet router) {
 		String allowedOrigins = getAllowedOrigins();
@@ -688,15 +657,15 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	}
 
 	protected Restlet createDBProtectedResource(String usersdbname, Restlet router, String prefix) {
-		String secret = getProperty(AMBITConfig.secret.name(), configProperties);
+		String secret = properties.getProperty(AMBITConfig.secret.name(), configProperties);
 		long sessionLength = 1000 * 60 * 45L; // 45 min in milliseconds
 		try {
-			sessionLength = Long.parseLong(getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
+			sessionLength = Long.parseLong(properties.getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
 		} catch (Exception x) {
 		}
 
-		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname,
-				configProperties, secret, sessionLength,false);
+		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname, configProperties, secret,
+				sessionLength, false);
 		// UserAuthorizer authz = new UserAuthorizer();
 		Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, configProperties,
 				getBaseURLDepth());
@@ -713,7 +682,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		authZ.setNext(router);
 		return authN;
 	}
-	
 
 	public static String printRoutes(Restlet re, String delimiter, StringWriter b) {
 
@@ -749,12 +717,11 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		return b.toString();
 
 	}
-	
+
 	public static void shutdown(Component component) throws Exception {
 		component.stop();
 		Logger logger = Logger.getLogger(AmbitFreeMarkerApplication.class.getName());
 		logger.log(Level.INFO, "Server stopped");
 	}
-
 
 }

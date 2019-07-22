@@ -34,6 +34,8 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 public class Preferences {
+	public static String AMBIT_CONFIG_OVERRIDE_DIR = "AMBIT_CONFIG_OVERRIDE_DIR";
+	
 	protected static PropertyChangeSupport propertyChangeSupport;
 	public static String FASTSMARTS="FASTSMARTS";
 	public static String SHOW_AROMATICITY="showAromaticity";

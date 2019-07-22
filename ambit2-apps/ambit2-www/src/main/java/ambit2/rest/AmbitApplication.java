@@ -198,15 +198,15 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 	public Restlet initInboundRoot() {
 		initFreeMarkerConfiguration();
 
-		String usersdbname = getProperty(AMBITConfig.Database.name(), configProperties);
+		String usersdbname = properties.getProperty(AMBITConfig.Database.name(), configProperties);
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
 		getContext().getParameters().add(AMBITConfig.users_dbname.name(), usersdbname);
 		
 		//templates - use ambit db if not specified
-		String templatesdbname = getProperty(AMBITConfig.Database.name(), templateProperties);
+		String templatesdbname = properties.getProperty(AMBITConfig.Database.name(), templateProperties);
 		if (templatesdbname == null)
-			templatesdbname = getProperty(AMBITConfig.Database.name(), ambitProperties);
+			templatesdbname = properties.getProperty(AMBITConfig.Database.name(), ambitProperties);
 		getContext().getParameters().add(AMBITConfig.templates_dbname.name(), templatesdbname);		
 
 		Router router = new MyRouter(this.getContext()) {
@@ -333,7 +333,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				Filter authz = null;
 				if (dbAAEnabled)
 					try {
-						String dbname = getProperty(AMBITConfig.Database.name(), ambitProperties);
+						String dbname = properties.getProperty(AMBITConfig.Database.name(), ambitProperties);
 						authz = UserRouter.createBundlePolicyAuthorizer(getContext(), dbname, usersdbname,
 								"ambit2/rest/config/config.prop", getBaseURLDepth());
 					} catch (Exception x) {
@@ -525,10 +525,10 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		if (!isOpenToxAAEnabled()) {
 
 			if (isDBAAEnabled()) {
-				String secret = getProperty(AMBITConfig.secret.name(), configProperties);
+				String secret = properties.getProperty(AMBITConfig.secret.name(), configProperties);
 				long sessionLength = 1000 * 60 * 45L; // 45 min in milliseconds
 				try {
-					sessionLength = Long.parseLong(getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
+					sessionLength = Long.parseLong(properties.getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
 				} catch (Exception x) {
 				}
 
