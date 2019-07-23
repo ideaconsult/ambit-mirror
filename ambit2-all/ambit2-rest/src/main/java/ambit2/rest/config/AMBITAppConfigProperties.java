@@ -24,12 +24,8 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	public static final String configProperties = "ambit2/rest/config/config.prop";
 	public static final String loggingProperties = "ambit2/rest/config/logging.prop";
 	
-	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
-	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
-	public static final String DB_AA_ENABLED = "aa.db.enabled";
 	public static final String GUARD_ENABLED = "guard.enabled";
 	public static final String GUARD_LIST = "guard.list";
-	public static final String WARMUP_ENABLED = "warmup.enabled";
 	public static final String ALLOWED_ORIGINS = "allowed.origins";
 	public static final String BASEURL_DEPTH = "baseurl.depth";
 
@@ -38,10 +34,6 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 
 	protected static final String identifierKey = "aa.local.admin.name";
 	protected static final String identifierPass = "aa.local.admin.pass";
-	protected static final String adminAAEnabled = "aa.admin";
-	protected static final String compoundAAEnabled = "aa.compound";
-	protected static final String featureAAEnabled = "aa.feature";
-	protected static final String modelAAEnabled = "aa.model"; // ignored
 	protected static final String version = "ambit.version";
 	protected static final String version_build = "ambit.build";
 	protected static final String version_timestamp = "ambit.build.timestamp";
@@ -66,7 +58,7 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 
 	
 	public AMBITAppConfigProperties() {
-		super();
+		super(null,null);
 	}
 
 	public AMBITAppConfigProperties(String context) {
@@ -113,7 +105,7 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 		return getBooleanPropertyWithDefault(AMBITConfig.enableEmailVerification.name(), configProperties,true);
 	}
 
-	protected synchronized String getAjaxTimeoutOption() {
+	public synchronized String getAjaxTimeoutOption() {
 		try {
 			String order = getProperty(AJAX_TIMEOUT, ambitProperties);
 			return order == null ? "10000" : order.trim();
@@ -215,7 +207,7 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	}
 	
 
-	protected boolean getConfigChangeLineSeparator() {
+	public boolean getConfigChangeLineSeparator() {
 		return getBooleanPropertyWithDefault(config_changeLineSeparators,ambitProperties,false);
 	}	
 

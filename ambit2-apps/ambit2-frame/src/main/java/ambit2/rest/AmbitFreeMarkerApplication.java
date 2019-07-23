@@ -57,9 +57,9 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected Logger logger = Logger.getLogger(AmbitFreeMarkerApplication.class.getName());
 	protected AMBITAppConfigInternal properties_internal = new AMBITAppConfigInternal();
 	protected AMBITAppConfigProperties properties_overridable = new AMBITAppConfigProperties(null);
-	
+
 	protected boolean standalone = false;
-	
+
 	protected AMBITAppConfigInternal getProperties_internal() {
 		return properties_internal;
 	}
@@ -70,79 +70,29 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 
 	public AMBITAppConfigProperties getProperties() {
 		return properties_overridable;
-	}	
-	/*
-	protected boolean openToxAAEnabled = false;
-	protected boolean localAAEnabled = false;
-	protected boolean dbAAEnabled = false;
-	protected boolean warmupEnabled = false;
-
-	protected String ajaxTimeout = "10000"; // msec
-	protected boolean enableEmailVerification = true;
-	protected int HOMEPAGE_DEPTH = 1;
-
-
-	public int getHOMEPAGE_DEPTH() {
-		return HOMEPAGE_DEPTH;
 	}
 
-	public void setHOMEPAGE_DEPTH(int hOMEPAGE_DEPTH) {
-		HOMEPAGE_DEPTH = hOMEPAGE_DEPTH;
-	}
-
-	public boolean isEnableEmailVerification() {
-		return enableEmailVerification;
-	}
-
-	public void setEnableEmailVerification(boolean enableEmailVerification) {
-		this.enableEmailVerification = enableEmailVerification;
-	}
-
-	public String getAjaxTimeout() {
-		return ajaxTimeout;
-	}
-
-	public void setAjaxTimeout(String ajaxTimeout) {
-		this.ajaxTimeout = ajaxTimeout;
-	}
-
-	public boolean isSimilarityOrder() {
-		return similarityOrder;
-	}
-
-	public void setSimilarityOrder(boolean similarityOrder) {
-		this.similarityOrder = similarityOrder;
-	}
-
-	protected boolean similarityOrder = true;
-*/
 	public AmbitFreeMarkerApplication(boolean standalone) {
 		super();
 		this.standalone = standalone;
 		/*
-		openToxAAEnabled = isOpenToxAAEnabled();
-		localAAEnabled = isSimpleSecretAAEnabled();
-		dbAAEnabled = isDBAAEnabled();
-		warmupEnabled = isWarmupEnabled();
-		changeLineSeparators = getConfigChangeLineSeparator();
-		versionShort = readVersionShort();
-		versionLong = readVersionLong();
-		gaCode = readGACode();
-		HOMEPAGE_DEPTH = getBaseURLDepth();
-		setSimilarityOrder(getSimilarityOrderOption());
-		ajaxTimeout = getAjaxTimeoutOption();
-		
-		setEnableEmailVerification(properties.getEnableEmailVerificationOption());
+		 * 
+		 * 
+		 * HOMEPAGE_DEPTH = getBaseURLDepth();
+		 * 
+		 */
 
-		setProfile(getMenuProfile());
-		
+		setProfile(getProperties().getMenuProfile());
+		gaCode = getProperties().readGACode();
+		versionShort = getProperties().readVersionShort();
+		versionLong = getProperties().readVersionLong();
+		changeLineSeparators = getProperties().getConfigChangeLineSeparator();
 
-		setName(properties.getPropertyWithDefault(custom_title, ambitProperties, "AMBIT"));
-		setDescription(properties.getPropertyWithDefault(custom_title, ambitProperties,
-				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"));
+		setName(getProperties().getCustomTitle());
+		setDescription(getProperties().getCustomDescription());
+
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");
-		*/
 
 		try {
 			URL url = getClass().getClassLoader().getResource(AMBITAppConfigProperties.loggingProperties);
@@ -174,8 +124,26 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		getMetadataService().addExtension("smiles", ChemicalMediaType.CHEMICAL_SMILES, true);
 	}
 
+	@Override
+	public boolean isEnableEmailVerification() {
+		return getProperties().getEnableEmailVerificationOption();
+	}
 
-	
+	@Override
+	public String getAjaxTimeout() {
+		return getProperties().getAjaxTimeoutOption();
+	}
+
+	@Override
+	public boolean isSendTokenAsCookie() {
+		return getProperties_internal().isDBAAEnabled();
+	}
+
+	@Override
+	public boolean isSimilarityOrder() {
+		return getProperties().getSimilarityOrderOption();
+	}
+
 	protected synchronized SimpleGuards isSimpleGuardEnabled() {
 		try {
 			String guard = getProperties_internal().isSimpleGuardEnabled();
@@ -184,9 +152,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 			return null;
 		}
 	}
-
-
-
 
 	/**
 	 * Reads the status report level from ambit.pref ${ambit.report.level} If
@@ -334,19 +299,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected Restlet createProtectedResource(Restlet router) {
 		return createProtectedResource(router, null);
 	}
-	/*
-	protected Restlet createDBProtectedResource(String usersdbname, Restlet router, String prefix) {
-
-		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), properties, AMBITAppConfigProperties.configProperties, false);
-		//Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname, configProperties, secret,s essionLength, false);
-		// UserAuthorizer authz = new UserAuthorizer();
-		Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, AMBITAppConfigProperties.configProperties,
-				properties.getBaseURLDepth());
-		dbAuth.setNext(authz);
-		authz.setNext(router);
-		return dbAuth;
-	}
-	*/
 
 	protected Restlet createProtectedResource(Restlet router, String prefix) {
 		Filter authN = new OpenSSOAuthenticator(getContext(), false, "opentox.org", new OpenSSOVerifierSetUser(false));

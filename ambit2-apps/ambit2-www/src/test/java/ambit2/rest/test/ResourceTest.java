@@ -43,6 +43,7 @@ import ambit2.db.processors.test.DbUnitTest;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.AmbitFreeMarkerApplication;
 import ambit2.rest.bundle.BundleSubstanceResource;
+import ambit2.rest.config.AMBITAppConfigInternal;
 import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.legacy.OTRemoteTask;
 import junit.framework.Assert;
@@ -69,9 +70,9 @@ public abstract class ResourceTest extends DbUnitTest {
 		context.getParameters().add(Preferences.PASSWORD, getPWD());
 		context.getParameters().add(Preferences.PORT, getPort());
 		context.getParameters().add(Preferences.HOST, getHost());
-		context.getParameters().add(AMBITAppConfigProperties.WARMUP_ENABLED, "false");
-		context.getParameters().add(AMBITAppConfigProperties.LOCAL_AA_ENABLED, "false");
-		context.getParameters().add(AMBITAppConfigProperties.OPENTOX_AA_ENABLED, "false");
+		context.getParameters().add(AMBITAppConfigInternal.WARMUP_ENABLED, "false");
+		context.getParameters().add(AMBITAppConfigInternal.LOCAL_AA_ENABLED, "false");
+		context.getParameters().add(AMBITAppConfigInternal.OPENTOX_AA_ENABLED, "false");
 
 		// Create a component
 		component = new AmbitComponent(context);

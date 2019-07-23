@@ -51,6 +51,7 @@ import ambit2.rest.bookmark.OntoBucketResource;
 import ambit2.rest.bundle.MyBundlesResource;
 import ambit2.rest.bundle.user.DummyUserByURIResource;
 import ambit2.rest.bundle.user.UserByURIResource;
+import ambit2.rest.config.AMBITAppConfigInternal;
 import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
@@ -194,10 +195,6 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		} else
 			return root;
 
-	}
-
-	public boolean isSendTokenAsCookie() {
-		return getProperties_internal().isDBAAEnabled();
 	}
 
 	public Restlet initInboundRoot() {
@@ -529,7 +526,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				router.attach("", AMBITLoginFormResource.class);
 
 				logger.log(Level.INFO,
-						String.format("Property %s set, DB AA enabled.", AMBITAppConfigProperties.DB_AA_ENABLED));
+						String.format("Property %s set, DB AA enabled.", AMBITAppConfigInternal.DB_AA_ENABLED));
 
 				/*
 				 * /login
@@ -616,7 +613,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				router.attach("/provider/signout", UIBasicResource.class);
 
 				logger.log(Level.INFO,
-						String.format("Property %s set, local AA enabled.", AMBITAppConfigProperties.LOCAL_AA_ENABLED));
+						String.format("Property %s set, local AA enabled.", AMBITAppConfigInternal.LOCAL_AA_ENABLED));
 
 				// for testing purposes only!
 				router.attach(ambit2.user.rest.resource.Resources.myaccount + "/users", DummyUserByURIResource.class);

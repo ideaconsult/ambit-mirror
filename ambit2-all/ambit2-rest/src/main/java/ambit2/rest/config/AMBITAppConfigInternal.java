@@ -7,9 +7,23 @@ public class AMBITAppConfigInternal extends AMBITAppConfigProperties {
 	protected static final String attachSubstanceOwner = "attach.substanceowner";
 	protected static final String attachToxmatch = "attach.toxmatch";
 
+	protected static final String adminAAEnabled = "aa.admin";
+	protected static final String compoundAAEnabled = "aa.compound";
+	protected static final String featureAAEnabled = "aa.feature";
+	protected static final String modelAAEnabled = "aa.model"; // ignored
 	
+	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
+	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
+	public static final String DB_AA_ENABLED = "aa.db.enabled";
+	
+	public static final String WARMUP_ENABLED = "warmup.enabled";
+
+	/**
+	 * No config overriding at all
+	 */
 	public AMBITAppConfigInternal() {
 		super(null,null);
+		setConfigOverrideVar(null);
 	}
 	
 
