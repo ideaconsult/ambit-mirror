@@ -35,6 +35,13 @@ public class AMBITConfigPropertiesTest {
 		Assert.assertEquals("TEST123", p.getPropertyWithDefault(key4test,ambitProperties,"ERROR"));
 	}	
 	@Test
+	public void testOverrideBadPath() throws Exception {
+		String overridePath = "";
+		Assert.assertNotNull(overridePath);
+		AMBITConfigProperties p = new AMBITConfigProperties(null,new File(overridePath));
+		Assert.assertEquals("TEST", p.getPropertyWithDefault(key4test,ambitProperties,"ERROR"));
+	}	
+	@Test
 	public void testPropertiesDefault() {
 		Properties  defaults = new Properties();
 		defaults.put("test", "defaults");
@@ -51,4 +58,5 @@ public class AMBITConfigPropertiesTest {
 		AMBITConfigProperties p = new AMBITConfigProperties(null,new File(overridePath));
 		Assert.assertEquals("XXX", p.getPropertyWithDefault(key4test,aaProperties,"ERROR"));
 	}		
+	
 }

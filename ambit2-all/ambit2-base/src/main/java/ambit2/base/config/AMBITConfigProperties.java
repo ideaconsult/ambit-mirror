@@ -7,7 +7,15 @@ import java.util.Hashtable;
 import java.util.Properties;
 
 public class AMBITConfigProperties {
-	protected static String AMBIT_CONFIG_OVERRIDE_VAR = "AMBIT_CONFIG_OVERRIDE_VAR";
+	protected String AMBIT_CONFIG_OVERRIDE_VAR = "AMBIT_CONFIG_OVERRIDE_VAR";
+	public String getConfigOverrideVar() {
+		return AMBIT_CONFIG_OVERRIDE_VAR;
+	}
+
+	public void setConfigOverrideVar(String configOverrideVar) {
+		this.AMBIT_CONFIG_OVERRIDE_VAR = configOverrideVar;
+	}
+
 	protected Hashtable<String, Properties> properties = new Hashtable<String, Properties>();
 	protected File overridePath = null;
 	protected String context = null;
@@ -57,9 +65,9 @@ public class AMBITConfigProperties {
 				try (InputStream in = this.getClass().getClassLoader().getResourceAsStream(config)) {
 					defaults.load(in);
 				}
-				if (defaults.get(AMBIT_CONFIG_OVERRIDE_VAR) != null) {
-					File dir = getConfigOverrideDir(defaults.get(AMBIT_CONFIG_OVERRIDE_VAR).toString());
-					if (dir != null)
+				if (getConfigOverrideVar() !=null && defaults.get(getConfigOverrideVar()) != null) {
+					File dir = getConfigOverrideDir(defaults.get(getConfigOverrideVar()).toString());
+					if (dir != null && !"".equals(dir.getAbsolutePath()))
 						overridePath = dir;
 				}
 				if (overridePath != null) {
