@@ -4,18 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.net.URI;
 import java.net.URL;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Request;
@@ -35,21 +30,19 @@ import org.restlet.security.MapVerifier;
 import org.restlet.service.TunnelService;
 import org.restlet.util.RouteList;
 
-import ambit2.base.config.AMBITConfig;
-import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.config.Preferences;
 import ambit2.rest.aa.UpdateAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOVerifierSetUser;
 import ambit2.rest.admin.SimpleGuard.SimpleGuards;
+import ambit2.rest.config.AMBITAppConfigInternal;
+import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.freemarker.FreeMarkerApplication;
 import ambit2.rest.freemarker.FreeMarkerStatusService;
 import ambit2.rest.task.PolicyProtectedTask;
 import ambit2.rest.task.Task;
 import ambit2.rest.task.TaskStorage;
-import ambit2.rest.wrapper.WrappedService;
-import ambit2.user.rest.UserRouter;
 import ambit2.user.rest.resource.DBRoles;
 import net.idea.restnet.aa.opensso.policy.CallablePolicyCreator;
 import net.idea.restnet.aa.opensso.users.OpenSSOUserResource;
@@ -59,59 +52,26 @@ import net.idea.restnet.i.task.ITaskResult;
 
 public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	public static final String BASE_URL = "BASE_URL";
+
 	protected boolean insecure = true;
 	protected Logger logger = Logger.getLogger(AmbitFreeMarkerApplication.class.getName());
-	protected AMBITConfigProperties properties = new AMBITConfigProperties(null);
-	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
-	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
-	public static final String DB_AA_ENABLED = "aa.db.enabled";
-	public static final String GUARD_ENABLED = "guard.enabled";
-	public static final String GUARD_LIST = "guard.list";
-	public static final String WARMUP_ENABLED = "warmup.enabled";
-	public static final String ALLOWED_ORIGINS = "allowed.origins";
-	public static final String BASEURL_DEPTH = "baseurl.depth";
-
-	public static final String AJAX_TIMEOUT = "ajax.timeout";
-	public static final String SIMILARITY_ORDER = "similarity.order";
-
-	protected static final String identifierKey = "aa.local.admin.name";
-	protected static final String identifierPass = "aa.local.admin.pass";
-	protected static final String adminAAEnabled = "aa.admin";
-	protected static final String compoundAAEnabled = "aa.compound";
-	protected static final String featureAAEnabled = "aa.feature";
-	protected static final String modelAAEnabled = "aa.model"; // ignored
-	protected static final String version = "ambit.version";
-	protected static final String version_build = "ambit.build";
-	protected static final String version_timestamp = "ambit.build.timestamp";
-	protected static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
-	protected static final String templateProperties = "ambit2/rest/config/ambit2.assay.properties";
-	protected static final String configProperties = "ambit2/rest/config/config.prop";
-	protected static final String loggingProperties = "ambit2/rest/config/logging.prop";
-
-	protected static final String attachDepict = "attach.depict";
-	protected static final String attachSubstance = "attach.substance";
-	protected static final String attachInvestigation = "attach.investigation";
-	protected static final String attachSubstanceOwner = "attach.substanceowner";
-	protected static final String attachToxmatch = "attach.toxmatch";
-	protected static final String config_changeLineSeparators = "changeLineSeparators";
-	protected static final String googleAnalytics = "google.analytics";
-
-	protected static final String custom_search = "custom.search";
-	protected static final String custom_title = "custom.title";
-	protected static final String custom_description = "custom.description";
-	protected static final String custom_license = "custom.license";
-	protected static final String custom_logo = "custom.logo";
-	protected static final String custom_query = "custom.query";
-	protected static final String custom_structurequery = "custom.structurequery";
-	protected static final String solr_service = "solr.service.%d";
-	protected static final String solr_url = "solr.url.%d";
-	protected static final String solr_basic_user = "solr.basic.user.%d";
-	protected static final String solr_basic_password = "solr.basic.password.%d";
-	protected static final String solr_filter = "solr.filter";
-
-	protected static final String map_folder = "map.folder";
-
+	protected AMBITAppConfigInternal properties_internal = new AMBITAppConfigInternal();
+	protected AMBITAppConfigProperties properties_overridable = new AMBITAppConfigProperties(null);
+	
 	protected boolean standalone = false;
+	
+	protected AMBITAppConfigInternal getProperties_internal() {
+		return properties_internal;
+	}
+
+	public AMBITAppConfigProperties getProperties_overridable() {
+		return properties_overridable;
+	}
+
+	public AMBITAppConfigProperties getProperties() {
+		return properties_overridable;
+	}	
+	/*
 	protected boolean openToxAAEnabled = false;
 	protected boolean localAAEnabled = false;
 	protected boolean dbAAEnabled = false;
@@ -120,6 +80,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected String ajaxTimeout = "10000"; // msec
 	protected boolean enableEmailVerification = true;
 	protected int HOMEPAGE_DEPTH = 1;
+
 
 	public int getHOMEPAGE_DEPTH() {
 		return HOMEPAGE_DEPTH;
@@ -154,10 +115,11 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	}
 
 	protected boolean similarityOrder = true;
-
+*/
 	public AmbitFreeMarkerApplication(boolean standalone) {
 		super();
 		this.standalone = standalone;
+		/*
 		openToxAAEnabled = isOpenToxAAEnabled();
 		localAAEnabled = isSimpleSecretAAEnabled();
 		dbAAEnabled = isDBAAEnabled();
@@ -169,18 +131,21 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		HOMEPAGE_DEPTH = getBaseURLDepth();
 		setSimilarityOrder(getSimilarityOrderOption());
 		ajaxTimeout = getAjaxTimeoutOption();
-		setEnableEmailVerification(getEnableEmailVerificationOption());
+		
+		setEnableEmailVerification(properties.getEnableEmailVerificationOption());
 
 		setProfile(getMenuProfile());
+		
 
 		setName(properties.getPropertyWithDefault(custom_title, ambitProperties, "AMBIT"));
 		setDescription(properties.getPropertyWithDefault(custom_title, ambitProperties,
 				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API"));
 		setOwner("Ideaconsult Ltd.");
 		setAuthor("Ideaconsult Ltd.");
+		*/
 
 		try {
-			URL url = getClass().getClassLoader().getResource(loggingProperties);
+			URL url = getClass().getClassLoader().getResource(AMBITAppConfigProperties.loggingProperties);
 			System.setProperty("java.util.logging.config.file", url.getFile());
 			try (InputStream in = new FileInputStream(new File(url.getFile()))) {
 				LogManager.getLogManager().readConfiguration(in);
@@ -209,288 +174,19 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		getMetadataService().addExtension("smiles", ChemicalMediaType.CHEMICAL_SMILES, true);
 	}
 
-	protected synchronized boolean isDBAAEnabled() {
-		try {
-			String aaadmin = properties.getProperty(DB_AA_ENABLED, configProperties);
-			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
-		} catch (Exception x) {
-			return false;
-		}
-	}
 
-	protected synchronized int getBaseURLDepth() {
-		try {
-			String val = properties.getProperty(BASEURL_DEPTH, ambitProperties);
-			return val == null ? 1 : Integer.parseInt(val);
-		} catch (Exception x) {
-			return 1;
-		}
-	}
-
-	protected synchronized boolean isSimpleSecretAAEnabled() {
-		try {
-			String aaadmin = properties.getProperty(LOCAL_AA_ENABLED, configProperties);
-			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
-		} catch (Exception x) {
-			return false;
-		}
-	}
-
-	protected synchronized boolean isWarmupEnabled() {
-		try {
-			String warmup = properties.getProperty(WARMUP_ENABLED, configProperties);
-			return warmup == null ? null : Boolean.parseBoolean(warmup);
-		} catch (Exception x) {
-			return false;
-		}
-	}
-
-	protected synchronized boolean getSimilarityOrderOption() {
-		try {
-			String order = properties.getProperty(SIMILARITY_ORDER, ambitProperties);
-			return order == null ? true : Boolean.parseBoolean(order);
-		} catch (Exception x) {
-			return true;
-		}
-	}
-
-	protected synchronized boolean getEnableEmailVerificationOption() {
-		try {
-			String order = properties.getProperty(AMBITConfig.enableEmailVerification.name(), configProperties);
-			return order == null ? true : Boolean.parseBoolean(order);
-		} catch (Exception x) {
-			return true;
-		}
-	}
-
-	protected synchronized String getAjaxTimeoutOption() {
-		try {
-			String order = properties.getProperty(AJAX_TIMEOUT, ambitProperties);
-			return order == null ? "10000" : order.trim();
-		} catch (Exception x) {
-			return "10000";
-		}
-	}
-
+	
 	protected synchronized SimpleGuards isSimpleGuardEnabled() {
 		try {
-			String guard = properties.getProperty(GUARD_ENABLED, configProperties);
+			String guard = getProperties_internal().isSimpleGuardEnabled();
 			return guard == null ? null : SimpleGuards.valueOf(guard);
 		} catch (Exception x) {
 			return null;
 		}
 	}
 
-	protected String[] getGuardListAllowed() {
-		try {
-			String list = properties.getProperty(GUARD_LIST, configProperties);
-			return list.split(" ");
-		} catch (Exception x) {
-			return null;
-		}
-	}
 
-	public synchronized String readVersionShort() {
-		try {
-			return properties.getProperty(version, ambitProperties);
-		} catch (Exception x) {
-			return "Unknown";
-		}
-	}
 
-	public synchronized String readVersionLong() {
-		try {
-			String v1 = properties.getProperty(version, ambitProperties);
-			String v2 = properties.getProperty(version_build, ambitProperties);
-			String v3 = properties.getProperty(version_timestamp, ambitProperties);
-			return String.format("%s r%s built %s", v1, v2, new Date(Long.parseLong(v3)));
-		} catch (Exception x) {
-			return "Unknown";
-		}
-	}
-
-	public synchronized String readGACode() {
-		try {
-			String ga = properties.getProperty(googleAnalytics, ambitProperties);
-			if ("".equals(ga))
-				return null;
-			return ga;
-		} catch (Exception x) {
-			return null;
-		}
-	}
-
-	public synchronized String getMapFolder() {
-		try {
-			String v = properties.getProperty(map_folder, ambitProperties);
-			if ("".equals(v))
-				return null;
-			return v;
-		} catch (Exception x) {
-			return null;
-		}
-	}
-
-	protected synchronized String getAllowedOrigins() {
-		try {
-			return properties.getProperty(ALLOWED_ORIGINS, configProperties);
-		} catch (Exception x) {
-			return null;
-		}
-	}
-
-	protected synchronized boolean isOpenToxAAEnabled() {
-		try {
-			String aaadmin = properties.getProperty(OPENTOX_AA_ENABLED, configProperties);
-			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
-		} catch (Exception x) {
-			return false;
-		}
-	}
-
-	protected synchronized boolean protectAdminResource() {
-		try {
-			String aaadmin = properties.getProperty(adminAAEnabled, ambitProperties);
-			return aaadmin == null ? null : Boolean.parseBoolean(aaadmin);
-		} catch (Exception x) {
-			return false;
-		}
-	}
-
-	public synchronized String getMenuProfile() {
-		String prefix = properties.getProperty("ambit.profile", ambitProperties);
-		if (prefix == null || "".equals(prefix) || prefix.contains("${"))
-			prefix = "default";
-		return prefix;
-	}
-
-	protected synchronized boolean protectCompoundResource() {
-		try {
-			String aacompound = properties.getProperty(compoundAAEnabled, ambitProperties);
-			return aacompound == null ? null : Boolean.parseBoolean(aacompound);
-		} catch (Exception x) {
-			return false;
-		}
-	}
-
-	protected synchronized boolean protectFeatureResource() {
-		try {
-			String aafeature = properties.getProperty(featureAAEnabled, ambitProperties);
-			return aafeature == null ? null : Boolean.parseBoolean(aafeature);
-		} catch (Exception x) {
-			return false;
-		}
-	}
-
-	protected synchronized boolean attachDepictRouter() {
-		return getBooleanPropertyWithDefault(attachDepict, ambitProperties, true);
-	}
-
-	protected synchronized boolean attachSubstanceRouter() {
-		return getBooleanPropertyWithDefault(attachSubstance, ambitProperties, true);
-	}
-
-	protected synchronized boolean attachInvestigationRouter() {
-		return getBooleanPropertyWithDefault(attachInvestigation, ambitProperties, false);
-	}
-
-	public synchronized Map<String, WrappedService<UsernamePasswordCredentials>> getSolrServices() {
-		try {
-			Map<String, WrappedService<UsernamePasswordCredentials>> services = null;
-
-			for (int i = 1; i < 10; i++) {
-				String name = properties.getPropertyWithDefault(String.format(solr_service, i), ambitProperties, null);
-				if (name == null)
-					continue;
-				if (services == null)
-					services = new Hashtable<String, WrappedService<UsernamePasswordCredentials>>();
-
-				WrappedService<UsernamePasswordCredentials> solr = new WrappedService<>();
-				solr.setName(name);
-				solr.setURI(
-						new URI(properties.getPropertyWithDefault(String.format(solr_url, i), ambitProperties, null)));
-				solr.setCredentials(new UsernamePasswordCredentials(
-						properties.getPropertyWithDefault(String.format(solr_basic_user, i), ambitProperties, null),
-						properties.getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties,
-								null)));
-				solr.setFilterConfig(properties.getPropertyWithDefault(solr_filter, ambitProperties, null));
-
-				services.put(name, solr);
-			}
-
-			return services;
-		} catch (Exception x) {
-			logger.log(Level.WARNING, x.getMessage());
-			return null;
-		}
-	}
-
-	protected synchronized boolean attachSubstanceOwnerRouter() {
-		return getBooleanPropertyWithDefault(attachSubstanceOwner, ambitProperties, true);
-	}
-
-	protected synchronized boolean attachToxmatchRouter() {
-		return getBooleanPropertyWithDefault(attachToxmatch, ambitProperties, true);
-	}
-
-	protected synchronized boolean getBooleanPropertyWithDefault(String name, String config, boolean defaultValue) {
-		try {
-			String attach = properties.getProperty(name, config);
-			if (attach != null && attach.startsWith("${"))
-				return defaultValue;
-			return attach == null ? defaultValue : Boolean.parseBoolean(attach);
-		} catch (Exception x) {
-			return defaultValue;
-		}
-	}
-
-	public synchronized String getCustomTitle() {
-		return properties.getPropertyWithDefault(custom_title, ambitProperties, "AMBIT");
-	}
-
-	public synchronized String getCustomDescription() {
-		return properties.getPropertyWithDefault(custom_description, ambitProperties,
-				"Chemical structures database, properties prediction & machine learning with OpenTox REST web services API");
-	}
-
-	public synchronized String getCustomQuery() {
-		return properties.getPropertyWithDefault(custom_query, ambitProperties, "formaldehyde");
-	}
-
-	public synchronized String getCustomStructureQuery() {
-		return properties.getPropertyWithDefault(custom_structurequery, ambitProperties, "formaldehyde");
-	}
-
-	public synchronized String getCustomLogo() {
-		String logo = properties.getPropertyWithDefault(custom_logo, ambitProperties, null);
-		if ("".equals(logo))
-			logo = null;
-		return logo;
-	}
-
-	public synchronized String getCustomLicense() {
-		return properties.getPropertyWithDefault(custom_license, ambitProperties, "AMBIT");
-	}
-
-	public synchronized String getSearchServiceURI() {
-		String rootUrl = getContext().getParameters().getFirstValue(BASE_URL);
-		return properties.getPropertyWithDefault(custom_search, ambitProperties, rootUrl + "/ui/_search");
-	}
-
-	protected ConcurrentMap<String, char[]> getLocalSecrets() throws Exception {
-
-		String identifier = properties.getProperty(identifierKey, configProperties);
-		String pass = properties.getProperty(identifierPass, configProperties);
-		if ((identifier == null) || "".equals(identifier) || identifier.indexOf("${") > -1)
-			throw new Exception(
-					String.format("Property %s not set. The web application will be READ ONLY!", identifierKey));
-		if ((pass == null) || "".equals(pass) || pass.indexOf("${") > -1)
-			throw new Exception(
-					String.format("Property %s not set. The web application will be READ ONLY!", identifierKey));
-		ConcurrentMap<String, char[]> localSecrets = new ConcurrentHashMap<String, char[]>();
-		localSecrets.put(identifier, pass.toCharArray());
-		return localSecrets;
-	}
 
 	/**
 	 * Reads the status report level from ambit.pref ${ambit.report.level} If
@@ -501,7 +197,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected FreeMarkerStatusService.REPORT_LEVEL getStatusReportLevel() {
 		try {
 			FreeMarkerStatusService.REPORT_LEVEL aa = FreeMarkerStatusService.REPORT_LEVEL
-					.valueOf(properties.getProperty(FreeMarkerStatusService.report_level, ambitProperties));
+					.valueOf(getProperties().getReportLevel());
 			if ((getContext() != null) && (getContext().getParameters() != null)
 					&& (getContext().getParameters().getFirstValue(FreeMarkerStatusService.report_level)) != null)
 				aa = FreeMarkerStatusService.REPORT_LEVEL
@@ -510,15 +206,6 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		} catch (Exception x) {
 		}
 		return FreeMarkerStatusService.REPORT_LEVEL.production;
-	}
-
-	protected boolean getConfigChangeLineSeparator() {
-		try {
-			String attach = properties.getProperty(config_changeLineSeparators, ambitProperties);
-			return attach == null ? null : Boolean.parseBoolean(attach);
-		} catch (Exception x) {
-			return false;
-		}
 	}
 
 	protected TaskStorage<O> createTaskStorage() {
@@ -589,7 +276,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	}
 
 	protected Restlet addOriginFilter(Restlet router) {
-		String allowedOrigins = getAllowedOrigins();
+		String allowedOrigins = getProperties().getAllowedOrigins();
 		getLogger().info("CORS: Origin filter attached:\t" + allowedOrigins);
 		OriginFilter originFilter = new OriginFilter(getContext(), allowedOrigins);
 		originFilter.setNext(router);
@@ -606,7 +293,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		// get from config file
 		ConcurrentMap<String, char[]> localSecrets = null;
 		try {
-			localSecrets = getLocalSecrets();
+			localSecrets = getProperties().getLocalSecrets();
 		} catch (Exception x) {
 			getLogger().log(Level.SEVERE, x.getMessage(), x);
 			localSecrets = new ConcurrentHashMap<String, char[]>(); // empty
@@ -647,24 +334,19 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 	protected Restlet createProtectedResource(Restlet router) {
 		return createProtectedResource(router, null);
 	}
-
+	/*
 	protected Restlet createDBProtectedResource(String usersdbname, Restlet router, String prefix) {
-		String secret = properties.getProperty(AMBITConfig.secret.name(), configProperties);
-		long sessionLength = 1000 * 60 * 45L; // 45 min in milliseconds
-		try {
-			sessionLength = Long.parseLong(properties.getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
-		} catch (Exception x) {
-		}
 
-		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname, configProperties, secret,
-				sessionLength, false);
+		Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), properties, AMBITAppConfigProperties.configProperties, false);
+		//Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname, configProperties, secret,s essionLength, false);
 		// UserAuthorizer authz = new UserAuthorizer();
-		Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, configProperties,
-				getBaseURLDepth());
+		Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, AMBITAppConfigProperties.configProperties,
+				properties.getBaseURLDepth());
 		dbAuth.setNext(authz);
 		authz.setNext(router);
 		return dbAuth;
 	}
+	*/
 
 	protected Restlet createProtectedResource(Restlet router, String prefix) {
 		Filter authN = new OpenSSOAuthenticator(getContext(), false, "opentox.org", new OpenSSOVerifierSetUser(false));

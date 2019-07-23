@@ -284,7 +284,7 @@ public class UserByURIResource<T> extends UserDBResource<T> {
 			if (bundleid <= 0)
 				throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
 
-			int hd = ((AmbitApplication) getApplication()).getHOMEPAGE_DEPTH();
+			int hd = ((AmbitApplication) getApplication()).getProperties().getBaseURLDepth();
 
 			DBConnection dbc = new DBConnection(getApplication().getContext(),
 					getConfigFile());

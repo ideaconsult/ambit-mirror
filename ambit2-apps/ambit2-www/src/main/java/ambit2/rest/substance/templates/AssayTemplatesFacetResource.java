@@ -32,11 +32,7 @@ public class AssayTemplatesFacetResource<Q extends IQueryRetrieval<AssayTemplate
 	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
 		AssayTemplateFacetQuery q = new AssayTemplateFacetQuery(
 				String.format("%s", AssayTemplatesFacetResource.assaytemplate_facet));
-		/*
-		String templatesdbname = getContext().getParameters().getFirstValue(
-				AMBITConfig.templates_dbname.name());
-		q.setDatabaseName(templatesdbname);
-		*/		
+
 		return (Q) q;
 	}
 

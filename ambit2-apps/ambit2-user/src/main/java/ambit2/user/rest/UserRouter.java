@@ -12,6 +12,7 @@ import org.restlet.routing.Router;
 import org.restlet.security.User;
 
 import ambit2.base.config.AMBITConfig;
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.user.aa.AMBITLoginFormResource;
 import ambit2.user.aa.AMBITLoginPOSTResource;
 import ambit2.user.aa.AMBITLogoutPOSTResource;
@@ -60,7 +61,7 @@ public class UserRouter extends MyRouter {
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
 		Filter auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret,
-				sessionLength,false);
+				sessionLength, false);
 		Router setCookieUserRouter = new MyRouter(context);
 		/*
 		 * Filter authz = new ProtocolAuthorizer(testAuthZ,DBRoles.adminRole);
@@ -78,7 +79,6 @@ public class UserRouter extends MyRouter {
 		// myAccountRouter.attach(Resources.protocol,MyObservationsResource.class);
 		setCookieUserRouter.attach(Resources.myaccount, myAccountRouter);
 		setCookieUserRouter.attach(Resources.user, new UserRouter(context, null, null));
-		
 
 		/*
 		 * setCookieUserRouter.attach(String.format("%s/{%s}",Resources.dataset,
@@ -94,7 +94,8 @@ public class UserRouter extends MyRouter {
 		protectedRouter.attach(String.format("/%s", UserLoginPOSTResource.resource), AMBITLoginPOSTResource.class);
 		protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource), AMBITLogoutPOSTResource.class);
 
-		auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret, sessionLength,false);
+		auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret, sessionLength,
+				false);
 		auth.setNext(protectedRouter);
 		router.attach("/protected", auth);
 
@@ -111,6 +112,14 @@ public class UserRouter extends MyRouter {
 		return setCookieUserRouter;
 	}
 
+	public static Filter createCookieAuthenticator(Context context, AMBITConfigProperties properties, String configProperties, boolean multiAuthenticating) {
+		
+		String secret = properties.getPropertyWithDefault(AMBITConfig.secret.name(), configProperties, UUID.randomUUID().toString());
+		long sessionlength = properties.getPropertyWithDefaultLong(AMBITConfig.sessiontimeout.name(), configProperties,  1000 * 60 * 45L);
+		String usersdbname = properties.getPropertyWithDefault(AMBITConfig.Database.name(), configProperties, "ambit_users");
+		return createCookieAuthenticator(context,usersdbname,configProperties,secret,sessionlength,multiAuthenticating);
+	}
+
 	public static Filter createCookieAuthenticator(Context context, String default_userdb, String config, String secret,
 			long sessionLength, boolean multiAuthenticating) {
 
@@ -119,7 +128,7 @@ public class UserRouter extends MyRouter {
 			usersdbname = "ambit_users";
 
 		CookieAuthenticator cookieAuth = new CookieAuthenticator(context, usersdbname,
-				(secret == null ? UUID.randomUUID().toString() : secret).getBytes()) ;
+				(secret == null ? UUID.randomUUID().toString() : secret).getBytes());
 		cookieAuth.setMultiAuthenticating(multiAuthenticating);
 		cookieAuth.setCookieName("ambitdb");
 		if (sessionLength < 600000)
@@ -129,14 +138,15 @@ public class UserRouter extends MyRouter {
 		cookieAuth.setLoginPath("/provider/signin");
 		cookieAuth.setLogoutPath("/provider/signout");
 
-		cookieAuth.setVerifier(new DBVerifier<UserAuth>(context, config, usersdbname,new UserAuth()) {
+		cookieAuth.setVerifier(new DBVerifier<UserAuth>(context, config, usersdbname, new UserAuth()) {
 			@Override
 			public int verify(Request request, Response response) {
 				if (request.getResourceRef().toString().indexOf("/provider/") >= 0)
 					return super.verify(request, response);
 				else { // just check the cookie
 					int result = RESULT_VALID;
-					if ((request.getChallengeResponse() != null) && ChallengeScheme.HTTP_COOKIE.equals(request.getChallengeResponse().getScheme())) {
+					if ((request.getChallengeResponse() != null)
+							&& ChallengeScheme.HTTP_COOKIE.equals(request.getChallengeResponse().getScheme())) {
 						String identifier = getIdentifier(request, response);
 						request.getClientInfo().setUser(new User(identifier));
 					}

@@ -34,7 +34,7 @@ public class ExperimentsSearchResource<E>  extends StatisticsResource<ResultsCou
 	
 	@Override
 	protected QueryReporter createJSONReporter(Request request, String jsonp) {
-		FacetAnnotator annotator = new FacetAnnotator(new File(((AmbitFreeMarkerApplication) getApplication()).getMapFolder()));
+		FacetAnnotator annotator = new FacetAnnotator(new File(((AmbitFreeMarkerApplication) getApplication()).getProperties().getMapFolder()));
 		return new FacetJSONReporter(request, jsonp,annotator);
 	}
 }

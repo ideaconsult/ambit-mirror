@@ -51,13 +51,13 @@ import ambit2.rest.bookmark.OntoBucketResource;
 import ambit2.rest.bundle.MyBundlesResource;
 import ambit2.rest.bundle.user.DummyUserByURIResource;
 import ambit2.rest.bundle.user.UserByURIResource;
+import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.dataset.CollectionStructureResource;
 import ambit2.rest.dataset.DatasetResource;
 import ambit2.rest.dataset.DatasetsResource;
 import ambit2.rest.dataset.MissingFeatureValuesResource;
 import ambit2.rest.dataset.filtered.DataAvailabilityResource;
 import ambit2.rest.dataset.filtered.ExperimentsSearchResource;
-import ambit2.rest.dataset.filtered.FilteredDatasetResource;
 import ambit2.rest.dataset.filtered.InterpretationResultSearchResource;
 import ambit2.rest.dataset.filtered.StudySearchResource;
 import ambit2.rest.dataset.filtered.SubstanceTypeSearchResource;
@@ -170,19 +170,24 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 		SimpleGuards guard = isSimpleGuardEnabled();
 
-		if (!standalone && warmupEnabled) // only servlets are lazy
-			addTask("warmup", new WarmupTask("warmup", openToxAAEnabled), new Reference("riap://component"), "guest");
+		if (!standalone && getProperties_internal().isWarmupEnabled()) // only
+																		// servlets
+																		// are
+																		// lazy
+			addTask("warmup", new WarmupTask("warmup", getProperties_internal().isOpenToxAAEnabled()),
+					new Reference("riap://component"), "guest");
 
 		if (guard != null) {
-			logger.log(Level.INFO, String.format("Property %s set, %s guard enabled.", GUARD_ENABLED, guard));
-			String[] allowed = getGuardListAllowed();
+			logger.log(Level.INFO,
+					String.format("Property %s set, %s guard enabled.", AMBITAppConfigProperties.GUARD_ENABLED, guard));
+			String[] allowed = getProperties_internal().getGuardListAllowed();
 			StringBuilder b = new StringBuilder();
 			for (String ip : allowed) {
 				b.append(ip);
 				b.append(" ");
 			}
-			logger.log(Level.INFO,
-					String.format("Property %s set, %s list allowed %s", GUARD_LIST, guard, b.toString()));
+			logger.log(Level.INFO, String.format("Property %s set, %s list allowed %s",
+					AMBITAppConfigProperties.GUARD_LIST, guard, b.toString()));
 			SimpleGuard theguard = guard.getGuard(allowed, logger);
 			theguard.setNext(root);
 			return theguard;
@@ -192,22 +197,16 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 	}
 
 	public boolean isSendTokenAsCookie() {
-		return openToxAAEnabled;
+		return getProperties_internal().isDBAAEnabled();
 	}
 
 	public Restlet initInboundRoot() {
 		initFreeMarkerConfiguration();
 
-		String usersdbname = properties.getProperty(AMBITConfig.Database.name(), configProperties);
+		String usersdbname = getProperties_overridable().getDBNameUsers();
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
 		getContext().getParameters().add(AMBITConfig.users_dbname.name(), usersdbname);
-		
-		//templates - use ambit db if not specified
-		String templatesdbname = properties.getProperty(AMBITConfig.Database.name(), templateProperties);
-		if (templatesdbname == null)
-			templatesdbname = properties.getProperty(AMBITConfig.Database.name(), ambitProperties);
-		getContext().getParameters().add(AMBITConfig.templates_dbname.name(), templatesdbname);		
 
 		Router router = new MyRouter(this.getContext()) {
 			public void handle(Request request, Response response) {
@@ -235,9 +234,9 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		 */
 
 		Restlet adminRouter = createAdminRouter();
-		if (openToxAAEnabled) {
-			router.attach(String.format("/%s", AdminResource.resource),
-					protectAdminResource() ? createProtectedResource(adminRouter, "admin") : adminRouter);
+		if (getProperties_internal().isOpenToxAAEnabled()) {
+			router.attach(String.format("/%s", AdminResource.resource), getProperties_internal().protectAdminResource()
+					? createProtectedResource(adminRouter, "admin") : adminRouter);
 		} else
 			router.attach(String.format("/%s", AdminResource.resource), adminRouter);
 
@@ -247,8 +246,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		/** /feature */
 		FeaturesRouter featuresRouter = new FeaturesRouter(getContext());
 
-		if (openToxAAEnabled) {
-			if (protectFeatureResource())
+		if (getProperties_internal().isOpenToxAAEnabled()) {
+			if (getProperties_internal().protectFeatureResource())
 				router.attach(PropertyResource.featuredef, createProtectedResource(featuresRouter, "feature"));
 			else {
 				Filter cauthN = new OpenSSOAuthenticator(getContext(), false, "opentox.org",
@@ -260,17 +259,16 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 			router.attach(PropertyResource.featuredef, featuresRouter);
 
 		/** filter */
-		router.attach(FilteredDatasetResource.resource, FilteredDatasetResource.class);
+		// router.attach(FilteredDatasetResource.resource,
+		// FilteredDatasetResource.class);
 
-		/** Similarity search TODO: move it under /algorithm */
 		Router similarityRouter = createSimilaritySearchRouter();
 
-		/** SMARTS search. TODO: move it under /algorithm */
 		Router smartsRouter = createSMARTSSearchRouter();
 		/** /compound */
 		CompoundsRouter compoundRouter = new CompoundsRouter(getContext(), featuresRouter, smartsRouter);
-		if (openToxAAEnabled) {
-			if (protectCompoundResource())
+		if (getProperties_internal().isOpenToxAAEnabled()) {
+			if (getProperties_internal().protectCompoundResource())
 				router.attach(DataResources.compound_resource, createProtectedResource(compoundRouter, "compound"));
 			else {
 				Filter cauthN = new OpenSSOAuthenticator(getContext(), false, "opentox.org",
@@ -286,7 +284,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		Router allDatasetsRouter = new MyRouter(getContext());
 		allDatasetsRouter.attachDefault(DatasetsResource.class);
 
-		if (openToxAAEnabled)
+		if (getProperties_internal().isOpenToxAAEnabled())
 			router.attach(DatasetsResource.datasets, createProtectedResource(allDatasetsRouter, "datasets"));
 		else
 			router.attach(DatasetsResource.datasets, allDatasetsRouter);
@@ -295,18 +293,18 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		CompoundInDatasetRouter cmpdRouter = new CompoundInDatasetRouter(getContext(), featuresRouter, smartsRouter);
 		Router datasetRouter = new DatasetsRouter(getContext(), cmpdRouter, smartsRouter, similarityRouter);
 
-		if (openToxAAEnabled)
+		if (getProperties_internal().isOpenToxAAEnabled())
 			router.attach(DatasetResource.dataset, createProtectedResource(datasetRouter, "dataset"));
 		else
 			router.attach(DatasetResource.dataset, datasetRouter);
 
-		if (attachSubstanceRouter()) {
-			Map<String, WrappedService<UsernamePasswordCredentials>> solrServices = getSolrServices();
+		if (getProperties_internal().attachSubstanceRouter()) {
+			Map<String, WrappedService<UsernamePasswordCredentials>> solrServices = getProperties().getSolrServices();
 
 			/**
 			 * /property/{id}
 			 */
-			if (openToxAAEnabled) {
+			if (getProperties_internal().isOpenToxAAEnabled()) {
 
 				router.attach(Resources.bundle,
 						createAuthenticatedOpenMethodResource(new BundleRouter(getContext(), null)));
@@ -317,11 +315,11 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				router.attach(SubstanceResource.substance,
 						createAuthenticatedOpenMethodResource(new SubstanceRouter(getContext())));
 
-				if (attachSubstanceOwnerRouter())
+				if (getProperties_internal().attachSubstanceOwnerRouter())
 					router.attach(OwnerSubstanceFacetResource.owner,
 							createAuthenticatedOpenMethodResource(new SubstanceOwnerRouter(getContext())));
 
-				if (attachInvestigationRouter()) {
+				if (getProperties_internal().attachInvestigationRouter()) {
 					router.attach(SubstanceStudyTableResource.investigation,
 							createAuthenticatedOpenMethodResource(new InvestigationRouter(getContext())));
 				}
@@ -331,21 +329,21 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 			} else {
 				Filter authz = null;
-				if (dbAAEnabled)
+				if (getProperties_internal().isDBAAEnabled())
 					try {
-						String dbname = properties.getProperty(AMBITConfig.Database.name(), ambitProperties);
+						String dbname = getProperties().getDBNameAmbit();
 						authz = UserRouter.createBundlePolicyAuthorizer(getContext(), dbname, usersdbname,
-								"ambit2/rest/config/config.prop", getBaseURLDepth());
+								"ambit2/rest/config/config.prop", getProperties().getBaseURLDepth());
 					} catch (Exception x) {
 
 					}
 				router.attach(Resources.bundle, new BundleRouter(getContext(), authz));
 				router.attach(Resources.collection_bundledrafts, new CollectionsRouter(getContext(), null));
 				router.attach(SubstanceResource.substance, new SubstanceRouter(getContext()));
-				if (attachSubstanceOwnerRouter())
+				if (getProperties_internal().attachSubstanceOwnerRouter())
 					router.attach(OwnerSubstanceFacetResource.owner, new SubstanceOwnerRouter(getContext()));
 
-				if (attachInvestigationRouter()) {
+				if (getProperties_internal().attachInvestigationRouter()) {
 					router.attach(SubstanceStudyTableResource.investigation, new InvestigationRouter(getContext()));
 				}
 
@@ -366,7 +364,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 		}
 
-		if (attachToxmatchRouter()) {
+		if (getProperties_internal().attachToxmatchRouter()) {
 			router.attach(QMapSpaceResource.resource, QMapSpaceResource.class);
 			router.attach(QMapResource.qmap, QMapResource.class);
 			router.attach(String.format("%s/{%s}/metadata", QMapResource.qmap, QMapResource.qmapKey),
@@ -378,13 +376,13 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		MyRouter collectionRouter = new MyRouter(getContext());
 		collectionRouter.attach(String.format("/{%s}/{%s}", CollectionStructureResource.folderKey,
 				CollectionStructureResource.datasetKey), CollectionStructureResource.class);
-		if (openToxAAEnabled) {
+		if (getProperties_internal().isOpenToxAAEnabled()) {
 			router.attach(CollectionStructureResource.collection,
 					createProtectedResource(collectionRouter, "collection"));
 		} else
 			router.attach(CollectionStructureResource.collection, collectionRouter);
 
-		if (openToxAAEnabled) {
+		if (getProperties_internal().isOpenToxAAEnabled()) {
 			/** /algorithm */
 			router.attach(MLResources.algorithm, createAuthenticatedOpenResource(new AlgorithmRouter(getContext())));
 			/** /model */
@@ -408,7 +406,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		 * 
 		 */
 		Router queryRouter = createQueryRouter();
-		if (openToxAAEnabled) {
+		if (getProperties_internal().isOpenToxAAEnabled()) {
 			router.attach(QueryResource.query_resource, createAuthenticatedOpenResource(queryRouter));
 		} else
 			router.attach(QueryResource.query_resource, queryRouter);
@@ -453,7 +451,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		/**
 		 * Demos
 		 */
-		if (attachDepictRouter()) {
+		if (getProperties_internal().attachDepictRouter()) {
 			Router depict = new DepictDemoRouter(getContext());
 			router.attach("/demo", depict);
 
@@ -461,8 +459,9 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 			router.attach(String.format("%s/{%s}", DepictionResource.resource, DepictionResource.resourceKey),
 					DepictionResource.class);
 		}
-		//router.attach("/datatemplate", InputTemplatesResource.class);
-		//router.attach("/datatemplate/{idtemplate}", InputTemplatesResource.class);
+		// router.attach("/datatemplate", InputTemplatesResource.class);
+		// router.attach("/datatemplate/{idtemplate}",
+		// InputTemplatesResource.class);
 		router.attach(AssayTemplatesFacetResource.assaytemplate_key, AssayTemplateResource.class);
 		router.attach(AssayTemplatesFacetResource.assaytemplate_filter, AssayTemplateResource.class);
 		router.attach(AssayTemplatesFacetResource.assaytemplate_facet, AssayTemplatesFacetResource.class);
@@ -522,20 +521,15 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 			logger.log(Level.WARNING, x.getMessage(), x);
 		}
 
-		if (!isOpenToxAAEnabled()) {
+		if (!getProperties_internal().isOpenToxAAEnabled()) {
 
-			if (isDBAAEnabled()) {
-				String secret = properties.getProperty(AMBITConfig.secret.name(), configProperties);
-				long sessionLength = 1000 * 60 * 45L; // 45 min in milliseconds
-				try {
-					sessionLength = Long.parseLong(properties.getProperty(AMBITConfig.sessiontimeout.name(), configProperties));
-				} catch (Exception x) {
-				}
+			if (getProperties_internal().isDBAAEnabled()) {
 
 				router.attach("/", AMBITLoginFormResource.class);
 				router.attach("", AMBITLoginFormResource.class);
 
-				logger.log(Level.INFO, String.format("Property %s set, DB AA enabled.", DB_AA_ENABLED));
+				logger.log(Level.INFO,
+						String.format("Property %s set, DB AA enabled.", AMBITAppConfigProperties.DB_AA_ENABLED));
 
 				/*
 				 * /login
@@ -594,20 +588,25 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 				// optional challenge authenticator
 				ChallengeAuthenticatorTokenLocal tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true,
-						usersdbname, configProperties);
+						usersdbname, AMBITAppConfigProperties.configProperties);
 
-				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), usersdbname, configProperties,
-						secret, sessionLength, true);
+				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), getProperties(),
+						AMBITAppConfigProperties.configProperties, true);
 
-				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname, configProperties,
-						getBaseURLDepth());
+				// Filter dbAuth =
+				// UserRouter.createCookieAuthenticator(getContext(),
+				// usersdbname, AMBITAppConfigProperties.configProperties,
+				// secret, sessionLength, true);
+
+				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
+						AMBITAppConfigProperties.configProperties, getProperties().getBaseURLDepth());
 				tokenAuth.setNext(dbAuth);
 				dbAuth.setNext(authz);
 				authz.setNext(router);
 				// dbAuth.setNext(router);
 				return addOriginFilter(tokenAuth);
 
-			} else if (isSimpleSecretAAEnabled()) {
+			} else if (getProperties_internal().isSimpleSecretAAEnabled()) {
 
 				router.attach("/", UIResource.class);
 				router.attach("", UIResource.class);
@@ -616,7 +615,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				router.attach(ambit2.user.rest.resource.Resources.myaccount, UIBasicResource.class);
 				router.attach("/provider/signout", UIBasicResource.class);
 
-				logger.log(Level.INFO, String.format("Property %s set, local AA enabled.", LOCAL_AA_ENABLED));
+				logger.log(Level.INFO,
+						String.format("Property %s set, local AA enabled.", AMBITAppConfigProperties.LOCAL_AA_ENABLED));
 
 				// for testing purposes only!
 				router.attach(ambit2.user.rest.resource.Resources.myaccount + "/users", DummyUserByURIResource.class);

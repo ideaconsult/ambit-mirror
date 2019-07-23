@@ -43,6 +43,7 @@ import ambit2.db.processors.test.DbUnitTest;
 import ambit2.rest.AmbitComponent;
 import ambit2.rest.AmbitFreeMarkerApplication;
 import ambit2.rest.bundle.BundleSubstanceResource;
+import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.legacy.OTRemoteTask;
 import junit.framework.Assert;
 import net.idea.restnet.c.ChemicalMediaType;
@@ -68,9 +69,9 @@ public abstract class ResourceTest extends DbUnitTest {
 		context.getParameters().add(Preferences.PASSWORD, getPWD());
 		context.getParameters().add(Preferences.PORT, getPort());
 		context.getParameters().add(Preferences.HOST, getHost());
-		context.getParameters().add(AmbitFreeMarkerApplication.WARMUP_ENABLED, "false");
-		context.getParameters().add(AmbitFreeMarkerApplication.LOCAL_AA_ENABLED, "false");
-		context.getParameters().add(AmbitFreeMarkerApplication.OPENTOX_AA_ENABLED, "false");
+		context.getParameters().add(AMBITAppConfigProperties.WARMUP_ENABLED, "false");
+		context.getParameters().add(AMBITAppConfigProperties.LOCAL_AA_ENABLED, "false");
+		context.getParameters().add(AMBITAppConfigProperties.OPENTOX_AA_ENABLED, "false");
 
 		// Create a component
 		component = new AmbitComponent(context);

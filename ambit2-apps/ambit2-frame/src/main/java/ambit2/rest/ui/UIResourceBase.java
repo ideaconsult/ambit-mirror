@@ -268,35 +268,35 @@ public class UIResourceBase extends FreeMarkerResource {
 
 		try {
 			map.put(AMBITConfig.service_search.name(),
-					((AmbitFreeMarkerApplication) getApplication()).getSearchServiceURI());
+					((AmbitFreeMarkerApplication) getApplication()).getProperties().getSearchServiceURI(getRequest().getRootRef().toString()));
 		} catch (Exception x) {
 		}
 		try {
-			map.put(AMBITConfig.custom_query.name(), ((AmbitFreeMarkerApplication) getApplication()).getCustomQuery());
+			map.put(AMBITConfig.custom_query.name(), ((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomQuery());
 		} catch (Exception x) {
 		}
 		try {
 			map.put(AMBITConfig.custom_structurequery.name(),
-					((AmbitFreeMarkerApplication) getApplication()).getCustomStructureQuery());
+					((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomStructureQuery());
 		} catch (Exception x) {
 		}
 
 		try {
-			map.put(AMBITConfig.custom_title.name(), ((AmbitFreeMarkerApplication) getApplication()).getCustomTitle());
+			map.put(AMBITConfig.custom_title.name(), ((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomTitle());
 		} catch (Exception x) {
 		}
 		try {
-			map.put(AMBITConfig.custom_logo.name(), ((AmbitFreeMarkerApplication) getApplication()).getCustomLogo());
+			map.put(AMBITConfig.custom_logo.name(), ((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomLogo());
 		} catch (Exception x) {
 		}
 		try {
 			map.put(AMBITConfig.custom_description.name(),
-					((AmbitFreeMarkerApplication) getApplication()).getCustomDescription());
+					((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomDescription());
 		} catch (Exception x) {
 		}
 		try {
 			map.put(AMBITConfig.custom_license.name(),
-					((AmbitFreeMarkerApplication) getApplication()).getCustomLicense());
+					((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomLicense());
 		} catch (Exception x) {
 		}
 	}

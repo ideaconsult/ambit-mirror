@@ -77,7 +77,7 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 
 	public ProxyResource() {
 		super();
-		solrServices = ((AmbitFreeMarkerApplication) getApplication()).getSolrServices();
+		solrServices = ((AmbitFreeMarkerApplication) getApplication()).getProperties().getSolrServices();
 		setHtmlbyTemplate(true);
 	}
 

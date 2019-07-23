@@ -34,8 +34,10 @@ public class AmbitComponent extends RESTComponent {
 	
 	@Override
 	public synchronized void start() throws Exception {
-		//ServletContext ctx = (ServletContext) getContext().getServerDispatcher().getContext().getAttributes().get("org.restlet.ext.servlet.ServletContext");
-		//System.out.println(ctx.getContextPath());
+		
+		ServletContext ctx = (ServletContext) getContext().getServerDispatcher().getContext().getAttributes().get("org.restlet.ext.servlet.ServletContext");
+		System.out.println(ctx.getContextPath());
+		((AmbitApplication)getApplication()).getProperties().setContext(ctx.getContextPath());
 		super.start();
 	}
 

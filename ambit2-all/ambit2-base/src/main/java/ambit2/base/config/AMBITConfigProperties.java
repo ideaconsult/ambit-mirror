@@ -48,7 +48,7 @@ public class AMBITConfigProperties {
 		setContext(context);
 	}
 
-	public synchronized Properties getProperties(String config) {
+	protected synchronized Properties getProperties(String config) {
 		try {
 			Properties p = properties.get(config);
 			if (p == null) {
@@ -80,7 +80,7 @@ public class AMBITConfigProperties {
 		}
 	}
 
-	public synchronized String getProperty(String name, String config) {
+	protected synchronized String getProperty(String name, String config) {
 		try {
 			Properties p = getProperties(config);
 			return p.getProperty(name);
@@ -103,4 +103,28 @@ public class AMBITConfigProperties {
 		}
 	}
 
+	public synchronized Long getPropertyWithDefaultLong(String name, String config, Long defaultValue) {
+		try {
+			String value = getProperty(name, config);
+			if (value == null)
+				return defaultValue;
+			else if (value != null && value.startsWith("${"))
+				return defaultValue;
+			else
+				return Long.parseLong(value);
+		} catch (Exception x) {
+			return defaultValue;
+		}
+	}	
+
+	public synchronized boolean getBooleanPropertyWithDefault(String name, String config, boolean defaultValue) {
+		try {
+			String attach = getProperty(name, config);
+			if (attach != null && attach.startsWith("${"))
+				return defaultValue;
+			return attach == null ? defaultValue : Boolean.parseBoolean(attach);
+		} catch (Exception x) {
+			return defaultValue;
+		}
+	}
 }
