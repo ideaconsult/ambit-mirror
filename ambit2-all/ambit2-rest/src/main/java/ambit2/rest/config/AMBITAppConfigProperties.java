@@ -18,12 +18,6 @@ import ambit2.rest.wrapper.WrappedService;
 
 public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	
-	
-	protected static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
-	protected static final String templateProperties = "ambit2/rest/config/ambit2.assay.properties";
-	public static final String configProperties = "ambit2/rest/config/config.prop";
-	public static final String loggingProperties = "ambit2/rest/config/logging.prop";
-	
 	public static final String GUARD_ENABLED = "guard.enabled";
 	public static final String GUARD_LIST = "guard.list";
 	public static final String ALLOWED_ORIGINS = "allowed.origins";

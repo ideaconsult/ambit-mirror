@@ -7,6 +7,12 @@ import java.util.Hashtable;
 import java.util.Properties;
 
 public class AMBITConfigProperties {
+	
+	protected static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
+	protected static final String templateProperties = "ambit2/rest/config/ambit2.assay.properties";
+	public static final String configProperties = "ambit2/rest/config/config.prop";
+	public static final String loggingProperties = "ambit2/rest/config/logging.prop";
+	
 	protected String AMBIT_CONFIG_OVERRIDE_VAR = "AMBIT_CONFIG_OVERRIDE_VAR";
 	public String getConfigOverrideVar() {
 		return AMBIT_CONFIG_OVERRIDE_VAR;
