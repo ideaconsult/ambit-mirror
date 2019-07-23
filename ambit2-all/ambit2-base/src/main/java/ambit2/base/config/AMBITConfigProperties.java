@@ -57,19 +57,20 @@ public class AMBITConfigProperties {
 				try (InputStream in = this.getClass().getClassLoader().getResourceAsStream(config)) {
 					defaults.load(in);
 				}
-				p = new Properties(defaults);
 				if (overridePath != null) {
+					p = new Properties(defaults);
 					String[] segments = config.split("/");
 					File contextdir = overridePath;
 					if (context != null) {
-						contextdir = new File(overridePath, context);
+						contextdir = new File(overridePath, context.replace("/", ""));
 					}
 					File file = new File(contextdir, segments[segments.length - 1]);
 					if (file.exists())
 						try (InputStream in = new FileInputStream(file)) {
 							p.load(in);
 						}
-				}
+				} else
+					p = defaults;
 				properties.put(config, p);
 			}
 			return p;

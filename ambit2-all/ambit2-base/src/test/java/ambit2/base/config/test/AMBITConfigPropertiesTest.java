@@ -23,7 +23,7 @@ public class AMBITConfigPropertiesTest {
 	public void testContextOverride() throws Exception {
 		String overridePath = this.getClass().getClassLoader().getResource(overrideProperties).getFile();
 		Assert.assertNotNull(overridePath);
-		AMBITConfigProperties p = new AMBITConfigProperties("context",new File(overridePath));
+		AMBITConfigProperties p = new AMBITConfigProperties("/context",new File(overridePath));
 		Assert.assertEquals("TEST_CONTEXT", p.getProperty(key4test,ambitProperties));
 	}
 	
