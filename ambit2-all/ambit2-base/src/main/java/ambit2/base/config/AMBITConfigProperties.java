@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.Properties;
 
 public class AMBITConfigProperties {
-	protected static String AMBIT_CONFIG_OVERRIDE_DIR = "AMBIT_CONFIG_OVERRIDE_DIR";
+	protected static String AMBIT_CONFIG_OVERRIDE_VAR = "AMBIT_CONFIG_OVERRIDE_VAR";
 	protected Hashtable<String, Properties> properties = new Hashtable<String, Properties>();
 	protected File overridePath = null;
 	protected String context = null;
@@ -20,9 +20,9 @@ public class AMBITConfigProperties {
 		this.context = context;
 	}
 
-	public static File getConfigOverrideDir() {
+	public File getConfigOverrideDir(String override_var) {
 		try {
-			String path = System.getenv(AMBIT_CONFIG_OVERRIDE_DIR);
+			String path = System.getenv(override_var);
 			if (path != null) {
 				File dir = new File(path);
 				if (dir.exists() && dir.isDirectory())
@@ -40,7 +40,7 @@ public class AMBITConfigProperties {
 	}
 
 	public AMBITConfigProperties(String context) {
-		this(context, getConfigOverrideDir());
+		this(context, null);
 	}
 
 	public AMBITConfigProperties(String context, File overridePath) {
@@ -57,6 +57,11 @@ public class AMBITConfigProperties {
 				try (InputStream in = this.getClass().getClassLoader().getResourceAsStream(config)) {
 					defaults.load(in);
 				}
+				if (defaults.get(AMBIT_CONFIG_OVERRIDE_VAR) != null) {
+					File dir = getConfigOverrideDir(defaults.get(AMBIT_CONFIG_OVERRIDE_VAR).toString());
+					if (dir != null)
+						overridePath = dir;
+				}
 				if (overridePath != null) {
 					p = new Properties(defaults);
 					String[] segments = config.split("/");
@@ -68,10 +73,13 @@ public class AMBITConfigProperties {
 					if (file.exists())
 						try (InputStream in = new FileInputStream(file)) {
 							p.load(in);
+							//no overriding of the var
+							p.remove(AMBIT_CONFIG_OVERRIDE_VAR);
 						}
 				} else
 					p = defaults;
 				properties.put(config, p);
+
 			}
 			return p;
 
@@ -115,7 +123,7 @@ public class AMBITConfigProperties {
 		} catch (Exception x) {
 			return defaultValue;
 		}
-	}	
+	}
 
 	public synchronized boolean getBooleanPropertyWithDefault(String name, String config, boolean defaultValue) {
 		try {
