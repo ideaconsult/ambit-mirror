@@ -52,18 +52,13 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 
 	
 	public AMBITAppConfigProperties() {
-		super(null,null);
+		super(null);
 	}
 
-	public AMBITAppConfigProperties(String context) {
-		super(context);
-	}
 
-	public AMBITAppConfigProperties(String context, File overridePath) {
-		super(context,overridePath);
+	public AMBITAppConfigProperties(File overridePath) {
+		super(overridePath);
 	}
-	
-
 	
 	public synchronized String getDBNameUsers() {
 		return getPropertyWithDefault(AMBITConfig.Database.name(), configProperties, "ambit_users");

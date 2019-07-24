@@ -22,7 +22,7 @@ public class AMBITAppConfigInternal extends AMBITAppConfigProperties {
 	 * No config overriding at all
 	 */
 	public AMBITAppConfigInternal() {
-		super(null,null);
+		super(null);
 		setConfigOverrideVar(null);
 	}
 	

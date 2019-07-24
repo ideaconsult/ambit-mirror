@@ -15,30 +15,22 @@ public class AMBITConfigPropertiesTest {
 	protected static final String key4test="custom.title";
 	@Test
 	public void test() throws Exception {
-		AMBITConfigProperties p = new AMBITConfigProperties(null,null);
+		AMBITConfigProperties p = new AMBITConfigProperties(null);
 		Assert.assertEquals("TEST", p.getPropertyWithDefault(key4test,ambitProperties,"ERROR"));
-	}
-	
-	@Test
-	public void testContextOverride() throws Exception {
-		String overridePath = this.getClass().getClassLoader().getResource(overrideProperties).getFile();
-		Assert.assertNotNull(overridePath);
-		AMBITConfigProperties p = new AMBITConfigProperties("/context",new File(overridePath));
-		Assert.assertEquals("TEST_CONTEXT", p.getPropertyWithDefault(key4test,ambitProperties,"ERROR"));
 	}
 	
 	@Test
 	public void testOverride() throws Exception {
 		String overridePath = this.getClass().getClassLoader().getResource(overrideProperties).getFile();
 		Assert.assertNotNull(overridePath);
-		AMBITConfigProperties p = new AMBITConfigProperties(null,new File(overridePath));
+		AMBITConfigProperties p = new AMBITConfigProperties(new File(overridePath));
 		Assert.assertEquals("TEST123", p.getPropertyWithDefault(key4test,ambitProperties,"ERROR"));
 	}	
 	@Test
 	public void testOverrideBadPath() throws Exception {
 		String overridePath = "";
 		Assert.assertNotNull(overridePath);
-		AMBITConfigProperties p = new AMBITConfigProperties(null,new File(overridePath));
+		AMBITConfigProperties p = new AMBITConfigProperties(new File(overridePath));
 		Assert.assertEquals("TEST", p.getPropertyWithDefault(key4test,ambitProperties,"ERROR"));
 	}	
 	@Test
@@ -55,7 +47,7 @@ public class AMBITConfigPropertiesTest {
 	public void testOverrideFileMissing() throws Exception {
 		String overridePath = this.getClass().getClassLoader().getResource(overrideProperties).getFile();
 		Assert.assertNotNull(overridePath);
-		AMBITConfigProperties p = new AMBITConfigProperties(null,new File(overridePath));
+		AMBITConfigProperties p = new AMBITConfigProperties(new File(overridePath));
 		Assert.assertEquals("XXX", p.getPropertyWithDefault(key4test,aaProperties,"ERROR"));
 	}		
 	
