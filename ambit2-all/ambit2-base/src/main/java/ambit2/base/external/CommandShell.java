@@ -39,6 +39,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.io.DownloadTool;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -437,17 +438,12 @@ public abstract class CommandShell<INPUT, OUTPUT> implements IProcessor<INPUT, O
 
 	public synchronized String getHomeFromConfig(String propertiesResource, String propertyHome) throws ShellException {
 		try {
-			Properties properties = new Properties();
-			URL uri = getClass().getClassLoader().getResource(propertiesResource);
-			try (InputStream in = uri.openStream()) {
-				if (in == null)
-					throw new ShellException(null, String.format("Can't find %s", uri.toString()));
-				properties.load(in);
-			}
-			String wheredragonlives = properties.getProperty(propertyHome);
+			AMBITConfigProperties properties = new AMBITConfigProperties();
+			
+			String wheredragonlives = properties.getPropertyWithDefault(propertyHome,propertiesResource,null);
 			if (wheredragonlives == null) {
 				logger.log(Level.SEVERE, String.format("Can't find where %s is located. No property %s in %s",
-						toString(), propertyHome, uri.toString()));
+						toString(), propertyHome, propertiesResource));
 				throw new ShellException(null, String.format("Can't find where %s is located.", toString()));
 			}
 			return wheredragonlives;

@@ -44,6 +44,8 @@ import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.aa.opensso.OpenSSOServicesConfig;
 import ambit2.rest.aa.opensso.OpenSSOUser;
+import ambit2.rest.config.AMBITAppConfigInternal;
+import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.exception.RResourceException;
 import ambit2.rest.property.ProfileReader;
 import ambit2.rest.rdf.RDFObjectIterator;
@@ -750,32 +752,15 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	}
 
 	public boolean isJSONPEnabled() {
-		Properties properties = new Properties();
-		try {
-			InputStream in = this.getClass().getClassLoader()
-					.getResourceAsStream("ambit2/rest/config/ambit2.pref");
-			properties.load(in);
-			in.close();
-			String jsonp = properties.getProperty("jsonp");
-			return jsonp == null ? false : Boolean.parseBoolean(jsonp);
-		} catch (Exception x) {
-			return false;
-		}
+		AMBITAppConfigProperties config = new AMBITAppConfigProperties();
+		return config.isJSONP();
 	}
-
+	
 	public boolean isAAEnabled() {
-		Properties properties = new Properties();
-		try {
-			InputStream in = this.getClass().getClassLoader()
-					.getResourceAsStream("ambit2/rest/config/config.prop");
-			properties.load(in);
-			in.close();
-			String jsonp = properties.getProperty("aa.enabled");
-			return jsonp == null ? false : Boolean.parseBoolean(jsonp);
-		} catch (Exception x) {
-			return false;
-		}
+		AMBITAppConfigInternal config = new AMBITAppConfigInternal();
+		return config.isOpenToxAAEnabled();
 	}
+	
 
 	protected Representation getHTMLByTemplate(Variant variant)
 			throws ResourceException {

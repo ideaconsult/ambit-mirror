@@ -1,5 +1,6 @@
 package ambit2.rest.algorithm.descriptors;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.external.ShellException;
 import ambit2.dragon.DescriptorDragonShell;
 import ambit2.dragon.DragonShell;
@@ -20,7 +21,7 @@ public class DragonDescriptorWeb extends DescriptorDragonShell {
 
 			@Override
 			protected String getHome() throws ShellException {
-				return getHomeFromConfig("ambit2/rest/config/ambit2.pref", DragonShell.DRAGON_HOME);
+				return getHomeFromConfig(AMBITConfigProperties.ambitProperties, DragonShell.DRAGON_HOME);
 			}
 		};
 	}

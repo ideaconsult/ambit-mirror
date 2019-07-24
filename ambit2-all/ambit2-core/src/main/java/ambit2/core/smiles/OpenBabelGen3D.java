@@ -1,15 +1,13 @@
 package ambit2.core.smiles;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.external.ShellException;
 
 public class OpenBabelGen3D extends OpenBabelAbstractShell<IAtomContainer> {
@@ -29,16 +27,10 @@ public class OpenBabelGen3D extends OpenBabelAbstractShell<IAtomContainer> {
 	@Override
 	protected String getOBabelHome() throws ShellException {
 		try {
-			Properties properties = new Properties();
-			URL uri = OpenBabelGen3D.class.getClassLoader().getResource("ambit2/rest/config/ambit2.pref");
-			
-			InputStream in = uri.openStream();
-			if (in==null) throw new ShellException(null,String.format("Can't find %s",uri.toString()));
-			properties.load(in);
-			in.close();	
-			String wheredragonlives = properties.getProperty(OpenBabelGen3D.OBABEL_HOME);
+			AMBITConfigProperties properties = new AMBITConfigProperties();
+			String wheredragonlives = properties.getPropertyWithDefault(OpenBabelGen3D.OBABEL_HOME,AMBITConfigProperties.ambitProperties,null);
 			if (wheredragonlives==null) 
-				throw new ShellException(null,String.format("Can't find where OpenBabel is located. No property %s in %s",OpenBabelGen3D.OBABEL_HOME,uri.toString()));
+				throw new ShellException(null,String.format("Can't find where OpenBabel is located. No property %s in %s",OpenBabelGen3D.OBABEL_HOME,AMBITConfigProperties.ambitProperties));
 			return wheredragonlives;
 		} catch (ShellException x) {
 			throw x;

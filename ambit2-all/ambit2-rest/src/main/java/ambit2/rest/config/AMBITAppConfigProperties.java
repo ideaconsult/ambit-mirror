@@ -13,6 +13,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.config.AMBITConfigProperties;
+import ambit2.base.config.Preferences;
 import ambit2.rest.freemarker.FreeMarkerStatusService;
 import ambit2.rest.wrapper.WrappedService;
 
@@ -49,7 +50,11 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	protected static final String solr_filter = "solr.filter";
 
 	protected static final String map_folder = "map.folder";
-
+	protected static final String jsonp = "jsonp";
+	protected static final String database_create = "database.create";
+	protected static final String rdf_writer = "rdf.writer";
+	protected static final String dataset_members_prefix = "dataset.members.prefix";
+	protected static final String service_ontology = "service.ontology";
 	
 	public AMBITAppConfigProperties() {
 		super(null);
@@ -89,7 +94,23 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	public synchronized boolean getSimilarityOrderOption() {
 		return getBooleanPropertyWithDefault(SIMILARITY_ORDER,ambitProperties,true);		
 	}
-
+	
+	public synchronized boolean isJSONP() {
+		return getBooleanPropertyWithDefault(jsonp,ambitProperties,true);		
+	}
+	public synchronized boolean isDatasetMembersPrefix() {
+		return getBooleanPropertyWithDefault(dataset_members_prefix,ambitProperties,false);		
+	}
+	public synchronized String getRDFwriter() {
+		return getPropertyWithDefault(rdf_writer,ambitProperties,"jena");		
+	}
+	public synchronized String getOntologyService() {
+		return getPropertyWithDefault(service_ontology,ambitProperties,null);		
+	}	
+	public synchronized boolean allowDatabaseCreate() {
+		return getBooleanPropertyWithDefault(database_create,ambitProperties,true);		
+	}
+	
 	public synchronized boolean getEnableEmailVerificationOption() {
 		return getBooleanPropertyWithDefault(AMBITConfig.enableEmailVerification.name(), configProperties,true);
 	}

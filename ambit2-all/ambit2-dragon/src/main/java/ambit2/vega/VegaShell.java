@@ -23,6 +23,7 @@ import org.openscience.cdk.io.SMILESWriter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -59,7 +60,7 @@ public class VegaShell extends AbstractDescriptorShell {
 	}
 
 	public VegaShell() throws ShellException {
-		this("ambit2/rest/config/ambit2.pref");
+		this(AMBITConfigProperties.ambitProperties);
 	}
 
 	public VegaShell(String config) throws ShellException {

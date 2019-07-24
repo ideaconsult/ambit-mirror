@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.external.ShellException;
 
 /**
@@ -28,16 +29,10 @@ public class ShellBalloonWeb extends ShellBalloon {
 	@Override
 	protected String getBalloonHome() throws ShellException{
 		try {
-			Properties properties = new Properties();
-			URL uri = ShellBalloonWeb.class.getClassLoader().getResource("ambit2/rest/config/ambit2.pref");
-			
-			InputStream in = uri.openStream();
-			if (in==null) throw new ShellException(null,String.format("Can't find %s",uri.toString()));
-			properties.load(in);
-			in.close();	
-			String wheredragonlives = properties.getProperty(ShellBalloon.BALLOON_HOME);
+			AMBITConfigProperties properties = new AMBITConfigProperties();
+			String wheredragonlives = properties.getPropertyWithDefault(ShellBalloon.BALLOON_HOME,AMBITConfigProperties.ambitProperties,null);
 			if (wheredragonlives==null) 
-				throw new ShellException(null,String.format("Can't find where Balloon is located. No property %s in %s",ShellBalloon.BALLOON_HOME,uri.toString()));
+				throw new ShellException(null,String.format("Can't find where Balloon is located. No property %s in %s",ShellBalloon.BALLOON_HOME,AMBITConfigProperties.ambitProperties));
 			return wheredragonlives;
 		} catch (ShellException x) {
 			throw x;

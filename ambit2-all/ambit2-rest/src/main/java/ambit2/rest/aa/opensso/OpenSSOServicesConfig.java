@@ -1,12 +1,8 @@
 package ambit2.rest.aa.opensso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Properties;
-
 import org.opentox.aa.exception.AAException;
-import org.opentox.aa.exception.AAPropertiesException;
+
+import ambit2.rest.config.AMBITAppConfigProperties;
 
 /**
  * Configuration for OpenSSO authn, authz and policy services
@@ -16,7 +12,7 @@ import org.opentox.aa.exception.AAPropertiesException;
 public class OpenSSOServicesConfig {
 	
 	private static OpenSSOServicesConfig ref;
-	protected Properties properties;
+	protected AMBITAppConfigProperties properties;
 	
 	
 	public static enum CONFIG {
@@ -55,10 +51,10 @@ public class OpenSSOServicesConfig {
 		public String getKey() {
 			return String.format("aa.%s",toString());
 		}
-		public String getValue(Properties properties) {
+		public String getValue(AMBITAppConfigProperties properties) {
 			try {
 				if (properties == null) return null;
-				Object o = properties.get(getKey());
+				Object o = properties.getPropertyWithDefault(name(), AMBITAppConfigProperties.configProperties,getDefaultValue());
 				return o==null?null:o.toString();
 			} catch (Exception x) {
 				return getDefaultValue();
@@ -71,19 +67,7 @@ public class OpenSSOServicesConfig {
 
 	}	
 	private OpenSSOServicesConfig() throws AAException {
-		properties = new Properties();
-		URL url = getClass().getClassLoader().getResource("ambit2/rest/config/config.prop");
-		InputStream in = null;
-		try {
-			in =  url.openStream();
-			properties.load(in);
-		} catch (IOException x) {	
-			throw new AAPropertiesException(x);
-		} catch (Exception x) {
-			throw new AAPropertiesException(x);
-		} finally {
-			try {in.close();} catch (Exception x) {}
-		}		
+		properties = new AMBITAppConfigProperties();
 	}	
 
 	public static synchronized OpenSSOServicesConfig getInstance() throws AAException  {

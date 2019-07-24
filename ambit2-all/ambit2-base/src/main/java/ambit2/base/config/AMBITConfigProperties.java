@@ -3,13 +3,13 @@ package ambit2.base.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Hashtable;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AMBITConfigProperties {
 	
 	public static final String ambitProperties = "ambit2/rest/config/ambit2.pref";
-	protected static final String templateProperties = "ambit2/rest/config/ambit2.assay.properties";
+	public static final String templateProperties = "ambit2/rest/config/ambit2.assay.properties";
 	public static final String configProperties = "ambit2/rest/config/config.prop";
 	public static final String loggingProperties = "ambit2/rest/config/logging.prop";
 	
@@ -22,7 +22,7 @@ public class AMBITConfigProperties {
 		this.AMBIT_CONFIG_OVERRIDE_VAR = configOverrideVar;
 	}
 
-	protected Hashtable<String, Properties> properties = new Hashtable<String, Properties>();
+	protected ConcurrentHashMap<String, Properties> properties = new ConcurrentHashMap<String, Properties>();
 	protected File overridePath = null;
 
 	public File getConfigOverrideDir(String override_var) {
@@ -49,7 +49,7 @@ public class AMBITConfigProperties {
 		this.overridePath = overridePath;
 	}
 
-	protected synchronized Properties getProperties(String config) {
+	public synchronized Properties getProperties(String config) {
 		try {
 			Properties p = properties.get(config);
 			if (p == null) {

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Properties;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.core.smiles.OpenBabelDepiction;
 
 public class DepictionReporterOBabel extends DepictionReporter<DepictQuery> {
@@ -43,13 +44,9 @@ public class DepictionReporterOBabel extends DepictionReporter<DepictQuery> {
 	public synchronized String getOpenBabelHome() {
 		if (obabel_home == null)
 			try {
-				Properties properties = new Properties();
-				InputStream in = this.getClass().getClassLoader()
-						.getResourceAsStream("ambit2/rest/config/ambit2.pref");
-				properties.load(in);
-				in.close();
-				obabel_home = properties
-						.getProperty(OpenBabelDepiction.OBABEL_HOME);
+				AMBITConfigProperties config = new AMBITConfigProperties();
+				obabel_home = config.getPropertyWithDefault(OpenBabelDepiction.OBABEL_HOME,AMBITConfigProperties.ambitProperties,null);
+
 			} catch (Exception x) {
 				return null;
 			}
