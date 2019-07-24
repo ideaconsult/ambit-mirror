@@ -1,4 +1,13 @@
 ############################################################
+# The user may set an environment variable with the name AMBIT_CONFIG_OVERRIDE_VAR
+# The environment variable shall point to an absolute filesystem path to a directory
+# The directory may contain ambit2.pref, config.prop and/or ambit2.assay.properties file
+# Settings in these files will take precedence over the same settings from the application 
+# WEB-INF/classes/ambit2/rest/config directory
+# 
+AMBIT_CONFIG_OVERRIDE_VAR=${AMBIT_CONFIG_OVERRIDE_VAR}
+############################################################
+############################################################
 #This is AMBIT ${project.version} web services configuration.
 ambit.version=${ambit.version}
 toxtree.version=${toxtree.version}

@@ -1,10 +1,11 @@
 ############################################################
-#the user may set an environment variable with the name AMBIT_CONFIG_OVERRIDE_DIR
-#if set, the variable must contain an absolute filesystem path to a directory
-#the directory may contain ambit2.pref, config.prop and/or ambit2.assay.properties file
-#settings in these files will take precedence over the same settings from the application WEB-INF/classes/ambit2/rest/config directory
+# The user may set an environment variable with the name AMBIT_CONFIG_OVERRIDE_VAR
+# The environment variable shall point to an absolute filesystem path to a directory
+# The directory may contain ambit2.pref, config.prop and/or ambit2.assay.properties file
+# Settings in these files will take precedence over the same settings from the application WEB-INF/classes/ambit2/rest/config directory
 # 
-#AMBIT_CONFIG_OVERRIDE_VAR=AMBIT_CONFIG_OVERRIDE_DIR
+AMBIT_CONFIG_OVERRIDE_VAR=${AMBIT_CONFIG_OVERRIDE_VAR}
+############################################################
 ############################################################
 #OpenTox Authentication and Authorization configuration for AMBIT ${project.version} web services
 #For AMBIT ${project.version} web services configuration please see ambit2.pref 
