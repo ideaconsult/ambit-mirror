@@ -143,6 +143,7 @@ import ambit2.user.rest.resource.PwdForgottenResource;
 import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
+import net.idea.modbcum.i.config.ConfigProperties;
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
 import net.idea.restnet.db.aalocal.ChallengeAuthenticatorTokenLocal;
@@ -162,7 +163,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 	public AmbitApplication(boolean standalone) {
 		super(standalone);
-
+		getContext().getAttributes().put(ConfigProperties.class.getName(),properties_overridable);
 	}
 
 	@Override
