@@ -50,6 +50,8 @@ import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 
+import ambit2.base.config.AMBITConfigProperties;
+import ambit2.base.config.Preferences;
 import ambit2.base.data.StringBean;
 import ambit2.db.DBVersion;
 import ambit2.db.processors.DbCreateDatabase;
@@ -67,20 +69,7 @@ public abstract class DbUnitTest {
 	}
 
 	protected static Logger logger = Logger.getLogger(DbUnitTest.class.getName());
-	protected Properties properties;
-
-	protected void loadProperties() {
-		try {
-			if (properties == null) {
-				properties = new Properties();
-				InputStream in = this.getClass().getClassLoader().getResourceAsStream("ambit2/db/conf/ambit2.pref");
-				properties.load(in);
-				in.close();
-			}
-		} catch (Exception x) {
-			properties = null;
-		}
-	}
+	protected AMBITConfigProperties properties = new AMBITConfigProperties();
 
 	public static void setLogLevel(Level level) throws Exception {
 		Logger tempLogger = logger;
@@ -93,33 +82,24 @@ public abstract class DbUnitTest {
 	}
 
 	protected String getHost() {
-		loadProperties();
-		String p = properties.getProperty("Host");
-		return p == null ? "localhost" : ("${ambit.db.host}".equals(p)) ? "localhost" : p;
+		return properties.getPropertyWithDefault(Preferences.HOST, AMBITConfigProperties.ambitProperties,"localhost");
 	}
 
 	protected String getDatabase() {
-		loadProperties();
-		String p = properties.getProperty("database.test");
-		return (p == null) || ("${ambit.db}".equals(p)) ? "ambit-test" : p;
+		return properties.getPropertyWithDefault("database.test", AMBITConfigProperties.ambitProperties,"ambit-test");
 	}
 
 	protected String getPort() {
-		loadProperties();
-		String p = properties.getProperty("database.test.port");
-		return p == null ? "3306" : p;
+		return properties.getPropertyWithDefault("database.test.port", AMBITConfigProperties.ambitProperties,"3306");
+
 	}
 
 	protected String getUser() {
-		loadProperties();
-		String p = properties.getProperty("database.user.test");
-		return (p == null) || ("${ambit.db.user.test}".equals(p)) ? "guest" : p;
+		return properties.getPropertyWithDefault("database.user.test", AMBITConfigProperties.ambitProperties,"guest");
 	}
 
 	protected String getPWD() {
-		loadProperties();
-		String p = properties.getProperty("database.user.test.password");
-		return (p == null) || ("${ambit.db.user.test.password}".equals(p)) ? "guest" : p;
+		return properties.getPropertyWithDefault("database.user.test.password", AMBITConfigProperties.ambitProperties,"guest");
 	}
 
 	@Before
