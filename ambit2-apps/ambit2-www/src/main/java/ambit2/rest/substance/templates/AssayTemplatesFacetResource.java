@@ -5,6 +5,7 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.rest.facet.AmbitFacetResource;
 import net.idea.ambit.templates.db.AssayTemplateFacet;
 import net.idea.ambit.templates.db.AssayTemplateFacetQuery;
@@ -38,6 +39,6 @@ public class AssayTemplatesFacetResource<Q extends IQueryRetrieval<AssayTemplate
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.assay.properties";
+		return AMBITConfigProperties.templateProperties;
 	}	
 }

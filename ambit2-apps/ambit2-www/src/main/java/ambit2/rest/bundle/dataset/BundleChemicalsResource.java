@@ -28,6 +28,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Profile;
 import ambit2.base.data.Property;
@@ -169,7 +170,7 @@ public class BundleChemicalsResource<Q extends IQueryRetrieval<IStructureRecord>
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITConfigProperties.ambitProperties;
 	}
 
 	@Override

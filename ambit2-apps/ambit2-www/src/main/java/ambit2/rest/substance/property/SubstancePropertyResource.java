@@ -14,6 +14,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.ILiteratureEntry;
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -136,7 +137,7 @@ public class SubstancePropertyResource extends AmbitDBResource<IQueryRetrieval<P
 
     @Override
     public String getConfigFile() {
-	return "ambit2/rest/config/ambit2.pref";
+    	return AMBITConfigProperties.ambitProperties;
     }
 
     // JSON , RDF , already as file

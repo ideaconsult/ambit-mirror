@@ -330,7 +330,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 					try {
 						String dbname = getProperties().getDBNameAmbit();
 						authz = UserRouter.createBundlePolicyAuthorizer(getContext(), dbname, usersdbname,
-								"ambit2/rest/config/config.prop", getProperties().getBaseURLDepth());
+								AMBITAppConfigProperties.configProperties, getProperties().getBaseURLDepth());
 					} catch (Exception x) {
 
 					}
@@ -417,16 +417,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		 * /query/relation/compound/has_tautomer?dataset_uri=
 		 */
 		queryRouter.attach(QueryStructureRelationResource.resource, createRelationsRouter());
-		/*
-		 * if (attachInvestigationRouter()) { Filter tokenAuth = new
-		 * ChallengeAuthenticatorTokenLocal(getContext(), false, usersdbname,
-		 * "ambit2/rest/config/config.prop"); Filter authz =
-		 * UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
-		 * configProperties, getBaseURLDepth()); tokenAuth.setNext(authz);
-		 * authz.setNext(new InvestigationRouter(getContext()));
-		 * router.attach(String.format("/api/{%s}",SubstanceStudyTableResource.
-		 * investigation), tokenAuth); }
-		 */
+
 
 		/**
 		 * API extensions from this point on

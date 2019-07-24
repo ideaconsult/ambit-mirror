@@ -11,6 +11,7 @@ import net.idea.restnet.user.resource.UserURIReporter;
 import org.restlet.data.Form;
 import org.restlet.data.Method;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.user.rest.resource.DBRoles;
 
 public class AMBITCallableUserCreator extends CallableUserCreator {
@@ -35,7 +36,7 @@ public class AMBITCallableUserCreator extends CallableUserCreator {
 	
 	@Override
 	protected String getConfig() {
-		return "ambit2/rest/config/config.prop";
+		return AMBITConfigProperties.configProperties;
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.rest.dataset.DatasetURIReporter;
@@ -38,7 +39,7 @@ public class CallableStudyBundleImporterTest extends DbUnitTest {
 
 	@Override
 	protected String getConfig() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITConfigProperties.ambitProperties;
 	}
 
 	@Test

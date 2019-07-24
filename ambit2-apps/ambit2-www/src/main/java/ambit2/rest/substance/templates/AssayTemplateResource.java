@@ -10,11 +10,11 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.rest.OutputStreamConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMakerSettings;
-import net.idea.ambit.templates.db.ExperimentTemplateQuery._QUERY_TYPE_TEMPLATE;
 import net.idea.ambit.templates.db.ReadExperimentTemplate;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -118,6 +118,7 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.assay.properties";
+		return AMBITConfigProperties.templateProperties;
+		
 	}
 }

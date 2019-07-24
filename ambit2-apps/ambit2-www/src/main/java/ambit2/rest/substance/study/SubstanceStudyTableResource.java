@@ -10,6 +10,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
@@ -213,6 +214,6 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITConfigProperties.ambitProperties;
 	}
 }

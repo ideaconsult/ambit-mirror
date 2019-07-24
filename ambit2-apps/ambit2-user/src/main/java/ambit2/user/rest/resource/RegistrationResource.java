@@ -22,6 +22,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.user.rest.AMBITCallableUserCreator;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -148,7 +149,7 @@ public class RegistrationResource extends CatalogResource<DBUser> {
 	}
 
 	public String getConfigFile() {
-		return "ambit2/rest/config/config.prop";
+		return AMBITConfigProperties.configProperties;
 	}
 
 	@Override

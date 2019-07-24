@@ -23,6 +23,7 @@ import org.restlet.resource.ResourceException;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.data.study.EffectRecord;
@@ -121,7 +122,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITConfigProperties.ambitProperties;
 	}
 
 	

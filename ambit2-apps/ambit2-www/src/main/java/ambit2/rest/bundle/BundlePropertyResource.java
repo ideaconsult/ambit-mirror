@@ -25,6 +25,7 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.Property;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.reporters.ImageReporter;
@@ -114,7 +115,7 @@ public class BundlePropertyResource<Q extends IQueryRetrieval<Property>>
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITConfigProperties.ambitProperties;
 	}
 
 	@Override

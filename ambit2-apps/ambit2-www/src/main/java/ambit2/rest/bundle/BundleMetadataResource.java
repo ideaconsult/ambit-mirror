@@ -21,6 +21,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.db.update.bundle.ReadBundle;
 import ambit2.db.update.bundle.UpdateBundle;
@@ -258,7 +259,7 @@ public class BundleMetadataResource
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITConfigProperties.ambitProperties;
 	}
 
 	@Override

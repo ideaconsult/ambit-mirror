@@ -60,7 +60,7 @@ public class UserRouter extends MyRouter {
 		String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
-		Filter auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret,
+		Filter auth = createCookieAuthenticator(context, usersdbname, AMBITConfigProperties.configProperties, secret,
 				sessionLength, false);
 		Router setCookieUserRouter = new MyRouter(context);
 		/*
@@ -94,7 +94,7 @@ public class UserRouter extends MyRouter {
 		protectedRouter.attach(String.format("/%s", UserLoginPOSTResource.resource), AMBITLoginPOSTResource.class);
 		protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource), AMBITLogoutPOSTResource.class);
 
-		auth = createCookieAuthenticator(context, usersdbname, "ambit2/rest/config/config.prop", secret, sessionLength,
+		auth = createCookieAuthenticator(context, usersdbname, AMBITConfigProperties.configProperties, secret, sessionLength,
 				false);
 		auth.setNext(protectedRouter);
 		router.attach("/protected", auth);

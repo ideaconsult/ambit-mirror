@@ -28,6 +28,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
+import ambit2.base.config.AMBITConfigProperties;
 
 public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>, T extends Serializable>
 		extends QueryResource<Q, T> {
@@ -42,7 +43,7 @@ public abstract class AmbitDBQueryResource<Q extends IQueryRetrieval<T>, T exten
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/config.prop";
+		return AMBITConfigProperties.configProperties;
 	}
 
 	@Override

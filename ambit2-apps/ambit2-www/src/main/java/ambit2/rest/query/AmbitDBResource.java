@@ -9,6 +9,7 @@ import net.idea.restnet.i.task.ITaskStorage;
 import org.restlet.data.MediaType;
 import org.restlet.resource.ResourceException;
 
+import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.task.FactoryTaskConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 
@@ -17,7 +18,7 @@ public abstract class AmbitDBResource<Q extends IQueryRetrieval<T>, T extends Se
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITAppConfigProperties.ambitProperties;
 	}
 
 	@Override

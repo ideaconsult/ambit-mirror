@@ -1,11 +1,5 @@
 package ambit2.rest.test.bundle;
 
-import junit.framework.Assert;
-import net.idea.modbcum.i.IQueryRetrieval;
-import net.idea.restnet.db.CreateDatabaseProcessor;
-import net.idea.restnet.db.test.DbUnitTest;
-import net.idea.restnet.i.task.TaskResult;
-
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
@@ -14,12 +8,18 @@ import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.security.User;
 
+import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.data.ISourceDataset;
 import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.rest.bundle.CallableBundleCreator;
 import ambit2.rest.bundle.CallableBundleVersionCreator;
 import ambit2.rest.dataset.DatasetURIReporter;
 import ambit2.rest.test.CreateAmbitDatabaseProcessor;
+import junit.framework.Assert;
+import net.idea.modbcum.i.IQueryRetrieval;
+import net.idea.restnet.db.CreateDatabaseProcessor;
+import net.idea.restnet.db.test.DbUnitTest;
+import net.idea.restnet.i.task.TaskResult;
 
 public class CallableBundleCreatorTest extends DbUnitTest {
 
@@ -297,7 +297,7 @@ public class CallableBundleCreatorTest extends DbUnitTest {
 
     @Override
     protected String getConfig() {
-	return "ambit2/rest/config/ambit2.pref";
+		return AMBITConfigProperties.ambitProperties;
     }
 
 }

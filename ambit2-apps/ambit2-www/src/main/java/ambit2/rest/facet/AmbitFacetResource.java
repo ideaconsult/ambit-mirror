@@ -31,6 +31,7 @@ import ambit2.base.data.Template;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
+import ambit2.rest.config.AMBITAppConfigProperties;
 import ambit2.rest.property.ProfileReader;
 import ambit2.user.rest.resource.AMBITDBRoles;
 import ambit2.user.rest.resource.DBRoles;
@@ -188,7 +189,7 @@ public abstract class AmbitFacetResource<FACET extends IFacet<String>, Q extends
 
 	@Override
 	public String getConfigFile() {
-		return "ambit2/rest/config/ambit2.pref";
+		return AMBITAppConfigProperties.ambitProperties;
 	}
 
 	@Override

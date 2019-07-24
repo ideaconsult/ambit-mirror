@@ -8,6 +8,7 @@ import net.idea.restnet.user.resource.RegistrationNotifyResource;
 import org.restlet.Request;
 
 import ambit2.base.config.AMBITConfig;
+import ambit2.base.config.AMBITConfigProperties;
 
 public class AMBITRegistrationNotifyResource extends RegistrationNotifyResource {
 
@@ -63,7 +64,7 @@ public class AMBITRegistrationNotifyResource extends RegistrationNotifyResource 
 	}
 
 	public String getConfigFile() {
-		return "ambit2/rest/config/config.prop";
+		return AMBITConfigProperties.configProperties;
 	}
 
 }

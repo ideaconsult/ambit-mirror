@@ -18,6 +18,7 @@ import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
 import ambit2.base.config.AMBITConfig;
+import ambit2.base.config.AMBITConfigProperties;
 
 public class AmbitRESTPolicyResource<Q extends IQueryRetrieval<IRESTPolicy<Integer>>>
 		extends RESTPolicyResource<Q> {
@@ -34,7 +35,7 @@ public class AmbitRESTPolicyResource<Q extends IQueryRetrieval<IRESTPolicy<Integ
 	}
 
 	public String getConfigFile() {
-		return "ambit2/rest/config/config.prop";
+		return AMBITConfigProperties.configProperties;
 	}
 
 	@Override
