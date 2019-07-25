@@ -163,7 +163,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 	public AmbitApplication(boolean standalone) {
 		super(standalone);
-		getContext().getAttributes().put(ConfigProperties.class.getName(),properties_overridable);
+		//getContext().getAttributes().put(ConfigProperties.class.getName(),properties_overridable);
 	}
 
 	@Override
