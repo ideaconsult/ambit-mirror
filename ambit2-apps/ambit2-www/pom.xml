@@ -33,7 +33,7 @@
 				<web_xml>src/main/resources/web.https.xml</web_xml>
 			</properties>
 		</profile>
-		<!-- Release build. Use together with profile -P aa-enabled or -P aa-disabled,
+		<!-- Release build. Use together with profile -P aa-enabled or -P aa-disabled, 
 			and -P http or -P https -->
 		<profile>
 			<id>ambit-release</id>
@@ -74,10 +74,10 @@
 				<attach.substance>true</attach.substance>
 				<ambit.report.level>debug</ambit.report.level>
 				<MAXRECORDS>10000</MAXRECORDS>
-				<!-- The folder, containing Dragon6 executable. Could be changed after
+				<!-- The folder, containing Dragon6 executable. Could be changed after 
 					deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
 				<DRAGON_HOME>/usr/local/dragon</DRAGON_HOME>
-				<!-- The folder, containing OpenBabel executable. Could be changed after
+				<!-- The folder, containing OpenBabel executable. Could be changed after 
 					deployment by editing WEB-INF/classes/ambit2/rest/config/ambit2.pref -->
 				<OBABEL_HOME>/usr/local/openbabel/bin</OBABEL_HOME>
 			</properties>
@@ -104,8 +104,8 @@
 				<dataset.members.prefix>false</dataset.members.prefix>
 			</properties>
 		</profile>
-		<!-- Simple local AA , GET is public, other methods require HTTP BASIC
-			with preconfigured credentials Will be switched on only if OpenTox AA is
+		<!-- Simple local AA , GET is public, other methods require HTTP BASIC 
+			with preconfigured credentials Will be switched on only if OpenTox AA is 
 			not enabled by aa.enabled=true and aa.local.enabled is set to true -->
 		<profile>
 			<id>aa-local</id>
@@ -161,7 +161,7 @@
 			</properties>
 		</profile>
 		<profile>
-			<!-- Remove JNI classes from the war; they should be copied into {tomcat}/shared/lib
+			<!-- Remove JNI classes from the war; they should be copied into {tomcat}/shared/lib 
 				folder -->
 			<id>no-jni</id>
 			<activation>
@@ -172,18 +172,15 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>nano</id>
+			<id>config_override</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>ambit</groupId>
-					<artifactId>ambit2-nano</artifactId>
-					<version>${project.version}</version>
-				</dependency>
-			</dependencies>
+			<properties>
+				<AMBIT_CONFIG_OVERRIDE_VAR>AMBIT_CONFIG_OVERRIDE_VAR</AMBIT_CONFIG_OVERRIDE_VAR>
+			</properties>
 		</profile>
+
 		<profile>
 			<id>menu-ot</id>
 			<activation>
@@ -315,7 +312,7 @@
 				<version>2.1.1</version>
 				<configuration>
 					<webXml>${web_xml}</webXml>
-					<!-- <manifest> <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+					<!-- <manifest> <addDefaultImplementationEntries>true</addDefaultImplementationEntries> 
 						</manifest> -->
 					<archive>
 						<manifestEntries>
@@ -325,11 +322,11 @@
 					<packagingExcludes>${exclude.jni}</packagingExcludes>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.2.1</version>
-				<executions> <execution> <id>create-executable-jar</id> <phase>package</phase>
-				<goals> <goal>single</goal> </goals> <configuration> <descriptorRefs> <descriptorRef>
-				jar-with-dependencies </descriptorRef> </descriptorRefs> <archive> <manifest>
-				<mainClass>ambit2.rest.AmbitApplication</mainClass> </manifest> </archive>
+			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.2.1</version> 
+				<executions> <execution> <id>create-executable-jar</id> <phase>package</phase> 
+				<goals> <goal>single</goal> </goals> <configuration> <descriptorRefs> <descriptorRef> 
+				jar-with-dependencies </descriptorRef> </descriptorRefs> <archive> <manifest> 
+				<mainClass>ambit2.rest.AmbitApplication</mainClass> </manifest> </archive> 
 				</configuration> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
@@ -343,7 +340,7 @@
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-dbtemplates</artifactId>
 			<version>${ambit.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-db</artifactId>
@@ -430,7 +427,7 @@
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			 <version>[1.3.3,)</version>
+			<version>[1.3.3,)</version>
 		</dependency>
 		<dependency>
 			<groupId>org.restlet.jee</groupId>
@@ -477,11 +474,11 @@
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>net.bull.javamelody</groupId> <artifactId>javamelody-core</artifactId>
-			<version>1.22.0</version> <scope>runtime</scope> </dependency> <dependency>
-			<groupId>org.jrobin</groupId> <artifactId>jrobin</artifactId> <version>1.5.9</version>
+		<!-- <dependency> <groupId>net.bull.javamelody</groupId> <artifactId>javamelody-core</artifactId> 
+			<version>1.22.0</version> <scope>runtime</scope> </dependency> <dependency> 
+			<groupId>org.jrobin</groupId> <artifactId>jrobin</artifactId> <version>1.5.9</version> 
 			<scope>runtime</scope> </dependency> -->
-		<!-- <dependency> <groupId>jmol</groupId> <artifactId>jmol</artifactId>
+		<!-- <dependency> <groupId>jmol</groupId> <artifactId>jmol</artifactId> 
 			<version>11.8.23</version> </dependency> -->
 
 		<dependency>
@@ -508,11 +505,11 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<!-- <dependency> <groupId>ambit</groupId> <artifactId>ambit2-waffles</artifactId>
-			<version>${project.version}</version> <type>jar</type> <scope>compile</scope>
+		<!-- <dependency> <groupId>ambit</groupId> <artifactId>ambit2-waffles</artifactId> 
+			<version>${project.version}</version> <type>jar</type> <scope>compile</scope> 
 			</dependency> -->
-		<!-- <dependency> <groupId>ambit</groupId> <artifactId>qmrf-swing</artifactId>
-			<version>2.0.1-SNAPSHOT</version> </dependency> <dependency> <groupId>ambit</groupId>
+		<!-- <dependency> <groupId>ambit</groupId> <artifactId>qmrf-swing</artifactId> 
+			<version>2.0.1-SNAPSHOT</version> </dependency> <dependency> <groupId>ambit</groupId> 
 			<artifactId>swing-lib</artifactId> <version>2.0.1-SNAPSHOT</version> </dependency> -->
 		<dependency>
 			<groupId>ambit</groupId>
@@ -542,13 +539,13 @@
 			<artifactId>enmexcelparser</artifactId>
 			<version>${nmparser.version}</version>
 		</dependency>
-		 
+
 		<dependency>
 			<groupId>net.enanomapper</groupId>
 			<artifactId>enmtemplategen</artifactId>
 			<version>${nmparser.version}</version>
 		</dependency>
-		 
+
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-user</artifactId>
@@ -580,7 +577,7 @@
 			<version>${toxtree.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>toxtree</groupId>
 			<artifactId>toxtree-mutant</artifactId>
@@ -686,14 +683,14 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<!-- <repository> <id>glassfish</id> <name>javamelody is here</name> <url>http://maven.glassfish.org/content/groups/public</url>
+		<!-- <repository> <id>glassfish</id> <name>javamelody is here</name> <url>http://maven.glassfish.org/content/groups/public</url> 
 			<releases><enabled>true</enabled></releases> </repository> -->
 	</repositories>
 	<reporting>
 		<plugins>
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jxr-maven-plugin</artifactId>
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jxr-maven-plugin</artifactId> 
 				</plugin> -->
-			<!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> </plugin>
+			<!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> </plugin> 
 				<plugin> <artifactId>maven-clover-plugin</artifactId> </plugin> -->
 			<plugin>
 				<!-- UML class diagrams -->
@@ -711,8 +708,8 @@
 						<version>4.6</version>
 					</docletArtifact>
 					<additionalparam>
-						<!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types
-							-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify
+						<!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types 
+							-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify 
 							-postfixpackage -all -->
 						${additionalparam}
 					</additionalparam>
