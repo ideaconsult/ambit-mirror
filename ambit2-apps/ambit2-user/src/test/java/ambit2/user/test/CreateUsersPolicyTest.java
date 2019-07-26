@@ -4,16 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import junit.framework.Assert;
-import net.idea.modbcum.i.query.IQueryUpdate;
-import net.idea.restnet.db.CreateDatabaseProcessor;
-import net.idea.restnet.db.aalocal.CreateUsersDatabaseProcessor;
-import net.idea.restnet.db.aalocal.DBRole;
-import net.idea.restnet.db.test.DbUnitTest;
-import net.idea.restnet.i.aa.RESTPolicy;
-import net.idea.restnet.i.task.TaskResult;
-import net.idea.restnet.user.DBUser;
-
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Before;
@@ -25,6 +15,15 @@ import ambit2.db.UpdateExecutor;
 import ambit2.user.policy.CallablePolicyUsersCreator;
 import ambit2.user.policy.CreateUsersPolicy;
 import ambit2.user.policy.RESTPolicyUsers;
+import junit.framework.Assert;
+import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.restnet.db.CreateDatabaseProcessor;
+import net.idea.restnet.db.aalocal.CreateUsersDatabaseProcessor;
+import net.idea.restnet.db.aalocal.DBRole;
+import net.idea.restnet.db.test.DbUnitTest;
+import net.idea.restnet.i.aa.RESTPolicy;
+import net.idea.restnet.i.task.TaskResult;
+import net.idea.restnet.user.DBUser;
 
 /**
  * Test for {@link CallablePolicyUsersCreator}
@@ -207,14 +206,14 @@ public class CreateUsersPolicyTest extends DbUnitTest {
 
 	}
 
-	protected String dbFile = "src/test/resources/ambit2/db/processors/test/users/aalocal.xml";
+	protected String dbFile = "ambit2/db/processors/test/users/aalocal.xml";
 
 	@Override
 	protected CreateDatabaseProcessor getDBCreateProcessor() {
 		return new CreateUsersDatabaseProcessor() {
 			@Override
 			public synchronized String getSQLFile() {
-				return "ambit2/db/sql/users/ambit_users.sql";
+				return "net/idea/restnet/db/aalocal/sql/users.sql";
 			}
 		};
 	}
@@ -226,7 +225,7 @@ public class CreateUsersPolicyTest extends DbUnitTest {
 
 	@Override
 	public String getDBTables() {
-		return "src/test/resources/ambit2/db/processors/test/users/tables.xml";
+		return "ambit2/db/processors/test/users/tables.xml";
 	}
 
 	@Test

@@ -208,14 +208,14 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 	}
 
-	protected String dbFile = "src/test/resources/ambit2/db/processors/test/users/aalocal.xml";
+	protected String dbFile = "ambit2/db/processors/test/users/aalocal.xml";
 
 	@Override
 	protected CreateDatabaseProcessor getDBCreateProcessor() {
 		return new CreateUsersDatabaseProcessor() {
 			@Override
 			public synchronized String getSQLFile() {
-				return "ambit2/db/sql/users/ambit_users.sql";
+				return "net/idea/restnet/db/aalocal/sql/users.sql";
 			}
 		};
 	}
@@ -227,7 +227,7 @@ public class CreateBundlePolicyTest extends DbUnitTest {
 
 	@Override
 	public String getDBTables() {
-		return "src/test/resources/ambit2/db/processors/test/users/tables.xml";
+		return "ambit2/db/processors/test/users/tables.xml";
 	}
 
 	@Test
