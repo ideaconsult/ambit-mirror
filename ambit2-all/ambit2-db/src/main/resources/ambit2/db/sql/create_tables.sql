@@ -1532,7 +1532,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (10,3,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (10,5,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
@@ -2901,7 +2901,7 @@ BEGIN
    -- assign rank		  
    SET @rownum := 0;
    insert into qsasmap4 
-       (SELECT idsasmap,idchemical,a,b,c,d,fisher,g2,(@rownum := @rownum + 1) AS rank FROM qsasmap4 WHERE idsasmap=@idsasmap ORDER BY g2 DESC
+       (SELECT idsasmap,idchemical,a,b,c,d,fisher,g2,(@rownum := @rownum + 1) AS `rank` FROM qsasmap4 WHERE idsasmap=@idsasmap ORDER BY g2 DESC
         ) on duplicate key  update  g2rank=values(g2rank);
           		  
    -- return sasmap id
