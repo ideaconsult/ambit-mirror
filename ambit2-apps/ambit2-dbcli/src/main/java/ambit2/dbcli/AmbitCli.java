@@ -51,7 +51,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import com.mysql.jdbc.CommunicationsException;
 
 import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
@@ -71,6 +70,7 @@ import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.db.DbReader;
+import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.FP1024Writer;
@@ -107,7 +107,6 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.i.query.IQueryUpdate;
-import net.idea.modbcum.p.AbstractRepositoryWriter.OP;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.idea.modbcum.p.MasterDetailsProcessor;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
@@ -238,10 +237,8 @@ public class AmbitCli extends AmbitPipeline {
 			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED", new Object[] { x.getMessage() });
 			Runtime.getRuntime().runFinalization();
 			code = -1;
-		} catch (com.mysql.jdbc.exceptions.jdbc4.CommunicationsException x) {
-			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED", new Object[] { x.getMessage() });
-			code=-1;
-		} catch (CommunicationsException x) {
+
+		} catch (com.mysql.jdbc.CommunicationsException x) {
 			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED", new Object[] { x.getMessage() });
 			code = -1;
 		} catch (SQLException x) {
