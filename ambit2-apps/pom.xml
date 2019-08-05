@@ -36,7 +36,7 @@
 		<!-- https://github.com/ideaconsult/i5 -->
 		<i5.version>2.1.0-SNAPSHOT</i5.version>
 		<restnet.version>1.1.4-SNAPSHOT</restnet.version>
-		<dbunit.version>2.5.1</dbunit.version>
+		<dbunit.version>2.6.0</dbunit.version>
 		<m2st-syntaxHighlighter-urlBase>syntaxhighlighter</m2st-syntaxHighlighter-urlBase>
 		<m2st-syntaxHighlighter-brushFiles>shBrushPlain.js,shBrushXml.js,shBrushJava.js</m2st-syntaxHighlighter-brushFiles>
 		<m2st-syntaxHighlighter-themeCssFile>shThemeDefault.css</m2st-syntaxHighlighter-themeCssFile>

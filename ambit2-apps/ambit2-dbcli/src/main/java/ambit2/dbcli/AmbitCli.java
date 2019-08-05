@@ -46,7 +46,6 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.IChemObjectWriter;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -68,12 +67,10 @@ import ambit2.core.io.IteratingDelimitedFileReader;
 import ambit2.core.io.RawIteratingSDFReader;
 import ambit2.core.io.fp.MultiFingerprintsWriter;
 import ambit2.core.processors.StructureNormalizer;
-import ambit2.core.processors.structure.InchiProcessor;
 import ambit2.core.processors.structure.MoleculeReader;
 import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.core.processors.structure.key.PropertyKey;
 import ambit2.db.DbReader;
-import ambit2.db.processors.AbstractRepositoryWriter.OP;
 import ambit2.db.processors.AbstractUpdateProcessor;
 import ambit2.db.processors.BatchDBProcessor;
 import ambit2.db.processors.FP1024Writer;
@@ -110,6 +107,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
 import net.idea.modbcum.i.processors.ProcessorsChain;
 import net.idea.modbcum.i.query.IQueryUpdate;
+import net.idea.modbcum.p.AbstractRepositoryWriter.OP;
 import net.idea.modbcum.p.DefaultAmbitProcessor;
 import net.idea.modbcum.p.MasterDetailsProcessor;
 import net.idea.modbcum.p.batch.AbstractBatchProcessor;
@@ -240,6 +238,9 @@ public class AmbitCli extends AmbitPipeline {
 			logger_cli.log(Level.SEVERE, "MSG_CONNECTION_REFUSED", new Object[] { x.getMessage() });
 			Runtime.getRuntime().runFinalization();
 			code = -1;
+		} catch (com.mysql.jdbc.exceptions.jdbc4.CommunicationsException x) {
+			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED", new Object[] { x.getMessage() });
+			code=-1;
 		} catch (CommunicationsException x) {
 			logger_cli.log(Level.SEVERE, "MSG_ERR_CONNECTION_FAILED", new Object[] { x.getMessage() });
 			code = -1;

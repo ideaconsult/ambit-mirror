@@ -541,7 +541,7 @@
 		<cdk.version>2.1.1</cdk.version>
 		<restnet.version>1.1.4-SNAPSHOT</restnet.version>
 		<modbcum.version>1.0.10-SNAPSHOT</modbcum.version>
-		<dbunit.version>2.5.1</dbunit.version>
+		<dbunit.version>2.6.0</dbunit.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<jackson.version>2.4.2</jackson.version>
 	</properties>
