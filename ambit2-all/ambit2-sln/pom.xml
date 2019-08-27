@@ -20,6 +20,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
+			<artifactId>ambit2-rules</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ambit</groupId>
 			<artifactId>ambit2-smarts</artifactId>
 			<version>${project.version}</version>
 		</dependency>
