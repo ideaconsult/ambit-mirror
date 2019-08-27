@@ -75,7 +75,7 @@ public class SLNTestUtilities
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
-		tu.sln2sub.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
+		tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
 		tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");
 		
 		//tu.testSLN2CompositionRelation("O=Si=O<compositionUUID=NWKI-144a9226-4b93-36a9-ba2d-6b6c4903357b;cas=7631-86-9"
