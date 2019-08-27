@@ -10,6 +10,7 @@ import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
 import ambit2.sln.io.SLN2Substance;
+import ambit2.sln.io.SLN2SubstanceConfig;
 import ambit2.sln.search.SLNSearchManager;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
@@ -75,14 +76,16 @@ public class SLNTestUtilities
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
-		tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
-		tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");
+		//tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
+		//tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");
 		
 		//tu.testSLN2CompositionRelation("O=Si=O<compositionUUID=NWKI-144a9226-4b93-36a9-ba2d-6b6c4903357b;cas=7631-86-9"
 		//		+ "name=Lesniak2013_NM4;type=NPO_1373;formula=SiO2;role=core>");
 		
 		//tu.testCompositionRelation2SLN("Smiles : NC(C)CO, Name : Test, CompositionUUID : 123456");
 		//tu.testCompositionRelation2SLN("CompositionUUID : 123456");
+		
+		tu.testSLN2SubstanceConfig();
 	}
 	
 	public void testSLN(String sln)
@@ -232,6 +235,12 @@ public class SLNTestUtilities
 		return rel;		
 	}
 	
-	
+	public void testSLN2SubstanceConfig()
+	{
+		SLN2SubstanceConfig cfg = new SLN2SubstanceConfig();
+		cfg.Flag_FlagProportion = true;
+		
+		System.out.println(cfg.toJSONKeyWord(""));
+	}
 	
 }

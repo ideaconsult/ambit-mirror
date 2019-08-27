@@ -1,10 +1,16 @@
 package ambit2.sln.io;
 
+import java.util.List;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class SLN2SubstanceConfig 
 {
 	//Conversion flags 
 	public boolean FlagProportion = true;
-	public boolean FlagCompositionUUID = true;
+	public boolean Flag_FlagProportion = false;
+
+	public boolean FlagCompositionUUID = true;		
 	public boolean FlagSmiles = true;
 	public boolean FlagInchi = true;
 	public boolean FlagInchiKey = true;
@@ -15,7 +21,7 @@ public class SLN2SubstanceConfig
 	public boolean FlagFacets = true;
 	public boolean FlagRelationMetric = true;
 	public boolean FlagRelationType = true;
-	
+
 	/*
 		public boolean FlagReference = false;
 		public boolean FlagSelected = false;
@@ -43,6 +49,7 @@ public class SLN2SubstanceConfig
 	public String reference_SLNAttr = "reference";
 	public String properties_SLNAttr = "properties";
 	public String type_SLNAttr = "type";
+
 	/*
 		public String selected_SLNAttr = "selected";
 		public String facets_SLNAttr = "facets";
@@ -51,4 +58,39 @@ public class SLN2SubstanceConfig
 	 */
 
 	public boolean FlagAddImplicitHAtomsOnSLNAtomConversion = false;
+
+
+	public static SLN2SubstanceConfig extractConfigFromJson(JsonNode node, List<String> errors)
+	{
+		SLN2SubstanceConfig cfg = new SLN2SubstanceConfig();
+
+		//TODO
+
+		return cfg;
+	}
+
+	public String toJSONKeyWord(String offset) {
+		int nFields = 0;
+		StringBuffer sb = new StringBuffer();
+		sb.append(offset+"{"+"\n");
+
+		if(Flag_FlagProportion) {
+			if (nFields > 0) {
+				sb.append(",\n");
+			}
+			sb.append(offset +  "\t\"FLAG_PROPORTION\" : " + FlagProportion);
+			nFields++;
+		}
+		
+		if (nFields > 0)
+			sb.append("\n");
+
+		sb.append(offset +"}");
+
+		return sb.toString();
+
+	}
+
+
+
 }
