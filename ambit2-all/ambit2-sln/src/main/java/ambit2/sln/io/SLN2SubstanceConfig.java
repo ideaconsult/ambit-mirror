@@ -99,13 +99,21 @@ public class SLN2SubstanceConfig
 		StringBuffer sb = new StringBuffer();
 		sb.append(offset+"{"+"\n");
 
+		//Conversion flags
+		sb.append(offset+"\t\"CONVERSION_FLAGS\" :"+"\n");
+		sb.append(offset+"\t{"+"\n");
+		
 		if(jsonFlags.proportion) {
 			if (nFields > 0) {
 				sb.append(",\n");
 			}
-			sb.append(offset +  "\t\"FLAG_PROPORTION\" : " + conversion.proportion);
+			sb.append(offset +  "\t\t\"PROPORTION\" : " + conversion.proportion);
 			nFields++;
 		}
+		
+		sb.append("\n");
+		sb.append(offset+"\t}"+"\n");
+		
 		
 		if (nFields > 0)
 			sb.append("\n");
