@@ -6,31 +6,34 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class SLN2SubstanceConfig 
 {
-	//Conversion flags 
-	public boolean FlagProportion = true;
-	public boolean Flag_FlagProportion = false;
+	public static class ConversionFlags 
+	{
+		//Conversion flags 
+		public boolean proportion = true;
+		public boolean compositionUUID = true;		
+		public boolean smiles = true;
+		public boolean inchi = true;
+		public boolean inchiKey = true;
+		public boolean relation = true;
+		public boolean content = true;
+		public boolean properties = true;
+		public boolean strType = true;
+		public boolean facets = true;
+		public boolean relationMetric = true;
+		public boolean relationType = true;
 
-	public boolean FlagCompositionUUID = true;		
-	public boolean FlagSmiles = true;
-	public boolean FlagInchi = true;
-	public boolean FlagInchiKey = true;
-	public boolean FlagRelation = true;
-	public boolean FlagContent = true;
-	public boolean FlagProperties = true;
-	public boolean FlagStrType = true;
-	public boolean FlagFacets = true;
-	public boolean FlagRelationMetric = true;
-	public boolean FlagRelationType = true;
+		/*
+			public boolean FlagReference = false;
+			public boolean FlagSelected = false;
+			public boolean FlagDataEntryID = false;
+			public boolean FlagId_srcdataset = false;
+			public boolean FlagIdchemical = false;
+			public boolean FlagIdstructure = false;
+		 */
 
-	/*
-		public boolean FlagReference = false;
-		public boolean FlagSelected = false;
-		public boolean FlagDataEntryID = false;
-		public boolean FlagId_srcdataset = false;
-		public boolean FlagIdchemical = false;
-		public boolean FlagIdstructure = false;
-	 */
-
+	}	
+		
+	public ConversionFlags conversion = new ConversionFlags(); 
 
 	//Conversion attribute names for CompositionRelation fields
 	public String proportion_SLNAttr = "proportion";
@@ -59,6 +62,28 @@ public class SLN2SubstanceConfig
 
 	public boolean FlagAddImplicitHAtomsOnSLNAtomConversion = false;
 
+	//Used only for saving configuration as a JSON
+	public JsonFlags jsonFlags = new JsonFlags(); 
+	
+	public static class JsonFlags 
+	{
+		public boolean proportion = false;
+		public boolean compositionUUID = false;		
+		public boolean smiles = false;
+		public boolean inchi = false;
+		public boolean inchiKey = false;
+		public boolean relation = false;
+		public boolean content = false;
+		public boolean properties = false;
+		public boolean strType = false;
+		public boolean facets = false;
+		public boolean relationMetric = false;
+		public boolean relationType = false;
+		
+		
+	}
+
+	
 
 	public static SLN2SubstanceConfig extractConfigFromJson(JsonNode node, List<String> errors)
 	{
@@ -74,11 +99,11 @@ public class SLN2SubstanceConfig
 		StringBuffer sb = new StringBuffer();
 		sb.append(offset+"{"+"\n");
 
-		if(Flag_FlagProportion) {
+		if(jsonFlags.proportion) {
 			if (nFields > 0) {
 				sb.append(",\n");
 			}
-			sb.append(offset +  "\t\"FLAG_PROPORTION\" : " + FlagProportion);
+			sb.append(offset +  "\t\"FLAG_PROPORTION\" : " + conversion.proportion);
 			nFields++;
 		}
 		

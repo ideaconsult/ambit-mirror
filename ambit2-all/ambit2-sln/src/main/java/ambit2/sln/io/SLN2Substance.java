@@ -79,14 +79,14 @@ public class SLN2Substance
 		IStructureRecord structure = slnContainerToStructureRecord(slnContainer);
 		CompositionRelation compRel = new CompositionRelation(null, structure, null, null);
 		
-		if (config.FlagCompositionUUID)
+		if (config.conversion.compositionUUID)
 		{
 			String attr = slnContainer.getAttributes().userDefiendAttr.get(config.compositionUUID_SLNAttr);
 			if (attr != null)
 				compRel.setCompositionUUID(attr);
 		}
 		
-		if (config.FlagRelationMetric)
+		if (config.conversion.relationMetric)
 		{
 			String attr = slnContainer.getAttributes().userDefiendAttr.get(config.relationMetric_SLNAttr);
 			if (attr != null)
@@ -115,14 +115,14 @@ public class SLN2Substance
 		else
 			container = new SLNContainer(SilentChemObjectBuilder.getInstance());
 		
-		if (config.FlagCompositionUUID)
+		if (config.conversion.compositionUUID)
 		{
 			String attr = compRel.getCompositionUUID();
 			if (attr != null)
 				container.getAttributes().userDefiendAttr.put(config.compositionUUID_SLNAttr, attr);
 		}
 		
-		if (config.FlagRelationMetric)
+		if (config.conversion.relationMetric)
 		{
 			Proportion prop = compRel.getRelation();
 			if (prop != null)
@@ -161,7 +161,7 @@ public class SLN2Substance
 		conversionWarnings.addAll(sln2ChemObject.getConversionWarnings());
 		
 		IStructureRecord structure = new StructureRecord();
-		if (config.FlagSmiles)
+		if (config.conversion.smiles)
 		{
 			try{
 				String smiles = SmartsHelper.moleculeToSMILES(container, true);

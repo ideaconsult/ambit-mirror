@@ -238,7 +238,7 @@ public class SLNTestUtilities
 	public void testSLN2SubstanceConfig()
 	{
 		SLN2SubstanceConfig cfg = new SLN2SubstanceConfig();
-		cfg.Flag_FlagProportion = true;
+		cfg.jsonFlags.proportion = true;
 		
 		System.out.println(cfg.toJSONKeyWord(""));
 	}
