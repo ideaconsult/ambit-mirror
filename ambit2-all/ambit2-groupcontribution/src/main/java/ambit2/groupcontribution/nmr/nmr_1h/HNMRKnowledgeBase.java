@@ -22,9 +22,17 @@ public class HNMRKnowledgeBase
 		}
 	}
 	
-	public void configure(HAtomEnvironment hae)
+	protected void configure(HAtomEnvironment hae)
 	{
 		//TODO
+	}
+	
+	public String getAllErrorsAsString() 
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < errors.size(); i++)
+			sb.append(errors.get(i) + "\n");
+		return sb.toString();
 	}
 	
 }
