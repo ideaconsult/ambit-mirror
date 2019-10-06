@@ -5,6 +5,7 @@ import java.util.List;
 
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
+import ambit2.groupcontribution.nmr.nmr_1h.HShift;
 
 public class HNMRShifts 
 {
@@ -12,6 +13,8 @@ public class HNMRShifts
 	private List<String> warnings = new ArrayList<String>();
 	private HNMRKnowledgeBase knowledgeBase = null;
 	private boolean implicitHAtomsWorkingMode = true;
+	
+	private List<HShift> hShifts = new ArrayList<HShift>();
 	
 	public HNMRShifts() throws Exception
 	{
@@ -46,6 +49,11 @@ public class HNMRShifts
 	public void setKnowledgeBase(HNMRKnowledgeBase knowledgeBase) {
 		this.knowledgeBase = knowledgeBase;
 	}
+	
+	public List<HShift> getHShifts(){
+		return hShifts;
+	}
+	
 	
 	
 	
