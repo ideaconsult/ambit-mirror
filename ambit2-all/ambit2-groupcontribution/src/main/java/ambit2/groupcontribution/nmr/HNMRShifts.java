@@ -3,6 +3,9 @@ package ambit2.groupcontribution.nmr;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
+import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HShift;
@@ -14,7 +17,10 @@ public class HNMRShifts
 	private HNMRKnowledgeBase knowledgeBase = null;
 	private boolean implicitHAtomsWorkingMode = true;
 	
+	private IAtomContainer molecule = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
+	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
+	
 	
 	public HNMRShifts() throws Exception
 	{
@@ -24,6 +30,29 @@ public class HNMRShifts
 			throw new Exception("There are errors in knowledge base:\n" + 
 					knowledgeBase.getAllErrorsAsString());
 		
+	}
+	
+	public void setStructure(IAtomContainer str) throws Exception {
+		molecule = str;
+		errors.clear();
+		warnings.clear();
+	}	
+	
+	public void calculateHShifts()
+	{
+		hShifts.clear();
+		hAtEnvInstances.clear();
+		
+		findAllHAtomEnvironmentInstances();
+		
+		//TODO
+		//generate H shifts
+	}
+	
+	
+	void findAllHAtomEnvironmentInstances()
+	{
+		//TODO
 	}
 
 	public List<String> getErrors() {
