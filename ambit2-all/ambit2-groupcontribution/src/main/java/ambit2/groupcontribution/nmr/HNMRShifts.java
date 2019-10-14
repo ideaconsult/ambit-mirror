@@ -2,6 +2,8 @@ package ambit2.groupcontribution.nmr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -16,9 +18,12 @@ public class HNMRShifts
 	private List<String> warnings = new ArrayList<String>();
 	private HNMRKnowledgeBase knowledgeBase = null;
 	private boolean implicitHAtomsWorkingMode = true;
+	private double resolutionStep = 0.05;
 	
 	private IAtomContainer molecule = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
+	private Map<Integer, HShift> binHShifts = new TreeMap<Integer, HShift>();
+	
 	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
 	
 	
@@ -41,6 +46,7 @@ public class HNMRShifts
 	public void calculateHShifts()
 	{
 		hShifts.clear();
+		binHShifts.clear();
 		hAtEnvInstances.clear();
 		
 		findAllHAtomEnvironmentInstances();
@@ -83,7 +89,10 @@ public class HNMRShifts
 		return hShifts;
 	}
 	
-	
+	public int getBinNumber(double shiftValue)
+	{
+		return (int) Math.round(shiftValue / resolutionStep);		
+	}
 	
 	
 }
