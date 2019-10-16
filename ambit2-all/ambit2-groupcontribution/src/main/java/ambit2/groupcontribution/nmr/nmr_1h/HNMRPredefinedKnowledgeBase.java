@@ -8,13 +8,14 @@ public class HNMRPredefinedKnowledgeBase
 	public static final String keyWordPrefix = "$$";
 	public static final String keyWordSeparator = "=";
 	
-	public static final String ALKANES[] = 
+	public static final String ALKANES_CH3[] = 
 	{
 		"$$NAME= ALKANES/CH3",
 		"$$SMARTS= [CH3]",
 		"$$INFO= ",
-		"$$BASIC_SHIFT = 0.83",
-		""
+		"$$BASIC_SHIFT= 0.83",
+		"$$SUBSTITUENT_DESIGNATIONS= Za Zb",
+		"$$POSITIPON_DISTANCES = 1 2"
 	};
 	
 	
@@ -22,7 +23,7 @@ public class HNMRPredefinedKnowledgeBase
 	{
 		HNMRKnowledgeBase knowledgeBase = new HNMRKnowledgeBase();
 		
-		HAtomEnvironment haEnv = parseHAtomEnvironment (ALKANES, "Alkanes", knowledgeBase.errors);
+		HAtomEnvironment haEnv = parseHAtomEnvironment (ALKANES_CH3, "Alkanes/CH3", knowledgeBase.errors);
 		knowledgeBase.hAtomEnvironments.add(haEnv);
 		
 		return knowledgeBase;
