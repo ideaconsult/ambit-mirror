@@ -21,7 +21,8 @@ public class HNMRPredefinedKnowledgeBase
 	{
 		HNMRKnowledgeBase knowledgeBase = new HNMRKnowledgeBase();
 		
-		parseHAtomEnvironment (ALKANES, "Alkanes", knowledgeBase.errors);
+		HAtomEnvironment haEnv = parseHAtomEnvironment (ALKANES, "Alkanes", knowledgeBase.errors);
+		knowledgeBase.hAtomEnvironments.add(haEnv);
 		
 		return knowledgeBase;
 	}
@@ -36,7 +37,7 @@ public class HNMRPredefinedKnowledgeBase
 			parseLine(lines[i], haEnv, errorPrefix + " line " + (i+1), errors);
 		}
 		
-		postProcess (haEnv, errors);
+		postProcess (haEnv, errorPrefix, errors);
 		return haEnv;
 	}
 	
@@ -83,12 +84,40 @@ public class HNMRPredefinedKnowledgeBase
 			return;
 		}
 		
+		if (key.equals("SMARTS"))	
+		{	
+			haEnv.smarts = keyValue;
+			return;
+		}
+		
+		if (key.equals("INFO"))	
+		{	
+			haEnv.info = keyValue;
+			return;
+		}
+		
+		if (key.equals("BASIC_SHIFT"))	
+		{	
+			try {
+				haEnv.chemShift0 = Double.parseDouble(keyValue);
+			}
+			catch(Exception e) {
+				errors.add(errorPrefix + " incorrect BASIC_SHIFT: " + e.getMessage());
+			}
+			return;
+		}
+		
 		errors.add(errorPrefix + " Unknow key word: " + key);
 	}
 	
-	public static void postProcess(HAtomEnvironment haEnv, List<String> errors)
+	public static void postProcess(HAtomEnvironment haEnv, String errorPrefix, List<String> errors)
 	{
-		//TODO
+		if (haEnv.name == null)
+			errors.add(errorPrefix + " NAME is missing");
+		if (haEnv.smarts == null)
+			errors.add(errorPrefix + " SMARTS is missing");
+		if (haEnv.chemShift0 == null)
+			errors.add(errorPrefix + " BASIC_SHIFT is missing");
 	}
 	
 	

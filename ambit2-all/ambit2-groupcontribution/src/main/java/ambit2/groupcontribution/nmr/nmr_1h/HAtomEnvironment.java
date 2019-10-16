@@ -11,7 +11,7 @@ public class HAtomEnvironment
 	public String name = null;
 	public String smarts = null;
 	public String info = "";
-	public double chemShift0 = 0.0;
+	public Double chemShift0 = null;
 	public String substituentPosDesignations[] = null;
 	public int substituentPosAtomIndex[] = null;
 		
@@ -22,8 +22,9 @@ public class HAtomEnvironment
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append("HAtomEnvironment: " + name + "  " + smarts);
-		sb.append("\n");		
+		sb.append("HAtomEnvironment: " + name + "\n");
+		sb.append("Smarts: " + smarts + "\n");
+				
 		if (!info.contentEquals(""))
 			sb.append("info:" + info + "\n");		
 		sb.append("ChemShift0: " + chemShift0 + "\n");
