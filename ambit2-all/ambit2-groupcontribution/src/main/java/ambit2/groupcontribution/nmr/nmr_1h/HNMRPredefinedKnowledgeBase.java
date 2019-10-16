@@ -15,7 +15,8 @@ public class HNMRPredefinedKnowledgeBase
 		"$$INFO= ",
 		"$$BASIC_SHIFT= 0.83",
 		"$$SUBSTITUENT_DESIGNATIONS= Za Zb",
-		"$$POSITIPON_DISTANCES = 1 2"
+		"$$SUBSTITUENT_POS_ATOM_INDICES= 1 1",
+		"$$POSITION_DISTANCES = 1 2"
 	};
 	
 	
@@ -108,6 +109,49 @@ public class HNMRPredefinedKnowledgeBase
 			}
 			return;
 		}
+		
+		if (key.equals("SUBSTITUENT_DESIGNATIONS"))	
+		{	
+			String tokens[] = keyValue.split(" ");
+			haEnv.substituentDesignations = tokens;
+			return;
+		}
+		
+				
+		if (key.equals("SUBSTITUENT_POS_ATOM_INDICES"))	
+		{	
+			String tokens[] = keyValue.split(" ");
+			haEnv.substituentPosAtomIndices = new int[tokens.length];
+			for (int i = 0; i < tokens.length; i++)
+			{
+				try {
+					int ival = Integer.parseInt(tokens[i]);
+					haEnv.substituentPosAtomIndices[i] = ival;
+				}
+				catch (Exception e) {
+					errors.add(errorPrefix + " incorrect SUBSTITUENT_POS_ATOM_INDICES[" + (i+1) + "] : " + e.getMessage());
+				}
+			}
+			return;
+		}
+		
+		if (key.equals("POSITION_DISTANCES"))	
+		{	
+			String tokens[] = keyValue.split(" ");
+			haEnv.positionDistances = new int[tokens.length];
+			for (int i = 0; i < tokens.length; i++)
+			{
+				try {
+					int ival = Integer.parseInt(tokens[i]);
+					haEnv.positionDistances[i] = ival;
+				}
+				catch (Exception e) {
+					errors.add(errorPrefix + " incorrect POSITION_DISTANCES[" + (i+1) + "] : " + e.getMessage());
+				}
+			}
+			return;
+		}
+		
 		
 		errors.add(errorPrefix + " Unknow key word: " + key);
 	}
