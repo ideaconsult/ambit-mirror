@@ -18,4 +18,36 @@ public class HAtomEnvironment
 	public List<Substituent> substituents = new ArrayList<Substituent>(); 
 	
 	public GroupMatch groupMatch = null;
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("HAtomEnvironment: " + name + "  " + smarts);
+		sb.append("\n");		
+		if (!info.contentEquals(""))
+			sb.append("info:" + info + "\n");		
+		sb.append("ChemShift0: " + chemShift0 + "\n");
+		
+		if (substituentPosDesignations != null)
+		{
+			sb.append("Substituent designations:");
+			for (int i = 0; i < substituentPosDesignations.length; i++)
+				sb.append(" " + substituentPosDesignations[i]);
+			sb.append("\n");
+		}
+		
+		if (substituentPosAtomIndex != null)
+		{
+			sb.append("Substituent pos  atom indices:");
+			for (int i = 0; i < substituentPosAtomIndex.length; i++)
+				sb.append(" " + substituentPosAtomIndex[i]);
+			sb.append("\n");
+		}
+		
+		sb.append("Substituents:\n");
+		for (int i = 0; i < substituents.size(); i++)
+			sb.append(substituents.get(i).toString() + "\n");
+		
+		return sb.toString();
+	}
 }
