@@ -2,6 +2,8 @@ package ambit2.groupcontribution.nmr.nmr_1h;
 
 import java.util.List;
 
+import ambit2.groupcontribution.nmr.Substituent;
+
 
 public class HNMRPredefinedKnowledgeBase 
 {
@@ -15,8 +17,12 @@ public class HNMRPredefinedKnowledgeBase
 		"$$INFO= ",
 		"$$BASIC_SHIFT= 0.83",
 		"$$SUBSTITUENT_DESIGNATIONS= Za Zb",
-		"$$SUBSTITUENT_POS_ATOM_INDICES= 1 1",
-		"$$POSITION_DISTANCES = 1 2"
+		//"$$SUBSTITUENT_POS_ATOM_INDICES= 1 1",
+		"$$POSITION_DISTANCES = 1 2",
+		
+		"$$SUBST= -C C 0.00 0.05",
+		"$$SUBST= -C=C C=[CH2] 0.85 0.20",
+		
 	};
 	
 	
@@ -152,6 +158,32 @@ public class HNMRPredefinedKnowledgeBase
 			return;
 		}
 		
+		if (key.equals("SUBST"))	
+		{	
+			String tokens[] = keyValue.split(" ");
+			Substituent subst = new Substituent();
+			if (tokens.length > 0)
+				subst.info = tokens[0];
+			if (tokens.length > 1)
+				subst.smarts = tokens[1];
+			if (tokens.length > 2)
+			{	
+				subst.chemShifts = new double[tokens.length-2];
+				for (int i = 2; i < tokens.length; i++)
+				{
+					try {
+						double val = Double.parseDouble(tokens[i]);
+						subst.chemShifts[i-2] = val;
+					}
+					catch (Exception e) {
+						errors.add(errorPrefix + " incorrect SUBSTITUENT chemical shift[" + (i-2+1) + "] : " + e.getMessage());
+					}
+				}
+			}
+			haEnv.substituents.add(subst);
+			return;
+		}
+		
 		
 		errors.add(errorPrefix + " Unknow key word: " + key);
 	}
@@ -164,6 +196,9 @@ public class HNMRPredefinedKnowledgeBase
 			errors.add(errorPrefix + " SMARTS is missing");
 		if (haEnv.chemShift0 == null)
 			errors.add(errorPrefix + " BASIC_SHIFT is missing");
+		
+		//TODO: check number of atom pos indices and postion distances
+		// check substituents
 	}
 	
 	

@@ -8,8 +8,8 @@ public class Substituent
 	{	
 	}
 	
-	public String info = "";
-	public String smarts = "";
+	public String info = null;
+	public String smarts = null;
 	public double chemShifts[] = null;
 	
 	public GroupMatch groupMatch = null;
