@@ -28,6 +28,8 @@ import ambit2.groupcontribution.descriptors.LDAtomHybridization;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.descriptors.LDAtomValency;
 import ambit2.groupcontribution.descriptors.LDHNum;
+import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
+import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
 import ambit2.smarts.SmartsHelper;
 
 
@@ -53,10 +55,11 @@ public class TestUtils2
 		//testDescriptor(new AverageMolecularWeightDescriptor(), "CCC");
 		
 		//testDataSet("/test-dataset.txt");
-		testDataSet("/Volumes/Data/test-dataset.csv");
-		
+		//testDataSet("/Volumes/Data/test-dataset.csv");
 		
 		//testLocalDescriptorsParsing("FC,HeN,A,H,Val");
+		
+		testHNMRKnowledgeBase();
 	}
 	
 	public static void testGroupCount(String smiles, GroupContributionModel model) throws Exception
@@ -143,4 +146,18 @@ public class TestUtils2
 			System.out.println(descriptors.get(i).getShortName() + " " + descriptors.get(i).getName());
 		
 	}
+	
+	public static void testHNMRKnowledgeBase()
+	{
+		System.out.println("Testing HNMRPredefinedKnowledgeBase:");
+		HNMRKnowledgeBase hnmrBase = HNMRPredefinedKnowledgeBase.getHNMRKnowledgeBase();
+		
+		if (hnmrBase.errors.isEmpty())
+			System.out.println(hnmrBase.toString());
+		else
+			System.out.println("Errors:\n" + hnmrBase.getAllErrorsAsString());
+		
+	}
+	
+	
 }

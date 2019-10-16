@@ -35,4 +35,12 @@ public class HNMRKnowledgeBase
 		return sb.toString();
 	}
 	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < hAtomEnvironments.size(); i++)
+			sb.append(hAtomEnvironments.get(i).toString() + "\n");
+		return sb.toString();
+	}
+	
 }
