@@ -12,7 +12,7 @@ public class HAtomEnvironment
 	public String smarts = null;
 	public String info = "";
 	public Double chemShift0 = null;
-	public String substituentPosDesignations[] = null;
+	public String substituentDesignations[] = null;
 	public int substituentPosAtomIndex[] = null; //it is not needed for SMARTS with one atom
 	public int positionDistances[] = null; //it is not needed when only alpha positions are considered
 		
@@ -30,11 +30,11 @@ public class HAtomEnvironment
 			sb.append("info:" + info + "\n");		
 		sb.append("ChemShift0: " + chemShift0 + "\n");
 		
-		if (substituentPosDesignations != null)
+		if (substituentDesignations != null)
 		{
 			sb.append("Substituent designations:");
-			for (int i = 0; i < substituentPosDesignations.length; i++)
-				sb.append(" " + substituentPosDesignations[i]);
+			for (int i = 0; i < substituentDesignations.length; i++)
+				sb.append(" " + substituentDesignations[i]);
 			sb.append("\n");
 		}
 		

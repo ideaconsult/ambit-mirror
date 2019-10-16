@@ -10,7 +10,8 @@ public class HNMRPredefinedKnowledgeBase
 	
 	public static final String ALKANES[] = 
 	{
-		"$$NAME= ALKANES $$SMARTS= [C;^3]",
+		"$$NAME= ALKANES/CH3",
+		"$$SMARTS= [CH3]",
 		"$$INFO= ",
 		"$$BASIC_SHIFT = 0.83",
 		""
