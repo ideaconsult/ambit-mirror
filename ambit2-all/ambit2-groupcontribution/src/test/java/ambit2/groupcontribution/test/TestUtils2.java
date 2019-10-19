@@ -59,7 +59,8 @@ public class TestUtils2
 		
 		//testLocalDescriptorsParsing("FC,HeN,A,H,Val");
 		
-		testHNMRKnowledgeBase();
+		//testHNMRKnowledgeBase();
+		testHNMRKnowledgeBase("/Projects/HNMR/hnmr-knowledgebase.txt");
 	}
 	
 	public static void testGroupCount(String smiles, GroupContributionModel model) throws Exception
@@ -151,6 +152,19 @@ public class TestUtils2
 	{
 		System.out.println("Testing HNMRPredefinedKnowledgeBase:");
 		HNMRKnowledgeBase hnmrBase = HNMRPredefinedKnowledgeBase.getHNMRKnowledgeBase();
+		
+		if (hnmrBase.errors.isEmpty())
+			System.out.println(hnmrBase.toString());
+		else
+			System.out.println("Errors:\n" + hnmrBase.getAllErrorsAsString());
+		
+	}
+	
+	public static void testHNMRKnowledgeBase(String fileName) throws Exception
+	{	
+		System.out.println("Testing HNMR Knowledge Base: " + fileName);
+				
+		HNMRKnowledgeBase hnmrBase = HNMRPredefinedKnowledgeBase.getHNMRKnowledgeBase(new File(fileName));
 		
 		if (hnmrBase.errors.isEmpty())
 			System.out.println(hnmrBase.toString());

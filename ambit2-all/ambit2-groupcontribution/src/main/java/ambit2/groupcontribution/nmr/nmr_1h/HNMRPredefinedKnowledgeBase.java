@@ -58,19 +58,26 @@ public class HNMRPredefinedKnowledgeBase
 				while ( (line = br.readLine()) != null ) 
 				{
 					nLine++;
+					if (line.isEmpty())
+						continue;
+					if (line.charAt(0) == '#')
+						continue;
+					
 					if (line.contains("$$H_ATOM_ENVIRONMENT"))
 					{
 						if (haEnv != null)
 						{	
 							//Register HAtomEnvironment
-							postProcess (haEnv, errorPrefix0, knowledgeBase.errors);
+							postProcess (haEnv, 
+									errorPrefix0 + ((haEnv.name != null)?(" " + haEnv.name + ": "):": "), 
+									knowledgeBase.errors);
 							knowledgeBase.hAtomEnvironments.add(haEnv);
 						}
 						
 						//Start new HAtomEnvironment
 						haEnv = new HAtomEnvironment();
-						errorPrefix0 = "HAtomEnvironment #" + nHAEnv;
 						nHAEnv++;
+						errorPrefix0 = "HAtomEnvironment #" + nHAEnv;
 					}
 					else
 					{
@@ -78,12 +85,18 @@ public class HNMRPredefinedKnowledgeBase
 							continue; //This is a file line before first H_ATOM_ENVIRONMENT
 						else
 						{	
-							parseLine(line, haEnv, errorPrefix0 + " line " + nLine, knowledgeBase.errors);
-							//Updating errorPrefix0 for better error messaging
-							if (haEnv.name != null)
-								errorPrefix0 += (" " + haEnv.name);
+							parseLine(line, haEnv, 
+									errorPrefix0 + ((haEnv.name != null)?(" " + haEnv.name):"") + ": line " + nLine, 
+									knowledgeBase.errors);
 						}	
 					}
+				}
+				
+				if (haEnv != null)
+				{	
+					//Register HAtomEnvironment
+					postProcess (haEnv, errorPrefix0, knowledgeBase.errors);
+					knowledgeBase.hAtomEnvironments.add(haEnv);
 				}
 				
 				br.close();
