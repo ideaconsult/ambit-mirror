@@ -163,7 +163,7 @@ public class HNMRPredefinedKnowledgeBase
 			String tokens[] = keyValue.split(" ");
 			Substituent subst = new Substituent();
 			if (tokens.length > 0)
-				subst.info = tokens[0];
+				subst.name = tokens[0];
 			if (tokens.length > 1)
 				subst.smarts = tokens[1];
 			if (tokens.length > 2)
