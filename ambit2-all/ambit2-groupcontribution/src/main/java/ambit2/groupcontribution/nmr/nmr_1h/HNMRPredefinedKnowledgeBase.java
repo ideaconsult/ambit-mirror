@@ -1,5 +1,11 @@
 package ambit2.groupcontribution.nmr.nmr_1h;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.groupcontribution.nmr.Substituent;
@@ -33,6 +39,64 @@ public class HNMRPredefinedKnowledgeBase
 		HAtomEnvironment haEnv = parseHAtomEnvironment (ALKANES_CH3, "Alkanes/CH3", knowledgeBase.errors);
 		knowledgeBase.hAtomEnvironments.add(haEnv);
 		
+		return knowledgeBase;
+	}
+	
+	public static HNMRKnowledgeBase getHNMRKnowledgeBase(File file) throws Exception
+	{
+		HNMRKnowledgeBase knowledgeBase = new HNMRKnowledgeBase();
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			try {
+				HAtomEnvironment haEnv = null;
+				String errorPrefix0 = null;
+				int nHAEnv = 0;
+				int nLine = 0;
+				String line;
+				
+				while ( (line = br.readLine()) != null ) 
+				{
+					nLine++;
+					if (line.contains("$$H_ATOM_ENVIRONMENT"))
+					{
+						if (haEnv != null)
+						{	
+							//Register HAtomEnvironment
+							postProcess (haEnv, errorPrefix0, knowledgeBase.errors);
+							knowledgeBase.hAtomEnvironments.add(haEnv);
+						}
+						
+						//Start new HAtomEnvironment
+						haEnv = new HAtomEnvironment();
+						errorPrefix0 = "HAtomEnvironment #" + nHAEnv;
+						nHAEnv++;
+					}
+					else
+					{
+						if (haEnv == null)
+							continue; //This is a file line before first H_ATOM_ENVIRONMENT
+						else
+						{	
+							parseLine(line, haEnv, errorPrefix0 + " line " + nLine, knowledgeBase.errors);
+							//Updating errorPrefix0 for better error messaging
+							if (haEnv.name != null)
+								errorPrefix0 += (" " + haEnv.name);
+						}	
+					}
+				}
+				
+				br.close();
+			}
+			catch (IOException e) {
+				throw e;
+			}
+		}
+		catch (FileNotFoundException e) {
+			throw e;
+		}
+
+
 		return knowledgeBase;
 	}
 	
@@ -184,6 +248,11 @@ public class HNMRPredefinedKnowledgeBase
 			return;
 		}
 		
+		if (key.equals("H_ATOM_ENVIRONMENT"))	
+		{	
+			//do nothing here
+			return;
+		}
 		
 		errors.add(errorPrefix + " Unknow key word: " + key);
 	}
