@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -19,11 +20,11 @@ public class HNMRShifts
 	private List<String> warnings = new ArrayList<String>();
 	private HNMRKnowledgeBase knowledgeBase = null;
 	private boolean implicitHAtomsWorkingMode = true;
-	private double resolutionStep = 0.05;
+	private double resolutionStep = 0.01;
 	
 	private IAtomContainer molecule = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
-	private Map<Integer, HShift> binHShifts = new TreeMap<Integer, HShift>();
+	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>();
 	
 	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
 	
@@ -102,6 +103,17 @@ public class HNMRShifts
 	{
 		return (int) Math.round(shiftValue / resolutionStep);		
 	}
-	
+
+	public double getResolutionStep() {
+		return resolutionStep;
+	}
+
+	public void setResolutionStep(double resolutionStep) {
+		this.resolutionStep = resolutionStep;
+	}
+
+	public IAtomContainer getMolecule() {
+		return molecule;
+	}	
 	
 }
