@@ -1,5 +1,6 @@
 package ambit2.groupcontribution.nmr;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,15 @@ public class HNMRShifts
 		if (!knowledgeBase.errors.isEmpty())
 			throw new Exception("There are errors in knowledge base:\n" + 
 					knowledgeBase.getAllErrorsAsString());
-		
+	}
+	
+	public HNMRShifts(File knowledgeBaseFile) throws Exception
+	{
+		knowledgeBase = HNMRPredefinedKnowledgeBase.getHNMRKnowledgeBase(knowledgeBaseFile);
+		knowledgeBase.configure();
+		if (!knowledgeBase.errors.isEmpty())
+			throw new Exception("There are errors in knowledge base:\n" + 
+					knowledgeBase.getAllErrorsAsString());
 	}
 	
 	public void setStructure(IAtomContainer str) throws Exception {
