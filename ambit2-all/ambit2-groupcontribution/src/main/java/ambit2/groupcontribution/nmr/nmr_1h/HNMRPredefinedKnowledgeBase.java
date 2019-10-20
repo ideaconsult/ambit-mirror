@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ambit2.groupcontribution.nmr.Substituent;
+import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment.ShiftAssociation;
 
 
 public class HNMRPredefinedKnowledgeBase 
@@ -22,7 +23,7 @@ public class HNMRPredefinedKnowledgeBase
 		"$$SMARTS= [CH3]",
 		"$$INFO= ",
 		"$$BASIC_SHIFT= 0.83",
-		"$$SUBSTITUENT_DESIGNATIONS= Za Zb",
+		"$$SHIFT_DESIGNATIONS= Za Zb",
 		//"$$SUBSTITUENT_POS_ATOM_INDICES= 1 1",
 		"$$POSITION_DISTANCES = 1 2",
 		
@@ -193,10 +194,10 @@ public class HNMRPredefinedKnowledgeBase
 			return;
 		}
 		
-		if (key.equals("SUBSTITUENT_DESIGNATIONS"))	
+		if (key.equals("SHIFT_DESIGNATIONS"))	
 		{	
 			String tokens[] = keyValue.split(" ");
-			haEnv.substituentDesignations = tokens;
+			haEnv.shiftDesignations = tokens;
 			return;
 		}
 		
@@ -232,6 +233,18 @@ public class HNMRPredefinedKnowledgeBase
 					errors.add(errorPrefix + " incorrect POSITION_DISTANCES[" + (i+1) + "] : " + e.getMessage());
 				}
 			}
+			return;
+		}
+		
+		if (key.equals("SHIFT_ASSOCIATION"))	
+		{	
+			if (keyValue.equals("SUBSTITUENT_POSITION"))
+				haEnv.shiftsAssociation = ShiftAssociation.SUBSTITUENT_POSITION;
+			else
+				if (keyValue.equals("H_ATOM_POSITION"))
+					haEnv.shiftsAssociation = ShiftAssociation.H_ATOM_POSITION;
+				else
+					errors.add(errorPrefix + " incorrect SHIFT_ASSOCIATION: " + keyValue);
 			return;
 		}
 		
@@ -278,6 +291,8 @@ public class HNMRPredefinedKnowledgeBase
 			errors.add(errorPrefix + " SMARTS is missing");
 		if (haEnv.chemShift0 == null)
 			errors.add(errorPrefix + " BASIC_SHIFT is missing");
+		if (haEnv.shiftsAssociation == null)
+			errors.add(errorPrefix + " SHIFT_ASSOCIATION is missing");
 		
 		//TODO: check number of atom pos indices and postion distances
 		// check substituents

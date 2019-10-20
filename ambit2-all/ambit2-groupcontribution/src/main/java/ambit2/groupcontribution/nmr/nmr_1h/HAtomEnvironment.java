@@ -8,14 +8,19 @@ import ambit2.smarts.groups.GroupMatch;
 
 public class HAtomEnvironment 
 {
+	public static enum ShiftAssociation {
+		SUBSTITUENT_POSITION, H_ATOM_POSITION
+	}
+	
 	public String name = null;
 	public String smarts = null;
 	public String info = "";
 	public Double chemShift0 = null;
-	public String substituentDesignations[] = null;
+	public String shiftDesignations[] = null;
 	public int substituentPosAtomIndices[] = null; //it is not needed for SMARTS with one atom
-	public int positionDistances[] = null; //it is not needed when only alpha positions are considered
-		
+	public int positionDistances[] = null; //it is not needed when only alpha positions are considered	
+	
+	public ShiftAssociation shiftsAssociation = null;
 	public List<Substituent> substituents = new ArrayList<Substituent>(); 
 	
 	public GroupMatch groupMatch = null;
@@ -30,17 +35,17 @@ public class HAtomEnvironment
 			sb.append("info:" + info + "\n");		
 		sb.append("ChemShift0: " + chemShift0 + "\n");
 		
-		if (substituentDesignations != null)
+		if (shiftDesignations != null)
 		{
-			sb.append("Substituent designations:");
-			for (int i = 0; i < substituentDesignations.length; i++)
-				sb.append(" " + substituentDesignations[i]);
+			sb.append("Shift designations:");
+			for (int i = 0; i < shiftDesignations.length; i++)
+				sb.append(" " + shiftDesignations[i]);
 			sb.append("\n");
 		}
 		
 		if (substituentPosAtomIndices != null)
 		{
-			sb.append("Substituent pos  atom indices:");
+			sb.append("Substituent posistion atom indices:");
 			for (int i = 0; i < substituentPosAtomIndices.length; i++)
 				sb.append(" " + substituentPosAtomIndices[i]);
 			sb.append("\n");
@@ -48,9 +53,16 @@ public class HAtomEnvironment
 		
 		if (positionDistances != null)
 		{
-			sb.append("Substituent position atom indices:");
+			sb.append("Substituent position distances:");
 			for (int i = 0; i < positionDistances.length; i++)
 				sb.append(" " + positionDistances[i]);
+			sb.append("\n");
+		}
+		
+		if (shiftsAssociation != null)
+		{
+			sb.append("Shifts association: ");
+			sb.append(shiftsAssociation);
 			sb.append("\n");
 		}
 		
