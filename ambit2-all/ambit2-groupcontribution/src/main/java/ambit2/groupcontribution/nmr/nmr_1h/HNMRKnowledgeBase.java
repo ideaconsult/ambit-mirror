@@ -1,12 +1,22 @@
 package ambit2.groupcontribution.nmr.nmr_1h;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import ambit2.groupcontribution.nmr.Substituent;
+import ambit2.smarts.IsomorphismTester;
+import ambit2.smarts.SmartsParser;
+import ambit2.smarts.groups.GroupMatch;
 
 public class HNMRKnowledgeBase 
 {
 	public List<HAtomEnvironment> hAtomEnvironments = new ArrayList<HAtomEnvironment>();
+	public Map<String, GroupMatch> groupMatchRepository = new HashMap<String, GroupMatch>(); 
 	
+	SmartsParser parser = new SmartsParser(); 
+	IsomorphismTester isoTester = new IsomorphismTester(); 
 	public List<String> errors = new ArrayList<String>();
 	
 	public HNMRKnowledgeBase()
@@ -24,7 +34,51 @@ public class HNMRKnowledgeBase
 	
 	protected void configure(HAtomEnvironment hae)
 	{
-		//TODO
+		GroupMatch haeGM = new GroupMatch(hae.smarts, parser, isoTester);
+		if (!haeGM.getError().equals(""))
+		{
+			errors.add("HAtomEnvironment: " + hae.name + 
+					" SMARTS: " + haeGM.getError());
+		}
+		else		
+			hae.groupMatch = haeGM;					
+		
+		//Handling substituents
+		for (int i = 0; i< hae.substituents.size(); i++)
+		{	
+			Substituent subst = hae.substituents.get(i);			
+			GroupMatch gm = groupMatchRepository.get(subst.name);
+			
+			if (gm == null)
+			{
+				//Register new GroupMatch
+				gm = new GroupMatch(subst.smarts, parser, isoTester);
+				if (!gm.getError().equals(""))
+				{
+					errors.add("HAtomEnvironment: " + hae.name + 
+							"  Substituent[" + (i+1) + "] " + subst.name + ": " + 
+							gm.getError());
+				}
+				else
+				{
+					groupMatchRepository.put(subst.name, gm);					
+				}
+			}
+			else
+			{	
+				//Check GroupMatch: compare SMAARTS from repository
+				if (!subst.smarts.equals("--"))
+					if (!subst.smarts.equals(gm.getSmarts()))
+					{
+						errors.add("HAtomEnvironment: " + hae.name + 
+								"  Substituent[" + (i+1) + "] " + subst.name + ": " + 
+								"Smarts " + subst.smarts + 
+								" is different than the already registered in repository: " + gm.getSmarts());
+					}
+			}
+			
+			subst.groupMatch = gm;
+		}
 	}
 	
 	public String getAllErrorsAsString() 

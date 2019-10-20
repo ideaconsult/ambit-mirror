@@ -152,6 +152,7 @@ public class TestUtils2
 	{
 		System.out.println("Testing HNMRPredefinedKnowledgeBase:");
 		HNMRKnowledgeBase hnmrBase = HNMRPredefinedKnowledgeBase.getHNMRKnowledgeBase();
+		hnmrBase.configure();
 		
 		if (hnmrBase.errors.isEmpty())
 			System.out.println(hnmrBase.toString());
@@ -165,6 +166,7 @@ public class TestUtils2
 		System.out.println("Testing HNMR Knowledge Base: " + fileName);
 				
 		HNMRKnowledgeBase hnmrBase = HNMRPredefinedKnowledgeBase.getHNMRKnowledgeBase(new File(fileName));
+		hnmrBase.configure();
 		
 		if (hnmrBase.errors.isEmpty())
 			System.out.println(hnmrBase.toString());

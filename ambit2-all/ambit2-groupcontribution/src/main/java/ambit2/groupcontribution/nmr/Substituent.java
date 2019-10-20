@@ -18,7 +18,7 @@ public class Substituent
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append("SUBST = " + name );
+		sb.append("SUBST= " + name );
 		sb.append("  " + smarts);
 		if (chemShifts != null)
 		{
