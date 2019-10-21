@@ -26,7 +26,7 @@ public class HNMRShifts
 	
 	private IAtomContainer molecule = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
-	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>(); //preferred sfdg 
+	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>();
 	private Map<IAtom, HShift> atomHShifts = new TreeMap<IAtom, HShift>();
 	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
 	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new TreeMap<IAtom, List<HAtomEnvironmentInstance>>();
@@ -68,8 +68,9 @@ public class HNMRShifts
 		
 		findAllHAtomEnvironmentInstances();
 		
-		//TODO
-		//generate H shifts
+		handleOverlappingHAtomEnvironmentInstances();
+		
+		generateHShifts();
 	}
 	
 	
@@ -110,6 +111,43 @@ public class HNMRShifts
 			haeInstList.add(haeInst);
 		}
 	}
+	
+	public void handleOverlappingHAtomEnvironmentInstances()
+	{
+		Set<IAtom> atoms = atomHAtEnvInstanceSet.keySet();
+		for (IAtom at : atoms)
+		{
+			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
+			HAtomEnvironmentInstance selectedInst = haeInstList.get(0);
+			
+			for (int i = 1; i < haeInstList.size(); i++)
+			{
+				HAtomEnvironmentInstance inst = haeInstList.get(i);
+				
+				if (selectedInst.hEnvironment.isHigherPriority(inst.hEnvironment))
+					selectedInst = inst;
+				else
+				{
+					if (inst.hEnvironment.isHigherPriority(selectedInst.hEnvironment))
+					{
+						//do nothing
+					}
+					else
+					{	
+						//cannot compare priorityInst with inst
+						//TODO issue warning
+					}	
+				}
+			}
+		}
+	}
+	
+	public void generateHShifts()
+	{
+		//TODO
+	}
+	
+	
 
 	public List<String> getErrors() {
 		return errors;

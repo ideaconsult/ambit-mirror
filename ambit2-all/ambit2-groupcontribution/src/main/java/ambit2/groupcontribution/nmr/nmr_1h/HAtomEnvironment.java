@@ -24,9 +24,19 @@ public class HAtomEnvironment
 	public ShiftAssociation shiftsAssociation = null;
 	public List<Substituent> substituents = new ArrayList<Substituent>(); 
 	
-	
-	
 	public GroupMatch groupMatch = null;
+	
+	
+	public boolean isHigherPriority(HAtomEnvironment hae)
+	{
+		if (higherPriorityEnvironments != null)
+		{	
+			for (String s : higherPriorityEnvironments)
+				if (hae.name.equals(s))
+					return true;
+		}
+		return false;
+	}
 	
 	public String toString()
 	{
