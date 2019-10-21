@@ -236,6 +236,13 @@ public class HNMRPredefinedKnowledgeBase
 			return;
 		}
 		
+		if (key.equals("HIGHER_PRIORITY_ENVIRONMENTS"))
+		{	
+			String tokens[] = keyValue.split(" ");
+			haEnv.higherPriorityEnvironments = tokens;
+			return;
+		}
+		
 		if (key.equals("SHIFT_ASSOCIATION"))	
 		{	
 			if (keyValue.equals("SUBSTITUENT_POSITION"))
