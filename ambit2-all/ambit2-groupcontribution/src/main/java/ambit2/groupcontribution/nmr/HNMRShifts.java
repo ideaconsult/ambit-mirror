@@ -95,7 +95,20 @@ public class HNMRShifts
 	
 	public void registerHAtomEnvironmentInstance(HAtomEnvironmentInstance haeInst)
 	{
-		//TODO
+		//Filling the data in atomHAtEnvInstanceSet
+		for (int i = 0; i < haeInst.atoms.length; i++)
+		{
+			IAtom at = haeInst.atoms[i];
+			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
+			
+			if (haeInstList == null)
+			{	
+				haeInstList = new ArrayList<HAtomEnvironmentInstance>();
+				atomHAtEnvInstanceSet.put(at, haeInstList);
+			}	
+			
+			haeInstList.add(haeInst);
+		}
 	}
 
 	public List<String> getErrors() {
