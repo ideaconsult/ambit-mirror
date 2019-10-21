@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
@@ -19,14 +21,16 @@ public class HNMRShifts
 	private List<String> errors = new ArrayList<String>();
 	private List<String> warnings = new ArrayList<String>();
 	private HNMRKnowledgeBase knowledgeBase = null;
-	private boolean implicitHAtomsWorkingMode = true;
+	//private boolean implicitHAtomsWorkingMode = true;
 	private double resolutionStep = 0.01;
 	
 	private IAtomContainer molecule = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
-	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>();
-	
+	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>(); //preferred sfdg 
+	private Map<IAtom, HShift> atomHShifts = new TreeMap<IAtom, HShift>();
 	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
+	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new TreeMap<IAtom, List<HAtomEnvironmentInstance>>();
+	private Map<IAtom, HAtomEnvironmentInstance> atomHAtEnvInstance = new TreeMap<IAtom, HAtomEnvironmentInstance>();
 	
 	
 	public HNMRShifts() throws Exception
@@ -57,7 +61,10 @@ public class HNMRShifts
 	{
 		hShifts.clear();
 		binHShifts.clear();
+		atomHShifts.clear();
 		hAtEnvInstances.clear();
+		atomHAtEnvInstanceSet.clear();
+		atomHAtEnvInstance.clear();
 		
 		findAllHAtomEnvironmentInstances();
 		
@@ -67,6 +74,26 @@ public class HNMRShifts
 	
 	
 	void findAllHAtomEnvironmentInstances()
+	{
+		for (int i = 0; i < knowledgeBase.hAtomEnvironments.size(); i++)
+		{
+			HAtomEnvironment hae = knowledgeBase.hAtomEnvironments.get(i);
+			List<List<IAtom>> atMaps = hae.groupMatch.getMappings(molecule);
+			
+			if (atMaps.isEmpty())
+				continue;
+			
+			for (int k = 0; k < atMaps.size(); k++ )
+			{
+				HAtomEnvironmentInstance haeInst = new HAtomEnvironmentInstance();
+				haeInst.atoms = (IAtom[])atMaps.get(k).toArray();
+				hAtEnvInstances.add(haeInst);
+				registerHAtomEnvironmentInstance(haeInst);
+			}
+		}
+	}
+	
+	public void registerHAtomEnvironmentInstance(HAtomEnvironmentInstance haeInst)
 	{
 		//TODO
 	}
