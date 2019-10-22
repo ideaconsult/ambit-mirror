@@ -36,7 +36,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +48,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.ext.mysql.MySqlDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import ambit2.base.config.AMBITConfigProperties;
 import ambit2.base.config.Preferences;
@@ -69,8 +69,13 @@ public abstract class DbUnitTest {
 	}
 
 	protected static Logger logger = Logger.getLogger(DbUnitTest.class.getName());
-	protected AMBITConfigProperties properties = new AMBITConfigProperties();
-
+	protected static AMBITConfigProperties properties;
+	
+	@BeforeClass
+	public static void initProperties() {
+		properties = new AMBITConfigProperties();	
+	}
+	
 	public static void setLogLevel(Level level) throws Exception {
 		Logger tempLogger = logger;
 		while (tempLogger != null) {
@@ -82,24 +87,25 @@ public abstract class DbUnitTest {
 	}
 
 	protected String getHost() {
-		return properties.getPropertyWithDefault(Preferences.HOST, AMBITConfigProperties.ambitProperties,"localhost");
+		return properties.getPropertyWithDefault(Preferences.HOST, AMBITConfigProperties.ambitProperties, "localhost");
 	}
 
 	protected String getDatabase() {
-		return properties.getPropertyWithDefault("database.test", AMBITConfigProperties.ambitProperties,"ambit-test");
+		return properties.getPropertyWithDefault("database.test", AMBITConfigProperties.ambitProperties, "ambit-test");
 	}
 
 	protected String getPort() {
-		return properties.getPropertyWithDefault("database.test.port", AMBITConfigProperties.ambitProperties,"3306");
+		return properties.getPropertyWithDefault("database.test.port", AMBITConfigProperties.ambitProperties, "3306");
 
 	}
 
 	protected String getUser() {
-		return properties.getPropertyWithDefault("database.user.test", AMBITConfigProperties.ambitProperties,"guest");
+		return properties.getPropertyWithDefault("database.user.test", AMBITConfigProperties.ambitProperties, "guest");
 	}
 
 	protected String getPWD() {
-		return properties.getPropertyWithDefault("database.user.test.password", AMBITConfigProperties.ambitProperties,"guest");
+		return properties.getPropertyWithDefault("database.user.test.password", AMBITConfigProperties.ambitProperties,
+				"guest");
 	}
 
 	@Before
@@ -157,7 +163,7 @@ public abstract class DbUnitTest {
 		String noAccessToProcedureBodiesQ = noAccessToProcedureBodies ? "&noAccessToProcedureBodies=true" : "";
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection jdbcConnection = DriverManager.getConnection(String.format(
-				"jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s%s%s",
+				"jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s%s%s&useSSL=false",
 				host, port, db, Boolean.toString(isProfileSQL()), (debug ? debugConnection : ""),
 				noAccessToProcedureBodiesQ), user, pass);
 		// SET NAMES utf8
@@ -195,8 +201,9 @@ public abstract class DbUnitTest {
 	public void setUpDatabase(InputStream xmlfile) throws Exception {
 		// This ensures all tables as defined in the schema are cleaned up, and
 		// is a single place to modify if a schema changes
-		InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/tables.xml");
-		initDB(in, DatabaseOperation.DELETE_ALL, true);
+		try (InputStream in = getClass().getClassLoader().getResourceAsStream("ambit2/db/processors/test/tables.xml")) {
+			initDB(in, DatabaseOperation.DELETE_ALL, true);
+		}
 		// This will import only records, defined in the xmlfile
 		initDB(xmlfile, DatabaseOperation.INSERT, false);
 	}
