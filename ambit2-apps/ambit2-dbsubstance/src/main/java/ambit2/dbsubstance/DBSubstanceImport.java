@@ -123,7 +123,7 @@ public class DBSubstanceImport {
 	}
 
 	protected IStructureKey matchByKey = new ReferenceSubstanceUUID();
-	protected String configFile;
+	protected File configFile;
 	protected _parsertype parserType = _parsertype.xlsx;
 
 	protected boolean isSplitRecord = false;
@@ -188,7 +188,7 @@ public class DBSubstanceImport {
 		this.parserType = parserType;
 	}
 
-	public String getConfigFile() {
+	public File getConfigFile() {
 		return configFile;
 	}
 
@@ -344,15 +344,16 @@ public class DBSubstanceImport {
 	}
 
 	protected static String getConfig(CommandLine line) {
-		if (line.hasOption('c'))
-			return line.getOptionValue('c');
-		else
+		if (line.hasOption('c')) {
+			return  line.getOptionValue('c');
+			
+		} else
 			return null;
 	}
 
-	protected void setConfig(String config) {
+	protected void setConfig(File config) {
 		if (config != null) {
-			if (!new File(config).exists())
+			if (!config.exists())
 				config = null;
 			else
 				this.configFile = config;
@@ -446,8 +447,8 @@ public class DBSubstanceImport {
 		Option output = OptionBuilder.hasArg().withLongOpt("output").withArgName("file").withDescription("Output file")
 				.create("o");
 
-		Option config = OptionBuilder.hasArg().withLongOpt("config").withArgName("file")
-				.withDescription("Config file (DB connection parameters)").create("c");
+		Option config = OptionBuilder.hasArg().withLongOpt("config").withArgName("folder")
+				.withDescription("Folder with AMBIT configuration files (DB connection parameters expected in 'ambit.properties' file)").create("c");
 
 		Option prefix = OptionBuilder.hasArg().withLongOpt("prefix").withArgName("4-letter-string")
 				.withDescription("UUID prefix, default 'XLSX'").create("e");
@@ -542,9 +543,10 @@ public class DBSubstanceImport {
 			outputFile = getOutput(line);
 
 			String config = getConfig(line);
+			
 			if (config == null || !(new File(config)).exists())
-				throw new Exception("Missing database connection config file");
-			setConfig(config);
+				throw new Exception("Missing database connection config folder");
+			setConfig(new File(config));
 
 			setClearComposition(isClearComposition(line));
 			setClearMeasurements(isClearMeasurements(line));
@@ -673,8 +675,7 @@ public class DBSubstanceImport {
 	protected int importFile(boolean splitRecord, final boolean xlsx, boolean importBundles) throws Exception {
 		IRawReader<IStructureRecord> parser = null;
 		Connection c = null;
-		try {
-			FileInputStream fin = new FileInputStream(inputFile);
+		try (FileInputStream fin = new FileInputStream(inputFile)) {
 
 			parser = createParser(fin, xlsx);
 			logger_cli.log(Level.INFO, "MSG_IMPORT",
@@ -742,15 +743,30 @@ public class DBSubstanceImport {
 			throw new AmbitException(x);
 		}
 	}
+	
+	protected DBConnectionConfigurable<Context> getConnection(File configFile) throws SQLException, AmbitException {
+		try {
+			Context context = initContext();
+			String driver = context.get(Preferences.DRIVERNAME);
+
+			if ((driver != null) && (driver.contains("mysql")))
+				return new MySQLSingleConnection(context, configFile);
+			else
+				throw new AmbitException("Driver not supported");
+		} catch (Exception x) {
+			x.printStackTrace();
+			throw new AmbitException(x);
+		}
+	}	
 
 	protected synchronized Context initContext() throws Exception {
 		if (getConfigFile() == null)
 			return new Context();
 
-		InputStream in = null;
-		try {
+
+		try (InputStream in  = new FileInputStream(getConfigFile());) {
 			Properties properties = new Properties();
-			in = new FileInputStream(getConfigFile());
+			
 
 			properties.load(in);
 			Context context = new Context();
@@ -765,11 +781,7 @@ public class DBSubstanceImport {
 
 		} catch (IOException x) {
 			throw x;
-		} finally {
-			try {
-				in.close();
-			} catch (Exception x) {
-			}
+
 		}
 	}
 

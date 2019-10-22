@@ -29,6 +29,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ambit2.base.config.AMBITConfigProperties;
+import ambit2.base.config.Preferences;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.dbsubstance.DBSubstanceImport;
 import net.enanomapper.maker.TemplateMakerSettings;
