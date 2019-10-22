@@ -63,6 +63,7 @@ public class AlgorithmPileTest {
 			output.write("[\n");
 			AlgorithmsPile p = new AlgorithmsPile();
 			List<Algorithm<String>> al = p.createList(p.fromJSON());
+			r.setOutput(output);
 			for (Algorithm<String> a : al)
 				r.processItem(a, output);
 			output.write("\n]");
