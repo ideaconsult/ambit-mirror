@@ -28,17 +28,17 @@ public class HNMRKnowledgeBase
 		for (int i = 0; i < hAtomEnvironments.size(); i++)
 		{
 			HAtomEnvironment hae = hAtomEnvironments.get(i);
-			configure(hae);
+			configure(hae, i+1);
 		}
 	}
 	
-	protected void configure(HAtomEnvironment hae)
+	protected void configure(HAtomEnvironment hae, int num)
 	{
 		GroupMatch haeGM = new GroupMatch(hae.smarts, parser, isoTester);
 		if (!haeGM.getError().equals(""))
 		{
-			errors.add("HAtomEnvironment: " + hae.name + 
-					" SMARTS: " + haeGM.getError());
+			errors.add("HAtomEnvironment #" + num + " " + hae.name + 
+					":	SMARTS: " + haeGM.getError());
 		}
 		else		
 			hae.groupMatch = haeGM;					
@@ -55,8 +55,8 @@ public class HNMRKnowledgeBase
 				gm = new GroupMatch(subst.smarts, parser, isoTester);
 				if (!gm.getError().equals(""))
 				{
-					errors.add("HAtomEnvironment: " + hae.name + 
-							"  Substituent[" + (i+1) + "] " + subst.name + ": " + 
+					errors.add("HAtomEnvironment #" + num + " " + hae.name +  
+							": Substituent[" + (i+1) + "] " + subst.name + ": " + 
 							gm.getError());
 				}
 				else
@@ -70,8 +70,8 @@ public class HNMRKnowledgeBase
 				if (!subst.smarts.equals("--"))
 					if (!subst.smarts.equals(gm.getSmarts()))
 					{
-						errors.add("HAtomEnvironment: " + hae.name + 
-								"  Substituent[" + (i+1) + "] " + subst.name + ": " + 
+						errors.add("HAtomEnvironment #" + num + " " + hae.name +   
+								": Substituent[" + (i+1) + "] " + subst.name + ": " + 
 								"Smarts " + subst.smarts + 
 								" is different than the already registered in repository: " + gm.getSmarts());
 					}

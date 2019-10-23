@@ -196,7 +196,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("SHIFT_DESIGNATIONS"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.shiftDesignations = tokens;
 			return;
 		}
@@ -204,7 +204,7 @@ public class HNMRPredefinedKnowledgeBase
 				
 		if (key.equals("SUBSTITUENT_POS_ATOM_INDICES"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.substituentPosAtomIndices = new int[tokens.length];
 			for (int i = 0; i < tokens.length; i++)
 			{
@@ -221,7 +221,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("POSITION_DISTANCES"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.positionDistances = new int[tokens.length];
 			for (int i = 0; i < tokens.length; i++)
 			{
@@ -238,7 +238,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("HIGHER_PRIORITY_ENVIRONMENTS"))
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.higherPriorityEnvironments = tokens;
 			return;
 		}
@@ -257,7 +257,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("SUBST"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			Substituent subst = new Substituent();
 			if (tokens.length > 0)
 				subst.name = tokens[0];
@@ -277,6 +277,20 @@ public class HNMRPredefinedKnowledgeBase
 					}
 				}
 			}
+			
+		
+			if (subst.name == null || subst.name.equals(""))
+			{	
+				errors.add(errorPrefix + " incorrect SUBSTITUENT: NAME (token #1) is an empty string");
+				return;
+			}
+			
+			if (subst.smarts == null || subst.smarts.equals(""))
+			{	
+				errors.add(errorPrefix + " incorrect SUBSTITUENT: SMARTS (token #2) is an empty string");
+				return;
+			}
+			
 			haEnv.substituents.add(subst);
 			return;
 		}
