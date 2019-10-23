@@ -149,7 +149,26 @@ public class HNMRShifts
 		//TODO
 	}
 	
-	
+	public String getCalcLog() 
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("Initial HAtomEnvironment Instances:\n");
+		Set<IAtom> atoms = atomHAtEnvInstanceSet.keySet();
+		for (IAtom at : atoms)
+		{
+			sb.append("At " + at.getSymbol() + " " + molecule.indexOf(at) + "\n");
+			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
+			for (HAtomEnvironmentInstance inst : haeInstList)
+			{
+				sb.append("  " + inst.hEnvironment.name);
+				for (int k = 0; k < inst.atoms.length; k++)
+					sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
+			}
+		}
+		
+		return sb.toString();
+	}
 
 	public List<String> getErrors() {
 		return errors;
