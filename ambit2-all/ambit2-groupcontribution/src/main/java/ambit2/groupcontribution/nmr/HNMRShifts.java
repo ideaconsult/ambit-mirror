@@ -2,6 +2,7 @@ package ambit2.groupcontribution.nmr;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,11 +28,11 @@ public class HNMRShifts
 	private IAtomContainer molecule = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
 	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>();
-	private Map<IAtom, HShift> atomHShifts = new TreeMap<IAtom, HShift>();
+	private Map<IAtom, HShift> atomHShifts = new HashMap<IAtom, HShift>();
 	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
-	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new TreeMap<IAtom, List<HAtomEnvironmentInstance>>();
-	private Map<IAtom, HAtomEnvironmentInstance> atomHAtEnvInstance = new TreeMap<IAtom, HAtomEnvironmentInstance>();
-	
+	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new HashMap<IAtom, List<HAtomEnvironmentInstance>>();
+	private Map<IAtom, HAtomEnvironmentInstance> atomHAtEnvInstance = new HashMap<IAtom, HAtomEnvironmentInstance>();
+	private Map<String, List<List<IAtom>>> groupMappings = new HashMap<String, List<List<IAtom>>>();
 	
 	public HNMRShifts() throws Exception
 	{
@@ -65,6 +66,7 @@ public class HNMRShifts
 		hAtEnvInstances.clear();
 		atomHAtEnvInstanceSet.clear();
 		atomHAtEnvInstance.clear();
+		groupMappings.clear();
 		
 		findAllHAtomEnvironmentInstances();
 		
