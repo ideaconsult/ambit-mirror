@@ -89,6 +89,17 @@ public class GroupMatch
 		return isoTester.hasIsomorphism(target);
 	}
 	
+	public boolean matchAtPosition(IAtomContainer target, int atomNum)
+	{
+		if (FlagPrepareTarget)
+			SmartsParser.prepareTargetForSMARTSSearch(flags, target);
+    	
+		if (flags.hasRecursiveSmarts)
+			 mapRecursiveAtomsAgainstTarget(recursiveAtoms, target);
+		
+		isoTester.setSequence(smartsQuery, sequence);
+		return isoTester.checkIsomorphismAtPosition(target, atomNum);
+	}
 		
 	public List<List<IAtom>> getMappings(IAtomContainer target)
 	{

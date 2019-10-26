@@ -36,6 +36,13 @@ public class TestGroupMatch extends TestCase
 		return grpMatch.match(mol); 
 	}
 	
+	public boolean matchGroupAtPosition(String smarts, String smiles, int atNum) throws Exception 
+	{
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		GroupMatch grpMatch = new GroupMatch(smarts, sp, isoTester);
+		return grpMatch.matchAtPosition(mol, atNum); 
+	}
+	
 	public int getGroupMatchCount(String smarts, String smiles, SSM_MODE flagSSMode) throws Exception 
 	{
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
@@ -72,6 +79,19 @@ public class TestGroupMatch extends TestCase
 	{
 		boolean res = matchGroup("[*;r5]", "C1CCCC1N");
 		assertEquals(true, res);
+		
+		res = matchGroupAtPosition("[*;r5]", "C1CCCC1N", 0);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[*;r5]", "C1CCCC1N", 1);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[*;r5]", "C1CCCC1N", 2);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[*;r5]", "C1CCCC1N", 3);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[*;r5]", "C1CCCC1N", 4);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[*;r5]", "C1CCCC1N", 5);
+		assertEquals(false, res);
 	}
 	
 	public void test06()  throws Exception
@@ -96,6 +116,15 @@ public class TestGroupMatch extends TestCase
 	{
 		boolean res = matchGroup("[a]", "c1cc(C)c(N)cc1");
 		assertEquals(true, res);
+		
+		res = matchGroupAtPosition("[a]", "c1cc(C)c(N)cc1", 0);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[a]", "c1cc(C)c(N)cc1", 1);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[a]", "c1cc(C)c(N)cc1", 2);
+		assertEquals(true, res);
+		res = matchGroupAtPosition("[a]", "c1cc(C)c(N)cc1", 3);
+		assertEquals(false, res);
 	}
 	
 	public void test10()  throws Exception
@@ -155,8 +184,6 @@ public class TestGroupMatch extends TestCase
 		assertEquals("Matching " + smarts + " against " + target + " in mode ALL: ",
 				2, res);		
 	}
-	
-	
 	
 
 }
