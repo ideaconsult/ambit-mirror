@@ -170,7 +170,10 @@ public class HNMRPredefinedKnowledgeBase
 			if (b == null)
 				errors.add(errorPrefix + " incorrect FLAG_USE: " + keyValue);
 			else
+			{	
 				haEnv.flagUse = b;
+				haEnv.flagUseString = keyValue;
+			}	
 			return;
 		}
 				

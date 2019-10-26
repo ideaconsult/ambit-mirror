@@ -13,6 +13,7 @@ public class HAtomEnvironment
 	}
 	
 	public boolean flagUse = true;
+	public String flagUseString = null;
 	public String name = null;
 	public String smarts = null;
 	public String info = "";
@@ -43,7 +44,10 @@ public class HAtomEnvironment
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("HAtomEnvironment: " + name + "\n");
-		sb.append("FlagUse: " + flagUse + "\n");
+		if (flagUseString == null)
+			sb.append("FlagUse: " + flagUse + "\n");
+		else
+			sb.append("FlagUse: " + flagUseString + "\n");
 		sb.append("Smarts: " + smarts + "\n");
 				
 		if (!info.contentEquals(""))
