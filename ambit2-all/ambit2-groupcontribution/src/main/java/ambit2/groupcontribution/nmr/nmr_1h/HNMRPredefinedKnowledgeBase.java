@@ -338,9 +338,9 @@ public class HNMRPredefinedKnowledgeBase
 			return true;
 		
 		if (s.equalsIgnoreCase("false"))
-			return true;
+			return false;
 		if (s.equalsIgnoreCase("no"))
-			return true;
+			return false;
 		if (s.equals("0"))
 			return false;
 		
