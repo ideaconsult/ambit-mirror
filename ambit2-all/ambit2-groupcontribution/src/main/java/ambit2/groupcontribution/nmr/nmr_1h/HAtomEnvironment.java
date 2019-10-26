@@ -12,6 +12,7 @@ public class HAtomEnvironment
 		SUBSTITUENT_POSITION, H_ATOM_POSITION
 	}
 	
+	public boolean flagUse = true;
 	public String name = null;
 	public String smarts = null;
 	public String info = "";
@@ -42,6 +43,7 @@ public class HAtomEnvironment
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("HAtomEnvironment: " + name + "\n");
+		sb.append("FlagUse: " + flagUse + "\n");
 		sb.append("Smarts: " + smarts + "\n");
 				
 		if (!info.contentEquals(""))

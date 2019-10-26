@@ -164,7 +164,16 @@ public class HNMRPredefinedKnowledgeBase
 		String key = keyword.substring(keyWordPrefix.length(), sepPos).trim();		
 		String keyValue = keyword.substring(sepPos+1).trim();
 		
-		
+		if (key.equals("FLAG_USE"))	
+		{	
+			Boolean b = getBooleanFromString(keyValue);
+			if (b == null)
+				errors.add(errorPrefix + " incorrect FLAG_USE: " + keyValue);
+			else
+				haEnv.flagUse = b;
+			return;
+		}
+				
 		if (key.equals("NAME"))	
 		{	
 			haEnv.name = keyValue;
@@ -317,6 +326,25 @@ public class HNMRPredefinedKnowledgeBase
 		
 		//TODO: check number of atom pos indices and postion distances
 		// check substituents
+	}
+	
+	static Boolean getBooleanFromString(String s)
+	{
+		if (s.equalsIgnoreCase("true"))
+			return true;
+		if (s.equalsIgnoreCase("yes"))
+			return true;
+		if (s.equals("1"))
+			return true;
+		
+		if (s.equalsIgnoreCase("false"))
+			return true;
+		if (s.equalsIgnoreCase("no"))
+			return true;
+		if (s.equals("0"))
+			return false;
+		
+		return null; //Incorrect string
 	}
 	
 	
