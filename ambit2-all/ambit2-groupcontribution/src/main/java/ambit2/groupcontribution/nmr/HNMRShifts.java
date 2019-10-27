@@ -81,6 +81,9 @@ public class HNMRShifts
 		for (int i = 0; i < knowledgeBase.hAtomEnvironments.size(); i++)
 		{
 			HAtomEnvironment hae = knowledgeBase.hAtomEnvironments.get(i);
+			if (!hae.flagUse)
+				continue;
+			
 			List<List<IAtom>> atMaps = hae.groupMatch.getMappings(molecule);
 			
 			if (atMaps.isEmpty())
@@ -89,7 +92,13 @@ public class HNMRShifts
 			for (int k = 0; k < atMaps.size(); k++ )
 			{
 				HAtomEnvironmentInstance haeInst = new HAtomEnvironmentInstance();
-				haeInst.atoms = (IAtom[])atMaps.get(k).toArray();
+				haeInst.hEnvironment = hae;
+				
+				int n = atMaps.get(k).size();
+				haeInst.atoms = new IAtom[n];
+				for (int r = 0; r < n; r++)
+					haeInst.atoms[r] = atMaps.get(k).get(r);
+				
 				hAtEnvInstances.add(haeInst);
 				registerHAtomEnvironmentInstance(haeInst);
 			}
@@ -157,13 +166,14 @@ public class HNMRShifts
 		Set<IAtom> atoms = atomHAtEnvInstanceSet.keySet();
 		for (IAtom at : atoms)
 		{
-			sb.append("At " + at.getSymbol() + " " + molecule.indexOf(at) + "\n");
+			sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
 			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
 			for (HAtomEnvironmentInstance inst : haeInstList)
 			{
 				sb.append("  " + inst.hEnvironment.name);
 				for (int k = 0; k < inst.atoms.length; k++)
 					sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
+				sb.append("\n");
 			}
 		}
 		

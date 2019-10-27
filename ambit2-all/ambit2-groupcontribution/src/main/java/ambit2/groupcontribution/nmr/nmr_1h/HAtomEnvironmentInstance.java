@@ -9,4 +9,12 @@ public class HAtomEnvironmentInstance
 	public IAtom atoms[] = null;
 	public HAtomEnvironment hEnvironment = null; 
 	public SubstituentInstance substituentInstances[] = null; 
+	
+	public HAtomEnvironmentInstance() {
+	}
+	
+	public HAtomEnvironmentInstance(IAtom atoms[], HAtomEnvironment hEnvironment) {
+		this.atoms = atoms;
+		this.hEnvironment = hEnvironment;
+	}
 }

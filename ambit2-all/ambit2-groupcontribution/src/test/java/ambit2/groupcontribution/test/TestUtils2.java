@@ -186,7 +186,7 @@ public class TestUtils2
 		hnmrShifts.setStructure(mol);
 		hnmrShifts.calculateHShifts();
 		
-		System.out.println(hnmrShifts.getCalcLog());
+		System.out.println("Log:\n" + hnmrShifts.getCalcLog());
 		
 	}
 	
