@@ -28,6 +28,7 @@ import ambit2.groupcontribution.descriptors.LDAtomHybridization;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.descriptors.LDAtomValency;
 import ambit2.groupcontribution.descriptors.LDHNum;
+import ambit2.groupcontribution.nmr.HNMRShifts;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
 import ambit2.smarts.SmartsHelper;
@@ -175,5 +176,18 @@ public class TestUtils2
 		
 	}
 	
+	public static void testHNMRShifts(String smiles, String knowledgeBaseFileName) throws Exception
+	{	
+		System.out.println("Configuring knowledge base ...");
+		HNMRShifts hnmrShifts = new HNMRShifts(new  File(knowledgeBaseFileName));
+		
+		System.out.println("Testing HNMR with molecule: " + smiles);
+		IAtomContainer mol = TestUtils.moleculeBuilder(smiles);
+		hnmrShifts.setStructure(mol);
+		hnmrShifts.calculateHShifts();
+		
+		System.out.println(hnmrShifts.getCalcLog());
+		
+	}
 	
 }
