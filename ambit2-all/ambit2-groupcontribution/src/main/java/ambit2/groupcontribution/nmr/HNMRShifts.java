@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.descriptors.utils.GraphMatrices;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
@@ -26,6 +27,7 @@ public class HNMRShifts
 	private double resolutionStep = 0.01;
 	
 	private IAtomContainer molecule = null;
+	private int distMatrix[][] = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
 	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>();
 	private Map<IAtom, HShift> atomHShifts = new HashMap<IAtom, HShift>();
@@ -67,6 +69,8 @@ public class HNMRShifts
 		atomHAtEnvInstanceSet.clear();
 		atomHAtEnvInstance.clear();
 		groupMappings.clear();
+		
+		distMatrix = GraphMatrices.getTopDistanceMatrix(molecule);
 		
 		findAllHAtomEnvironmentInstances();
 		
@@ -165,29 +169,56 @@ public class HNMRShifts
 		}
 	}
 	
-	public void findSubstituents(HAtomEnvironmentInstance inst)
+	public void findSubstituents(HAtomEnvironmentInstance haeInst)
 	{
-		switch (inst.hEnvironment.shiftsAssociation)
+		int n = haeInst.hEnvironment.shiftDesignations.length;
+		haeInst.substituentInstances = new ArrayList<List<SubstituentInstance>>();
+		
+		switch (haeInst.hEnvironment.shiftsAssociation)
 		{
 		case H_ATOM_POSITION:
 			//TODO
 			break;
 			
 		case SUBSTITUENT_POSITION:
-			for (int i = 0; i < inst.hEnvironment.shiftDesignations.length; i++)
+			for (int i = 0; i < n; i++)
 			{
 				int substPos = 0; //default value
-				if (inst.hEnvironment.substituentPosAtomIndices != null)
-					substPos = inst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base 
+				if (haeInst.hEnvironment.substituentPosAtomIndices != null)
+					substPos = haeInst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base 
 				
 				int distance = 1; //default value
-				if (inst.hEnvironment.positionDistances != null)
-					distance = inst.hEnvironment.positionDistances[i];
+				if (haeInst.hEnvironment.positionDistances != null)
+					distance = haeInst.hEnvironment.positionDistances[i];
+				
+				//Find possible starting atoms for substituent match
+				//using distance matrix
+				List<IAtom> startAtoms = new ArrayList<IAtom>();
+				IAtom at0 = haeInst.atoms[substPos];
+				int atIndex0 = molecule.indexOf(at0);
+				//The start atoms are at apropriate distance from atom at0 
+				for (int k = 0; k < distMatrix[atIndex0].length; k++)
+					if (distMatrix[atIndex0][k] == distance)
+					{	
+						//TODO check atom whether it is part of the instances
+						startAtoms.add(molecule.getAtom(k));
+					}
+				
+				if (startAtoms.size() > 0)
+				{
+					List<SubstituentInstance> listSubst = new ArrayList<SubstituentInstance>();
+					//TODO
+					//...
+					haeInst.substituentInstances.add(listSubst);
+				}
+				else
+					haeInst.substituentInstances.add(null);
 				
 			}
 			break;
 		}
 	}
+	
 	
 	
 	public void generateHShifts()

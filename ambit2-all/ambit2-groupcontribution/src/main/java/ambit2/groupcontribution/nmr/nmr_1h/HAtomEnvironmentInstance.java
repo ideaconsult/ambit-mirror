@@ -10,7 +10,7 @@ public class HAtomEnvironmentInstance
 {
 	public IAtom atoms[] = null;
 	public HAtomEnvironment hEnvironment = null; 
-	public List<SubstituentInstance> substituentInstances[] = null; 
+	public List<List<SubstituentInstance>> substituentInstances = null; 
 	
 	public HAtomEnvironmentInstance() {
 	}
