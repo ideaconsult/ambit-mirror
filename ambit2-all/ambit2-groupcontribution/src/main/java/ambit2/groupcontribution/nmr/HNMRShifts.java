@@ -161,9 +161,34 @@ public class HNMRShifts
 		for (IAtom at : atoms)
 		{
 			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
-			//TODO
+			findSubstituents(inst);
 		}
 	}
+	
+	public void findSubstituents(HAtomEnvironmentInstance inst)
+	{
+		switch (inst.hEnvironment.shiftsAssociation)
+		{
+		case H_ATOM_POSITION:
+			//TODO
+			break;
+			
+		case SUBSTITUENT_POSITION:
+			for (int i = 0; i < inst.hEnvironment.shiftDesignations.length; i++)
+			{
+				int substPos = 0; //default value
+				if (inst.hEnvironment.substituentPosAtomIndices != null)
+					substPos = inst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base 
+				
+				int distance = 1; //default value
+				if (inst.hEnvironment.positionDistances != null)
+					distance = inst.hEnvironment.positionDistances[i];
+				
+			}
+			break;
+		}
+	}
+	
 	
 	public void generateHShifts()
 	{
