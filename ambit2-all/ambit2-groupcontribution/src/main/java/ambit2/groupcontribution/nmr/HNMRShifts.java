@@ -150,6 +150,18 @@ public class HNMRShifts
 					}	
 				}
 			}
+			
+			atomHAtEnvInstance.put(at, selectedInst);
+		}
+	}
+	
+	public void findAllSubstituents()
+	{
+		Set<IAtom> atoms = atomHAtEnvInstance.keySet();
+		for (IAtom at : atoms)
+		{
+			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
+			//TODO
 		}
 	}
 	
@@ -177,6 +189,19 @@ public class HNMRShifts
 			}
 		}
 		
+		sb.append("\n");
+		sb.append("Refined HAtomEnvironment Instances:\n");
+		atoms = atomHAtEnvInstance.keySet();
+		for (IAtom at : atoms)
+		{
+			sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
+			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
+			sb.append("  " + inst.hEnvironment.name);
+			for (int k = 0; k < inst.atoms.length; k++)
+				sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
+			sb.append("\n");
+		}
+
 		return sb.toString();
 	}
 
