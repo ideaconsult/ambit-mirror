@@ -17,6 +17,7 @@ import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HShift;
+import ambit2.smarts.groups.GroupMatch;
 
 public class HNMRShifts 
 {
@@ -71,6 +72,8 @@ public class HNMRShifts
 		groupMappings.clear();
 		
 		distMatrix = GraphMatrices.getTopDistanceMatrix(molecule);
+		
+		findAllGroupMappings();
 		
 		findAllHAtomEnvironmentInstances();
 		
@@ -181,15 +184,15 @@ public class HNMRShifts
 			break;
 			
 		case SUBSTITUENT_POSITION:
-			for (int i = 0; i < n; i++)
+			for (int pos = 0; pos < n; pos++)
 			{
 				int substPos = 0; //default value
 				if (haeInst.hEnvironment.substituentPosAtomIndices != null)
-					substPos = haeInst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base 
+					substPos = haeInst.hEnvironment.substituentPosAtomIndices[pos]-1; //1-base --> 0-base 
 				
 				int distance = 1; //default value
 				if (haeInst.hEnvironment.positionDistances != null)
-					distance = haeInst.hEnvironment.positionDistances[i];
+					distance = haeInst.hEnvironment.positionDistances[pos];
 				
 				//Find possible starting atoms for substituent match
 				//using distance matrix
@@ -207,9 +210,38 @@ public class HNMRShifts
 				if (startAtoms.size() > 0)
 				{
 					List<SubstituentInstance> listSubst = new ArrayList<SubstituentInstance>();
-					//TODO
-					//...
-					haeInst.substituentInstances.add(listSubst);
+					
+					for (int k = 0; k < startAtoms.size(); k++)
+					{	
+						IAtom startAt = startAtoms.get(k);
+						
+						for (Substituent sub : haeInst.hEnvironment.substituents)
+						{	
+							List<List<IAtom>> maps = groupMappings.get(sub.name);
+							if (maps != null)
+							{	
+								for (int i = 0; i < maps.size(); i++)
+								{
+									List<IAtom> map = maps.get(i);
+									if (map.get(0) == startAt)
+									{
+										//Register substance instance
+										SubstituentInstance subInst = new SubstituentInstance(); 
+										subInst.substituent = sub;
+										subInst.atoms = new IAtom[map.size()];
+										for (int j = 0; j < map.size(); j++)
+											subInst.atoms[j] = map.get(j);
+										listSubst.add(subInst);
+									}
+								}
+							}
+						}
+					}
+					
+					if (listSubst.isEmpty())
+						haeInst.substituentInstances.add(null);
+					else
+						haeInst.substituentInstances.add(listSubst);
 				}
 				else
 					haeInst.substituentInstances.add(null);
@@ -219,12 +251,25 @@ public class HNMRShifts
 		}
 	}
 	
-	
+	public void findAllGroupMappings()
+	{
+		Set<String> keys = knowledgeBase.groupMatchRepository.keySet();
+		for (String key : keys)
+		{
+			GroupMatch gm = knowledgeBase.groupMatchRepository.get(key);
+			List<List<IAtom>> maps =  gm.getMappings(molecule);
+			if (!maps.isEmpty())
+				groupMappings.put(key, maps);
+			//System.out.println("Searching: " + key + "  " + maps.size());
+		}
+	}
 	
 	public void generateHShifts()
 	{
 		//TODO
 	}
+	
+	
 	
 	public String getCalcLog() 
 	{
