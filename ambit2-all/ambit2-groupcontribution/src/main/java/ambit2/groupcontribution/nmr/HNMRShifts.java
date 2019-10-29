@@ -79,6 +79,8 @@ public class HNMRShifts
 		
 		handleOverlappingHAtomEnvironmentInstances();
 		
+		findAllSubstituents();
+		
 		generateHShifts();
 	}
 	
@@ -302,16 +304,51 @@ public class HNMRShifts
 		}
 		
 		sb.append("\n");
-		sb.append("Refined HAtomEnvironment Instances:\n");
+		sb.append("Filtered HAtomEnvironment Instances:\n");
 		atoms = atomHAtEnvInstance.keySet();
 		for (IAtom at : atoms)
 		{
-			sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
+			//sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
 			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
 			sb.append("  " + inst.hEnvironment.name);
 			for (int k = 0; k < inst.atoms.length; k++)
 				sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
 			sb.append("\n");
+			
+			if (inst.substituentInstances != null)
+			{
+				switch (inst.hEnvironment.shiftsAssociation)
+				{
+				case H_ATOM_POSITION:
+					//TODO
+					break;
+				case SUBSTITUENT_POSITION:
+					//Iterate all shift positions
+					for (int i = 0; i < inst.substituentInstances.size(); i++)
+					{	
+						List<SubstituentInstance> siList = inst.substituentInstances.get(i);
+						if (siList == null)
+							continue;
+						
+						int pos = 0; //default value
+						if (inst.hEnvironment.substituentPosAtomIndices != null)
+							pos = inst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base			
+						int distance = 1; //default value
+						if (inst.hEnvironment.positionDistances != null)
+							distance = inst.hEnvironment.positionDistances[i];
+						
+						sb.append("    pos=" + (pos+1) + " distance=" + distance);
+						for (SubstituentInstance si : siList)
+						{
+							sb.append(" " + si.substituent.name);
+							for (int k = 0; k < si.atoms.length; k++)
+								sb.append(" " + /*si.atoms[k].getSymbol()*/ molecule.indexOf(si.atoms[k]));
+						}
+						sb.append("\n");
+					}
+					break;
+				}
+			}
 		}
 
 		return sb.toString();
