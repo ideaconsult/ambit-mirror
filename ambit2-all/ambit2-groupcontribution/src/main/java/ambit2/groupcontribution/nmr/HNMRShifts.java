@@ -203,8 +203,19 @@ public class HNMRShifts
 				for (int k = 0; k < distMatrix[atIndex0].length; k++)
 					if (distMatrix[atIndex0][k] == distance)
 					{	
-						//TODO check atom whether it is part of the instances
-						startAtoms.add(molecule.getAtom(k));
+						IAtom at = molecule.getAtom(k);
+						
+						//Check whether at is part of the instance
+						boolean flagAdd = true;
+						for (int i = 0; i < haeInst.atoms.length; i++)
+							if (at == haeInst.atoms[i])
+							{
+								flagAdd = false;
+								break;
+							}
+						
+						if (flagAdd)
+							startAtoms.add(at);
 					}
 				
 				if (startAtoms.size() > 0)
@@ -225,7 +236,7 @@ public class HNMRShifts
 									List<IAtom> map = maps.get(i);
 									if (map.get(0) == startAt)
 									{
-										//Register substance instance
+										//Register substituent instance
 										SubstituentInstance subInst = new SubstituentInstance(); 
 										subInst.substituent = sub;
 										subInst.atoms = new IAtom[map.size()];
