@@ -3102,7 +3102,7 @@ public class Protocol {
 		IMPURITY_SECTION {
 			@Override
 			public String toString() {
-				return "Impurities";
+				return "Elemental composition and chemical purity";
 			}
 			@Override
 			public String getNumber() {
