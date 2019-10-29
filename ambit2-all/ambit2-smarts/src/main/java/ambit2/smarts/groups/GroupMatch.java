@@ -27,6 +27,7 @@ public class GroupMatch
 	
 	private SmartsFlags flags = new SmartsFlags();
 	private SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
+	private boolean FlagPrepareTarget = true;
 	
 	public GroupMatch(String smarts, SmartsParser parser, IsomorphismTester isoTester)
 	{
@@ -78,7 +79,8 @@ public class GroupMatch
 	
 	public boolean match(IAtomContainer target)
 	{	
-		SmartsParser.prepareTargetForSMARTSSearch(flags, target);
+		if (FlagPrepareTarget)
+			SmartsParser.prepareTargetForSMARTSSearch(flags, target);
     	
 		if (flags.hasRecursiveSmarts)
 			 mapRecursiveAtomsAgainstTarget(recursiveAtoms, target);
@@ -87,10 +89,22 @@ public class GroupMatch
 		return isoTester.hasIsomorphism(target);
 	}
 	
+	public boolean matchAtPosition(IAtomContainer target, int atomNum)
+	{
+		if (FlagPrepareTarget)
+			SmartsParser.prepareTargetForSMARTSSearch(flags, target);
+    	
+		if (flags.hasRecursiveSmarts)
+			 mapRecursiveAtomsAgainstTarget(recursiveAtoms, target);
+		
+		isoTester.setSequence(smartsQuery, sequence);
+		return isoTester.checkIsomorphismAtPosition(target, atomNum);
+	}
 		
 	public List<List<IAtom>> getMappings(IAtomContainer target)
 	{
-		SmartsParser.prepareTargetForSMARTSSearch(flags, target);
+		if (FlagPrepareTarget)
+			SmartsParser.prepareTargetForSMARTSSearch(flags, target);
     	
 		if (flags.hasRecursiveSmarts)
 			 mapRecursiveAtomsAgainstTarget(recursiveAtoms, target);
@@ -156,6 +170,14 @@ public class GroupMatch
 
 	public void setFlagSSMode(SSM_MODE flagSSMode) {
 		FlagSSMode = flagSSMode;
+	}	
+	
+	public boolean isFlagPrepareTarget() {
+		return FlagPrepareTarget;
+	}
+
+	public void setFlagPrepareTarget(boolean flagPrepareTarget) {
+		FlagPrepareTarget = flagPrepareTarget;
 	}
 
 	public IsomorphismTester getIsoTester() {

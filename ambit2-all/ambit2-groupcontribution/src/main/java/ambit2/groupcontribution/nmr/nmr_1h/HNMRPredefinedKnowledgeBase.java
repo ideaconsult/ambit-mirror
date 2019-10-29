@@ -164,7 +164,19 @@ public class HNMRPredefinedKnowledgeBase
 		String key = keyword.substring(keyWordPrefix.length(), sepPos).trim();		
 		String keyValue = keyword.substring(sepPos+1).trim();
 		
-		
+		if (key.equals("FLAG_USE"))	
+		{	
+			Boolean b = getBooleanFromString(keyValue);
+			if (b == null)
+				errors.add(errorPrefix + " incorrect FLAG_USE: " + keyValue);
+			else
+			{	
+				haEnv.flagUse = b;
+				haEnv.flagUseString = keyValue;
+			}	
+			return;
+		}
+				
 		if (key.equals("NAME"))	
 		{	
 			haEnv.name = keyValue;
@@ -196,7 +208,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("SHIFT_DESIGNATIONS"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.shiftDesignations = tokens;
 			return;
 		}
@@ -204,7 +216,7 @@ public class HNMRPredefinedKnowledgeBase
 				
 		if (key.equals("SUBSTITUENT_POS_ATOM_INDICES"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.substituentPosAtomIndices = new int[tokens.length];
 			for (int i = 0; i < tokens.length; i++)
 			{
@@ -221,7 +233,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("POSITION_DISTANCES"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.positionDistances = new int[tokens.length];
 			for (int i = 0; i < tokens.length; i++)
 			{
@@ -238,7 +250,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("HIGHER_PRIORITY_ENVIRONMENTS"))
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			haEnv.higherPriorityEnvironments = tokens;
 			return;
 		}
@@ -257,7 +269,7 @@ public class HNMRPredefinedKnowledgeBase
 		
 		if (key.equals("SUBST"))	
 		{	
-			String tokens[] = keyValue.split(" ");
+			String tokens[] = keyValue.split("\\s+");
 			Substituent subst = new Substituent();
 			if (tokens.length > 0)
 				subst.name = tokens[0];
@@ -277,6 +289,20 @@ public class HNMRPredefinedKnowledgeBase
 					}
 				}
 			}
+			
+		
+			if (subst.name == null || subst.name.equals(""))
+			{	
+				errors.add(errorPrefix + " incorrect SUBSTITUENT: NAME (token #1) is an empty string");
+				return;
+			}
+			
+			if (subst.smarts == null || subst.smarts.equals(""))
+			{	
+				errors.add(errorPrefix + " incorrect SUBSTITUENT: SMARTS (token #2) is an empty string");
+				return;
+			}
+			
 			haEnv.substituents.add(subst);
 			return;
 		}
@@ -303,6 +329,25 @@ public class HNMRPredefinedKnowledgeBase
 		
 		//TODO: check number of atom pos indices and postion distances
 		// check substituents
+	}
+	
+	static Boolean getBooleanFromString(String s)
+	{
+		if (s.equalsIgnoreCase("true"))
+			return true;
+		if (s.equalsIgnoreCase("yes"))
+			return true;
+		if (s.equals("1"))
+			return true;
+		
+		if (s.equalsIgnoreCase("false"))
+			return false;
+		if (s.equalsIgnoreCase("no"))
+			return false;
+		if (s.equals("0"))
+			return false;
+		
+		return null; //Incorrect string
 	}
 	
 	

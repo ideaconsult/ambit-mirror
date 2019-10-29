@@ -2,6 +2,7 @@ package ambit2.groupcontribution.nmr;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.TreeMap;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.descriptors.utils.GraphMatrices;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
@@ -25,13 +27,14 @@ public class HNMRShifts
 	private double resolutionStep = 0.01;
 	
 	private IAtomContainer molecule = null;
+	private int distMatrix[][] = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
 	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>();
-	private Map<IAtom, HShift> atomHShifts = new TreeMap<IAtom, HShift>();
+	private Map<IAtom, HShift> atomHShifts = new HashMap<IAtom, HShift>();
 	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
-	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new TreeMap<IAtom, List<HAtomEnvironmentInstance>>();
-	private Map<IAtom, HAtomEnvironmentInstance> atomHAtEnvInstance = new TreeMap<IAtom, HAtomEnvironmentInstance>();
-	
+	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new HashMap<IAtom, List<HAtomEnvironmentInstance>>();
+	private Map<IAtom, HAtomEnvironmentInstance> atomHAtEnvInstance = new HashMap<IAtom, HAtomEnvironmentInstance>();
+	private Map<String, List<List<IAtom>>> groupMappings = new HashMap<String, List<List<IAtom>>>();
 	
 	public HNMRShifts() throws Exception
 	{
@@ -65,6 +68,9 @@ public class HNMRShifts
 		hAtEnvInstances.clear();
 		atomHAtEnvInstanceSet.clear();
 		atomHAtEnvInstance.clear();
+		groupMappings.clear();
+		
+		distMatrix = GraphMatrices.getTopDistanceMatrix(molecule);
 		
 		findAllHAtomEnvironmentInstances();
 		
@@ -79,6 +85,9 @@ public class HNMRShifts
 		for (int i = 0; i < knowledgeBase.hAtomEnvironments.size(); i++)
 		{
 			HAtomEnvironment hae = knowledgeBase.hAtomEnvironments.get(i);
+			if (!hae.flagUse)
+				continue;
+			
 			List<List<IAtom>> atMaps = hae.groupMatch.getMappings(molecule);
 			
 			if (atMaps.isEmpty())
@@ -87,7 +96,13 @@ public class HNMRShifts
 			for (int k = 0; k < atMaps.size(); k++ )
 			{
 				HAtomEnvironmentInstance haeInst = new HAtomEnvironmentInstance();
-				haeInst.atoms = (IAtom[])atMaps.get(k).toArray();
+				haeInst.hEnvironment = hae;
+				
+				int n = atMaps.get(k).size();
+				haeInst.atoms = new IAtom[n];
+				for (int r = 0; r < n; r++)
+					haeInst.atoms[r] = atMaps.get(k).get(r);
+				
 				hAtEnvInstances.add(haeInst);
 				registerHAtomEnvironmentInstance(haeInst);
 			}
@@ -139,15 +154,112 @@ public class HNMRShifts
 					}	
 				}
 			}
+			
+			atomHAtEnvInstance.put(at, selectedInst);
 		}
 	}
+	
+	public void findAllSubstituents()
+	{
+		Set<IAtom> atoms = atomHAtEnvInstance.keySet();
+		for (IAtom at : atoms)
+		{
+			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
+			findSubstituents(inst);
+		}
+	}
+	
+	public void findSubstituents(HAtomEnvironmentInstance haeInst)
+	{
+		int n = haeInst.hEnvironment.shiftDesignations.length;
+		haeInst.substituentInstances = new ArrayList<List<SubstituentInstance>>();
+		
+		switch (haeInst.hEnvironment.shiftsAssociation)
+		{
+		case H_ATOM_POSITION:
+			//TODO
+			break;
+			
+		case SUBSTITUENT_POSITION:
+			for (int i = 0; i < n; i++)
+			{
+				int substPos = 0; //default value
+				if (haeInst.hEnvironment.substituentPosAtomIndices != null)
+					substPos = haeInst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base 
+				
+				int distance = 1; //default value
+				if (haeInst.hEnvironment.positionDistances != null)
+					distance = haeInst.hEnvironment.positionDistances[i];
+				
+				//Find possible starting atoms for substituent match
+				//using distance matrix
+				List<IAtom> startAtoms = new ArrayList<IAtom>();
+				IAtom at0 = haeInst.atoms[substPos];
+				int atIndex0 = molecule.indexOf(at0);
+				//The start atoms are at apropriate distance from atom at0 
+				for (int k = 0; k < distMatrix[atIndex0].length; k++)
+					if (distMatrix[atIndex0][k] == distance)
+					{	
+						//TODO check atom whether it is part of the instances
+						startAtoms.add(molecule.getAtom(k));
+					}
+				
+				if (startAtoms.size() > 0)
+				{
+					List<SubstituentInstance> listSubst = new ArrayList<SubstituentInstance>();
+					//TODO
+					//...
+					haeInst.substituentInstances.add(listSubst);
+				}
+				else
+					haeInst.substituentInstances.add(null);
+				
+			}
+			break;
+		}
+	}
+	
+	
 	
 	public void generateHShifts()
 	{
 		//TODO
 	}
 	
-	
+	public String getCalcLog() 
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("Initial HAtomEnvironment Instances:\n");
+		Set<IAtom> atoms = atomHAtEnvInstanceSet.keySet();
+		for (IAtom at : atoms)
+		{
+			sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
+			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
+			for (HAtomEnvironmentInstance inst : haeInstList)
+			{
+				sb.append("  " + inst.hEnvironment.name);
+				for (int k = 0; k < inst.atoms.length; k++)
+					sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
+				sb.append("\n");
+			}
+		}
+		
+		sb.append("\n");
+		sb.append("Refined HAtomEnvironment Instances:\n");
+		atoms = atomHAtEnvInstance.keySet();
+		for (IAtom at : atoms)
+		{
+			sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
+			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
+			sb.append("  " + inst.hEnvironment.name);
+			for (int k = 0; k < inst.atoms.length; k++)
+				sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
+			sb.append("\n");
+		}
+
+		return sb.toString();
+	}
 
 	public List<String> getErrors() {
 		return errors;

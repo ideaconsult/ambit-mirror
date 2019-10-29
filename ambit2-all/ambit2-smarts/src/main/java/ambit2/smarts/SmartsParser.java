@@ -2227,6 +2227,14 @@ public class SmartsParser {
 			setParentMoleculeData(container);
 	}
 
+	static public void prepareTargetForSMARTSSearchFull(IAtomContainer container) {
+			setNeighbourData(container);
+			setValenceData(container);
+			setRingData(container, true, true);
+			setExplicitHAtomData(container);
+			setParentMoleculeData(container);
+	}
+	
 	static public void prepareTargetForSMARTSSearch(SmartsFlags flags, IAtomContainer container) {
 		if (flags.mNeedNeighbourData)
 			setNeighbourData(container);
