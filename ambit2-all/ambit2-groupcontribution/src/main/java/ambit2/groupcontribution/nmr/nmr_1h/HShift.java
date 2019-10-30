@@ -12,7 +12,7 @@ public class HShift
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append(value);
-		sb.append(" atom " + atomIndex);
+		sb.append(" atom " + (atomIndex + 1));
 		sb.append("  " + explanationInfo);
 		return sb.toString();
 	}
