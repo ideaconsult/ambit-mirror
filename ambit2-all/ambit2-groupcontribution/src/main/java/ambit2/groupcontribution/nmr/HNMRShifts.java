@@ -188,13 +188,16 @@ public class HNMRShifts
 		case SUBSTITUENT_POSITION:
 			for (int pos = 0; pos < n; pos++)
 			{
-				int substPos = 0; //default value
-				if (haeInst.hEnvironment.substituentPosAtomIndices != null)
-					substPos = haeInst.hEnvironment.substituentPosAtomIndices[pos]-1; //1-base --> 0-base 
+				//int substPos = 0; //default value
+				//if (haeInst.hEnvironment.substituentPosAtomIndices != null)
+				//	substPos = haeInst.hEnvironment.substituentPosAtomIndices[pos]-1; //1-base --> 0-base 
 				
-				int distance = 1; //default value
-				if (haeInst.hEnvironment.positionDistances != null)
-					distance = haeInst.hEnvironment.positionDistances[pos];
+				//int distance = 1; //default value
+				//if (haeInst.hEnvironment.positionDistances != null)
+				//	distance = haeInst.hEnvironment.positionDistances[pos];
+				
+				int substPos = haeInst.hEnvironment.getSubstituentPosAtomIndicex(pos);
+				int distance = haeInst.hEnvironment.getPositionDistance(pos);
 				
 				//Find possible starting atoms for substituent match
 				//using distance matrix
@@ -282,7 +285,7 @@ public class HNMRShifts
 		//TODO
 	}
 	
-	
+		
 	
 	public String getCalcLog() 
 	{
@@ -330,12 +333,16 @@ public class HNMRShifts
 						if (siList == null)
 							continue;
 						
-						int pos = 0; //default value
-						if (inst.hEnvironment.substituentPosAtomIndices != null)
-							pos = inst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base			
-						int distance = 1; //default value
-						if (inst.hEnvironment.positionDistances != null)
-							distance = inst.hEnvironment.positionDistances[i];
+						//int pos = 0; //default value
+						//if (inst.hEnvironment.substituentPosAtomIndices != null)
+						//	pos = inst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base	
+						
+						//int distance = 1; //default value
+						//if (inst.hEnvironment.positionDistances != null)
+						//	distance = inst.hEnvironment.positionDistances[i];
+						
+						int pos = inst.hEnvironment.getSubstituentPosAtomIndicex(i);
+						int distance = inst.hEnvironment.getPositionDistance(i);
 						
 						sb.append("    pos=" + (pos+1) + " distance=" + distance);
 						for (SubstituentInstance si : siList)
