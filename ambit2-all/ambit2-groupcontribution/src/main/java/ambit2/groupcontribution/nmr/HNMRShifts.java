@@ -285,7 +285,44 @@ public class HNMRShifts
 		//TODO
 	}
 	
+	public HShift calcHShift(HAtomEnvironmentInstance haeInst)
+	{
+		HShift hs = new HShift();
+		StringBuffer sb = new StringBuffer();
 		
+		hs.value = haeInst.hEnvironment.chemShift0;
+		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
+		sb.append(haeInst.hEnvironment.chemShift0);
+		
+		switch (haeInst.hEnvironment.shiftsAssociation)
+		{
+		case H_ATOM_POSITION:
+			//TODO
+			break;
+		case SUBSTITUENT_POSITION:
+			//Iterate all shift positions
+			for (int i = 0; i < haeInst.substituentInstances.size(); i++)
+			{	
+				List<SubstituentInstance> siList = haeInst.substituentInstances.get(i);
+				if (siList == null)
+					continue;
+						
+				//int pos = haeInst.hEnvironment.getSubstituentPosAtomIndicex(i);
+				//int distance = haeInst.hEnvironment.getPositionDistance(i);
+				
+				for (SubstituentInstance si : siList)
+				{
+					hs.value += si.substituent.chemShifts[i];
+					sb.append(" + " + si.substituent.chemShifts[i]);
+					sb.append("(" + haeInst.hEnvironment.shiftDesignations[i]);
+					sb.append("," + si.substituent.name + ")");
+				}
+			}	
+		}
+		
+		hs.explanationInfo = sb.toString();
+		return hs;
+	}	
 	
 	public String getCalcLog() 
 	{
