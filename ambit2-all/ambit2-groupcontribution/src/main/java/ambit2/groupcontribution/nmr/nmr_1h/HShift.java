@@ -7,4 +7,13 @@ public class HShift
 	public int atomIndex = 0; //It might be explicit H atom index or a heavy atom index with implicit H atoms
 	public int numberOfImlicitHAtoms = 0;
 	public String explanationInfo = null;
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append(value);
+		sb.append(" atom " + atomIndex);
+		sb.append("  " + explanationInfo);
+		return sb.toString();
+	}
 }

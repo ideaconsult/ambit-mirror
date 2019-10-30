@@ -282,7 +282,13 @@ public class HNMRShifts
 	
 	public void generateHShifts()
 	{
-		//TODO
+		Set<IAtom> atoms = atomHAtEnvInstance.keySet();
+		for (IAtom at : atoms)
+		{
+			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
+			HShift hs = calcHShift(inst);
+			hShifts.add(hs);
+		}	
 	}
 	
 	public HShift calcHShift(HAtomEnvironmentInstance haeInst)
@@ -292,6 +298,7 @@ public class HNMRShifts
 		
 		hs.value = haeInst.hEnvironment.chemShift0;
 		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
+		sb.append(haeInst.hEnvironment.name + " ");
 		sb.append(haeInst.hEnvironment.chemShift0);
 		
 		switch (haeInst.hEnvironment.shiftsAssociation)
@@ -314,8 +321,8 @@ public class HNMRShifts
 				{
 					hs.value += si.substituent.chemShifts[i];
 					sb.append(" + " + si.substituent.chemShifts[i]);
-					sb.append("(" + haeInst.hEnvironment.shiftDesignations[i]);
-					sb.append("," + si.substituent.name + ")");
+					sb.append(" (" + haeInst.hEnvironment.shiftDesignations[i]);
+					sb.append(", " + si.substituent.name + ")");
 				}
 			}	
 		}
