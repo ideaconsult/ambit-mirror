@@ -504,6 +504,38 @@ var config_study = {
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
 		},
+		"OMICS_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"],
+			"effects" : {
+				"endpoint" : {
+					"iOrder" : -9,
+					"bVisible" : true,
+					"inMatrix" : true
+				},
+				"text" : {
+					"iOrder" : -8,
+					"bVisible" : true,
+					"inMatrix" : true,
+					"sTitle" : "Identifier",
+					"mRender" : function(data, type, full) {
+						try {
+							var id = data[0].result.textValue;
+							var out= "<a target='_external' href='https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=" + id + "'>"+id+"</a>";
+							return out;
+						} catch(e) {
+							return data;
+						}
+					}		
+							
+
+				}
+
+			}			
+		},
+		
 		"TRANSCRIPTOMICS_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"conditions" : config_bao["conditions"],

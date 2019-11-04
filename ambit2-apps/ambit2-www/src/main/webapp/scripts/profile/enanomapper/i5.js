@@ -703,6 +703,26 @@ var config_i5 = {
 
 		}
 	},
+	"OMICS_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true,
+				"sTitle" : "Identifier"
+			}
+
+		}			
+	},
 	"EXPOSURE_SECTION" : {
 		"parameters" : config_exposure["parameters"],
 		"effects" : config_exposure["effects"],
