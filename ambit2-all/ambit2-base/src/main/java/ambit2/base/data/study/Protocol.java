@@ -3149,6 +3149,25 @@ public class Protocol {
 			}
 	
 		},
+		OMICS_SECTION {
+			@Override
+			public String getNumber() {
+				return "_";
+			}
+			@Override
+			public String getTopCategory() {
+				return "OMICS";
+			}
+			@Override
+			public String toString() {
+				return "Omics";
+			}
+			@Override
+			public int getSortingOrder() {
+				return 3500;
+			}
+			
+		},		
 		EXPOSURE_SECTION {
 			@Override
 			public String getNumber() {
