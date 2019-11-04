@@ -508,12 +508,22 @@ var config_study = {
 			"parameters" : config_bao["parameters"],
 			"conditions" : config_bao["conditions"],
 			"protocol" : config_bao["protocol"],
-			"interpretation" : config_bao["interpretation"],
+			"interpretation" : {
+				"result" : {
+					"bVisible" : false
+				},
+				"criteria" : {
+					"bVisible" : false
+				}
+			},
 			"effects" : {
 				"endpoint" : {
 					"iOrder" : -9,
 					"bVisible" : true,
 					"inMatrix" : true
+				},
+				"result" : {
+					"bVisible" : false
 				},
 				"text" : {
 					"iOrder" : -8,
@@ -522,8 +532,9 @@ var config_study = {
 					"sTitle" : "Identifier",
 					"mRender" : function(data, type, full) {
 						try {
+							console.log(data);
 							var id = data[0].result.textValue;
-							var out= "<a target='_external' href='https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=" + id + "'>"+id+"</a>";
+							var out= "<a target='_external' href='" + full.interpretation.criteria +  id + "'>"+id+"</a>";
 							return out;
 						} catch(e) {
 							return data;
