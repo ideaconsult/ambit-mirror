@@ -40,6 +40,22 @@ public class HAtomEnvironment
 		return false;
 	}
 	
+	public int getSubstituentPosAtomIndicex(int shiftIndex)
+	{
+		int pos = 0; //default value
+		if (substituentPosAtomIndices != null)
+			pos = substituentPosAtomIndices[shiftIndex]-1; //1-base --> 0-base	
+		return pos;
+	}
+	
+	public int getPositionDistance(int shiftIndex)
+	{
+		int distance = 1; //default value
+		if (positionDistances != null)
+			distance = positionDistances[shiftIndex];
+		return distance;
+	}
+	
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();

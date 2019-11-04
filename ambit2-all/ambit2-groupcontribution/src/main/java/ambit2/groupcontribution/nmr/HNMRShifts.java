@@ -17,6 +17,7 @@ import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HShift;
+import ambit2.smarts.groups.GroupMatch;
 
 public class HNMRShifts 
 {
@@ -72,9 +73,13 @@ public class HNMRShifts
 		
 		distMatrix = GraphMatrices.getTopDistanceMatrix(molecule);
 		
+		findAllGroupMappings();
+		
 		findAllHAtomEnvironmentInstances();
 		
 		handleOverlappingHAtomEnvironmentInstances();
+		
+		findAllSubstituents();
 		
 		generateHShifts();
 	}
@@ -181,15 +186,18 @@ public class HNMRShifts
 			break;
 			
 		case SUBSTITUENT_POSITION:
-			for (int i = 0; i < n; i++)
+			for (int pos = 0; pos < n; pos++)
 			{
-				int substPos = 0; //default value
-				if (haeInst.hEnvironment.substituentPosAtomIndices != null)
-					substPos = haeInst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base 
+				//int substPos = 0; //default value
+				//if (haeInst.hEnvironment.substituentPosAtomIndices != null)
+				//	substPos = haeInst.hEnvironment.substituentPosAtomIndices[pos]-1; //1-base --> 0-base 
 				
-				int distance = 1; //default value
-				if (haeInst.hEnvironment.positionDistances != null)
-					distance = haeInst.hEnvironment.positionDistances[i];
+				//int distance = 1; //default value
+				//if (haeInst.hEnvironment.positionDistances != null)
+				//	distance = haeInst.hEnvironment.positionDistances[pos];
+				
+				int substPos = haeInst.hEnvironment.getSubstituentPosAtomIndicex(pos);
+				int distance = haeInst.hEnvironment.getPositionDistance(pos);
 				
 				//Find possible starting atoms for substituent match
 				//using distance matrix
@@ -200,16 +208,56 @@ public class HNMRShifts
 				for (int k = 0; k < distMatrix[atIndex0].length; k++)
 					if (distMatrix[atIndex0][k] == distance)
 					{	
-						//TODO check atom whether it is part of the instances
-						startAtoms.add(molecule.getAtom(k));
+						IAtom at = molecule.getAtom(k);
+						
+						//Check whether at is part of the instance
+						boolean flagAdd = true;
+						for (int i = 0; i < haeInst.atoms.length; i++)
+							if (at == haeInst.atoms[i])
+							{
+								flagAdd = false;
+								break;
+							}
+						
+						if (flagAdd)
+							startAtoms.add(at);
 					}
 				
 				if (startAtoms.size() > 0)
 				{
 					List<SubstituentInstance> listSubst = new ArrayList<SubstituentInstance>();
-					//TODO
-					//...
-					haeInst.substituentInstances.add(listSubst);
+					
+					for (int k = 0; k < startAtoms.size(); k++)
+					{	
+						IAtom startAt = startAtoms.get(k);
+						
+						for (Substituent sub : haeInst.hEnvironment.substituents)
+						{	
+							List<List<IAtom>> maps = groupMappings.get(sub.name);
+							if (maps != null)
+							{	
+								for (int i = 0; i < maps.size(); i++)
+								{
+									List<IAtom> map = maps.get(i);
+									if (map.get(0) == startAt)
+									{
+										//Register substituent instance
+										SubstituentInstance subInst = new SubstituentInstance(); 
+										subInst.substituent = sub;
+										subInst.atoms = new IAtom[map.size()];
+										for (int j = 0; j < map.size(); j++)
+											subInst.atoms[j] = map.get(j);
+										listSubst.add(subInst);
+									}
+								}
+							}
+						}
+					}
+					
+					if (listSubst.isEmpty())
+						haeInst.substituentInstances.add(null);
+					else
+						haeInst.substituentInstances.add(listSubst);
 				}
 				else
 					haeInst.substituentInstances.add(null);
@@ -219,12 +267,69 @@ public class HNMRShifts
 		}
 	}
 	
-	
+	public void findAllGroupMappings()
+	{
+		Set<String> keys = knowledgeBase.groupMatchRepository.keySet();
+		for (String key : keys)
+		{
+			GroupMatch gm = knowledgeBase.groupMatchRepository.get(key);
+			List<List<IAtom>> maps =  gm.getMappings(molecule);
+			if (!maps.isEmpty())
+				groupMappings.put(key, maps);
+			//System.out.println("Searching: " + key + "  " + maps.size());
+		}
+	}
 	
 	public void generateHShifts()
 	{
-		//TODO
+		Set<IAtom> atoms = atomHAtEnvInstance.keySet();
+		for (IAtom at : atoms)
+		{
+			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
+			HShift hs = calcHShift(inst);
+			hShifts.add(hs);
+		}	
 	}
+	
+	public HShift calcHShift(HAtomEnvironmentInstance haeInst)
+	{
+		HShift hs = new HShift();
+		StringBuffer sb = new StringBuffer();
+		
+		hs.value = haeInst.hEnvironment.chemShift0;
+		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
+		sb.append(haeInst.hEnvironment.name + " ");
+		sb.append(haeInst.hEnvironment.chemShift0);
+		
+		switch (haeInst.hEnvironment.shiftsAssociation)
+		{
+		case H_ATOM_POSITION:
+			//TODO
+			break;
+		case SUBSTITUENT_POSITION:
+			//Iterate all shift positions
+			for (int i = 0; i < haeInst.substituentInstances.size(); i++)
+			{	
+				List<SubstituentInstance> siList = haeInst.substituentInstances.get(i);
+				if (siList == null)
+					continue;
+						
+				//int pos = haeInst.hEnvironment.getSubstituentPosAtomIndicex(i);
+				//int distance = haeInst.hEnvironment.getPositionDistance(i);
+				
+				for (SubstituentInstance si : siList)
+				{
+					hs.value += si.substituent.chemShifts[i];
+					sb.append(" + " + si.substituent.chemShifts[i]);
+					sb.append(" (" + haeInst.hEnvironment.shiftDesignations[i]);
+					sb.append(", " + si.substituent.name + ")");
+				}
+			}	
+		}
+		
+		hs.explanationInfo = sb.toString();
+		return hs;
+	}	
 	
 	public String getCalcLog() 
 	{
@@ -234,28 +339,67 @@ public class HNMRShifts
 		Set<IAtom> atoms = atomHAtEnvInstanceSet.keySet();
 		for (IAtom at : atoms)
 		{
-			sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
+			sb.append("At " + at.getSymbol() + "" + (molecule.indexOf(at) + 1) + "\n");
 			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
 			for (HAtomEnvironmentInstance inst : haeInstList)
 			{
 				sb.append("  " + inst.hEnvironment.name);
 				for (int k = 0; k < inst.atoms.length; k++)
-					sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
+					sb.append("  " + inst.atoms[k].getSymbol() + (molecule.indexOf(inst.atoms[k])+1));
 				sb.append("\n");
 			}
 		}
 		
 		sb.append("\n");
-		sb.append("Refined HAtomEnvironment Instances:\n");
+		sb.append("Filtered HAtomEnvironment Instances:\n");
 		atoms = atomHAtEnvInstance.keySet();
 		for (IAtom at : atoms)
 		{
-			sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
+			//sb.append("At " + at.getSymbol() + "" + molecule.indexOf(at) + "\n");
 			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
 			sb.append("  " + inst.hEnvironment.name);
 			for (int k = 0; k < inst.atoms.length; k++)
-				sb.append("  " + inst.atoms[k].getSymbol() + molecule.indexOf(inst.atoms[k]));
+				sb.append("  " + inst.atoms[k].getSymbol() + (molecule.indexOf(inst.atoms[k])+1));
 			sb.append("\n");
+			
+			if (inst.substituentInstances != null)
+			{
+				switch (inst.hEnvironment.shiftsAssociation)
+				{
+				case H_ATOM_POSITION:
+					//TODO
+					break;
+				case SUBSTITUENT_POSITION:
+					//Iterate all shift positions
+					for (int i = 0; i < inst.substituentInstances.size(); i++)
+					{	
+						List<SubstituentInstance> siList = inst.substituentInstances.get(i);
+						if (siList == null)
+							continue;
+						
+						//int pos = 0; //default value
+						//if (inst.hEnvironment.substituentPosAtomIndices != null)
+						//	pos = inst.hEnvironment.substituentPosAtomIndices[i]-1; //1-base --> 0-base	
+						
+						//int distance = 1; //default value
+						//if (inst.hEnvironment.positionDistances != null)
+						//	distance = inst.hEnvironment.positionDistances[i];
+						
+						int pos = inst.hEnvironment.getSubstituentPosAtomIndicex(i);
+						int distance = inst.hEnvironment.getPositionDistance(i);
+						
+						sb.append("    pos=" + (pos+1) + " distance=" + distance);
+						for (SubstituentInstance si : siList)
+						{
+							sb.append(" " + si.substituent.name);
+							for (int k = 0; k < si.atoms.length; k++)
+								sb.append(" " + /*si.atoms[k].getSymbol()*/ (molecule.indexOf(si.atoms[k])+1));
+						}
+						sb.append("\n");
+					}
+					break;
+				}
+			}
 		}
 
 		return sb.toString();

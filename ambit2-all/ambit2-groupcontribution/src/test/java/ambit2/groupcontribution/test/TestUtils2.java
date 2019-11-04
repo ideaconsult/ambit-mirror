@@ -31,6 +31,7 @@ import ambit2.groupcontribution.descriptors.LDHNum;
 import ambit2.groupcontribution.nmr.HNMRShifts;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
+import ambit2.groupcontribution.nmr.nmr_1h.HShift;
 import ambit2.smarts.SmartsHelper;
 
 
@@ -187,6 +188,10 @@ public class TestUtils2
 		hnmrShifts.calculateHShifts();
 		
 		System.out.println("Log:\n" + hnmrShifts.getCalcLog());
+		System.out.println();
+		
+		for (HShift hs : hnmrShifts.getHShifts())
+			System.out.println(hs.toString());
 		
 	}
 	
