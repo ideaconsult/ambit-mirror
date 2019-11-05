@@ -64,6 +64,30 @@ var config_i5 = {
 			}
 		}
 	},
+	"PC_THERMAL_STABILITY_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"],
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -9,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"result" : {
+				"iOrder" : -8,
+				"bVisible" : true,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Result",
+				"iOrder" : -7,
+				"bVisible" : true,
+				"inMatrix" : true
+			}
+		}
+	},	
 	"PC_BOILING_SECTION" : {
 		"parameters" : {
 			"bVisible" : false

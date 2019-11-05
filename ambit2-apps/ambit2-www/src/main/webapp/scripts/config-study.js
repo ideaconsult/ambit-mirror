@@ -116,7 +116,7 @@ var config_study = {
 		"TO_REPRODUCTION_SECTION" : config_i5["TO_REPRODUCTION_SECTION"],
 
 		"TO_DEVELOPMENTAL_SECTION" : config_i5["TO_DEVELOPMENTAL_SECTION"],
-
+		"PC_THERMAL_STABILITY_SECTION" : config_i5["PC_THERMAL_STABILITY_SECTION"],
 		"TO_SENSITIZATION_INVITRO_SECTION" : {
 			"parameters" : config_ce_invitro["parameters"],
 			"effects" : config_ce_invitro["effects"],
