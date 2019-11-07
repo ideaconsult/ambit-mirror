@@ -256,6 +256,23 @@
 				<baseurl>/ambit3</baseurl>
 			</properties>
 		</profile>
+                <profile>
+			<id>docker_generic</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<ambit.profile>enanomapper</ambit.profile>
+				<AMBIT_CONFIG_OVERRIDE_VAR>AMBIT_CONFIG_OVERRIDE_DIR</AMBIT_CONFIG_OVERRIDE_VAR>
+				<ambit.secret>0000000000000000</ambit.secret>
+				<ambit.db>ambit</ambit.db>
+				<ambit.db.host>db</ambit.db.host>
+				<ambit.db.user.test>ambit</ambit.db.user.test>
+				<ambit.db.user.test.password>ambit</ambit.db.user.test.password>
+				<aa.db.enabled>false</aa.db.enabled>
+				<users.db>ambit_users</users.db>
+			</properties>
+		</profile>
 	</profiles>
 	<build>
 		<finalName>ambit2</finalName>
