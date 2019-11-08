@@ -314,7 +314,7 @@ public class HNMRShifts
 	}
 	
 	public HShift calcHShift(HAtomEnvironmentInstance haeInst)
-	{
+	{			
 		HShift hs = new HShift();
 		StringBuffer sb = new StringBuffer();
 		
@@ -351,7 +351,14 @@ public class HNMRShifts
 		
 		hs.explanationInfo = sb.toString();
 		return hs;
-	}	
+	}
+	
+	public HShift calcAlkeneHShift(HAtomEnvironmentInstance haeInst, int atomIndex)
+	{
+		//TODO
+		return null;
+	}
+	
 	
 	public String getCalcLog() 
 	{
