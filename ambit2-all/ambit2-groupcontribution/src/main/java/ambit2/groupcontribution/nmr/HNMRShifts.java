@@ -187,15 +187,7 @@ public class HNMRShifts
 			
 		case SUBSTITUENT_POSITION:
 			for (int pos = 0; pos < n; pos++)
-			{
-				//int substPos = 0; //default value
-				//if (haeInst.hEnvironment.substituentPosAtomIndices != null)
-				//	substPos = haeInst.hEnvironment.substituentPosAtomIndices[pos]-1; //1-base --> 0-base 
-				
-				//int distance = 1; //default value
-				//if (haeInst.hEnvironment.positionDistances != null)
-				//	distance = haeInst.hEnvironment.positionDistances[pos];
-				
+			{	
 				int substPos = haeInst.hEnvironment.getSubstituentPosAtomIndicex(pos);
 				int distance = haeInst.hEnvironment.getPositionDistance(pos);
 				
@@ -204,7 +196,8 @@ public class HNMRShifts
 				List<IAtom> startAtoms = new ArrayList<IAtom>();
 				IAtom at0 = haeInst.atoms[substPos];
 				int atIndex0 = molecule.indexOf(at0);
-				//The start atoms are at apropriate distance from atom at0 
+				
+				//The start atoms are at appropriate distance from atom at0 
 				for (int k = 0; k < distMatrix[atIndex0].length; k++)
 					if (distMatrix[atIndex0][k] == distance)
 					{	
@@ -239,7 +232,8 @@ public class HNMRShifts
 								for (int i = 0; i < maps.size(); i++)
 								{
 									List<IAtom> map = maps.get(i);
-									if (map.get(0) == startAt)
+									if ((map.get(0) == startAt) &&
+										checkSubstituentMapping(map, haeInst, atIndex0, distance))
 									{
 										//Register substituent instance
 										SubstituentInstance subInst = new SubstituentInstance(); 
@@ -265,6 +259,34 @@ public class HNMRShifts
 			}
 			break;
 		}
+	}
+	
+	public boolean checkSubstituentMapping(List<IAtom> map, 
+				HAtomEnvironmentInstance haeInst, int substPosAtIndex, int distance)
+	{
+		//Check whether:
+		//(1) All map atoms are not part of the instance
+		//(2) All map atoms are not closer than distance to the substPos atoms
+		
+		//First atom does not need checking
+		if (map.size() == 1)
+			return true;
+		
+		for (int i = 1; i < map.size(); i++)
+		{
+			IAtom at = map.get(i);
+			
+			for (int k = 0; k < haeInst.atoms.length; k++)
+			{	
+				if (at == haeInst.atoms[k])
+					return false; //at is part of the instance
+			}
+			
+			int atIndex = molecule.indexOf(at);
+			if (distMatrix[atIndex][substPosAtIndex] < distance)
+				return false;
+		}
+		return true;
 	}
 	
 	public void findAllGroupMappings()
