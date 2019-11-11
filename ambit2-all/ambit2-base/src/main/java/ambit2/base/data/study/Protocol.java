@@ -1138,7 +1138,7 @@ public class Protocol {
 		EC_DAPHNIATOX_SECTION {
 			@Override
 			public String toString() {
-				return "Short-term toxicity to aquatic inverterbrates";
+				return "Short-term toxicity to aquatic invertebrates";
 			}
 
 			@Override
@@ -1163,7 +1163,7 @@ public class Protocol {
 		EC_CHRONDAPHNIATOX_SECTION {
 			@Override
 			public String toString() {
-				return "Long-term toxicity to aquatic inverterbrates";
+				return "Long-term toxicity to aquatic invertebrates";
 			}
 
 			@Override

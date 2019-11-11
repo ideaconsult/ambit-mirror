@@ -122,8 +122,8 @@ The [REACH Guide]( http://echa.europa.eu/documents/10162/13643/nutshell_guidance
 
 </tr><tr><td>6.1.1.	</td><td>Short-term toxicity to fish	EC_FISHTOX</td>
 </tr><tr><td>6.1.2.	</td><td>Long-term toxicity to fish	EC_CHRONFISHTOX</td>
-</tr><tr><td>6.1.3.	</td><td>Short-term toxicity to aquatic inverterbrates	EC_DAPHNIATOX</td>
-</tr><tr><td>6.1.4.	</td><td>Long-term toxicity to aquatic inverterbrates	EC_CHRONDAPHNIATOX</td>
+</tr><tr><td>6.1.3.	</td><td>Short-term toxicity to aquatic invertebrates	EC_DAPHNIATOX</td>
+</tr><tr><td>6.1.4.	</td><td>Long-term toxicity to aquatic invertebrates	EC_CHRONDAPHNIATOX</td>
 </tr><tr><td>6.1.5.	</td><td>Toxicity to aquatic algae and cyanobacteria	EC_ALGAETOX</td>
 </tr><tr><td>6.1.7.	</td><td>Toxicity to microorganisms	EC_BACTOX</td>
 </tr><tr><td>6.2.	</td><td>Sediment toxicity	EC_SEDIMENTDWELLINGTOX</td>
