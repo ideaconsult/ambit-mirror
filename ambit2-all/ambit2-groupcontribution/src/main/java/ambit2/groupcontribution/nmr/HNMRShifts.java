@@ -308,6 +308,15 @@ public class HNMRShifts
 		for (IAtom at : atoms)
 		{
 			HAtomEnvironmentInstance inst = atomHAtEnvInstance.get(at);
+			
+			//Special recognition for ALKENES environment
+			if (inst.hEnvironment.name.equalsIgnoreCase("ALKENES"))
+			{
+				calcAlkeneHShifts(inst, 0);
+				calcAlkeneHShifts(inst, 1);
+				continue;
+			}
+			
 			HShift hs = calcHShift(inst);
 			hShifts.add(hs);
 		}	
@@ -353,12 +362,53 @@ public class HNMRShifts
 		return hs;
 	}
 	
-	public HShift calcAlkeneHShift(HAtomEnvironmentInstance haeInst, int atomIndex)
+	public void calcAlkeneHShifts(HAtomEnvironmentInstance haeInst, int atIndex)
 	{
-		//TODO
-		return null;
+		//The other atom from the double bond
+		int atIndex2 = (atIndex==0)?1:0;
+		
+		switch (haeInst.atoms[atIndex].getImplicitHydrogenCount())
+		{
+		case 1:
+			break;
+			
+		case 2:
+			//Atom at position atIndex contains two implicit H atoms 
+			List<SubstituentInstance> siList2 = haeInst.substituentInstances.get(atIndex2);
+			if (siList2 == null)
+			{
+				generateAlkeneHShift(haeInst, atIndex, null, null, null, 2);
+			}
+			else
+			{
+				if (siList2.size() == 1)
+				{
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), null, 1);
+					generateAlkeneHShift(haeInst, atIndex, null, null, siList2.get(0), 1);
+				}
+				else if (siList2.size() == 2)
+				{
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), siList2.get(1), 1);
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(2), 1);					
+				}
+			}
+			break;
+		}
 	}
 	
+	
+	void generateAlkeneHShift(HAtomEnvironmentInstance haeInst, int atIndex,
+			SubstituentInstance gemSI, SubstituentInstance cisSI, SubstituentInstance transSI, int numImlicitHAtoms)
+	{
+		HShift hs = new HShift();
+		StringBuffer sb = new StringBuffer();
+		hs.value = haeInst.hEnvironment.chemShift0;
+		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
+		sb.append(haeInst.hEnvironment.name + " ");
+		sb.append(haeInst.hEnvironment.chemShift0);
+		
+		//TODO
+	}
 	
 	public String getCalcLog() 
 	{
