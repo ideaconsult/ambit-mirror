@@ -391,7 +391,7 @@ public class HNMRShifts
 				else if (siList2.size() == 2)
 				{
 					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), siList2.get(1), 1);
-					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(2), 1);					
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(0), 1);					
 				}
 			}
 			break;
