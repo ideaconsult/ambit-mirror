@@ -1,5 +1,7 @@
 package ambit2.groupcontribution.nmr.nmr_1h;
 
+import java.text.DecimalFormat;
+
 public class HShift 
 {
 	public double value = 0.0;
@@ -11,7 +13,8 @@ public class HShift
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append(value);
+		DecimalFormat df = new DecimalFormat("###.###");
+		sb.append(df.format(value));
 		sb.append(" H" + imlicitHAtomsNumbers);
 		sb.append(" atom " + (atomIndex + 1));
 		sb.append("  " + explanationInfo);
