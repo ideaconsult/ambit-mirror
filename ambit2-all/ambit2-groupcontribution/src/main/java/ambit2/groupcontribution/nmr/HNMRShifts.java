@@ -345,9 +345,6 @@ public class HNMRShifts
 				List<SubstituentInstance> siList = haeInst.substituentInstances.get(i);
 				if (siList == null)
 					continue;
-						
-				//int pos = haeInst.hEnvironment.getSubstituentPosAtomIndicex(i);
-				//int distance = haeInst.hEnvironment.getPositionDistance(i);
 				
 				for (SubstituentInstance si : siList)
 				{
@@ -379,6 +376,8 @@ public class HNMRShifts
 			List<SubstituentInstance> siList2 = haeInst.substituentInstances.get(atIndex2);
 			if (siList2 == null)
 			{
+				//Either unknown substituents or implicit H atoms
+				//The unknown substituents are treated as implicit H atoms
 				generateAlkeneHShift(haeInst, atIndex, null, null, null, 2);
 			}
 			else
@@ -405,12 +404,51 @@ public class HNMRShifts
 		HShift hs = new HShift();
 		StringBuffer sb = new StringBuffer();
 		hs.value = haeInst.hEnvironment.chemShift0;
+		hs.imlicitHAtomsNumbers = numImlicitHAtoms;
 		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
 		sb.append(haeInst.hEnvironment.name + " ");
 		sb.append(haeInst.hEnvironment.chemShift0);
 		
-		//TODO
+		SubstituentInstance si = null;
+		int pos = 0;
+		
+		//Geminal
+		if (gemSI != null)
+		{	
+			si = gemSI;
+			pos = 0;
+			hs.value += si.substituent.chemShifts[pos];
+			sb.append(" + " + si.substituent.chemShifts[pos]);
+			sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
+			sb.append(", " + si.substituent.name + ")");
+		}
+		
+		//Cis
+		if (cisSI != null)
+		{	
+			si = cisSI;
+			pos = 1;
+			hs.value += si.substituent.chemShifts[pos];
+			sb.append(" + " + si.substituent.chemShifts[pos]);
+			sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
+			sb.append(", " + si.substituent.name + ")");
+		}
+		
+		//Trans
+		if (transSI != null)
+		{	
+			si = transSI;
+			pos = 2;
+			hs.value += si.substituent.chemShifts[pos];
+			sb.append(" + " + si.substituent.chemShifts[pos]);
+			sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
+			sb.append(", " + si.substituent.name + ")");
+		}
+
+		hs.explanationInfo = sb.toString();
+		hShifts.add(hs);
 	}
+	
 	
 	public String getCalcLog() 
 	{
