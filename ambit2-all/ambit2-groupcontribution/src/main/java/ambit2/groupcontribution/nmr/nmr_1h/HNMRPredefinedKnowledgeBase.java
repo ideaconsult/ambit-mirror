@@ -206,6 +206,17 @@ public class HNMRPredefinedKnowledgeBase
 			return;
 		}
 		
+		if (key.equals("IMPLICIT_H_ATOMS_NUMBER"))	
+		{	
+			try {
+				haEnv.implicitHAtomsNumber = Integer.parseInt(keyValue);
+			}
+			catch(Exception e) {
+				errors.add(errorPrefix + " incorrect IMPLICIT_H_ATOMS_NUMBER: " + e.getMessage());
+			}
+			return;
+		}
+		
 		if (key.equals("SHIFT_DESIGNATIONS"))	
 		{	
 			String tokens[] = keyValue.split("\\s+");

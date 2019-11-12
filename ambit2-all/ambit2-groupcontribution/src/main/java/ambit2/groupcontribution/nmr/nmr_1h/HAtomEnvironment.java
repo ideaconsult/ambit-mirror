@@ -18,6 +18,7 @@ public class HAtomEnvironment
 	public String smarts = null;
 	public String info = "";
 	public Double chemShift0 = null;
+	public Integer implicitHAtomsNumber = null;
 	public String shiftDesignations[] = null;
 	public int substituentPosAtomIndices[] = null; //it is not needed for SMARTS with one atom
 	public int positionDistances[] = null; //it is not needed when only alpha positions are considered	
@@ -69,6 +70,8 @@ public class HAtomEnvironment
 		if (!info.contentEquals(""))
 			sb.append("info:" + info + "\n");		
 		sb.append("ChemShift0: " + chemShift0 + "\n");
+		sb.append("implicitHAtomsNumber: " + implicitHAtomsNumber + "\n");
+				
 		
 		if (shiftDesignations != null)
 		{

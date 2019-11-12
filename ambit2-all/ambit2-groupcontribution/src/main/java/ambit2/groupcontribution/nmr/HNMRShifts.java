@@ -328,6 +328,7 @@ public class HNMRShifts
 		StringBuffer sb = new StringBuffer();
 		
 		hs.value = haeInst.hEnvironment.chemShift0;
+		hs.imlicitHAtomsNumbers = haeInst.hEnvironment.implicitHAtomsNumber;
 		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
 		sb.append(haeInst.hEnvironment.name + " ");
 		sb.append(haeInst.hEnvironment.chemShift0);
@@ -361,6 +362,7 @@ public class HNMRShifts
 		hs.explanationInfo = sb.toString();
 		return hs;
 	}
+	
 	
 	public void calcAlkeneHShifts(HAtomEnvironmentInstance haeInst, int atIndex)
 	{
