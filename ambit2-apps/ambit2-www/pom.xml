@@ -271,6 +271,7 @@
 				<ambit.db.user.test.password>ambit</ambit.db.user.test.password>
 				<aa.db.enabled>false</aa.db.enabled>
 				<users.db>ambit_users</users.db>
+				<enableEmailVerification>false</enableEmailVerification>
 			</properties>
 		</profile>
 	</profiles>
