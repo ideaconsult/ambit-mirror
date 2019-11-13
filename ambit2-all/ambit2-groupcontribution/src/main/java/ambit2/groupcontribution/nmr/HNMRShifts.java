@@ -369,6 +369,7 @@ public class HNMRShifts
 		switch (haeInst.atoms[atIndex].getImplicitHydrogenCount())
 		{
 		case 1:
+			
 			break;
 			
 		case 2:
@@ -378,19 +379,19 @@ public class HNMRShifts
 			{
 				//Either unknown substituents or implicit H atoms
 				//The unknown substituents are treated as implicit H atoms
-				generateAlkeneHShift(haeInst, atIndex, null, null, null, 2);
+				generateAlkeneHShift(haeInst, atIndex, null, null, null, 2, false);
 			}
 			else
 			{
 				if (siList2.size() == 1)
 				{
-					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), null, 1);
-					generateAlkeneHShift(haeInst, atIndex, null, null, siList2.get(0), 1);
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), null, 1, false);
+					generateAlkeneHShift(haeInst, atIndex, null, null, siList2.get(0), 1, false);
 				}
 				else if (siList2.size() == 2)
 				{
-					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), siList2.get(1), 1);
-					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(0), 1);					
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), siList2.get(1), 1, false);
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(0), 1, false);					
 				}
 			}
 			break;
@@ -399,7 +400,8 @@ public class HNMRShifts
 	
 	
 	void generateAlkeneHShift(HAtomEnvironmentInstance haeInst, int atIndex,
-			SubstituentInstance gemSI, SubstituentInstance cisSI, SubstituentInstance transSI, int numImlicitHAtoms)
+			SubstituentInstance gemSI, SubstituentInstance cisSI, SubstituentInstance transSI, 
+			int numImlicitHAtoms, boolean missingStereo)
 	{
 		HShift hs = new HShift();
 		StringBuffer sb = new StringBuffer();
@@ -423,26 +425,41 @@ public class HNMRShifts
 			sb.append(", " + si.substituent.name + ")");
 		}
 		
-		//Cis
-		if (cisSI != null)
-		{	
+		if (missingStereo)
+		{			
 			si = cisSI;
-			pos = 1;
-			hs.value += si.substituent.chemShifts[pos];
-			sb.append(" + " + si.substituent.chemShifts[pos]);
-			sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
-			sb.append(", " + si.substituent.name + ")");
-		}
-		
-		//Trans
-		if (transSI != null)
-		{	
+			hs.value += (si.substituent.chemShifts[1] + si.substituent.chemShifts[2]) / 2;
+			sb.append(" + (" + si.substituent.chemShifts[1] + "+" + si.substituent.chemShifts[2] + ")/2");			
+			sb.append(" (" + si.substituent.name + ")");
+			
 			si = transSI;
-			pos = 2;
-			hs.value += si.substituent.chemShifts[pos];
-			sb.append(" + " + si.substituent.chemShifts[pos]);
-			sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
-			sb.append(", " + si.substituent.name + ")");
+			hs.value += (si.substituent.chemShifts[1] + si.substituent.chemShifts[2]) / 2;
+			sb.append(" + (" + si.substituent.chemShifts[1] + "+" + si.substituent.chemShifts[2] + ")/2");			
+			sb.append(" (" + si.substituent.name + ")");
+		}
+		else
+		{		
+			//Cis
+			if (cisSI != null)
+			{	
+				si = cisSI;
+				pos = 1;
+				hs.value += si.substituent.chemShifts[pos];
+				sb.append(" + " + si.substituent.chemShifts[pos]);
+				sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
+				sb.append(", " + si.substituent.name + ")");
+			}
+
+			//Trans
+			if (transSI != null)
+			{	
+				si = transSI;
+				pos = 2;
+				hs.value += si.substituent.chemShifts[pos];
+				sb.append(" + " + si.substituent.chemShifts[pos]);
+				sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
+				sb.append(", " + si.substituent.name + ")");
+			}
 		}
 
 		hs.explanationInfo = sb.toString();
