@@ -1,10 +1,8 @@
 package ambit2.base.data.study.test;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import org.junit.Test;
 
@@ -13,6 +11,7 @@ import ambit2.base.data.study.IParams;
 import ambit2.base.data.study.Params;
 import ambit2.base.data.study.Protocol;
 import ambit2.base.data.study.ProtocolApplication;
+import ambit2.base.json.JSONUtils;
 import junit.framework.Assert;
 
 public class ProtocolApplicationTestFactory {
@@ -44,9 +43,9 @@ public class ProtocolApplicationTestFactory {
 	// omitted.
 	protected static Date getTimeStamp() {
 		try {
-            SimpleDateFormat formatter = ProtocolApplication.dateformatter;
-            //String s = formatter.format(new Date());
-            return formatter.parse("2017-11-1 0:0:0");
+			SimpleDateFormat formatter = ProtocolApplication.dateformatter;
+			// String s = formatter.format(new Date());
+			return formatter.parse("2017-11-1 0:0:0");
 		} catch (ParseException x) {
 			return null;
 		}
@@ -127,4 +126,36 @@ public class ProtocolApplicationTestFactory {
 		return papp;
 	}
 
+	@Test
+	public void test_categories() throws Exception {
+		StringBuilder b = null;
+
+		for (Protocol._categories c : Protocol._categories.values()) {
+			if (b == null) {
+				b = new StringBuilder();
+				b.append("[\n");
+			} else
+				b.append(",");
+
+			b.append("{\n");
+			b.append(String.format("%s:%s", JSONUtils.jsonQuote("id"), JSONUtils.jsonQuote(c.name())));
+			b.append(",\n");
+			b.append(String.format("%s:[%s]", JSONUtils.jsonQuote("name"), JSONUtils.jsonQuote(c.toString())));
+			b.append(",\n");
+			b.append(String.format("%s:\"%s\"", JSONUtils.jsonQuote("ontology"), "IUCLID_DERIVED"));
+			b.append(",\n");
+			b.append(String.format("%s:[%s]", JSONUtils.jsonQuote("definition"),
+					JSONUtils.jsonQuote(String.format("%s. %s", c.getNumber(), c.name()))));
+			b.append(",\n");
+			b.append(String.format("%s:[%s]", JSONUtils.jsonQuote("URI"), JSONUtils.jsonQuote(c.getOntologyURI())));
+			b.append(",\n");
+			b.append(String.format("%s:[%s]", JSONUtils.jsonQuote("topcategory"),
+					JSONUtils.jsonQuote(c.getTopCategory())));
+
+			b.append("}\n");
+
+		}
+		b.append("\n]");
+		System.out.println(b.toString());
+	}
 }

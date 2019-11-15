@@ -132,4 +132,15 @@ public class EffectRecordTest {
 			System.out.println(String.format("// comment\t%s\n{\"PROTOCOL_TOP_CATEGORY\"=\"%s\",\t\"PROTOCOL_CATEGORY_CODE\":\"%s\"}\t",c.toString(),c.getTopCategory(),c.name()));
 		}
 	}
+	
+	@Test
+	public void test_survey() {
+		for (Protocol._categories c : Protocol._categories.values() ) {
+			if (c.deprecated()) continue;
+			System.out.println(
+		    String.format("{value: \"%s\",text: \"%s\",visibleIf: \"{row.PROTOCOL_TOP_CATEGORY} = '%s'\"},",c.name(),c.toString(),c.getTopCategory())
+		    );
+		    
+		}
+	}
 }
