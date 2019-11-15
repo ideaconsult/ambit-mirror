@@ -1716,6 +1716,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000081";
 			}
+			@Override
+			public boolean deprecated() {
+				// should not be category
+				return true;
+			}
 		},
 		BAO_0002189_SECTION {
 			// to be merged with I5 category
@@ -1742,6 +1747,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002189";
+			}
+			@Override
+			public boolean deprecated() {
+				//assays should not be here
+				return true;
 			}
 		},		
 		UNKNOWN_TOXICITY_SECTION {
@@ -1817,11 +1827,21 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
+			}
 		},
 		PUBCHEM_SUMMARY_SECTION {
 			@Override
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
 			}
 		},
 		PUBCHEM_SCREENING_SECTION {
@@ -1829,11 +1849,21 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
+			}
 		},
 		PUBCHEM_CELLBASED_SECTION {
 			@Override
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
 			}
 		},
 		PUBCHEM_DOSERESPONSE_SECTION {
@@ -1841,11 +1871,21 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
+			}
 		},
 		PUBCHEM_PANEL_SECTION {
 			@Override
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
 			}
 		},
 		PUBCHEM_BIOCHEMICAL_SECTION {
@@ -1853,11 +1893,21 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
+			}
 		},
 		PUBCHEM_INVIVO_SECTION {
 			@Override
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
 			}
 		},
 		PUBCHEM_ACTIVECONCENTRATIONSPECIFIED_SECTION {
@@ -1865,11 +1915,21 @@ public class Protocol {
 			public String getTopCategory() {
 				return "TOX";
 			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
+			}
 		},
 		PUBCHEM_INVITRO_SECTION {
 			@Override
 			public String getTopCategory() {
 				return "TOX";
+			}
+			@Override
+			public boolean deprecated() {
+				//too specific
+				return true;
 			}
 		},
 		TRANSCRIPTOMICS_SECTION {
@@ -1972,6 +2032,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0003009";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		BAO_0002993_SECTION {
 			@Override
@@ -1998,6 +2063,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002993";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		BAO_0002100_SECTION {
 			@Override
@@ -2023,6 +2093,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002100";
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
 			}
 		},
 		BAO_0002167_SECTION {
@@ -2051,7 +2126,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002167";
 			}
-
+			@Override
+			public boolean deprecated() {
+				//there is already genotox section
+				return true;
+			}
 		},
 
 		ENM_0000037_SECTION {
@@ -2107,7 +2186,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002168";
 			}
-
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		BAO_0002084_SECTION {
 			@Override
@@ -2133,6 +2216,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002084";
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
 			}
 		},
 		BAO_0000451_SECTION {
@@ -2160,6 +2248,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0000451";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		BAO_0002733_SECTION {
 			@Override
@@ -2185,6 +2278,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://www.bioassayontology.org/bao#BAO_0002733";
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
 			}
 		},
 		CHMO_0000287_SECTION {
@@ -2212,6 +2310,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000287";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		MMO_0000368_SECTION {
 			@Override
@@ -2237,6 +2340,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/MMO_0000368";
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
 			}
 		},
 		OBI_0302736_SECTION {
@@ -2264,6 +2372,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/OBI_0302736";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		CSEO_00001191_SECTION {
 			@Override
@@ -2289,6 +2402,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://scai.fraunhofer.de/CSEO#CSEO_00001191";
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
 			}
 		},
 		CHMO_0000239_SECTION {
@@ -2316,6 +2434,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000239";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		CHMO_0000538_SECTION {
 			@Override
@@ -2342,6 +2465,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000538";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		CHMO_0000234_SECTION {
 			@Override
@@ -2367,6 +2495,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/CHMO_0000234";
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
 			}
 		},
 		NPO_1773_SECTION {
@@ -2395,6 +2528,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1773";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		NPO_1709_SECTION {
 
@@ -2422,6 +2560,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1709";
 			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 
 		ENM_8000223_SECTION {
@@ -2448,7 +2591,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_8000223";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},		
 		ENM_0000069_SECTION {
 			@Override
@@ -2475,6 +2623,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_0000069";
 			}			
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		
 		ENM_9000011_SECTION {
@@ -2501,7 +2654,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000011";
-			}			
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		ENM_9000013_SECTION {
 			@Override
@@ -2528,6 +2686,11 @@ public class Protocol {
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000013";
 			}			
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},		
 		ENM_9000100_SECTION {
 			@Override
@@ -2548,7 +2711,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000100";
-			}			
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level! there is already boiling point section
+				return true;
+			}
 		},
 		ENM_9000111_SECTION {
 			@Override
@@ -2569,7 +2737,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000111";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		ENM_9000112_SECTION {
 			@Override
@@ -2590,7 +2763,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000112";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		ENM_9000127_SECTION {
 			@Override
@@ -2611,7 +2789,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000127";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		ENM_9000177_SECTION {
 			@Override
@@ -2632,7 +2815,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000177";
-			}			
+			}		
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		ENM_9000195_SECTION {
 			@Override
@@ -2653,7 +2841,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.enanomapper.org/onto/ENM_9000195";
-			}			
+			}		
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		BAO_0010001_SECTION {
 
@@ -2680,6 +2873,11 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/bao#BAO_0010001";
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
 			}
 		},
 
@@ -2708,7 +2906,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1911";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 
 		NPO_1699_SECTION {
@@ -2731,7 +2934,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1699";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		NPO_1914_SECTION {
 
@@ -2753,7 +2961,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1914";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		NPO_1204_SECTION {
 
@@ -2775,7 +2988,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1204";
-			}			
+			}		
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		NPO_1694_SECTION {
 
@@ -2797,7 +3015,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1694";
-			}			
+			}
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		NPO_1539_SECTION {
 
@@ -2819,7 +3042,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.bioontology.org/ontology/npo#NPO_1539";
-			}			
+			}		
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		PATO_0000921_SECTION {
 
@@ -2841,7 +3069,12 @@ public class Protocol {
 			@Override
 			public String getOntologyURI() {
 				return "http://purl.obolibrary.org/obo/PATO_0000921";
-			}			
+			}	
+			@Override
+			public boolean deprecated() {
+				//this should not be on endpoint category level!
+				return true;
+			}
 		},
 		ENM_0000044_SECTION {
 			@Override
@@ -2881,6 +3114,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1001;
 			}
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		CELL_DEATH {
 			// obo:GO:0008219
@@ -2898,7 +3135,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1002;
 			}
-
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		CELL_MORPHOLOGY {
 			// BAO_0170002
@@ -2916,7 +3156,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1003;
 			}
-
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		CELL_PROLIFERATION {
 			// obo:GO:0008283
@@ -2934,7 +3177,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1004;
 			}
-
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		MITOCHONDRIAL_DEPOLARIZATION {
 
@@ -2952,7 +3198,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1005;
 			}
-
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		OXIDATIVE_PHOSPHORYLATION {
 			@Override
@@ -2968,6 +3217,10 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 1006;
+			}
+			@Override
+			public boolean deprecated() {
+				return true;
 			}
 		},
 		PROTEIN_STABILIZATION {
@@ -2986,7 +3239,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1007;
 			}
-
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		RECEPTOR_BINDING {
 			// obo:GO:0005102
@@ -3003,6 +3259,10 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 1008;
+			}
+			@Override
+			public boolean deprecated() {
+				return true;
 			}
 		},
 		REGULATION_OF_CATALYTIC_ACTIVITY {
@@ -3021,6 +3281,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1009;
 			}
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		REGULATION_OF_GENE_EXPRESSION {
 			// obo:GO:0010468
@@ -3037,6 +3301,10 @@ public class Protocol {
 			@Override
 			public int getSortingOrder() {
 				return 1010;
+			}
+			@Override
+			public boolean deprecated() {
+				return true;
 			}
 		},
 		REGULATION_OF_TRANSCRIPTION_FACTOR_ACTIVITY {
@@ -3055,6 +3323,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1011;
 			}
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		AUTOFLUORESCENCE {
 
@@ -3072,7 +3344,10 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 1012;
 			}
-
+			@Override
+			public boolean deprecated() {
+				return true;
+			}
 		},
 		//Immunotoxicity
 		NPO_1339_SECTION {
@@ -3295,9 +3570,11 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 3560;
 			}			
-		}			
+		};			
+		public boolean deprecated() {
+			return false;
+		}
 		
-		;
 		public String getTopCategory() {
 			return "P-CHEM";
 		}
