@@ -377,11 +377,9 @@ public class HNMRShifts
 		List<SubstituentInstance> siList = haeInst.substituentInstances.get(atIndex);
 		List<SubstituentInstance> siList2 = haeInst.substituentInstances.get(atIndex2);
 		
-		switch (siList.size())
+		if (siList == null)
 		{
-			
-		case 0:
-			//No substituent is handled as 2 implicit H atoms
+			//No substituents is handled as 2 implicit H atoms
 			
 			//Atom at position atIndex contains two implicit H atoms
 			//Handling stereo double bond is not needed
@@ -404,9 +402,9 @@ public class HNMRShifts
 					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(0), 2, false);					
 				}
 			}
-			break;
-			
-		case 1:			
+		}
+		else
+		{			
 			//One implicit H atom and one substituent
 			IBond bo = molecule.getBond(haeInst.atoms[0], haeInst.atoms[1]); 
 			DoubleBondStereochemistry dbsc = StereoChemUtils.findDBStereoElementByStereoBond(bo, molecule);
@@ -452,8 +450,6 @@ public class HNMRShifts
 			{
 				//TODO
 			}
-			
-			break;
 		
 		}
 		
@@ -468,7 +464,7 @@ public class HNMRShifts
 		StringBuffer sb = new StringBuffer();
 		hs.value = haeInst.hEnvironment.chemShift0;
 		hs.imlicitHAtomsNumbers = numImlicitHAtoms;
-		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
+		hs.atomIndex = molecule.indexOf(haeInst.atoms[atIndex]);
 		sb.append(haeInst.hEnvironment.name + " ");
 		if (missingStereo)
 			sb.append("no stereo ");
