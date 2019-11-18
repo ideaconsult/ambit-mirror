@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 
 import ambit2.descriptors.utils.GraphMatrices;
@@ -379,8 +380,9 @@ public class HNMRShifts
 		
 		if (siList == null)
 		{
-			//No substituents is handled as 2 implicit H atoms
+			//TODO check for unidentified substituents to issue a warning message
 			
+			//No substituents is handled as 2 implicit H atoms
 			//Atom at position atIndex contains two implicit H atoms
 			//Handling stereo double bond is not needed
 			if (siList2 == null)
@@ -404,7 +406,13 @@ public class HNMRShifts
 			}
 		}
 		else
-		{			
+		{	
+			if (siList.size() == 2)
+			{	
+				//Two substituents at atIndex means no H atoms 
+				return;
+			}	
+			
 			//One implicit H atom and one substituent
 			IBond bo = molecule.getBond(haeInst.atoms[0], haeInst.atoms[1]); 
 			DoubleBondStereochemistry dbsc = StereoChemUtils.findDBStereoElementByStereoBond(bo, molecule);
@@ -425,7 +433,15 @@ public class HNMRShifts
 						generateAlkeneHShift(haeInst, atIndex, siList.get(0), null, siList2.get(0), 1, true);
 					}
 					else {
-						//TODO handle stereo bond
+						//Handle stereo bond
+						if (dbsc.getStereo() == Conformation.TOGETHER) {	
+							//Cis
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(0), null, 1, false);
+						}	
+						else {
+							//Trans
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), null, siList2.get(0), 1, false);
+						}	
 					}
 				
 				}
@@ -437,20 +453,28 @@ public class HNMRShifts
 						generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(1), siList2.get(0), 1, true);
 					}
 					else {
-						//TODO handle stereo bond
+						//Handle stereo bond
+						int k = 0; //the index of SubstituentInstance participating in the stereo bond
+						if (dbsc.contains(siList2.get(1).atoms[0]))
+							k = 1;
+						
+						int k2 = (k==0)?1:0; ////the index of other SubstituentInstance
+						
+						if (dbsc.getStereo() == Conformation.OPPOSITE) {	
+							//SubstituentInstance(k) is OPPOSITE (i.e. TRANS) to 
+							//the substituent on the other side of the double bond 
+							//Therofore it is CIS to the H atom on the other side of the double bond
+							
+							//Cis  
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(k), siList2.get(k2), 1, false);
+						}	
+						else {
+							//Trans (see logic from the upper comment)
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(k2), siList2.get(k), 1, false);
+						}
 					}
 				}
-			}
-			
-			if(dbsc == null)
-			{
-				
-			}
-			else
-			{
-				//TODO
-			}
-		
+			}		
 		}
 		
 	}
