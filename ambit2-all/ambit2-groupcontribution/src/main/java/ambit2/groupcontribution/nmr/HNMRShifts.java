@@ -120,7 +120,8 @@ public class HNMRShifts
 	public void registerHAtomEnvironmentInstance(HAtomEnvironmentInstance haeInst)
 	{
 		//Filling the data in atomHAtEnvInstanceSet
-		for (int i = 0; i < haeInst.atoms.length; i++)
+		//for (int i = 0; i < haeInst.atoms.length; i++)
+		int i = 0;
 		{
 			IAtom at = haeInst.atoms[i];
 			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
