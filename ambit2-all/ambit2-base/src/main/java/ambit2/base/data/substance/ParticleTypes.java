@@ -417,7 +417,7 @@ public enum ParticleTypes {
 			return "1306-24-7";
 		}
 	},
-	NPO_ZrO2 {
+	ENM_9000241 {
 		@Override
 		public String getSMILES() {
 			return "O=[Zr]=O";
