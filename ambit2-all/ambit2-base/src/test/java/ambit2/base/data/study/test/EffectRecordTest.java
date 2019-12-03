@@ -138,7 +138,7 @@ public class EffectRecordTest {
 		for (Protocol._categories c : Protocol._categories.values() ) {
 			if (c.deprecated()) continue;
 			System.out.println(
-		    String.format("{value: \"%s\",text: \"%s\",visibleIf: \"{row.PROTOCOL_TOP_CATEGORY} = '%s'\"},",c.name(),c.toString(),c.getTopCategory())
+		    String.format("{value: \"%s\",text: \"%s.%s\",visibleIf: \"{row.PROTOCOL_TOP_CATEGORY} = '%s'\"},",c.name(),c.getNumber(),c.toString(),c.getTopCategory())
 		    );
 		    
 		}
