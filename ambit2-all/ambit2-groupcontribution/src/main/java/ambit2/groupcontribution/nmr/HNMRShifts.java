@@ -10,6 +10,9 @@ import java.util.TreeMap;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 
 import ambit2.descriptors.utils.GraphMatrices;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment;
@@ -17,6 +20,7 @@ import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HShift;
+import ambit2.smarts.StereoChemUtils;
 import ambit2.smarts.groups.GroupMatch;
 
 public class HNMRShifts 
@@ -117,7 +121,8 @@ public class HNMRShifts
 	public void registerHAtomEnvironmentInstance(HAtomEnvironmentInstance haeInst)
 	{
 		//Filling the data in atomHAtEnvInstanceSet
-		for (int i = 0; i < haeInst.atoms.length; i++)
+		//for (int i = 0; i < haeInst.atoms.length; i++)
+		int i = 0;
 		{
 			IAtom at = haeInst.atoms[i];
 			List<HAtomEnvironmentInstance> haeInstList = atomHAtEnvInstanceSet.get(at);
@@ -177,6 +182,9 @@ public class HNMRShifts
 	public void findSubstituents(HAtomEnvironmentInstance haeInst)
 	{
 		int n = haeInst.hEnvironment.shiftDesignations.length;
+		if (haeInst.hEnvironment.name.equalsIgnoreCase("ALKENES"))
+			n = 2; //correction for skipping unnecessary substituent search
+		
 		haeInst.substituentInstances = new ArrayList<List<SubstituentInstance>>();
 		
 		switch (haeInst.hEnvironment.shiftsAssociation)
@@ -328,7 +336,8 @@ public class HNMRShifts
 		StringBuffer sb = new StringBuffer();
 		
 		hs.value = haeInst.hEnvironment.chemShift0;
-		hs.imlicitHAtomsNumbers = haeInst.hEnvironment.implicitHAtomsNumber;
+		if (haeInst.hEnvironment.implicitHAtomsNumber != null)
+			hs.imlicitHAtomsNumbers = haeInst.hEnvironment.implicitHAtomsNumber;
 		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
 		sb.append(haeInst.hEnvironment.name + " ");
 		sb.append(haeInst.hEnvironment.chemShift0);
@@ -366,15 +375,16 @@ public class HNMRShifts
 		//The other atom from the double bond
 		int atIndex2 = (atIndex==0)?1:0;
 		
-		switch (haeInst.atoms[atIndex].getImplicitHydrogenCount())
+		List<SubstituentInstance> siList = haeInst.substituentInstances.get(atIndex);
+		List<SubstituentInstance> siList2 = haeInst.substituentInstances.get(atIndex2);
+		
+		if (siList == null)
 		{
-		case 1:
+			//TODO check for unidentified substituents to issue a warning message
 			
-			break;
-			
-		case 2:
-			//Atom at position atIndex contains two implicit H atoms 
-			List<SubstituentInstance> siList2 = haeInst.substituentInstances.get(atIndex2);
+			//No substituents is handled as 2 implicit H atoms
+			//Atom at position atIndex contains two implicit H atoms
+			//Handling stereo double bond is not needed
 			if (siList2 == null)
 			{
 				//Either unknown substituents or implicit H atoms
@@ -385,17 +395,88 @@ public class HNMRShifts
 			{
 				if (siList2.size() == 1)
 				{
-					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), null, 1, false);
-					generateAlkeneHShift(haeInst, atIndex, null, null, siList2.get(0), 1, false);
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), null, 2, false);
+					generateAlkeneHShift(haeInst, atIndex, null, null, siList2.get(0), 2, false);
 				}
 				else if (siList2.size() == 2)
 				{
-					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), siList2.get(1), 1, false);
-					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(0), 1, false);					
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(0), siList2.get(1), 2, false);
+					generateAlkeneHShift(haeInst, atIndex, null, siList2.get(1), siList2.get(0), 2, false);					
 				}
 			}
-			break;
 		}
+		else
+		{	
+			if (siList.size() == 2)
+			{	
+				//Two substituents at atIndex means no H atoms 
+				return;
+			}	
+			
+			//One implicit H atom and one substituent
+			IBond bo = molecule.getBond(haeInst.atoms[0], haeInst.atoms[1]); 
+			DoubleBondStereochemistry dbsc = StereoChemUtils.findDBStereoElementByStereoBond(bo, molecule);
+			
+			if (siList2 == null)
+			{
+				//Either unknown substituents or implicit H atoms
+				//The unknown substituents are treated as implicit H atoms
+				generateAlkeneHShift(haeInst, atIndex, siList.get(0), null, null, 1, false);
+			}
+			else
+			{
+				if (siList2.size() == 1)
+				{
+					if (dbsc == null) {
+						//No stereo specified. Considering both configuration cis and trans
+						generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(0), null, 1, true);
+						generateAlkeneHShift(haeInst, atIndex, siList.get(0), null, siList2.get(0), 1, true);
+					}
+					else {
+						//Handle stereo bond
+						if (dbsc.getStereo() == Conformation.TOGETHER) {	
+							//Cis
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(0), null, 1, false);
+						}	
+						else {
+							//Trans
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), null, siList2.get(0), 1, false);
+						}	
+					}
+				
+				}
+				else if (siList2.size() == 2)
+				{
+					if (dbsc == null) {
+						//No stereo specified. Considering both configurations cis and trans
+						generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(0), siList2.get(1), 1, true);
+						generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(1), siList2.get(0), 1, true);
+					}
+					else {
+						//Handle stereo bond
+						int k = 0; //the index of SubstituentInstance participating in the stereo bond
+						if (dbsc.contains(siList2.get(1).atoms[0]))
+							k = 1;
+						
+						int k2 = (k==0)?1:0; ////the index of other SubstituentInstance
+						
+						if (dbsc.getStereo() == Conformation.OPPOSITE) {	
+							//SubstituentInstance(k) is OPPOSITE (i.e. TRANS) to 
+							//the substituent on the other side of the double bond 
+							//Therofore it is CIS to the H atom on the other side of the double bond
+							
+							//Cis  
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(k), siList2.get(k2), 1, false);
+						}	
+						else {
+							//Trans (see logic from the upper comment)
+							generateAlkeneHShift(haeInst, atIndex, siList.get(0), siList2.get(k2), siList2.get(k), 1, false);
+						}
+					}
+				}
+			}		
+		}
+		
 	}
 	
 	
@@ -407,8 +488,10 @@ public class HNMRShifts
 		StringBuffer sb = new StringBuffer();
 		hs.value = haeInst.hEnvironment.chemShift0;
 		hs.imlicitHAtomsNumbers = numImlicitHAtoms;
-		hs.atomIndex = molecule.indexOf(haeInst.atoms[0]);
+		hs.atomIndex = molecule.indexOf(haeInst.atoms[atIndex]);
 		sb.append(haeInst.hEnvironment.name + " ");
+		if (missingStereo)
+			sb.append("no stereo ");
 		sb.append(haeInst.hEnvironment.chemShift0);
 		
 		SubstituentInstance si = null;
@@ -425,6 +508,7 @@ public class HNMRShifts
 			sb.append(", " + si.substituent.name + ")");
 		}
 		
+		/*
 		if (missingStereo)
 		{			
 			si = cisSI;
@@ -437,29 +521,28 @@ public class HNMRShifts
 			sb.append(" + (" + si.substituent.chemShifts[1] + "+" + si.substituent.chemShifts[2] + ")/2");			
 			sb.append(" (" + si.substituent.name + ")");
 		}
-		else
-		{		
-			//Cis
-			if (cisSI != null)
-			{	
-				si = cisSI;
-				pos = 1;
-				hs.value += si.substituent.chemShifts[pos];
-				sb.append(" + " + si.substituent.chemShifts[pos]);
-				sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
-				sb.append(", " + si.substituent.name + ")");
-			}
+		*/
+				
+		//Cis
+		if (cisSI != null)
+		{	
+			si = cisSI;
+			pos = 1;
+			hs.value += si.substituent.chemShifts[pos];
+			sb.append(" + " + si.substituent.chemShifts[pos]);
+			sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
+			sb.append(", " + si.substituent.name + ")");
+		}
 
-			//Trans
-			if (transSI != null)
-			{	
-				si = transSI;
-				pos = 2;
-				hs.value += si.substituent.chemShifts[pos];
-				sb.append(" + " + si.substituent.chemShifts[pos]);
-				sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
-				sb.append(", " + si.substituent.name + ")");
-			}
+		//Trans
+		if (transSI != null)
+		{	
+			si = transSI;
+			pos = 2;
+			hs.value += si.substituent.chemShifts[pos];
+			sb.append(" + " + si.substituent.chemShifts[pos]);
+			sb.append(" (" + haeInst.hEnvironment.shiftDesignations[pos]);
+			sb.append(", " + si.substituent.name + ")");
 		}
 
 		hs.explanationInfo = sb.toString();
