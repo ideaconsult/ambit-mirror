@@ -186,6 +186,47 @@ var config_i5 = {
 			}
 		}
 	},
+	"SURFACE_TENSION_SECTION" : {
+		"parameters" : {
+			"bVisible" : false,
+			"method type" : {
+				"bVisible" : false
+			}
+		},
+		"conditions" : {
+			"bVisible" : false,
+			"temperature" : {
+				"iOrder" : -3,
+				"inMatrix" : true,
+				"bVisible" : true
+			},
+			"ph" : {
+				"sTitle" : "pH",
+				"iOrder" : -2,
+				"inMatrix" : true,
+				"bVisible" : true
+			},
+			"remark" : {
+				"iOrder" : -1,
+				"bVisible" : true
+			}
+		},
+		"effects" : {
+			"endpoint" : {
+				"bVisible" : false
+			},
+			"result" : {
+				"sTitle" : "Value",
+				"iOrder" : -4,
+				"inMatrix" : true
+			}
+		},
+		"interpretation" : {
+			"result" : {
+				"bVisible" : false
+			}
+		}		
+	},
 	"PC_WATER_SOL_SECTION" : {
 		"parameters" : {
 			"bVisible" : false,
