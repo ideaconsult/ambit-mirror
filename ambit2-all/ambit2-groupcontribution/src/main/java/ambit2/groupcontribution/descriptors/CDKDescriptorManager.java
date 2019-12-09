@@ -79,9 +79,42 @@ public class CDKDescriptorManager
 		else if (dname.equals("NAA") || dname.equals("AromaticAtomsCount") || dname.equals("AAC"))
 			di = registerDecriptor(fullString, dname, AromaticAtomsCountDescriptor.class, 0, 0, vt);
 		
-	}	
+	}
 	
-	public static double getDescritptor(IAtomContainer mol, IMolecularDescriptor descr, int n)
+	public List<DescriptorValue> calcDecriptorValuesForMolecule(IAtomContainer mol, IAtomContainer molH)
+	{
+		List<DescriptorValue> dValues = new ArrayList<DescriptorValue>();
+		
+		for (int i = 0; i < descriptors.size(); ++i)
+		{
+			IAtomContainer m;
+			if (descriptors.get(i).hAtomsFlag == 0)
+				m = mol;
+			else
+				m = molH;
+			
+			try
+			{
+				int instanceIndex = descriptors.get(i).descrInstanceIndex;
+				DescriptorValue v = descriptorInstances.get(instanceIndex).calculate(m);
+				dValues.add(v);
+			}	
+			catch (Exception e){
+			}
+		}
+		
+		return dValues;
+	}
+	
+	public double getDecriptor(int descrIndex, List<DescriptorValue> dValues)
+	{
+		int resPos = descriptors.get(descrIndex).resultPos;
+		double d = getDescriptorFromDescrValue(dValues.get(descrIndex), resPos);
+		return(d);
+	}
+	
+	
+	public static double calcDescritptor(IAtomContainer mol, IMolecularDescriptor descr, int n)
 	{
 		try
 		{
@@ -95,7 +128,7 @@ public class CDKDescriptorManager
 		return(0);
 	}
 	
-	public static double getDescriptorFromDescrValue(DescriptorValue v, int n)
+	public static double getDescriptorFromDescrValue(DescriptorValue v, int resPos)
 	{	
 		try
 		{				
@@ -103,7 +136,7 @@ public class CDKDescriptorManager
 			if (v.getValue() instanceof DoubleArrayResult)
 			{
 				DoubleArrayResult d = (DoubleArrayResult)v.getValue();
-				return(d.get(n));
+				return(d.get(resPos));
 			}
 			else
 			if (v.getValue() instanceof DoubleResult)
@@ -115,7 +148,7 @@ public class CDKDescriptorManager
 			if (v.getValue() instanceof IntegerArrayResult)
 			{
 				IntegerArrayResult i = (IntegerArrayResult)v.getValue();
-				return(i.get(n));
+				return(i.get(resPos));
 			}
 			else
 			if (v.getValue() instanceof IntegerResult)
