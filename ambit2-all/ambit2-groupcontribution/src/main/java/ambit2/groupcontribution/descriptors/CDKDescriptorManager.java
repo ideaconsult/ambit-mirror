@@ -1,5 +1,8 @@
 package ambit2.groupcontribution.descriptors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
@@ -9,10 +12,49 @@ import org.openscience.cdk.qsar.result.DoubleResult;
 import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
+import ambit2.groupcontribution.transformations.IValueTransformation;
+
 public class CDKDescriptorManager 
 {
+	public List<IMolecularDescriptor> descriptorInstances = new ArrayList<IMolecularDescriptor>();
+	public List<CDKDescriptorInfo> descriptors = new ArrayList<CDKDescriptorInfo>();
+	public List<String> errors = new ArrayList<String>();
 	
-	public double getDescritptor(IAtomContainer mol, IMolecularDescriptor descr, int n)
+	
+	public int getDescrInstanceIndex(String className)
+	{	
+		for (int i = 0; i < descriptorInstances.size(); ++i)
+			if (descriptorInstances.get(i).getClass().getName().equals(className))
+				return(i);
+		return(-1); 
+	}
+	
+	
+	public CDKDescriptorInfo registerDecriptor(String name, Class descrClass, int resPos, int hAtomsFlag, IValueTransformation valueTranform)
+	{	
+		int index = getDescrInstanceIndex(descrClass.getName());			
+		if (index == -1)
+		{	
+			index = descriptorInstances.size();
+			try{
+				descriptorInstances.add((IMolecularDescriptor)descrClass.newInstance());
+			}
+			catch(Exception e){
+				errors.add("Errors on registering " + descrClass.getName() 
+				+ " : " + e.getMessage());				
+				return null;
+			}
+		}
+		
+		CDKDescriptorInfo di = new CDKDescriptorInfo(); 
+		di.name = name;
+		di.resultPos = resPos;
+		di.valueTranform = valueTranform;
+		descriptors.add(di);
+		return di;
+	}
+	
+	public static double getDescritptor(IAtomContainer mol, IMolecularDescriptor descr, int n)
 	{
 		try
 		{
@@ -26,7 +68,7 @@ public class CDKDescriptorManager
 		return(0);
 	}
 	
-	public double getDescriptorFromDescrValue(DescriptorValue v, int n)
+	public static double getDescriptorFromDescrValue(DescriptorValue v, int n)
 	{	
 		try
 		{				
