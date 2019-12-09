@@ -55,6 +55,7 @@ public class CDKDescriptorManager
 		di.fullString = fullString;
 		di.name = name;
 		di.resultPos = resPos;
+		di.hAtomsFlag = hAtomsFlag; 
 		di.valueTranform = valueTranform;
 		descriptors.add(di);
 		return di;
