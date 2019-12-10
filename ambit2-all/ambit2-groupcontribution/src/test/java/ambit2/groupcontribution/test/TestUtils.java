@@ -16,6 +16,7 @@ import ambit2.groupcontribution.descriptors.LDAtomHybridization;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.descriptors.LDAtomValency;
 import ambit2.groupcontribution.descriptors.LDHNum;
+import ambit2.groupcontribution.transformations.TransformationUtils;
 import ambit2.groupcontribution.utils.MoleculeUtils;
 import ambit2.smarts.SmartsHelper;
 
@@ -29,7 +30,9 @@ public class TestUtils
 		//testLD("CN[H]");
 		
 		//testCDKDescriptors(new String[] {"W"});
-		testCDKDescriptorCalculation("CC(C)C", new String[] {"W"});
+		//testCDKDescriptorCalculation("CC(C)C", new String[] {"W"});
+		
+		testParseTransformation("POW(2)");
 	}
 
 	public static void testLD(String smiles) throws Exception
@@ -127,6 +130,19 @@ public class TestUtils
 		{	
 			double d = descrMan.getDecriptor(i, dValues);
 			System.out.println(descrMan.descriptors.get(i).name + " = " + d);
+		}
+	}
+	
+	public static void testParseTransformation(String s) throws Exception
+	{
+		TransformationUtils tu = new TransformationUtils();
+		tu.parseTransformation(s);
+		
+		if (!tu.errors.isEmpty())
+		{	
+			System.out.println("There are transformation errors:");
+			for (String err : tu.errors)
+				System.out.println(err);
 		}
 	}
 
