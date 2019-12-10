@@ -1,7 +1,10 @@
 package ambit2.groupcontribution.test;
 
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.groupcontribution.descriptors.CDKDescriptorInfo;
@@ -25,7 +28,8 @@ public class TestUtils
 		//testLD("CC(NC=C)COC(S(=O)(=O)O)CCNC=O");
 		//testLD("CN[H]");
 		
-		testCDKDescriptors(new String[] {"W"});
+		//testCDKDescriptors(new String[] {"W"});
+		testCDKDescriptorCalculation("CC(C)C", new String[] {"W"});
 	}
 
 	public static void testLD(String smiles) throws Exception
@@ -98,6 +102,31 @@ public class TestUtils
 		{
 			System.out.print(di.toString());
 			System.out.print(descrMan.descriptorInstances.get(di.descrInstanceIndex).getClass().getName());
+		}
+	}
+	
+	public static void testCDKDescriptorCalculation(String smiles, String[] descriptors) throws Exception
+	{
+		CDKDescriptorManager descrMan = new CDKDescriptorManager(); 
+		for (String d: descriptors)
+			descrMan.parseDecriptor(d);
+		
+		if (!descrMan.errors.isEmpty())
+		{	
+			System.out.println("There are descriptor errors:");
+			for (String err : descrMan.errors)
+				System.out.println(err);
+		}
+		
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
+		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+
+		System.out.println("Calculating descriptors for " + smiles);
+		List<DescriptorValue> dValues = descrMan.calcDecriptorValuesForMolecule(mol, mol);
+		for (int i = 0; i < dValues.size(); i++)
+		{	
+			double d = descrMan.getDecriptor(i, dValues);
+			System.out.println(descrMan.descriptors.get(i).name + " = " + d);
 		}
 	}
 
