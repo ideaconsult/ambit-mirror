@@ -8,7 +8,11 @@ import org.openscience.cdk.qsar.DescriptorValue;
 import org.openscience.cdk.qsar.IMolecularDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.AromaticAtomsCountDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor;
 import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -79,6 +83,54 @@ public class CDKDescriptorManager
 			di = registerDecriptor(fullString, dname, BPolDescriptor.class, 0, 1, vt);
 		else if (dname.equals("NAA") || dname.equals("AromaticAtomsCount") || dname.equals("AAC"))
 			di = registerDecriptor(fullString, dname, AromaticAtomsCountDescriptor.class, 0, 0, vt);
+		else if (dname.equals("NAB") || dname.equals("AromaticBondsCount") || dname.equals("ABC"))
+			di = registerDecriptor(fullString, dname, AromaticBondsCountDescriptor.class, 0, 0, vt);
+		else if (dname.equals("BCUTw-Lo"))
+			di = registerDecriptor(fullString, dname, BCUTDescriptor.class, 0, 0, vt);
+		else if (dname.equals("BCUTw-Hi"))
+			di = registerDecriptor(fullString, dname, BCUTDescriptor.class, 1, 0, vt);
+		else if (dname.equals("BCUTc-Lo"))
+			di = registerDecriptor(fullString, dname, BCUTDescriptor.class, 2, 0, vt);
+		else if (dname.equals("BCUTc-Hi"))
+			di = registerDecriptor(fullString, dname, BCUTDescriptor.class, 3, 0, vt);
+		else if (dname.equals("BCUTp-Lo"))
+			di = registerDecriptor(fullString, dname, BCUTDescriptor.class, 4, 0, vt);
+		else if (dname.equals("BCUTp-Hi"))
+			di = registerDecriptor(fullString, dname, BCUTDescriptor.class, 5, 0, vt);
+		else if (dname.equals("SCH3"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 0, 0, vt);
+		else if (dname.equals("SCH4"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 1, 0, vt);
+		else if (dname.equals("SCH5"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 2, 0, vt);
+		else if (dname.equals("SCH6"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 3, 0, vt);
+		else if (dname.equals("VCH3"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 4, 0, vt);
+		else if (dname.equals("VCH4"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 5, 0, vt);
+		else if (dname.equals("VCH5"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 6, 0, vt);
+		else if (dname.equals("VCH6"))
+			di = registerDecriptor(fullString, dname, ChiChainDescriptor.class, 7, 0, vt);
+		else if (dname.equals("SC3"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 0, 0, vt);
+		else if (dname.equals("SC4"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 1, 0, vt);
+		else if (dname.equals("SC5"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 2, 0, vt);
+		else if (dname.equals("SC6"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 3, 0, vt);
+		else if (dname.equals("VC3"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 4, 0, vt);
+		else if (dname.equals("VC4"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 5, 0, vt);
+		else if (dname.equals("VC5"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 6, 0, vt);
+		else if (dname.equals("VC6"))
+			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 7, 0, vt);
+		
+		
 		else
 		{
 			errors.add("Incorrect/unknown descriptor: " + fullString);
