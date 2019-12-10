@@ -2,7 +2,7 @@ package ambit2.groupcontribution.transformations;
 
 import java.util.List;
 
-public class LnTranformation implements IValueTransformation 
+public class TransformationLn implements IValueTransformation 
 {
 
 	@Override
