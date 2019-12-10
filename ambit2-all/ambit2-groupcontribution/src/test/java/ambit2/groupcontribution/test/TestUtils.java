@@ -4,6 +4,8 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.groupcontribution.descriptors.CDKDescriptorInfo;
+import ambit2.groupcontribution.descriptors.CDKDescriptorManager;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LDAtomFormalCharge;
 import ambit2.groupcontribution.descriptors.LDAtomHeavyNeighbours;
@@ -21,7 +23,9 @@ public class TestUtils
 	public static void main(String[] args) throws Exception
 	{
 		//testLD("CC(NC=C)COC(S(=O)(=O)O)CCNC=O");
-		testLD("CN[H]");
+		//testLD("CN[H]");
+		
+		testCDKDescriptors(new String[] {"W"});
 	}
 
 	public static void testLD(String smiles) throws Exception
@@ -75,6 +79,26 @@ public class TestUtils
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);
 		AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
 		return mol;
+	}
+	
+	public static void testCDKDescriptors(String[] descriptors)
+	{
+		CDKDescriptorManager descrMan = new CDKDescriptorManager(); 
+		for (String d: descriptors)
+			descrMan.parseDecriptor(d);
+		
+		if (!descrMan.errors.isEmpty())
+		{	
+			System.out.println("There are descriptor errors:");
+			for (String err : descrMan.errors)
+				System.out.println(err);
+		}
+		
+		for (CDKDescriptorInfo di : descrMan.descriptors )
+		{
+			System.out.print(di.toString());
+			System.out.print(descrMan.descriptorInstances.get(di.descrInstanceIndex).getClass().getName());
+		}
 	}
 
 }

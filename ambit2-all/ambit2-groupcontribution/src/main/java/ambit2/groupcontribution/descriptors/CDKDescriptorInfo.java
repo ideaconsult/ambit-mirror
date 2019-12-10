@@ -11,4 +11,16 @@ public class CDKDescriptorInfo
 	public int resultPos = 0;
 	public int hAtomsFlag = 0;
 	public IValueTransformation valueTranform = null;
+	
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("fullString: " + fullString + "\n");
+		sb.append("name: " + name + "\n");
+		sb.append("descrInstanceIndex: " + descrInstanceIndex + "\n");
+		sb.append("resultPos: " + resultPos + "\n");
+		sb.append("hAtomsFlag: " + hAtomsFlag + "\n");
+		sb.append("valueTranform: " + valueTranform + "\n");
+		return sb.toString();
+	}
 }

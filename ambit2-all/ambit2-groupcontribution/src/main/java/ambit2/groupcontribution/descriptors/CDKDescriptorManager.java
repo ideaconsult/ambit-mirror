@@ -53,6 +53,7 @@ public class CDKDescriptorManager
 		
 		CDKDescriptorInfo di = new CDKDescriptorInfo(); 
 		di.fullString = fullString;
+		di.descrInstanceIndex = index;
 		di.name = name;
 		di.resultPos = resPos;
 		di.hAtomsFlag = hAtomsFlag; 
@@ -78,7 +79,10 @@ public class CDKDescriptorManager
 			di = registerDecriptor(fullString, dname, BPolDescriptor.class, 0, 1, vt);
 		else if (dname.equals("NAA") || dname.equals("AromaticAtomsCount") || dname.equals("AAC"))
 			di = registerDecriptor(fullString, dname, AromaticAtomsCountDescriptor.class, 0, 0, vt);
-		
+		else
+		{
+			errors.add("Incorrect/unknown descriptor: " + fullString);
+		}
 	}
 	
 	public List<DescriptorValue> calcDecriptorValuesForMolecule(IAtomContainer mol, IAtomContainer molH)
