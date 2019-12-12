@@ -4,7 +4,7 @@ import java.util.List;
 
 public class TransformationComposition implements IValueTransformation 
 {
-	public static final String composeSeparator = ">";
+	public static final String composeSeparator = ">>";
 	
 	IValueTransformation transformations[] = null;
 	

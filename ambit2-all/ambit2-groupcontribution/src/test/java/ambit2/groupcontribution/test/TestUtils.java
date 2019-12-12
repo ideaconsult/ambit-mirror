@@ -16,6 +16,7 @@ import ambit2.groupcontribution.descriptors.LDAtomHybridization;
 import ambit2.groupcontribution.descriptors.LDAtomSymbol;
 import ambit2.groupcontribution.descriptors.LDAtomValency;
 import ambit2.groupcontribution.descriptors.LDHNum;
+import ambit2.groupcontribution.transformations.IValueTransformation;
 import ambit2.groupcontribution.transformations.TransformationUtils;
 import ambit2.groupcontribution.utils.MoleculeUtils;
 import ambit2.smarts.SmartsHelper;
@@ -32,7 +33,7 @@ public class TestUtils
 		//testCDKDescriptors(new String[] {"W"});
 		//testCDKDescriptorCalculation("CC(C)C", new String[] {"W"});
 		
-		testParseTransformation("POW(2)");
+		testParseTransformation("LN>>POW(2)");
 	}
 
 	public static void testLD(String smiles) throws Exception
@@ -135,8 +136,9 @@ public class TestUtils
 	
 	public static void testParseTransformation(String s) throws Exception
 	{
+		System.out.println("Testing transformatio: " + s);
 		TransformationUtils tu = new TransformationUtils();
-		tu.parseTransformation(s);
+		IValueTransformation  trans = tu.parseTransformation(s);
 		
 		if (!tu.errors.isEmpty())
 		{	
@@ -144,6 +146,9 @@ public class TestUtils
 			for (String err : tu.errors)
 				System.out.println(err);
 		}
+		
+		if (trans != null)
+			System.out.println(trans.getTransformationName());
 	}
 
 }

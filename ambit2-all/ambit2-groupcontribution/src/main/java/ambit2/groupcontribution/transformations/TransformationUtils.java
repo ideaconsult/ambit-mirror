@@ -7,10 +7,38 @@ public class TransformationUtils
 {
 	public String paramSplitter = ",";
 	public List<String> errors = new ArrayList<String>();
-		
+	
 	public IValueTransformation parseTransformation(String s)
 	{
 		errors.clear();
+		String tokens[] = s.split(TransformationComposition.composeSeparator);
+		if (tokens.length == 0)
+			return null;
+		
+		if (tokens.length == 1)
+			return parseTransformation0(s);
+		
+		IValueTransformation transArray[] = new IValueTransformation[tokens.length];
+		boolean FlagError = false;
+		for (int i = 0; i < tokens.length; i++)
+		{
+			IValueTransformation trans = parseTransformation0(tokens[i].trim());
+			transArray[i] = trans;
+			if (trans == null)
+				FlagError = true;
+		}
+		
+		if (FlagError)		
+			return null;
+		else
+		{
+			TransformationComposition transComp = new TransformationComposition(transArray);
+			return transComp;
+		}
+	}
+	
+	IValueTransformation parseTransformation0(String s)
+	{	
 		String transformationName = null;
 		String paramsString = null;
 		List<Object> paramObjList = null;
@@ -41,8 +69,8 @@ public class TransformationUtils
 			}
 		}
 		
-		System.out.println("transformationName: " + transformationName);
-		System.out.println("paramsString: " + paramsString);
+		//System.out.println("transformationName: " + transformationName);
+		//System.out.println("paramsString: " + paramsString);
 		
 		if (paramsString != null)
 			if (!paramsString.equals(""))
@@ -51,6 +79,26 @@ public class TransformationUtils
 		if (transformationName.equalsIgnoreCase("LN"))
 		{
 			TransformationLn trans = new TransformationLn();
+			if (paramObjList != null)
+			{
+				if (paramObjList.size() > 1)
+				{
+					errors.add("Too many parameters in tranformation LN: " + paramsString );
+					return null;
+				}
+				
+				if (paramObjList.size() == 1)
+				{
+					Object o = paramObjList.get(0);
+					if (o instanceof String)
+					{
+						errors.add("Incorrect parameter in tranformation LN: " + paramsString );
+						return null;
+					}
+					trans.setShift((Double)o);
+				}
+				
+			}		
 			return trans;
 		}
 		

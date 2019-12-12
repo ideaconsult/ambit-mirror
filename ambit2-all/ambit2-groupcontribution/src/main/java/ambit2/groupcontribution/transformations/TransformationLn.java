@@ -53,4 +53,8 @@ public class TransformationLn implements IValueTransformation
 		else
 			return Math.log(value);
 	}
+	
+	public void setShift(double shift) {
+		this.shift = shift;
+	}
 }
