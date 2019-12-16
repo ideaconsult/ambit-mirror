@@ -20,7 +20,7 @@ public class CDKDescriptorInfo
 		sb.append("descrInstanceIndex: " + descrInstanceIndex + "\n");
 		sb.append("resultPos: " + resultPos + "\n");
 		sb.append("hAtomsFlag: " + hAtomsFlag + "\n");
-		sb.append("valueTranform: " + valueTranform + "\n");
+		sb.append("valueTranform: " + ((valueTranform==null)?"null":valueTranform.getTransformationName()) + "\n");
 		return sb.toString();
 	}
 }

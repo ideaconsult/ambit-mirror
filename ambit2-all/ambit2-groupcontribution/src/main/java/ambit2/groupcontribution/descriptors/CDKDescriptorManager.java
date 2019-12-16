@@ -21,13 +21,15 @@ import org.openscience.cdk.qsar.result.IntegerArrayResult;
 import org.openscience.cdk.qsar.result.IntegerResult;
 
 import ambit2.groupcontribution.transformations.IValueTransformation;
+import ambit2.groupcontribution.transformations.TransformationComposition;
+import ambit2.groupcontribution.transformations.TransformationUtils;
 
 public class CDKDescriptorManager 
 {
 	public List<IMolecularDescriptor> descriptorInstances = new ArrayList<IMolecularDescriptor>();
 	public List<CDKDescriptorInfo> descriptors = new ArrayList<CDKDescriptorInfo>();
 	public List<String> errors = new ArrayList<String>();
-	
+	public TransformationUtils transfUtils = new TransformationUtils(); 
 	
 	public int getDescrInstanceIndex(String className)
 	{	
@@ -68,9 +70,25 @@ public class CDKDescriptorManager
 	
 	public void parseDecriptor(String descrString)
 	{	
-		String dname = descrString;
+		String dname = null;
 		String fullString = descrString;
 		IValueTransformation vt = null;
+		
+		int sepIndex = descrString.indexOf(TransformationComposition.composeSeparator);
+		if (sepIndex == -1)
+			dname = descrString;
+		else
+		{
+			dname = descrString.substring(0, sepIndex).trim();
+			String transfStr = descrString.substring(sepIndex + 
+							TransformationComposition.composeSeparator.length()).trim();
+			
+			vt = transfUtils.parseTransformation(transfStr);
+			if (vt == null)
+				errors.addAll(transfUtils.errors);
+		}
+		
+		
 		CDKDescriptorInfo di = null;
 		
 		if (dname.equals("W") || dname.equals("WI") || dname.equals("WienerIndex"))			

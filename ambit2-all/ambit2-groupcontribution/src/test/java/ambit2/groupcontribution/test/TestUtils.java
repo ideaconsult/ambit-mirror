@@ -30,10 +30,10 @@ public class TestUtils
 		//testLD("CC(NC=C)COC(S(=O)(=O)O)CCNC=O");
 		//testLD("CN[H]");
 		
-		//testCDKDescriptors(new String[] {"W"});
+		testCDKDescriptors(new String[] {"W>>POW(3)>>LN"});
 		//testCDKDescriptorCalculation("CC(C)C", new String[] {"W"});
 		
-		testParseTransformation("LN>>POW(2)");
+		//testParseTransformation("LN>>POW(2)");
 	}
 
 	public static void testLD(String smiles) throws Exception
@@ -100,6 +100,7 @@ public class TestUtils
 			System.out.println("There are descriptor errors:");
 			for (String err : descrMan.errors)
 				System.out.println(err);
+			return;
 		}
 		
 		for (CDKDescriptorInfo di : descrMan.descriptors )
