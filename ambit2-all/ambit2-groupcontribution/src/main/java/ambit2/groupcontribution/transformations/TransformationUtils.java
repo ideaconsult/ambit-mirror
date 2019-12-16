@@ -132,10 +132,49 @@ public class TransformationUtils
 			return trans;
 		}
 		
+		if (transformationName.equalsIgnoreCase("LIN"))
+		{
+			if ((paramObjList == null) || paramObjList.isEmpty() )
+			{
+				errors.add("Missing parameters for tranformation LIN");
+				return null;
+			}
+			if (paramObjList.size() == 1)
+			{
+				errors.add("Mising parameter in tranformation LIN: " + paramsString );
+				return null;
+			}
+			
+			if (paramObjList.size() > 2)
+			{
+				errors.add("Too many parameters in tranformation LIN: " + paramsString );
+				return null;
+			}
+			
+			Object o = paramObjList.get(0);
+			if (o instanceof String)
+			{
+				errors.add("Incorrect parameter in tranformation LIN: " + paramsString );
+				return null;
+			}
+			
+			Object o1 = paramObjList.get(1);
+			if (o1 instanceof String)
+			{
+				errors.add("Incorrect parameter in tranformation LIN: " + paramsString );
+				return null;
+			}
+			
+			TransformationLin trans = new TransformationLin((Double)o, (Double)o1);
+			return trans;
+		}
+		
 		
 		errors.add("Unknown tranformation: " + transformationName);
 		return null;
 	}
+	
+	
 	
 	
 	List<Object> extractParams(String paramsString)

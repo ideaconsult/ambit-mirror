@@ -30,7 +30,7 @@ public class TestUtils
 		//testLD("CC(NC=C)COC(S(=O)(=O)O)CCNC=O");
 		//testLD("CN[H]");
 		
-		testCDKDescriptors(new String[] {"W>>POW(3)>>LN"});
+		testCDKDescriptors(new String[] {"W>>Pow(3)>>Ln>>Lin(2,5)"});
 		//testCDKDescriptorCalculation("CC(C)C", new String[] {"W"});
 		
 		//testParseTransformation("LN>>POW(2)");
