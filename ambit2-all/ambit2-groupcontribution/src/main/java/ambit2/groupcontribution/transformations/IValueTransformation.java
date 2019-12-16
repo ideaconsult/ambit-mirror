@@ -7,5 +7,6 @@ public interface IValueTransformation
 	public String getTransformationName();
 	public List<Double> getParameters();
 	public List<String> getParameterNames();
+	public IValueTransformation getInverseTransformation();
 	public double transform(double value) throws Exception;
 }

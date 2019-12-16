@@ -57,4 +57,10 @@ public class TransformationLn implements IValueTransformation
 	public void setShift(double shift) {
 		this.shift = shift;
 	}
+
+	@Override
+	public IValueTransformation getInverseTransformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

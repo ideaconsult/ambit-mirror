@@ -34,5 +34,11 @@ public class TransformationPow implements IValueTransformation
 	public double transform(double value) throws Exception {
 		return Math.pow(value, power);
 	}
+
+	@Override
+	public IValueTransformation getInverseTransformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

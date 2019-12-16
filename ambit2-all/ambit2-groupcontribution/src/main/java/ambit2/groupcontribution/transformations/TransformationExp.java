@@ -25,4 +25,10 @@ public class TransformationExp implements IValueTransformation
 		return Math.exp(value);
 	}
 
+	@Override
+	public IValueTransformation getInverseTransformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

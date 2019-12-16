@@ -44,5 +44,11 @@ public class TransformationComposition implements IValueTransformation
 		}
 		return resValue;
 	}
+
+	@Override
+	public IValueTransformation getInverseTransformation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
