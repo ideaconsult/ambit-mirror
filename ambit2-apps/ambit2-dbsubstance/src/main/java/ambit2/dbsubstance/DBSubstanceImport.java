@@ -62,6 +62,7 @@ import net.idea.modbcum.c.DBConnectionConfigurable;
 import net.idea.modbcum.c.MySQLSingleConnection;
 import net.idea.modbcum.i.config.Preferences;
 import net.idea.modbcum.i.exceptions.AmbitException;
+import net.idea.modbcum.i.processors.IProcessor;
 
 public class DBSubstanceImport {
 	protected static Logger logger_cli = Logger.getLogger(DBSubstanceImport.class.getName());
@@ -287,8 +288,8 @@ public class DBSubstanceImport {
 
 	/**
 	 * If splitrecord = true and record.getMeasurements() is not null, only
-	 * measurements will be imported if record.getmeasurements() is null, only
-	 * the substance record will be imported
+	 * measurements will be imported if record.getmeasurements() is null, only the
+	 * substance record will be imported
 	 * 
 	 * @param line
 	 * @return
@@ -345,8 +346,8 @@ public class DBSubstanceImport {
 
 	protected static String getConfig(CommandLine line) {
 		if (line.hasOption('c')) {
-			return  line.getOptionValue('c');
-			
+			return line.getOptionValue('c');
+
 		} else
 			return null;
 	}
@@ -433,6 +434,7 @@ public class DBSubstanceImport {
 				}
 			}
 		};
+
 		public abstract IStructureKey getKey();
 	};
 
@@ -447,8 +449,9 @@ public class DBSubstanceImport {
 		Option output = OptionBuilder.hasArg().withLongOpt("output").withArgName("file").withDescription("Output file")
 				.create("o");
 
-		Option config = OptionBuilder.hasArg().withLongOpt("config").withArgName("folder")
-				.withDescription("Folder with AMBIT configuration files (DB connection parameters expected in 'ambit.properties' file)").create("c");
+		Option config = OptionBuilder.hasArg().withLongOpt("config").withArgName("folder").withDescription(
+				"Folder with AMBIT configuration files (DB connection parameters expected in 'ambit.properties' file)")
+				.create("c");
 
 		Option prefix = OptionBuilder.hasArg().withLongOpt("prefix").withArgName("4-letter-string")
 				.withDescription("UUID prefix, default 'XLSX'").create("e");
@@ -543,7 +546,7 @@ public class DBSubstanceImport {
 			outputFile = getOutput(line);
 
 			String config = getConfig(line);
-			
+
 			if (config == null || !(new File(config)).exists())
 				throw new Exception("Missing database connection config folder");
 			setConfig(new File(config));
@@ -672,6 +675,38 @@ public class DBSubstanceImport {
 		}
 	}
 
+	protected StructureRecordValidator createValidator(boolean xlsx) {
+		StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true, getPrefix()) {
+			@Override
+			public IStructureRecord validate(SubstanceRecord record) throws Exception {
+				record.setContent(inputFile.getName());
+				record.setFormat(xlsx ? "xlsx" : "xls");
+				if (record.getRelatedStructures() != null && !record.getRelatedStructures().isEmpty()) {
+
+					for (int i = record.getRelatedStructures().size() - 1; i >= 0; i--) {
+						CompositionRelation rel = record.getRelatedStructures().get(i);
+						int props = 0;
+						for (Property p : rel.getSecondStructure().getRecordProperties()) {
+							Object val = rel.getSecondStructure().getRecordProperty(p);
+							if (val != null && !"".equals(val.toString()))
+								props++;
+						}
+						if ((rel.getContent() == null || "".equals(rel.getContent())) && (props == 0))
+							record.getRelatedStructures().remove(i);
+
+					}
+
+				}
+				if (record.getMeasurements() != null)
+					for (ProtocolApplication papp : record.getMeasurements()) {
+						papp.setUpdated(getUpdated());
+					}
+				return super.validate(record);
+			}
+		};
+		return validator;
+	}
+
 	protected int importFile(boolean splitRecord, final boolean xlsx, boolean importBundles) throws Exception {
 		IRawReader<IStructureRecord> parser = null;
 		Connection c = null;
@@ -681,34 +716,7 @@ public class DBSubstanceImport {
 			logger_cli.log(Level.INFO, "MSG_IMPORT",
 					new Object[] { parser.getClass().getName(), inputFile.getAbsolutePath() });
 
-			StructureRecordValidator validator = new StructureRecordValidator(inputFile.getName(), true, getPrefix()) {
-				@Override
-				public IStructureRecord validate(SubstanceRecord record) throws Exception {
-					record.setContent(inputFile.getName());
-					record.setFormat(xlsx ? "xlsx" : "xls");
-					if (record.getRelatedStructures() != null && !record.getRelatedStructures().isEmpty()) {
-
-						for (int i = record.getRelatedStructures().size() - 1; i >= 0; i--) {
-							CompositionRelation rel = record.getRelatedStructures().get(i);
-							int props = 0;
-							for (Property p : rel.getSecondStructure().getRecordProperties()) {
-								Object val = rel.getSecondStructure().getRecordProperty(p);
-								if (val != null && !"".equals(val.toString()))
-									props++;
-							}
-							if ((rel.getContent() == null || "".equals(rel.getContent())) && (props == 0))
-								record.getRelatedStructures().remove(i);
-
-						}
-
-					}
-					if (record.getMeasurements() != null)
-						for (ProtocolApplication papp : record.getMeasurements()) {
-							papp.setUpdated(getUpdated());
-						}
-					return super.validate(record);
-				}
-			};
+			StructureRecordValidator validator = createValidator(xlsx);
 
 			DBConnectionConfigurable<Context> dbc = null;
 			dbc = getConnection(getConfigFile());
@@ -743,7 +751,7 @@ public class DBSubstanceImport {
 			throw new AmbitException(x);
 		}
 	}
-	
+
 	protected DBConnectionConfigurable<Context> getConnection(File configFile) throws SQLException, AmbitException {
 		try {
 			Context context = initContext();
@@ -757,16 +765,14 @@ public class DBSubstanceImport {
 			x.printStackTrace();
 			throw new AmbitException(x);
 		}
-	}	
+	}
 
 	protected synchronized Context initContext() throws Exception {
 		if (getConfigFile() == null)
 			return new Context();
 
-
-		try (InputStream in  = new FileInputStream(getConfigFile());) {
+		try (InputStream in = new FileInputStream(getConfigFile());) {
 			Properties properties = new Properties();
-			
 
 			properties.load(in);
 			Context context = new Context();
