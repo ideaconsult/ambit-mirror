@@ -29,8 +29,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ambit2.base.config.AMBITConfigProperties;
-import ambit2.base.config.Preferences;
 import ambit2.db.processors.test.DbUnitTest;
 import ambit2.dbsubstance.DBSubstanceImport;
 import net.enanomapper.maker.TemplateMakerSettings;
@@ -68,9 +66,9 @@ public abstract class AbstractImportTest extends DbUnitTest {
 			}
 
 			@Override
-			protected int processFile(File spreadsheet, File json, String prefix, boolean resetdb, String release)
+			protected int processFile(File spreadsheet, File json, String prefix, boolean resetdb, String release, String expandconfig)
 					throws Exception {
-				return importFile(spreadsheet, json, prefix, resetdb, release);
+				return importFile(spreadsheet, json, prefix, resetdb, release, expandconfig);
 			}
 		};
 
@@ -219,10 +217,10 @@ public abstract class AbstractImportTest extends DbUnitTest {
 		}
 	}
 
-	protected abstract int importFile(File spreadsheet, File json, String prefix, boolean resetdb, String release)
+	protected abstract int importFile(File spreadsheet, File json, String prefix, boolean resetdb, String release, String expandconfig)
 			throws Exception;
 
-	protected String[] getImportOptions(File spreadsheet, File json, String prefix, String release) {
+	protected String[] getImportOptions(File spreadsheet, File json, String prefix, String release, String expandconfig) {
 		URL propertiesFile = this.getClass().getClassLoader().getResource("config/ambit.properties");
 		Assert.assertNotNull(propertiesFile);
 		Assert.assertTrue(new File(propertiesFile.getFile()).exists());

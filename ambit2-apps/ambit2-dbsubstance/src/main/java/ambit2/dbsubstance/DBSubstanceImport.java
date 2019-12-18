@@ -129,6 +129,15 @@ public class DBSubstanceImport {
 
 	protected boolean isSplitRecord = false;
 	protected boolean gzipped = false;
+	protected File expandMap = null;
+
+	public File getExpandMap() {
+		return expandMap;
+	}
+
+	public void setExpandMap(File expandMap) {
+		this.expandMap = expandMap;
+	}
 
 	public boolean isSplitRecord() {
 		return isSplitRecord;
@@ -237,6 +246,18 @@ public class DBSubstanceImport {
 			return new File(line.getOptionValue('o'));
 		} else
 			return null;
+	}
+
+	protected static File getExpandMap(CommandLine line) {
+		if (line.hasOption('n'))
+			try {
+				File xmap = new File(line.getOptionValue('n'));
+				if (xmap.exists())
+					return xmap;
+
+			} catch (Exception x) {
+			}
+		return null;
 	}
 
 	protected static boolean isClearMeasurements(CommandLine line) {
@@ -482,6 +503,9 @@ public class DBSubstanceImport {
 		Option timestamp_release = OptionBuilder.hasArg().withLongOpt("timestamp_release").withArgName("value")
 				.withDescription("Timestamp, default null").create("a");
 
+		Option expandconfig = OptionBuilder.hasArg().withLongOpt("expandconfig").withArgName("json map file")
+				.withDescription("JSON file for mapping condition values into parameters and conditions").create("n");
+
 		/*
 		 * Option gzip = OptionBuilder.hasArg().withLongOpt("gzipped")
 		 * .withDescription("Gzipped file").create("z");
@@ -502,6 +526,7 @@ public class DBSubstanceImport {
 		options.addOption(prefix);
 		options.addOption(addDefaultComposition);
 		options.addOption(timestamp_release);
+		options.addOption(expandconfig);
 
 		options.addOption(help);
 
@@ -557,7 +582,7 @@ public class DBSubstanceImport {
 			setSplitRecord(isSplitRecord(line));
 			setAddDefaultComposition(addDefaultComposition(line));
 			setUpdated(timestamp_release(line));
-
+			setExpandMap(getExpandMap(line));
 			maxRefSubstances = getMaxRefSubstances(line);
 			if (line.hasOption("h")) {
 				printHelp(options, null);
@@ -797,7 +822,8 @@ public class DBSubstanceImport {
 	}
 
 	public int write(IRawReader<IStructureRecord> reader, Connection connection, PropertyKey key, boolean splitRecord,
-			StructureRecordValidator validator,IProcessor<IStructureRecord, IStructureRecord> mapper, boolean i5mode, boolean importBundles) throws Exception {
+			StructureRecordValidator validator, IProcessor<IStructureRecord, IStructureRecord> mapper, boolean i5mode,
+			boolean importBundles) throws Exception {
 		return write(reader, connection, key, splitRecord, true, true, validator, mapper, i5mode, importBundles);
 	}
 
