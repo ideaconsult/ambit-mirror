@@ -661,7 +661,7 @@ public class DBSubstanceImport {
 			reader.setQASettings(qa);
 
 			matchByKey = keytomatch == null ? new CASKey() : keytomatch;
-			return write(reader, c, matchByKey, true, clearMeasurements, clearComposition, null, true, false);
+			return write(reader, c, matchByKey, true, clearMeasurements, clearComposition, null, null, true, false);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -673,6 +673,10 @@ public class DBSubstanceImport {
 			} catch (Exception x) {
 			}
 		}
+	}
+
+	protected IProcessor<IStructureRecord, IStructureRecord> createMapper(boolean xlsx) {
+		return null;
 	}
 
 	protected StructureRecordValidator createValidator(boolean xlsx) {
@@ -717,14 +721,15 @@ public class DBSubstanceImport {
 					new Object[] { parser.getClass().getName(), inputFile.getAbsolutePath() });
 
 			StructureRecordValidator validator = createValidator(xlsx);
+			IProcessor<IStructureRecord, IStructureRecord> mapper = createMapper(xlsx);
 
 			DBConnectionConfigurable<Context> dbc = null;
 			dbc = getConnection(getConfigFile());
 			c = dbc.getConnection();
 			c.setAutoCommit(true);
 
-			return write(parser, c, matchByKey, splitRecord, clearMeasurements, clearComposition, validator, false,
-					importBundles);
+			return write(parser, c, matchByKey, splitRecord, clearMeasurements, clearComposition, validator, mapper,
+					false, importBundles);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -792,13 +797,14 @@ public class DBSubstanceImport {
 	}
 
 	public int write(IRawReader<IStructureRecord> reader, Connection connection, PropertyKey key, boolean splitRecord,
-			StructureRecordValidator validator, boolean i5mode, boolean importBundles) throws Exception {
-		return write(reader, connection, key, splitRecord, true, true, validator, i5mode, importBundles);
+			StructureRecordValidator validator,IProcessor<IStructureRecord, IStructureRecord> mapper, boolean i5mode, boolean importBundles) throws Exception {
+		return write(reader, connection, key, splitRecord, true, true, validator, mapper, i5mode, importBundles);
 	}
 
 	public int write(IRawReader<IStructureRecord> reader, Connection connection, IStructureKey key, boolean splitRecord,
-			boolean clearMeasurements, boolean clearComposition, StructureRecordValidator validator, boolean i5mode,
-			boolean importBundles) throws Exception {
+			boolean clearMeasurements, boolean clearComposition, StructureRecordValidator validator,
+			IProcessor<IStructureRecord, IStructureRecord> mapper, boolean i5mode, boolean importBundles)
+			throws Exception {
 
 		DBSubstanceWriter writer = new DBSubstanceWriter(DBSubstanceWriter.datasetMeta(), new SubstanceRecord(),
 				clearMeasurements, clearComposition, key);
@@ -818,6 +824,8 @@ public class DBSubstanceImport {
 					continue;
 				if (record instanceof SubstanceRecord)
 					configure(writer, (SubstanceRecord) record);
+				if (mapper != null)
+					record = map(mapper, (IStructureRecord) record);
 				validate(validator, (IStructureRecord) record);
 				writer.process((IStructureRecord) record);
 				records++;
@@ -833,6 +841,14 @@ public class DBSubstanceImport {
 
 	protected void configure(DBSubstanceWriter writer, SubstanceRecord record) {
 
+	}
+
+	protected IStructureRecord map(IProcessor<IStructureRecord, IStructureRecord> mapper, IStructureRecord record)
+			throws Exception {
+		if (mapper == null)
+			return record;
+		else
+			return mapper.process(record);
 	}
 
 	protected void validate(StructureRecordValidator validator, IStructureRecord record) throws Exception {
