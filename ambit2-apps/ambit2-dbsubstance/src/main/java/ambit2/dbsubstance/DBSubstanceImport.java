@@ -505,6 +505,8 @@ public class DBSubstanceImport {
 
 		Option expandconfig = OptionBuilder.hasArg().withLongOpt("expandconfig").withArgName("json map file")
 				.withDescription("JSON file for mapping condition values into parameters and conditions").create("n");
+		expandconfig.setRequired(false);
+		expandconfig.setOptionalArg(true);
 
 		/*
 		 * Option gzip = OptionBuilder.hasArg().withLongOpt("gzipped")
@@ -590,6 +592,7 @@ public class DBSubstanceImport {
 			}
 			return true;
 		} catch (Exception x) {
+			x.printStackTrace();
 			printHelp(options, x.getMessage());
 			throw x;
 		} finally {
