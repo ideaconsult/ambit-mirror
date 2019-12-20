@@ -2,38 +2,51 @@ package ambit2.groupcontribution.correctionfactors;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import ambit2.groupcontribution.descriptors.CDKDescriptorInfo;
+import ambit2.groupcontribution.descriptors.CDKDescriptorManager;
 import ambit2.groupcontribution.transformations.IValueTransformation;
 
 public class DescriptorCorrectionFactor implements ICorrectionFactor
 {
-
+	private CDKDescriptorInfo cdkDescrInfo = null;
+	private CDKDescriptorManager cdkDescrMan = null;
+	private double contribution = 0.0;
+	
+	public DescriptorCorrectionFactor (CDKDescriptorInfo cdkDescrInfo) {
+		this.cdkDescrInfo = cdkDescrInfo;
+	}
+	
+	public DescriptorCorrectionFactor (CDKDescriptorInfo cdkDescrInfo, CDKDescriptorManager cdkDescrMan) {
+		this.cdkDescrInfo = cdkDescrInfo;
+		this.cdkDescrMan = cdkDescrMan; 
+	}
+	
 	@Override
 	public IValueTransformation getValueTransformation() {
-		// TODO Auto-generated method stub
+		if (cdkDescrInfo != null)
+			return cdkDescrInfo.valueTranform; 
 		return null;
 	}
 
 	@Override
 	public void setValueTransformation(IValueTransformation transformation) {
-		// TODO Auto-generated method stub
-		
+		//Do nothing. It is set via cdkDescrInfo field.
 	}
 
 	@Override
 	public double getContribution() {
-		// TODO Auto-generated method stub
-		return 0;
+		return contribution;
 	}
 
 	@Override
 	public void setContribution(double contribution) {
-		// TODO Auto-generated method stub
-		
+		this.contribution = contribution;		
 	}
 
 	@Override
 	public String getDesignation() {
-		// TODO Auto-generated method stub
+		if (cdkDescrInfo != null)
+			return cdkDescrInfo.fullString; 
 		return null;
 	}
 
