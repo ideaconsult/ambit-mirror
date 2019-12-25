@@ -12,10 +12,6 @@ public class DescriptorCorrectionFactor implements ICorrectionFactor
 	private CDKDescriptorManager cdkDescrMan = null;
 	private double contribution = 0.0;
 	
-	public DescriptorCorrectionFactor (CDKDescriptorInfo cdkDescrInfo) {
-		this.cdkDescrInfo = cdkDescrInfo;
-	}
-	
 	public DescriptorCorrectionFactor (CDKDescriptorInfo cdkDescrInfo, CDKDescriptorManager cdkDescrMan) {
 		this.cdkDescrInfo = cdkDescrInfo;
 		this.cdkDescrMan = cdkDescrMan; 

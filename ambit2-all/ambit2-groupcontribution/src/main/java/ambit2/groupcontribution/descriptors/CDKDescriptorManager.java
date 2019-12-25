@@ -68,7 +68,7 @@ public class CDKDescriptorManager
 		return di;
 	}
 	
-	public void parseDecriptor(String descrString)
+	public CDKDescriptorInfo parseDecriptor(String descrString)
 	{	
 		String dname = null;
 		String fullString = descrString;
@@ -152,7 +152,10 @@ public class CDKDescriptorManager
 		else
 		{
 			errors.add("Incorrect/unknown descriptor: " + fullString);
+			return null;
 		}
+		
+		return di;
 	}
 	
 	public List<DescriptorValue> calcDecriptorValuesForMolecule(IAtomContainer mol, IAtomContainer molH)

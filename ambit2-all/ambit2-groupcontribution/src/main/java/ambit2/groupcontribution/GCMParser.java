@@ -3,9 +3,11 @@ package ambit2.groupcontribution;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.groupcontribution.correctionfactors.DescriptorCorrectionFactor;
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.correctionfactors.SmartsCorrectionFactor;
+import ambit2.groupcontribution.descriptors.CDKDescriptorInfo;
 import ambit2.groupcontribution.descriptors.CDKDescriptorManager;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LocalDescriptorManager;
@@ -19,7 +21,7 @@ public class GCMParser
 	public boolean FlagOmitEmptyTokens = true;
 	public boolean FlagTrimTokens = true;
 	
-	private CDKDescriptorManager cdkDescrMan = null; //Used for creating DescriptorCorrectionFactor
+	private CDKDescriptorManager cdkDescrMan = new CDKDescriptorManager(); //Used for creating DescriptorCorrectionFactor
 	private IsomorphismTester isoTester = null;
 	private SmartsParser parser = null;	
 	private List<String> errors = new ArrayList<String>();
@@ -190,6 +192,10 @@ public class GCMParser
 		if (cf != null)
 			corFactors.add(cf);
 		
+		//Handling the errors from cdkDescrMan 
+		if (!cdkDescrMan.errors.isEmpty())
+			errors.addAll(cdkDescrMan.errors);
+		
 		return corFactors;
 	}
 	
@@ -200,9 +206,11 @@ public class GCMParser
 		
 		if (cfStr.startsWith("AP("))
 			return extractAtomPairCorrectionFactor(cfStr);
-				
-		errors.add("Unknown correction factor: " + cfStr);
-		return null;
+		
+		//Treating the string as a DescriptorCorrectionFactor
+		ICorrectionFactor dcf = extractDescriptorCorrectionFactor(cfStr);
+		return dcf;
+		
 	}
 	
 	ICorrectionFactor extractSmartsCorrectionFactor(String cfStr)
@@ -255,6 +263,17 @@ public class GCMParser
 	ICorrectionFactor extractAtomPairCorrectionFactor(String cfStr)
 	{
 		//TODO
+		return null;
+	}
+	
+	ICorrectionFactor extractDescriptorCorrectionFactor(String cfStr)
+	{
+		CDKDescriptorInfo di = cdkDescrMan.parseDecriptor(cfStr); 
+		if (di != null)
+		{
+			DescriptorCorrectionFactor dcf = new DescriptorCorrectionFactor(di, cdkDescrMan); 
+			return dcf;
+		}
 		return null;
 	}
 	
