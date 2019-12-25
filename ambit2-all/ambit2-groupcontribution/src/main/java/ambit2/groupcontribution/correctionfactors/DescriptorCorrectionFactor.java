@@ -52,14 +52,31 @@ public class DescriptorCorrectionFactor implements ICorrectionFactor
 
 	@Override
 	public double calculateFor(IAtomContainer mol) {
-		// TODO Auto-generated method stub
-		return 0;
+		if ((cdkDescrInfo != null) && (cdkDescrMan!= null))
+		{
+			double d = CDKDescriptorManager.calcDescritptor(mol, 
+					cdkDescrMan.descriptorInstances.get(cdkDescrInfo.descrInstanceIndex), 
+					cdkDescrInfo.resultPos);
+			
+			if (cdkDescrInfo.valueTranform == null)
+				return d;
+			else
+			{
+				try {
+					double res = cdkDescrInfo.valueTranform.transform(d);
+					return res;
+				}
+				catch (Exception x) {
+					return 0.0;
+				}
+			}				
+		}
+		return 0.0;
 	}
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return Type.DESCRIPTOR;
 	}
 
 }

@@ -8,7 +8,7 @@ public interface ICorrectionFactor extends IHasValueTransformation
 {
 	public enum Type
 	{
-		PREDEFINED, ATOM_PAIR, SMARTS;
+		PREDEFINED, ATOM_PAIR, SMARTS, DESCRIPTOR;
 		
 		public static Type fromString(String s)
 		{

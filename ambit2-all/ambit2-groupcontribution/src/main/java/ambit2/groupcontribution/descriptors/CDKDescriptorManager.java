@@ -202,6 +202,7 @@ public class CDKDescriptorManager
 		return(0);
 	}
 	
+	
 	public static double getDescriptorFromDescrValue(DescriptorValue v, int resPos)
 	{	
 		try
