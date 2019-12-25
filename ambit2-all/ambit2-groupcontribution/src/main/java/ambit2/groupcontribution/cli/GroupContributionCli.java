@@ -615,7 +615,7 @@ public class GroupContributionCli
 		if (addConfigInfo.corFactorsString != null)
 		{
 			List<ICorrectionFactor> cfs = 
-					gcmParser.getCorrectionFactorsFromString(addConfigInfo.corFactorsString);
+					gcmParser.getCorrectionFactorsFromString(addConfigInfo.corFactorsString, ',');
 			if (!gcmParser.getErrors().isEmpty())
 			{
 				System.out.println("Errors:\n" + gcmParser.getAllErrorsAsString());

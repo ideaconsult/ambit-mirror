@@ -6,6 +6,7 @@ import java.util.List;
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.correctionfactors.SmartsCorrectionFactor;
+import ambit2.groupcontribution.descriptors.CDKDescriptorManager;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LocalDescriptorManager;
 import ambit2.smarts.IsomorphismTester;
@@ -18,9 +19,9 @@ public class GCMParser
 	public boolean FlagOmitEmptyTokens = true;
 	public boolean FlagTrimTokens = true;
 	
+	private CDKDescriptorManager cdkDescrMan = null; //Used for creating DescriptorCorrectionFactor
 	private IsomorphismTester isoTester = null;
-	private SmartsParser parser = null;
-	
+	private SmartsParser parser = null;	
 	private List<String> errors = new ArrayList<String>();
 	
 	public GCMParser() 
@@ -45,7 +46,16 @@ public class GCMParser
 			sb.append(errors.get(i) + "\n");
 		return sb.toString();
 	}
+		
 	
+	public CDKDescriptorManager getCdkDescrMan() {
+		return cdkDescrMan;
+	}
+
+	public void setCdkDescrMan(CDKDescriptorManager cdkDescrMan) {
+		this.cdkDescrMan = cdkDescrMan;
+	}
+
 	public List<ILocalDescriptor> getLocalDescriptorsFromString(String locDescr)
 	{
 		return getLocalDescriptorsFromString(locDescr, ",");
@@ -136,7 +146,7 @@ public class GCMParser
 		return descriptors;
 	}
 	
-	public List<ICorrectionFactor> getCorrectionFactorsFromString(String cfStr)
+	public List<ICorrectionFactor> getCorrectionFactorsFromString(String cfStr, char separator)
 	{
 		errors.clear();
 		List<ICorrectionFactor> corFactors = new ArrayList<ICorrectionFactor>();
@@ -152,9 +162,10 @@ public class GCMParser
 			case ')':
 				openBrackets--;
 				break;
-			case ',':
-				if (openBrackets == 0)
-					sepPos.add(i);
+			default:
+				if (cfStr.charAt(i) == separator)
+					if (openBrackets == 0)
+						sepPos.add(i);
 				break;
 			}
 		}
