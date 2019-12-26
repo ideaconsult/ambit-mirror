@@ -11,6 +11,9 @@ import ambit2.groupcontribution.descriptors.CDKDescriptorInfo;
 import ambit2.groupcontribution.descriptors.CDKDescriptorManager;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.descriptors.LocalDescriptorManager;
+import ambit2.groupcontribution.transformations.IValueTransformation;
+import ambit2.groupcontribution.transformations.TransformationComposition;
+import ambit2.groupcontribution.transformations.TransformationUtils;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
 
@@ -23,6 +26,7 @@ public class GCMParser
 	
 	private CDKDescriptorManager cdkDescrMan = new CDKDescriptorManager(); //Used for creating DescriptorCorrectionFactor
 	private IsomorphismTester isoTester = null;
+	private TransformationUtils transfUtils = new TransformationUtils(); 
 	private SmartsParser parser = null;	
 	private List<String> errors = new ArrayList<String>();
 	
@@ -213,8 +217,13 @@ public class GCMParser
 		
 	}
 	
-	ICorrectionFactor extractSmartsCorrectionFactor(String cfStr)
+	ICorrectionFactor extractSmartsCorrectionFactor(String corFactorStr)
 	{
+		Object obj[]  = extractNameAndTransformation(corFactorStr);
+		String cfStr = (String)obj[0];
+		IValueTransformation vt = (IValueTransformation)obj[1];
+		
+		
 		//Analyzing string: extract smarts argument		
 		int openBrackets = 1; //Counting opening "G("
 		int closingArgBracketPos = -1;
@@ -246,7 +255,10 @@ public class GCMParser
 		try {
 			SmartsCorrectionFactor cf = new SmartsCorrectionFactor(smarts, parser, isoTester);
 			if (cf.getError().equals(""))
+			{
+				cf.setValueTransformation(vt);
 				return cf;
+			}	
 			else
 			{
 				errors.add(cf.getError());
@@ -275,6 +287,28 @@ public class GCMParser
 			return dcf;
 		}
 		return null;
+	}
+	
+	Object[] extractNameAndTransformation(String str)
+	{
+		String dname = null;
+		IValueTransformation vt = null;
+		
+		int sepIndex = str.indexOf(TransformationComposition.composeSeparator);
+		if (sepIndex == -1)
+			dname = str;
+		else
+		{
+			dname = str.substring(0, sepIndex).trim();
+			String transfStr = str.substring(sepIndex + 
+					TransformationComposition.composeSeparator.length()).trim();
+
+			vt = transfUtils.parseTransformation(transfStr);
+			if (vt == null)
+				errors.addAll(transfUtils.errors);
+		}
+		
+		return new Object[] {dname, vt};
 	}
 	
 }
