@@ -1,10 +1,13 @@
 package ambit2.groupcontribution.correctionfactors;
 
+import ambit2.groupcontribution.transformations.IValueTransformation;
 
 public class DescriptorInfo 
 {
-	double contribution = 0.0;
-	String name = "";
+	public double contribution = 0.0;
+	public String fullString = "";
+	public String name = "";
+	public IValueTransformation valueTranform = null;
 	
 	public double getContribution()
 	{

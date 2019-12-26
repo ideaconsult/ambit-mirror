@@ -142,10 +142,17 @@ public class GCMParser
 				if (!FlagOmitEmptyTokens)
 					errors.add("Emtpy global descriptor string");
 				continue;
-			}			
+			}
+			
+			Object obj[]  = extractNameAndTransformation(tok);
+			String dStr = (String)obj[0];
+			IValueTransformation vt = (IValueTransformation)obj[1];
+			
 			
 			DescriptorInfo di = new DescriptorInfo();
-			di.setName(tok);
+			di.setName(dStr);
+			di.fullString = tok;
+			di.valueTranform = vt;
 			descriptors.add(di);
 		}
 		
