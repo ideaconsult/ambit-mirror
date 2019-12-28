@@ -366,7 +366,7 @@ public class GroupContributionModel
 				DescriptorInfo di = descriptors.get(i);				
 				Double d = dso.getPropertyDoubleValue(di.getName());
 				if (d != null)
-					value += di.getContribution() * d;
+					value += di.getContribution() * di.transform(d);
 				else
 				{
 					if (missingMolDescrError)

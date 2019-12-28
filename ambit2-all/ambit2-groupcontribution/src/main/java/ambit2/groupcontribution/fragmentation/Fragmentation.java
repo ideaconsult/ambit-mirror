@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.dataset.DataSetObject;
@@ -606,7 +607,26 @@ public class Fragmentation
 		return b;
 	}
 	
-	
-	
+	public static MatrixDouble generateMultiplePropertyMatrix2(DataSet dataset, List<DescriptorInfo> diList) throws Exception
+	{
+		int m = dataset.dataObjects.size();
+		int n = diList.size();
+		MatrixDouble b = new MatrixDouble(m,n);
+		for (int i = 0; i < m; i++)
+		{
+			DataSetObject dso = dataset.dataObjects.get(i);
+			for (int k = 0; k < n; k++)
+			{	
+				DescriptorInfo di = diList.get(k);
+				Double d = dso.getPropertyDoubleValue(di.getName());
+				if (d == null)
+					throw new Exception("Property " + di.getName() + " of object #" + (i+1) +
+							" is not double value or not defined!");
+				b.el[i][k] = di.transform(d);
+			}
+		}
+		
+		return b;
+	}
 	
 }

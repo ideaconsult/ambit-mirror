@@ -232,13 +232,14 @@ public class Learner
 		
 		if (model.getDescriptors() != null)
 		{	
-			List<String> descriptors = new ArrayList<String>();
+			//List<String> descriptors = new ArrayList<String>();
 			List<DescriptorInfo> diList = model.getDescriptors();
-			for (int i = 0; i < model.getDescriptors().size(); i++)
-				descriptors.add(diList.get(i).getName());
+			//for (int i = 0; i < model.getDescriptors().size(); i++)
+			//	descriptors.add(diList.get(i).getName());
 			try
 			{
-				D0 = Fragmentation.generateMultiplePropertyMatrix(trainDataSet, descriptors);
+				//D0 = Fragmentation.generateMultiplePropertyMatrix(trainDataSet, descriptors);
+				D0 = Fragmentation.generateMultiplePropertyMatrix2(trainDataSet, diList);
 			}
 			catch(Exception e)
 			{
@@ -881,7 +882,7 @@ public class Learner
 				System.out.println("Descriptor contributions:");
 				for (int i = 0; i < diList.size(); i++)
 				{	
-					System.out.println("\t" + diList.get(i).getName() + "\t" 
+					System.out.println("\t" + diList.get(i).fullString + "\t" 
 							+ diList.get(i).getContribution());
 				}
 			}
@@ -915,7 +916,7 @@ public class Learner
 				model.addToReport("Descriptor contributions:\n");
 				for (int i = 0; i < diList.size(); i++)
 				{	
-					model.addToReport("\t" + diList.get(i).getName() + "\t" 
+					model.addToReport("\t" + diList.get(i).fullString + "\t" 
 							+ diList.get(i).getContribution() + "\n");
 				}
 			}
