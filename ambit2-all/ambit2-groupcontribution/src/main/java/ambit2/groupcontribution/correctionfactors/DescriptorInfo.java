@@ -29,6 +29,22 @@ public class DescriptorInfo
 		this.name = name;
 	}
 	
+	public double transform(double value)
+	{
+		if (valueTranform == null)
+			return value;
+		else
+		{	
+			try {
+				double res = valueTranform.transform(value);
+				return res;
+			}
+			catch (Exception x) {
+				return 0.0;
+			}
+		}	
+	}
+	
 	//public int calculateFor(IAtomContainer mol);
 	//public Type getType();
 }

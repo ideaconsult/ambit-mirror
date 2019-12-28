@@ -363,15 +363,14 @@ public class GroupContributionModel
 		if (descriptors != null)
 			for (int i = 0; i < descriptors.size(); i++)
 			{	
-				DescriptorInfo di = descriptors.get(i);
-				di.getName();
+				DescriptorInfo di = descriptors.get(i);				
 				Double d = dso.getPropertyDoubleValue(di.getName());
 				if (d != null)
 					value += di.getContribution() * d;
 				else
 				{
 					if (missingMolDescrError)
-						calculationErrors.add("Descriptor " + di.getName() + " is missing");
+						calculationErrors.add("Descriptor " + di.fullString + " is missing");
 				}
 			}
 		
