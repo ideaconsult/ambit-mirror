@@ -13,6 +13,22 @@ import org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.LargestChainDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.LargestPiSystemDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.LongestAliphaticChainDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.RotatableBondsCountDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.RuleOfFiveDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor;
+import org.openscience.cdk.qsar.descriptors.molecular.WeightDescriptor;
 import org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor;
 import org.openscience.cdk.qsar.result.BooleanResult;
 import org.openscience.cdk.qsar.result.DoubleArrayResult;
@@ -147,7 +163,116 @@ public class CDKDescriptorManager
 			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 6, 0, vt);
 		else if (dname.equals("VC6"))
 			di = registerDecriptor(fullString, dname, ChiClusterDescriptor.class, 7, 0, vt);
-		
+		else if (dname.equals("SP0"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 0, 0, vt);
+		else if (dname.equals("SP1"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 1, 0, vt);
+		else if (dname.equals("SP2"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 2, 0, vt);
+		else if (dname.equals("SP3"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 3, 0, vt);
+		else if (dname.equals("SP4"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 4, 0, vt);
+		else if (dname.equals("SP5"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 5, 0, vt);
+		else if (dname.equals("SP6"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 6, 0, vt);
+		else if (dname.equals("SP7"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 7, 0, vt);
+		else if (dname.equals("VP0"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 8, 0, vt);
+		else if (dname.equals("VP1"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 9, 0, vt);
+		else if (dname.equals("VP2"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 10, 0, vt);
+		else if (dname.equals("VP3"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 11, 0, vt);
+		else if (dname.equals("VP4"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 12, 0, vt);
+		else if (dname.equals("VP5"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 13, 0, vt);
+		else if (dname.equals("VP6"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 14, 0, vt);
+		else if (dname.equals("VP7"))
+			di = registerDecriptor(fullString, dname, ChiPathDescriptor.class, 15, 0, vt);
+		else if (dname.equals("ECCEN"))
+			di = registerDecriptor(fullString, dname, EccentricConnectivityIndexDescriptor.class, 0, 0, vt);
+		else if (dname.equals("FragCompl"))
+			di = registerDecriptor(fullString, dname, FragmentComplexityDescriptor.class, 0, 0, vt);
+		else if (dname.equals("NHBACC"))
+			di = registerDecriptor(fullString, dname, HBondAcceptorCountDescriptor.class, 0, 1, vt);
+		else if (dname.equals("NHBDON"))
+			di = registerDecriptor(fullString, dname, HBondDonorCountDescriptor.class, 0, 1, vt);
+		else if (dname.equals("Kappa1"))
+			di = registerDecriptor(fullString, dname, KappaShapeIndicesDescriptor.class, 0, 0, vt);
+		else if (dname.equals("Kappa2"))
+			di = registerDecriptor(fullString, dname, KappaShapeIndicesDescriptor.class, 1, 0, vt);
+		else if (dname.equals("Kappa3"))
+			di = registerDecriptor(fullString, dname, KappaShapeIndicesDescriptor.class, 2, 0, vt);
+		else if (dname.equals("LargestChain"))
+			di = registerDecriptor(fullString, dname, LargestChainDescriptor.class, 0, 0, vt);
+		else if (dname.equals("LargestPiSystem"))
+			di = registerDecriptor(fullString, dname, LargestPiSystemDescriptor.class, 0, 0, vt);
+		else if (dname.equals("LongestAliphaticChain"))
+			di = registerDecriptor(fullString, dname, LongestAliphaticChainDescriptor.class, 0, 0, vt);
+		else if (dname.equals("MDEC11"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 0, 1, vt);
+		else if (dname.equals("MDEC12"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 1, 1, vt);
+		else if (dname.equals("MDEC13"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 2, 1, vt);
+		else if (dname.equals("MDEC14"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 3, 1, vt);
+		else if (dname.equals("MDEC22"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 4, 1, vt);
+		else if (dname.equals("MDEC23"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 5, 1, vt);
+		else if (dname.equals("MDEC24"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 6, 1, vt);
+		else if (dname.equals("MDEC33"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 7, 1, vt);
+		else if (dname.equals("MDEC34"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 8, 1, vt);
+		else if (dname.equals("MDEC44"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 9, 1, vt);
+		else if (dname.equals("MDEO11"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 10, 1, vt);
+		else if (dname.equals("MDEO12"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 11, 1, vt);
+		else if (dname.equals("MDEO22"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 12, 1, vt);
+		else if (dname.equals("MDEN11"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 13, 1, vt);
+		else if (dname.equals("MDEN12"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 14, 1, vt);
+		else if (dname.equals("MDEN13"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 15, 1, vt);
+		else if (dname.equals("MDEN22"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 16, 1, vt);
+		else if (dname.equals("MDEN23"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 17, 0, vt);
+		else if (dname.equals("MDEN33"))
+			di = registerDecriptor(fullString, dname, MDEDescriptor.class, 18, 0, vt);
+		else if (dname.equals("PetitjeanNumber"))
+			di = registerDecriptor(fullString, dname, PetitjeanNumberDescriptor.class, 0, 1, vt);
+		//else if (dname.equals("PetitjeanShapeIndex-topo"))
+		//	registerDecriptor(PetitjeanShapeIndexDescriptor.class, 0, 1);
+		//else if (dname.equals("PetitjeanShapeIndex-geom"))
+		//	registerDecriptor(PetitjeanShapeIndexDescriptor.class, 1, 1);
+		else if (dname.equals("NROTB"))
+			di = registerDecriptor(fullString, dname, RotatableBondsCountDescriptor.class, 0, 1, vt);
+		else if (dname.equals("RuleOf5")||dname.equals("LipinskiFailures"))
+			di = registerDecriptor(fullString, dname, RuleOfFiveDescriptor.class, 0, 1, vt);
+		else if (dname.equals("TPSA"))
+			di = registerDecriptor(fullString, dname, TPSADescriptor.class, 0, 1, vt);
+		else if (dname.equals("VAdjMa"))
+			di = registerDecriptor(fullString, dname, VAdjMaDescriptor.class, 0, 0, vt);
+		//else if (dname.equals("VCC0") || dname.equals("ValenceCarbonConnectivity0"))
+		//	registerDecriptor(ValenceCarbonConnectivityOrderZeroDescriptor.class, 0, 0);
+		//else if (dname.equals("VCC1") || dname.equals("ValenceCarbonConnectivity1"))
+		//	registerDecriptor(ValenceCarbonConnectivityOrderOneDescriptor.class, 0, 0);
+		else if (dname.equals("MW") || dname.equals("Weight"))
+			di = registerDecriptor(fullString, dname, WeightDescriptor.class, 0, 1, vt);		
 		
 		else
 		{
