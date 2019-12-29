@@ -858,7 +858,8 @@ public class Learner
 				model.addToReport(Cf0.toString(matrixDig,matrixDecDig) + "\n");
 			}
 		}		
-	}	
+	}
+	
 	
 	void reportContributions()
 	{
@@ -939,6 +940,25 @@ public class Learner
 			model.addToReport("\n");
 		}
 	}
+	
+	public String getMatricesAsString(String separator, boolean mergeMatrices, 
+				boolean roupCountMatrix, boolean externalDescriptorMatrix, boolean correctionFactorsMatrix)
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		if (mergeMatrices)
+		{
+			//Make header line
+			
+		}
+		else
+		{
+			//TODO
+		}
+		
+		return sb.toString();
+	}
+	
 	
 	DecimalFormat getDecimalFormat(int digits)
 	{

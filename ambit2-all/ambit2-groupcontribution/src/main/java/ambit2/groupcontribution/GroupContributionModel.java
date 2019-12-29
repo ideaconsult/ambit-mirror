@@ -280,6 +280,20 @@ public class GroupContributionModel
 		return sb.toString();
 	}
 	
+	String getGroupsAsString(String separator)
+	{
+		StringBuffer sb = new StringBuffer();
+		int n =  groups.keySet().size();
+		String groupsStr[] = groups.keySet().toArray(new String[n]);
+		for (int i = 0; i < n; i++)
+		{	
+			sb.append(groupsStr[i]);
+			if (i < (n-1))
+				sb.append(separator);
+		}
+		return sb.toString();
+	}
+	
 	public String getCorrectionFactorsAsString()
 	{
 		StringBuffer sb = new StringBuffer();
@@ -290,6 +304,34 @@ public class GroupContributionModel
 		
 		return sb.toString();
 	}
+	
+	public String getCorrectionFactorsAsString(String separator)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < correctionFactors.size(); i++)
+		{			
+			sb.append(correctionFactors.get(i).getDesignation());
+			if (i < (correctionFactors.size()-1))
+				sb.append(separator);
+		}
+		
+		return sb.toString();
+	}
+	
+	public String getDescriptorsAsString(String separator)
+	{
+		StringBuffer sb = new StringBuffer();
+		if (descriptors != null)
+			for (int i = 0; i < descriptors.size(); i++)
+			{	
+				DescriptorInfo di = descriptors.get(i);				
+				sb.append(di.fullString);
+				if (i < (descriptors.size()-1))
+					sb.append(separator);
+			}
+
+		return sb.toString();
+	}	
 	
 	public void addToReport(String info)
 	{
