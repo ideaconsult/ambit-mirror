@@ -14,6 +14,7 @@ import org.apache.commons.cli.PosixParser;
 
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
+import ambit2.groupcontribution.GroupContributionModel.GCMConfigInfo;
 import ambit2.groupcontribution.Learner;
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
@@ -33,7 +34,8 @@ public class GroupContributionCli
 	private static final String title = "Group contribution modeling";
 	
 	public String trainSetFile = null;
-	public String externalSetFile = null;	
+	public String externalSetFile = null;
+	public String matrixOutputFile = null;
 	public String gcmConfigFile = null;
 	public String outputGCMFile = null;
 	public String localDescriptors = null;
@@ -111,6 +113,21 @@ public class GroupContributionCli
 			@Override
 			public String getShortName() {
 				return "b";
+			}
+		},
+		
+		matrix_output {
+			@Override
+			public String getArgName() {
+				return "out-file";
+			}
+			@Override
+			public String getDescription() {
+				return "Output matrices to a file";
+			}
+			@Override
+			public String getShortName() {
+				return "a";
 			}
 		},
 		
@@ -284,8 +301,7 @@ public class GroupContributionCli
 		        .create(getShortName());
 		    	return option;
 			}
-		},
-		
+		},		
 		
 		help {
 			@Override
@@ -361,6 +377,12 @@ public class GroupContributionCli
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			resultBufferOutFile = argument;
+			break;
+		}
+		case matrix_output: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			matrixOutputFile = argument;
 			break;
 		}
 		case local_descriptors: {
@@ -589,7 +611,6 @@ public class GroupContributionCli
 			return -1;
 		}	
 		
-
 				
 		if (addConfigInfo.gcmTypeString != null)
 		{
@@ -674,6 +695,7 @@ public class GroupContributionCli
 		if (FlagFragmenationOnly)
 		{
 			learner.performFragmentationOnly();
+			saveMatricesToOutFile(learner);
 			return 0;
 		}
 		
@@ -684,6 +706,7 @@ public class GroupContributionCli
 			System.out.println(learner.getAllErrorsAsString());
 			return res;
 		}
+		saveMatricesToOutFile(learner);
 		
 		System.out.println();
 		learner.validate();
@@ -753,6 +776,40 @@ public class GroupContributionCli
 				+ x.getMessage());
 		}
 	}
+	
+	void saveMatricesToOutFile(Learner learner)
+	{
+		if (matrixOutputFile == null)
+			return;
+		
+		String sep = ",";
+		GCMConfigInfo gci = learner.getModel().getAdditionalConfig();
+		
+		if (matrixOutputFile.equalsIgnoreCase("con") || 
+				matrixOutputFile.equalsIgnoreCase("console") )
+		{	
+			String matrixOutStr = learner.getMatricesAsString(sep, true, 
+					true, gci.corFactorsString != null, gci.globalDescriptorsString != null);
+			System.out.println(matrixOutStr);
+			return;
+		}	
+		
+		try 
+		{
+			File file = new File (matrixOutputFile);
+			RandomAccessFile f = new RandomAccessFile(file, "rw");
+			f.setLength(0);
+			String matrixOutStr = learner.getMatricesAsString(sep, true, 
+					true, gci.corFactorsString != null, gci.globalDescriptorsString != null);
+			f.write(matrixOutStr.getBytes());
+			f.close();
+		}
+		catch (Exception x) {
+			System.out.println("Error on creating matrix output file: " 
+				+ x.getMessage());
+		}
+	}
+	
 	
 	GroupContributionModel.Type getModelType(String s)
 	{
