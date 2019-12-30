@@ -942,20 +942,79 @@ public class Learner
 	}
 	
 	public String getMatricesAsString(String separator, boolean mergeMatrices, 
-				boolean roupCountMatrix, boolean externalDescriptorMatrix, boolean correctionFactorsMatrix)
+				boolean groupCountMatrix, boolean correctionFactorsMatrix, boolean externalDescriptorMatrix)
 	{
 		StringBuffer sb = new StringBuffer();
 		
 		if (mergeMatrices)
 		{
 			//Make header line
+			if (groupCountMatrix)
+				sb.append(model.getGroupsAsString(separator));
+			
+			if (correctionFactorsMatrix)
+			{
+				if (groupCountMatrix)
+					sb.append(separator);
+				sb.append(model.getCorrectionFactorsAsString(separator));
+			}
+			
+			if (externalDescriptorMatrix)
+			{
+				if (groupCountMatrix || correctionFactorsMatrix)
+					sb.append(separator);
+				sb.append(model.getDescriptorsAsString(separator));
+			}			
+			sb.append("\n");
+			
+			int m = A0.nRows;
+			for (int i = 0; i < m; i++)
+			{
+				if (groupCountMatrix)
+				{
+					for (int j = 0; j < A0.nColumns; j++)
+					{	
+						sb.append(A0.el[i][j]);
+						if (j< (A0.nColumns-1))
+							sb.append(separator);
+					}	
+				}
+				
+				if (correctionFactorsMatrix)
+				{
+					if (groupCountMatrix)
+						sb.append(separator);
+					
+					for (int j = 0; j < Cf0.nColumns; j++)
+					{	
+						sb.append(Cf0.el[i][j]);
+						if (j< (Cf0.nColumns-1))
+							sb.append(separator);
+					}
+				}
+				
+				if (externalDescriptorMatrix)
+				{
+					if (groupCountMatrix || correctionFactorsMatrix)
+						sb.append(separator);
+					
+					for (int j = 0; j < D0.nColumns; j++)
+					{	
+						sb.append(D0.el[i][j]);
+						if (j< (D0.nColumns-1))
+							sb.append(separator);
+					}
+				}
+				
+				sb.append("\n");
+			}
 			
 		}
 		else
 		{
 			//TODO
 		}
-		
+				
 		return sb.toString();
 	}
 	
