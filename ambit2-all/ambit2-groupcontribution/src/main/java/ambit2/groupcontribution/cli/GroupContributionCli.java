@@ -789,7 +789,7 @@ public class GroupContributionCli
 				matrixOutputFile.equalsIgnoreCase("console") )
 		{	
 			String matrixOutStr = learner.getMatricesAsString(sep, true, 
-					true, gci.corFactorsString != null, gci.globalDescriptorsString != null);
+					true, gci.corFactorsString != null, gci.globalDescriptorsString != null, true);
 			System.out.println(matrixOutStr);
 			return;
 		}	
@@ -800,7 +800,7 @@ public class GroupContributionCli
 			RandomAccessFile f = new RandomAccessFile(file, "rw");
 			f.setLength(0);
 			String matrixOutStr = learner.getMatricesAsString(sep, true, 
-					true, gci.corFactorsString != null, gci.globalDescriptorsString != null);
+					true, gci.corFactorsString != null, gci.globalDescriptorsString != null, true);
 			f.write(matrixOutStr.getBytes());
 			f.close();
 		}

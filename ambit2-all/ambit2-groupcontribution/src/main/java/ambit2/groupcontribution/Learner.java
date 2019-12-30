@@ -942,7 +942,8 @@ public class Learner
 	}
 	
 	public String getMatricesAsString(String separator, boolean mergeMatrices, 
-				boolean groupCountMatrix, boolean correctionFactorsMatrix, boolean externalDescriptorMatrix)
+				boolean groupCountMatrix, boolean correctionFactorsMatrix, 
+				boolean externalDescriptorMatrix, boolean targetPropertyMatrix)
 	{
 		StringBuffer sb = new StringBuffer();
 		
@@ -964,7 +965,14 @@ public class Learner
 				if (groupCountMatrix || correctionFactorsMatrix)
 					sb.append(separator);
 				sb.append(model.getDescriptorsAsString(separator));
-			}			
+			}
+			
+			if (targetPropertyMatrix)
+			{
+				if (groupCountMatrix || correctionFactorsMatrix || externalDescriptorMatrix)
+					sb.append(separator);
+				sb.append(model.getTargetProperty());
+			}
 			sb.append("\n");
 			
 			int m = A0.nRows;
@@ -1004,6 +1012,13 @@ public class Learner
 						if (j< (D0.nColumns-1))
 							sb.append(separator);
 					}
+				}
+				
+				if (targetPropertyMatrix)
+				{
+					if (groupCountMatrix || correctionFactorsMatrix || externalDescriptorMatrix)
+						sb.append(separator);
+					sb.append(b0.el[i][0]);
 				}
 				
 				sb.append("\n");
