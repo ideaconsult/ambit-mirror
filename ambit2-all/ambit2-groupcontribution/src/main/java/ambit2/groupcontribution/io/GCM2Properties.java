@@ -128,4 +128,20 @@ public class GCM2Properties
 		}
 		return prop;
 	}
+	
+	public String getAllErrorsAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (String err :errors)
+			sb.append(err + "\n");
+		return sb.toString();
+	}
+	
+	public String getAllWarningAsString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (String w : warnings)
+			sb.append(w + "\n");
+		return sb.toString();
+	}
 }

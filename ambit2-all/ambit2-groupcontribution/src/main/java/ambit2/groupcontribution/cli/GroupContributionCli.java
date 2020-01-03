@@ -22,6 +22,7 @@ import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
 import ambit2.groupcontribution.fragmentation.Fragmentation;
 import ambit2.groupcontribution.io.GCM2Json;
+import ambit2.groupcontribution.io.GCM2Properties;
 import ambit2.groupcontribution.utils.math.CrossValidation;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
 import ambit2.smarts.IsomorphismTester;
@@ -583,22 +584,39 @@ public class GroupContributionCli
 		{			
 			System.out.println("GCM config: " + gcmConfigFile);
 			
-			GCM2Json g2j = new GCM2Json();
-			gcm = g2j.loadFromJSON(new File(gcmConfigFile));
-			
-			if (!g2j.configErrors.isEmpty())
-			{	
-				System.out.println(g2j.getAllErrorsAsString());
-				return -1;
-			}	
-			else if (!g2j.configErrors.isEmpty())
-				System.out.println(g2j.getAllErrorsAsString());
-			
-			addConfigInfo = gcm.getAdditionalConfig();
-			
-			//String gcm_json = gcm.toJsonString();
-			//System.out.println(gcm_json);			
-			//return 0;
+			if (gcmConfigFile.toLowerCase().endsWith(".json"))
+			{
+				GCM2Json g2j = new GCM2Json();
+				gcm = g2j.loadFromJSON(new File(gcmConfigFile));
+
+				if (!g2j.configErrors.isEmpty())
+				{	
+					System.out.println(g2j.getAllErrorsAsString());
+					return -1;
+				}	
+				//else if (!g2j.configErrors.isEmpty())
+				//	System.out.println(g2j.getAllErrorsAsString());
+
+				addConfigInfo = gcm.getAdditionalConfig();
+
+				//String gcm_json = gcm.toJsonString();
+				//System.out.println(gcm_json);			
+				//return 0;
+			}
+			else
+			{
+				GCM2Properties g2p = new GCM2Properties();
+				gcm = g2p.loadFromProperties(gcmConfigFile);
+				
+				if (!g2p.errors.isEmpty())
+				{	
+					System.out.println(g2p.getAllErrorsAsString());
+					return -1;
+				}
+				
+				addConfigInfo = gcm.getAdditionalConfig();
+
+			}
 		}
 		
 		
