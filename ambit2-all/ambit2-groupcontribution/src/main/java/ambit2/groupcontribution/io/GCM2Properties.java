@@ -44,7 +44,7 @@ public class GCM2Properties
 		if (p != null)
 			addConfigInfo.gcmTypeString = p;
 		
-		p = prop.getProperty("TARGET_PROPERTYE");
+		p = prop.getProperty("TARGET_PROPERTY");
 		if (p == null)
 			errors.add("Target property not assigned! Use -p command line option.");
 		else

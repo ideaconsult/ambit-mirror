@@ -615,6 +615,9 @@ public class GroupContributionCli
 				}
 				
 				addConfigInfo = gcm.getAdditionalConfig();
+				
+				if (!g2p.warnings.isEmpty())
+					System.out.println(g2p.getAllWarningAsString());
 
 			}
 		}
