@@ -620,6 +620,8 @@ public class GroupContributionCli
 					System.out.println(g2p.getAllWarningAsString());
 
 			}
+			
+			printGCMConfiguration(gcm);
 		}
 		
 		
@@ -960,6 +962,31 @@ public class GroupContributionCli
 		}	
 		
 		return valCfg;
+	}
+	
+	void printGCMConfiguration(GroupContributionModel gcm)
+	{	
+		GroupContributionModel.GCMConfigInfo addConfigInfo = gcm.getAdditionalConfig();
+		System.out.println("train set file: " + addConfigInfo.trainingSetFile);
+		
+		if (addConfigInfo.externalSetFile != null)
+			System.out.println("External set file: " + addConfigInfo.externalSetFile);
+		
+		System.out.println("Local descriptors: " + addConfigInfo.localDescriptorsString);
+		
+		if (addConfigInfo.corFactorsString != null)
+		System.out.println("Correction factors: " + addConfigInfo.corFactorsString);		
+			
+		if (addConfigInfo.globalDescriptorsString != null)
+			System.out.println("Global descriptors: " + addConfigInfo.globalDescriptorsString);
+			
+		System.out.println("Column filtration threshold: " + addConfigInfo.columnFiltrationthreshold);
+		
+		System.out.println("Target property: " + gcm.getTargetProperty());		
+		
+		if (addConfigInfo.validationString != null)
+			System.out.println("Validation: " + addConfigInfo.validationString);
+		
 	}
 		
 }

@@ -101,6 +101,8 @@ public class GCM2Properties
 		if (p != null)
 			addConfigInfo.validationString = p;
 		
+		//p = prop.getProperty("RESULT_BUFFER_OUT_FILE");
+		//if (p != null)
 		//if (resultBufferOutFile != null)
 		//	gcm.getReportConfig().FlagBufferOutput = true;
 		
