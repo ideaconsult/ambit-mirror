@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import net.enanomapper.maker.TR;
-import net.enanomapper.maker.TemplateMaker;
+import net.enanomapper.maker.TemplateMakerExtended;
 import net.enanomapper.maker.TemplateMakerSettings;
 import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_CMD;
 import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_TYPE;
@@ -21,11 +21,15 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 		extends QueryReporter<TR, Q, OutputStream> {
 	protected final HashSet<String> templateids = new HashSet<String>();
 	protected final List<TR> records = new ArrayList<TR>();
+	protected _TEMPLATES_TYPE templates_type; 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4995013793566213468L;
 
+	public AssayTemplateEntrySpreadsheetReporter(_TEMPLATES_TYPE templates_type) {
+		this.templates_type = templates_type;
+	}
 	@Override
 	public Object processItem(TR item) throws Exception {
 		templateids.add(TR.hix.id.get(item).toString());
@@ -66,10 +70,10 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 		};
 
 		try {
-			TemplateMaker maker = new TemplateMaker();
-
+			TemplateMakerExtended maker = new TemplateMakerExtended();
+			settings.setTemplatesType(templates_type);
 			settings.setTemplatesCommand(_TEMPLATES_CMD.generate);
-			settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
+			//settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
 			settings.setSinglefile(true);
 			// FIXME no input for generation needed, this is a placeholder
 			File tmpdir = new File(System.getProperty("java.io.tmpdir"));

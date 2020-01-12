@@ -15,6 +15,7 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMakerSettings;
+import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_TYPE;
 import net.idea.ambit.templates.db.ReadExperimentTemplate;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.exceptions.AmbitException;
@@ -55,6 +56,22 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 			tf = _template_filter.id;
 		}
 		settings.getQuery().clear();
+		
+		try {
+			_TEMPLATES_TYPE type = _TEMPLATES_TYPE.valueOf(request.getResourceRef().getQueryAsForm().getFirstValue("type"));
+			switch (type) {
+			case multisheet: {
+				settings.setTemplatesType(_TEMPLATES_TYPE.multisheet);
+				break;
+			}
+			default: {
+				settings.setTemplatesType(_TEMPLATES_TYPE.jrc);	
+			}
+			}
+		} catch (Exception x) {
+			settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
+		}
+		
 		switch (tf) {
 		case id: {
 			Object idtemplate = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
@@ -99,7 +116,7 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 			variant.setMediaType(new MediaType(media));
 
 		if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
-			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter();
+			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter(settings.getTemplatesType());
 
 			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX,
 					settings.getOutputFileName()) {
