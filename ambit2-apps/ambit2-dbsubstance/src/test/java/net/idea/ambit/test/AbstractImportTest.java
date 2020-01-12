@@ -226,7 +226,7 @@ public abstract class AbstractImportTest extends DbUnitTest {
 		Assert.assertTrue(new File(propertiesFile.getFile()).exists());
 		return new String[] { "-i", spreadsheet.getAbsolutePath(), "-j", json.getAbsolutePath(), "-c",
 				propertiesFile.getFile(), "-m", "false", "-t", "true", "-p", "xls", "-e", prefix, "-d",
-				Boolean.toString(addDefaultComposition), "-a", release };
+				Boolean.toString(addDefaultComposition), "-a", release, "-n", "-n",expandconfig==null?"":expandconfig };
 	}
 
 	protected void storeUndefined(Properties properties, String type, String comments) {
