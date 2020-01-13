@@ -72,6 +72,21 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 			settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
 		}
 		
+		try {
+			settings.setNumber_of_concentration(Integer.parseInt(request.getResourceRef().getQueryAsForm().getFirstValue("C")));
+		} catch (Exception x) {
+			//default
+		}		
+		try {
+			settings.setNumber_of_timepoints(Integer.parseInt(request.getResourceRef().getQueryAsForm().getFirstValue("T")));
+		} catch (Exception x) {
+			//default
+		}		
+		try {
+			settings.setNumber_of_replicates(Integer.parseInt(request.getResourceRef().getQueryAsForm().getFirstValue("R")));
+		} catch (Exception x) {
+			//default
+		}				
 		switch (tf) {
 		case id: {
 			Object idtemplate = request.getAttributes().get(AssayTemplatesFacetResource.idassaytemplate);
@@ -116,7 +131,8 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 			variant.setMediaType(new MediaType(media));
 
 		if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
-			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter(settings.getTemplatesType());
+			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter(settings.getTemplatesType(),
+					settings.getNumber_of_replicates(),settings.getNumber_of_timepoints(),settings.getNumber_of_concentration());
 
 			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX,
 					settings.getOutputFileName()) {
