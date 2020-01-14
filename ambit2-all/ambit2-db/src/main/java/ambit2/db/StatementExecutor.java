@@ -67,7 +67,8 @@ public abstract class StatementExecutor<Q extends IStatement, Results> extends A
     }
 
     public void setUseCache(boolean useCache) {
-	this.useCache = useCache;
+	//this.useCache = useCache;
+	this.useCache = false;
     }
 
     @Override
