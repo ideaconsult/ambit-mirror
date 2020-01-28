@@ -392,8 +392,9 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									prm.put("endpointcategory_s", papp.getProtocol().getCategory());
 									if (papp.getProtocol().getGuideline() != null
 											&& !papp.getProtocol().getGuideline().isEmpty()) {
-
+										try {	
 										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0).toUpperCase());
+										} catch (Exception x) {}
 
 									} else
 										prm.put("guidance_s", "Not specified");

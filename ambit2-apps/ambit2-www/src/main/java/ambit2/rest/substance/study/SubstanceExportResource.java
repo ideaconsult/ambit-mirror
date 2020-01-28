@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.restlet.Context;
 import org.restlet.Request;
@@ -124,8 +125,14 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 		ProcessorsChain chain = new ProcessorsChain<>();
 		chain.add(new SubstanceStudyDetailsProcessor());
 		getCompositionProcessors(chain);
-		SubstanceRecordAnnotationProcessor annotator = new SubstanceRecordAnnotationProcessor(new File(((AmbitFreeMarkerApplication) getApplication()).getProperties().getMapFolder()),
+		SubstanceRecordAnnotationProcessor annotator = null;
+		try {
+			annotator = new SubstanceRecordAnnotationProcessor(new File(((AmbitFreeMarkerApplication) getApplication()).getProperties().getMapFolder()),
 				false);
+		} catch (Exception x) {
+			Logger.getGlobal().log(Level.WARNING,x.getMessage());
+			annotator = null;
+		}
 		return new OutputWriterConvertor<SubstanceRecord, Q>(
 				(QueryAbstractReporter<SubstanceRecord, Q, Writer>) new Substance2BucketJsonReporter(command, chain,
 						jsonmode, summaryMeasurement, dbTag,annotator),
