@@ -293,6 +293,26 @@ public enum ParticleTypes {
 		}
 	
 	},
+	CHEBI_51050 {
+		// TiO2
+		@Override
+		public String getSMILES() {
+			return "O=[Ti]=O";
+		}
+
+		@Override
+		public String getFormula() {
+			return "TiO2";
+		}
+		@Override
+		public STRUCTURE_RELATION getDefaultRole() {
+			return STRUCTURE_RELATION.HAS_CORE;
+		}
+		@Override
+		public String getName() {
+			return "Titanium dioxide nanoparticle";
+		}		
+	},
 	NPO_1486 {
 		// TiO2
 		@Override
