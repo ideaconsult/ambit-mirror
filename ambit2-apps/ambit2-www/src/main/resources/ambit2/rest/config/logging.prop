@@ -26,7 +26,8 @@ ambit2.core.processors.structure.level = SEVERE
 toxtree.level = WARNING
 mutant.level = WARNING
 #Restlet http://www.restlet.org/
-#org.restlet.engine.level = WARNING
+org.restlet.level=WARNING
+org.restlet.engine.level = WARNING
 #Inchi
 org.openscience.cdk.level = WARNING
 #c3p0
