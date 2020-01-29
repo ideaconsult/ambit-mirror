@@ -46,8 +46,7 @@ import net.idea.restnet.i.task.ITaskStorage;
  * 
  */
 public abstract class CatalogResource<T extends Serializable>
-		extends
-		AbstractResource<Iterator<T>, T, IProcessor<Iterator<T>, Representation>> {
+		extends AbstractResource<Iterator<T>, T, IProcessor<Iterator<T>, Representation>> {
 	protected int page = 0;
 
 	public int getPage() {
@@ -71,31 +70,29 @@ public abstract class CatalogResource<T extends Serializable>
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] { MediaType.TEXT_URI_LIST,
-				MediaType.APPLICATION_RDF_XML,
-				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
-				ChemicalMediaType.APPLICATION_JSONLD,
-				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT,
-				MediaType.TEXT_HTML, MediaType.APPLICATION_WADL });
+		customizeVariants(new MediaType[] { MediaType.TEXT_URI_LIST, MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3, ChemicalMediaType.APPLICATION_JSONLD,
+				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_JSON,
+				MediaType.APPLICATION_JAVASCRIPT, MediaType.TEXT_HTML, MediaType.APPLICATION_WADL });
 
 	}
 
 	public static String getAlgorithmURI(String category) {
-		return String.format("%s%s/{%s}", MLResources.algorithm, category,
-				MLResources.algorithmKey);
+		return String.format("%s%s/{%s}", MLResources.algorithm, category, MLResources.algorithmKey);
 	}
 
 	@Override
-	public IProcessor<Iterator<T>, Representation> createConvertor(
-			Variant variant) throws AmbitException, ResourceException {
+	public IProcessor<Iterator<T>, Representation> createConvertor(Variant variant)
+			throws AmbitException, ResourceException {
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_HTML)) {
-			return new StringConvertor(createHTMLReporter(),
-					MediaType.TEXT_HTML);
+			Reporter reporter = createHTMLReporter();
+			if (reporter == null)
+				throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+			else
+				return new StringConvertor(reporter, MediaType.TEXT_HTML);
 		} else if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
-			CatalogURIReporter reporter = new CatalogURIReporter<T>(
-					getRequest()) {
+			CatalogURIReporter reporter = new CatalogURIReporter<T>(getRequest()) {
 				private static final long serialVersionUID = 6849465718621669311L;
 
 				@Override
@@ -107,33 +104,33 @@ public abstract class CatalogResource<T extends Serializable>
 					}
 				}
 			};
-			return new StringConvertor(reporter, MediaType.TEXT_HTML,
-					filenamePrefix);
+			return new StringConvertor(reporter, MediaType.TEXT_HTML, filenamePrefix);
 
-		} else
+		} else {
 			// html
-			return new StringConvertor(createHTMLReporter(),
-					MediaType.TEXT_HTML);
+			Reporter reporter = createHTMLReporter();
+			if (reporter == null)
+				throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+			else
+				return new StringConvertor(reporter, MediaType.TEXT_HTML);
+		}
 
 	}
-
+	@Deprecated
 	protected Reporter createHTMLReporter() {
 		return null;
 	}
 
-	protected ICallableTask createCallable(Form form, T item)
-			throws ResourceException {
+	protected ICallableTask createCallable(Form form, T item) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
-	protected Reference getSourceReference(Form form, T model)
-			throws ResourceException {
+	protected Reference getSourceReference(Form form, T model) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
 		synchronized (this) {
 
 			Form form = entity.isAvailable() ? new Form(entity) : new Form();
@@ -149,38 +146,29 @@ public abstract class CatalogResource<T extends Serializable>
 					T model = query.next();
 					Reference reference = getSourceReference(form, model);
 					ICallableTask callable = createCallable(form, model);
-					ITask<ITaskResult, String> task = ((ITaskApplication) getApplication())
-							.addTask(String.format("Apply %s %s %s", model
-									.toString(), reference == null ? "" : "to",
+					ITask<ITaskResult, String> task = ((ITaskApplication) getApplication()).addTask(
+							String.format("Apply %s %s %s", model.toString(), reference == null ? "" : "to",
 									reference == null ? "" : reference),
-									callable, getRequest().getRootRef(),
-									callable instanceof CallablePOST,
-									getToken());
+							callable, getRequest().getRootRef(), callable instanceof CallablePOST, getToken());
 					task.update();
-					setStatus(task.isDone() ? Status.SUCCESS_OK
-							: Status.SUCCESS_ACCEPTED);
+					setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
 					tasks.add(task.getUuid());
 
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
-					throw new ResourceException(Status.SERVER_ERROR_INTERNAL,
-							x.getMessage(), x);
+					throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 				}
 			if (tasks.size() == 0)
 				throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 			else {
 
-				ITaskStorage storage = ((ITaskApplication) getApplication())
-						.getTaskStorage();
-				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(
-						storage);
+				ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 				if (tasks.size() == 1)
-					return tc.createTaskRepresentation(tasks.get(0), variant,
-							getRequest(), getResponse(), null);
+					return tc.createTaskRepresentation(tasks.get(0), variant, getRequest(), getResponse(), null);
 				else
-					return tc.createTaskRepresentation(tasks.iterator(),
-							variant, getRequest(), getResponse(), null);
+					return tc.createTaskRepresentation(tasks.iterator(), variant, getRequest(), getResponse(), null);
 			}
 		}
 	}
@@ -188,13 +176,11 @@ public abstract class CatalogResource<T extends Serializable>
 	protected void setPaging(Form form) {
 		String max = form.getFirstValue(max_hits);
 		String page = form.getFirstValue(OpenTox.params.page.toString());
-		String pageSize = form
-				.getFirstValue(OpenTox.params.pagesize.toString());
+		String pageSize = form.getFirstValue(OpenTox.params.pagesize.toString());
 		if (max != null)
 			try {
 				setPage(0);
-				setPageSize(Long.parseLong(form.getFirstValue(max_hits)
-						.toString()));
+				setPageSize(Long.parseLong(form.getFirstValue(max_hits).toString()));
 				return;
 			} catch (Exception x) {
 
@@ -214,8 +200,7 @@ public abstract class CatalogResource<T extends Serializable>
 	}
 
 	@Override
-	public void configureTemplateMap(Map<String, Object> map, Request request,
-			IFreeMarkerApplication app) {
+	public void configureTemplateMap(Map<String, Object> map, Request request, IFreeMarkerApplication app) {
 
 		map.put(AMBITDBRoles.ambit_admin.name(), Boolean.FALSE);
 		map.put(AMBITDBRoles.ambit_datasetmgr.name(), Boolean.FALSE);
@@ -236,8 +221,7 @@ public abstract class CatalogResource<T extends Serializable>
 		}
 
 		map.put(AMBITConfig.creator.name(), "IdeaConsult Ltd.");
-		map.put(AMBITConfig.ambit_root.name(), getRequest().getRootRef()
-				.toString());
+		map.put(AMBITConfig.ambit_root.name(), getRequest().getRootRef().toString());
 		map.put(AMBITConfig.ambit_version_short.name(), app.getVersionShort());
 		map.put(AMBITConfig.ambit_version_long.name(), app.getVersionLong());
 		map.put(AMBITConfig.googleAnalytics.name(), app.getGACode());
@@ -292,8 +276,7 @@ public abstract class CatalogResource<T extends Serializable>
 	 * info.getResponse().getRepresentations().add(repInfo); }
 	 */
 
-	protected Representation getHTMLByTemplate(Variant variant)
-			throws ResourceException {
+	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (getClientInfo().getUser() != null)
 			map.put("username", getClientInfo().getUser().getIdentifier());
@@ -303,8 +286,7 @@ public abstract class CatalogResource<T extends Serializable>
 			getClientInfo().setUser(ou);
 		}
 		setTokenCookies(variant, useSecureCookie(getRequest()));
-		configureTemplateMap(map, getRequest(),
-				(IFreeMarkerApplication) getApplication());
+		configureTemplateMap(map, getRequest(), (IFreeMarkerApplication) getApplication());
 		return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 
