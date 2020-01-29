@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -36,7 +38,6 @@ import ambit2.base.processors.ProcessorException;
 import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.CallableSubstanceI5Query;
-import ambit2.db.processors.CallableSubstanceI5Query._iuclidversion;
 import ambit2.db.reporters.ImageReporter;
 import ambit2.db.reporters.xlsx.SubstanceRecordXLSXReporter;
 import ambit2.db.substance.DeleteSubstance;
@@ -91,8 +92,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 	public static MediaType ISAJSON = new MediaType(ISAConst.ISAFormat.JSON.getMediaType());
 	public final static String substance = OpenTox.URI.substance.getURI();
 	public final static String idsubstance = OpenTox.URI.substance.getKey();
-	public final static String substanceID = OpenTox.URI.substance
-			.getResourceID();
+	public final static String substanceID = OpenTox.URI.substance.getResourceID();
 	protected SubstanceEndpointsBundle[] bundles;
 	protected boolean retrieveStudySummary = false;
 
@@ -125,36 +125,26 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		return AMBITConfigProperties.ambitProperties;
 	}
 
-	
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
-				MediaType.TEXT_URI_LIST, MediaType.APPLICATION_JSON,
-				ChemicalMediaType.APPLICATION_JSONLD,
-				MediaType.APPLICATION_RDF_TURTLE, 
-				MediaType.APPLICATION_RDF_XML,
-				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
-				MediaType.TEXT_RDF_NTRIPLES,
-				MediaType.APPLICATION_JAVA_OBJECT,
-				MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG,
-				MediaType.APPLICATION_EXCEL,
-				MediaType.APPLICATION_MSOFFICE_XLSX,
-				ISAJSON});
+		customizeVariants(new MediaType[] { MediaType.TEXT_HTML, MediaType.TEXT_URI_LIST, MediaType.APPLICATION_JSON,
+				ChemicalMediaType.APPLICATION_JSONLD, MediaType.APPLICATION_RDF_TURTLE, MediaType.APPLICATION_RDF_XML,
+				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3, MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_JAVASCRIPT, MediaType.IMAGE_PNG,
+				MediaType.APPLICATION_EXCEL, MediaType.APPLICATION_MSOFFICE_XLSX, ISAJSON });
 
 	}
 
 	@Override
-	public IProcessor<Q, Representation> createConvertor(Variant variant)
-			throws AmbitException, ResourceException {
+	public IProcessor<Q, Representation> createConvertor(Variant variant) throws AmbitException, ResourceException {
 		/* workaround for clients not being able to set accept headers */
 		Form acceptform = getResourceRef(getRequest()).getQueryAsForm();
-		
-		String configResource = String.format("config-%s.js",((IFreeMarkerApplication) getApplication()).getProfile());
-		
+
+		String configResource = String.format("config-%s.js", ((IFreeMarkerApplication) getApplication()).getProfile());
+
 		try {
-			retrieveStudySummary = Boolean.parseBoolean(acceptform
-					.getFirstValue("studysummary"));
+			retrieveStudySummary = Boolean.parseBoolean(acceptform.getFirstValue("studysummary"));
 		} catch (Exception x) {
 			retrieveStudySummary = false;
 		}
@@ -165,66 +155,53 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 		String filenamePrefix = getRequest().getResourceRef().getPath();
 		if (variant.getMediaType().equals(MediaType.TEXT_URI_LIST)) {
 			QueryURIReporter r = (QueryURIReporter) getURIReporter(getRequest());
-			return new StringConvertor(r, MediaType.TEXT_URI_LIST,
-					filenamePrefix);
+			return new StringConvertor(r, MediaType.TEXT_URI_LIST, filenamePrefix);
 		} else if (variant.getMediaType().equals(MediaType.IMAGE_PNG)) {
 			Dimension d = new Dimension(250, 250);
 			try {
-				d.width = Integer.parseInt(acceptform.getFirstValue("w")
-						.toString());
+				d.width = Integer.parseInt(acceptform.getFirstValue("w").toString());
 			} catch (Exception x) {
 			}
 			try {
-				d.height = Integer.parseInt(acceptform.getFirstValue("h")
-						.toString());
+				d.height = Integer.parseInt(acceptform.getFirstValue("h").toString());
 			} catch (Exception x) {
 			}
-			return new ImageConvertor(new ImageReporter(variant.getMediaType()
-					.getMainType(), variant.getMediaType().getSubType(), d),
+			return new ImageConvertor(
+					new ImageReporter(variant.getMediaType().getMainType(), variant.getMediaType().getSubType(), d),
 					variant.getMediaType());
 		} else if (variant.getMediaType().equals(MediaType.TEXT_CSV)) {
-			SubstanceCSVReporter csvreporter = new SubstanceCSVReporter(
-					getRequest(), bundles);
-			return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter,
-					MediaType.TEXT_CSV, filenamePrefix);
+			SubstanceCSVReporter csvreporter = new SubstanceCSVReporter(getRequest(), bundles);
+			return new OutputWriterConvertor<SubstanceRecord, Q>(csvreporter, MediaType.TEXT_CSV, filenamePrefix);
 
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_MSOFFICE_XLSX)) {
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
 			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
 					getRequest().getRootRef().toString(), false, bundles, configResource);
-			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
-					MediaType.APPLICATION_MSOFFICE_XLSX, filenamePrefix);
+			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter, MediaType.APPLICATION_MSOFFICE_XLSX,
+					filenamePrefix);
 
 		} else if (variant.getMediaType().equals(MediaType.APPLICATION_EXCEL)) {
 			SubstanceRecordXLSXReporter xlsxreporter = new SubstanceRecordXLSXReporter(
 					getRequest().getRootRef().toString(), true, bundles, configResource);
-			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter,
-					MediaType.APPLICATION_EXCEL, filenamePrefix);
-		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML) 
-		//	return new RDFStaXConvertor(new SubstanceBundleStAXReporter(getRequest()), filenamePrefix);
+			return new OutputStreamConvertor<SubstanceRecord, Q>(xlsxreporter, MediaType.APPLICATION_EXCEL,
+					filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_RDF_XML)
+				// return new RDFStaXConvertor(new SubstanceBundleStAXReporter(getRequest()),
+				// filenamePrefix);
 				|| variant.getMediaType().equals(MediaType.APPLICATION_RDF_TURTLE)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
-				|| variant.getMediaType().equals(
-						ChemicalMediaType.APPLICATION_JSONLD)) {
-			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(),
-					variant.getMediaType()), variant.getMediaType(),
-					filenamePrefix) {
+				|| variant.getMediaType().equals(ChemicalMediaType.APPLICATION_JSONLD)) {
+			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(), variant.getMediaType()),
+					variant.getMediaType(), filenamePrefix) {
 				@Override
-				protected OntModel createOutput(IQueryRetrieval query)
-						throws AmbitException {
+				protected OntModel createOutput(IQueryRetrieval query) throws AmbitException {
 					try {
 						OntModel jenaModel = OT.createModel();
-						jenaModel.setNsPrefix("sio",
-								"http://semanticscience.org/resource/");
-						jenaModel.setNsPrefix("obo",
-								"http://purl.obolibrary.org/obo/");
-						jenaModel.setNsPrefix("bao",
-								"http://www.bioassayontology.org/bao#");
-						jenaModel.setNsPrefix("npo",
-								"http://purl.bioontology.org/ontology/npo/");
-						jenaModel.setNsPrefix("enm",
-								"http://purl.enanomapper.org/onto/");
+						jenaModel.setNsPrefix("sio", "http://semanticscience.org/resource/");
+						jenaModel.setNsPrefix("obo", "http://purl.obolibrary.org/obo/");
+						jenaModel.setNsPrefix("bao", "http://www.bioassayontology.org/bao#");
+						jenaModel.setNsPrefix("npo", "http://purl.bioontology.org/ontology/npo/");
+						jenaModel.setNsPrefix("enm", "http://purl.enanomapper.org/onto/");
 						return jenaModel;
 					} catch (Exception x) {
 						throw new AmbitException(x);
@@ -233,15 +210,13 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			};
 
 		} else if (variant.getMediaType().equals(ISAJSON)) {
-			return new OutputStreamConvertor<SubstanceRecord, Q>(
-					createISAReporter(getRequest()),
-					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);			
-		} else if (variant.getMediaType().equals(
-				MediaType.APPLICATION_JAVASCRIPT)) {
+			return new OutputStreamConvertor<SubstanceRecord, Q>(createISAReporter(getRequest()),
+					MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
+		} else if (variant.getMediaType().equals(MediaType.APPLICATION_JAVASCRIPT)) {
 			return createJSONReporter(filenamePrefix);
-		} else  // json by default
+		} else // json by default
 			return createJSONReporter(filenamePrefix);
-		
+
 	}
 
 	protected QueryReporter createISAReporter(Request request) {
@@ -253,35 +228,27 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 
 	}
 
-	
-	protected IProcessor<Q, Representation> createJSONReporter(
-			String filenamePrefix) {
+	protected IProcessor<Q, Representation> createJSONReporter(String filenamePrefix) {
 		String jsonpcallback = getParams().getFirstValue("jsonp");
 		if (jsonpcallback == null)
 			jsonpcallback = getParams().getFirstValue("callback");
-		SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(
-				getRequest(), jsonpcallback, bundles, queryRelatedRecord,
-				retrieveStudySummary);
+		SubstanceJSONReporter cmpreporter = new SubstanceJSONReporter(getRequest(), jsonpcallback, bundles,
+				queryRelatedRecord, retrieveStudySummary);
 		return new OutputWriterConvertor<SubstanceRecord, Q>(cmpreporter,
-				jsonpcallback == null ? MediaType.APPLICATION_JSON
-						: MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
+				jsonpcallback == null ? MediaType.APPLICATION_JSON : MediaType.APPLICATION_JAVASCRIPT, filenamePrefix);
 
 	}
 
 	@Override
-	protected Q createQuery(Context context, Request request, Response response)
-			throws ResourceException {
+	protected Q createQuery(Context context, Request request, Response response) throws ResourceException {
 		Object key = request.getAttributes().get(idsubstance);
 		if (key == null) {
 			Form form = getRequest().getResourceRef().getQueryAsForm();
 
 			try {
-				Object bundleURI = OpenTox.params.bundle_uri
-						.getFirstValue(form);
-				Integer idbundle = bundleURI == null ? null : getIdBundle(
-						bundleURI, request);
-				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(
-						idbundle);
+				Object bundleURI = OpenTox.params.bundle_uri.getFirstValue(form);
+				Integer idbundle = bundleURI == null ? null : getIdBundle(bundleURI, request);
+				SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
 				bundles = new SubstanceEndpointsBundle[1];
 				bundles[0] = bundle;
 			} catch (Exception x) {
@@ -290,8 +257,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 
 			boolean addDummySubstance = false;
 			try {
-				addDummySubstance = Boolean.parseBoolean(form
-						.getFirstValue("addDummySubstance"));
+				addDummySubstance = Boolean.parseBoolean(form.getFirstValue("addDummySubstance"));
 			} catch (Exception x) {
 				addDummySubstance = false;
 			}
@@ -312,12 +278,10 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 						return (Q) new ReadSubstance(substance);
 					}
 					case related: {
-						IStructureRecord record = new StructureRecord(
-								idchemical, -1, null, null);
+						IStructureRecord record = new StructureRecord(idchemical, -1, null, null);
 						// queryRelatedRecord
 						queryRelatedRecord = addDummySubstance ? record : null;
-						CompositionRelation composition = new CompositionRelation(
-								null, record, null);
+						CompositionRelation composition = new CompositionRelation(null, record, null);
 						return (Q) new ReadSubstance(composition);
 					}
 					}
@@ -336,14 +300,12 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 					}
 					switch (mode) {
 					case reference: {
-						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(
-								idbundle);
+						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
 						bundles = new SubstanceEndpointsBundle[] { bundle };
 						return (Q) new ReadSubstancesByBundleCompounds(bundle);
 					}
 					case related: {
-						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(
-								idbundle);
+						SubstanceEndpointsBundle bundle = new SubstanceEndpointsBundle(idbundle);
 						bundles = new SubstanceEndpointsBundle[] { bundle };
 						return (Q) new ReadSubstancesByBundleCompounds(bundle);
 					}
@@ -361,28 +323,20 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 							break;
 						String[] categories = value.split("\\.");
 						Protocol protocol = new Protocol(null);
-						protocol.setCategory(Protocol._categories.valueOf(
-								categories[1]).name());
+						protocol.setCategory(Protocol._categories.valueOf(categories[1]).name());
 						protocol.setTopCategory(categories[0]);
 						ProtocolApplication<Protocol, Params, String, Params, String> papp = new ProtocolApplication<Protocol, Params, String, Params, String>(
 								protocol);
 						protocols.add(papp);
-						String effectEndpoint = form.getFirstValue("endpoint."
-								+ value);
-						String effectloValue = form.getFirstValue("lovalue."
-								+ value);
-						String effectupValue = form.getFirstValue("upvalue."
-								+ value);
-						String effectloQualifier = form.getFirstValue("loqlf."
-								+ value);
-						String effectupQualifier = form.getFirstValue("upqlf."
-								+ value);
+						String effectEndpoint = form.getFirstValue("endpoint." + value);
+						String effectloValue = form.getFirstValue("lovalue." + value);
+						String effectupValue = form.getFirstValue("upvalue." + value);
+						String effectloQualifier = form.getFirstValue("loqlf." + value);
+						String effectupQualifier = form.getFirstValue("upqlf." + value);
 						String units = form.getFirstValue("unit." + value);
-						String interpretationResult = form
-								.getFirstValue("iresult." + value);
+						String interpretationResult = form.getFirstValue("iresult." + value);
 
-						final String[] qlfs = new String[] { "<=", "<", ">=",
-								">", "=" };
+						final String[] qlfs = new String[] { "<=", "<", ">=", ">", "=" };
 						EffectRecord<String, Params, String> effect = null;
 						if (effectEndpoint != null) {
 							effect = new EffectRecord<String, Params, String>();
@@ -395,8 +349,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 								papp.addEffect(effect);
 							}
 							try {
-								effect.setLoValue(Double
-										.parseDouble(effectloValue));
+								effect.setLoValue(Double.parseDouble(effectloValue));
 							} catch (Exception x) {
 								effect.setTextValue(effectloValue);
 							}
@@ -415,8 +368,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 								papp.addEffect(effect);
 							}
 							try {
-								effect.setUpValue(Double
-										.parseDouble(effectupValue));
+								effect.setUpValue(Double.parseDouble(effectupValue));
 							} catch (Exception x) {
 							}
 							effect.setUpQualifier("<=");
@@ -457,16 +409,14 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				// search by study
 				try {
 					ReadSubstanceByStudy._studysearchmode byStudy = null;
-					byStudy = ReadSubstanceByStudy._studysearchmode
-							.valueOf(type);
+					byStudy = ReadSubstanceByStudy._studysearchmode.valueOf(type);
 					return (Q) new ReadSubstanceByStudy(byStudy, search);
 				} catch (Exception x) {
 				}
 				// search by owner
 				try {
 					ReadSubstanceByOwner._ownersearchmode byOwner = null;
-					byOwner = ReadSubstanceByOwner._ownersearchmode
-							.valueOf(type);
+					byOwner = ReadSubstanceByOwner._ownersearchmode.valueOf(type);
 					return (Q) new ReadSubstanceByOwner(byOwner, search);
 				} catch (Exception x) {
 				}
@@ -480,6 +430,11 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				} else if ("like".equals(type)) {
 					return (Q) new ReadSubstanceByName("like", search);
 				} else if ("regexp".equals(type)) {
+					try {
+						Pattern.compile(search);
+					} catch (PatternSyntaxException exception) {
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
+					}
 					return (Q) new ReadSubstanceByName("regexp", search);
 				} else if ("reliability".equals(type)) {
 					return (Q) new ReadByReliabilityFlags(type, search);
@@ -492,16 +447,14 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				} else if ("substancetype".equals(type)) {
 					return (Q) new ReadSubstanceByType(search);
 				} else {
-					return (Q) new ReadSubstanceByExternalIDentifier(type,
-							search);
+					return (Q) new ReadSubstanceByExternalIDentifier(type, search);
 				}
 			} else
 				return (Q) new ReadSubstance();
 
 		} else
 			try {
-				return (Q) new ReadSubstance(new SubstanceRecord(
-						Integer.parseInt(key.toString())));
+				return (Q) new ReadSubstance(new SubstanceRecord(Integer.parseInt(key.toString())));
 			} catch (Exception x) {
 				int len = key.toString().trim().length();
 				if ((len > 40) && (len <= 45)) {
@@ -515,15 +468,12 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 
 	protected Integer getIdChemical(Object cmpURI, Request request) {
 		if (cmpURI != null) {
-			Object id = OpenTox.URI.compound.getId(cmpURI.toString(),
-					request.getRootRef());
+			Object id = OpenTox.URI.compound.getId(cmpURI.toString(), request.getRootRef());
 			if (id != null && (id instanceof Integer))
 				return (Integer) id;
 			else {
-				Object[] ids = OpenTox.URI.conformer.getIds(cmpURI.toString(),
-						request.getRootRef());
-				if (ids != null && (ids.length > 1)
-						&& (ids[0] instanceof Integer))
+				Object[] ids = OpenTox.URI.conformer.getIds(cmpURI.toString(), request.getRootRef());
+				if (ids != null && (ids.length > 1) && (ids[0] instanceof Integer))
 					return (Integer) ids[0];
 			}
 		}
@@ -532,8 +482,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 
 	protected Integer getIdBundle(Object bundleURI, Request request) {
 		if (bundleURI != null) {
-			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(),
-					request.getRootRef());
+			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
 			if (id != null && (id instanceof Integer))
 				return (Integer) id;
 		}
@@ -541,22 +490,18 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 	}
 
 	@Override
-	protected QueryURIReporter<SubstanceRecord, Q> getURIReporter(
-			Request baseReference) throws ResourceException {
+	protected QueryURIReporter<SubstanceRecord, Q> getURIReporter(Request baseReference) throws ResourceException {
 		return new SubstanceURIReporter<Q>(baseReference);
 	}
 
 	@Override
-	protected Representation post(Representation entity, Variant variant)
-			throws ResourceException {
+	protected Representation post(Representation entity, Variant variant) throws ResourceException {
 
 		if ((entity == null) || !entity.isAvailable())
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Empty content");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 
 		if (entity.getMediaType() != null)
-			if (MediaType.MULTIPART_FORM_DATA.getName().equals(
-					entity.getMediaType().getName())) {
+			if (MediaType.MULTIPART_FORM_DATA.getName().equals(entity.getMediaType().getName())) {
 				DiskFileItemFactory factory = new DiskFileItemFactory();
 				RestletFileUpload upload = new RestletFileUpload(factory);
 				try {
@@ -579,8 +524,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 								} catch (Exception x) {
 									qa.setEnabled(true);
 								}
-							else if ("clearMeasurements".equals(file
-									.getFieldName())) {
+							else if ("clearMeasurements".equals(file.getFieldName())) {
 								try {
 									clearMeasurements = false;
 									String cm = file.getString();
@@ -594,8 +538,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 									clearMeasurements = false;
 								}
 
-							} else if ("clearComposition".equals(file
-									.getFieldName())) {
+							} else if ("clearComposition".equals(file.getFieldName())) {
 								try {
 									clearComposition = false;
 									String cm = file.getString();
@@ -609,97 +552,70 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 									clearComposition = false;
 								}
 							} else
-								for (IQASettings.qa_field f : IQASettings.qa_field
-										.values())
+								for (IQASettings.qa_field f : IQASettings.qa_field.values())
 									if (f.name().equals(file.getFieldName()))
 										try {
-											String value = file
-													.getString("UTF-8");
-											f.addOption(qa, "null"
-													.equals(value) ? null
-													: value == null ? null
-															: value.toString());
+											String value = file.getString("UTF-8");
+											f.addOption(qa, "null".equals(value) ? null
+													: value == null ? null : value.toString());
 										} catch (Exception x) {
 										}
 						} else {
 							String ext = file.getName().toLowerCase().trim();
-							if ("".equals(ext) || ext.endsWith(".i5z") || ext.endsWith(".i6z")
-									|| ext.endsWith(".csv")
-									|| ext.endsWith(".rdf")
-									|| ext.endsWith(".ttl")
-									|| ext.endsWith(".json")
-									|| ext.endsWith(".xlsx")
-									|| ext.endsWith(".xls")) {
+							if ("".equals(ext) || ext.endsWith(".i5z") || ext.endsWith(".i6z") || ext.endsWith(".csv")
+									|| ext.endsWith(".rdf") || ext.endsWith(".ttl") || ext.endsWith(".json")
+									|| ext.endsWith(".xlsx") || ext.endsWith(".xls")) {
 							} else
-								throw new ResourceException(
-										Status.CLIENT_ERROR_BAD_REQUEST,
+								throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
 										"Unsupported format " + ext);
 						}
 					}
-					CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(
-							items, CallableFileUpload.field_files,
-							CallableFileUpload.field_config, getRootRef(),
-							getContext(), new SubstanceURIReporter(getRequest()
-									.getRootRef()), new DatasetURIReporter(
-									getRequest().getRootRef()), token,
-							getRequest().getResourceRef().toString(),getClientInfo());
+					CallableSubstanceImporter<String> callable = new CallableSubstanceImporter<String>(items,
+							CallableFileUpload.field_files, CallableFileUpload.field_config, getRootRef(), getContext(),
+							new SubstanceURIReporter(getRequest().getRootRef()),
+							new DatasetURIReporter(getRequest().getRootRef()), token,
+							getRequest().getResourceRef().toString(), getClientInfo());
 					callable.setClearComposition(clearComposition);
 					callable.setClearMeasurements(clearMeasurements);
 					callable.setQASettings(qa);
-					ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-							.addTask("Substance import", callable, getRequest()
-									.getRootRef(), token);
+					ITask<Reference, Object> task = ((ITaskApplication) getApplication()).addTask("Substance import",
+							callable, getRequest().getRootRef(), token);
 
-					ITaskStorage storage = ((ITaskApplication) getApplication())
-							.getTaskStorage();
-					FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(
-							storage);
+					ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+					FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 					task.update();
-					getResponse().setStatus(
-							task.isDone() ? Status.SUCCESS_OK
-									: Status.SUCCESS_ACCEPTED);
-					return tc.createTaskRepresentation(task.getUuid(), variant,
-							getRequest(), getResponse(), null);
+					getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+					return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
 				} catch (ResourceException x) {
 					throw x;
 				} catch (Exception x) {
-					throw new ResourceException(
-							Status.CLIENT_ERROR_BAD_REQUEST, x);
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x);
 				}
-			} else if (MediaType.APPLICATION_WWW_FORM.getName().equals(
-					entity.getMediaType().getName())) {
+			} else if (MediaType.APPLICATION_WWW_FORM.getName().equals(entity.getMediaType().getName())) {
 				/*
-				 * web form to update substances from IUCLID5 server Expected
-				 * web form fields : substance: UUID or query URL type : UUID or
-				 * query or URL (ambit substance URL) qa options query : one of
-				 * {@link QueryToolClient.PredefinedQuery} query parameters:
-				 * depend on the query type iuclid5 server; credentials -
-				 * optional, use preconfigured if not submitted [(option,UUID),
-				 * (uuid,ZZZZZZZZZZ), (extidtype,CompTox), (extidvalue,Ambit
-				 * Transfer), (i5server,null), (i5user,null), (i5pass,null)]
+				 * web form to update substances from IUCLID5 server Expected web form fields :
+				 * substance: UUID or query URL type : UUID or query or URL (ambit substance
+				 * URL) qa options query : one of {@link QueryToolClient.PredefinedQuery} query
+				 * parameters: depend on the query type iuclid5 server; credentials - optional,
+				 * use preconfigured if not submitted [(option,UUID), (uuid,ZZZZZZZZZZ),
+				 * (extidtype,CompTox), (extidvalue,Ambit Transfer), (i5server,null),
+				 * (i5user,null), (i5pass,null)]
 				 */
 
 				Form form = new Form(entity);
 				String token = getToken();
-				CallableSubstanceI5Query<String> callable = new CallableSubstanceI5Query<String>(
-						getRootRef(), form, getContext(),
-						new SubstanceURIReporter(getRequest().getRootRef()),
-						new DatasetURIReporter(getRequest().getRootRef()),
-						token, getRequest().getResourceRef().toString(),getClientInfo());
+				CallableSubstanceI5Query<String> callable = new CallableSubstanceI5Query<String>(getRootRef(), form,
+						getContext(), new SubstanceURIReporter(getRequest().getRootRef()),
+						new DatasetURIReporter(getRequest().getRootRef()), token,
+						getRequest().getResourceRef().toString(), getClientInfo());
 				ITask<Reference, Object> task = ((ITaskApplication) getApplication())
-						.addTask("Retrieve substance from IUCLID server",
-								callable, getRequest().getRootRef(), token);
+						.addTask("Retrieve substance from IUCLID server", callable, getRequest().getRootRef(), token);
 
-				ITaskStorage storage = ((ITaskApplication) getApplication())
-						.getTaskStorage();
-				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(
-						storage);
+				ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+				FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 				task.update();
-				getResponse().setStatus(
-						task.isDone() ? Status.SUCCESS_OK
-								: Status.SUCCESS_ACCEPTED);
-				return tc.createTaskRepresentation(task.getUuid(), variant,
-						getRequest(), getResponse(), null);
+				getResponse().setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+				return tc.createTaskRepresentation(task.getUuid(), variant, getRequest(), getResponse(), null);
 
 			}
 		throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
@@ -714,8 +630,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 
 			Form form = getResourceRef(getRequest()).getQueryAsForm();
-			String uri = getRequest().getRootRef() + "/substance/"
-					+ key.toString();
+			String uri = getRequest().getRootRef() + "/substance/" + key.toString();
 			if (!uri.toString().equals(form.getFirstValue("substance_uri")))
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 
@@ -723,29 +638,26 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			record.setSubstanceUUID(key.toString());
 			executeUpdate(getRequestEntity(), null, createDeleteObject(record));
 			getResponse().setStatus(Status.SUCCESS_OK);
-			return new StringRepresentation(String.format("%s/dataset",
-					getRequest().getRootRef()), MediaType.TEXT_URI_LIST);
+			return new StringRepresentation(String.format("%s/dataset", getRequest().getRootRef()),
+					MediaType.TEXT_URI_LIST);
 		} catch (ResourceException x) {
 			throw x;
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					x.getMessage(), x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 		}
 	}
 
-	protected AbstractUpdate createDeleteObject(SubstanceRecord entry)
-			throws ResourceException {
+	protected AbstractUpdate createDeleteObject(SubstanceRecord entry) throws ResourceException {
 		DeleteSubstance c = new DeleteSubstance();
 		c.setObject(entry);
 		return c;
 	}
 
 	/**
-	 * POST - create entity based on parameters in http header, creates a new
-	 * entry in the databaseand returns an url to it
+	 * POST - create entity based on parameters in http header, creates a new entry
+	 * in the databaseand returns an url to it
 	 */
-	public void executeUpdate(Representation entity, T entry,
-			AbstractUpdate updateObject) throws ResourceException {
+	public void executeUpdate(Representation entity, T entry, AbstractUpdate updateObject) throws ResourceException {
 
 		Connection c = null;
 		// TODO it is inefficient to instantiate executor in all classes
@@ -763,28 +675,22 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 			QueryURIReporter uriReporter = getURIReporter(getRequest());
 			if (uriReporter != null) {
 				getResponse().setLocationRef(uriReporter.getURI(entry));
-				getResponse().setEntity(uriReporter.getURI(entry),
-						MediaType.TEXT_HTML);
+				getResponse().setEntity(uriReporter.getURI(entry), MediaType.TEXT_HTML);
 			}
 			getResponse().setStatus(Status.SUCCESS_OK);
 			onUpdateSuccess();
 		} catch (SQLException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
-			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN, x,
-					x.getMessage());
+			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN, x, x.getMessage());
 			getResponse().setEntity(null);
 		} catch (ProcessorException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
-			getResponse()
-					.setStatus(
-							(x.getCause() instanceof SQLException) ? Status.CLIENT_ERROR_FORBIDDEN
-									: Status.SERVER_ERROR_INTERNAL, x,
-							x.getMessage());
+			getResponse().setStatus((x.getCause() instanceof SQLException) ? Status.CLIENT_ERROR_FORBIDDEN
+					: Status.SERVER_ERROR_INTERNAL, x, x.getMessage());
 			getResponse().setEntity(null);
 		} catch (Exception x) {
 			Context.getCurrentLogger().severe(x.getMessage());
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x,
-					x.getMessage());
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x, x.getMessage());
 			getResponse().setEntity(null);
 		} finally {
 			try {
@@ -803,8 +709,7 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 
 	}
 
-	protected void customizeEntry(T entry, Connection conection)
-			throws ResourceException {
+	protected void customizeEntry(T entry, Connection conection) throws ResourceException {
 
 	}
 
