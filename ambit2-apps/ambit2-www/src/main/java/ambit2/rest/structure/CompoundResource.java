@@ -455,7 +455,8 @@ public class CompoundResource extends StructureQueryResource<IQueryRetrieval<ISt
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid resource id", x);
 				}
 			}
-
+		} catch (ResourceException x) {
+			throw x;
 		} catch (Exception x) {
 			throw new ResourceException(Status.SERVER_ERROR_INTERNAL, x.getMessage(), x);
 		}

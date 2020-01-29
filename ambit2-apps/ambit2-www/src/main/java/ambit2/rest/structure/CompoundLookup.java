@@ -524,6 +524,10 @@ public class CompoundLookup extends StructureQueryResource<IQueryRetrieval<IStru
 	}
 
 	public Object isAmbitID(String text) {
+		if (text==null) {
+			searchType = null;
+			return null;
+		}
 		try {
 			searchType = _searchtype.ambitid;
 			return Integer.parseInt(text);
