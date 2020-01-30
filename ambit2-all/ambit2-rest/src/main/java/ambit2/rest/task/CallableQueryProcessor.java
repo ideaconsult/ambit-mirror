@@ -188,7 +188,7 @@ public abstract class CallableQueryProcessor<Target, Result, USERID> extends Cal
 				cookiestring.append("=");
 				cookiestring.append(cookie.getValue());
 			}
-		return getQueryObject(reference, applicationRootReference, context, cookiestring.toString(), agent, referer);
+		return getQueryObject(reference, applicationRootReference, context, cookiestring==null?null:cookiestring.toString(), agent, referer);
 	}
 
 	public static Object getQueryObject(Reference reference, Reference applicationRootReference, Context context,
