@@ -8,7 +8,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
-
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.reactions.rules.IRetroSynthRuleInstance;
 import ambit2.reactions.rules.RetroSynthRule;
 import ambit2.reactions.rules.RetroSynthRuleInstance;
@@ -50,7 +50,7 @@ public class RetroSynthesis
 		molecule = str;
 	}	
 	
-	public RetroSynthesisResult run()
+	public RetroSynthesisResult run() throws EmptyMoleculeException
 	{
 		retroSynthResult = new RetroSynthesisResult();
 		searchPaths();
@@ -64,7 +64,7 @@ public class RetroSynthesis
 	 * (1)impossible to apply more rules (transformations)
 	 * (2)some of the products are starting materials
 	 */
-	void searchPaths()
+	void searchPaths() throws EmptyMoleculeException
 	{	
 		nodes.clear();
 		generateInitialNodes();
@@ -91,7 +91,7 @@ public class RetroSynthesis
 			nodes.push(node0);
 	}
 	
-	void processNode(RetroSynthNode node)
+	void processNode(RetroSynthNode node) throws EmptyMoleculeException
 	{
 		//Check if terminal node 
 		if (node.components.isEmpty())		
@@ -106,7 +106,7 @@ public class RetroSynthesis
 				nodes.push(child);
 	}
 	
-	ArrayList<IRetroSynthRuleInstance> findAllRuleInstances(IAtomContainer mol)
+	ArrayList<IRetroSynthRuleInstance> findAllRuleInstances(IAtomContainer mol) throws EmptyMoleculeException
 	{
 		ArrayList<IRetroSynthRuleInstance> ruleInstances = new ArrayList<IRetroSynthRuleInstance>(); 
 		for (RetroSynthRule rule : knowledgeBase.retroSynthRules)
@@ -124,7 +124,7 @@ public class RetroSynthesis
 	}
 	
 		
-	public ArrayList<RetroSynthNode> generateChildrenNodes(RetroSynthNode node)
+	public ArrayList<RetroSynthNode> generateChildrenNodes(RetroSynthNode node) throws EmptyMoleculeException
 	{	
 		ArrayList<RetroSynthNode> children = new ArrayList<RetroSynthNode>();		
 		ArrayList<IRetroSynthRuleInstance> ruleInstances0 = null;
@@ -174,7 +174,7 @@ public class RetroSynthesis
 	
 		
 	
-	ArrayList<IRetroSynthRuleInstance> findRuleInstances(IAtomContainer str, RetroSynthRule rule)
+	ArrayList<IRetroSynthRuleInstance> findRuleInstances(IAtomContainer str, RetroSynthRule rule)  throws EmptyMoleculeException
 	{	
 		ArrayList<IRetroSynthRuleInstance> instances = new ArrayList<IRetroSynthRuleInstance>();
 				

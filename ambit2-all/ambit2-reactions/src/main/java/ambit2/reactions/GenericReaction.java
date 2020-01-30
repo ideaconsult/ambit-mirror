@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.reactions.rules.ReactionParser;
 import ambit2.rules.conditions.ICondition;
 import ambit2.rules.conditions.IDescriptorValueCondition;
@@ -417,13 +418,13 @@ public class GenericReaction
 	
 	
 	
-	public List<List<IAtom>> findReactionInstances(IAtomContainer target, SMIRKSManager smrkMan)
+	public List<List<IAtom>> findReactionInstances(IAtomContainer target, SMIRKSManager smrkMan)  throws EmptyMoleculeException
 	{
 		return findReactionInstances(target, smrkMan, SmartsConst.SSM_MODE.SSM_NON_OVERLAPPING);
 	}
 	
 	
-	public List<List<IAtom>> findReactionInstances(IAtomContainer target, SMIRKSManager smrkMan, SSM_MODE SSMode)
+	public List<List<IAtom>> findReactionInstances(IAtomContainer target, SMIRKSManager smrkMan, SSM_MODE SSMode) throws EmptyMoleculeException
 	{	
 		SmartsParser.prepareTargetForSMARTSSearch(smirksReaction.reactantFlags, target);
 		if (smirksReaction.reactantFlags.hasRecursiveSmarts)

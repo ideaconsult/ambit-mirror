@@ -18,7 +18,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
-
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.groupcontribution.Calculator;
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
@@ -150,7 +150,7 @@ public class TestUtils2
 		
 	}
 	
-	public static void testHNMRKnowledgeBase()
+	public static void testHNMRKnowledgeBase() throws EmptyMoleculeException
 	{
 		System.out.println("Testing HNMRPredefinedKnowledgeBase:");
 		HNMRKnowledgeBase hnmrBase = HNMRPredefinedKnowledgeBase.getHNMRKnowledgeBase();

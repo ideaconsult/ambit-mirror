@@ -27,6 +27,7 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.ChemObjectFactory;
 import ambit2.smarts.IsomorphismTester;
@@ -1440,7 +1441,7 @@ public class AutomaticTestUtilities {
 		return (0);
 	}
 
-	public int calcBitVectorStrings() {
+	public int calcBitVectorStrings() throws EmptyMoleculeException {
 		// Input file is interpreted as str. keys set
 		// for each DB structure BitVector is calculated and saved to the output
 		// file

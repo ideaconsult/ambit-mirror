@@ -46,6 +46,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 
 /**
@@ -842,7 +843,7 @@ public class SmartsManager {
 	}
 
 	List<IAtom> getFirstPosAtomMappings_CurrentIsoTester(IAtomContainer target,
-			IQueryAtomContainer recQuery) {
+			IQueryAtomContainer recQuery) throws EmptyMoleculeException {
 		// This function is based on the IsoTester from this package
 		isoTester.setQuery(recQuery);
 		List<Integer> pos = isoTester.getIsomorphismPositions(target);
@@ -1136,12 +1137,12 @@ public class SmartsManager {
 	 * @param target
 	 * @param groupQueries
 	 */
-	public void markAtomGroups(IAtomContainer target, List<IQueryAtomContainer> groupQueries)
+	public void markAtomGroups(IAtomContainer target, List<IQueryAtomContainer> groupQueries) throws EmptyMoleculeException
 	{
 		markAtomGroups(target, groupQueries, SmartsConst.SSM_MODE.SSM_ALL);
 	}
 	
-	public void markAtomGroups(IAtomContainer target, List<IQueryAtomContainer> groupQueries, SmartsConst.SSM_MODE FlagSSMode)
+	public void markAtomGroups(IAtomContainer target, List<IQueryAtomContainer> groupQueries, SmartsConst.SSM_MODE FlagSSMode) throws EmptyMoleculeException
 	{	
 		for (int i = 0; i < groupQueries.size(); i++)
 		{
@@ -1152,7 +1153,7 @@ public class SmartsManager {
 		}
 	}
 	
-	public void handleGroupRecursiveAtoms(IAtomContainer target, IQueryAtomContainer groupQuery)
+	public void handleGroupRecursiveAtoms(IAtomContainer target, IQueryAtomContainer groupQuery) throws EmptyMoleculeException
 	{
 		List<SmartsAtomExpression> recAtList = new ArrayList<SmartsAtomExpression>();
 		

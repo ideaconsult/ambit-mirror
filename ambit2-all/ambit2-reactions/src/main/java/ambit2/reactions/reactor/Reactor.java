@@ -21,6 +21,7 @@ import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.data.StructureRecord;
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.reactions.GenericReaction;
 //import ambit2.reactions.Reaction;
@@ -217,7 +218,7 @@ public class Reactor
 			nodeHashCodes.add(node0.calcNodeHash());
 	}
 	
-	void processNode(ReactorNode node)
+	void processNode(ReactorNode node) throws EmptyMoleculeException
 	{
 		ReactorNode.State state = getNodeState(node);
 		
@@ -258,7 +259,7 @@ public class Reactor
 		}
 	}
 	
-	int generateChildrenNodes(ReactorNode node, IAtomContainer reagent)
+	int generateChildrenNodes(ReactorNode node, IAtomContainer reagent) throws EmptyMoleculeException
 	{	
 		int numOfReactionInstances = 0;
 		for (int i = 0; i < reactionDataBase.genericReactions.size(); i++)

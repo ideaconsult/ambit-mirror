@@ -14,6 +14,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conformation;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.descriptors.utils.GraphMatrices;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
@@ -65,7 +66,7 @@ public class HNMRShifts
 		warnings.clear();
 	}	
 	
-	public void calculateHShifts()
+	public void calculateHShifts() throws EmptyMoleculeException
 	{
 		hShifts.clear();
 		binHShifts.clear();
@@ -88,8 +89,8 @@ public class HNMRShifts
 		generateHShifts();
 	}
 	
-	
-	void findAllHAtomEnvironmentInstances()
+	 
+	void findAllHAtomEnvironmentInstances() throws EmptyMoleculeException
 	{
 		for (int i = 0; i < knowledgeBase.hAtomEnvironments.size(); i++)
 		{
@@ -297,7 +298,7 @@ public class HNMRShifts
 		return true;
 	}
 	
-	public void findAllGroupMappings()
+	public void findAllGroupMappings() throws EmptyMoleculeException
 	{
 		Set<String> keys = knowledgeBase.groupMatchRepository.keySet();
 		for (String key : keys)

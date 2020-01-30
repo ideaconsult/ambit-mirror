@@ -40,6 +40,7 @@ import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
 import ambit2.smarts.SmartsParser;
@@ -91,7 +92,11 @@ public class PubChemFingerprinter {
 
 	public PubChemFingerprinter() {
 		m_bits = new byte[(FP_SIZE + 7) >> 3];
-		initPubChemBitSubstructures();
+		try {
+			initPubChemBitSubstructures();
+		} catch (EmptyMoleculeException x) {
+			//should not be here ;)
+		}
 	}
 
 	/**
@@ -333,7 +338,7 @@ public class PubChemFingerprinter {
 		}
 	}
 
-	private void addPubChemBitSubstructure(int bit, String smarts) {
+	private void addPubChemBitSubstructure(int bit, String smarts)  throws EmptyMoleculeException {
 		PubChemBitSubstructure pcbs = new PubChemBitSubstructure();
 		pcbs.setBitNum(bit);
 		pcbs.setSmarts(smarts);
@@ -1364,7 +1369,7 @@ public class PubChemFingerprinter {
 		}
 	}
 
-	private void initPubChemBitSubstructures() {
+	private void initPubChemBitSubstructures() throws EmptyMoleculeException {
 		// Section 3: Simple atom pairs. These bits test for the presence
 		// of patterns of bonded atom pairs, regardless of bond order or
 		// count.

@@ -9,6 +9,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
+
 public class Screening {
 	IsomorphismTester isoTester = new IsomorphismTester();
 	ScreeningData querySD = new ScreeningData();
@@ -53,7 +55,7 @@ public class Screening {
 	 * 
 	 * @param externalSmartsKeys
 	 */
-	public Screening(List<String> externalSmartsKeys) {
+	public Screening(List<String> externalSmartsKeys) throws EmptyMoleculeException  {
 		FlagUseStrKeys = true;
 		smartsKeys = externalSmartsKeys;
 		nKeys = smartsKeys.size();
@@ -151,7 +153,7 @@ public class Screening {
 		nKeys = smartsScrKeys.nKeys;
 	}
 
-	void prepareKeySequences() {
+	void prepareKeySequences()  throws EmptyMoleculeException {
 		IQueryAtomContainer query;
 		sequences.clear();
 

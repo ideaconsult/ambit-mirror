@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.groupcontribution.nmr.Substituent;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
@@ -23,7 +24,7 @@ public class HNMRKnowledgeBase
 	{	
 	}
 	
-	public void configure()
+	public void configure() throws EmptyMoleculeException
 	{
 		for (int i = 0; i < hAtomEnvironments.size(); i++)
 		{
@@ -32,7 +33,7 @@ public class HNMRKnowledgeBase
 		}
 	}
 	
-	protected void configure(HAtomEnvironment hae, int num)
+	protected void configure(HAtomEnvironment hae, int num) throws EmptyMoleculeException
 	{
 		GroupMatch haeGM = new GroupMatch(hae.smarts, parser, isoTester);
 		if (!haeGM.getError().equals(""))

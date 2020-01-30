@@ -21,6 +21,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.reactions.GenericReaction;
@@ -248,13 +249,13 @@ public class ReactionSequence
 		}
 	}
 	
-	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol)
+	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol) throws EmptyMoleculeException
 	{
 		return generateAllReactionInstances(mol, reactDB.genericReactions);
 	}
 	
 	
-	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions)
+	public Map<GenericReaction,List<List<IAtom>>> generateAllReactionInstances(IAtomContainer mol, List<GenericReaction> reactions) throws EmptyMoleculeException
 	{
 		//Pre-processing should not be needed
 		//it is expected to be done via reaction products processing from previous steps

@@ -21,6 +21,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.Property;
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
@@ -392,7 +393,7 @@ public class FilterTautomers {
 
 
 	boolean checkIsomorphismEquivalence(IAtomContainer target,
-			List<IAtomContainer> structs) {
+			List<IAtomContainer> structs)  throws EmptyMoleculeException {
 		if (structs.isEmpty())
 			return (false);
 

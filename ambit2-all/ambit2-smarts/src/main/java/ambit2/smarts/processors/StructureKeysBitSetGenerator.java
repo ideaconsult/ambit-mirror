@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
 import ambit2.smarts.IsomorphismTester;
@@ -62,10 +63,10 @@ public class StructureKeysBitSetGenerator extends DefaultAmbitProcessor<IAtomCon
 		setSmartsKeys(externalSmartsKeys);
 
 	}	
-	public void setSmartsKeys(List<String> smartsKeys) {
+	public void setSmartsKeys(List<String> smartsKeys) throws EmptyMoleculeException {
 		prepareKeySequences(smartsKeys,smartsKeys.size());		
 	}
-	protected synchronized void prepareKeySequences(List<String> keys, int nKeys)
+	protected synchronized void prepareKeySequences(List<String> keys, int nKeys) throws EmptyMoleculeException
 	{
 		smartsKeys = keys; 
 		IQueryAtomContainer query;

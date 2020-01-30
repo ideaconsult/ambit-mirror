@@ -13,6 +13,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.tautomers.TautomerConst.GAT;
@@ -1464,7 +1465,7 @@ public class AutomaticTautomerTests
 	}
 	
 	
-	int compareTautomerSetsIsomorphismCheck(List<IAtomContainer> tautomers0, List<IAtomContainer> tautomers)
+	int compareTautomerSetsIsomorphismCheck(List<IAtomContainer> tautomers0, List<IAtomContainer> tautomers) throws EmptyMoleculeException
 	{
 		//if (tautomers0.size() != tautomers.size())
 		//	return false;

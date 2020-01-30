@@ -1,5 +1,6 @@
 package ambit2.reactions.rules.conditions;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.reactions.GenericReactionInstance;
 import ambit2.rules.conditions.ICondition;
 import ambit2.smarts.IsomorphismTester;
@@ -20,7 +21,7 @@ public class ReactionGroupCondition implements ICondition
 			RGConditionType conditionType, 
 			String smarts, 
 			SmartsParser parser, 
-			IsomorphismTester isoTester)
+			IsomorphismTester isoTester) throws EmptyMoleculeException
 	{
 		groupMatch = new GroupMatch(smarts, parser, isoTester);
 		this.conditionType = conditionType;
@@ -45,7 +46,12 @@ public class ReactionGroupCondition implements ICondition
 	@Override
 	public boolean isTrue(Object target) {
 		if (target instanceof GenericReactionInstance)
+			try {
 			return checkReactionInstance((GenericReactionInstance)target);
+			} catch (EmptyMoleculeException x) {
+				//hope this is what it should be
+				return false;
+			}
 		
 		return false;
 	}
@@ -60,7 +66,7 @@ public class ReactionGroupCondition implements ICondition
 		//does not have any effect
 	}
 	
-	boolean checkReactionInstance(GenericReactionInstance gri) 
+	boolean checkReactionInstance(GenericReactionInstance gri)  throws EmptyMoleculeException
 	{
 		switch (conditionType)
 		{

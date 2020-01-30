@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.QuerySequenceElement;
 import ambit2.smarts.SmartsAtomExpression;
@@ -29,7 +30,7 @@ public class GroupMatch
 	private SSM_MODE FlagSSMode = SmartsConst.SSM_MODE.SSM_NON_IDENTICAL;
 	private boolean FlagPrepareTarget = true;
 	
-	public GroupMatch(String smarts, SmartsParser parser, IsomorphismTester isoTester)
+	public GroupMatch(String smarts, SmartsParser parser, IsomorphismTester isoTester) throws EmptyMoleculeException
 	{
 		this.smarts = smarts;
 		this.parser = parser;
@@ -37,7 +38,7 @@ public class GroupMatch
 		configure();
 	}
 	
-	public void configure()
+	public void configure()  throws EmptyMoleculeException
 	{
 		smartsQuery = parser.parse(smarts);
 		
@@ -77,7 +78,7 @@ public class GroupMatch
 	}
 	
 	
-	public boolean match(IAtomContainer target)
+	public boolean match(IAtomContainer target) throws EmptyMoleculeException
 	{	
 		if (FlagPrepareTarget)
 			SmartsParser.prepareTargetForSMARTSSearch(flags, target);
@@ -89,7 +90,7 @@ public class GroupMatch
 		return isoTester.hasIsomorphism(target);
 	}
 	
-	public boolean matchAtPosition(IAtomContainer target, int atomNum)
+	public boolean matchAtPosition(IAtomContainer target, int atomNum) throws EmptyMoleculeException
 	{
 		if (FlagPrepareTarget)
 			SmartsParser.prepareTargetForSMARTSSearch(flags, target);
@@ -101,7 +102,7 @@ public class GroupMatch
 		return isoTester.checkIsomorphismAtPosition(target, atomNum);
 	}
 		
-	public List<List<IAtom>> getMappings(IAtomContainer target)
+	public List<List<IAtom>> getMappings(IAtomContainer target) throws EmptyMoleculeException
 	{
 		if (FlagPrepareTarget)
 			SmartsParser.prepareTargetForSMARTSSearch(flags, target);
@@ -133,7 +134,7 @@ public class GroupMatch
 	}
 	
 	
-	public int matchCount(IAtomContainer target)
+	public int matchCount(IAtomContainer target) throws EmptyMoleculeException
 	{
 		List<List<IAtom>> maps = getMappings(target);
 		if (maps == null)
@@ -142,7 +143,7 @@ public class GroupMatch
 			return maps.size();
 	}
 	
-	public void mapRecursiveAtomsAgainstTarget(List<SmartsAtomExpression> recursiveAtoms, IAtomContainer target) {
+	public void mapRecursiveAtomsAgainstTarget(List<SmartsAtomExpression> recursiveAtoms, IAtomContainer target)  throws EmptyMoleculeException {
 		// Reset for new mapping
 		for (int i = 0; i < recursiveAtoms.size(); i++)
 			recursiveAtoms.get(i).recSmartsMatches = new ArrayList<List<IAtom>>();

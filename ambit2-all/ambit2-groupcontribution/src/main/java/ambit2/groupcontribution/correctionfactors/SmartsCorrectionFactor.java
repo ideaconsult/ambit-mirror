@@ -1,7 +1,6 @@
 package ambit2.groupcontribution.correctionfactors;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
-
+import org.openscience.cdk.interfaces.IAtomContainer;import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.groupcontribution.transformations.IValueTransformation;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsParser;
@@ -62,9 +61,14 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 	}
 
 	@Override
-	public double calculateFor(IAtomContainer mol) 
+	public double calculateFor(IAtomContainer mol)  
 	{
-		double matchCount = groupMatch.matchCount(mol); 
+		double matchCount = 0;
+		try {
+			matchCount = groupMatch.matchCount(mol);
+		} catch (EmptyMoleculeException x) {
+			return 0.0;
+		}
 		if (transformation == null)
 			return matchCount;
 		else
@@ -74,6 +78,7 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 				return res;
 			}
 			catch (Exception x) {
+				//???
 				return 0.0;
 			}
 		}		

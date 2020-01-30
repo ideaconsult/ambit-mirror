@@ -7,6 +7,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
+
 
 public class StructureSetAnalyzer 
 {
@@ -106,13 +108,17 @@ public class StructureSetAnalyzer
 				
 				String smiles = cots.getSMILES(struct);
 				
-				if (!checkForDuplication(smiles))
-					registerNewStruct(struct,smiles);
+				try {
+					if (!checkForDuplication(smiles))
+						registerNewStruct(struct,smiles);
+				} catch (EmptyMoleculeException x) {
+					
+				}
 			}
 		}
 	}
 	
-	boolean checkForDuplication(String smarts)
+	boolean checkForDuplication(String smarts) throws EmptyMoleculeException
 	{	
 		IQueryAtomContainer query  = sp.parse(smarts);
 		sp.setNeededDataFlags();
@@ -140,7 +146,7 @@ public class StructureSetAnalyzer
 	}
 	
 	
-	void registerNewStruct(IAtomContainer struct, String smiles)
+	void registerNewStruct(IAtomContainer struct, String smiles) throws EmptyMoleculeException
 	{
 		int freq = getFrequency(smiles);
 		double SQI = getSQI(freq, struct.getAtomCount());
@@ -198,7 +204,7 @@ public class StructureSetAnalyzer
 	}
 	
 	
-	int getFrequency(String smiles)
+	int getFrequency(String smiles) throws EmptyMoleculeException
 	{
 		int freq = 0;
 		IQueryAtomContainer query  = sp.parse(smiles);

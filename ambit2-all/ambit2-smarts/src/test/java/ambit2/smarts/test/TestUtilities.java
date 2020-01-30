@@ -58,6 +58,7 @@ import org.openscience.cdk.validate.CDKValidator;
 import org.openscience.cdk.validate.ValidationReport;
 import org.openscience.cdk.validate.ValidatorEngine;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.smarts.BinaryCombinations;
@@ -758,7 +759,7 @@ public class TestUtilities {
 		System.out.println("Number of parser fails = " + nParserFails);
 	}
 
-	public void testAtomSequencing(String smarts[]) {
+	public void testAtomSequencing(String smarts[]) throws EmptyMoleculeException {
 		int nError = 0;
 		for (int i = 0; i < smarts.length; i++) {
 			IQueryAtomContainer query = sp.parse(smarts[i]);

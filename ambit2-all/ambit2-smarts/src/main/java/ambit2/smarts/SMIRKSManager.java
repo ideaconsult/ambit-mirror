@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.idea.modbcum.i.exceptions.AmbitException;
-
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.CDKConstants;
@@ -28,6 +26,7 @@ import org.openscience.cdk.stereo.TetrahedralChirality;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.core.processors.structure.AtomConfigurator;
@@ -36,6 +35,7 @@ import ambit2.smarts.SmartsConst.HandleHAtoms;
 import ambit2.smarts.SmartsConst.SSM_MODE;
 import ambit2.smarts.smirks.StereoTransformation;
 import ambit2.smarts.smirks.Transformations;
+import net.idea.modbcum.i.exceptions.AmbitException;
 
 public class SMIRKSManager {
 
@@ -408,7 +408,7 @@ public class SMIRKSManager {
     public boolean matchReaction(SMIRKSReaction reaction, 
     						IAtomContainer targetReactants, 
     						IAtomContainer targetProducts, 
-    						IAtomContainer targetAgents)
+    						IAtomContainer targetAgents) throws EmptyMoleculeException
     {
     	if (targetReactants == null)
     		return false;
@@ -472,7 +472,7 @@ public class SMIRKSManager {
     public boolean matchReaction(SMIRKSReaction reaction, 
     					IAtomContainerSet targetReactants, 
     					IAtomContainerSet targetProducts, 
-    					IAtomContainerSet targetAgents)
+    					IAtomContainerSet targetAgents) throws EmptyMoleculeException
     {
 
     	//Match reactants
@@ -1167,7 +1167,7 @@ public class SMIRKSManager {
     	return recursiveAtoms;
     }
 
-    public void mapRecursiveAtomsAgainstTarget(List<SmartsAtomExpression> recursiveAtoms, IAtomContainer target) {
+    public void mapRecursiveAtomsAgainstTarget(List<SmartsAtomExpression> recursiveAtoms, IAtomContainer target)  throws EmptyMoleculeException {
     	// Reset for new mapping
     	for (int i = 0; i < recursiveAtoms.size(); i++)
     		recursiveAtoms.get(i).recSmartsMatches = new ArrayList<List<IAtom>>();
@@ -1191,7 +1191,7 @@ public class SMIRKSManager {
     
     protected boolean matchCLG(List<IQueryAtomContainer> queryFragments, 
     							List<Integer> queryCLG,
-    							IAtomContainerSet targetComponents)
+    							IAtomContainerSet targetComponents)  throws EmptyMoleculeException
     {
     	int maxCLG = 0;
     	for (int i = 0; i < queryCLG.size(); i++)
