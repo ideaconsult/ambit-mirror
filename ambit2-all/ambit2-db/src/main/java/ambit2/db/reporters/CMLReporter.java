@@ -79,8 +79,7 @@ public class CMLReporter<Q extends IQueryRetrieval<IStructureRecord>> extends Qu
 	@Override
 	public Object processItem(IStructureRecord item) throws AmbitException {
 		if (item==null) throw new EmptyMoleculeException();
-		try {
-			StringWriter w = new StringWriter();
+		try (StringWriter w = new StringWriter()) {
 			if (STRUC_TYPE.NANO.name().equals(item.getFormat())) { // this is CML already
 				output.write(item.getContent());
 				output.write("\n");
