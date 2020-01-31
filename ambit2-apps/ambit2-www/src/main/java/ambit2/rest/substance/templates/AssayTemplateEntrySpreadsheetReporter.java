@@ -21,7 +21,7 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 		extends QueryReporter<TR, Q, OutputStream> {
 	protected final HashSet<String> templateids = new HashSet<String>();
 	protected final List<TR> records = new ArrayList<TR>();
-	protected _TEMPLATES_TYPE templates_type; 
+	protected _TEMPLATES_TYPE templates_type;
 	protected int number_of_replicates = 1;
 	protected int number_of_timepoints = 3;
 	protected int number_of_concentration = 6;
@@ -29,15 +29,19 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 	 * 
 	 */
 	private static final long serialVersionUID = -4995013793566213468L;
-	public AssayTemplateEntrySpreadsheetReporter(_TEMPLATES_TYPE templates_type, int number_of_replicates,int number_of_timepoints, int number_of_concentrations) {
+
+	public AssayTemplateEntrySpreadsheetReporter(_TEMPLATES_TYPE templates_type, int number_of_replicates,
+			int number_of_timepoints, int number_of_concentrations) {
 		this(templates_type);
 		this.number_of_concentration = number_of_concentrations;
 		this.number_of_replicates = number_of_replicates;
 		this.number_of_timepoints = number_of_timepoints;
 	}
+
 	public AssayTemplateEntrySpreadsheetReporter(_TEMPLATES_TYPE templates_type) {
 		this.templates_type = templates_type;
 	}
+
 	@Override
 	public Object processItem(TR item) throws Exception {
 		templateids.add(TR.hix.id.get(item).toString());
@@ -66,11 +70,13 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 			@Override
 			public File write(String templateid, _TEMPLATES_TYPE ttype, Workbook workbook) throws IOException {
 				try {
+					if (workbook!=null)
 					workbook.write(output);
 				} catch (Exception x) {
 					x.printStackTrace();
 				} finally {
-					workbook.close();
+					if (workbook != null)
+						workbook.close();
 				}
 				return null;
 			}
@@ -84,7 +90,7 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 			settings.setNumber_of_replicates(number_of_replicates);
 			settings.setNumber_of_timepoints(number_of_timepoints);
 			settings.setTemplatesCommand(_TEMPLATES_CMD.generate);
-			//settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
+			// settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
 			settings.setSinglefile(true);
 			// FIXME no input for generation needed, this is a placeholder
 			File tmpdir = new File(System.getProperty("java.io.tmpdir"));
