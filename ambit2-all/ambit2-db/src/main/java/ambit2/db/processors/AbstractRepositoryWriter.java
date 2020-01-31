@@ -57,7 +57,7 @@ public abstract class AbstractRepositoryWriter<Target, Result> extends AbstractD
 	exec = new UpdateExecutor<IQueryUpdate>();
 	exec.setUseCache(true);
 	queryexec = new QueryExecutor<IQueryObject>();
-	queryexec.setCache(true);
+	queryexec.setUseCache(true);
     }
 
     @Override

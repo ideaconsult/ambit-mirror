@@ -98,7 +98,7 @@ public class RepositoryWriter extends AbstractRepositoryWriter<IStructureRecord,
 		query = new QueryByIdentifierWithStructureFallback();
 		queryNum = new QueryFieldNumeric();
 		setPropertyKey(new CASKey());
-		queryexec.setCache(true);
+		queryexec.setUseCache(true);
 	}
 	
 	

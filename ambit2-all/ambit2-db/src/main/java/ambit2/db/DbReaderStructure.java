@@ -68,7 +68,7 @@ public class DbReaderStructure extends DbReader<IStructureRecord> {
 		retriever.setConnection(connection);
 		cacheUpdater.setConnection(connection);
 		lookup.setConnection(connection);
-		lookup.setCache(true);
+		lookup.setUseCache(true);
 	}
 	@Override
 	public void close() throws Exception {

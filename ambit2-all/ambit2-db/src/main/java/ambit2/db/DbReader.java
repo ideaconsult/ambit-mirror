@@ -112,7 +112,7 @@ public class DbReader<ResultType> extends AbstractBatchProcessor<IQueryRetrieval
 		if (executor==null) {
 			executor = new QueryExecutor<IQueryObject<ResultType>>();
 			executor.setCloseConnection(false);
-			executor.setCache(true);
+			executor.setUseCache(true);
 			executor.setConnection(connection);
 		}
 		setResultSet(executor.process(query));

@@ -8,14 +8,14 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 
+import ambit2.base.processors.ProcessorException;
+import ambit2.db.StatementExecutor;
 import net.idea.modbcum.i.IQueryObject;
 import net.idea.modbcum.i.IQueryRetrieval;
 import net.idea.modbcum.i.IStoredProcStatement;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.exceptions.DbAmbitException;
 import net.idea.modbcum.i.query.QueryParam;
-import ambit2.base.processors.ProcessorException;
-import ambit2.db.StatementExecutor;
 
 /**
  * Executes arbitrary {@link IQueryObject}
@@ -33,21 +33,13 @@ public class QueryExecutor<Q extends IQueryObject> extends
 	private static final long serialVersionUID = 5821244671560506456L;
 	protected PreparedStatement sresults = null;
 	protected Statement statement = null;
-	protected boolean cache = false;
+	
 	// protected String limit = "%s limit %d";
 	protected String paged_limit = "%s limit %d,%d";
 	protected String LIMIT = "limit";
 
 	public QueryExecutor() {
 
-	}
-
-	public boolean isCache() {
-		return cache;
-	}
-
-	public void setCache(boolean cache) {
-		this.cache = cache;
 	}
 
 	// ResultSet.TYPE_FORWARD_ONLY, ResultSet.TYPE_SCROLL_INSENSITIVE
@@ -105,7 +97,7 @@ public class QueryExecutor<Q extends IQueryObject> extends
 						sresults.setFetchDirection(ResultSet.FETCH_FORWARD);
 						sresults.setFetchSize(Integer.MIN_VALUE);
 					}
-					if (cache)
+					if (isUseCache())
 						addStatementToCache(sql, sresults);
 				} else {
 					sresults.clearParameters();
@@ -173,7 +165,7 @@ public class QueryExecutor<Q extends IQueryObject> extends
 		if (rs != null)
 			rs.close();
 		if (sresults != null) {
-			if (!cache)
+			if (!isUseCache())
 				sresults.close();
 			sresults = null;
 		}

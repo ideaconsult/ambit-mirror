@@ -73,7 +73,7 @@ public class ProcessorStructureRetrieval extends AbstractDBProcessor<IStructureR
 			exec = new QueryExecutor<IQueryObject<IStructureRecord>>();
 			exec.setConnection(getConnection());
 			exec.setCloseConnection(false);
-			exec.setCache(true);
+			exec.setUseCache(true);
 		}
 		
 		if (query instanceof AbstractQuery) {
