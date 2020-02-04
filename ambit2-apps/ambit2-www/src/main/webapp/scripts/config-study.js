@@ -60,14 +60,21 @@ var config_study = {
 		},
 		"GI_GENERAL_INFORM_SECTION" : {
 			"conditions" : {
+					
 				"remark" : {
 					"iOrder" : -4
 				}
 			},
 			"effects" : {
 				"endpoint" : {
-					"sTitle" : "Physical state",
+					"sTitle" : "Parameter",
+					"iOrder" : -6,
+					"inMatrix" : true
+				},
+				"text" : {
+					"sTitle" : "Result",
 					"iOrder" : -5,
+					"bVisible" : true,
 					"inMatrix" : true
 				},
 				"result" : {
@@ -78,9 +85,22 @@ var config_study = {
 				"result" : {
 					"sTitle" : "Substance type",
 					"iOrder" : -3,
-					"inMatrix" : true
+					"inMatrix" : true,
+					"bVisible" : false
+				}
+			},
+			"protocol" : {
+				"owner" : {
+					"sTitle" : "Provider"
+				},
+				"uuid" : {
+					"bVisible" : true
+				},
+				"reliability" : {
+					"bVisible" : false
 				}
 			}
+			
 		},
 		"PC_DENSITY_SECTION" : config_i5["PC_DENSITY_SECTION"],
 		"PC_MELTING_SECTION" : config_i5["PC_MELTING_SECTION"],

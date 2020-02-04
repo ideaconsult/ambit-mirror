@@ -7,8 +7,14 @@ var config_i5 = {
 		},
 		"effects" : {
 			"endpoint" : {
-				"sTitle" : "Physical state",
+				"sTitle" : "Parameter",
+				"iOrder" : -6,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Result",
 				"iOrder" : -5,
+				"bVisible" : true,
 				"inMatrix" : true
 			},
 			"result" : {
@@ -19,12 +25,19 @@ var config_i5 = {
 			"result" : {
 				"sTitle" : "Substance type",
 				"iOrder" : -3,
-				"inMatrix" : true
+				"inMatrix" : true,
+				"bVisible" : false
 			}
 		},
 		"protocol" : {
+			"owner" : {
+				"sTitle" : "Provider"
+			},
 			"uuid" : {
 				"bVisible" : true
+			},
+			"reliability" : {
+				"bVisible" : false
 			}
 		}
 	},
@@ -81,7 +94,7 @@ var config_i5 = {
 		},
 		"conditions" : config_bao["conditions"],
 		"protocol" : config_bao["protocol"],
-		"interpretation" : config_bao["interpretation"]		
+		"interpretation" : config_bao["interpretation"]
 	},
 	"PC_WATER_SOL_SECTION" : {
 		"parameters" : config_bao["parameters"],
@@ -551,7 +564,6 @@ var config_i5 = {
 			}
 
 		}
-		
 
 	},
 	"CRYSTALLITE_AND_GRAIN_SIZE_SECTION" : {
@@ -701,7 +713,7 @@ var config_i5 = {
 			}
 
 		}
-	},	
+	},
 	"IMPURITY_SECTION" : {
 		"parameters" : config_bao["parameters"],
 		"conditions" : config_bao["conditions"],
@@ -745,7 +757,7 @@ var config_i5 = {
 				"sTitle" : "Identifier"
 			}
 
-		}			
+		}
 	},
 	"EXPOSURE_SECTION" : {
 		"parameters" : config_exposure["parameters"],
@@ -795,7 +807,6 @@ var config_i5 = {
 		"conditions" : config_exposure["conditions"],
 		"protocol" : config_exposure["protocol"],
 		"interpretation" : config_exposure["interpretation"]
-	}		
-	
+	}
 
 }

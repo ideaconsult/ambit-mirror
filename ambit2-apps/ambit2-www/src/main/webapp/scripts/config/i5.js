@@ -12,8 +12,14 @@ var config_i5 = {
 		},
 		"effects" : {
 			"endpoint" : {
-				"sTitle" : "Physical state",
+				"sTitle" : "Parameter",
+				"iOrder" : -6,
+				"inMatrix" : true
+			},
+			"text" : {
+				"sTitle" : "Result",
 				"iOrder" : -5,
+				"bVisible" : true,
 				"inMatrix" : true
 			},
 			"result" : {
@@ -24,12 +30,19 @@ var config_i5 = {
 			"result" : {
 				"sTitle" : "Substance type",
 				"iOrder" : -3,
-				"inMatrix" : true
+				"inMatrix" : true,
+				"bVisible" : false
 			}
 		},
 		"protocol" : {
+			"owner" : {
+				"sTitle" : "Provider"
+			},
 			"uuid" : {
 				"bVisible" : true
+			},
+			"reliability" : {
+				"bVisible" : false
 			}
 		}
 	},
