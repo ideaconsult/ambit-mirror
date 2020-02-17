@@ -15,6 +15,7 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.db.search.QueryCombined.COMBINE;
 import ambit2.db.search.structure.QueryCombinedStructure;
 import ambit2.db.search.structure.QueryStructureByID;
+import ambit2.rest.AmbitApplication;
 import ambit2.rest.DBConnection;
 import ambit2.rest.OpenTox;
 import ambit2.rest.error.InvalidResourceIDException;
@@ -38,7 +39,7 @@ public class DatasetCompoundResource extends CompoundResource {
 	@Override
 	protected void doInit() throws ResourceException {
 		DBConnection dbc = new DBConnection(getContext());
-		configureDatasetMembersPrefixOption(dbc.dataset_prefixed_compound_uri());
+		configureDatasetMembersPrefixOption(((AmbitApplication) getApplication()).getProperties().isDatasetMembersPrefix());
 		super.doInit();
 	}
 	@Override

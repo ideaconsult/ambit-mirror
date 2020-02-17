@@ -86,7 +86,7 @@ public class AmbitFreeMarkerApplication<O> extends FreeMarkerApplication<O> {
 		gaCode = getProperties().readGACode();
 		versionShort = getProperties().readVersionShort();
 		versionLong = getProperties().readVersionLong();
-		changeLineSeparators = getProperties().getConfigChangeLineSeparator();
+		
 
 		setName(getProperties().getCustomTitle());
 		setDescription(getProperties().getCustomDescription());
