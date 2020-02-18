@@ -8,12 +8,14 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
-import ambit2.groupcontribution.cli.GroupContributionCli._option;
 
 public class HNMRPredictCli {
 
 	private static final String title = "HNMR predict";
 	public String configFile = null;
+	public String inputFileName = null;
+	public String outputFileName = null;
+	public String inputSmiles = null;
 
 	public static void main(String[] args) 
 	{
@@ -50,6 +52,51 @@ public class HNMRPredictCli {
 			@Override
 			public String getShortName() {
 				return "c";
+			}
+		},
+		
+		smiles {
+			@Override
+			public String getArgName() {
+				return "smiles";
+			}
+			@Override
+			public String getDescription() {
+				return "Input molecule smiles";
+			}
+			@Override
+			public String getShortName() {
+				return "s";
+			}
+		},
+		
+		input {
+			@Override
+			public String getArgName() {
+				return "input";
+			}
+			@Override
+			public String getDescription() {
+				return "Input molecule file";
+			}
+			@Override
+			public String getShortName() {
+				return "i";
+			}
+		},
+		
+		output {
+			@Override
+			public String getArgName() {
+				return "output";
+			}
+			@Override
+			public String getDescription() {
+				return "Output file name (*.csv)";
+			}
+			@Override
+			public String getShortName() {
+				return "o";
 			}
 		},
 
@@ -103,12 +150,31 @@ public class HNMRPredictCli {
 			argument = argument.trim();
 		switch (option) {
 
-		case config: 
+		case config:{ 
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			configFile = argument;
 			break;
-		}	
+		}
+		case smiles: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			inputSmiles = argument;
+			break;
+		}
+		case input: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			inputFileName = argument;
+			break;
+		}
+		case output: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			outputFileName = argument;
+			break;
+		}
+		}
 
 	}
 	
