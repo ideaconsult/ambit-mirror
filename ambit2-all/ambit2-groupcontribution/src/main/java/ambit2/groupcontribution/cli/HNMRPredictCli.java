@@ -1,9 +1,12 @@
 package ambit2.groupcontribution.cli;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 
 import ambit2.groupcontribution.cli.GroupContributionCli._option;
 
@@ -107,6 +110,46 @@ public class HNMRPredictCli {
 			break;
 		}	
 
+	}
+	
+	public int run(String[] args) 
+	{
+		Options options = createOptions();
+		final CommandLineParser parser = new PosixParser();
+		try {
+			CommandLine line = parser.parse( options, args,false );
+			if (line.hasOption(_option.help.name())) {
+				printHelp(options, null);
+				return -1;
+			}
+
+			for (_option o: _option.values()) 
+				if (line.hasOption(o.getShortName())) try {
+					setOption(o,line.getOptionValue(o.getShortName()));
+				} catch (Exception x) {
+					printHelp(options,x.getMessage());
+					return -1;
+				}
+
+			return runHNMR();	
+
+		} catch (Exception x ) {
+			System.out.println("**** HNMR " + x.getMessage());
+			//x.printStackTrace();
+			//printHelp(options,x.getMessage());
+			return -1;
+		} finally {
+			try { 
+				//run whatever cleanup is needed
+			} catch (Exception xx) {
+				printHelp(options,xx.getMessage());
+			}
+		}
+	}
+	
+	protected int runHNMR() throws Exception
+	{
+		//TODO
+		return 0;
 	}	
-		
 }
