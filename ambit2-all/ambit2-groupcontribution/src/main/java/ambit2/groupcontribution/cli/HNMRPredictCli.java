@@ -215,7 +215,25 @@ public class HNMRPredictCli {
 	
 	protected int runHNMR() throws Exception
 	{
-		//TODO
+		if ((inputFileName == null) && (inputSmiles == null))
+		{
+			System.out.println("No input is given! \n"
+					+ "Please assign input SMILES or input molecules file)!");
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		if (configFile == null)
+		{	
+			System.out.println("GCM configuration file not assigned!");
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		else
+		{
+			//TODO
+		}
+			
 		return 0;
 	}	
 }
