@@ -114,11 +114,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					"COMPOSITION.CONSTITUENT", "COMPOSITION.ADDITIVE", "COMPOSITION.IMPURITY", "COMPOSITION.CORE",
 					"COMPOSITION.COATING", "COMPOSITION.FUNCTIONALISATION", "COMPOSITION.DOPING" },
 			{ "id", "document_uuid", "investigation_uuid", "assay_uuid", "type_s", "topcategory", "endpointcategory",
-					"guidance", "guidance_synonym", "E.method_synonym","E.cell_type_synonym","endpoint", "effectendpoint", "effectendpoint_type",
-					"effectendpoint_synonym", "effectendpoint_group", "reference_owner", "reference_year", "reference",
-					"loQualifier", "loValue", "upQualifier", "upValue", "err", "errQualifier", "conditions", "params",
-					"textValue", "interpretation_result", "unit", "category", "idresult", "updated", "r_value",
-					"r_purposeFlag", "r_studyResultType" },
+					"guidance", "guidance_synonym", "E.method_synonym", "E.cell_type_synonym", "endpoint",
+					"effectendpoint", "effectendpoint_type", "effectendpoint_synonym", "effectendpoint_group",
+					"reference_owner", "reference_year", "reference", "loQualifier", "loValue", "upQualifier",
+					"upValue", "err", "errQualifier", "conditions", "params", "textValue", "interpretation_result",
+					"unit", "category", "idresult", "updated", "r_value", "r_purposeFlag", "r_studyResultType" },
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
@@ -137,19 +137,20 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	private static String FIELD_METHOD_SYNONYM = "E.method_synonym_ss";
 	private static String FIELD_CELLTYPE = "E.cell_type_s";
 	private static String FIELD_CELLTYPE_SYNONYM = "E.cell_type_synonym_ss";
-		
+
 	private final String[][] study_headers_combined = new String[][] { { "id", "name_s", "publicname_s", "owner_name_s",
 			"content_hss", header_dbtag, "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs",
 			"substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", header_component, "ChemicalName_s",
 			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
 			"investigation_uuid_s", "assay_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s",
-			"guidance_synonym_ss", FIELD_METHOD_SYNONYM,FIELD_CELLTYPE_SYNONYM,"endpoint_s", "effectendpoint_s", "effectendpoint_type_s",
-			"effectendpoint_synonym_ss", "effectendpoint_group_d", "reference_owner_s", "reference_year_s",
-			"reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d", "errQualifier_s",
-			"conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s", "unit_s", "category_s",
-			"idresult", "nmcode_hs", "nmcode_s", "substance_annotation_hss", "substance_annotation_ss", "updated_s",
-			FIELD_METHOD, FIELD_CELLTYPE, header_reliability, header_studyResultType, header_purposeFlag,
-			header_summary_results, header_summary_refs, header_summary_refowner, "" } };
+			"guidance_synonym_ss", FIELD_METHOD_SYNONYM, FIELD_CELLTYPE_SYNONYM, "endpoint_s", "effectendpoint_s",
+			"effectendpoint_type_s", "effectendpoint_synonym_ss", "effectendpoint_group_d", "reference_owner_s",
+			"reference_year_s", "reference_s", "loQualifier_s", "loValue_d", "upQualifier_s", "upValue_d", "err_d",
+			"errQualifier_s", "conditions_s", "effectid_hs", "params", "textValue_s", "interpretation_result_s",
+			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", "substance_annotation_hss",
+			"substance_annotation_ss", "updated_s", FIELD_METHOD, FIELD_CELLTYPE, header_reliability,
+			header_studyResultType, header_purposeFlag, header_summary_results, header_summary_refs,
+			header_summary_refowner, "" } };
 
 	@Override
 	public void setConnection(Connection conn) throws DbAmbitException {
@@ -302,8 +303,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 
 			String nmcode = null;
 			Bucket bucket_ids = new Bucket();
+			List<String> xids = new ArrayList<String>();
 			if (record.getExternalids() != null) {
-				List<String> xids = new ArrayList<String>();
 
 				Set<String> keys = new TreeSet<String>();
 				keys.add("type_s");
@@ -323,9 +324,6 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						continue;
 					if ("COD ID".equals(id.getSystemDesignator())) {
 						xids.add(String.format("http://www.crystallography.net/cod/%s.html", id.getSystemIdentifier()));
-					} else if (id.getSystemIdentifier().indexOf("{cananohome}") >= 0) {
-						xids.add(id.getSystemIdentifier().replace("{cananohome}",
-								"https://cananolab.nci.nih.gov/caNanoLab/#"));
 					} else if (id.getSystemIdentifier().startsWith("http"))
 						xids.add(id.getSystemIdentifier());
 					else if ("NM code".equals(id.getSystemDesignator())) {
@@ -340,16 +338,18 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 				}
 
 				if (bucket_ids.size() > 0) {
-
 					bucket_ids.setHeaders(new String[][] { keys.toArray(new String[keys.size()]) });
 					bucket_ids.put("id", String.format("%s/id", record.getSubstanceUUID()));
 					bucket_ids.put("s_uuid_hs", record.getSubstanceUUID());
 					bucket_ids.put("type_s", "identifier");
 					_childDocuments_.add(bucket_ids);
 				}
-				bucket.put("content_hss", xids);
 
 			}
+			if (record.getContent() != null)
+				xids.add(record.getContent());
+			if (xids != null && xids.size() > 0)
+				bucket.put("content_hss", xids);
 
 			List<String> summary_papp = null;
 			List<String> summary_refs = null;
@@ -392,9 +392,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 									prm.put("endpointcategory_s", papp.getProtocol().getCategory());
 									if (papp.getProtocol().getGuideline() != null
 											&& !papp.getProtocol().getGuideline().isEmpty()) {
-										try {	
-										prm.put("guidance_s", papp.getProtocol().getGuideline().get(0).toUpperCase());
-										} catch (Exception x) {}
+										try {
+											prm.put("guidance_s",
+													papp.getProtocol().getGuideline().get(0).toUpperCase());
+										} catch (Exception x) {
+										}
 
 									} else
 										prm.put("guidance_s", "Not specified");
@@ -446,7 +448,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 											prmc.put("endpointcategory_s", papp.getProtocol().getCategory());
 											if (papp.getProtocol().getGuideline() != null
 													&& !papp.getProtocol().getGuideline().isEmpty())
-												prmc.put("guidance_s", papp.getProtocol().getGuideline().get(0).toUpperCase());
+												prmc.put("guidance_s",
+														papp.getProtocol().getGuideline().get(0).toUpperCase());
 											if (cell != null)
 												prmc.put(FIELD_CELLTYPE, cell.toString());
 											if (method != null) {
@@ -498,12 +501,11 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			 */
 			/*
 			 * if (summary_papp != null) { Iterator<String> keys =
-			 * summary_papp.keySet().iterator(); while (keys.hasNext()) { String
-			 * key = keys.next(); bucket.put(String.format("RESULTS.%s_hs",
-			 * key), summary_papp.get(key)); } } if (summary_refs != null) {
-			 * Iterator<String> keys = summary_refs.keySet().iterator(); while
-			 * (keys.hasNext()) { String key = keys.next();
-			 * bucket.put(String.format("REFS.%s_hs", key),
+			 * summary_papp.keySet().iterator(); while (keys.hasNext()) { String key =
+			 * keys.next(); bucket.put(String.format("RESULTS.%s_hs", key),
+			 * summary_papp.get(key)); } } if (summary_refs != null) { Iterator<String> keys
+			 * = summary_refs.keySet().iterator(); while (keys.hasNext()) { String key =
+			 * keys.next(); bucket.put(String.format("REFS.%s_hs", key),
 			 * summary_refs.get(key)); } }
 			 */
 		}
@@ -538,13 +540,13 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					if (unit != null && !"".equals(unit.toString().trim())) {
 						newprm.put(String.format("%s_UNIT_s", key.toString()), unit.toString());
 					}
-					if (v.getLoValue() != null && v.getUpValue() != null)  {
+					if (v.getLoValue() != null && v.getUpValue() != null) {
 						newprm.put(String.format("%s_LOVALUE_d", key.toString()), v.getLoValue());
 						if (v.getLoQualifier() != null && !"".equals(v.getLoQualifier().trim()))
 							newprm.put(String.format("%s_LOQUALIFIER_s", key.toString()), v.getLoQualifier());
 						newprm.put(String.format("%s_UPVALUE_d", key.toString()), v.getUpValue());
 						if (v.getUpQualifier() != null && !"".equals(v.getUpQualifier().trim()))
-							newprm.put(String.format("%s_UPQUALIFIER_s", key.toString()), v.getUpQualifier());						
+							newprm.put(String.format("%s_UPQUALIFIER_s", key.toString()), v.getUpQualifier());
 					} else if (v.getLoValue() != null) {
 						newprm.put(String.format("%s_d", key.toString()), v.getLoValue());
 					}
