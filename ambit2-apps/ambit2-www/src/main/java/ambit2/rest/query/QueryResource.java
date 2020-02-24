@@ -1,7 +1,6 @@
 package ambit2.rest.query;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.URL;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -90,22 +88,17 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	protected boolean dataset_prefixed_compound_uri = false;
 	public final static String query_resource = "/query";
 
-
-
 	protected int maxRetry = 3;
 	protected boolean headless = false;
 
 	@Override
 	protected void doInit() throws ResourceException {
 		super.doInit();
-		customizeVariants(new MediaType[] { MediaType.TEXT_HTML,
-				MediaType.TEXT_PLAIN, MediaType.TEXT_URI_LIST,
-				MediaType.TEXT_CSV, MediaType.APPLICATION_RDF_XML,
-				MediaType.APPLICATION_RDF_TURTLE, MediaType.TEXT_RDF_N3,
-				ChemicalMediaType.APPLICATION_JSONLD,
-				MediaType.TEXT_RDF_NTRIPLES, MediaType.APPLICATION_JSON,
-				MediaType.APPLICATION_JAVASCRIPT,
-				MediaType.APPLICATION_JAVA_OBJECT, MediaType.APPLICATION_WADL
+		customizeVariants(new MediaType[] { MediaType.TEXT_HTML, MediaType.TEXT_PLAIN, MediaType.TEXT_URI_LIST,
+				MediaType.TEXT_CSV, MediaType.APPLICATION_RDF_XML, MediaType.APPLICATION_RDF_TURTLE,
+				MediaType.TEXT_RDF_N3, ChemicalMediaType.APPLICATION_JSONLD, MediaType.TEXT_RDF_NTRIPLES,
+				MediaType.APPLICATION_JSON, MediaType.APPLICATION_JAVASCRIPT, MediaType.APPLICATION_JAVA_OBJECT,
+				MediaType.APPLICATION_WADL
 
 		});
 		if (queryObject != null) {
@@ -119,7 +112,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		return getResourceRef(getRequest()).getQueryAsForm();
 	}
 
-
 	protected Q returnQueryObject() {
 		return queryObject;
 	}
@@ -130,11 +122,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	protected void configureRDFWriterOption(String defaultWriter) {
 		try {
-			Object jenaOption = getResourceRef(getRequest()).getQueryAsForm()
-					.getFirstValue("rdfwriter");
+			Object jenaOption = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("rdfwriter");
 
-			rdfwriter = RDF_WRITER.valueOf(jenaOption == null ? defaultWriter
-					: jenaOption.toString().toLowerCase());
+			rdfwriter = RDF_WRITER.valueOf(jenaOption == null ? defaultWriter : jenaOption.toString().toLowerCase());
 		} catch (Exception x) {
 			rdfwriter = RDF_WRITER.jena;
 		}
@@ -142,33 +132,25 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	protected void configureSDFLineSeparators(boolean defaultSeparator) {
 		try {
-			Object lsOption = getResourceRef(getRequest()).getQueryAsForm()
-					.getFirstValue("changeLineSeparators");
-			changeLineSeparators = lsOption == null ? defaultSeparator
-					: Boolean.parseBoolean(lsOption.toString());
+			Object lsOption = getResourceRef(getRequest()).getQueryAsForm().getFirstValue("changeLineSeparators");
+			changeLineSeparators = lsOption == null ? defaultSeparator : Boolean.parseBoolean(lsOption.toString());
 		} catch (Exception x) {
 			changeLineSeparators = defaultSeparator;
 		}
 	}
 
-	protected Representation getRepresentation(Variant variant)
-			throws ResourceException {
+	protected Representation getRepresentation(Variant variant) throws ResourceException {
 		try {
-			if (MediaType.APPLICATION_JAVA_OBJECT
-					.equals(variant.getMediaType())) {
-				if ((queryObject != null)
-						&& (queryObject instanceof Serializable))
-					return new ObjectRepresentation(
-							(Serializable) returnQueryObject(),
+			if (MediaType.APPLICATION_JAVA_OBJECT.equals(variant.getMediaType())) {
+				if ((queryObject != null) && (queryObject instanceof Serializable))
+					return new ObjectRepresentation((Serializable) returnQueryObject(),
 							MediaType.APPLICATION_JAVA_OBJECT);
 				else
-					throw new ResourceException(
-							Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+					throw new ResourceException(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
 			}
 			if (MediaType.APPLICATION_JAVASCRIPT.equals(variant.getMediaType())) {
 				if (!isJSONPEnabled())
-					throw new ResourceException(
-							Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+					throw new ResourceException(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
 			}
 			if (queryObject != null) {
 
@@ -179,19 +161,16 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 					try {
 						DBConnection dbc = new DBConnection(getContext());
 
-						configureRDFWriterOption(dbc.rdfWriter());
-						configureSDFLineSeparators(((AmbitApplication) getApplication())
-								.isChangeLineSeparators());
-						configureDatasetMembersPrefixOption(dbc
-								.dataset_prefixed_compound_uri());
+						configureRDFWriterOption(((AmbitApplication) getApplication()).getProperties().getRDFwriter());
+						configureSDFLineSeparators(((AmbitApplication) getApplication()).getProperties().getConfigChangeLineSeparator());
+						configureDatasetMembersPrefixOption(((AmbitApplication) getApplication()).getProperties().isDatasetMembersPrefix());
+						
 						convertor = createConvertor(variant);
 						if (convertor instanceof RepresentationConvertor)
-							((RepresentationConvertor) convertor)
-									.setLicenseURI(getLicenseURI());
+							((RepresentationConvertor) convertor).setLicenseURI(getLicenseURI());
 
 						connection = dbc.getConnection();
-						Reporter reporter = ((RepresentationConvertor) convertor)
-								.getReporter();
+						Reporter reporter = ((RepresentationConvertor) convertor).getReporter();
 						if (reporter instanceof IDBProcessor)
 							((IDBProcessor) reporter).setConnection(connection);
 						Representation r = convertor.process(queryObject);
@@ -207,15 +186,13 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 							return r;
 					} catch (BatchProcessingException x) {
 						if (x.getCause() instanceof NotFoundException) {
-							Representation r = processNotFound(
-									(NotFoundException) x.getCause(), retry);
+							Representation r = processNotFound((NotFoundException) x.getCause(), retry);
 							retry++;
 							if (r != null)
 								return r;
 						} else {
 							Context.getCurrentLogger().severe(x.getMessage());
-							throw new RResourceException(
-									Status.SERVER_ERROR_INTERNAL, x, variant);
+							throw new RResourceException(Status.SERVER_ERROR_INTERNAL, x, variant);
 						}
 					} catch (SQLException x) {
 						Representation r = processSQLError(x, retry, variant);
@@ -226,8 +203,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 							return r;
 					} catch (Exception x) {
 						Context.getCurrentLogger().severe(x.getMessage());
-						throw new RResourceException(
-								Status.SERVER_ERROR_INTERNAL, x, variant);
+						throw new RResourceException(Status.SERVER_ERROR_INTERNAL, x, variant);
 
 					} finally {
 
@@ -248,12 +224,10 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 						Representation r = convertor.process(null);
 						return r;
 					} catch (Exception x) {
-						throw new RResourceException(
-								Status.CLIENT_ERROR_BAD_REQUEST, x, variant);
+						throw new RResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x, variant);
 					}
 				else {
-					throw new RResourceException(
-							Status.CLIENT_ERROR_BAD_REQUEST, error, variant);
+					throw new RResourceException(Status.CLIENT_ERROR_BAD_REQUEST, error, variant);
 				}
 
 			}
@@ -262,46 +236,40 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		} catch (ResourceException x) {
 			throw new RResourceException(x.getStatus(), x, variant);
 		} catch (Exception x) {
-			throw new RResourceException(Status.SERVER_ERROR_INTERNAL, x,
-					variant);
+			throw new RResourceException(Status.SERVER_ERROR_INTERNAL, x, variant);
 		}
 	}
 
-	protected Representation processNotFound(NotFoundException x, int retry)
-			throws Exception {
+	protected Representation processNotFound(NotFoundException x, int retry) throws Exception {
 		throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND,
 				String.format("Query returns no results! %s", x.getMessage()));
 	}
 
-	protected Representation processSQLError(SQLException x, int retry,
-			Variant variant) throws Exception {
+	protected Representation processSQLError(SQLException x, int retry, Variant variant) throws Exception {
 		Context.getCurrentLogger().severe(x.getMessage());
 		if (retry < maxRetry) {
 			retry++;
-			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE, x,
-					String.format("Retry %d ", retry));
+			getResponse().setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE, x, String.format("Retry %d ", retry));
 			return null;
 		} else {
-			throw new RResourceException(
-					Status.SERVER_ERROR_SERVICE_UNAVAILABLE, x, variant);
+			throw new RResourceException(Status.SERVER_ERROR_SERVICE_UNAVAILABLE, x, variant);
 		}
 	}
 
-	protected void customizeEntry(T entry, Connection conection)
-			throws ResourceException {
+	protected void customizeEntry(T entry, Connection conection) throws ResourceException {
 
 	}
 
 	/**
-	 * POST - create entity based on parameters in http header, creates a new
-	 * entry in the databaseand returns an url to it
+	 * POST - create entity based on parameters in http header, creates a new entry
+	 * in the databaseand returns an url to it
+	 * 
 	 * @param entity
 	 * @param entry
 	 * @param updateObject
 	 * @throws ResourceException
 	 */
-	public void executeUpdate(Representation entity, T entry,
-			AbstractUpdate updateObject) throws ResourceException {
+	public void executeUpdate(Representation entity, T entry, AbstractUpdate updateObject) throws ResourceException {
 
 		Connection c = null;
 		// TODO it is inefficient to instantiate executor in all classes
@@ -319,28 +287,22 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			QueryURIReporter<T, Q> uriReporter = getURUReporter(getRequest());
 			if (uriReporter != null) {
 				getResponse().setLocationRef(uriReporter.getURI(entry));
-				getResponse().setEntity(uriReporter.getURI(entry),
-						MediaType.TEXT_HTML);
+				getResponse().setEntity(uriReporter.getURI(entry), MediaType.TEXT_HTML);
 			}
 			getResponse().setStatus(Status.SUCCESS_OK);
 			onUpdateSuccess();
 		} catch (SQLException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
-			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN, x,
-					x.getMessage());
+			getResponse().setStatus(Status.CLIENT_ERROR_FORBIDDEN, x, x.getMessage());
 			getResponse().setEntity(null);
 		} catch (ProcessorException x) {
 			Context.getCurrentLogger().severe(x.getMessage());
-			getResponse()
-					.setStatus(
-							(x.getCause() instanceof SQLException) ? Status.CLIENT_ERROR_FORBIDDEN
-									: Status.SERVER_ERROR_INTERNAL, x,
-							x.getMessage());
+			getResponse().setStatus((x.getCause() instanceof SQLException) ? Status.CLIENT_ERROR_FORBIDDEN
+					: Status.SERVER_ERROR_INTERNAL, x, x.getMessage());
 			getResponse().setEntity(null);
 		} catch (Exception x) {
 			Context.getCurrentLogger().severe(x.getMessage());
-			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x,
-					x.getMessage());
+			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL, x, x.getMessage());
 			getResponse().setEntity(null);
 		} finally {
 			try {
@@ -360,10 +322,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	}
 
 	/**
-	 * POST - create entity based on parameters in the query, creates a new
-	 * entry in the databaseand returns an url to it TODO Refactor to allow
-	 * multiple objects
-
+	 * POST - create entity based on parameters in the query, creates a new entry in
+	 * the databaseand returns an url to it TODO Refactor to allow multiple objects
+	 * 
 	 * @param entity
 	 * @throws ResourceException
 	 */
@@ -372,7 +333,6 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		executeUpdate(entity, entry, createUpdateObject(entry));
 
 	}
-
 
 	protected Representation delete(Variant variant) throws ResourceException {
 		Representation entity = getRequestEntity();
@@ -385,40 +345,35 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		return new EmptyRepresentation();
 	};
 
-	protected QueryURIReporter<T, Q> getURUReporter(Request baseReference)
-			throws ResourceException {
+	protected QueryURIReporter<T, Q> getURUReporter(Request baseReference) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,
 				String.format("%s getURUReporter()", getClass().getName()));
 	}
 
-	protected AbstractUpdate createUpdateObject(T entry)
-			throws ResourceException {
+	protected AbstractUpdate createUpdateObject(T entry) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,
 				String.format("%s createUpdateObject()", getClass().getName()));
 	}
 
-	protected AbstractUpdate createDeleteObject(T entry)
-			throws ResourceException {
+	protected AbstractUpdate createDeleteObject(T entry) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,
 				String.format("%s createDeleteObject()", getClass().getName()));
 	}
 
-	protected RDFObjectIterator<T> createObjectIterator(Reference reference,
-			MediaType mediaType) throws ResourceException {
-		throw new ResourceException(
-				Status.SERVER_ERROR_NOT_IMPLEMENTED,
+	protected RDFObjectIterator<T> createObjectIterator(Reference reference, MediaType mediaType)
+			throws ResourceException {
+		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,
 				String.format("%s createObjectIterator()", getClass().getName()));
 	}
 
-	protected RDFObjectIterator<T> createObjectIterator(Representation entity)
-			throws ResourceException {
+	protected RDFObjectIterator<T> createObjectIterator(Representation entity) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED,
 				String.format("%s createObjectIterator", getClass().getName()));
 	}
 
 	/**
 	 * Return this object if can't parse source_uri
-	 
+	 * 
 	 * @param uri
 	 * @return
 	 */
@@ -428,17 +383,16 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	/**
 	 * either entity in RDF/XML or ?source_uri=URI
+	 * 
 	 * @param queryForm
 	 * @param entity
 	 * @return
 	 * @throws ResourceException
 	 */
-	protected T createObjectFromHeaders(Form queryForm, Representation entity)
-			throws ResourceException {
+	protected T createObjectFromHeaders(Form queryForm, Representation entity) throws ResourceException {
 		RDFObjectIterator<T> iterator = null;
 		if (!entity.isAvailable()) { // using URI
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					"Empty content");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Empty content");
 		} else if (MediaType.TEXT_URI_LIST.equals(entity.getMediaType())) {
 			return createObjectFromURIlist(entity);
 		} else if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) {
@@ -463,8 +417,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			} catch (ResourceException x) {
 				throw x;
 			} catch (Exception x) {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-						x.getMessage(), x);
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 			} finally {
 				try {
 					iterator.close();
@@ -479,20 +432,17 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 	}
 
 	protected String getObjectURI(Form queryForm) throws ResourceException {
-		return getParameter(queryForm, OpenTox.params.source_uri.toString(),
-				OpenTox.params.source_uri.getDescription(), true);
+		return getParameter(queryForm, OpenTox.params.source_uri.toString(), OpenTox.params.source_uri.getDescription(),
+				true);
 	}
 
-	protected T createObjectFromWWWForm(Representation entity)
-			throws ResourceException {
+	protected T createObjectFromWWWForm(Representation entity) throws ResourceException {
 		Form queryForm = new Form(entity);
 		String sourceURI = getObjectURI(queryForm);
 		RDFObjectIterator<T> iterator = null;
 		try {
-			iterator = createObjectIterator(
-					new Reference(sourceURI),
-					entity.getMediaType() == null ? MediaType.APPLICATION_RDF_XML
-							: entity.getMediaType());
+			iterator = createObjectIterator(new Reference(sourceURI),
+					entity.getMediaType() == null ? MediaType.APPLICATION_RDF_XML : entity.getMediaType());
 			iterator.setCloseModel(true);
 			iterator.setBaseReference(getRequest().getRootRef());
 			while (iterator.hasNext()) {
@@ -510,24 +460,20 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		}
 	}
 
-	protected T createObjectFromMultiPartForm(Representation entity)
-			throws ResourceException {
+	protected T createObjectFromMultiPartForm(Representation entity) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
-	protected T createObjectFromURIlist(Representation entity)
-			throws ResourceException {
+	protected T createObjectFromURIlist(Representation entity) throws ResourceException {
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(
-					entity.getStream()));
+			reader = new BufferedReader(new InputStreamReader(entity.getStream()));
 			String line = null;
 			while ((line = reader.readLine()) != null)
 				return onError(line);
 			throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 		} catch (Exception x) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-					x.getMessage(), x);
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, x.getMessage(), x);
 		} finally {
 			try {
 				reader.close();
@@ -537,8 +483,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	}
 
-	protected Representation process(Representation entity,
-			final Variant variant, final boolean async)
+	protected Representation process(Representation entity, final Variant variant, final boolean async)
 			throws ResourceException {
 		synchronized (this) {
 
@@ -548,40 +493,33 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 				final Form form = new Form(entity);
 				final Reference reference = new Reference(getObjectURI(form));
 				// models
-				IQueryRetrieval<T> query = createQuery(getContext(),
-						getRequest(), getResponse());
+				IQueryRetrieval<T> query = createQuery(getContext(), getRequest(), getResponse());
 				if (query == null)
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
 
-				TaskCreator<Object, T> taskCreator = new TaskCreator<Object, T>(
-						form, async) {
+				TaskCreator<Object, T> taskCreator = new TaskCreator<Object, T>(form, async) {
 					/**
-				     * 
-				     */
+					 * 
+					 */
 					private static final long serialVersionUID = -1964726528437949752L;
 
 					@Override
-					protected ICallableTask getCallable(Form form, T item)
-							throws ResourceException {
+					protected ICallableTask getCallable(Form form, T item) throws ResourceException {
 						return createCallable(form, item);
 					}
 
 					@Override
-					protected ITask<Reference, Object> createTask(
-							ICallableTask callable, T item)
+					protected ITask<Reference, Object> createTask(ICallableTask callable, T item)
 							throws ResourceException {
 
 						return ((ITaskApplication) getApplication()).addTask(
-								String.format("Apply %s %s %s",
-										item.toString(), reference == null ? ""
-												: "to", reference == null ? ""
-												: reference), callable,
-								getRequest().getRootRef(), getToken());
+								String.format("Apply %s %s %s", item.toString(), reference == null ? "" : "to",
+										reference == null ? "" : reference),
+								callable, getRequest().getRootRef(), getToken());
 					}
 				};
 
-				DBConnection dbc = new DBConnection(getApplication()
-						.getContext());
+				DBConnection dbc = new DBConnection(getApplication().getContext());
 				conn = dbc.getConnection(30, true, 5);
 
 				List<UUID> r = null;
@@ -603,21 +541,15 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 				if ((r == null) || (r.size() == 0))
 					throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND);
 				else {
-					ITaskStorage storage = ((ITaskApplication) getApplication())
-							.getTaskStorage();
-					FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(
-							storage);
+					ITaskStorage storage = ((ITaskApplication) getApplication()).getTaskStorage();
+					FactoryTaskConvertor<Object> tc = new FactoryTaskConvertor<Object>(storage);
 					if (r.size() == 1) {
-						ITask<Reference, Object> task = storage.findTask(r
-								.get(0));
+						ITask<Reference, Object> task = storage.findTask(r.get(0));
 						task.update();
-						setStatus(task.isDone() ? Status.SUCCESS_OK
-								: Status.SUCCESS_ACCEPTED);
-						return tc.createTaskRepresentation(r.get(0), variant,
-								getRequest(), getResponse(), null);
+						setStatus(task.isDone() ? Status.SUCCESS_OK : Status.SUCCESS_ACCEPTED);
+						return tc.createTaskRepresentation(r.get(0), variant, getRequest(), getResponse(), null);
 					} else
-						return tc.createTaskRepresentation(r.iterator(),
-								variant, getRequest(), getResponse(), null);
+						return tc.createTaskRepresentation(r.iterator(), variant, getRequest(), getResponse(), null);
 
 				}
 			} catch (RResourceException x) {
@@ -625,14 +557,11 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			} catch (ResourceException x) {
 				throw new RResourceException(x.getStatus(), x, variant);
 			} catch (AmbitException x) {
-				throw new RResourceException(new Status(
-						Status.SERVER_ERROR_INTERNAL, x), variant);
+				throw new RResourceException(new Status(Status.SERVER_ERROR_INTERNAL, x), variant);
 			} catch (SQLException x) {
-				throw new RResourceException(new Status(
-						Status.SERVER_ERROR_INTERNAL, x), variant);
+				throw new RResourceException(new Status(Status.SERVER_ERROR_INTERNAL, x), variant);
 			} catch (Exception x) {
-				throw new RResourceException(new Status(
-						Status.SERVER_ERROR_INTERNAL, x), variant);
+				throw new RResourceException(new Status(Status.SERVER_ERROR_INTERNAL, x), variant);
 			} finally {
 				try {
 					if (conn != null)
@@ -643,21 +572,18 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		}
 	}
 
-	protected CallableQueryProcessor createCallable(Form form, T item)
-			throws ResourceException {
+	protected CallableQueryProcessor createCallable(Form form, T item) throws ResourceException {
 		throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
 	}
 
 	protected void setPaging(Form form, IQueryObject queryObject) {
 		String max = form.getFirstValue(max_hits);
 		String page = form.getFirstValue(OpenTox.params.page.toString());
-		String pageSize = form
-				.getFirstValue(OpenTox.params.pagesize.toString());
+		String pageSize = form.getFirstValue(OpenTox.params.pagesize.toString());
 		if (max != null)
 			try {
 				queryObject.setPage(0);
-				queryObject.setPageSize(Long.parseLong(form.getFirstValue(
-						max_hits).toString()));
+				queryObject.setPageSize(Long.parseLong(form.getFirstValue(max_hits).toString()));
 				return;
 			} catch (Exception x) {
 
@@ -675,23 +601,20 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	protected Template createTemplate(Form form) throws ResourceException {
 		String[] featuresURI = OpenTox.params.feature_uris.getValuesArray(form);
-		return createTemplate(getContext(), getRequest(), getResponse(),
-				featuresURI);
+		return createTemplate(getContext(), getRequest(), getResponse(), featuresURI);
 	}
 
-	protected Template createTemplate(Context context, Request request,
-			Response response, String[] featuresURI) throws ResourceException {
+	protected Template createTemplate(Context context, Request request, Response response, String[] featuresURI)
+			throws ResourceException {
 		Connection conn = null;
 		try {
 			Template profile = new Template(null);
 			profile.setId(-1);
 
-			ProfileReader reader = new ProfileReader(getRequest().getRootRef(),
-					profile, getApplication().getContext(), getToken(),
-					getRequest().getCookies(),
-					getRequest().getClientInfo() == null ? null : getRequest()
-							.getClientInfo().getAgent(), getRequest()
-							.getResourceRef().toString());
+			ProfileReader reader = new ProfileReader(getRequest().getRootRef(), profile, getApplication().getContext(),
+					getToken(), getRequest().getCookies(),
+					getRequest().getClientInfo() == null ? null : getRequest().getClientInfo().getAgent(),
+					getRequest().getResourceRef().toString());
 			reader.setCloseConnection(false);
 
 			DBConnection dbc = new DBConnection(getApplication().getContext());
@@ -709,8 +632,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 				// readFeatures(featureURI, profile);
 				if (profile.size() == 0) {
 					reader.setConnection(conn);
-					String templateuri = getDefaultTemplateURI(context,
-							request, response);
+					String templateuri = getDefaultTemplateURI(context, request, response);
 					if (templateuri != null)
 						profile = reader.process(new Reference(templateuri));
 					reader.setProfile(profile);
@@ -742,8 +664,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	}
 
-	protected String getDefaultTemplateURI(Context context, Request request,
-			Response response) {
+	protected String getDefaultTemplateURI(Context context, Request request, Response response) {
 		return null;
 	}
 
@@ -755,15 +676,13 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		AMBITAppConfigProperties config = new AMBITAppConfigProperties();
 		return config.isJSONP();
 	}
-	
+
 	public boolean isAAEnabled() {
 		AMBITAppConfigInternal config = new AMBITAppConfigInternal();
 		return config.isOpenToxAAEnabled();
 	}
-	
 
-	protected Representation getHTMLByTemplate(Variant variant)
-			throws ResourceException {
+	protected Representation getHTMLByTemplate(Variant variant) throws ResourceException {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		if (getClientInfo().getUser() != null) {
@@ -784,14 +703,12 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			getClientInfo().setUser(ou);
 		}
 		try {
-			map.put(AMBITConfig.ajaxtimeout.name(),
-					((AmbitApplication) getApplication()).getAjaxTimeout());
+			map.put(AMBITConfig.ajaxtimeout.name(), ((AmbitApplication) getApplication()).getAjaxTimeout());
 		} catch (Exception x) {
 			map.put(AMBITConfig.ajaxtimeout.name(), "10000");
 		}
 		setTokenCookies(variant, useSecureCookie(getRequest()));
-		configureTemplateMap(map, getRequest(),
-				(IFreeMarkerApplication) getApplication());
+		configureTemplateMap(map, getRequest(), (IFreeMarkerApplication) getApplication());
 		return toRepresentation(map, getTemplateName(), MediaType.TEXT_PLAIN);
 	}
 
@@ -800,8 +717,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			return;
 		try {
 			OpenSSOServicesConfig config = OpenSSOServicesConfig.getInstance();
-			OpenSSOPolicy policyTools = new OpenSSOPolicy(
-					config.getPolicyService());
+			OpenSSOPolicy policyTools = new OpenSSOPolicy(config.getPolicyService());
 			OpenSSOToken ssoToken = new OpenSSOToken(config.getOpenSSOService());
 			ssoToken.setToken(token);
 			deleteAllPolicies(policyTools, ssoToken, url);
@@ -811,13 +727,11 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 		}
 	}
 
-	public void deleteAllPolicies(OpenSSOPolicy policyTools,
-			OpenSSOToken ssoToken, URL url) throws Exception {
+	public void deleteAllPolicies(OpenSSOPolicy policyTools, OpenSSOToken ssoToken, URL url) throws Exception {
 		IOpenToxUser user = new OpenToxUser();
 		getLogger().fine("Deleting policies for " + url.toString());
 		Hashtable<String, String> policies = new Hashtable<String, String>();
-		int status = policyTools.getURIOwner(ssoToken, url.toExternalForm(),
-				user, policies);
+		int status = policyTools.getURIOwner(ssoToken, url.toExternalForm(), user, policies);
 		if (200 == status) {
 			Enumeration<String> e = policies.keys();
 			while (e.hasMoreElements()) {
@@ -830,8 +744,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 	protected Integer getIdBundle(Object bundleURI, Request request) {
 		if (bundleURI != null) {
-			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(),
-					request.getRootRef());
+			Object id = OpenTox.URI.bundle.getId(bundleURI.toString(), request.getRootRef());
 			if (id != null && (id instanceof Integer))
 				return (Integer) id;
 		}
