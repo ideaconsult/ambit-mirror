@@ -567,7 +567,32 @@ var config_study = {
 
 			}			
 		},
-		
+		"METABOLOMICS_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"],
+			"effects" : {
+				"endpoint" : {
+					"iOrder" : -9,
+					"bVisible" : true,
+					"inMatrix" : true,
+					"sTitle" : "Result"
+				},
+				"text" : {
+					"iOrder" : -8,
+					"bVisible" : true,
+					"inMatrix" : true,
+					"sTitle" : ""
+				},
+				"result" : {
+					"iOrder" : -8,
+					"bVisible" : false,
+					"inMatrix" : false
+				}
+
+			},
+		},
 		"TRANSCRIPTOMICS_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"conditions" : config_bao["conditions"],
@@ -936,6 +961,14 @@ var config_study = {
 			"interpretation" : config_bao["interpretation"]
 		},
 		"ENM_0000068_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+		},
+		
+		"NPO_296_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
 			"conditions" : config_bao["conditions"],

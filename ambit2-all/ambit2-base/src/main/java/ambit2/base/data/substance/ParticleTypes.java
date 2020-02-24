@@ -990,10 +990,10 @@ public enum ParticleTypes {
 			return "Glass wool";
 		}
 	},
-	Alloy {
+	CHEBI_142648 {
 		@Override
 		public String toString() {
-			return name();
+			return "Alloy";
 		}
 	};
 	public String getName() {

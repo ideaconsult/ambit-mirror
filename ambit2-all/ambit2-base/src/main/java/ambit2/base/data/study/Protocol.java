@@ -1993,7 +1993,27 @@ public class Protocol {
 				return "TOX";
 			}
 		},
+		METABOLOMICS_SECTION {
+			@Override
+			public String toString() {
+				return "Metabolomics";
+			}
 
+			@Override
+			public int getSortingOrder() {
+				return 800;
+			}
+
+			@Override
+			public String getNumber() {
+				return "";
+			}
+
+			@Override
+			public String getTopCategory() {
+				return "TOX";
+			}			
+		},
 		NPO_296_SECTION {
 			@Override
 			public String toString() {
