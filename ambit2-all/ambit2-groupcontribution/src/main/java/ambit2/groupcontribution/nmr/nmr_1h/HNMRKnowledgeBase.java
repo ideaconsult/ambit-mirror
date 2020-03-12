@@ -14,7 +14,10 @@ import ambit2.smarts.groups.GroupMatch;
 public class HNMRKnowledgeBase 
 {
 	public List<HAtomEnvironment> hAtomEnvironments = new ArrayList<HAtomEnvironment>();
-	public Map<String, GroupMatch> groupMatchRepository = new HashMap<String, GroupMatch>(); 
+	public Map<String, GroupMatch> groupMatchRepository = new HashMap<String, GroupMatch>();
+	public List<Rule2J> rules2j = new ArrayList<Rule2J>();
+	public List<Rule3J> rules3j = new ArrayList<Rule3J>();
+	
 	
 	SmartsParser parser = new SmartsParser(); 
 	IsomorphismTester isoTester = new IsomorphismTester(); 
