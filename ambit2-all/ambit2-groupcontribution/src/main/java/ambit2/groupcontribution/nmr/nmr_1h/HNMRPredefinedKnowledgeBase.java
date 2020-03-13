@@ -83,7 +83,18 @@ public class HNMRPredefinedKnowledgeBase
 					else
 					{
 						if (haEnv == null)
-							continue; //This is a file line before first H_ATOM_ENVIRONMENT
+						{	
+							//This is a file line outside H_ATOM_ENVIRONMENT sections
+							//(before, between or after H_ATOM_ENVIRONMENT sections) used for
+							//It is an empty line or a line with JJ coupling rules
+							if (line.contains("$$2JJ"))
+								parseRule2JLine(line, "", knowledgeBase);
+							
+							if (line.contains("$$3JJ"))
+								parseRule2JLine(line, "", knowledgeBase);
+							
+							continue; 
+						}	
 						else
 						{	
 							parseLine(line, haEnv, 
@@ -151,7 +162,7 @@ public class HNMRPredefinedKnowledgeBase
 		return 0;
 	}
 	
-		
+	
 	public static void parseKeyWord(String keyword, HAtomEnvironment haEnv, String errorPrefix, List<String> errors)
 	{
 		int sepPos = keyword.indexOf(keyWordSeparator);		
@@ -340,6 +351,18 @@ public class HNMRPredefinedKnowledgeBase
 		
 		//TODO: check number of atom pos indices and postion distances
 		// check substituents
+	}
+	
+	public static int parseRule2JLine(String line, String errorPrefix, HNMRKnowledgeBase knowledgeBase)
+	{
+		//TODO
+		return 0;
+	}
+	
+	public static int parseRule3JLine(String line, String errorPrefix, HNMRKnowledgeBase knowledgeBase)
+	{
+		//TODO
+		return 0;
 	}
 	
 	static Boolean getBooleanFromString(String s)
