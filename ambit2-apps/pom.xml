@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ambit</groupId>
@@ -45,6 +46,8 @@
 		<m2st-gatc-config>_setDetectFlash(true),_setDetectTitle(false)</m2st-gatc-config>
 		<slf4j.version>1.7.12</slf4j.version>
 		<jackson.version>2.4.2</jackson.version>
+		<additionalparam>-Xdoclint:none</additionalparam>
+		<doclint>none</doclint>
 	</properties>
 	<description>AMBIT applications</description>
 	<inceptionYear>2008</inceptionYear>
@@ -351,21 +354,31 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.9</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>summary</report>
-							<report>license</report>
-							<report>issue-tracking</report>
-							<report>mailing-list</report>
-							<report>project-team</report>
-							<report>scm</report>
-							<!-- <report>dependencies</report> -->
-						</reports>
-					</reportSet>
-				</reportSets>
+				<artifactId>maven-javadoc-plugin</artifactId>
+
+				<version>3.1.1</version>
+				<configuration>
+					<doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+
+					<!-- https://issues.apache.org/jira/browse/MJAVADOC-453?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel -->
+					<docletArtifact>
+						<groupId>org.umlgraph</groupId>
+						<artifactId>umlgraph</artifactId>
+						<version>5.6.6</version>
+					</docletArtifact>
+					<additionalparam>-all</additionalparam>
+					>
+					<additionalOptions>
+						<!-- <additionalOption>-views</additionalOption> -->
+						<additionalOption>-attributes</additionalOption>
+						<additionalOption>-types</additionalOption>
+						<!-- <additionalparam>-inferrel</additionalparam> <additionalparam>-inferdep</additionalparam> -->
+						<additionalparam>-inferdepinpackage</additionalparam>
+					</additionalOptions>
+
+					<useStandardDocletOptions>true</useStandardDocletOptions>
+
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

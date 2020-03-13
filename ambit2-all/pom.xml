@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ambit</groupId>
@@ -392,39 +393,7 @@
 					</reportSet>
 				</reportSets>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
-				<version>2.10.1</version> <configuration> <stylesheetfile>stylesheet.css</stylesheetfile> 
-				</configuration> </plugin> -->
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jxr-maven-plugin</artifactId> 
-				</plugin> -->
-			<!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> </plugin> 
-				<plugin> <artifactId>maven-clover-plugin</artifactId> </plugin> -->
-			<plugin>
-				<!-- UML class diagrams -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
-				<!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
-				<configuration>
-					<source>${sourceVersion}</source>
-					<aggregate>false</aggregate>
-					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
-					<docletArtifact>
-						<groupId>gr.spinellis</groupId>
-						<artifactId>UmlGraph</artifactId>
-						<version>4.6</version>
-					</docletArtifact>
-					<additionalparam>
-						<!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types 
-							-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify 
-							-postfixpackage -all -->
-						${additionalparam}
-					</additionalparam>
-					<failOnError>false</failOnError>
 
-				</configuration>
-				
-			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jdepend-maven-plugin</artifactId>
@@ -438,7 +407,38 @@
 					<showSuccess>false</showSuccess>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+
+				<version>3.1.1</version>
+				<configuration>
+					<doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+
+					<!-- https://issues.apache.org/jira/browse/MJAVADOC-453?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel -->
+					<docletArtifact>
+						<groupId>org.umlgraph</groupId>
+						<artifactId>umlgraph</artifactId>
+						<version>5.6.6</version>
+					</docletArtifact>
+					<additionalparam>-all</additionalparam>
+					>
+					<additionalOptions>
+						<!-- <additionalOption>-views</additionalOption> -->
+						<additionalOption>-attributes</additionalOption>
+						<additionalOption>-types</additionalOption>
+						<!-- <additionalparam>-inferrel</additionalparam> <additionalparam>-inferdep</additionalparam> -->
+						<additionalparam>-inferdepinpackage</additionalparam>
+					</additionalOptions>
+
+					<useStandardDocletOptions>true</useStandardDocletOptions>
+
+				</configuration>
+			</plugin>
+
 		</plugins>
+
+
 	</reporting>
 	<profiles>
 		<profile>
@@ -453,7 +453,7 @@
 							<debug>true</debug>
 							<optimize>false</optimize>
 							<source>${sourceVersion}</source>
-    						<target>${sourceVersion}</target>
+							<target>${sourceVersion}</target>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -470,14 +470,14 @@
 						<configuration>
 							<debug>false</debug>
 							<optimize>true</optimize>
-						<source>${sourceVersion}</source>
-    						<target>${sourceVersion}</target>							
+							<source>${sourceVersion}</source>
+							<target>${sourceVersion}</target>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<profile>
 			<id>JRE7</id>
 			<activation>
@@ -504,18 +504,15 @@
 			<properties>
 				<sourceVersion>1.9</sourceVersion>
 			</properties>
-		</profile>			
+		</profile>
 		<profile>
 			<!-- http://stackoverflow.com/questions/15886209/maven-is-not-working-in-java-8-when-javadoc-tags-are-incomplete -->
 			<id>disable-java8-doclint</id>
 			<activation>
 				<jdk>[1.8,)</jdk>
 			</activation>
-			<properties>
-				<additionalparam>-Xdoclint:none</additionalparam>
-			</properties>
-		</profile>
 
+		</profile>
 	</profiles>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -535,14 +532,15 @@
 			since ambit 2.4.7-SNAPSHOT -->
 		<!-- cdk 1.5.10 @ maven central since ambit 3.0.0 -->
 		<!-- cdk 1.5.11 @ maven central since ambit 3.0.0 Sep 2015 -->
-		<!-- ambit 3.x versions 
-		<cdk.version>1.5.13</cdk.version>
-		 -->
+		<!-- ambit 3.x versions <cdk.version>1.5.13</cdk.version> -->
 		<cdk.version>2.1.1</cdk.version>
 		<restnet.version>1.1.4-SNAPSHOT</restnet.version>
 		<modbcum.version>1.0.10-SNAPSHOT</modbcum.version>
 		<dbunit.version>2.6.0</dbunit.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<jackson.version>2.4.2</jackson.version>
+		<javadoc.plugin.version>3.1.1</javadoc.plugin.version>
+		<additionalparam>-Xdoclint:none</additionalparam>
+		<doclint>none</doclint>
 	</properties>
 </project>

@@ -322,6 +322,12 @@
 						<JAVA_OPTS>XX:-UseSplitVerifier
 							-Djava.util.Arrays.useLegacyMergeSort=true
 							-Djsse.enableSNIExtension=false</JAVA_OPTS>
+							
+						<MAVEN_OPTS>
+						-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9000 -Xmx1024m -XX:MaxPermSize=256m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false
+						</MAVEN_OPTS>
+						
+							
 					</systemProperties>
 				</configuration>
 			</plugin>
@@ -704,39 +710,6 @@
 		<!-- <repository> <id>glassfish</id> <name>javamelody is here</name> <url>http://maven.glassfish.org/content/groups/public</url> 
 			<releases><enabled>true</enabled></releases> </repository> -->
 	</repositories>
-	<reporting>
-		<plugins>
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jxr-maven-plugin</artifactId> 
-				</plugin> -->
-			<!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> </plugin> 
-				<plugin> <artifactId>maven-clover-plugin</artifactId> </plugin> -->
-			<plugin>
-				<!-- UML class diagrams -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
-				<!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
-				<configuration>
-					<source>1.7</source>
-					<aggregate>false</aggregate>
-					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
-					<docletArtifact>
-						<groupId>gr.spinellis</groupId>
-						<artifactId>UmlGraph</artifactId>
-						<version>4.6</version>
-					</docletArtifact>
-					<additionalparam>
-						<!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types 
-							-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify 
-							-postfixpackage -all -->
-						${additionalparam}
-					</additionalparam>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</reporting>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<restlet.version>2.0-M6</restlet.version>

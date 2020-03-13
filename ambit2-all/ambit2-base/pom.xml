@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<description>Base classes, without cheminformatics functionality</description>
 	<parent>
@@ -17,20 +18,10 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
-		</dependency>
-		 -->
-		<!-- 
-		<dependency>
-			<groupId>com.jgoodies</groupId>
-			<artifactId>binding</artifactId>
-			<version>2.0.6</version>
-		</dependency>
-		 -->
+		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+			<version>1.2.16</version> </dependency> -->
+		<!-- <dependency> <groupId>com.jgoodies</groupId> <artifactId>binding</artifactId> 
+			<version>2.0.6</version> </dependency> -->
 		<dependency>
 			<groupId>net.idea</groupId>
 			<artifactId>modbcum-p</artifactId>
@@ -45,31 +36,40 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<reporting>
+	<build>
 		<plugins>
+
 			<plugin>
-				<!-- UML class diagrams -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
-				<!-- <docletPath>/path/to/UmlGraph.jar</docletPath> -->
+				
+				<version>3.1.1</version>
 				<configuration>
-					<source>1.7</source>
-					<aggregate>false</aggregate>
-					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+					<doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+
+					<!-- https://issues.apache.org/jira/browse/MJAVADOC-453?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel -->
 					<docletArtifact>
-						<groupId>gr.spinellis</groupId>
-						<artifactId>UmlGraph</artifactId>
-						<version>4.6</version>
+						<groupId>org.umlgraph</groupId>
+						<artifactId>umlgraph</artifactId>
+						<version>5.6.6</version>
 					</docletArtifact>
-					<additionalparam>
-						<!-- http://www.umlgraph.org/doc/cd-opt.html -attributes -views -types 
-							-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify 
-							-postfixpackage -->
-						-all
-					</additionalparam>
+					<additionalparam>-all</additionalparam>>
+					<additionalOptions>
+ 						<!-- 
+						<additionalOption>-views</additionalOption>
+ -->
+						<additionalOption>-attributes</additionalOption>
+						<additionalOption>-types</additionalOption>
+						<!-- <additionalparam>-inferrel</additionalparam> 
+						<additionalparam>-inferdep</additionalparam>
+						-->
+						<additionalparam>-inferdepinpackage</additionalparam>
+					</additionalOptions>
+
+					<useStandardDocletOptions>true</useStandardDocletOptions>
+
 				</configuration>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
 </project>
