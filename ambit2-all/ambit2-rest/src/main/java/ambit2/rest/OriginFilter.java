@@ -46,7 +46,9 @@ public class OriginFilter extends Filter {
 	            } 
 	            responseHeaders.add("Access-Control-Allow-Origin", origin!=null?origin:(all?"*":origin)); 
 	            responseHeaders.add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS"); 
-	            responseHeaders.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept" );
+	            //responseHeaders.add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept" );
+	            responseHeaders.add("Access-Control-Allow-Headers", "Authorization, DNT, X-CustomHeader, Keep-Alive, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Accept" );
+
 	            responseHeaders.add("Access-Control-Allow-Credentials", "true"); 
 	            responseHeaders.add("Access-Control-Max-Age", "60"); 
 	            response.setEntity(new EmptyRepresentation()); 
