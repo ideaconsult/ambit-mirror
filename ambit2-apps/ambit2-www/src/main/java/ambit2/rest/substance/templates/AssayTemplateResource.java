@@ -15,6 +15,7 @@ import ambit2.rest.OutputStreamConvertor;
 import ambit2.user.rest.resource.AmbitDBQueryResource;
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMakerSettings;
+import net.enanomapper.maker.TemplateMakerSettings._LAYOUT_RAW_DATA;
 import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_TYPE;
 import net.idea.ambit.templates.db.ReadExperimentTemplate;
 import net.idea.modbcum.i.IQueryRetrieval;
@@ -71,7 +72,21 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 		} catch (Exception x) {
 			settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
 		}
-		
+		try {
+			settings.setLayout_raw_data(_LAYOUT_RAW_DATA.valueOf(request.getResourceRef().getQueryAsForm().getFirstValue("L")));
+		} catch (Exception x) {
+
+		}
+		try {
+			settings.setNumber_of_experiments(Integer.parseInt(request.getResourceRef().getQueryAsForm().getFirstValue("E")));
+		} catch (Exception x) {
+
+		}
+		try {
+			settings.setNumber_of_endpoints(Integer.parseInt(request.getResourceRef().getQueryAsForm().getFirstValue("N")));
+		} catch (Exception x) {
+
+		}		
 		try {
 			settings.setNumber_of_concentration(Integer.parseInt(request.getResourceRef().getQueryAsForm().getFirstValue("C")));
 		} catch (Exception x) {
@@ -132,6 +147,7 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 
 		if (variant.getMediaType().equals(MediaType.APPLICATION_MSOFFICE_XLSX)) {
 			AssayTemplateEntrySpreadsheetReporter reporter = new AssayTemplateEntrySpreadsheetReporter(settings.getTemplatesType(),
+					settings.getLayout_raw_data(),settings.getNumber_of_experiments(),settings.getNumber_of_endpoints(),
 					settings.getNumber_of_replicates(),settings.getNumber_of_timepoints(),settings.getNumber_of_concentration());
 
 			return new OutputStreamConvertor(reporter, MediaType.APPLICATION_MSOFFICE_XLSX,

@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import net.enanomapper.maker.TR;
 import net.enanomapper.maker.TemplateMakerExtended;
 import net.enanomapper.maker.TemplateMakerSettings;
+import net.enanomapper.maker.TemplateMakerSettings._LAYOUT_RAW_DATA;
 import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_CMD;
 import net.enanomapper.maker.TemplateMakerSettings._TEMPLATES_TYPE;
 import net.idea.modbcum.i.IQueryRetrieval;
@@ -22,9 +23,12 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 	protected final HashSet<String> templateids = new HashSet<String>();
 	protected final List<TR> records = new ArrayList<TR>();
 	protected _TEMPLATES_TYPE templates_type;
+	protected int number_of_experiments = 1;
+	protected int number_of_endpoints = 1;
 	protected int number_of_replicates = 1;
 	protected int number_of_timepoints = 3;
 	protected int number_of_concentration = 6;
+	protected _LAYOUT_RAW_DATA layout = _LAYOUT_RAW_DATA.x_replicate_y_experiment;
 	/**
 	 * 
 	 */
@@ -32,7 +36,14 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 
 	public AssayTemplateEntrySpreadsheetReporter(_TEMPLATES_TYPE templates_type, int number_of_replicates,
 			int number_of_timepoints, int number_of_concentrations) {
+		this(templates_type,_LAYOUT_RAW_DATA.x_replicate_y_experiment,1,1,number_of_replicates,number_of_timepoints,number_of_concentrations);
+		
+	}
+	public AssayTemplateEntrySpreadsheetReporter(_TEMPLATES_TYPE templates_type, _LAYOUT_RAW_DATA layout, int number_of_experiments, int number_of_endpoints, int number_of_replicates,
+			int number_of_timepoints, int number_of_concentrations) {
 		this(templates_type);
+		this.layout= layout;
+		this.number_of_experiments = number_of_experiments;
 		this.number_of_concentration = number_of_concentrations;
 		this.number_of_replicates = number_of_replicates;
 		this.number_of_timepoints = number_of_timepoints;
@@ -85,11 +96,14 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 
 		try {
 			TemplateMakerExtended maker = new TemplateMakerExtended();
+			settings.setLayout_raw_data(layout);
 			settings.setTemplatesType(templates_type);
+			settings.setNumber_of_experiments(number_of_experiments);
 			settings.setNumber_of_concentration(number_of_concentration);
 			settings.setNumber_of_replicates(number_of_replicates);
 			settings.setNumber_of_timepoints(number_of_timepoints);
 			settings.setTemplatesCommand(_TEMPLATES_CMD.generate);
+			settings.setNumber_of_endpoints(number_of_endpoints);
 			// settings.setTemplatesType(_TEMPLATES_TYPE.jrc);
 			settings.setSinglefile(true);
 			// FIXME no input for generation needed, this is a placeholder
