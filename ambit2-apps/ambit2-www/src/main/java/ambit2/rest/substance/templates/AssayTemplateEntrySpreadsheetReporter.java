@@ -47,6 +47,7 @@ public class AssayTemplateEntrySpreadsheetReporter<Q extends IQueryRetrieval<TR>
 		this.number_of_concentration = number_of_concentrations;
 		this.number_of_replicates = number_of_replicates;
 		this.number_of_timepoints = number_of_timepoints;
+		this.number_of_endpoints = number_of_endpoints;
 	}
 
 	public AssayTemplateEntrySpreadsheetReporter(_TEMPLATES_TYPE templates_type) {
