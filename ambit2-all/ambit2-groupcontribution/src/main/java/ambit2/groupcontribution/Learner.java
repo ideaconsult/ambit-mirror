@@ -340,6 +340,31 @@ public class Learner
 		}
 	}
 	
+	void calculate_x_sd()
+	{
+		//modeled_b values must be determined
+		//An estimations of the Variation-covariation matrix of the model parameters x 
+		//is given by V(x) = (Se^2)/(m-n).inv(A'.A) = (Se^2)/(m-n).invC
+		//where Se^2 = e1^2 + e2^2 + ... + em^2
+		//Confidence interval of parameter is [x - t.V(x), x + t.V(x)]
+		
+		int m = b.nRows;
+		int n = x.nRows;
+		MatrixDouble modeled_b = new MatrixDouble(n,1);
+		
+		for (int i = 0; i < m; i++)
+			modeled_b.el[i][0] = modelValue(i, A, x);
+		
+		double Se2 = 0;
+		for (int i = 0; i < m; i++)
+			Se2 += (b.el[i][0]-modeled_b.el[i][0])*(b.el[i][0]-modeled_b.el[i][0]);
+
+		for (int i = 0; i < n; i++)
+			x_sd.el[i][0] = Math.sqrt( (Se2/(m-n))*invC.el[i][i] );
+	}
+	
+	
+	
 	int  makeModel()
 	{
 		//Calculating of matrix C = A'A
