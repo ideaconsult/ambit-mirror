@@ -5,6 +5,7 @@ import ambit2.groupcontribution.transformations.IValueTransformation;
 public class DescriptorInfo 
 {
 	public double contribution = 0.0;
+	public double sd = 0.0;
 	public String fullString = "";
 	public String name = "";
 	public IValueTransformation valueTranform = null;
@@ -17,6 +18,14 @@ public class DescriptorInfo
 	public void setContribution(double contribution)
 	{
 		this.contribution = contribution;
+	}
+	
+	public double getSD() {
+		return sd;
+	}
+	
+	public void setSD(double sd) {
+		this.sd = sd;
 	}
 	
 	public String getName()
