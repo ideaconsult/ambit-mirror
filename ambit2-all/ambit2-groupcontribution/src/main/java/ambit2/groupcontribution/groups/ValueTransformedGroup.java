@@ -6,6 +6,17 @@ import ambit2.groupcontribution.transformations.IValueTransformation;
 public abstract class ValueTransformedGroup implements IGroup, IHasValueTransformation
 {
 	IValueTransformation transformation = null;
+	protected double contribution = 0.0;
+	
+	@Override
+	public double getContribution() {
+		return contribution;
+	}
+	
+	@Override
+	public void setContribution(double contribution) {
+		this.contribution = contribution;
+	}
 	
 	public IValueTransformation getValueTransformation()
 	{
