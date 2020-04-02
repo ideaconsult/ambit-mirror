@@ -350,7 +350,7 @@ public class Learner
 		
 		int m = b.nRows;
 		int n = x.nRows;
-		MatrixDouble modeled_b = new MatrixDouble(n,1);
+		MatrixDouble modeled_b = new MatrixDouble(m,1);
 		
 		for (int i = 0; i < m; i++)
 			modeled_b.el[i][0] = modelValue(i, A, x);
@@ -359,6 +359,7 @@ public class Learner
 		for (int i = 0; i < m; i++)
 			Se2 += (b.el[i][0]-modeled_b.el[i][0])*(b.el[i][0]-modeled_b.el[i][0]);
 
+		x_sd = new MatrixDouble(n,1);
 		for (int i = 0; i < n; i++)
 			x_sd.el[i][0] = Math.sqrt( (Se2/(m-n))*invC.el[i][i] );
 	}
@@ -378,7 +379,7 @@ public class Learner
 			MatrixDouble invC_A_transposed =  MathUtilities.Multiply(invC, A.transposed());
 			x = MathUtilities.Multiply(invC_A_transposed , b);
 			
-			//TODO calculate x_sd
+			calculate_x_sd();
 			
 			//Set group contributions
 			Map<String,IGroup> groups = model.getGroups();
