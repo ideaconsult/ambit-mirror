@@ -7,12 +7,11 @@ public class BondGroup extends ValueTransformedGroup
 	private String bondDesignation = "";
 	private boolean missing = true;
 	
-	@Override
-	public double getContribution() {
-		return contribution;
+	public void setBondDesignation(String bondDesignation) {		
+		this.bondDesignation = bondDesignation;
 	}
 	
-
+	
 	@Override
 	public String getDesignation() {
 		return bondDesignation;
