@@ -75,6 +75,8 @@ public class Learner
 	
 	ArrayUtils arrayUtils = new ArrayUtils();
 	
+	DecimalFormat df2 = getDecimalFormat(2);
+	
 	public void reset()
 	{
 		errors.clear();
@@ -389,6 +391,7 @@ public class Learner
 				String key = initialColumnGroups[col];
 				IGroup g = groups.get(key);
 				g.setContribution(x.el[i][0]);
+				g.setSD(x_sd.el[i][0]);
 				g.setMissing(false);
 			}
 			
@@ -400,6 +403,7 @@ public class Learner
 				int dIndex = usedDescriptors.get(i);
 				DescriptorInfo di = diList.get(dIndex);
 				di.setContribution(x.el[offset+i][0]);
+				di.setSD(x_sd.el[offset+i][0]);
 			}
 			
 			//Set correction factors
@@ -410,6 +414,7 @@ public class Learner
 				int cfIndex = usedCorrectionFactors.get(i);
 				ICorrectionFactor cf = cfList.get(cfIndex);
 				cf.setContribution(x.el[offset+i][0]);
+				cf.setSD(x_sd.el[offset+i][0]);
 			}
 		}
 		else
@@ -892,6 +897,8 @@ public class Learner
 		GCMReportConfig repCfg = model.getReportConfig();
 		Map<String,IGroup> groups = model.getGroups();
 		
+		double t = 2.0;
+		
 		if (repCfg.FlagConsoleOutput)
 		{
 			System.out.println("Group contributions:");
@@ -900,7 +907,9 @@ public class Learner
 			{
 				IGroup g = groups.get(key);
 				System.out.println("\t" + key + "\t" 
-						+ g.getContribution() + (g.isMissing()?"  missing":""));
+						//+ g.getContribution() 
+						+ (g.isMissing()?(g.getContribution() + "  missing" )
+								: getContributionStatReport(g.getContribution(), g.getSD(), t)));
 			}
 			
 			List<DescriptorInfo> diList = model.getDescriptors();
@@ -910,7 +919,8 @@ public class Learner
 				for (int i = 0; i < diList.size(); i++)
 				{	
 					System.out.println("\t" + diList.get(i).fullString + "\t" 
-							+ diList.get(i).getContribution());
+							//+ diList.get(i).getContribution());
+							+ getContributionStatReport(diList.get(i).getContribution(), diList.get(i).getSD(), t));
 				}
 			}
 			
@@ -921,7 +931,8 @@ public class Learner
 				for (int i = 0; i < cfList.size(); i++)
 				{	
 					System.out.println("\t" + cfList.get(i).getDesignation() + "\t" 
-							+ cfList.get(i).getContribution());
+							//+ cfList.get(i).getContribution());
+							+ getContributionStatReport(cfList.get(i).getContribution(), cfList.get(i).getSD(), t));
 				}
 			}
 		}
@@ -965,6 +976,23 @@ public class Learner
 			model.addToReport(dataSet.reportErrorsAsString());
 			model.addToReport("\n");
 		}
+	}
+	
+	String getContributionStatReport(double contr, double sd, double t)
+	{
+		double d1 = contr - t*sd;
+		double d2 = contr + t*sd;
+		boolean statSignificance = ((d1 >0) || (d2 <0));
+		
+		double rsd = 0.0;
+		if (contr != 0)
+			rsd = 100*sd/Math.abs(contr);
+		
+		String s = "" + contr + (statSignificance?"  Yes  ":"  No  ")
+				+  " rsd = " + df2.format(rsd) + "%"
+				+ "   [" + d1 + ", " + d2 + "]";;
+		
+		return s;
 	}
 	
 	public String getMatricesAsString(String separator, boolean mergeMatrices, 
