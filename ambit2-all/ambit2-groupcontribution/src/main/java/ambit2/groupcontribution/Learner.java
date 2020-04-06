@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
@@ -18,6 +20,7 @@ import ambit2.groupcontribution.utils.math.MathUtilities;
 import ambit2.groupcontribution.utils.math.MatrixDouble;
 import ambit2.groupcontribution.utils.math.Statistics;
 import ambit2.groupcontribution.utils.math.ValidationConfig;
+import ambit2.smarts.SmartsHelper;
 
 /**
  * 
@@ -997,13 +1000,16 @@ public class Learner
 	
 	public String getMatricesAsString(String separator, boolean mergeMatrices, 
 				boolean groupCountMatrix, boolean correctionFactorsMatrix, 
-				boolean externalDescriptorMatrix, boolean targetPropertyMatrix)
+				boolean externalDescriptorMatrix, boolean targetPropertyMatrix, boolean addSmiles) throws Exception
 	{
 		StringBuffer sb = new StringBuffer();
 		
 		if (mergeMatrices)
 		{
 			//Make header line
+			if (addSmiles)
+				sb.append("SMILES" + separator);
+			
 			if (groupCountMatrix)
 				sb.append(model.getGroupsAsString(separator));
 			
@@ -1032,6 +1038,14 @@ public class Learner
 			int m = A0.nRows;
 			for (int i = 0; i < m; i++)
 			{
+				if (addSmiles)
+				{
+					IAtomContainer mol = trainDataSet.dataObjects.get(i).molecule;
+					String smi = SmartsHelper.moleculeToSMILES(mol, true);
+					sb.append(smi);
+					sb.append(separator);
+				}
+				
 				if (groupCountMatrix)
 				{
 					for (int j = 0; j < A0.nColumns; j++)
