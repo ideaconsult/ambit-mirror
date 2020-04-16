@@ -6,7 +6,7 @@
 	<groupId>ambit</groupId>
 	<artifactId>ambit2-all</artifactId>
 	<packaging>pom</packaging>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.0.1-SNAPSHOT</version>
 	<name>Ambit 2</name>
 	<description>AMBIT offers chemoinformatics functionality via REST web services and desktop applications. Chemical compounds and data storage in MySQL database; substructure, similarity and other queries, descriptor calculation and predictive models building.</description>
 	<url>http://ambit.sourceforge.net</url>
@@ -534,7 +534,7 @@
 		<!-- cdk 1.5.11 @ maven central since ambit 3.0.0 Sep 2015 -->
 		<!-- ambit 3.x versions <cdk.version>1.5.13</cdk.version> -->
 		<cdk.version>2.1.1</cdk.version>
-		<restnet.version>1.1.4-SNAPSHOT</restnet.version>
+		<restnet.version>1.1.5-SNAPSHOT</restnet.version>
 		<modbcum.version>1.0.10-SNAPSHOT</modbcum.version>
 		<dbunit.version>2.6.0</dbunit.version>
 		<slf4j.version>1.7.12</slf4j.version>
