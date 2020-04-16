@@ -282,7 +282,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 												if (jQuery.inArray(dataset.URI,_ambit.selectedDatasets)>=0) {
 													var dataset_uri = dataset.URI + '/feature';
 													var feature_uri =
-																'&feature_uris[]=' + 
+																'&feature_uris=' + 
 																((dataset_uri.indexOf('http')==0)?
 																encodeURIComponent(dataset_uri):
 																encodeURIComponent(query_service+dataset_uri));	
@@ -292,7 +292,7 @@ function defineStructuresTable(url, query_service, similarity,root) {
 											$.each(_ambit.models,function(index,model) {
 												if (jQuery.inArray(model.URI,_ambit.selectedModels)>=0) {													
 													var feature_uri =
-																'&feature_uris[]=' + 
+																'&feature_uris=' + 
 																((model.predicted.indexOf('http')==0)?
 																encodeURIComponent(model.predicted):
 																encodeURIComponent(query_service+model.predicted));	

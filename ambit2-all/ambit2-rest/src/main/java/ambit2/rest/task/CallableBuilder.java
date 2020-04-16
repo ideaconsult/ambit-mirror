@@ -17,20 +17,6 @@ import ambit2.rest.legacy.OTModel;
 <pre>
 http://opentox.org/dev/apis/api-1.2/Algorithm
 
-Superservice
-URL parameters:
-dataset_uri
-feature_uris[]
-feature_calculation
-feature_selection
-model_learning
-applicability_domain
-validation_service
-dataset_service
-parameter
-
-TP header:
-subjectid 
 </pre>
  * @author nina
  *

@@ -81,7 +81,7 @@ public class FacetURIReporter <Q extends IQueryRetrieval<IFacet>> extends QueryU
 				
 		} else if (item instanceof PropertyDatasetFacet)  {
 			PropertyDatasetFacet<Property,SourceDataset> q = (PropertyDatasetFacet<Property,SourceDataset>) item;
-			return String.format("%s/dataset/%d?feature_uris[]=%s/dataset/%s/feature&feature_uris[]=%s/feature/%s&property=%s/feature/%s&search=%s",
+			return String.format("%s/dataset/%d?feature_uris=%s/dataset/%s/feature&feature_uris=%s/feature/%s&property=%s/feature/%s&search=%s",
 							root,q.getDataset().getId(),
 						    root,q.getDataset().getId(),
 						    root,q.getProperty().getId(),

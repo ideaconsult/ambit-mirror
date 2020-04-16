@@ -44,14 +44,14 @@ public class OnlineStructureFinderTest  extends ResourceTest {
 		Form headers = new Form();  
 		headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1", port));
 		String feature = String.format("http://localhost:%d/feature/3", port);
-		headers.add("feature_uris[]",feature);
+		headers.add("feature_uris",feature);
 		headers.add("mode",mode);
 		headers.add("search",search);
 		Reference ref = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/finder", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/1?%s=%s", port,
-						Reference.encode("feature_uris[]"),
+						Reference.encode("feature_uris"),
 						Reference.encode(feature)
 						));
 

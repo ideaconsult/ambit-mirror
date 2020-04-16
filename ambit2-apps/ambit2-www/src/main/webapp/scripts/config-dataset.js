@@ -87,7 +87,7 @@ var config_dataset = {
 
                                         var q =  'http://apps.ideaconsult.net:8080/ambit2/query/compound/search/all?search='+
                                                 encodeURIComponent(fvalue.value) +
-                                                "&feature_uris[]=http://apps.ideaconsult.net:8080/ambit2/dataset/1967255/feature";
+                                                "&feature_uris=http://apps.ideaconsult.net:8080/ambit2/dataset/1967255/feature";
                                         sOut += '<a href="'+ root + encodeURIComponent(q)+'" title="Structures participating in this pathway">'+
                                                 '<span class="ui-icon ui-icon-search" style="float: right; margin-right: .3em;"></span>'+
                                                 '</a>';

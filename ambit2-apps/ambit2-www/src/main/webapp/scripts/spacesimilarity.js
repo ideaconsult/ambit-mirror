@@ -672,7 +672,7 @@ function spaceMatrix(oSpace,iMax,method) {
   compounds();
   function compounds() {
 	  try {
-		  d3.json(oSpace.datasetURI+"?feature_uris[]="+oSpace["featureURI"],function(jsonData) {
+		  d3.json(oSpace.datasetURI+"?feature_uris="+oSpace["featureURI"],function(jsonData) {
 			  nodes.forEach(function(node) {
 				 node.group1 = null; 
 			  });

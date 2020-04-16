@@ -777,11 +777,12 @@ public class AlgorithmPileTest {
 			{ "tautomers", "Tautomers generator", "tautomers", null,
 					new String[] { AlgorithmType.TautomerGenerator.toString() }, null, Algorithm.requires.structure,
 					"http://ambit.sourceforge.net/descriptors.owl#tautomergen" },
-
+			/*
 			{ "ambit2.rest.algorithm.descriptors.OPSCountsWrapper", "Number of pathways and assays in OpenPhacts",
 					"ambit2.rest.algorithm.descriptors.OPSCountsWrapper", null,
 					new String[] { AlgorithmType.DescriptorCalculation.toString() }, null, Algorithm.requires.structure,
-					"http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT" },
+					"http://ambit.sourceforge.net/descriptors.owl#OPSCOUNT" }, 
+			*/
 			{ "vega", "VEGA models", "ambit2.vega.ExternalModelVega", null,
 					new String[] { "http://www.opentox.org/algorithmTypes.owl#Learning",
 							"http://www.opentox.org/algorithmTypes.owl#Supervised",

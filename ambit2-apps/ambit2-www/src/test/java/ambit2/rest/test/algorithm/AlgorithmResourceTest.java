@@ -108,8 +108,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference ref = testAsyncTask(String.format(
 				"http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor", port),
 				headers, Status.SUCCESS_OK, null);
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
-		String expected = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		String expected = String.format("http://localhost:%d/dataset/1?feature_uris=%s", port,
 				Reference.encode(getModelURI("CPSA descriptor", port, false)));
 		Assert.assertEquals(expected, ref.toString());
 
@@ -130,8 +130,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference ref = testAsyncTask(String.format(
 				"http://localhost:%d/algorithm/ambit2.descriptors.fingerprints.EStateFingerprinterWrapper", port),
 				headers, Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+						"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 
 		int count = 0;
 		RDFPropertyIterator i = new RDFPropertyIterator(ref, "test");
@@ -150,8 +150,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference ref = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/ambit2.dragon.DescriptorDragonShell/MW", port), headers,
 				Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+						"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 
 		int count = 0;
 		RDFPropertyIterator i = new RDFPropertyIterator(ref, "test");
@@ -170,9 +170,9 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference ref = testAsyncTask(String.format(
 				"http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port),
 				headers, Status.SUCCESS_OK, null);
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 
-		String expected = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
+		String expected = String.format("http://localhost:%d/dataset/1?feature_uris=%s", port,
 				Reference.encode(getModelURI("XLogP", port, false)));
 		Assert.assertEquals(expected, ref.toString());
 
@@ -180,7 +180,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				"http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port),
 				headers, Status.SUCCESS_OK, null);
 
-		expected = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
+		expected = String.format("http://localhost:%d/dataset/1?feature_uris=%s", port,
 				Reference.encode(getModelURI("XLogP", port, false)));
 		Assert.assertEquals(expected, ref.toString());
 
@@ -205,13 +205,13 @@ public class AlgorithmResourceTest extends ResourceTest {
 		headers.add("dataset_uri", String.format("http://localhost:%d/dataset/1", port));
 		Reference ref = testAsyncTask(model.toString(), headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+						"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 
 		ref = testAsyncTask(String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacOriginalStructure", port),
 				headers, Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F4%2Fpredicted"));
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+						"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F4%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 
 		int count = 0;
 		RDFPropertyIterator i = new RDFPropertyIterator(ref, "test");
@@ -237,11 +237,11 @@ public class AlgorithmResourceTest extends ResourceTest {
 		headers.add("dataset_uri", String.format("http://localhost:%d/dataset/1", port));
 		Reference ref = testAsyncTask(model.toString(), headers, Status.SUCCESS_OK, null);
 
-		String expected = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
+		String expected = String.format("http://localhost:%d/dataset/1?feature_uris=%s", port,
 				Reference.encode(getModelURI("MOPAC", port, false)));
 
 		Assert.assertEquals(expected, ref.toString());
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FXLogPorg.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor"));
 	}
 
 	@Test
@@ -253,7 +253,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				String.format("http://localhost:%d/algorithm/ambit2.mopac.MopacOriginalStructure", port), headers,
 				Status.SUCCESS_OK, null);
 
-		String expected = String.format("http://localhost:%d/dataset/4?feature_uris[]=%s", port,
+		String expected = String.format("http://localhost:%d/dataset/4?feature_uris=%s", port,
 				Reference.encode(getModelURI("MOPAC", port, false)));
 		Assert.assertEquals(expected, ref.toString());
 		int count = 0;
@@ -339,7 +339,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		// port));
 		testAsyncTask(String.format("http://localhost:%d/algorithm/fingerprints", port), headers, Status.SUCCESS_OK,
 				"");
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
 		c = getConnection();
 		table = c.createQueryTable("EXPECTED", "SELECT bc from fp1024");
@@ -364,7 +364,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		// port));
 		testAsyncTask(String.format("http://localhost:%d/algorithm/structurequality", port), headers, Status.SUCCESS_OK,
 				"");
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
 		c = getConnection();
 		table = c.createQueryTable("EXPECTED", "SELECT bc from fp1024_struc");
@@ -388,7 +388,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
 		// port));
 		testAsyncTask(String.format("http://localhost:%d/algorithm/struckeys", port), headers, Status.SUCCESS_OK, "");
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
 		c = getConnection();
 		table = c.createQueryTable("EXPECTED", "SELECT bc from sk1024");
@@ -412,7 +412,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
 		// port));
 		testAsyncTask(String.format("http://localhost:%d/algorithm/smartsprop", port), headers, Status.SUCCESS_OK, "");
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
 		c = getConnection();
 		table = c.createQueryTable("EXPECTED", "SELECT * from structure where atomproperties is not null");
@@ -443,7 +443,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		// headers.add("dataset_uri",String.format("http://localhost:%d/dataset/1",
 		// port));
 		testAsyncTask(String.format("http://localhost:%d/algorithm/inchi", port), headers, Status.SUCCESS_OK, "");
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
 		c = getConnection();
 		table = c.createQueryTable("EXPECTED", "SELECT * from chemicals where inchi is not null");
@@ -463,7 +463,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 				headers, Status.SUCCESS_OK, null);
 		String modeluri = getModelURI("InChI", port, true);
 		Assert.assertEquals(modeluri, ref.toString());
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 		IDatabaseConnection c = getConnection();
 		Connection connection = c.getConnection();
 		ITable table = c.createQueryTable("EXPECTED", "SELECT * from properties");
@@ -486,7 +486,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		// port));
 		testAsyncTask(String.format("http://localhost:%d/algorithm/atomenvironments", port), headers, Status.SUCCESS_OK,
 				"");
-		// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+		// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 
 		c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED", "SELECT * from fpaechemicals group by idchemical");
@@ -501,8 +501,8 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference ref = testAsyncTask(
 				String.format("http://localhost:%d/algorithm/ambit2.some.DescriptorSOMEShell", port), headers,
 				Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
-				// "1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
+						"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+				// "1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
 				));
 
 	}
@@ -514,7 +514,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 			String sql = String.format("SELECT idmodel FROM models where name regexp \"%s\"", name);
 			ITable table = c.createQueryTable("EXPECTED", sql);
 
-			// localhost:8181/dataset/1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F138%2Fpredicted
+			// localhost:8181/dataset/1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F138%2Fpredicted
 			return modelonly
 					? String.format("http://localhost:%s/model/%s", port, table.getValue(0, "idmodel").toString())
 					: String.format("http://localhost:%s/model/%s/predicted", port,
@@ -531,7 +531,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference url = testAsyncTask(String.format(
 				"http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor", port),
 				headers, Status.SUCCESS_OK, null);
-		String expected = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
+		String expected = String.format("http://localhost:%d/dataset/1?feature_uris=%s", port,
 				Reference.encode(getModelURI("BCUT descriptors", port, false)));
 		Assert.assertEquals(expected, url.toString());
 
@@ -544,7 +544,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference ref = testAsyncTask(String.format(
 				"http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.AminoAcidCountDescriptor",
 				port), headers, Status.SUCCESS_OK, null);
-		String expected = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
+		String expected = String.format("http://localhost:%d/dataset/1?feature_uris=%s", port,
 				Reference.encode(getModelURI("Number of each amino acid in an atom container", port, false)));
 		Assert.assertEquals(expected, ref.toString());
 
@@ -582,7 +582,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Reference dataset = testAsyncTask(String.format(
 				"http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.XLogPDescriptor", port),
 				headers, Status.SUCCESS_OK, null);
-		String xlogpuri = String.format("http://localhost:%d/dataset/1?feature_uris[]=%s", port,
+		String xlogpuri = String.format("http://localhost:%d/dataset/1?feature_uris=%s", port,
 				Reference.encode(getModelURI("XLogP", port, false)));
 		Assert.assertEquals(xlogpuri, dataset.toString());
 
@@ -608,7 +608,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 		Assert.fail("second run, try if predictions already exists");
 		testAsyncTask(String.format("http://localhost:%d/model/3", port), headers, Status.SUCCESS_OK,
-				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
 
 		table = c.createQueryTable("EXPECTED",
 				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Property 2'");
@@ -639,7 +639,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		testAsyncTask(String.format("http://localhost:%d/model/3", port),
 				// Reference.encode(String.format("http://localhost:%d/dataset/1",port))),
 				headers, Status.SUCCESS_OK,
-				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
 
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED", "SELECT * from properties where name='Property 2'");
@@ -655,7 +655,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 
 		Assert.fail("second run, try if predictions already exists");
 		testAsyncTask(String.format("http://localhost:%d/model/3", port), headers, Status.SUCCESS_OK,
-				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
+				"http://localhost:8181/dataset/1?feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F1&feature_uris%5B%5D=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2F2&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted");
 
 		table = c.createQueryTable("EXPECTED",
 				"SELECT name,idstructure,idchemical FROM values_all join structure using(idstructure) where name='Property 2'");
@@ -672,7 +672,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		String modeluri = getModelURI("range", port, true);
 		Assert.assertEquals(modeluri, ref.toString());
 		ref = testAsyncTask(modeluri, headers, Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/1%s", port,
-				String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+				String.format("%s", "?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 	}
 
@@ -733,7 +733,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(modeluri, ref.toString());
 
 		ref = testAsyncTask(modeluri, headers, Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/1%s", port,
-				String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+				String.format("%s", "?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 	}
 
@@ -747,7 +747,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(modeluri, model.toString());
 
 		testAsyncTask(modeluri, headers, Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/1%s", port,
-				String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+				String.format("%s", "?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED",
@@ -819,7 +819,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(modeluri, ref.toString());
 		ref = testAsyncTask(String.format("http://localhost:%d/model/3", port), headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/1%s", port,
-						String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+						String.format("%s", "?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED",
@@ -844,7 +844,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Assert.assertEquals(modeluri, ref.toString());
 
 		ref = testAsyncTask(modeluri, headers, Status.SUCCESS_OK, String.format("http://localhost:%d/dataset/1%s", port,
-				String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+				String.format("%s", "?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED",
@@ -870,7 +870,7 @@ public class AlgorithmResourceTest extends ResourceTest {
 		headers.add(OpenTox.params.dataset_uri.toString(), String.format("http://localhost:%d/dataset/1", port));
 		testAsyncTask(String.format("http://localhost:%d/model/3", port), headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/1%s", port,
-						String.format("%s", "?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+						String.format("%s", "?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 		IDatabaseConnection c = getConnection();
 		ITable table = c.createQueryTable("EXPECTED",
@@ -896,9 +896,9 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Form form = new Form();
 		form.add(OpenTox.params.dataset_uri.toString(),
 				String.format(
-						"http://localhost:8080/dataset/67?feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720",
+						"http://localhost:8080/dataset/67?feature_uris=http://localhost:8080/feature/13719&feature_uris=http://localhost:8080/feature/13720",
 						port));
-		// String.format("http://localhost:8080/dataset/67/smarts?text=Tr&feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720",
+		// String.format("http://localhost:8080/dataset/67/smarts?text=Tr&feature_uris=http://localhost:8080/feature/13719&feature_uris=http://localhost:8080/feature/13720",
 		// port));
 
 		OTRemoteTask taskTrain = new OTRemoteTask(new Reference("http://localhost:8080/algorithm/leverage"),
@@ -910,9 +910,9 @@ public class AlgorithmResourceTest extends ResourceTest {
 		Form testData = new Form();
 		testData.add(OpenTox.params.dataset_uri.toString(),
 				String.format(
-						"http://localhost:8080/dataset/67?feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720",
+						"http://localhost:8080/dataset/67?feature_uris=http://localhost:8080/feature/13719&feature_uris=http://localhost:8080/feature/13720",
 						port));
-		// String.format("http://localhost:8080/dataset/67/smarts?text=Te&feature_uris[]=http://localhost:8080/feature/13719&feature_uris[]=http://localhost:8080/feature/13720",
+		// String.format("http://localhost:8080/dataset/67/smarts?text=Te&feature_uris=http://localhost:8080/feature/13719&feature_uris=http://localhost:8080/feature/13720",
 		// port));
 
 		OTRemoteTask taskEstimate = new OTRemoteTask(taskTrain.getResult(), MediaType.APPLICATION_WWW_FORM,

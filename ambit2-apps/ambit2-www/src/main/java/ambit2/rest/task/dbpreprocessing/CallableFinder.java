@@ -46,7 +46,6 @@ import ambit2.search.AllSourcesFinder;
 import ambit2.search.chemidplus.ChemIdPlusRequest;
 import ambit2.search.csls.CSLSStringRequest;
 import ambit2.search.opentox.OpenToxRequest;
-import ambit2.search.tbwiki.TBWikiFinder;
 import net.idea.modbcum.i.batch.IBatchStatistics;
 import net.idea.modbcum.i.exceptions.AmbitException;
 import net.idea.modbcum.i.processors.IProcessor;
@@ -186,8 +185,7 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 		}
 		/*
 		 * case CHEMBL: { p.add(new ChemBLFinder(profile,mode)); le = new
-		 * LiteratureEntry(searchSite.name(),"https://www.ebi.ac.uk/chemblws");
-		 * break; }
+		 * LiteratureEntry(searchSite.name(),"https://www.ebi.ac.uk/chemblws"); break; }
 		 */
 		case CHEMIDPLUS: {
 			request = new ChemIdPlusRequest();
@@ -195,12 +193,11 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
 		}
-		case TBWIKI: {
-			mode = MODE.propertyonly;
-			le = new LiteratureEntry("TBWIKI", "http://wiki.toxbank.net/wiki/Special:SPARQLEndpoint");
-			p.add(new TBWikiFinder(profile, le));
-			break;
-		}
+		/*
+		 * case TBWIKI: { mode = MODE.propertyonly; le = new LiteratureEntry("TBWIKI",
+		 * "http://wiki.toxbank.net/wiki/Special:SPARQLEndpoint"); p.add(new
+		 * TBWikiFinder(profile, le)); break; }
+		 */
 		default: {
 			request = new CSLSStringRequest();
 			p.add(new AllSourcesFinder(profile, request, mode));

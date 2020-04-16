@@ -335,21 +335,6 @@ public class OTDataset extends OTObject implements IOTDataset {
 		return dataset(ref).withDatasetService(dataset_service);
 	}
 
-	/*
-	 * public OTDataset addColumns(OTFeatures features) throws Exception { if
-	 * ((features == null) || (features.getItems()==null)) return this;
-	 * Reference newuri = getUri().clone(); String d =
-	 * newuri.getQuery()==null?"?":"&"; StringBuilder b = new StringBuilder();
-	 * b.append(newuri.toString()); int count = 0; for (OTFeature
-	 * feature:features.getItems()) { if (!feature.isSelected()) continue;
-	 * b.append(d); b.append(String.format("%s=%s",
-	 * OpenTox.params.feature_uris.toString
-	 * (),Reference.encode(feature.getUri().toString()))); d="&"; count++; } if
-	 * (count==0) return this; //[] in feature_uris[] is encoded
-	 * //newuri.addQueryParameter(OpenTox.params.feature_uris.toString(),
-	 * feature.getUri().toString()); return
-	 * dataset(b.toString()).withDatasetService(dataset_service); }
-	 */
 	public OTDataset addColumns(OTFeatures features) throws Exception {
 		Reference newuri = uri.clone();
 		for (OTFeature feature : features.getItems())

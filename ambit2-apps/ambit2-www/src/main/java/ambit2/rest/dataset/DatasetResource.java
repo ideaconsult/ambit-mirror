@@ -224,7 +224,7 @@ public class DatasetResource<Q extends IQueryRetrieval<IStructureRecord>> extend
 					new StoredQuery(queryResultsID), token, getRequest().getResourceRef().toString(),getClientInfo());
 			((CallableQueryResultsCreator) callable).setClearPreviousContent(clearPreviousContent);
 		} else if ((datasetID != null) && (datasetID > 0)) {
-			// PUT only for compound_uris[]=... & feature_uris[]=....
+			// PUT only for compound_uris[]=... & feature_uris=....
 			// same for SourceDataset
 			SourceDataset dataset = readDataset();
 			// reading from dataset uri)

@@ -99,7 +99,7 @@ public class ModelResourceTest extends ResourceTest {
 		headers.add(OpenTox.params.dataset_uri.toString(), dataset);
 
 		testAsyncTask(getTestURI(), headers, Status.SUCCESS_OK, String.format(
-				"%s?feature_uris[]=%s", dataset,
+				"%s?feature_uris=%s", dataset,
 				Reference.encode(String.format("%s/predicted", getTestURI()))));
 
 		IDatabaseConnection c = getConnection();
@@ -123,11 +123,11 @@ public class ModelResourceTest extends ResourceTest {
 	public void testClustering() throws Exception {
 		setUpDatabaseFromResource("src-datasets_model.xml");
 		predict(String.format(
-				"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",
+				"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2",
 				port, port, port),
 				null,
 				String.format(
-						"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",
+						"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2",
 						port, port, port), String.format(
 						"http://localhost:%d/algorithm/SimpleKMeans", port));
 		IDatabaseConnection c = getConnection();
@@ -143,11 +143,11 @@ public class ModelResourceTest extends ResourceTest {
 	public void testJ48Test() throws Exception {
 		setUpDatabaseFromResource("src-datasets_model.xml");
 		predict(String.format(
-				"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/4",
+				"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/2&feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/4",
 				port, port, port, port),
 				String.format("http://localhost:%d/feature/4", port),
 				String.format(
-						"http://localhost:%d/dataset/2?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/3",
+						"http://localhost:%d/dataset/2?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/3",
 						port, port, port), String.format(
 						"http://localhost:%d/algorithm/J48", port));
 		IDatabaseConnection c = getConnection();
@@ -165,7 +165,7 @@ public class ModelResourceTest extends ResourceTest {
 
 		OTDataset dataset = OTDataset
 				.dataset(String
-						.format("http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/4",
+						.format("http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2&feature_uris=http://localhost:%d/feature/4",
 								port, port, port, port));
 		dataset.withDatasetService(String.format("http://localhost:%d/dataset",
 				port));
@@ -175,7 +175,7 @@ public class ModelResourceTest extends ResourceTest {
 		predict(newDataset.getUri().toString(),
 				String.format("http://localhost:%d/feature/4", port),
 				String.format(
-						"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",
+						"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2",
 						port, port, port, port), String.format(
 						"http://localhost:%d/algorithm/J48", port));
 
@@ -201,11 +201,11 @@ public class ModelResourceTest extends ResourceTest {
 
 		setUpDatabaseFromResource("src-datasets_model.xml");
 		predict(String.format(
-				"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/4&feature_uris[]=http://localhost:%d/feature/2",
+				"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/4&feature_uris=http://localhost:%d/feature/2",
 				port, port, port, port),
 				String.format("http://localhost:%d/feature/4", port),
 				String.format(
-						"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/7",
+						"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2&feature_uris=http://localhost:%d/feature/7",
 						port, port, port, port), String.format(
 						"http://localhost:%d/algorithm/WafflesRandomForest",
 						port), "10"); // 10 trees in the random forest
@@ -250,11 +250,11 @@ public class ModelResourceTest extends ResourceTest {
 
 		setUpDatabaseFromResource("src-datasets_model.xml");
 		predict(String.format(
-				"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/4&feature_uris[]=http://localhost:%d/feature/2",
+				"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/4&feature_uris=http://localhost:%d/feature/2",
 				port, port, port, port),
 				String.format("http://localhost:%d/feature/4", port),
 				String.format(
-						"http://localhost:%d/compound/10/conformer/999?feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/1",
+						"http://localhost:%d/compound/10/conformer/999?feature_uris=http://localhost:%d/feature/2&feature_uris=http://localhost:%d/feature/1",
 						port, port, port, port), String.format(
 						"http://localhost:%d/algorithm/WafflesRandomForest",
 						port), "10"); // 10 trees in the random forest
@@ -299,11 +299,11 @@ public class ModelResourceTest extends ResourceTest {
 
 		setUpDatabaseFromResource("src-datasets_model.xml");
 		predict(String.format(
-				"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/4",
+				"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2&feature_uris=http://localhost:%d/feature/4",
 				port, port, port, port),
 				String.format("http://localhost:%d/feature/4", port),
 				String.format(
-						"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",
+						"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2",
 						port, port, port, port), String.format(
 						"http://localhost:%d/algorithm/J48", port));
 
@@ -344,11 +344,11 @@ public class ModelResourceTest extends ResourceTest {
 
 		setUpDatabaseFromResource("src-datasets_model.xml");
 		predict(String.format(
-				"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2&feature_uris[]=http://localhost:%d/feature/4",
+				"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2&feature_uris=http://localhost:%d/feature/4",
 				port, port, port, port),
 				String.format("http://localhost:%d/feature/4", port),
 				String.format(
-						"http://localhost:%d/dataset/1?feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",
+						"http://localhost:%d/dataset/1?feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2",
 						port, port, port, port), String.format(
 						"http://localhost:%d/algorithm/RandomForest", port));
 
@@ -417,7 +417,7 @@ public class ModelResourceTest extends ResourceTest {
 			headers.add(OpenTox.params.target.toString(), target);
 		headers.add(OpenTox.params.dataset_uri.toString(), datasetTest);
 		testAsyncTask(wekaURI, headers, Status.SUCCESS_OK, String.format(
-				"%s%sfeature_uris[]=%s", datasetTest,
+				"%s%sfeature_uris=%s", datasetTest,
 				datasetTest.indexOf("?") > 0 ? "&" : "?",
 				Reference.encode(String.format("%s/predicted", wekaURI))));
 

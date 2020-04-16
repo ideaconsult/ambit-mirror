@@ -74,7 +74,7 @@ public class LauncherResource extends ProtectedResource {
 				} finally {
 					try {writer.write(String.format("</body></html>"));} catch (Exception x) {}
 				}
-				//return new StringRepresentation("Expects dataset_uri, feature_uris[], model_uri");
+
 				
 			}
 		};

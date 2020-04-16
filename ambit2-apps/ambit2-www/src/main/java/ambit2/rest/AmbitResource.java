@@ -161,10 +161,10 @@ public class AmbitResource extends FreeMarkerResource {
 			{PropertyResource.featuredef+"?search=LogP&condition=regexp","Get description of feature where dc:title regexp 'LogP'",format,"GET","Yes"},
 			{String.format(PropertyResource.featuredef+"?sameas=%s",Reference.encode("http://www.opentox.org/api/1.1#CASRN")),
 				"Get description of feature which is same as a resource, defined in some ontology'",format,"GET","Yes"},
-			{PropertyResource.featuredef,"Create a new feature<ul><li>RDF representation of ot:Feature in the content, RDF mime type<li>feature_uris[]=feature-URL in application/x-www-form-urlencoded</ul>",format,"POST","Yes"},
+			{PropertyResource.featuredef,"Create a new feature<ul><li>RDF representation of ot:Feature in the content, RDF mime type<li>feature_uris=feature-URL in application/x-www-form-urlencoded</ul>",format,"POST","Yes"},
 	
 			{"http://opentox.org/dev/apis/api-1.2/structure","Features per compound/conformer",formatHeader,null,"Implemented"},
-			{String.format("%s/%d?feature_uris[]=%s",DataResources.compound_resource,100,"featureuri"),"features and values ",format,"GET","Yes"},
+			{String.format("%s/%d?feature_uris=%s",DataResources.compound_resource,100,"featureuri"),"features and values ",format,"GET","Yes"},
 			
 
 			{"http://opentox.org/dev/apis/api-1.2/Algorithm","Algorithms",formatHeader,null},
@@ -257,9 +257,9 @@ public class AmbitResource extends FreeMarkerResource {
 
 
 			{"[ambit - chart]","Charts",formatHeader,null},
-			{"/chart/pie?dataset_uri=...&feature_uris[]=...","Pie chart",format,"GET"},
-			{"/chart/xy?dataset_uri=...&feature_uris[]=...&feature_uris[]=...","XY Scatter plot",format,"GET"},
-			{"/chart/bar?dataset_uri=...&feature_uris[]=...&feature_uris[]=...","Bar chart",format,"GET"},
+			{"/chart/pie?dataset_uri=...&feature_uris=...","Pie chart",format,"GET"},
+			{"/chart/xy?dataset_uri=...&feature_uris=...&feature_uris=...","XY Scatter plot",format,"GET"},
+			{"/chart/bar?dataset_uri=...&feature_uris=...&feature_uris=...","Bar chart",format,"GET"},
 			
 			{"[ambit - bookmarks]","Bookmarks",formatHeader,null},
 			{"/bookmark/creator/{id}?search={name}&hasTopic={Model,Dataset,Algorithm,Feature,Compound}","Bookmark",format,"GET"},
