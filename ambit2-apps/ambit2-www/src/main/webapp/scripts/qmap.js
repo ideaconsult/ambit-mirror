@@ -105,7 +105,7 @@ var qmap = {
 		    					"bUseRendered" : false,	
 		    					"fnRender" : function(o,val) {
 		    						var sOut =  "<a href='"+root+"/toxmatch?dataset_uri="+ val.URI+"' target=_blank title='All QMaps for this dataset'>All QMaps</a>";
-		    						sOut +=  " | <a href='"+root+"/toxmatch?dataset_uri="+ val.URI+"&feature_uris[]="+o.aData.activity.featureURI+"' target=_blank title='QMaps for this dataset and this activity'>This activity QMaps</a>";
+		    						sOut +=  " | <a href='"+root+"/toxmatch?dataset_uri="+ val.URI+"&feature_uris="+o.aData.activity.featureURI+"' target=_blank title='QMaps for this dataset and this activity'>This activity QMaps</a>";
 		    						return sOut;
 		    					}
 		    				}				    				
@@ -529,7 +529,7 @@ var qmap = {
 			if ((map===undefined) || (map==null)) return;
 			var query = map.dataset.URI + "/similarity?type=url&threshold="+map.similarity.threshold+"&search=" + cmpuri + "&media=application/json";
 			/**
-			http://localhost:8080/ambit2/dataset/112/similarity?type=url&threshold=0.59&search=http://localhost:8080/ambit2/compound/12466/conformer/17513&feature_uris[]=http://localhost:8080/ambit2/feature/274
+			http://localhost:8080/ambit2/dataset/112/similarity?type=url&threshold=0.59&search=http://localhost:8080/ambit2/compound/12466/conformer/17513&feature_uris=http://localhost:8080/ambit2/feature/274
 			*/
 			var cmpx = qmap.getCompoundIndex(root,results);
 			var myid = qmap.getCompoundID(root,cmpuri);

@@ -72,8 +72,8 @@
 		<div class='three columns omega'><a href='#' class='chelp hdataset'>?</a></div>
 	</div>	    	
 	<div class='row remove-bottom' >
-		<label class='five columns alpha' for="feature_uris[]">Dataset column, containing the identifier (OpenTox Feature URI) </label>
-		<input class='eight columns alpha half-bottom featureuri' type='text' title='URI of the dataset feature (e.g. http://host/ambit2/feature/2), containing the identifier (e.g. CAS)' name='feature_uris[]' value=''>
+		<label class='five columns alpha' for="feature_uris">Dataset column, containing the identifier (OpenTox Feature URI) </label>
+		<input class='eight columns alpha half-bottom featureuri' type='text' title='URI of the dataset feature (e.g. http://host/ambit2/feature/2), containing the identifier (e.g. CAS)' name='feature_uris' value=''>
 		<div class='three columns omega help'><a href='#' class='chelp hfeature'>?</a></div>
 	</div>		
 	<div class='row remove-bottom' >

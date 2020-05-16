@@ -168,11 +168,11 @@ public class CallableStructureEntry<USERID> extends CallableDBProcessing<USERID>
 			for (IStructureRecord result : records) {
 				// what about policies
 				if (isPropertyOnly()) {
-					return new TaskResult(String.format("%s?feature_uris[]=%s/dataset/Properties+registration/feature",
+					return new TaskResult(String.format("%s?feature_uris=%s/dataset/Properties+registration/feature",
 							cmpreporter.getURI(result), applicationRootReference), false);
 				} else {
 					return new TaskResult(
-							String.format("%s?feature_uris[]=%s/dataset/Chemical+structure+registration/feature",
+							String.format("%s?feature_uris=%s/dataset/Chemical+structure+registration/feature",
 									cmpreporter.getURI(result), applicationRootReference),
 							false);
 				}

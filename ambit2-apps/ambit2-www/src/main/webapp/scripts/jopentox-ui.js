@@ -2041,8 +2041,8 @@ function loadChart(root, datasetselector, xselector, yselector, chartselector) {
 	else {
 		var uri = root + "/chart/xy?dataset_uri="
 				+ encodeURIComponent($(datasetselector).attr("value"))
-				+ "&feature_uris[]=" + encodeURIComponent($(xselector).val())
-				+ "&feature_uris[]=" + encodeURIComponent($(yselector).val());
+				+ "&feature_uris=" + encodeURIComponent($(xselector).val())
+				+ "&feature_uris=" + encodeURIComponent($(yselector).val());
 		$(chartselector).attr('src', uri);
 	}
 }
@@ -2053,7 +2053,7 @@ function loadPieChart(root, datasetselector, xselector, chartselector) {
 	else {
 		var uri = root + "/chart/pie?dataset_uri="
 				+ encodeURIComponent($(datasetselector).attr("value"))
-				+ "&feature_uris[]=" + encodeURIComponent($(xselector).val());
+				+ "&feature_uris=" + encodeURIComponent($(xselector).val());
 		$(chartselector).attr('src', uri);
 	}
 }
@@ -2064,7 +2064,7 @@ function loadHistogramChart(root, datasetselector, xselector, chartselector) {
 	else {
 		var uri = root + "/chart/histogram?w=800&h=250&dataset_uri="
 				+ encodeURIComponent($(datasetselector).attr("value"))
-				+ "&feature_uris[]=" + encodeURIComponent($(xselector).val());
+				+ "&feature_uris=" + encodeURIComponent($(xselector).val());
 		$(chartselector).attr('src', uri);
 	}
 }

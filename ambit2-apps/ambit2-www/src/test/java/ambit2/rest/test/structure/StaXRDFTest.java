@@ -23,7 +23,7 @@ public class StaXRDFTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
 		//return String.format("http://localhost:%d/dataset/2?rdfwriter=stax", port);
-		return String.format("http://localhost:%d/dataset/1?rdfwriter=jena&feature_uris[]=http://localhost:%d/feature/1&feature_uris[]=http://localhost:%d/feature/2",
+		return String.format("http://localhost:%d/dataset/1?rdfwriter=jena&feature_uris=http://localhost:%d/feature/1&feature_uris=http://localhost:%d/feature/2",
 				port,port,port);
 	}
 	//

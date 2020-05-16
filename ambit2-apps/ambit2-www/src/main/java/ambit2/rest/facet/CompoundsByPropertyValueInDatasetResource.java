@@ -42,7 +42,7 @@ public class CompoundsByPropertyValueInDatasetResource extends AmbitFacetResourc
 		
 		Template profile = getProperty(getParams().getValuesArray(OpenTox.params.feature_uris.toString()),1);
 		if ((profile==null) || (profile.size()==0))
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No feature_uris[] !");
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"No feature_uris !");
 		
 		PropertyDatasetFacetQuery q = new PropertyDatasetFacetQuery(getResourceRef(getRequest()).toString());
 		Iterator<Property> i = profile.getProperties(true);

@@ -502,7 +502,7 @@ public class DatasetsResourceTest extends ProtectedResourceTest {
 		headers.add(OpenTox.params.dataset_uri.toString(), String.format("http://localhost:%d/dataset/4", port));
 		Reference result = testAsyncTask(String.format("http://localhost:%d/model/pKa", port), headers,
 				Status.SUCCESS_OK,
-				"http://localhost:8181/dataset/4?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F2%2Fpredicted");
+				"http://localhost:8181/dataset/4?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F2%2Fpredicted");
 		System.out.println(result);
 	}
 

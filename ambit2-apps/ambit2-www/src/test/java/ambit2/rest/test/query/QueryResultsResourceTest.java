@@ -76,7 +76,7 @@ public class QueryResultsResourceTest extends ResourceTest {
 	}	
 	
 	public String getSimilarityURI() {
-		return String.format("http://localhost:%d/query/similarity?search=%s&threshold=0.16&feature_uris[]=http://localhost:%d/dataset/2/feature", 
+		return String.format("http://localhost:%d/query/similarity?search=%s&threshold=0.16&feature_uris=http://localhost:%d/dataset/2/feature", 
 				port,
 				Reference.encode("c1ccccc1"),
 				port

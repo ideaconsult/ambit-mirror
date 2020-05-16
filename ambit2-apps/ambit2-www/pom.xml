@@ -9,7 +9,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>4.0.1-SNAPSHOT</version>
 	</parent>
 	<distributionManagement>
 		<site>
@@ -575,11 +575,13 @@
 			<artifactId>ambit2-user</artifactId>
 			<version>${ambit.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-loom</artifactId>
 			<version>${ambit.version}</version>
 		</dependency>
+		 -->
 		<!-- Toxtree -->
 		<dependency>
 			<groupId>toxtree</groupId>

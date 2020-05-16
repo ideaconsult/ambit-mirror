@@ -151,7 +151,7 @@
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
-            			   "name": "feature_uris[]",
+            			   "name": "feature_uris",
             			   "description": "Feature URI",
             			   "required": true,
             			   "type": "string",
@@ -193,7 +193,7 @@
                      <#include "/apidocs/authz.ftl" >
                     "parameters": [
                         {
-            			   "name": "feature_uris[]",
+            			   "name": "feature_uris",
             			   "description": "Feature URI",
             			   "required": true,
             			   "type": "string",

@@ -18,7 +18,7 @@ import ambit2.rest.OpenTox;
 /**
  * Returns structures with missing values from a given dataset, or globally.
  * Dataset is expected in dataset_uri parameter.
- * Features are accepted in feature_uris[] parameters.
+ * Features are accepted in feature_uris parameters.
  * @author nina
  *
  */

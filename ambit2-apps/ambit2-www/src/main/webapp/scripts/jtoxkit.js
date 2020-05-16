@@ -3002,7 +3002,7 @@ var jToxDataset = (function () {
   cls.prototype.modifyUri = function (uri) {
     jT.$('input[type="checkbox"]', this.rootElement).each(function () {
       if (this.checked)
-        uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
+        uri = ccLib.addParameter(uri, 'feature_uris=' + encodeURIComponent(this.value + '/feature'));
     })
 
     return uri;
@@ -3202,7 +3202,7 @@ var jToxModel = (function () {
 
   cls.prototype.runPrediction = function (datasetUri, modelUri, callback) {
     var self = this;
-    var q = ccLib.addParameter(datasetUri, 'feature_uris[]=' + encodeURIComponent(modelUri + '/predicted'));
+    var q = ccLib.addParameter(datasetUri, 'feature_uris=' + encodeURIComponent(modelUri + '/predicted'));
 
     var createIt = function () {
       jT.service(self, modelUri, { method: "POST", data: { dataset_uri: datasetUri } }, function (result, jhr) {
@@ -3242,7 +3242,7 @@ var jToxModel = (function () {
   cls.prototype.modifyUri = function (uri) {
     jT.$('input[type="checkbox"]', this.rootElement).each(function () {
       if (this.checked)
-        uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/predicted'));
+        uri = ccLib.addParameter(uri, 'feature_uris=' + encodeURIComponent(this.value + '/predicted'));
     })
 
     return uri;
@@ -4970,7 +4970,7 @@ var jToxEndpoint = (function () {
   cls.prototype.modifyUri = function (uri) {
     jT.$('input[type="checkbox"]', this.rootElement).each(function () {
       if (this.checked)
-        uri = ccLib.addParameter(uri, 'feature_uris[]=' + encodeURIComponent(this.value + '/feature'));
+        uri = ccLib.addParameter(uri, 'feature_uris=' + encodeURIComponent(this.value + '/feature'));
     })
 
     return uri;

@@ -37,10 +37,10 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 				String.format("http://localhost:%d/algorithm/org.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/%s", port,
-						"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
-						//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
+						"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"
+						//"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTw-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTc-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1lorg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor&feature_uris=http%3A%2F%2Flocalhost%3A8181%2Ffeature%2FBCUTp-1horg.openscience.cdk.qsar.descriptors.molecular.BCUTDescriptor"
 						));		
-				//"1?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
+				//"1?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2FBCUT%2Bdescriptors%2Fpredicted"));
 	}	
 	
 	@Test
@@ -66,7 +66,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 				String.format("http://localhost:%d/model/3", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/1%s", port,
-						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+						String.format("%s","?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 
 		
 	}	
@@ -105,7 +105,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 		testAsyncTask(
 				String.format("http://localhost:%d/model/3", port),
 				form, Status.SUCCESS_OK,
-				String.format("http://localhost:%s/compound/%s%s", port,"11","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
+				String.format("http://localhost:%s/compound/%s%s", port,"11","?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted"));
 		/*
 		form = new Form();  
 		form.add(OpenTox.params.dataset_uri.toString(), 
@@ -125,7 +125,7 @@ public class ProtectedModelBuilder extends ProtectedResourceTest {
 				String.format("http://localhost:%d/model/3", port),
 				headers, Status.SUCCESS_OK,
 				String.format("http://localhost:%d/dataset/1%s", port,
-						String.format("%s","?feature_uris[]=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
+						String.format("%s","?feature_uris=http%3A%2F%2Flocalhost%3A8181%2Fmodel%2F3%2Fpredicted")));
 		*/
 		
 	}	

@@ -24,7 +24,7 @@ import ambit2.rest.test.ResourceTest;
 public class ExactStructureResourceTest extends ResourceTest {
 	@Override
 	public String getTestURI() {
-		return String.format("http://localhost:%d/query%s?search=%s&feature_uris[]=%s", port,
+		return String.format("http://localhost:%d/query%s?search=%s&feature_uris=%s", port,
 				ExactStructureQueryResource.resource,
 				//"/smarts",
 				Reference.encode("[Br-].CC[P+](c1ccccc1)(c2ccccc2)c3ccccc3"),

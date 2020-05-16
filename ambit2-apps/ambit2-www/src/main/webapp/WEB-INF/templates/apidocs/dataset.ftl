@@ -73,7 +73,7 @@
 							    "allowMultiple": false
 							},	  
 							{
-							    "name": "feature_uris[]",
+							    "name": "feature_uris",
 							    "description": "Feature URIs to use as columns",
 							    "required": false,
 							    "type": "string",
