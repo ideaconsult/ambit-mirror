@@ -11,6 +11,7 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 {
 	private String smarts = null;
 	private double contribution = 0.0;
+	private double sd = 0.0;
 	private String designation = "";
 	private IValueTransformation transformation = null;
 	
@@ -53,6 +54,16 @@ public class SmartsCorrectionFactor implements ICorrectionFactor
 	@Override
 	public void setContribution(double contribution) {
 		this.contribution = contribution;
+	}
+	
+	@Override
+	public double getSD() {
+		return sd;
+	}
+	
+	@Override
+	public void setSD(double sd) {
+		this.sd = sd;
 	}
 
 	@Override

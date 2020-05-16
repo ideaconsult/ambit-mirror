@@ -75,6 +75,8 @@ public class Learner
 	
 	ArrayUtils arrayUtils = new ArrayUtils();
 	
+	DecimalFormat df2 = getDecimalFormat(2);
+	
 	public void reset()
 	{
 		errors.clear();
@@ -340,6 +342,32 @@ public class Learner
 		}
 	}
 	
+	void calculate_x_sd()
+	{
+		//modeled_b values must be determined
+		//An estimations of the Variation-covariation matrix of the model parameters x 
+		//is given by V(x) = (Se^2)/(m-n).inv(A'.A) = (Se^2)/(m-n).invC
+		//where Se^2 = e1^2 + e2^2 + ... + em^2
+		//Confidence interval of parameter is [x - t.V(x), x + t.V(x)]
+		
+		int m = b.nRows;
+		int n = x.nRows;
+		MatrixDouble modeled_b = new MatrixDouble(m,1);
+		
+		for (int i = 0; i < m; i++)
+			modeled_b.el[i][0] = modelValue(i, A, x);
+		
+		double Se2 = 0;
+		for (int i = 0; i < m; i++)
+			Se2 += (b.el[i][0]-modeled_b.el[i][0])*(b.el[i][0]-modeled_b.el[i][0]);
+
+		x_sd = new MatrixDouble(n,1);
+		for (int i = 0; i < n; i++)
+			x_sd.el[i][0] = Math.sqrt( (Se2/(m-n))*invC.el[i][i] );
+	}
+	
+	
+	
 	int  makeModel()
 	{
 		//Calculating of matrix C = A'A
@@ -353,7 +381,7 @@ public class Learner
 			MatrixDouble invC_A_transposed =  MathUtilities.Multiply(invC, A.transposed());
 			x = MathUtilities.Multiply(invC_A_transposed , b);
 			
-			//TODO calculate x_sd
+			calculate_x_sd();
 			
 			//Set group contributions
 			Map<String,IGroup> groups = model.getGroups();
@@ -363,6 +391,7 @@ public class Learner
 				String key = initialColumnGroups[col];
 				IGroup g = groups.get(key);
 				g.setContribution(x.el[i][0]);
+				g.setSD(x_sd.el[i][0]);
 				g.setMissing(false);
 			}
 			
@@ -374,6 +403,7 @@ public class Learner
 				int dIndex = usedDescriptors.get(i);
 				DescriptorInfo di = diList.get(dIndex);
 				di.setContribution(x.el[offset+i][0]);
+				di.setSD(x_sd.el[offset+i][0]);
 			}
 			
 			//Set correction factors
@@ -384,6 +414,7 @@ public class Learner
 				int cfIndex = usedCorrectionFactors.get(i);
 				ICorrectionFactor cf = cfList.get(cfIndex);
 				cf.setContribution(x.el[offset+i][0]);
+				cf.setSD(x_sd.el[offset+i][0]);
 			}
 		}
 		else
@@ -866,6 +897,8 @@ public class Learner
 		GCMReportConfig repCfg = model.getReportConfig();
 		Map<String,IGroup> groups = model.getGroups();
 		
+		double t = 2.0;
+		
 		if (repCfg.FlagConsoleOutput)
 		{
 			System.out.println("Group contributions:");
@@ -874,7 +907,9 @@ public class Learner
 			{
 				IGroup g = groups.get(key);
 				System.out.println("\t" + key + "\t" 
-						+ g.getContribution() + (g.isMissing()?"  missing":""));
+						//+ g.getContribution() 
+						+ (g.isMissing()?(g.getContribution() + "  missing" )
+								: getContributionStatReport(g.getContribution(), g.getSD(), t)));
 			}
 			
 			List<DescriptorInfo> diList = model.getDescriptors();
@@ -884,7 +919,8 @@ public class Learner
 				for (int i = 0; i < diList.size(); i++)
 				{	
 					System.out.println("\t" + diList.get(i).fullString + "\t" 
-							+ diList.get(i).getContribution());
+							//+ diList.get(i).getContribution());
+							+ getContributionStatReport(diList.get(i).getContribution(), diList.get(i).getSD(), t));
 				}
 			}
 			
@@ -895,7 +931,8 @@ public class Learner
 				for (int i = 0; i < cfList.size(); i++)
 				{	
 					System.out.println("\t" + cfList.get(i).getDesignation() + "\t" 
-							+ cfList.get(i).getContribution());
+							//+ cfList.get(i).getContribution());
+							+ getContributionStatReport(cfList.get(i).getContribution(), cfList.get(i).getSD(), t));
 				}
 			}
 		}
@@ -939,6 +976,23 @@ public class Learner
 			model.addToReport(dataSet.reportErrorsAsString());
 			model.addToReport("\n");
 		}
+	}
+	
+	String getContributionStatReport(double contr, double sd, double t)
+	{
+		double d1 = contr - t*sd;
+		double d2 = contr + t*sd;
+		boolean statSignificance = ((d1 >0) || (d2 <0));
+		
+		double rsd = 0.0;
+		if (contr != 0)
+			rsd = 100*sd/Math.abs(contr);
+		
+		String s = "" + contr + (statSignificance?"  Yes  ":"  No  ")
+				+  " rsd = " + df2.format(rsd) + "%"
+				+ "   [" + d1 + ", " + d2 + "]";;
+		
+		return s;
 	}
 	
 	public String getMatricesAsString(String separator, boolean mergeMatrices, 

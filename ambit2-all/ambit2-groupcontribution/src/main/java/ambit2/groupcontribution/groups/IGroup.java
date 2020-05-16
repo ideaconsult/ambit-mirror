@@ -40,6 +40,9 @@ public interface IGroup
 	   
 	public double getContribution();
 	public void setContribution(double contribution);
+	public double getSD();
+	public void setSD(double sd);
+	
 	public IValueTransformation getValueTransformation();
 	public void setValueTransformation(IValueTransformation transformation);
 	public String getDesignation();	

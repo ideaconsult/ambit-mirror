@@ -26,6 +26,8 @@ public interface ICorrectionFactor extends IHasValueTransformation
 	   
 	public double getContribution();
 	public void setContribution(double contribution);
+	public double getSD();
+	public void setSD(double sd);
 	public String getDesignation();	
 	public double calculateFor(IAtomContainer mol);
 	public Type getType();

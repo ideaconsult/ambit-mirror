@@ -4,7 +4,6 @@ package ambit2.groupcontribution.groups;
 public class AtomGroup extends ValueTransformedGroup 
 {	
 	private String atomDesignation = "";
-	private double contribution = 0.0;
 	private boolean missing = true;
 	
 	public void setAtomDesignation(String atomDesignation) {		
@@ -21,18 +20,6 @@ public class AtomGroup extends ValueTransformedGroup
 	public IGroupSet getGroupSet() {		
 		return null;
 	}
-
-
-	@Override
-	public double getContribution() {
-		return contribution;
-	}
-	
-	@Override
-	public void setContribution(double contribution) {
-		this.contribution = contribution;
-	}
-
 
 	@Override
 	public GroupInfo getInfo() {		
