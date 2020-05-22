@@ -381,6 +381,26 @@ public class Protocol {
 			}
 
 		},
+		BIO_NANO_INTERACTION_SECTION {
+			@Override
+			public String toString() {
+				return "Bio-nano interactions";
+			}
+
+			@Override
+			public String getNumber() {
+				return "";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 4890;
+			}
+
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+		},		
 		PC_UNKNOWN_SECTION {
 			@Override
 			public String toString() {
