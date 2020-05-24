@@ -3453,15 +3453,18 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 
 	var col = [ 'substanceType', 'name', 'publicname', 
 			'reference', 'reference_owner', 'reference_year', 'topcategory',
-			'endpointcategory', 'guidance', 'effectendpoint','resulttype', 'textValue',
+			'endpointcategory', 'guidance', 'MEDIUM','cell_type','method','effectendpoint','resulttype', 'textValue',
 			'loQualifier', 'loValue', 'upQualifier', 'upValue',  'unit','errQualifier',
-			'err', , 's_uuid', 'owner_name' , 'document_uuid', 'auuid','iuuid'];
+			'err', "concentration","exposure_time","replicate","material", 's_uuid', 'owner_name' , 'document_uuid', 'auuid','iuuid'];
 
 	var headers = {
 		"substanceType" : "Material Type",
 		"topcategory" : "Module",
 		"endpointcategory" : "Study type",
 		"guidance" : "Protocol",
+		"MEDIUM" : "Medium",
+		"cell_type" : "Cell type",
+		"method" : "Method",
 		"reference_owner" : "Study provider",
 		"reference_year" : "Study year",
 		"effectendpoint" : "endpoint",
@@ -3473,19 +3476,23 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		"upValue" : "value",
 		"errQualifier" : "Uncertainty Type",
 		"err" : "Uncertainty",
+		"concentration" : "Concentration",
+		"exposure_time" : "Exposure time",
+		"replicate" : "Replicate",
+		"material" : "Treatment",
 		"s_uuid" : "Link to substance",
 		"owner_name" : "Supplier",
 		"document_uuid" : "Experiment identifier",
 		"auuid" : "Assay",
-		"iuuid" : "Investigation"
-
+		"iuuid" : "Investigation" 
+		
 	};
 
 	var coldefs = [];
 
 	// "substanceType","endpointcategory"
 	var render = function(o, val) {
-		return (val === undefined || val == null) ? "" : val;
+		return (val === undefined || val == null) ? "" : val.split("_").join(" ");
 	}
 	var ontrender = function(o, val) {
 		try {
@@ -3532,14 +3539,28 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		v = ontlookup[val];
 		v = (v === undefined || v == null) ? val : v;
 		return "<a href='" + root + "/investigation?type=bycitation&search="
-				+ val + "'>" + v + "</a>";
+				+ val + "'>" + v.split("_").join(" ") + "</a>";
 	}
+	
 	var linkrender_refowner = function(o, val) {
 		v = ontlookup[val];
 		v = (v === undefined || v == null) ? val : v;
 		return "<a href='" + root + "/investigation?type=byprovider&search="
 				+ val + "'>" + v + "</a>";
 	}
+	
+	var linkrender_conditions = function(o, val) {
+		var out = "";
+		val.forEach(function(item) {
+			if (item.conditions != undefined) {
+				try {
+					out = item.conditions.concentration.loValue + " " + item.conditions.concentration.unit;
+				} catch (err) {}
+			}  
+		});
+		return out;
+	}
+
 	var fnlist = {
 		"iuuid" : linkrender_i,
 		"auuid" : linkrender_a,
@@ -3548,7 +3569,10 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 		"substanceType" : ontrender,
 		"endpointcategory" : linkrender_category,
 		"reference" : linkrender_reference,
-		"reference_owner" : linkrender_refowner
+		"reference_owner" : linkrender_refowner,
+		"effectendpoint" : render,
+		"material" : render
+		
 	};
 
 	$.each(col, function(key, value) {
@@ -3571,6 +3595,83 @@ function defineInvestigationTable(root, url, selector, jQueryUI, dom) {
 					{
 						"sAjaxDataProp" : "results",
 						"sAjaxSource" : url,
+						
+						"fnServerData" : function(sSource, aoData, fnCallback,
+								oSettings) {
+							oSettings.jqXHR = $
+									.ajax({
+										"type" : "GET",
+										"url" : url,
+										"data" : aoData,
+										"dataType" : "json",
+										"contentType" : "application/json",
+										"cache" : true,
+										"success" : function(result) {
+											result["results"].forEach(function(item) {
+												item["concentration"] = undefined;
+												item["exposure_time"] = undefined;
+												item["replicate"] = undefined;
+												item["material"] = undefined;
+												item["MEDIUM"] = undefined;
+												item["cell_type"] = undefined;
+												item._childDocuments_.forEach(function (cd) {
+													
+													if (cd.params != undefined) {
+														try {
+															item["MEDIUM"]  = cd.params.MEDIUM;
+														} catch (err) {}
+														try {
+															item["cell_type"]  = cd.params["E.cell_type"];
+														} catch (err) {}
+														try {
+															item["method"]  = cd.params["E.method"];
+														} catch (err) {}
+													}
+													if (cd.conditions != undefined) {
+														try {
+															item["concentration"]  = cd.conditions.concentration.loValue + " " + cd.conditions.concentration.unit;
+														} catch (err) {}
+														try {
+															item["exposure_time"]  = cd.conditions["E.exposure_time"].loValue + " " + cd.conditions["E.exposure_time"].unit;
+														} catch (err) {}
+														try {
+															item["replicate"]  = cd.conditions.replicate.loValue;
+														} catch (err) {}
+														try {
+															item["material"]  = cd.conditions.material;
+														} catch (err) {}	
+													}  	
+												});
+											});
+											fnCallback(result);
+										},
+										"error" : function(xhr, textStatus,
+												error) {
+											switch (xhr.status) {
+											case 403: {
+												alert("Restricted access. You are not authorized to access the requested investigations.");
+												break;
+											}
+											case 404: {
+												// not found
+												break;
+											}
+											default: {
+												// console.log(xhr.status + " "
+												// + xhr.statusText + " " +
+												// xhr.responseText);
+												alert("Error loading investigation "
+														+ xhr.status
+														+ " "
+														+ error);
+											}
+											}
+											oSettings.oApi
+													._fnProcessingDisplay(
+															oSettings, false);
+										}
+									});
+						},						
 						"sSearch" : "Filter:",
 						"bJQueryUI" : jQueryUI,
 						"bSearchable" : true,
