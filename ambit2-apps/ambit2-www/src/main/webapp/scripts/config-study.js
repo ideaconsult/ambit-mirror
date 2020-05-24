@@ -696,6 +696,13 @@ var config_study = {
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
 		},
+		"BIO_NANO_INTERACTION_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+		},		
 		"RISKASSESSMENT_SECTION" : config_i5["RISKASSESSMENT_SECTION"],
 
 		"UNKNOWN_TOXICITY_SECTION" : {
