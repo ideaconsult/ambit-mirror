@@ -187,10 +187,10 @@ var jToxBundle = {
               self.load(bundleUri);
               var url = ccLib.parseURL( window.location.href );
               if (url.query != '' ) {
-                url.query += '&bundleUri=' + bundleUri;
+                url.query += '&bundle_uri=' + bundleUri;
               }
               else {
-                url.query = '?bundleUri=' + bundleUri;
+                url.query = '?bundle_uri=' + bundleUri;
               }
               var href = url.protocol + '://' + url.host + ( (url.port != '') ? ':' + url.port : '' ) + url.path + url.query + ( (url.hash != '') ? '#' + url.hash : '' );
               if ( 'pushState' in window.history ) {
