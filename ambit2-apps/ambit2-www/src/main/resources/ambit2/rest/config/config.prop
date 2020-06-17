@@ -53,6 +53,7 @@ Password=${ambit.db.user.test.password}
 secret=${ambit.secret}
 #Session timeout in milliseconds. Default is 45 min = 2700000 ms
 sessiontimeout=${ambit.sessiontimeout}
+auth_cookie_path=${auth_cookie_path}
 ############################################################
 #e-mail setup. Used for registration notifications
 #The eMail server is used to send confirmation emails to newly registered 

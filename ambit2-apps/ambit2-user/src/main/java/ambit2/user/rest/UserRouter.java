@@ -60,8 +60,12 @@ public class UserRouter extends MyRouter {
 		String usersdbname = getContext().getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
+		
+		String auth_cookie_path =  getContext().getParameters().getFirstValue("auth_cookie_path");
+		if (auth_cookie_path.startsWith("${")) auth_cookie_path = null;
+		
 		Filter auth = createCookieAuthenticator(context, usersdbname, AMBITConfigProperties.configProperties, secret,
-				sessionLength, false);
+				sessionLength, false,auth_cookie_path);
 		Router setCookieUserRouter = new MyRouter(context);
 		/*
 		 * Filter authz = new ProtocolAuthorizer(testAuthZ,DBRoles.adminRole);
@@ -95,7 +99,7 @@ public class UserRouter extends MyRouter {
 		protectedRouter.attach(String.format("/%s", UserLogoutPOSTResource.resource), AMBITLogoutPOSTResource.class);
 
 		auth = createCookieAuthenticator(context, usersdbname, AMBITConfigProperties.configProperties, secret, sessionLength,
-				false);
+				false,auth_cookie_path);
 		auth.setNext(protectedRouter);
 		router.attach("/protected", auth);
 
@@ -117,18 +121,21 @@ public class UserRouter extends MyRouter {
 		String secret = properties.getPropertyWithDefault(AMBITConfig.secret.name(), configProperties, UUID.randomUUID().toString());
 		long sessionlength = properties.getPropertyWithDefaultLong(AMBITConfig.sessiontimeout.name(), configProperties,  1000 * 60 * 45L);
 		String usersdbname = properties.getPropertyWithDefault(AMBITConfig.Database.name(), configProperties, "ambit_users");
-		return createCookieAuthenticator(context,usersdbname,configProperties,secret,sessionlength,multiAuthenticating);
+		String auth_cookie_path = properties.getPropertyWithDefault("auth_cookie_path", configProperties, null);
+		if (auth_cookie_path != null && auth_cookie_path.startsWith("${")) auth_cookie_path = null;
+		return createCookieAuthenticator(context,usersdbname,configProperties,secret,sessionlength,multiAuthenticating,auth_cookie_path==""?null:auth_cookie_path);
 	}
 
 	public static Filter createCookieAuthenticator(Context context, String default_userdb, String config, String secret,
-			long sessionLength, boolean multiAuthenticating) {
-
+			long sessionLength, boolean multiAuthenticating, String auth_cookie_path) {
+		//System.out.println(auth_cookie_path);
 		String usersdbname = context.getParameters().getFirstValue(AMBITConfig.users_dbname.name());
 		if (usersdbname == null)
 			usersdbname = "ambit_users";
+		
 
 		CookieAuthenticator cookieAuth = new CookieAuthenticator(context, usersdbname,
-				(secret == null ? UUID.randomUUID().toString() : secret).getBytes());
+				(secret == null ? UUID.randomUUID().toString() : secret).getBytes(),auth_cookie_path);
 		cookieAuth.setMultiAuthenticating(multiAuthenticating);
 		cookieAuth.setCookieName("ambitdb");
 		if (sessionLength < 600000)
