@@ -133,7 +133,13 @@ public class SubstanceStudyTableResource<Q extends IQueryRetrieval<Bucket>> exte
 				papp.setAssayUUID(search);
 				q = new SubstanceStudyFlatQuery(papp,_QUERY_TYPE.byassay);
 				break;
-			}			
+			}
+			case byprotocolapplication: {
+				ProtocolApplication papp = new ProtocolApplication(null);
+				papp.setDocumentUUID(search);
+				q = new SubstanceStudyFlatQuery(papp,_QUERY_TYPE.byprotocolapplication);
+				break;
+			}				
 			case byprovider: {
 				q = new SubstanceStudyFlatQuery(qtype, search);
 				break;

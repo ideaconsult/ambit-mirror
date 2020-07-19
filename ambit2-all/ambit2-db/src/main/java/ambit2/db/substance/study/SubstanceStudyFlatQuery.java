@@ -95,6 +95,18 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 			}
 
 		},
+		byprotocolapplication {
+			@Override
+			public String getField() {
+				return "d_uuid";
+			}
+
+			@Override
+			public String getSQL() {
+				return "ambit2/db/q/substance_study_byprotocolapplication.sql";
+			}
+			
+		},		
 		byassay {
 			@Override
 			public String getField() {
@@ -308,7 +320,7 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 	}
 	public SubstanceStudyFlatQuery(ProtocolApplication papp, _QUERY_TYPE qtype) throws IOException {
 		this(qtype);
-		UUID search = null;
+		Object search = null;
 		switch(qtype) {
 		case byinvestigation: {
 			search = papp.getInvestigationUUID();
@@ -316,6 +328,10 @@ public class SubstanceStudyFlatQuery extends SQLFileQueryParams {
 		}
 		case byassay: {
 			search = papp.getAssayUUID();
+			break;
+		}
+		case byprotocolapplication: {
+			search = papp.getDocumentUUID().substring(4).replace("-","").toLowerCase();
 			break;
 		}
 		default:

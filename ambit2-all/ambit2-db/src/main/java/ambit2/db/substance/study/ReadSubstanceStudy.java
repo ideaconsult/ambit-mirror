@@ -41,6 +41,7 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol, String,
 	private final static String whereCategory = "\nand endpointcategory=?";
 	private final static String whereProperty = "\nand document_uuid in (select document_uuid from substance_experiment where endpointhash =unhex(?))";
 	private final static String whereInvestigation = "\nand investigation_uuid=unhex(?)";
+	private final static String whereDocumentUUID = "\nand document_uuid=unhex(?)";
 
 	@Override
 	public String getSQL() throws AmbitException {
@@ -56,6 +57,9 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol, String,
 			}
 			if (getValue().getInvestigationUUID() != null)
 				wsql += whereInvestigation;
+			if (getValue().getDocumentUUID() != null)
+				wsql += whereDocumentUUID;			
+			
 
 			return wsql;
 		} else
@@ -85,6 +89,11 @@ public class ReadSubstanceStudy<PA extends ProtocolApplication<Protocol, String,
 		if (getValue() != null && getValue().getInvestigationUUID() != null)
 			params.add(new QueryParam<String>(String.class,
 					getValue().getInvestigationUUID().toString().replace("-", "").toLowerCase()));
+		
+		if (getValue() != null && getValue().getDocumentUUID() != null)
+			params.add(new QueryParam<String>(String.class,
+					getValue().getDocumentUUID().toString().substring(4).replace("-", "").toLowerCase()));
+		
 		return params;
 	}
 
