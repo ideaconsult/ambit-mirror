@@ -555,7 +555,7 @@ var config_study = {
 						try {
 							console.log(data);
 							var id = data[0].result.textValue;
-							var out= "<a target='_external' href='" + full.interpretation.criteria +  id + "'>"+id+"</a>";
+							var out= "<a target='_external' href='" + full.interpretation.criteria + "'>"+id+"</a>";
 							return out;
 						} catch(e) {
 							return data;
