@@ -444,7 +444,13 @@ var config_study = {
 			}
 		},
 		"SURFACE_CHEMISTRY_SECTION" : config_i5["SURFACE_CHEMISTRY_SECTION"],
-
+		"RADICAL_FORMATION_POTENTIAL_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+		},
 		"PC_GRANULOMETRY_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
