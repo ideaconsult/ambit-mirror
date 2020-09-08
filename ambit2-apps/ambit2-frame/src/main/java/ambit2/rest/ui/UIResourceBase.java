@@ -1,5 +1,6 @@
 package ambit2.rest.ui;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -15,10 +16,14 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ResourceException;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ambit2.base.config.AMBITConfig;
 import ambit2.base.data.StructureRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.interfaces.IStructureRecord.MOL_TYPE;
+import ambit2.base.json.JSONUtils;
 import ambit2.rendering.StructureEditorProcessor;
 import ambit2.rest.AmbitFreeMarkerApplication;
 import ambit2.rest.OpenTox;
@@ -132,8 +137,9 @@ public class UIResourceBase extends FreeMarkerResource {
 			}
 		},
 		annotation {
-			
+
 		};
+
 		public String getTemplateName() {
 			return name();
 		}
@@ -267,12 +273,13 @@ public class UIResourceBase extends FreeMarkerResource {
 		}
 
 		try {
-			map.put(AMBITConfig.service_search.name(),
-					((AmbitFreeMarkerApplication) getApplication()).getProperties().getSearchServiceURI(getRequest().getRootRef().toString()));
+			map.put(AMBITConfig.service_search.name(), ((AmbitFreeMarkerApplication) getApplication()).getProperties()
+					.getSearchServiceURI(getRequest().getRootRef().toString()));
 		} catch (Exception x) {
 		}
 		try {
-			map.put(AMBITConfig.custom_query.name(), ((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomQuery());
+			map.put(AMBITConfig.custom_query.name(),
+					((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomQuery());
 		} catch (Exception x) {
 		}
 		try {
@@ -282,11 +289,13 @@ public class UIResourceBase extends FreeMarkerResource {
 		}
 
 		try {
-			map.put(AMBITConfig.custom_title.name(), ((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomTitle());
+			map.put(AMBITConfig.custom_title.name(),
+					((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomTitle());
 		} catch (Exception x) {
 		}
 		try {
-			map.put(AMBITConfig.custom_logo.name(), ((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomLogo());
+			map.put(AMBITConfig.custom_logo.name(),
+					((AmbitFreeMarkerApplication) getApplication()).getProperties().getCustomLogo());
 		} catch (Exception x) {
 		}
 		try {
@@ -351,25 +360,45 @@ public class UIResourceBase extends FreeMarkerResource {
 			if (page.enablePOST()) {
 				return uploadsubstance(entity, variant);
 			} else if (page.editorServices()) {
-				Form form = new Form(entity);
-				String moldata = form.getFirstValue("moldata");
 				IStructureRecord record = new StructureRecord();
-				if (moldata != null && !"".equals(moldata))
-					try {
-						record.setContent(moldata);
-						record.setFormat(MOL_TYPE.SDF.name());
-					} catch (Exception x) {
-						return new StringRepresentation("Error.\n" + x.getMessage(), MediaType.TEXT_PLAIN);
-					}
-
 				String smiles = getRequest().getResourceRef().getQueryAsForm().getFirstValue("smiles");
 				if ((smiles != null) && !"".equals(smiles)) {
 					record.setContent(smiles);
 					record.setFormat(MOL_TYPE.CSV.name());
 				}
+				if (MediaType.APPLICATION_WWW_FORM.equals(entity.getMediaType())) { // old ketcher
+					Form form = new Form(entity);
+					String moldata = form.getFirstValue("moldata");
+					if (moldata != null && !"".equals(moldata))
+						try {
+							record.setContent(moldata);
+							record.setFormat(MOL_TYPE.SDF.name());
+						} catch (Exception x) {
+							return new StringRepresentation("Error.\n" + x.getMessage(), MediaType.TEXT_PLAIN);
+						}
+				} else if (MediaType.APPLICATION_JSON.equals(entity.getMediaType())) { // new ketcher
+					ObjectMapper dx = new ObjectMapper();
+					try (InputStream in = entity.getStream()) {
+						JsonNode node = dx.readTree(in);
+						String struct = node.get("struct").asText();
+						if (struct.indexOf("\n") >= 0) { // multiline, assume sdf
+							record.setContent(struct);
+							record.setFormat(MOL_TYPE.SDF.name());
+						} else { // assume smiles
+							record.setContent(struct);
+							record.setFormat(MOL_TYPE.CSV.name());
+						}
+					}
+				}
+
 				StructureEditorProcessor processor = new StructureEditorProcessor(page.name());
+
 				try {
-					return new StringRepresentation("Ok.\n" + processor.process(record), MediaType.TEXT_PLAIN);
+					String result = processor.process(record);
+					if (MediaType.APPLICATION_JSON.equals(variant.getMediaType())) { //new ketcher
+						return new StringRepresentation(String.format("{\"struct\": %s}",JSONUtils.jsonQuote(JSONUtils.jsonEscape(result))) , MediaType.APPLICATION_JSON);
+					} else
+						return new StringRepresentation("Ok.\n" + result, MediaType.TEXT_PLAIN);
 				} catch (Exception x) {
 					return new StringRepresentation("Error.\n", MediaType.TEXT_PLAIN);
 				}
