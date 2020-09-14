@@ -81,6 +81,12 @@ public class UIResourceBase extends FreeMarkerResource {
 				return true;
 			};
 		},
+		clean {
+			@Override
+			public boolean editorServices() {
+				return true;
+			};
+		},		
 		layout {
 			@Override
 			public boolean editorServices() {
