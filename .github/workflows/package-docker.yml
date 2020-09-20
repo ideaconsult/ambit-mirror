@@ -26,7 +26,7 @@ jobs:
       run: mvn -B --file ambit2-apps/ambit2-www/pom.xml clean buildnumber:create package -P http -P docker_generic -DskipTests=true
 
     - name: Publish to GitHub Packages
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn -B --file ambit2-apps/ambit2-www/pom.xml deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
