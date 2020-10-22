@@ -333,8 +333,10 @@ public class SubstanceRecord extends StructureRecord {
 	public void setExternalids(List<ExternalIdentifier> externalids) {
 		this.externalids = externalids;
 	}
-
 	public String toJSON(String baseReference) {
+		return this.toJSON(baseReference,false);
+	}
+	public String toJSON(String baseReference, boolean with_measurement) {
 		String uri = getURI(baseReference, this);
 		StringBuilder builder = new StringBuilder();
 		builder.append("\n\t{\n");
@@ -392,7 +394,6 @@ public class SubstanceRecord extends StructureRecord {
 			}
 		}
 		builder.append("\t],\n");
-
 		builder.append(String.format("\n\t%s:{\n",
 				JSONUtils.jsonQuote("bundles")));
 		Iterable<IFacet> facets = getFacets();
@@ -419,6 +420,17 @@ public class SubstanceRecord extends StructureRecord {
 				}
 
 		builder.append("\t]");
+		
+		if (with_measurement) {
+			builder.append(String.format("\n\t,%s:[\n",
+					JSONUtils.jsonQuote("study")));
+			for (ProtocolApplication papp : getMeasurements()) {
+				builder.append(papp.toString());
+				builder.append("\n");
+			}
+			builder.append("\t]");
+		}
+			
 		builder.append("\t}");
 		return builder.toString();
 	}
