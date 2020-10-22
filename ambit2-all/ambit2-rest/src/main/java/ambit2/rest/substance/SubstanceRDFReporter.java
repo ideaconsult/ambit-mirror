@@ -37,6 +37,7 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.facet.BundleRoleFacet;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.base.ro.SubstanceRecordAnnotationProcessor;
 import ambit2.core.io.json.SubstanceStudyParser;
 import ambit2.db.substance.study.SubstanceStudyDetailsProcessor;
 import ambit2.rest.property.PropertyURIReporter;
@@ -59,8 +60,13 @@ public class SubstanceRDFReporter<Q extends IQueryRetrieval<SubstanceRecord>>
 	 */
 	private static final long serialVersionUID = -4522513627076425922L;
 
+	protected SubstanceRecordAnnotationProcessor annotator;
 	public SubstanceRDFReporter(Request request, MediaType mediaType) {
+		this(request,mediaType,null);
+	}
+	public SubstanceRDFReporter(Request request, MediaType mediaType,SubstanceRecordAnnotationProcessor annotator) {
 		super(request, mediaType, null);
+		this.annotator=annotator;
 		if (request != null) {
 			base = request.getRootRef().toString();
 			propertyReporter = new PropertyURIReporter(request);

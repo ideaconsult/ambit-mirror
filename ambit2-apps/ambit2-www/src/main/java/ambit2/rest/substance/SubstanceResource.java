@@ -1,10 +1,13 @@
 package ambit2.rest.substance;
 
 import java.awt.Dimension;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -36,6 +39,7 @@ import ambit2.base.data.substance.SubstanceEndpointsBundle;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.ProcessorException;
 import ambit2.base.relation.composition.CompositionRelation;
+import ambit2.base.ro.SubstanceRecordAnnotationProcessor;
 import ambit2.db.UpdateExecutor;
 import ambit2.db.processors.CallableSubstanceI5Query;
 import ambit2.db.reporters.ImageReporter;
@@ -51,6 +55,7 @@ import ambit2.db.substance.ReadSubstanceByStudy;
 import ambit2.db.substance.ReadSubstanceByType;
 import ambit2.db.update.bundle.substance.ReadSubstancesByBundleCompounds;
 import ambit2.export.isa.base.ISAConst;
+import ambit2.rest.AmbitFreeMarkerApplication;
 import ambit2.rest.DBConnection;
 import ambit2.rest.ImageConvertor;
 import ambit2.rest.OpenTox;
@@ -191,7 +196,16 @@ public class SubstanceResource<Q extends IQueryRetrieval<SubstanceRecord>, T ext
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_NTRIPLES)
 				|| variant.getMediaType().equals(MediaType.TEXT_RDF_N3)
 				|| variant.getMediaType().equals(ChemicalMediaType.APPLICATION_JSONLD)) {
-			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(), variant.getMediaType()),
+			
+			SubstanceRecordAnnotationProcessor annotator = null;
+			try {
+				annotator = new SubstanceRecordAnnotationProcessor(new File(((AmbitFreeMarkerApplication) getApplication()).getProperties().getMapFolder()),
+					false);
+			} catch (Exception x) {
+				Logger.getGlobal().log(Level.WARNING,x.getMessage());
+				annotator = null;
+			}			
+			return new RDFJenaConvertor(new SubstanceRDFReporter(getRequest(), variant.getMediaType(),annotator),
 					variant.getMediaType(), filenamePrefix) {
 				@Override
 				protected OntModel createOutput(IQueryRetrieval query) throws AmbitException {
