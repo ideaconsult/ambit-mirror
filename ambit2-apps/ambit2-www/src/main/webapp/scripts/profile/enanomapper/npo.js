@@ -233,11 +233,26 @@ var config_npo = {
 			"bVisible" : true,
 			"inMatrix" : true
 		},
+		"biological replicate" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : false
+		},		
+		"technical replicate" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : false
+		},				
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,
 			"inMatrix" : false
 		},
+		"experiment" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : false
+		},		
 		"material" : {
 			"iOrder" : -5,
 			"bVisible" : true,

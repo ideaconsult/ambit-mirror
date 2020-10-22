@@ -337,6 +337,21 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : false
 		},
+		"biological replicate" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : false
+		},		
+		"technical replicate" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : false
+		},		
+		"experiment" : {
+			"iOrder" : -5,
+			"bVisible" : true,
+			"inMatrix" : false
+		},		
 		"calibration range" : {
 			"iOrder" : -4,
 			"bVisible" : true,
