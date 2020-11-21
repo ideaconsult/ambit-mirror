@@ -658,6 +658,7 @@ public class Protocol {
 				return "http://purl.enanomapper.org/onto/ENM_0000020";
 			}
 		},
+
 		TO_ACUTE_INHAL_SECTION {
 			@Override
 			public String toString() {
@@ -708,6 +709,31 @@ public class Protocol {
 				return "http://purl.enanomapper.org/onto/ENM_0000026";
 			}
 		},
+		TO_ACUTE_OTHER_SECTION {
+			@Override
+			public String toString() {
+				return "Acute toxicity: other routes";
+			}
+
+			@Override
+			public String getNumber() {
+				return "7.2.4";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 7021;
+			}
+
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000020";
+			}
+		},		
 		TO_SKIN_IRRITATION_SECTION {
 			@Override
 			public String toString() {
@@ -933,6 +959,7 @@ public class Protocol {
 				return "http://purl.enanomapper.org/onto/ENM_0000021";
 			}
 		},
+	
 		TO_REPEATED_INHAL_SECTION {
 			@Override
 			public String toString() {
@@ -983,6 +1010,31 @@ public class Protocol {
 				return "http://purl.enanomapper.org/onto/ENM_0000027";
 			}
 		},
+		TO_REPEATED_OTHER_SECTION {
+			@Override
+			public String toString() {
+				return "Repeated dose toxicity - other";
+			}
+
+			@Override
+			public String getNumber() {
+				return "7.5.4";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 7051;
+			}
+
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.enanomapper.org/onto/ENM_0000021";
+			}
+		},				
 		TO_GENETIC_IN_VITRO_SECTION {
 			@Override
 			public String toString() {

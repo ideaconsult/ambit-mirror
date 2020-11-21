@@ -156,6 +156,13 @@ var config_i5 = {
 		"protocol" : config_bao["protocol"],
 		"interpretation" : config_bao["interpretation"]
 	},
+	"TO_ACUTE_OTHER_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"effects" : config_bao["effects"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"]
+	},	
 	"TO_ACUTE_DERMAL_SECTION" : {
 		"parameters" : config_bao["parameters"],
 		"effects" : config_bao["effects"],
@@ -202,6 +209,13 @@ var config_i5 = {
 		"protocol" : config_bao["protocol"],
 		"interpretation" : config_bao["interpretation"]
 	},
+	"TO_REPEATED_OTHER_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"effects" : config_bao["effects"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"]
+	},	
 	"TO_REPEATED_INHAL_SECTION" : {
 		"parameters" : config_bao["parameters"],
 		"effects" : config_bao["effects"],

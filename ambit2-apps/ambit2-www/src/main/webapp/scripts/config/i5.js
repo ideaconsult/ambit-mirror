@@ -572,6 +572,57 @@ var config_i5 = {
 			}
 		}
 	},
+	"TO_ACUTE_OTHER_SECTION" : {
+		"parameters" : {
+			"bVisible" : false,
+			"species" : {
+				"comment" : "Moved to conditions",
+				"iOrder" : -7,
+				"inMatrix" : false,
+				"bVisible" : false
+			}
+		},
+		"conditions" : {
+			"bVisible" : false,
+			"sex" : {
+				"bVisible" : true,
+				"iOrder" : -4
+			},
+			"species" : {
+				"bVisible" : true,
+				"iOrder" : -7,
+				"inMatrix" : true
+			}
+		},
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -6,
+				"inMatrix" : true
+			},
+			"result" : {
+				"sTitle" : "Value",
+				"iOrder" : -5,
+				"inMatrix" : true
+			}
+		},
+		"protocol" : {
+			"guideline" : {
+				"iOrder" : -1
+			},
+			"citation" : {
+				"bVisible" : true
+			}
+		},
+		"interpretation" : {
+			"result" : {
+				"iOrder" : -3,
+				"sTitle" : "Interpretation of the results"
+			},
+			"criteria" : {
+				"iOrder" : -2
+			}
+		}
+	},	
 	"TO_SKIN_IRRITATION_SECTION" : {
 		"parameters" : {
 			"bVisible" : false,
@@ -993,6 +1044,83 @@ var config_i5 = {
 			}
 		}
 	},
+	"TO_REPEATED_OTHER_SECTION" : {
+		"parameters" : {
+			"bVisible" : false,
+			"species" : {
+				"comment" : "copied to conditions",
+				"iOrder" : -10,
+				"inMatrix" : false,
+				"bVisible" : false
+			},
+			"test type" : {
+				"comment" : "copied to conditions",
+				"iOrder" : -9,
+				"inMatrix" : false,
+				"bVisible" : false
+			},
+			"route of administration" : {
+				"iOrder" : -8,
+				"bVisible" : true
+			},
+			"doses/concentrations" : {
+				"sTitle" : "Dose/concentrations",
+				"iOrder" : -7,
+				"bVisible" : true
+			}
+		},
+		"conditions" : {
+			"bVisible" : false,
+			"test type" : {
+				"iOrder" : -9,
+				"inMatrix" : true,
+				"bVisible" : true
+			},
+			"species" : {
+				"iOrder" : -10,
+				"inMatrix" : true,
+				"bVisible" : true
+			},
+			"sex" : {
+				"iOrder" : -4,
+				"bVisible" : true
+			},
+			"criticaleffectsobserved" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle" : "Critical Effects Observed"
+			},
+			"organ" : {
+				"iOrder" : -4,
+				"bVisible" : true,
+				"sTitle" : "Target organ"
+			}
+		},
+		"effects" : {
+			"endpoint" : {
+				"iOrder" : -6,
+				"inMatrix" : true
+			},
+			"result" : {
+				"sTitle" : "Value",
+				"iOrder" : -5,
+				"inMatrix" : true
+			}
+		},
+		"protocol" : {
+			"guideline" : {
+				"iOrder" : -3
+			},
+			"citation" : {
+				"bVisible" : true
+			}
+		},
+		"interpretation" : {
+			"result" : {
+				"bVisible" : false
+			}
+		}
+	},	
 	"TO_GENETIC_IN_VITRO_SECTION" : {
 		"parameters" : {
 			"bVisible" : false,
