@@ -187,11 +187,12 @@ public class StructureRecord implements IStructureRecord {
 	}
 
 	public String getWritableContent() {
-		if (MOL_TYPE.SDF.toString().equals(getFormat())) {
-			int p = getContent().indexOf("M  END");
-			if (p > 0)
-				return getContent().substring(0, p + 6);
-		}
+		if (getContent()!=null)
+			if (MOL_TYPE.SDF.toString().equals(getFormat())) {
+				int p = getContent().indexOf("M  END");
+				if (p > 0)
+					return getContent().substring(0, p + 6);
+			}
 		return getContent();
 	}
 
