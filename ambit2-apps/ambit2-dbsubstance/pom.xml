@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>ambit2-apps</artifactId>
 		<groupId>ambit</groupId>
-		<version>4.0.1-SNAPSHOT</version>
+		<version>4.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>ambit2-dbsubstance</artifactId>
 	<name>ambit2-dbsubstance</name>
@@ -98,7 +98,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.idea</groupId>
-			<artifactId>iuclid_6_2-io</artifactId>
+			<artifactId>iuclid_6_4-io</artifactId>
 			<version>${i5.version}</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
