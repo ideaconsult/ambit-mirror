@@ -121,6 +121,8 @@ public class I5CONSTANTS {
     public static final String pPARTICLESIZE = "PARTICLE SIZE";
     
     public static final String pCOATING = "COATING";
+    public static final String pHasCOATING = "HAS_COATING";
+    public static final String pHasFUNCTIONALIZATION = "HAS_FUNCTIONALIZATION";
     public static final String pFUNCTIONALIZATION = "FUNCTIONALIZATION";
     public static final String pTYPE = "TYPE";
     public static final String pDESCRIPTION = "DESCRIPTION";
@@ -187,7 +189,7 @@ public class I5CONSTANTS {
     public static final String DevelopmentalEffectsObserved = "DevelopmentalEffectsObserved";
     public static final String TreatmentRelated = "TreatmentRelated";
     public static final String DoseResponseRelationship = "DoseResponseRelationship";
-    public static final String KeyResult = "KeyResult";
+    public static final String KeyResult = "KEY_RESULT";
     public static final String Organ = "Organ";
     public static final String System = "System";
 
@@ -195,7 +197,20 @@ public class I5CONSTANTS {
     public static final String endpoint_type_PERCENT="PERCENT";
     public static final String endpoint_type_MEDIAN="MEDIAN";
     public static final String endpoint_type_MEDIAN_MASS="MEDIAN MASS";
-    public static final String effect_stdev="sd";
+    public static final String effect_stdev="SD";
+    
+    public static final String e_variability = "VARIABILITY";
+    public static final String e_testgroup = "TEST_GROUP";
+    public static final String e_observation = "OBSERVATION";
+    public static final String e_nowithreactions = "NO_WITH_REACTIONS";
+    public static final String e_hoursafterchallenge = "HOURS_AFTER_CHALLENGE";
+    public static final String e_clinicalobservations = "CLINICAL_OBSERVATION";
+    public static final String e_totalnoingroup = "TOTAL_NO_IN_GROUP";
+    
+    public static final String p_invivo = "in vivo";
+    public static final String p_invitro = "in vitro";
+    public static final String p_chemico = "in chemico";
+    
     
 }
 
