@@ -3,14 +3,14 @@
   <parent>
     <artifactId>ambit2-apps</artifactId>
     <groupId>ambit</groupId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>ambit</groupId>
   <artifactId>ambit2-i5rest</artifactId>
   <packaging>war</packaging>
   <name>ambit2-i5rest</name>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>4.1.0-SNAPSHOT</version>
   <description>IUCLID5 interface</description>
   <inceptionYear>2008</inceptionYear>
   <dependencies>
