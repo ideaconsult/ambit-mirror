@@ -9,9 +9,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
 
-
-
-
 public class SLNCli {
 
 	private static final String title = "SLN Command Line App";
@@ -20,6 +17,10 @@ public class SLNCli {
 	public String outputFileName = null;
 	public String inputSmiles = null;
 	public String sln = null;
+	public String operationString = null;
+	public _operation operation = _operation.convert;
+	
+	
 	
 
 	public static void main(String[] args) 
@@ -102,6 +103,21 @@ public class SLNCli {
 				return "o";
 			}
 		},
+		
+		operation {
+			@Override
+			public String getArgName() {
+				return "operation";
+			}
+			@Override
+			public String getDescription() {
+				return "Operation: convert, ss_match";
+			}
+			@Override
+			public String getShortName() {
+				return "p";
+			}
+		},
 
 		help {
 			@Override
@@ -144,12 +160,31 @@ public class SLNCli {
 			return option;
 		}
 	}
+	
+	enum _operation {
+		convert, ss_match;
+		
+		public static _operation fromString(String text) {
+	        for (_operation  x : _operation.values()) {
+	            if (x.name().equalsIgnoreCase(text)) {
+	                return x;
+	            }
+	        }
+	        return null;
+	    }
+	}
 
 	public void setOption(_option option, String argument) throws Exception 
 	{
 		if (argument != null)
 			argument = argument.trim();
 		switch (option) {
+		case sln: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			sln = argument;
+			break;
+		}
 		case smiles: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -166,6 +201,13 @@ public class SLNCli {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			outputFileName = argument;
+			break;
+		}
+		case operation: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			operationString = argument;
+			operation = _operation.fromString(operationString);
 			break;
 		}
 
@@ -216,8 +258,17 @@ public class SLNCli {
 	
 	
 	protected int runSLN() throws Exception
-	{
+	{		
+		if (operation == null)
+		{
+			System.out.println("Incorrect operation: " + operationString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
 		return 0;
 	}
+	
+	
 
 }
