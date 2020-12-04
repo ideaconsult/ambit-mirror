@@ -1,24 +1,31 @@
 package ambit2.sln.cli;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
+
+
 
 
 
 public class SLNCli {
 
-	private static final String title = "SLN";
+	private static final String title = "SLN Command Line App";
 
 	public String inputFileName = null;
 	public String outputFileName = null;
 	public String inputSmiles = null;
+	public String sln = null;
+	
 
 	public static void main(String[] args) 
 	{
-
-
+		SLNCli sclCli = new SLNCli();
+		sclCli.run(args);
 	}
 
 	protected static Options createOptions() {
@@ -37,22 +44,20 @@ public class SLNCli {
 	}
 
 	enum _option {
-
-		config {
+		sln {
 			@Override
 			public String getArgName() {
-				return "config";
+				return "sln";
 			}
 			@Override
 			public String getDescription() {
-				return "GCM configuration (.json) file";
+				return "SLN string";
 			}
 			@Override
 			public String getShortName() {
-				return "c";
+				return "s";
 			}
 		},
-
 		smiles {
 			@Override
 			public String getArgName() {
@@ -60,11 +65,11 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Input molecule smiles";
+				return "Input molecule as smiles";
 			}
 			@Override
 			public String getShortName() {
-				return "s";
+				return "m";
 			}
 		},
 
@@ -166,6 +171,53 @@ public class SLNCli {
 
 		}	
 	}
+	
+	public int run(String[] args) 
+	{		
+		Options options = createOptions();
+		
+		if (args == null || args.length == 0)
+		{
+			printHelp(options, null);
+			return 0;
+		}		
+		
+		final CommandLineParser parser = new PosixParser();
+		try {
+			CommandLine line = parser.parse( options, args,false );
+			if (line.hasOption(_option.help.name())) {
+				printHelp(options, null);
+				return -1;
+			}
 
+			for (_option o: _option.values()) 
+				if (line.hasOption(o.getShortName())) try {
+					setOption(o,line.getOptionValue(o.getShortName()));
+				} catch (Exception x) {
+					printHelp(options,x.getMessage());
+					return -1;
+				}
+
+			return runSLN();	
+
+		} catch (Exception x ) {
+			System.out.println("**********" + x.getMessage());
+			x.printStackTrace();
+			//printHelp(options,x.getMessage());
+			return -1;
+		} finally {
+			try { 
+				//run whatever cleanup is needed
+			} catch (Exception xx) {
+				printHelp(options,xx.getMessage());
+			}
+		}
+	}
+	
+	
+	protected int runSLN() throws Exception
+	{
+		return 0;
+	}
 
 }
