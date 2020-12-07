@@ -19,10 +19,10 @@ public class SLNCli {
 	public String sln = null;
 	public String operationString = null;
 	public _operation operation = _operation.convert;
+	public String outFormatString = null;
+	public _out_format outFormat = _out_format.smiles;
 	
 	
-	
-
 	public static void main(String[] args) 
 	{
 		SLNCli sclCli = new SLNCli();
@@ -118,6 +118,21 @@ public class SLNCli {
 				return "p";
 			}
 		},
+		
+		out_format {
+			@Override
+			public String getArgName() {
+				return "out_format";
+			}
+			@Override
+			public String getDescription() {
+				return "Output format: smiles, ct";
+			}
+			@Override
+			public String getShortName() {
+				return "f";
+			}
+		},
 
 		help {
 			@Override
@@ -173,6 +188,19 @@ public class SLNCli {
 	        return null;
 	    }
 	}
+	
+	enum _out_format {
+		smiles, ct;
+		
+		public static _out_format fromString(String text) {
+	        for (_out_format  x : _out_format.values()) {
+	            if (x.name().equalsIgnoreCase(text)) {
+	                return x;
+	            }
+	        }
+	        return null;
+	    }
+	}
 
 	public void setOption(_option option, String argument) throws Exception 
 	{
@@ -208,6 +236,13 @@ public class SLNCli {
 				return;
 			operationString = argument;
 			operation = _operation.fromString(operationString);
+			break;
+		}
+		case out_format: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			outFormatString = argument;
+			outFormat = _out_format.fromString(outFormatString);
 			break;
 		}
 
@@ -262,6 +297,13 @@ public class SLNCli {
 		if (operation == null)
 		{
 			System.out.println("Incorrect operation: " + operationString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		if (outFormat == null)
+		{
+			System.out.println("Incorrect out format: " + outFormatString);
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
