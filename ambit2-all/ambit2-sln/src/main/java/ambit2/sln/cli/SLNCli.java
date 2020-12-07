@@ -8,6 +8,10 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
+import ambit2.sln.SLNContainer;
+import ambit2.sln.SLNHelper;
+import ambit2.sln.SLNParser;
+
 
 public class SLNCli {
 
@@ -21,6 +25,9 @@ public class SLNCli {
 	public _operation operation = _operation.convert;
 	public String outFormatString = null;
 	public _out_format outFormat = _out_format.smiles;
+	
+	public SLNParser slnParser = new SLNParser();
+	public SLNHelper slnHelper = new SLNHelper();
 	
 	
 	public static void main(String[] args) 
@@ -306,6 +313,45 @@ public class SLNCli {
 			System.out.println("Incorrect out format: " + outFormatString);
 			System.out.println("Use option '-h' for help.");
 			return -1;
+		}
+		
+		if (sln == null)
+		{
+			System.out.println("SLN is not specified. Use option -s (--sln)");
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		int res = 0;
+		
+		switch (operation) {
+		case convert:
+			res = convert();
+			break;
+		}
+		
+		return res;
+	}
+	
+	public int convert()
+	{
+		SLNContainer container = slnParser.parse(sln);
+		if (!slnParser.getErrorMessages().equals(""))
+		{
+			System.out.println("Original sln:    " + sln); 
+			System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+			return -1;
+		}
+		 
+		System.out.println("Input  sln: " + sln); 
+		System.out.println("Atom attributes:");		
+		System.out.println(SLNHelper.getAtomsAttributes(container));
+		System.out.println("Bond attributes:");
+		System.out.println(SLNHelper.getBondsAttributes(container));
+		if (container.getAttributes().getNumOfAttributes() > 0)
+		{
+			System.out.println("Molecule attributes:");
+			System.out.println(SLNHelper.getMolAttributes(container));
 		}
 		
 		return 0;
