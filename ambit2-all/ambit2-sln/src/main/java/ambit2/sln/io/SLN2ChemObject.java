@@ -19,9 +19,11 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
 import ambit2.sln.SLNAtom;
+import ambit2.sln.SLNAtomExpression;
 import ambit2.sln.SLNBond;
 import ambit2.sln.SLNConst;
 import ambit2.sln.SLNContainer;
+import ambit2.sln.SLNExpressionToken;
 import ambit2.smarts.SMIRKSReaction;
 
 /**
@@ -237,7 +239,17 @@ public class SLN2ChemObject
         		atom.setSymbol(SLNConst.elSymbols[slnAt.atomType]);
         		atom.setAtomicNumber(PeriodicTable.getAtomicNumber(SLNConst.elSymbols[slnAt.atomType]));
         		atom.setImplicitHydrogenCount(0);
-        		//TODO handle H atoms, charge, isotope
+        		
+        		if (slnAt.atomExpression != null)
+        		{
+        			Integer charge = extractFormalCharge(slnAt.atomExpression);
+        			if (charge != null)
+        				if (charge != 0)
+        					atom.setFormalCharge(charge);
+        			
+        			//TODO handle H atoms, isotope
+        		
+        		}
         		return atom;
         	}
         	else
@@ -329,6 +341,22 @@ public class SLN2ChemObject
         currentConversionWarning = null;
         //TODO
         return null;
+    }
+    
+    
+    public Integer extractFormalCharge(SLNAtomExpression slnAE)
+    {
+    	//Simple extraction from expression
+    	for (int i = 0; i < slnAE.tokens.size(); i++)
+    	{
+    		SLNExpressionToken tok = slnAE.tokens.get(i);
+    		if (tok.type == SLNConst.A_ATTR_charge)
+    		{
+    			if (tok.comparisonOperation == SLNConst.CO_EQUALS)
+    				return tok.param;
+    		}
+    	}
+    	return null;
     }
 
 	
