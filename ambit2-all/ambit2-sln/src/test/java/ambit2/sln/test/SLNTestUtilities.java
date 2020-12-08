@@ -125,6 +125,11 @@ public class SLNTestUtilities
 		System.out.println("Ouput  sln: " + slnHelper.toSLN(container));
 	}
 	
+	public void testSLN2Smiles(String sln)
+	{	
+		//TODO
+	}
+	
 	public void testSLNIsomorphism(String sln, String smiles) throws Exception
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	

@@ -2,6 +2,12 @@ package ambit2.sln.io;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
+
+import ambit2.sln.SLNContainer;
+import ambit2.sln.SLNParser;
+import ambit2.smarts.SmartsHelper;
 /**
  * 
  * @author nick
@@ -11,7 +17,10 @@ public class SLN2SMARTS
 {	
 	private List<String> conversionErrors = new ArrayList<String>();
 	private List<String> conversionWarnings = new ArrayList<String>();
-
+	
+	private SLNParser slnParser = new SLNParser();
+	private SLN2ChemObject slnConverter = new SLN2ChemObject();
+	
 	public List<String> getConversionErrors() {
 		return conversionErrors;
 	}
@@ -28,10 +37,26 @@ public class SLN2SMARTS
 		return sb.toString();
 	}
 	
-	public String slnToSmiles(String sln)
+	protected void reset() {
+		conversionErrors.clear();
+		conversionWarnings.clear();
+	}
+	
+	public String slnToSmiles(String sln) throws Exception
 	{
-		//TODO
-		return null;
+		reset();		
+		SLNContainer container = slnParser.parse(sln);
+		String parserErr = slnParser.getErrorMessages(); 
+		if (!parserErr.equals(""))
+		{
+			conversionErrors.add(parserErr);			
+			return null;
+		}
+		
+		IAtomContainer mol = slnConverter.slnContainerToAtomContainer(container);
+		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
+		
+		return smiles;
 	}
 	
 	public String slnToSmarts(String sln)

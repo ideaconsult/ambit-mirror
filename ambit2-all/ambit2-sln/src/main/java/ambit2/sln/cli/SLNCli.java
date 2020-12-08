@@ -344,9 +344,9 @@ public class SLNCli {
 		}
 		 
 		System.out.println("Input  sln: " + sln); 
-		System.out.println("Atom attributes:");		
+		System.out.println("Atom list:");		
 		System.out.println(SLNHelper.getAtomsAttributes(container));
-		System.out.println("Bond attributes:");
+		System.out.println("Bond list:");
 		System.out.println(SLNHelper.getBondsAttributes(container));
 		if (container.getAttributes().getNumOfAttributes() > 0)
 		{

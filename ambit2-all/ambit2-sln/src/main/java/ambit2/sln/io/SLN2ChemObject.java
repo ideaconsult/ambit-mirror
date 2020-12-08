@@ -112,7 +112,7 @@ public class SLN2ChemObject
 		return slnContainer;
 	}
 	
-	public IAtomContainer  slnContainerToAtomContainer(SLNContainer slnContainer)
+	public IAtomContainer slnContainerToAtomContainer(SLNContainer slnContainer)
 	{
 		 IAtomContainer container = new AtomContainer();
 		 
@@ -344,7 +344,7 @@ public class SLN2ChemObject
     }
     
     
-    public Integer extractFormalCharge(SLNAtomExpression slnAE)
+    public static Integer extractFormalCharge(SLNAtomExpression slnAE)
     {
     	//Simple extraction from expression
     	for (int i = 0; i < slnAE.tokens.size(); i++)
