@@ -9,6 +9,7 @@ import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
+import ambit2.sln.io.SLN2SMARTS;
 import ambit2.sln.io.SLN2Substance;
 import ambit2.sln.io.SLN2SubstanceConfig;
 import ambit2.sln.search.SLNSearchManager;
@@ -22,6 +23,7 @@ public class SLNTestUtilities
 {
 	static SLNParser slnParser = new SLNParser();
 	static SLNHelper slnHelper = new SLNHelper();
+	static SLN2SMARTS sln2Smarts = new SLN2SMARTS();
 	static SLNSearchManager man = new SLNSearchManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SLN2Substance sln2sub = new SLN2Substance();
@@ -76,6 +78,8 @@ public class SLNTestUtilities
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
+		tu.testSLN2Smiles("CC=CCCS[charge=+3]");
+		
 		//tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
 		//tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");
 		
@@ -85,7 +89,7 @@ public class SLNTestUtilities
 		//tu.testCompositionRelation2SLN("Smiles : NC(C)CO, Name : Test, CompositionUUID : 123456");
 		//tu.testCompositionRelation2SLN("CompositionUUID : 123456");
 		
-		tu.testSLN2SubstanceConfig();
+		//tu.testSLN2SubstanceConfig();
 	}
 	
 	public void testSLN(String sln)
@@ -125,9 +129,21 @@ public class SLNTestUtilities
 		System.out.println("Ouput  sln: " + slnHelper.toSLN(container));
 	}
 	
-	public void testSLN2Smiles(String sln)
+	public void testSLN2Smiles(String sln) throws Exception
 	{	
-		//TODO
+		System.out.println("Input  sln: " + sln);
+		String smi = sln2Smarts.slnToSmiles(sln);
+		if (smi == null)
+			System.out.println("Conversion errors: " + sln2Smarts.getAllErrors());
+		else
+			System.out.println("Ouput  smiles: " + smi);
+		
+		if (!sln2Smarts.getConversionWarnings().isEmpty())
+		{
+			System.out.println("Conversion warnings: ");
+			for (String w: sln2Smarts.getConversionWarnings())
+				System.out.println(w);
+		}
 	}
 	
 	public void testSLNIsomorphism(String sln, String smiles) throws Exception
