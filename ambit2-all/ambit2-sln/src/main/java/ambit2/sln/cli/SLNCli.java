@@ -59,7 +59,7 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "SLN string";
+				return "Input SLN string (specify molecule or query)";
 			}
 			@Override
 			public String getShortName() {
@@ -73,7 +73,7 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Input molecule as smiles";
+				return "Input single molecule as smiles";
 			}
 			@Override
 			public String getShortName() {
@@ -315,39 +315,59 @@ public class SLNCli {
 			return -1;
 		}
 		
-		if (sln == null)
+		if (sln == null && inputFileName == null && inputSmiles == null)
 		{
-			System.out.println("SLN is not specified. Use option -s (--sln)");
+			System.out.println("No input specified.\n"
+					+ "Specify input SLN, ipnput SMILES or input files with molecules");
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
+				
 		
 		int res = 0;
 		
-		switch (operation) {
-		case convert:
-			res = convert();
-			break;
+		if (inputFileName != null)
+		{
+			//TODO
+			return res;
+		}
+		
+		if (sln != null) 
+		{	
+			SLNContainer container = slnParser.parse(sln);
+			if (!slnParser.getErrorMessages().equals(""))
+			{
+				System.out.println("Original sln:    " + sln); 
+				System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+				return -1;
+			}
+
+			switch (operation) {
+			case convert:
+				res = convert(container);
+				break;
+			}
 		}
 		
 		return res;
 	}
 	
-	public int convert()
-	{
-		SLNContainer container = slnParser.parse(sln);
-		if (!slnParser.getErrorMessages().equals(""))
-		{
-			System.out.println("Original sln:    " + sln); 
-			System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
-			return -1;
-		}
-		 
+	public int convert(SLNContainer container)
+	{				 
 		System.out.println("Input  sln: " + sln); 
-		System.out.println(SLNHelper.getCTString(container));
+		switch (outFormat)
+		{
+			case ct:
+				System.out.println(SLNHelper.getCTString(container));
+				break;
+		}
 		
 		
-		/*
+		return 0;
+	}
+	
+	public void printExtendedCT(SLNContainer container)
+	{
 		System.out.println("Input  sln: " + sln); 
 		System.out.println("Atom list:");		
 		System.out.println(SLNHelper.getAtomsAttributes(container));
@@ -358,9 +378,6 @@ public class SLNCli {
 			System.out.println("Molecule attributes:");
 			System.out.println(SLNHelper.getMolAttributes(container));
 		}
-		*/
-		
-		return 0;
 	}
 	
 	
