@@ -7,10 +7,13 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
+import ambit2.sln.io.SLN2ChemObject;
+import ambit2.smarts.SmartsHelper;
 
 
 public class SLNCli {
@@ -352,13 +355,35 @@ public class SLNCli {
 		return res;
 	}
 	
-	public int convert(SLNContainer container)
+	public int convert(SLNContainer container) 
 	{				 
 		System.out.println("Input  sln: " + sln); 
 		switch (outFormat)
 		{
 			case ct:
 				System.out.println(SLNHelper.getCTString(container));
+				break;
+			case extended_ct:
+				printExtendedCT(container);
+				break;
+			case smiles:
+				SLN2ChemObject slnConverter = new SLN2ChemObject();
+				IAtomContainer mol = slnConverter.slnContainerToAtomContainer(container);
+				if (slnConverter.hasConversionErrors())
+				{	
+					System.out.println("Conversion errors:");
+					System.out.println(slnConverter.getAllErrors());
+				}	
+				else
+				{	
+					try {
+						String smiles = SmartsHelper.moleculeToSMILES(mol, false);
+						System.out.println(smiles);
+					}
+					catch (Exception x) {
+						System.out.println("Error generating SMILES: " + x.getMessage());
+					}
+				}
 				break;
 		}
 		
@@ -367,8 +392,7 @@ public class SLNCli {
 	}
 	
 	public void printExtendedCT(SLNContainer container)
-	{
-		System.out.println("Input  sln: " + sln); 
+	{	 
 		System.out.println("Atom list:");		
 		System.out.println(SLNHelper.getAtomsAttributes(container));
 		System.out.println("Bond list:");

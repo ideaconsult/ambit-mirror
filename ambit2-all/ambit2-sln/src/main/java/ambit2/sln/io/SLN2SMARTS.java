@@ -37,6 +37,10 @@ public class SLN2SMARTS
 		return sb.toString();
 	}
 	
+	public boolean hasErrors() {
+		return (conversionErrors.size() > 0);
+	}
+	
 	protected void reset() {
 		conversionErrors.clear();
 		conversionWarnings.clear();

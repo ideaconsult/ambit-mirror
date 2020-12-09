@@ -43,6 +43,10 @@ public class SLN2ChemObject
 	private String currentConversionError = null;
 	private String currentConversionWarning = null;
 
+	public boolean hasConversionErrors() {
+		return (conversionErrors.size() > 0);
+	}
+	
 	public List<String> getConversionErrors() {
 		return conversionErrors;
 	}
