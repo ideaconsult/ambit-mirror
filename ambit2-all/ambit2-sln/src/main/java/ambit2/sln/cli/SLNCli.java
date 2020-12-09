@@ -133,7 +133,7 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Output format: smiles, ct";
+				return "Output format: smiles, ct, extended_ct";
 			}
 			@Override
 			public String getShortName() {
@@ -197,7 +197,7 @@ public class SLNCli {
 	}
 	
 	enum _out_format {
-		smiles, ct;
+		smiles, ct, extended_ct;
 		
 		public static _out_format fromString(String text) {
 	        for (_out_format  x : _out_format.values()) {
@@ -344,6 +344,11 @@ public class SLNCli {
 		}
 		 
 		System.out.println("Input  sln: " + sln); 
+		System.out.println(SLNHelper.getCTString(container));
+		
+		
+		/*
+		System.out.println("Input  sln: " + sln); 
 		System.out.println("Atom list:");		
 		System.out.println(SLNHelper.getAtomsAttributes(container));
 		System.out.println("Bond list:");
@@ -353,6 +358,7 @@ public class SLNCli {
 			System.out.println("Molecule attributes:");
 			System.out.println(SLNHelper.getMolAttributes(container));
 		}
+		*/
 		
 		return 0;
 	}
