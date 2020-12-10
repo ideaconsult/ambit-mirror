@@ -342,14 +342,9 @@ public class SLNCli {
 		
 		int res = 0;
 		
-		if (inputFileName != null)
-		{
-			//TODO
-			return res;
-		}
-		
 		if (sln != null) 
 		{	
+			//SLN (-s/--sln) option takes precedence over Input file (-i/--input) 
 			SLNContainer container = slnParser.parse(sln);
 			if (!slnParser.getErrorMessages().equals(""))
 			{
@@ -362,7 +357,50 @@ public class SLNCli {
 			case convert:
 				res = convert(container);
 				break;
+			
+			case ss_match:
+				if (inputFileName == null)
+				{
+					if (inputSmiles == null)
+					{
+						System.out.println("Neither SMILES nor Input File is specified for conversion!"); 
+						return -1;
+					}
+					else
+					{
+						//TODO
+					}
+				}
+				else
+				{
+					res = iterateInputMoleculesFile();
+				}
+				break;
 			}
+		}
+		else
+		{
+			//SLN is not specified
+			switch (operation) {
+			case convert:
+				if (inputFileName == null)
+				{
+					System.out.println("Neither SLN nor Input File is specified for conversion!"); 
+					return -1;
+				}
+				else
+				{
+					res = iterateInputFileWithSLNs();
+				}
+				break;
+			
+			case ss_match:
+				System.out.println("SLN is not specified. Can not perform substructure matching!");
+				return -1;
+				
+			}
+			
+			
 		}
 		
 		return res;
@@ -417,7 +455,14 @@ public class SLNCli {
 		}
 	}
 	
-	public void iterateInputFile() throws Exception
+	public int iterateInputFileWithSLNs() throws Exception
+	{
+		//TODO
+		return 0;
+	}
+	
+	
+	public int iterateInputMoleculesFile() throws Exception
 	{
 		int records_read = 0;
 		int records_error = 0;
@@ -450,19 +495,25 @@ public class SLNCli {
 					continue;
 				}
 				
-				
+				performTask(molecule);
 				
 			}
 			
 		}
 		catch (Exception x1) {
-			//logger.log(Level.SEVERE, String.format("[Record %d] Error %s\n", records_read, file.getAbsoluteFile()), x1);
+			System.out.println("Error: " + x1.getMessage());
 		} 
 		finally {
 			try { reader.close(); } catch (Exception x) {}
 		}
 		
-		
+		return records_error;
+	}
+	
+	
+	public void performTask(IAtomContainer mol)
+	{
+		//TODO
 	}
 	
 	
