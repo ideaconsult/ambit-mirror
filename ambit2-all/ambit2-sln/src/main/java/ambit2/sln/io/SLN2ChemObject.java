@@ -15,6 +15,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
@@ -38,12 +40,25 @@ import ambit2.smarts.SMIRKSReaction;
 public class SLN2ChemObject 
 {
 	private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+	private SLN2ChemObjectConfig conversionConfig = null;
 	
 	private List<String> conversionErrors = new ArrayList<String>();
 	private List<String> conversionWarnings = new ArrayList<String>();
 	
 	private String currentConversionError = null;
 	private String currentConversionWarning = null;
+	
+	public SLN2ChemObject() {
+		conversionConfig = new SLN2ChemObjectConfig();
+	}
+	
+	public SLN2ChemObject(SLN2ChemObjectConfig conversionConfig) {
+		this.conversionConfig = conversionConfig;
+	}
+		
+	public SLN2ChemObjectConfig getConversionConfig() {
+		return conversionConfig;
+	}
 
 	public boolean hasConversionErrors() {
 		return (conversionErrors.size() > 0);
@@ -120,8 +135,7 @@ public class SLN2ChemObject
 	
 	public IAtomContainer slnContainerToAtomContainer(SLNContainer slnContainer)
 	{
-		 IAtomContainer container = new AtomContainer();
-		 
+		 IAtomContainer container = new AtomContainer();		 
 		 Map<SLNAtom, IAtom> convertedAtoms = new HashMap<SLNAtom, IAtom>();
 
 		 for (int i = 0; i < slnContainer.getAtomCount(); i++)
@@ -169,13 +183,51 @@ public class SLN2ChemObject
 		 return container;
 	}
 	
-	public IQueryAtomContainer slnContainerToQueryAtomContainer(SLNContainer container)
+	public IQueryAtomContainer slnContainerToQueryAtomContainer(SLNContainer slnContainer)
 	{
-		//TODO
-		return null;
+		IQueryAtomContainer container = new QueryAtomContainer(SilentChemObjectBuilder.getInstance()); 		
+		Map<SLNAtom, IQueryAtom> convertedAtoms = new HashMap<SLNAtom, IQueryAtom>();
+		
+		 for (int i = 0; i < slnContainer.getAtomCount(); i++)
+		 {
+			 SLNAtom slnAtom = (SLNAtom) slnContainer.getAtom(i);
+			 IQueryAtom atom = slnAtomToQueryAtom(slnAtom);
+			 if (currentConversionWarning != null)
+				 conversionWarnings.add(currentConversionWarning + " for atom: " + (i+1));
+			 if (atom == null)
+			 {
+				 conversionErrors.add(currentConversionError + " for atom: " + (i+1));
+				 continue;
+			 }
+			 container.addAtom(atom);
+			 convertedAtoms.put(slnAtom, atom);
+		 }
+		
+		 for (int i = 0; i < slnContainer.getBondCount(); i++)
+		 {
+			 SLNBond slnBbond = (SLNBond) slnContainer.getBond(i);
+			 IQueryBond bond = slnBondToQueryBond(slnBbond);
+			 if (currentConversionWarning != null)
+				 conversionWarnings.add(currentConversionWarning + " for bond: " + (i+1));
+			 if (bond == null)
+			 {
+				 conversionErrors.add(currentConversionError + " for bond: " + (i+1));
+				 continue;
+			 }
+			 IAtom newAtoms[] = new IAtom[2];
+			 newAtoms[0] = convertedAtoms.get(slnBbond.getAtom(0));
+			 newAtoms[1] = convertedAtoms.get(slnBbond.getAtom(1));
+			 if (newAtoms[0] == null || newAtoms[1] == null)
+				continue; //one of the atoms is not converted
+			 bond.setAtoms(newAtoms);
+			 container.addBond(bond);
+		 }
+		
+		 
+		return container;
 	}
 	
-	public  SLNContainer QueryAtomContainerToSLNContainer(IQueryAtomContainer query)
+	public SLNContainer QueryAtomContainerToSLNContainer(IQueryAtomContainer query)
 	{
 		//TODO
 		return null;
