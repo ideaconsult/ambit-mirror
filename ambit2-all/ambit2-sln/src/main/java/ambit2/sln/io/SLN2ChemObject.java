@@ -164,8 +164,7 @@ public class SLN2ChemObject
 		 }
 		 catch (Exception x) {
 			 conversionErrors.add(x.getMessage());
-		 }
-			 
+		 } 
 		 
 		 return container;
 	}
