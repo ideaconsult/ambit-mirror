@@ -252,7 +252,7 @@ public class SLN2ChemObject
         		IAtom atom = new Atom();
         		atom.setSymbol(SLNConst.elSymbols[slnAt.atomType]);
         		atom.setAtomicNumber(PeriodicTable.getAtomicNumber(SLNConst.elSymbols[slnAt.atomType]));
-        		atom.setImplicitHydrogenCount(0);
+        		atom.setImplicitHydrogenCount(slnAt.numHAtom);
         		
         		if (slnAt.atomExpression != null)
         		{
@@ -262,7 +262,6 @@ public class SLN2ChemObject
         					atom.setFormalCharge(charge);
         			
         			//TODO isotope
-        		
         		}
         		return atom;
         	}

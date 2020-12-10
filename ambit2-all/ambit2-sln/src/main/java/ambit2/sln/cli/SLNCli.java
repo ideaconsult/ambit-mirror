@@ -377,7 +377,7 @@ public class SLNCli {
 				else
 				{	
 					try {
-						String smiles = SmartsHelper.moleculeToSMILES(mol, false);
+						String smiles = SmartsHelper.moleculeToSMILES(mol, true);
 						System.out.println(smiles);
 					}
 					catch (Exception x) {
