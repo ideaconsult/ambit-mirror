@@ -16,8 +16,10 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
+import ambit2.core.helper.CDKHueckelAromaticityDetector;
 import ambit2.sln.SLNAtom;
 import ambit2.sln.SLNAtomExpression;
 import ambit2.sln.SLNBond;
@@ -157,6 +159,14 @@ public class SLN2ChemObject
 			 container.addBond(bond);
 		 }
 
+		 try {
+			 processMolecule(container);
+		 }
+		 catch (Exception x) {
+			 conversionErrors.add(x.getMessage());
+		 }
+			 
+		 
 		 return container;
 	}
 	
@@ -251,7 +261,7 @@ public class SLN2ChemObject
         				if (charge != 0)
         					atom.setFormalCharge(charge);
         			
-        			//TODO handle H atoms, isotope
+        			//TODO isotope
         		
         		}
         		return atom;
@@ -361,6 +371,12 @@ public class SLN2ChemObject
     		}
     	}
     	return null;
+    }
+    
+    public static void processMolecule(IAtomContainer mol) throws Exception
+    {
+    	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+    	CDKHueckelAromaticityDetector.detectAromaticity(mol);
     }
 
 	
