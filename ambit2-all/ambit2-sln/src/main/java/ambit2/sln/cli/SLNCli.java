@@ -44,6 +44,7 @@ public class SLNCli {
 	
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
+	public SLN2ChemObject slnConverter = new SLN2ChemObject();
 	
 	
 	public static void main(String[] args) 
@@ -340,7 +341,19 @@ public class SLNCli {
 		}
 				
 		
+		IAtomContainer inputMol = null;
+		if (inputSmiles != null) {
+			try {
+				inputMol = SmartsHelper.getMoleculeFromSmiles(inputSmiles);
+			}
+			catch (Exception x) {
+				System.out.println("Smiles parsing error: " + x.getMessage());
+				return -1;
+			}
+		}
+		
 		int res = 0;
+				
 		
 		if (sln != null) 
 		{	
@@ -385,8 +398,7 @@ public class SLNCli {
 			case convert:
 				if (inputFileName == null)
 				{
-					System.out.println("Neither SLN nor Input File is specified for conversion!"); 
-					return -1;
+					res = convertToSLN(inputMol);
 				}
 				else
 				{
@@ -418,7 +430,6 @@ public class SLNCli {
 				printExtendedCT(container);
 				break;
 			case smiles:
-				SLN2ChemObject slnConverter = new SLN2ChemObject();
 				IAtomContainer mol = slnConverter.slnContainerToAtomContainer(container);
 				if (slnConverter.hasConversionErrors())
 				{	
@@ -441,6 +452,24 @@ public class SLNCli {
 		
 		return 0;
 	}
+	
+
+	public int convertToSLN(IAtomContainer container) 
+	{		
+		SLNContainer slnCon = slnConverter.atomContainerToSLNContainer(container);
+		if (slnConverter.hasConversionErrors())
+		{	
+			System.out.println("Conversion errors:");
+			System.out.println(slnConverter.getAllErrors());
+			return -1;
+		}
+		
+		System.out.println("Input  smiles: " + inputSmiles); 
+		System.out.println(slnHelper.toSLN(slnCon));
+		
+		return 0;
+	}
+	
 	
 	public void printExtendedCT(SLNContainer container)
 	{	 
