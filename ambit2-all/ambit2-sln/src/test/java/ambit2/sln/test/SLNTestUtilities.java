@@ -63,7 +63,7 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("Any=C","C=N");
 		//tu.testSLNIsomorphism("N[charge=+1](=O)(O[charge=-1])","[N+](=O)[O-]");
 		
-		//tu.testSLNIsomorphism("C[1]CC@1C", "C1CC1");  //EmptyStackException !!! 
+		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
 		
 		
 		//tu.testSLNIsomorphism("C[rbc=1]","C1CCCC1"); //not working !!!

@@ -23,6 +23,10 @@ public class SLNAtomExpression
 
 	public boolean matches(IAtom atom) 
 	{	
+		//Empty token list is used for SLNLogicalExpression encapsulating only an atom ID
+		if (tokens.isEmpty())
+			return true;  
+		
 		SLNLogicalExpression sle = new SLNLogicalExpression();
 		for (int i = 0; i< tokens.size(); i++)
 		{
