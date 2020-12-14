@@ -266,7 +266,11 @@ public class SLN2ChemObject
 				break;
 			}	
 		slnAt.atomName = atomName;
-		//TODO handle H atoms
+		
+		if (atom.getImplicitHydrogenCount() != null)
+			slnAt.numHAtom = atom.getImplicitHydrogenCount();
+		
+		//TODO handle: isotope, charge
 		
 		return slnAt;
 	}
