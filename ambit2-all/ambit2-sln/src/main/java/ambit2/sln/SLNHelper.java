@@ -132,7 +132,12 @@ public class SLNHelper
 	{
 		at.atomID = ID;
 		if (at.atomExpression != null)
+			at.atomExpression.atomID = ID;		
+		else
+		{
+			at.atomExpression = new SLNAtomExpression();
 			at.atomExpression.atomID = ID;
+		}
 	}
 	
 	private void analyzeAtomIDs(SLNContainer container)
