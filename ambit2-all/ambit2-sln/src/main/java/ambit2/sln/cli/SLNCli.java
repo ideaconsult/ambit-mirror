@@ -411,7 +411,13 @@ public class SLNCli {
 				}
 				else
 				{
-					res = iterateInputFileWithSLNs();
+					if (inputFileName.endsWith("sln"))
+						res = iterateInputFileWithSLNs(); //SLN --> Molecule format
+					else
+					{	
+						System.out.println("Converting molecules to SLN:");
+						res = iterateInputMoleculesFile(); //Molecules --> SLN
+					}	
 				}
 				break;
 			
@@ -464,7 +470,7 @@ public class SLNCli {
 
 	public int convertToSLN(IAtomContainer container) 
 	{		
-		slnHelper.FlagPreserveOriginalAtomID = false;
+		//slnHelper.FlagPreserveOriginalAtomID = false;
 		SLNContainer slnCon = slnConverter.atomContainerToSLNContainer(container);
 		if (slnConverter.hasConversionErrors())
 		{	
@@ -553,7 +559,15 @@ public class SLNCli {
 	{	
 		switch (operation) {
 		case convert:
+			SLNContainer slnCon = slnConverter.atomContainerToSLNContainer(mol);
+			if (slnConverter.hasConversionErrors())
+			{	
+				System.out.println(info + " conversion errors:");
+				System.out.println(slnConverter.getAllErrors());
+				return;
+			}
 			
+			System.out.println(info + "  " + slnHelper.toSLN(slnCon));
 			break;
 		
 		case ss_match:
@@ -563,13 +577,10 @@ public class SLNCli {
 				System.out.println(info + "  " + smi + "  " + ssRes);
 			}
 			catch(Exception x) {
-				
+				System.out.println(info + "  Error: " + x.getMessage()); 
 			}
 			break;
-			
-		}
-	
-		
+		}	
 	}
 	
 	public boolean ssMatch(SLNContainer query, IAtomContainer mol) throws Exception
