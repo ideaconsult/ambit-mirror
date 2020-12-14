@@ -26,7 +26,7 @@ public class SLNHelper
 	private HashMap<IAtom,AtomSLNNode> nodes = new HashMap<IAtom,AtomSLNNode>();
 	private HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
 	List<IBond> ringClosures = new ArrayList<IBond>();
-	private HashMap<IAtom,Integer> newAtomIDs = new HashMap<IAtom,Integer>();
+	//private HashMap<IAtom,Integer> newAtomIDs = new HashMap<IAtom,Integer>();
 	private int maxAtomID = -1;
 	private int nAtom;
 	private int nBond;
@@ -162,7 +162,7 @@ public class SLNHelper
 		determineFirstSheres(container);
 		nodes.clear();
 		ringClosures.clear();
-		newAtomIDs.clear();
+		//newAtomIDs.clear();
 		maxAtomID = -1;
 		
 		if (FlagPreserveOriginalAtomID)
