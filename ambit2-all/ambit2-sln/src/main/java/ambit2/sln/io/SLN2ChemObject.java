@@ -125,7 +125,10 @@ public class SLN2ChemObject
 			newAtoms[0] = convertedAtoms.get(bond.getAtom(0));
 			newAtoms[1] = convertedAtoms.get(bond.getAtom(1));
 			if (newAtoms[0] == null || newAtoms[1] == null)
+			{	
+				conversionErrors.add("One of the atoms for bond: " + (i+1) + " is not converted");
 				continue; //one of the atoms is not converted
+			}
 			slnBond.setAtoms(newAtoms);
 			slnContainer.addBond(slnBond);
 		}

@@ -26,7 +26,9 @@ import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
 import ambit2.sln.io.SLN2ChemObject;
+import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
+import ambit2.smarts.SmartsParser;
 
 
 public class SLNCli {
@@ -45,6 +47,11 @@ public class SLNCli {
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
 	public SLN2ChemObject slnConverter = new SLN2ChemObject();
+	public IsomorphismTester isoTester = new IsomorphismTester();
+	
+	public SLNContainer slnContainer = null;
+	public IAtomContainer inputMol = null;
+	
 	
 	
 	public static void main(String[] args) 
@@ -339,9 +346,8 @@ public class SLNCli {
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
-				
 		
-		IAtomContainer inputMol = null;
+				
 		if (inputSmiles != null) {
 			try {
 				inputMol = SmartsHelper.getMoleculeFromSmiles(inputSmiles);
@@ -358,7 +364,7 @@ public class SLNCli {
 		if (sln != null) 
 		{	
 			//SLN (-s/--sln) option takes precedence over Input file (-i/--input) 
-			SLNContainer container = slnParser.parse(sln);
+			slnContainer = slnParser.parse(sln);
 			if (!slnParser.getErrorMessages().equals(""))
 			{
 				System.out.println("Original sln:    " + sln); 
@@ -368,7 +374,7 @@ public class SLNCli {
 
 			switch (operation) {
 			case convert:
-				res = convert(container);
+				res = convert(slnContainer);
 				break;
 			
 			case ss_match:
@@ -447,8 +453,7 @@ public class SLNCli {
 					}
 				}
 				break;
-		}
-		
+		}		
 		
 		return 0;
 	}
@@ -456,6 +461,7 @@ public class SLNCli {
 
 	public int convertToSLN(IAtomContainer container) 
 	{		
+		slnHelper.FlagPreserveOriginalAtomID = false;
 		SLNContainer slnCon = slnConverter.atomContainerToSLNContainer(container);
 		if (slnConverter.hasConversionErrors())
 		{	
@@ -543,6 +549,13 @@ public class SLNCli {
 	public void performTask(IAtomContainer mol)
 	{
 		//TODO
+	}
+	
+	public boolean ssMatch(SLNContainer query, IAtomContainer mol) throws Exception
+	{
+		isoTester.setQuery(query);
+		SmartsParser.prepareTargetForSMARTSSearch(true, true, true, true, true, true, mol); //flags are set temporary
+		return isoTester.hasIsomorphism(mol);
 	}
 	
 	

@@ -75,10 +75,13 @@ public class SLNTestUtilities
 		
 		//tu.testSLN2SLN("CCXx[n=3;fcharge=2]");
 		
+		slnHelper.FlagPreserveOriginalAtomID = false;
+		tu.testSLN2SLN("C[7]CC@7");
+		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
-		tu.testSLN2Smiles("CC=CCCS[charge=+3]");
+		//tu.testSLN2Smiles("CC=CCCS[charge=+3]");
 		
 		//tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
 		//tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");
