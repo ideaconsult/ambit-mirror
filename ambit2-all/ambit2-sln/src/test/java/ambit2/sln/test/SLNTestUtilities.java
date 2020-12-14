@@ -32,6 +32,9 @@ public class SLNTestUtilities
 	{
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
+		//This flag is set TRUE in order to generate SLNs which are identical to the input SLNs
+		slnHelper.FlagPreserveOriginalAtomID = true; 
+		
 		//tu.testSLN("C[1:c=y]H2=[s=I;ftt=m]CH[5:ccor=z;!fcharge=-3.3](OCH(CH3)CH3)CH3[7]");
 		//tu.testSLN("CH2=C[1]HCH3[12]CH3=@1CCC@1CCCC@1");
 		//tu.testSLN("CH3[1:I=13;is=2]CH(CH(CH3)CH3)CH2CH3");
@@ -43,7 +46,7 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("C(C)CCH3<coord2d=(1,2),(3,4);a1=b1>");
 		//tu.testSLN2SLN("C(C)CCH3<coord3d=(1,2,4),(1,2,3);a1=b1>");
 		
-		//slnHelper.FlagPreserveOriginalAtomID = false;
+		
 		//tu.testSLN2SLN("C[2]CCCC(C)@2CC");
 		//tu.testSLN2SLN("C[21]CC[3]CC@21@3");
 		//tu.testSLN2SLN("CH2=CHCH2C[1]:CH:C[2]OCH2OC(@2):C(OCH3):CH:(@1)");
@@ -75,7 +78,7 @@ public class SLNTestUtilities
 		
 		//tu.testSLN2SLN("CCXx[n=3;fcharge=2]");
 		
-		slnHelper.FlagPreserveOriginalAtomID = false;
+		//slnHelper.FlagPreserveOriginalAtomID = false;
 		tu.testSLN2SLN("C[7]CC@7");
 		
 		//tu.testSLN("C[hac=3]");

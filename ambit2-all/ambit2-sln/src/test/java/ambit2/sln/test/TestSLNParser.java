@@ -52,6 +52,9 @@ public class TestSLNParser extends TestCase
 	
 	public void testSLN2SLN() throws Exception 
 	{
+		//This flag is set TRUE in order to generate SLNs which are identical to the input SLNs
+		slnHelper.FlagPreserveOriginalAtomID = true;
+		
 		sln2sln("CCCCC");
 		sln2sln("C[1]CCCC@1");
 		sln2sln("C[1]CCCC@1");

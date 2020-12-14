@@ -14,7 +14,7 @@ import ambit2.smarts.TopLayer;
 
 public class SLNHelper 
 {	
-	public boolean FlagPreserveOriginalAtomID = true;
+	public boolean FlagPreserveOriginalAtomID = false;  //value true used mainly for testing purposes
 	//public boolean FlagRingColusuresBeforeBrunches = true;
 	
 	class AtomSLNNode
