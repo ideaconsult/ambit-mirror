@@ -387,11 +387,13 @@ public class SLNCli {
 					}
 					else
 					{
-						//TODO
+						boolean ssRes = ssMatch(slnContainer, inputMol);
+						System.out.println("Matching " + sln + " against " + inputSmiles + "  " + ssRes);
 					}
 				}
 				else
 				{
+					System.out.println("Matching " + sln + " against:");
 					res = iterateInputMoleculesFile();
 				}
 				break;
@@ -404,6 +406,7 @@ public class SLNCli {
 			case convert:
 				if (inputFileName == null)
 				{
+					//Working with input smiles
 					res = convertToSLN(inputMol);
 				}
 				else
