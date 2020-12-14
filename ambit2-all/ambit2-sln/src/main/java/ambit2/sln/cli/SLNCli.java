@@ -530,7 +530,7 @@ public class SLNCli {
 					continue;
 				}
 				
-				performTask(molecule);
+				performTask(molecule, "" + records_read);
 				
 			}
 			
@@ -546,9 +546,27 @@ public class SLNCli {
 	}
 	
 	
-	public void performTask(IAtomContainer mol)
-	{
-		//TODO
+	public void performTask(IAtomContainer mol, String info)
+	{	
+		switch (operation) {
+		case convert:
+			
+			break;
+		
+		case ss_match:
+			try {
+				boolean ssRes = ssMatch(slnContainer, mol);
+				String smi = SmartsHelper.moleculeToSMILES(mol, true);
+				System.out.println(info + "  " + smi + "  " + ssRes);
+			}
+			catch(Exception x) {
+				
+			}
+			break;
+			
+		}
+	
+		
 	}
 	
 	public boolean ssMatch(SLNContainer query, IAtomContainer mol) throws Exception
