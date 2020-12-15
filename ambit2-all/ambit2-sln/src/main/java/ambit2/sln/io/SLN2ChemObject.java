@@ -16,6 +16,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -28,7 +29,9 @@ import ambit2.sln.SLNBond;
 import ambit2.sln.SLNConst;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNExpressionToken;
+import ambit2.smarts.AliphaticSymbolQueryAtom;
 import ambit2.smarts.SMIRKSReaction;
+import ambit2.smarts.SmartsAtomExpression;
 
 /**
  * 
@@ -39,6 +42,11 @@ import ambit2.smarts.SMIRKSReaction;
 
 public class SLN2ChemObject 
 {
+	public static class ExpressionAtomInfo
+	{
+		
+	}
+	
 	private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
 	private SLN2ChemObjectConfig conversionConfig = null;
 	
@@ -393,13 +401,72 @@ public class SLN2ChemObject
         //TODO
         return null;
     }
+    
 
     public IQueryAtom slnAtomToQueryAtom(SLNAtom slnAt)
     {
-        currentConversionError = null;
-        currentConversionWarning = null;
-        //TODO
-        return null;
+    	currentConversionError = null;
+		currentConversionWarning = null;
+		if (slnAt == null)
+        {
+            currentConversionError = "SNLAtom is null";
+            return null;
+        }
+		
+		if (slnAt.atomType == 0)
+		{
+			
+			if (slnAt.atomExpression == null || slnAt.atomExpression.tokens.isEmpty())
+			{	
+				if (slnAt.numHAtom == 0)
+					return new AnyAtom(SilentChemObjectBuilder.getInstance());
+			}	
+			
+			//TODO handle Any atom expression
+			//slnAt.numHAtom > 0 info is added into the expression
+			return null;	
+		}
+		
+		//slnAt.atomType > 0
+		if (slnAt.atomType < SLNConst.GlobDictOffseet)
+		{
+			if (slnAt.atomType < SLNConst.elSymbols.length)
+			{	
+				if (slnAt.atomExpression == null || slnAt.atomExpression.tokens.isEmpty())
+				{
+					if (slnAt.numHAtom == 0)
+					{
+						AliphaticSymbolQueryAtom atom = new AliphaticSymbolQueryAtom(SilentChemObjectBuilder.getInstance());
+						String symb = SLNConst.elSymbols[slnAt.atomType];
+						atom.setSymbol(symb);
+						atom.setAtomicNumber(PeriodicTable.getAtomicNumber(symb));
+						return atom;
+					}
+					else
+					{
+						//Since there are H atoms they define an expression
+						//slnAt.numHAtom > 0 info is added into the expression
+						
+					}
+				}
+				
+				//Create an expression
+				SmartsAtomExpression atExpr = new SmartsAtomExpression(SilentChemObjectBuilder.getInstance());
+				//TODO
+				
+				return atExpr;				
+			}
+			else
+			{
+				//TODO
+				return null;
+			}
+		}
+		else
+		{
+			//TODO
+			return null;
+		}
     }
 
     /*
@@ -414,7 +481,14 @@ public class SLN2ChemObject
         return null;
     }
     
+    public ExpressionAtomInfo extractAtomInfoFromExprresion(SLNAtomExpression slnAtExp)
+    {
+    	ExpressionAtomInfo eai = new ExpressionAtomInfo();
+    	//TODO
+    	return eai;		
+    }
     
+     
     public static Integer extractFormalCharge(SLNAtomExpression slnAE)
     {
     	//Simple extraction from expression
