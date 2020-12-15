@@ -96,8 +96,8 @@ public class SLNHelper
 		for (int i = 0; i < container.getAtomCount(); i++)
 		{	
 			SLNAtom at = (SLNAtom)container.getAtom(i); 
-			sb.append("  #" + (i+1) + "  ");
-			sb.append("  " + at.atomName + "  H" + at.numHAtom);
+			sb.append("  " + (i+1));
+			sb.append("  " + at.atomName + ((at.numHAtom>0)?("  H" + at.numHAtom):""));
 			sb.append("\n");
 		}
 		sb.append("Bonds:\n");

@@ -385,7 +385,7 @@ public class SLNCli {
 				{
 					if (inputSmiles == null)
 					{
-						System.out.println("Neither SMILES nor Input File is specified for conversion!"); 
+						System.out.println("Neither SMILES nor Input File is specified!"); 
 						return -1;
 					}
 					else
@@ -472,8 +472,7 @@ public class SLNCli {
 	
 
 	public int convertToSLN(IAtomContainer container) 
-	{		
-		//slnHelper.FlagPreserveOriginalAtomID = false;
+	{	
 		SLNContainer slnCon = slnConverter.atomContainerToSLNContainer(container);
 		if (slnConverter.hasConversionErrors())
 		{	
@@ -492,7 +491,7 @@ public class SLNCli {
 	public void printExtendedCT(SLNContainer container)
 	{	 
 		System.out.println("Atom list:");		
-		System.out.println(SLNHelper.getAtomsAttributes(container));
+		System.out.print(SLNHelper.getAtomsAttributes(container));
 		System.out.println("Bond list:");
 		System.out.println(SLNHelper.getBondsAttributes(container));
 		if (container.getAttributes().getNumOfAttributes() > 0)
@@ -512,8 +511,7 @@ public class SLNCli {
 		catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 			return -1;
-		}
-		
+		}		
 		
 		try {
 			int nLine = 0;
@@ -528,8 +526,7 @@ public class SLNCli {
 				{
 					System.out.println("Empty SLN string in line #" + nLine);
 					continue;
-				}
-				
+				}				
 				
 				slnContainer = slnParser.parse(slnString);
 				if (!slnParser.getErrorMessages().equals(""))
@@ -539,17 +536,16 @@ public class SLNCli {
 					return -1;
 				}
 				
-				convert (slnContainer);
-				
+				System.out.println("mol #" + nLine);
+				convert (slnContainer);				
 			}	
 			
 			br.close();
 		}
-		catch (IOException e) {
+		catch (IOException e) {			
 			System.out.println(e.getMessage());
 			return -1;
-		}
-		
+		}		
 		
 		return 0;
 	}
@@ -588,7 +584,7 @@ public class SLNCli {
 					continue;
 				}
 				
-				performTask(molecule, "" + records_read);
+				performTask(molecule, " " + records_read);
 				
 			}
 			
