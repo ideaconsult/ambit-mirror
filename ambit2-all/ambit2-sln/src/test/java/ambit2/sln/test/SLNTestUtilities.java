@@ -67,9 +67,10 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("N[charge=+1](=O)(O[charge=-1])","[N+](=O)[O-]");
 		
 		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
+		//tu.testSLNIsomorphism("C[hc=2&charge<=0]", "[CH3-]CC"); 
 		
 		
-		//tu.testSLNIsomorphism("C[rbc=1]","C1CCCC1"); //not working !!!
+		tu.testSLNIsomorphism("C[rbc=2]","C1CCCC1"); //partially fixed; not not working for spiro atoms!!!
 		
 		//tu.testSLNIsomorphism("C~[type=2]CCCCC~[type=3]C","C=CCCCC#C"); 
 		
@@ -79,7 +80,7 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("CCXx[n=3;fcharge=2]");
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;
-		tu.testSLN2SLN("C[7]CC@7");
+		//tu.testSLN2SLN("C[7]CC@7");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");

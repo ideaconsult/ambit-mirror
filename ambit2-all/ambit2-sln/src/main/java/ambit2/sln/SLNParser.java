@@ -776,6 +776,19 @@ public class SLNParser {
 			}
 		}
 		
+		// Handle query atom attribute rbc - ring bond count of an atom
+		if (name.equals("rbc")) {
+			int rbc = extractInteger(value);
+			if (extractError.equals("")) {
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_rbc, rbc);
+				return token;
+			} else {
+				newError("Incorrect tbo value " + value, curChar, "");
+				return null;
+			}
+		}
+		
 		// By default it is an user defined attribute
 		if (value != null)
 			if (value.equals(""))

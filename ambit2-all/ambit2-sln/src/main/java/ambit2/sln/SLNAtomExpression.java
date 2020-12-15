@@ -157,10 +157,6 @@ public class SLNAtomExpression
 
 		case SLNConst.QA_ATTR_hc:
 		{	
-			/*
-        	https://sourceforge.net/tracker/?func=detail&aid=3020065&group_id=20024&atid=120024
-			Integer hci = atom.getHydrogenCount();
-			 */
 			Integer hci = atom.getImplicitHydrogenCount();
 			int totalH = 0;
 			if (hci != null)
@@ -199,6 +195,7 @@ public class SLNAtomExpression
 		
 		case SLNConst.QA_ATTR_ntc:
 			//TODO number of nonterminal atoms
+			return false;
 
 		case SLNConst.QA_ATTR_rbc:    		 
 			int atomRings1[] = (int[])atom.getProperty(CMLUtilities.RingData);
@@ -232,6 +229,7 @@ public class SLNAtomExpression
 
 	public boolean match_rbc(int atomRings[], int param,  IAtom atom)
 	{
+		
 		if (atomRings == null)
 		{
 			if (param == 0)
@@ -250,7 +248,12 @@ public class SLNAtomExpression
 			}
 			else
 			{
-				if (param == atomRings.length)
+				//TODO to improve the rbc determination
+				//This is not correct for spiro atoms: atomRings.length = 2 but rbc = 4;
+				
+				int rbc = atomRings.length + 1;
+					
+				if (param == rbc)
 					return(true);
 				else
 					return(false);
