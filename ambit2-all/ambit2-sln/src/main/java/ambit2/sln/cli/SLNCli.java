@@ -1,8 +1,11 @@
 package ambit2.sln.cli;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.cli.CommandLine;
@@ -407,6 +410,7 @@ public class SLNCli {
 				if (inputFileName == null)
 				{
 					//Working with input smiles
+					System.out.println("Input  sln: " + sln); 
 					res = convertToSLN(inputMol);
 				}
 				else
@@ -434,8 +438,7 @@ public class SLNCli {
 	}
 	
 	public int convert(SLNContainer container) 
-	{				 
-		System.out.println("Input  sln: " + sln); 
+	{		 
 		switch (outFormat)
 		{
 			case ct:
@@ -499,9 +502,55 @@ public class SLNCli {
 		}
 	}
 	
-	public int iterateInputFileWithSLNs() throws Exception
+	
+	public int iterateInputFileWithSLNs() 
 	{
-		//TODO
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(inputFileName));
+		}
+		catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
+		
+		
+		try {
+			int nLine = 0;
+			String line;
+			
+			while ( (line = br.readLine()) != null ) 
+			{
+				nLine++;
+				String slnString = line.trim();
+				
+				if (slnString.isEmpty())
+				{
+					System.out.println("Empty SLN string in line #" + nLine);
+					continue;
+				}
+				
+				
+				slnContainer = slnParser.parse(slnString);
+				if (!slnParser.getErrorMessages().equals(""))
+				{
+					System.out.println("SLN: " + slnString); 
+					System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+					return -1;
+				}
+				
+				convert (slnContainer);
+				
+			}	
+			
+			br.close();
+		}
+		catch (IOException e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
+		
+		
 		return 0;
 	}
 	
