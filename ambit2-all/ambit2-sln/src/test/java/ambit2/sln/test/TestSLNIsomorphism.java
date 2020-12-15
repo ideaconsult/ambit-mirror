@@ -49,7 +49,7 @@ public class TestSLNIsomorphism extends TestCase
 	
 	public void testSimpleSLNQueries() throws Exception 
 	{
-		slnMatch("C[1]CCN@1", "C1CCN1", true); //does not match
+		slnMatch("C[1]CCN@1", "C1CCN1", true);
 		slnMatch("CCCC", "C1CCC1", true);
 		slnMatch("CCCN", "CCCCC", false);
 		slnMatch("AnyN", "CCCCN", true);
@@ -59,9 +59,18 @@ public class TestSLNIsomorphism extends TestCase
 		slnMatch("N=Any-Any", "CCCC=N", true);
 		slnMatch("N=Any-Any=Any", "CCCC=N", false);
 		
+		slnMatch("N[charge<0]","CC(C)CC[N-]", true);
+		slnMatch("N[charge<0]","CC(C)CC[N+]", false);
+		slnMatch("N[charge<0]","CC(C)CCN", false);
+		slnMatch("N[charge<=0]","CC(C)CCN", true);
+		
+		slnMatch("C[hc=0]","CC(C)CCC", false);
+		slnMatch("C[hc=1]","CC(C)CCC", true);
+		slnMatch("C[hc=4]","CC(C)CCC", false);
+		slnMatch("C[hc=0|hc=0]","CC(C)CCC", false);
+		slnMatch("C[hc=0|hc=1]","CC(C)CCC", true);
+		
 	}
-	
-	
 	
 	
 }
