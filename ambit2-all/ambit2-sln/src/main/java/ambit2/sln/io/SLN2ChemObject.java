@@ -44,7 +44,8 @@ public class SLN2ChemObject
 {
 	public static class ExpressionAtomInfo
 	{
-		
+		public Integer charge = null;
+		public Integer isotope = null;
 	}
 	
 	private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
@@ -414,17 +415,18 @@ public class SLN2ChemObject
         }
 		
 		if (slnAt.atomType == 0)
-		{
-			
+		{			
 			if (slnAt.atomExpression == null || slnAt.atomExpression.tokens.isEmpty())
 			{	
 				if (slnAt.numHAtom == 0)
 					return new AnyAtom(SilentChemObjectBuilder.getInstance());
 			}	
 			
-			//TODO handle Any atom expression
+			//Handle Any atom as an expression
 			//slnAt.numHAtom > 0 info is added into the expression
-			return null;	
+			
+			SmartsAtomExpression atExpr = slnAtomToSmartsAtomExpression(slnAt);
+			return atExpr;	
 		}
 		
 		//slnAt.atomType > 0
@@ -451,9 +453,7 @@ public class SLN2ChemObject
 				}
 				
 				//Create an expression
-				SmartsAtomExpression atExpr = new SmartsAtomExpression(SilentChemObjectBuilder.getInstance());
-				//TODO
-				
+				SmartsAtomExpression atExpr = slnAtomToSmartsAtomExpression(slnAt);
 				return atExpr;				
 			}
 			else
@@ -481,10 +481,19 @@ public class SLN2ChemObject
         return null;
     }
     
-    public ExpressionAtomInfo extractAtomInfoFromExprresion(SLNAtomExpression slnAtExp)
+    
+    public SmartsAtomExpression slnAtomToSmartsAtomExpression(SLNAtom slnAt)
+    {
+    	SmartsAtomExpression atExpr = new SmartsAtomExpression(SilentChemObjectBuilder.getInstance());
+    	
+    	//TODO
+    	return atExpr;
+    }
+    
+    public static ExpressionAtomInfo extractSimpleAtomInfoFromExprresion(SLNAtomExpression slnAE)
     {
     	ExpressionAtomInfo eai = new ExpressionAtomInfo();
-    	//TODO
+    	eai.charge = extractFormalCharge(slnAE);
     	return eai;		
     }
     
