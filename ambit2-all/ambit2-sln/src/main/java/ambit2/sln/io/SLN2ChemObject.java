@@ -17,6 +17,8 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
+import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -30,7 +32,11 @@ import ambit2.sln.SLNConst;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNExpressionToken;
 import ambit2.smarts.AliphaticSymbolQueryAtom;
+import ambit2.smarts.DoubleBondAromaticityNotSpecified;
+import ambit2.smarts.DoubleNonAromaticBond;
 import ambit2.smarts.SMIRKSReaction;
+import ambit2.smarts.SingleBondAromaticityNotSpecified;
+import ambit2.smarts.SingleNonAromaticBond;
 import ambit2.smarts.SmartsAtomExpression;
 
 /**
@@ -474,11 +480,57 @@ public class SLN2ChemObject
 	 * connected atoms info is not handled 
 	 */
     public IQueryBond slnBondToQueryBond(SLNBond slnBo)
-    {
+    {              
         currentConversionError = null;
-        currentConversionWarning = null;
-        //TODO
-        return null;
+		currentConversionWarning = null;
+		if (slnBo == null)
+        {
+            currentConversionError = "Bond is null";
+            return null;
+        }
+		
+		if (slnBo.bondType == 0)
+		{
+			if (slnBo.bondExpression == null)
+				return new AnyOrderQueryBond(SilentChemObjectBuilder.getInstance());
+			
+			//TODO handle bond expression
+		}
+		else
+		{
+			//slnBo.bondType > 0
+			
+			if (slnBo.bondExpression == null)
+			{			 
+				IQueryBond bond = null;
+				switch (slnBo.bondType)
+				{
+				case 1:
+					if (conversionConfig.FlagSupportSingleBondAromaticityNotSpecified)
+						bond = new SingleBondAromaticityNotSpecified(SilentChemObjectBuilder.getInstance());
+					else
+						bond = new SingleNonAromaticBond(SilentChemObjectBuilder.getInstance());
+					break;					
+				case 2:
+					if (conversionConfig.FlagSupportDoubleBondAromaticityNotSpecified)
+						bond = new DoubleBondAromaticityNotSpecified(SilentChemObjectBuilder.getInstance());
+					else
+						bond = new DoubleNonAromaticBond(SilentChemObjectBuilder.getInstance());
+					break;
+				case 3:
+					bond = new OrderQueryBond(IBond.Order.TRIPLE, SilentChemObjectBuilder.getInstance());
+					break;	
+				}
+				
+				return bond;
+			}
+			
+			//TODO handle bond expression
+			
+		}
+		
+		return null;
+			
     }
     
     

@@ -31,6 +31,8 @@ public class SLN2ChemObjectConfig
 	public int maxHCount = 4;
 	public int minHCount = 0;
 	
-	
+	//For SMARTS conversion
+	public boolean FlagSupportSingleBondAromaticityNotSpecified = false;
+	public boolean FlagSupportDoubleBondAromaticityNotSpecified = false;
 	
 }
