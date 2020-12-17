@@ -565,16 +565,16 @@ public class SLN2ChemObject
     	//Adding implicit H atoms from the name
     	if (slnAt.numHAtom > 0)
     	{
-    		//Insert logical operation AND 
-        	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_AND, 0));
+    		//Insert logical operation AND_LO 
+        	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_ANDLO, 0));
     		atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_H, slnAt.numHAtom));
     	}	
     	
     	if (slnAt.atomExpression == null || slnAt.atomExpression.tokens.isEmpty())
     		return atExpr;
     	
-    	//Insert logical operation AND 
-    	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_AND, 0));
+    	//Insert logical operation AND_LO 
+    	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_ANDLO, 0));
     	
     	//Converting SLN atom expression into SMARTS atom expression
     	for (int i = 0; i < slnAt.atomExpression.tokens.size(); i++)
@@ -722,20 +722,32 @@ public class SLN2ChemObject
     
     public SmartsExpressionToken slnExpressionTokenToSmartsExpressionToken(SLNExpressionToken slnTok)
     {
+    	//htc, ntc and rbc cannot be converted
+    	
     	switch (slnTok.type)
     	{
+    	case SLNConst.A_ATTR_charge:
+    		return new SmartsExpressionToken(SmartsConst.AP_Charge, slnTok.param);
+    		
     	case SLNConst.QA_ATTR_r:
     		return new SmartsExpressionToken(SmartsConst.AP_R, 1);
     	case SLNConst.QA_ATTR_hac:
     		return new SmartsExpressionToken(SmartsConst.AP_D, slnTok.param);	
-    		
-    	//TODO	
+    	case SLNConst.QA_ATTR_hc:
+    		return new SmartsExpressionToken(SmartsConst.AP_H, slnTok.param);	
+    	case SLNConst.QA_ATTR_tac:
+    		return new SmartsExpressionToken(SmartsConst.AP_X, slnTok.param);
+    	case SLNConst.QA_ATTR_tbo:
+    		return new SmartsExpressionToken(SmartsConst.AP_v, slnTok.param);
+    	case SLNConst.QA_ATTR_src:
+    		return new SmartsExpressionToken(SmartsConst.AP_R, slnTok.param);
+    	
     	}
     	
-    	//TODO generate warning
+    	//TODO improve warning for attributes that cannot be converted e.g. user defined
+    	
+    	addToCurrentConversionWarning("Atom attribute: " + slnTok.attrName + " is not converted");
     	return null;
-    	
-    	
     }
     
     public int[] getSmartsTokenAlternativeValues()

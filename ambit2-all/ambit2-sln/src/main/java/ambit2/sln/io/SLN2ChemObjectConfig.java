@@ -22,7 +22,7 @@ public class SLN2ChemObjectConfig
 	}
 	
 	
-	public ComparisonConversion FlagComparisonConversion = ComparisonConversion.omit;
+	public ComparisonConversion FlagComparisonConversion = ComparisonConversion.convert_as_equal;
 	
 	//Limit values for atom/bond attributes 
 	//used for converting in equality expressions
