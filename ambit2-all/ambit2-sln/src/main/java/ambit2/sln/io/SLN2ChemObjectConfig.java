@@ -36,4 +36,9 @@ public class SLN2ChemObjectConfig
 	public boolean FlagSupportSingleBondAromaticityNotSpecified = false;
 	public boolean FlagSupportDoubleBondAromaticityNotSpecified = false;
 	
+	public boolean FlagSmartsSupportMOEExtension = true;
+	public boolean FlagSmartsUseMOEvPrimitive = false;
+	public boolean FlagSmartsSupportOpenEyeExtension = true;
+	public boolean FlagSmartsSupportOpenBabelExtension = true;
+	
 }

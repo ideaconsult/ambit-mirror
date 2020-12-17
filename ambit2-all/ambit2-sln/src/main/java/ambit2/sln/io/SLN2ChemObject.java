@@ -40,6 +40,8 @@ import ambit2.smarts.SingleNonAromaticBond;
 import ambit2.smarts.SingleOrAromaticBond;
 import ambit2.smarts.SmartsAtomExpression;
 import ambit2.smarts.SmartsBondExpression;
+import ambit2.smarts.SmartsConst;
+import ambit2.smarts.SmartsExpressionToken;
 
 /**
  * 
@@ -543,6 +545,27 @@ public class SLN2ChemObject
     public SmartsAtomExpression slnAtomToSmartsAtomExpression(SLNAtom slnAt)
     {
     	SmartsAtomExpression atExpr = new SmartsAtomExpression(SilentChemObjectBuilder.getInstance());
+    	
+    	//Adding atom name
+    	if (slnAt.atomType == 0)
+    	{
+    		atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_ANY, 0));
+    	}
+    	else
+    	{
+    		if (slnAt.atomType < SLNConst.elSymbols.length)
+    			atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_A, slnAt.atomType));
+    		else
+    		{
+    			//Handle dictionary info
+    		}
+    	}
+    	
+    	//Adding implicit H atoms from the name
+    	//Insert logical operation AND 
+    	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_AND, 0));
+    	if (slnAt.numHAtom > 0)
+    		atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_H, slnAt.numHAtom));
     	
     	//TODO
     	return atExpr;
