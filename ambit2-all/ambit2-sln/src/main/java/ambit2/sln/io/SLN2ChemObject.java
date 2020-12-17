@@ -567,10 +567,17 @@ public class SLN2ChemObject
     	if (slnAt.numHAtom > 0)
     		atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_H, slnAt.numHAtom));
     	
-    	//TODO
+    	if (slnAt.atomExpression == null || slnAt.atomExpression.tokens.isEmpty())
+    		return atExpr;
+    	
+    	for (int i = 0; i < slnAt.atomExpression.tokens.size(); i++)
+    	{	
+    		//TODO
+    	}	
     	return atExpr;
     }
     
+        
     public SmartsBondExpression slnBondToSmartsBondExpression(SLNBond slnBo)
     {
     	SmartsBondExpression boExpr = new SmartsBondExpression(SilentChemObjectBuilder.getInstance());
@@ -578,6 +585,15 @@ public class SLN2ChemObject
     	//TODO
     	return boExpr;
     }
+    
+    
+    public SmartsExpressionToken slnExpressionTokenToSmartsExpressionToken(SLNExpressionToken slnTok)
+    {
+    	//
+    	return null;
+    }
+    
+    
     
     public static ExpressionAtomInfo extractSimpleAtomInfoFromExprresion(SLNAtomExpression slnAE)
     {
@@ -606,7 +622,24 @@ public class SLN2ChemObject
     {
     	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
     	CDKHueckelAromaticityDetector.detectAromaticity(mol);
+    	
+    	
+    }
+    
+    void addToCurrentConversionError(String err)
+    {
+    	if (currentConversionError == null)
+    		currentConversionError = err;
+    	else
+    		currentConversionError += (err + " ");
     }
 
+    void addToCurrentConversionWarning(String warning)
+    {
+    	if (currentConversionWarning == null)
+    		currentConversionWarning = warning;
+    	else
+    		currentConversionWarning += (warning + " ");
+    }
 	
 }
