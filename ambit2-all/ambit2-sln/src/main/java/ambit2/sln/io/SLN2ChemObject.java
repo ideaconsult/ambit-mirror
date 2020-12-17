@@ -562,18 +562,24 @@ public class SLN2ChemObject
     	}
     	
     	//Adding implicit H atoms from the name
-    	//Insert logical operation AND 
-    	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_AND, 0));
     	if (slnAt.numHAtom > 0)
+    	{
+    		//Insert logical operation AND 
+        	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_AND, 0));
     		atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.AP_H, slnAt.numHAtom));
+    	}	
     	
     	if (slnAt.atomExpression == null || slnAt.atomExpression.tokens.isEmpty())
     		return atExpr;
+    	
+    	//Insert logical operation AND 
+    	atExpr.tokens.add(new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_AND, 0));
     	
     	//Converting SLN atom expression into SMARTS atom expression
     	for (int i = 0; i < slnAt.atomExpression.tokens.size(); i++)
     	{	
     		SLNExpressionToken slnTok = slnAt.atomExpression.tokens.get(i);
+    		
     		if (slnTok.isLogicalOperation())
     		{
     			SmartsExpressionToken logOpTok = slnLogOperationToSmartsExpressionToken(slnTok.getLogOperation());
@@ -581,9 +587,13 @@ public class SLN2ChemObject
     		}
     		else
     		{
-    			//TODO
+    			SmartsExpressionToken smToks[] = slnExpressionTokenToSmartsExpressionToken(slnTok);
+    			if (smToks != null)
+    				for (int k = 0; k < smToks.length; k++)
+    					atExpr.tokens.add(smToks[k]);
     		}
     	}	
+    	
     	return atExpr;
     }
     
@@ -617,6 +627,7 @@ public class SLN2ChemObject
     
     public SmartsExpressionToken[] slnExpressionTokenToSmartsExpressionToken(SLNExpressionToken slnTok)
     {
+    	
     	//TODO
     	return null;
     }
