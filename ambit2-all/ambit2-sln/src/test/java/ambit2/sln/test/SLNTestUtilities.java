@@ -70,7 +70,7 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("C[hc=2&charge<=0]", "[CH3-]CC"); 
 		
 		
-		tu.testSLNIsomorphism("C[rbc=2]","C1CCCC1"); //partially fixed; not not working for spiro atoms!!!
+		//tu.testSLNIsomorphism("C[rbc=2]","C1CCCC1"); //partially fixed; not working for spiro atoms!!!
 		
 		//tu.testSLNIsomorphism("C~[type=2]CCCCC~[type=3]C","C=CCCCC#C"); 
 		

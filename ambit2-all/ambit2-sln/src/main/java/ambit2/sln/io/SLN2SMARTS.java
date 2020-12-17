@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNParser;
@@ -20,6 +22,7 @@ public class SLN2SMARTS
 	
 	private SLNParser slnParser = new SLNParser();
 	private SLN2ChemObject slnConverter = new SLN2ChemObject();
+	private SmartsHelper smartsHelper = new SmartsHelper(SilentChemObjectBuilder.getInstance()); 
 	
 	public List<String> getConversionErrors() {
 		return conversionErrors;
@@ -65,8 +68,19 @@ public class SLN2SMARTS
 	
 	public String slnToSmarts(String sln)
 	{
-		//TODO
-		return null;
+		reset();		
+		SLNContainer container = slnParser.parse(sln);
+		String parserErr = slnParser.getErrorMessages(); 
+		if (!parserErr.equals(""))
+		{
+			conversionErrors.add(parserErr);			
+			return null;
+		}
+		
+		IQueryAtomContainer mol = slnConverter.slnContainerToQueryAtomContainer(container);
+		String smarts = smartsHelper.toSmarts(container);
+		
+		return smarts;
 	}
 	
 	public String slnToSmirks(String sln)
