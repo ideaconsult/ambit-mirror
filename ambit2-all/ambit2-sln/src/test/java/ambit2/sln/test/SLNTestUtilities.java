@@ -86,7 +86,9 @@ public class SLNTestUtilities
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
 		
 		//tu.testSLN2Smiles("CC=CCCS[charge=+3]");
-		
+				
+		tu.testSLN2Smarts("CC=CCCS[charge=+3]");
+				
 		//tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
 		//tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");
 		
@@ -144,6 +146,23 @@ public class SLNTestUtilities
 			System.out.println("Conversion errors: " + sln2Smarts.getAllErrors());
 		else
 			System.out.println("Ouput  smiles: " + smi);
+		
+		if (!sln2Smarts.getConversionWarnings().isEmpty())
+		{
+			System.out.println("Conversion warnings: ");
+			for (String w: sln2Smarts.getConversionWarnings())
+				System.out.println(w);
+		}
+	}
+	
+	public void testSLN2Smarts(String sln) throws Exception
+	{	
+		System.out.println("Input sln: " + sln);
+		String smarts = sln2Smarts.slnToSmarts(sln);
+		if (smarts == null)
+			System.out.println("Conversion errors: " + sln2Smarts.getAllErrors());
+		else
+			System.out.println("Ouput smarts: " + smarts);
 		
 		if (!sln2Smarts.getConversionWarnings().isEmpty())
 		{
