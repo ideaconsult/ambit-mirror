@@ -32,6 +32,7 @@ public class SLN2ChemObjectConfig
 	public int minHCount = 0;
 	
 	//For SMARTS conversion
+	public boolean FlagSLNSingleBondToSingleOrAromaticBond = true;
 	public boolean FlagSupportSingleBondAromaticityNotSpecified = false;
 	public boolean FlagSupportDoubleBondAromaticityNotSpecified = false;
 	

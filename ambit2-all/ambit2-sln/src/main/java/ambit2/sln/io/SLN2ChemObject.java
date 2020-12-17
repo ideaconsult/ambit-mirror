@@ -37,6 +37,7 @@ import ambit2.smarts.DoubleNonAromaticBond;
 import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SingleBondAromaticityNotSpecified;
 import ambit2.smarts.SingleNonAromaticBond;
+import ambit2.smarts.SingleOrAromaticBond;
 import ambit2.smarts.SmartsAtomExpression;
 import ambit2.smarts.SmartsBondExpression;
 
@@ -211,6 +212,7 @@ public class SLN2ChemObject
 		 {
 			 SLNAtom slnAtom = (SLNAtom) slnContainer.getAtom(i);
 			 IQueryAtom atom = slnAtomToQueryAtom(slnAtom);
+			 
 			 if (currentConversionWarning != null)
 				 conversionWarnings.add(currentConversionWarning + " for atom: " + (i+1));
 			 if (atom == null)
@@ -222,6 +224,7 @@ public class SLN2ChemObject
 			 convertedAtoms.put(slnAtom, atom);
 		 }
 		
+		 
 		 for (int i = 0; i < slnContainer.getBondCount(); i++)
 		 {
 			 SLNBond slnBbond = (SLNBond) slnContainer.getBond(i);
@@ -416,8 +419,8 @@ public class SLN2ChemObject
     	currentConversionError = null;
 		currentConversionWarning = null;
 		if (slnAt == null)
-        {
-            currentConversionError = "SNLAtom is null";
+        {           
+			currentConversionError = "SNLAtom is null";
             return null;
         }
 		
@@ -507,7 +510,9 @@ public class SLN2ChemObject
 				switch (slnBo.bondType)
 				{
 				case 1:
-					if (conversionConfig.FlagSupportSingleBondAromaticityNotSpecified)
+					if (conversionConfig.FlagSLNSingleBondToSingleOrAromaticBond)
+						bond = new SingleOrAromaticBond(SilentChemObjectBuilder.getInstance());					
+					else if (conversionConfig.FlagSupportSingleBondAromaticityNotSpecified)
 						bond = new SingleBondAromaticityNotSpecified(SilentChemObjectBuilder.getInstance());
 					else
 						bond = new SingleNonAromaticBond(SilentChemObjectBuilder.getInstance());

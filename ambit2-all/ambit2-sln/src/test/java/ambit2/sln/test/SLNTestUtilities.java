@@ -87,7 +87,9 @@ public class SLNTestUtilities
 		
 		//tu.testSLN2Smiles("CC=CCCS[charge=+3]");
 				
-		tu.testSLN2Smarts("CC=CCCS[charge=+3]");
+		//tu.testSLN2Smarts("CC=CCCS[charge=+3]");
+		tu.testSLN2Smarts("CC");
+		
 				
 		//tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
 		//tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");

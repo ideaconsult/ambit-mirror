@@ -77,8 +77,8 @@ public class SLN2SMARTS
 			return null;
 		}
 		
-		IQueryAtomContainer mol = slnConverter.slnContainerToQueryAtomContainer(container);
-		String smarts = smartsHelper.toSmarts(container);
+		IQueryAtomContainer query = slnConverter.slnContainerToQueryAtomContainer(container);
+		String smarts = smartsHelper.toSmarts(query);
 		
 		return smarts;
 	}
