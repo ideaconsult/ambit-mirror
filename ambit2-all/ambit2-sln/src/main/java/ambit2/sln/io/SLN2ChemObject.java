@@ -38,6 +38,7 @@ import ambit2.smarts.SMIRKSReaction;
 import ambit2.smarts.SingleBondAromaticityNotSpecified;
 import ambit2.smarts.SingleNonAromaticBond;
 import ambit2.smarts.SmartsAtomExpression;
+import ambit2.smarts.SmartsBondExpression;
 
 /**
  * 
@@ -540,6 +541,14 @@ public class SLN2ChemObject
     	
     	//TODO
     	return atExpr;
+    }
+    
+    public SmartsBondExpression slnBondToSmartsBondExpression(SLNBond slnBo)
+    {
+    	SmartsBondExpression boExpr = new SmartsBondExpression(SilentChemObjectBuilder.getInstance());
+    	
+    	//TODO
+    	return boExpr;
     }
     
     public static ExpressionAtomInfo extractSimpleAtomInfoFromExprresion(SLNAtomExpression slnAE)
