@@ -31,6 +31,7 @@ import ambit2.sln.SLNBond;
 import ambit2.sln.SLNConst;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNExpressionToken;
+import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
 import ambit2.smarts.AliphaticSymbolQueryAtom;
 import ambit2.smarts.DoubleBondAromaticityNotSpecified;
 import ambit2.smarts.DoubleNonAromaticBond;
@@ -587,7 +588,7 @@ public class SLN2ChemObject
     		}
     		else
     		{
-    			SmartsExpressionToken smToks[] = slnExpressionTokenToSmartsExpressionToken(slnTok);
+    			SmartsExpressionToken smToks[] = slnExpressionTokenToSmartsExpressionTokenArray(slnTok);
     			if (smToks != null)
     				for (int k = 0; k < smToks.length; k++)
     					atExpr.tokens.add(smToks[k]);
@@ -625,14 +626,108 @@ public class SLN2ChemObject
     	return null;
     }
     
-    public SmartsExpressionToken[] slnExpressionTokenToSmartsExpressionToken(SLNExpressionToken slnTok)
+    public SmartsExpressionToken[] slnExpressionTokenToSmartsExpressionTokenArray(SLNExpressionToken slnTok)
     {
+    	int conversionStatus = 0;//-1 do not convert, 0 convert as equal, 1 generate list of alternative values
     	
+    	//Determine conversionStatus
+    	switch(slnTok.comparisonOperation)
+		{
+		case SLNConst.CO_EQUALS:
+			conversionStatus = 0;			
+			break;
+			
+		case SLNConst.CO_LESS_THAN:
+		case SLNConst.CO_GREATER_THAN:	
+			switch (conversionConfig.FlagComparisonConversion) 
+			{
+			case omit:
+				conversionStatus = -1;
+				break;
+			case convert_as_equal:
+				conversionStatus = 0;
+				break;
+			case convert_as_equal_if_eqaul_is_present:
+				conversionStatus = -1;
+				break;
+			case convert_as_equal_if_not_nonequality:
+				conversionStatus = 0;
+				break;
+			case convert_as_value_list:
+				conversionStatus = 1;
+				break;	
+			}
+			break;
+			
+		case SLNConst.CO_LESS_OR_EQUALS:
+		case SLNConst.CO_GREATER_OR_EQUALS:	
+			switch (conversionConfig.FlagComparisonConversion) 
+			{
+			case omit:
+				conversionStatus = -1;
+				break;
+			case convert_as_equal:
+				conversionStatus = 0;
+				break;
+			case convert_as_equal_if_eqaul_is_present:
+				conversionStatus = 0;
+				break;
+			case convert_as_equal_if_not_nonequality:
+				conversionStatus = 0;
+				break;
+			case convert_as_value_list:
+				conversionStatus = 1;
+				break;	
+			}
+			break;
+			
+		case SLNConst.CO_DIFFERS:
+			switch (conversionConfig.FlagComparisonConversion) 
+			{
+			case omit:
+				conversionStatus = -1;
+				break;
+			case convert_as_equal:
+				conversionStatus = 0;
+				break;
+			case convert_as_equal_if_eqaul_is_present:
+				conversionStatus = -1;
+				break;
+			case convert_as_equal_if_not_nonequality:
+				conversionStatus = -1;
+				break;
+			case convert_as_value_list:
+				conversionStatus = 1;
+				break;	
+			}
+			break;
+		}    
+    	
+    	if (conversionStatus < 0)
+    		return null;
+    	else if (conversionStatus == 0)
+    	{
+    		return null;	
+    	}
+    	else
+    	{
+    		//Generate an array of tokens based on the alternative values;
+    		//TODO
+    		return null;
+    	}
+    }
+    
+    public SmartsExpressionToken slnExpressionTokenToSmartsExpressionToken(SLNExpressionToken slnTok)
+    {
     	//TODO
     	return null;
     }
     
-    
+    public int[] getSmartsTokenAlternativeValues()
+    {
+    	//
+    	return null;
+    }
     
     public static ExpressionAtomInfo extractSimpleAtomInfoFromExprresion(SLNAtomExpression slnAE)
     {
