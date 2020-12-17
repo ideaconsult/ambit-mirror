@@ -707,25 +707,40 @@ public class SLN2ChemObject
     		return null;
     	else if (conversionStatus == 0)
     	{
-    		return null;	
+    		SmartsExpressionToken tok = slnExpressionTokenToSmartsExpressionToken(slnTok);
+    		if (tok != null)
+    			return new SmartsExpressionToken[] {tok};	
     	}
     	else
     	{
     		//Generate an array of tokens based on the alternative values;
     		//TODO
-    		return null;
     	}
+    	
+    	return null;
     }
     
     public SmartsExpressionToken slnExpressionTokenToSmartsExpressionToken(SLNExpressionToken slnTok)
     {
-    	//TODO
+    	switch (slnTok.type)
+    	{
+    	case SLNConst.QA_ATTR_r:
+    		return new SmartsExpressionToken(SmartsConst.AP_R, 1);
+    	case SLNConst.QA_ATTR_hac:
+    		return new SmartsExpressionToken(SmartsConst.AP_D, slnTok.param);	
+    		
+    	//TODO	
+    	}
+    	
+    	//TODO generate warning
     	return null;
+    	
+    	
     }
     
     public int[] getSmartsTokenAlternativeValues()
     {
-    	//
+    	//TODO
     	return null;
     }
     
