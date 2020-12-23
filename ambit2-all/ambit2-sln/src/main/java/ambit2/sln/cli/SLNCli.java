@@ -29,6 +29,7 @@ import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
 import ambit2.sln.io.SLN2ChemObject;
+import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
@@ -46,6 +47,10 @@ public class SLNCli {
 	public _operation operation = _operation.convert;
 	public String outFormatString = null;
 	public _out_format outFormat = _out_format.smiles;
+	public String comparisonConversionString = null;
+	public ComparisonConversion comparisonConversion = ComparisonConversion.convert_as_equal;
+	public String warningsString = null;
+	public Boolean warnings = true;
 	
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
@@ -160,11 +165,41 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Output format: smiles, ct, extended_ct";
+				return "Output format: smiles, smarts, ct, extended_ct";
 			}
 			@Override
 			public String getShortName() {
 				return "f";
+			}
+		},
+		
+		comparison_convert {
+			@Override
+			public String getArgName() {
+				return "mode";
+			}
+			@Override
+			public String getDescription() {
+				return "Comparison conversion modes: omit, convert_as_equal (default), convert_as_equal_if_eqaul_is_present";
+			}
+			@Override
+			public String getShortName() {
+				return "r";
+			}
+		},
+		
+		warnings {
+			@Override
+			public String getArgName() {
+				return "on|off";
+			}
+			@Override
+			public String getDescription() {
+				return "Switch on/off conversion warnings. Default warnings is on";
+			}
+			@Override
+			public String getShortName() {
+				return "w";
 			}
 		},
 
@@ -224,7 +259,7 @@ public class SLNCli {
 	}
 	
 	enum _out_format {
-		smiles, ct, extended_ct;
+		smiles, smarts, ct, extended_ct;
 		
 		public static _out_format fromString(String text) {
 	        for (_out_format  x : _out_format.values()) {
@@ -277,6 +312,27 @@ public class SLNCli {
 				return;
 			outFormatString = argument;
 			outFormat = _out_format.fromString(outFormatString);
+			break;
+		}
+		
+		case comparison_convert: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			comparisonConversionString = argument;
+			comparisonConversion = ComparisonConversion.fromString(comparisonConversionString);
+			break;
+		}
+		
+		case warnings: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			warningsString = argument;
+			if (warningsString.equalsIgnoreCase("on"))
+				warnings = true;
+			else if (warningsString.equalsIgnoreCase("off"))
+				warnings = false;
+			else
+				warnings = null;
 			break;
 		}
 
@@ -338,6 +394,20 @@ public class SLNCli {
 		if (outFormat == null)
 		{
 			System.out.println("Incorrect out format: " + outFormatString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		if (comparisonConversion == null)
+		{
+			System.out.println("Incorrect comparison conversion mode: " + comparisonConversionString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		if (warnings == null)
+		{
+			System.out.println("Incorrect warnings option: " + warningsString);
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
