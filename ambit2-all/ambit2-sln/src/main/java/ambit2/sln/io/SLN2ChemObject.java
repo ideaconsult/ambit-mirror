@@ -112,6 +112,7 @@ public class SLN2ChemObject
 	
 	public SLNContainer atomContainerToSLNContainer(IAtomContainer container)
 	{
+		clearAllErrorsAndWarnings();
 		SLNContainer slnContainer = new SLNContainer(null);
 
 		Map<IAtom, SLNAtom> convertedAtoms = new HashMap<IAtom, SLNAtom>();
@@ -158,6 +159,7 @@ public class SLN2ChemObject
 	
 	public IAtomContainer slnContainerToAtomContainer(SLNContainer slnContainer)
 	{
+		clearAllErrorsAndWarnings();
 		 IAtomContainer container = new AtomContainer();		 
 		 Map<SLNAtom, IAtom> convertedAtoms = new HashMap<SLNAtom, IAtom>();
 
@@ -208,6 +210,7 @@ public class SLN2ChemObject
 	
 	public IQueryAtomContainer slnContainerToQueryAtomContainer(SLNContainer slnContainer)
 	{
+		clearAllErrorsAndWarnings();
 		IQueryAtomContainer container = new QueryAtomContainer(SilentChemObjectBuilder.getInstance()); 		
 		Map<SLNAtom, IQueryAtom> convertedAtoms = new HashMap<SLNAtom, IQueryAtom>();
 		
@@ -254,18 +257,21 @@ public class SLN2ChemObject
 	
 	public SLNContainer QueryAtomContainerToSLNContainer(IQueryAtomContainer query)
 	{
+		clearAllErrorsAndWarnings();
 		//TODO
 		return null;
 	}
 	
 	public SMIRKSReaction slnContainerToSMIRKSReaction(SLNContainer container)
 	{
+		clearAllErrorsAndWarnings();
 		//TODO
 		return null;
 	}
 	
 	public  SLNContainer SMIRKSReactionToSLNContainer(SMIRKSReaction reaction)
 	{
+		clearAllErrorsAndWarnings();
 		//TODO
 		return null;
 	}
