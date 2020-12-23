@@ -32,6 +32,10 @@ public class SLN2SMARTS
 		return conversionWarnings;
 	}
 	
+	public SLN2ChemObjectConfig getConversionConfig() {
+		return slnConverter.getConversionConfig();
+	}
+	
 	public String getAllErrors()
 	{
 		StringBuffer sb = new StringBuffer();

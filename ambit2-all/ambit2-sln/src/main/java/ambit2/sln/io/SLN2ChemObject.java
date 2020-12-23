@@ -590,8 +590,33 @@ public class SLN2ChemObject
     		{
     			SmartsExpressionToken smToks[] = slnExpressionTokenToSmartsExpressionTokenArray(slnTok);
     			if (smToks != null)
+    			{	
     				for (int k = 0; k < smToks.length; k++)
     					atExpr.tokens.add(smToks[k]);
+    			}
+    			else
+    			{
+    				//Handle logical operation primitives (due to the token omitted)
+    				
+    				//Check for preceding NOT
+    				if (!atExpr.tokens.isEmpty())
+    				{
+    					int n = atExpr.tokens.size();
+    					SmartsExpressionToken tok = atExpr.tokens.get(n-1);
+    					if (tok.type == SmartsConst.LO + SmartsConst.LO_NOT)
+    						atExpr.tokens.remove(n-1);
+    				}
+    				
+    				//TODO Improve: check for the type of LO
+    				if (!atExpr.tokens.isEmpty())
+    				{
+    					int n = atExpr.tokens.size();
+    					SmartsExpressionToken tok = atExpr.tokens.get(n-1);
+    					if (tok.isLogicalOperation())
+    						atExpr.tokens.remove(n-1);
+    				}
+    				
+    			}
     		}
     	}	
     	
@@ -629,6 +654,7 @@ public class SLN2ChemObject
     public SmartsExpressionToken[] slnExpressionTokenToSmartsExpressionTokenArray(SLNExpressionToken slnTok)
     {
     	int conversionStatus = 0;//-1 do not convert, 0 convert as equal, 1 generate list of alternative values
+    	String warning = null;
     	
     	//Determine conversionStatus
     	switch(slnTok.comparisonOperation)
@@ -643,18 +669,23 @@ public class SLN2ChemObject
 			{
 			case omit:
 				conversionStatus = -1;
+				warning = "logical primitive is not converted";
 				break;
 			case convert_as_equal:
 				conversionStatus = 0;
+				warning = "logical primitive converted as equal comparison";
 				break;
 			case convert_as_equal_if_eqaul_is_present:
 				conversionStatus = -1;
+				warning = "logical primitive is not converted";
 				break;
 			case convert_as_equal_if_not_nonequality:
 				conversionStatus = 0;
+				warning = "logical primitive converted as equal comparison";
 				break;
 			case convert_as_value_list:
 				conversionStatus = 1;
+				warning = "logical primitive converted as value list";
 				break;	
 			}
 			break;
@@ -665,18 +696,23 @@ public class SLN2ChemObject
 			{
 			case omit:
 				conversionStatus = -1;
+				warning = "logical primitive is not converted";
 				break;
 			case convert_as_equal:
 				conversionStatus = 0;
+				warning = "logical primitive converted as equal comparison";
 				break;
 			case convert_as_equal_if_eqaul_is_present:
 				conversionStatus = 0;
+				warning = "logical primitive converted as equal comparison";
 				break;
 			case convert_as_equal_if_not_nonequality:
 				conversionStatus = 0;
+				warning = "logical primitive converted as equal comparison";
 				break;
 			case convert_as_value_list:
 				conversionStatus = 1;
+				warning = "logical primitive converted as value list";
 				break;	
 			}
 			break;
@@ -686,28 +722,36 @@ public class SLN2ChemObject
 			{
 			case omit:
 				conversionStatus = -1;
+				warning = "logical primitive is not converted";
 				break;
 			case convert_as_equal:
 				conversionStatus = 0;
+				warning = "logical primitive converted as equal comparison";
 				break;
 			case convert_as_equal_if_eqaul_is_present:
 				conversionStatus = -1;
+				warning = "logical primitive is not converted";
 				break;
 			case convert_as_equal_if_not_nonequality:
 				conversionStatus = -1;
+				warning = "logical primitive is not converted";
 				break;
 			case convert_as_value_list:
 				conversionStatus = 1;
+				warning = "logical primitive converted as value list";
 				break;	
 			}
 			break;
 		}    
     	
+    	if (warning != null)
+			addToCurrentConversionWarning(slnTok.toString(true) + "  " + warning);
+    	
     	if (conversionStatus < 0)
     		return null;
     	else if (conversionStatus == 0)
     	{
-    		SmartsExpressionToken tok = slnExpressionTokenToSmartsExpressionToken(slnTok);
+    		SmartsExpressionToken tok = slnExpressionTokenToSmartsExpressionToken(slnTok);    		
     		if (tok != null)
     			return new SmartsExpressionToken[] {tok};	
     	}
