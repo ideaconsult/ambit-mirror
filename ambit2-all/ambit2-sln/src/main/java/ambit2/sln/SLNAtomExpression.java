@@ -197,13 +197,14 @@ public class SLNAtomExpression
 			//TODO number of nonterminal atoms
 			return false;
 
-		case SLNConst.QA_ATTR_rbc:    		 
+		case SLNConst.QA_ATTR_rbc:  
+			//TODO improve: use comparison operation
 			int atomRings1[] = (int[])atom.getProperty(CMLUtilities.RingData);
 			return(match_rbc(atomRings1, tok.param, atom));
 
 		case SLNConst.QA_ATTR_src:    		 
 			int atomRings2[] = (int[])atom.getProperty(CMLUtilities.RingData);    		
-			return(match_src(atomRings2, tok.param, atom));	
+			return(match_src(atomRings2, tok.param, tok.comparisonOperation, atom));	
 
 		case SLNConst.QA_ATTR_tbo:
 			if (tok.param == atom.getValency())
@@ -261,34 +262,16 @@ public class SLNAtomExpression
 		}
 	}
 
-	public boolean match_src(int atomRings[], int param,  IAtom atom)
+	public boolean match_src(int atomRings[], int param, int comparisonOperation, IAtom atom)
 	{
-		if (atomRings == null)
-		{
-			if (param == 0)
-				return(true);
-			else
-				return(false);
-		}
+		int src = 0;
+		if (atomRings != null)
+			src = atomRings.length;
+		
+		if (SLNConst.compare(src, param, comparisonOperation))
+			return(true);
 		else
-		{
-			if (param < 3) // value 1 is possible here 
-			{
-				if (atomRings.length > 0)
-					return(true);
-				else
-					return(false);
-			}
-			else
-			{
-				for (int i = 0; i < atomRings.length; i++)
-				{
-					if (atomRings[i] == param)
-						return(true);
-				}
-				return(false);
-			}
-		}
+			return(false);
 	}
 	
 	boolean match_stereo(int param, int targetStereo)

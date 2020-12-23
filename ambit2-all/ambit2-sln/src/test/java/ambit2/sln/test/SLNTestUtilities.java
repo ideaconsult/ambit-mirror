@@ -96,7 +96,8 @@ public class SLNTestUtilities
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.omit;
 		
 		//tu.testSLN2Smarts("CC=CCCS[charge>+3]");
-		tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[src>0;charge=0]");
+		tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]");
+		tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]", "NCc1cnc(O)c(O)c1");
 		
 		//tu.testSLN2Smarts("C[1:charge=-1]C=CC[src=3]CCC[tbo=4]C[r;!hac=3;tac=4]CH3Any@1");
 		
