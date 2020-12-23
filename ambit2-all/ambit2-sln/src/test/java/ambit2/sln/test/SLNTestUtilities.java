@@ -100,7 +100,7 @@ public class SLNTestUtilities
 		
 		//tu.testSLN2Smarts("C[1:charge=-1]C=CC[src=3]CCC[tbo=4]C[r;!hac=3;tac=4]CH3Any@1");
 		
-		//tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[r]");
+		tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[r]");
 		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[r]", "NCc1cnc(O)c(O)c1"); 
 		
 

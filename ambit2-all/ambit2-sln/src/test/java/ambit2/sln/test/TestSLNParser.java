@@ -64,6 +64,8 @@ public class TestSLNParser extends TestCase
 		sln2sln("CC-[a=b]CCOCCCN");
 		sln2sln("AnyCC");
 		sln2sln("C=Any=C[a=b]C");
+		sln2sln("AnyCC[!src=3]");
+		sln2sln("AnyCC[!r]");
 	}
 	
 	

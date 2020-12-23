@@ -138,9 +138,9 @@ public class SLNExpressionToken
 					+ param;
 			
 		case SLNConst.QA_ATTR_r:
-			return SLNConst.atomAttributeToSLNString(type)
-					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
-					+ param;
+			//It is a boolean attribute
+			return SLNConst.atomAttributeToSLNString(type);
+			
 			
 		case SLNConst.QA_ATTR_v:
 			return SLNConst.atomAttributeToSLNString(type)
