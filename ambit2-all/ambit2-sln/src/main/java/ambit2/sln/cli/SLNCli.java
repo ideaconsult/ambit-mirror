@@ -20,6 +20,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
 import org.openscience.cdk.io.IChemObjectReader.Mode;
 import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.base.exceptions.AmbitIOException;
@@ -29,6 +30,7 @@ import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
 import ambit2.sln.io.SLN2ChemObject;
+import ambit2.sln.io.SLN2SMARTS;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
@@ -54,8 +56,9 @@ public class SLNCli {
 	
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
-	public SLN2ChemObject slnConverter = new SLN2ChemObject();
+	public SLN2ChemObject slnConverter = new SLN2ChemObject();	
 	public IsomorphismTester isoTester = new IsomorphismTester();
+	public SmartsHelper smartsHelper = new SmartsHelper(SilentChemObjectBuilder.getInstance()); 
 	
 	public SLNContainer slnContainer = null;
 	public IAtomContainer inputMol = null;
@@ -517,6 +520,7 @@ public class SLNCli {
 			case extended_ct:
 				printExtendedCT(container);
 				break;
+				
 			case smiles:
 				IAtomContainer mol = slnConverter.slnContainerToAtomContainer(container);
 				if (slnConverter.hasConversionErrors())
@@ -533,7 +537,37 @@ public class SLNCli {
 					catch (Exception x) {
 						System.out.println("Error generating SMILES: " + x.getMessage());
 					}
+					
+					if (warnings)
+						if (!slnConverter.getConversionWarnings().isEmpty())
+						{
+							System.out.println("Conversion warnings: ");
+							for (String w: slnConverter.getConversionWarnings())
+								System.out.println(w);
+						}
 				}
+				break;
+				
+			case smarts:
+				IQueryAtomContainer query = slnConverter.slnContainerToQueryAtomContainer(container);
+				if (slnConverter.hasConversionErrors())
+				{	
+					System.out.println("Conversion errors:");
+					System.out.println(slnConverter.getAllErrors());
+				}	
+				else
+				{	
+					String smarts = smartsHelper.toSmarts(query);
+					System.out.println(smarts);
+					
+					if (warnings)
+						if (!slnConverter.getConversionWarnings().isEmpty())
+						{
+							System.out.println("Conversion warnings: ");
+							for (String w: slnConverter.getConversionWarnings())
+								System.out.println(w);
+						}
+				}	
 				break;
 		}		
 		

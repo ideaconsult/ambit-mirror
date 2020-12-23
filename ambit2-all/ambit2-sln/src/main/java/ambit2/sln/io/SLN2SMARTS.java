@@ -66,6 +66,7 @@ public class SLN2SMARTS
 		
 		IAtomContainer mol = slnConverter.slnContainerToAtomContainer(container);
 		String smiles = SmartsHelper.moleculeToSMILES(mol, false);
+		conversionErrors.addAll(slnConverter.getConversionErrors());
 		conversionWarnings.addAll(slnConverter.getConversionWarnings());
 		
 		return smiles;
@@ -84,6 +85,7 @@ public class SLN2SMARTS
 		
 		IQueryAtomContainer query = slnConverter.slnContainerToQueryAtomContainer(container);
 		String smarts = smartsHelper.toSmarts(query);
+		conversionErrors.addAll(slnConverter.getConversionErrors());
 		conversionWarnings.addAll(slnConverter.getConversionWarnings());
 		
 		return smarts;
