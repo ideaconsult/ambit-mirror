@@ -1276,13 +1276,31 @@ public class SLNParser {
 		int openBrackets = 1;
 		while ((curChar < nChars) && (openBrackets > 0) && (errors.size() == 0)) {
 			if (sln.charAt(curChar) == '<')
-				openBrackets++;
+			{
+				if ( (curChar+1) < nChars)
+				{	
+					//Check for <= comparison operation
+					if (sln.charAt(curChar+1) != '=')					
+						openBrackets++;
+				}
+				else
+					openBrackets++;
+			}	
 			else if (sln.charAt(curChar) == '>')
-				openBrackets--;
+			{	
+				if ( (curChar+1) < nChars)
+				{	
+					//Check for <= comparison operation
+					if (sln.charAt(curChar+1) != '=')					
+						openBrackets--;
+				}
+				else					
+					openBrackets--;
+			}	
 
 			curChar++;
 		}
-
+		
 		return sln.substring(startPos, curChar - 1);
 	}
 
@@ -1318,7 +1336,9 @@ public class SLNParser {
 
 				// TODO add check for ':=' and '^=' attribute assignments
 
-				String attrName = molAttr.substring(startPos, pos);
+				
+				String attrName = molAttr.substring(startPos, pos);				
+				/*
 				if (pos < molAttr.length()) {
 					if (molAttr.charAt(pos) == '=')
 						pos++;
@@ -1329,8 +1349,86 @@ public class SLNParser {
 							curChar, "");
 					return;
 				}
-
-				// Read attribute value (after '=')
+				*/
+				
+				//Read comparison operation
+				int comparisonOperation = SLNConst.CO_NO_COMPARISON;				
+				
+				if (pos < molAttr.length()) 
+				{					
+					if (molAttr.charAt(pos) == '=')						
+					{	
+						comparisonOperation = SLNConst.CO_EQUALS;
+						pos++;
+					}	
+					else if (molAttr.charAt(pos) == '<')						
+					{	
+						comparisonOperation = SLNConst.CO_LESS_THAN;
+						pos++;
+						if (pos < molAttr.length())
+						{	
+							if (molAttr.charAt(pos) == '=')
+							{
+								comparisonOperation = SLNConst.CO_LESS_OR_EQUALS;
+								pos++;
+							}
+							else if (molAttr.charAt(pos) == '>')
+							{
+								comparisonOperation = SLNConst.CO_DIFFERS;
+								pos++;
+							}	
+						}	
+					}
+					else if (molAttr.charAt(pos) == '>')
+					{
+						comparisonOperation = SLNConst.CO_GREATER_THAN;
+						pos++;
+						if (pos < molAttr.length())
+							if (molAttr.charAt(pos) == '=')
+							{
+								comparisonOperation = SLNConst.CO_GREATER_OR_EQUALS;
+								pos++;
+							}
+					}
+					else if (molAttr.charAt(pos) == '!') 
+					{
+						//Handle '!=' differs comparison operation
+						pos++;
+						if (pos < molAttr.length())
+						{
+							if (molAttr.charAt(pos) == '=')
+							{	
+								comparisonOperation = SLNConst.CO_DIFFERS;
+								pos++;
+							}
+							else 
+							{
+								newError("Incorrect comparison operation for attribute " + attrName + " ",
+									curChar, "");
+								return;
+							}	
+						}
+					}
+				}
+				
+				//Check for the case "NO_COMPARISON"				 
+				if (comparisonOperation == SLNConst.CO_NO_COMPARISON)
+				{
+					newError("Missing comparison operation for attribute " + attrName + " ",
+							curChar, "");
+					return;
+				}
+				
+				//Check for no value attribute (end reached)
+				if (pos >= molAttr.length()) 
+				{	
+					newError("Missing value for attribute " + attrName + " ",
+							curChar, "");
+					return;
+				}
+				
+				
+				// Read attribute value (after =, >=, <=, >, < or != )
 				startPos = pos;
 				while (pos < molAttr.length()) {
 					/*
