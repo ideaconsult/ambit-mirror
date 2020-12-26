@@ -79,7 +79,7 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("C[1:tt=456]CCCCC@1");
 		
 		//tu.testSLN2SLN("CCXx[n=3;fcharge=2]");
-		tu.testSLN2SLN("CCC<a=3;b>=234>");
+		tu.testSLN2SLN("CCC<a<=3;b>=234;c=ddd;t1!=aaa;t2<234;t3>123>");
 		
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;

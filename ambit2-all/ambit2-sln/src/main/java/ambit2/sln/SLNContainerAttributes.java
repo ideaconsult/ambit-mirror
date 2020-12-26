@@ -13,7 +13,9 @@ public class SLNContainerAttributes
 	//TODO handle brackets within expression
 	
 	public Map<String,String> userDefiendAttr = new HashMap<String,String>();
-
+	public Map<String,Integer> userDefiendAttrComparisonOperation = new HashMap<String,Integer>();
+	
+	
 	public String name = null;
 	public String regid = null;
 	public String type = null;
@@ -116,8 +118,10 @@ public class SLNContainerAttributes
 			if (sb.length() > 1)
 				sb.append(";");
 			Map.Entry<String,String> entry = iterator.next();
-			//TODO handle comparison operation
-			sb.append(entry.getKey() + "=" + entry.getValue());
+			//handle comparison operation
+			Integer compOp = userDefiendAttrComparisonOperation.get(entry.getKey());
+			String compOpStr = SLNConst.comparisonOperationToSLNString(compOp);
+			sb.append(entry.getKey() + compOpStr + entry.getValue());
 			
 		}	
 		sb.append(">");

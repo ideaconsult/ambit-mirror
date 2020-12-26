@@ -1444,7 +1444,7 @@ public class SLNParser {
 
 				String attrValue = molAttr.substring(startPos, pos);
 
-				registerMoleculeAttribute(attrName, attrValue);
+				registerMoleculeAttribute(attrName, attrValue, comparisonOperation);
 				continue;
 			}
 
@@ -1498,10 +1498,12 @@ public class SLNParser {
 		}
 	}
 
-	void registerMoleculeAttribute(String name, String value) {
+	void registerMoleculeAttribute(String name, String value, int comparisonOperation) {
 		// System.out.println("Registering Molecule Attribute: " + name + "  " +
 		// value);
-
+		
+		//TODO check comparisonOperation for the standard attributes
+		
 		// Handle predefined molecule attributes
 		if (name.equals("name")) {
 			container.getAttributes().name = value;
@@ -1540,6 +1542,8 @@ public class SLNParser {
 			return;
 		} else {
 			container.getAttributes().userDefiendAttr.put(name, value);
+			container.getAttributes().userDefiendAttrComparisonOperation.put(name, comparisonOperation);
+			
 			// System.out.println("put " + name + " = " + value);
 		}
 	}
