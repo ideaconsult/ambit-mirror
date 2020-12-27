@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+
 
 
 public class SLNContainerAttributes
@@ -131,6 +134,46 @@ public class SLNContainerAttributes
 			return "";
 		else
 			return attr;
+	}
+	
+	
+	public boolean matchesUserDefinedAttributes(IAtomContainer mol)
+	{
+		Set<Map.Entry<String,String>> set = userDefiendAttr.entrySet();		
+		Iterator<Map.Entry<String,String>> iterator = set.iterator();
+		
+		while (iterator.hasNext())
+		{	
+			Map.Entry<String,String> entry = iterator.next();
+			String attrib = entry.getKey();
+			String value = entry.getValue();
+			
+			//Get comparison operation
+			Integer compOp = userDefiendAttrComparisonOperation.get(entry.getKey());			
+			//Get molecule property
+			Object prop = mol.getProperty(attrib);
+			
+			if (prop == null)
+			{
+				if (compOp == SLNConst.CO_DIFFERS)
+					continue;
+				else
+				{
+					if (value.equalsIgnoreCase("null"))
+						continue;
+					else
+						return false;
+				}
+			}
+			
+			String propVal = prop.toString();
+			boolean res = SLNConst.compare(propVal, value, compOp);
+			
+			if (!res)
+				return false;
+		}	
+		
+		return true;
 	}
 	
 	
