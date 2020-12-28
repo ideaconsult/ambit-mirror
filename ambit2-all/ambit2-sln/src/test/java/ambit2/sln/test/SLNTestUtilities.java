@@ -79,8 +79,10 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("C[1:tt=456]CCCCC@1");
 		
 		//tu.testSLN2SLN("CCXx[n=3;fcharge=2]");
-		tu.testSLN2SLN("CCC<a<=3;b>=234;c=ddd;t1!=aaa;t2<234;t3>123>");
+		//tu.testSLN2SLN("CCC<a<=3;b>=234;c=ddd;t1!=aaa;t2<234;t3>123>");
 		
+		
+		tu.testSLNMatch("CC<aa<5>", "CCC", new Object[] {"aa",4});
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;
 		//tu.testSLN2SLN("C[7]CC@7");
@@ -206,6 +208,33 @@ public class SLNTestUtilities
 		SmartsParser.prepareTargetForSMARTSSearch(true, true, true, true, true, true, mol); //flags are set temporary
 		System.out.println("SLN Isomorphism: " + sln  + "  in  " + smiles + 
 				"   " + isoTester.hasIsomorphism(mol));
+	}
+	
+	public void testSLNMatch(String sln, String smiles, Object propertyValuePairs[]) throws Exception
+	{	
+		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
+		SmartsHelper.preProcessStructure(mol, true, false);
+		
+		//Setting molecule properties
+		if (propertyValuePairs != null) {
+			int n = propertyValuePairs.length/2;
+			for (int i = 0; i < n; i++)
+				mol.setProperty(propertyValuePairs[2*i], propertyValuePairs[2*i+1]);
+		}
+		
+		man.setQuery(sln);
+		if (!man.getErrors().isEmpty())
+		{
+			System.out.println("Original sln:    " + sln); 
+			System.out.println("SLNSearhManager errors:\n" + man.getAllErrorsAsString());			
+			return;
+		}
+		
+		boolean res = man.matches(mol);
+		
+		
+		System.out.println("Match: " + sln  + "  in  " + smiles + 
+				"   " + res);
 	}
 	
 	public void testSLN2CompositionRelation(String sln)

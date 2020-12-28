@@ -12,7 +12,7 @@ import ambit2.smarts.IsomorphismTester;
 public class SLNSearchManager 
 {
 	boolean FlagAutoResetErrors = true;
-	
+	boolean FlagMatchMolecularProperties = true;
 	
 	IsomorphismTester isoTester = new IsomorphismTester();
 	SLNParser slnParser = new SLNParser();
@@ -45,8 +45,11 @@ public class SLNSearchManager
 	
 	public String getAllErrorsAsString()
 	{
-		//TODO
-		return("");
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < errors.size(); i++) {
+			sb.append(errors.get(i) + "\n");
+		}
+		return (sb.toString());
 	}
 
 	public List<String> getErrors() {
@@ -76,17 +79,32 @@ public class SLNSearchManager
 	public void setFlagAutoResetErrors(boolean flagAutoResetErrors) {
 		FlagAutoResetErrors = flagAutoResetErrors;
 	}
-
 	
-	boolean mappingIn(IAtomContainer target) throws Exception
+	
+	public boolean isFlagMatchMolecularProperties() {
+		return FlagMatchMolecularProperties;
+	}
+
+	public void setFlagMatchMolecularProperties(boolean flagMatchMolecularProperties) {
+		FlagMatchMolecularProperties = flagMatchMolecularProperties;
+	}
+
+		
+	public boolean matches(IAtomContainer target) throws Exception
 	{
 		isoTester.setQuery(query);
-		return (isoTester.hasIsomorphism(target));
+		boolean isoRes = isoTester.hasIsomorphism(target);
+		
+		if (FlagAutoResetErrors)
+			return (isoRes && matchMolecularProperties(target));
+		else
+			return (isoRes);
 	}
 	
-	
-	
-	
+	boolean matchMolecularProperties(IAtomContainer target)
+	{		
+		return query.getAttributes().matchesUserDefinedAttributes(target);
+	}
 	
 	
 }
