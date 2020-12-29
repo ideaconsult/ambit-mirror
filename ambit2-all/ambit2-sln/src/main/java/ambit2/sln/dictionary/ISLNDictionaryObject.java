@@ -1,7 +1,7 @@
 package ambit2.sln.dictionary;
 
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IBond;
+
+import ambit2.sln.SLNContainer;
 
 public interface ISLNDictionaryObject 
 {
@@ -10,8 +10,9 @@ public interface ISLNDictionaryObject
 	}
 	
 	public Type getObjectType();
+	public String getSLNString();
+	public SLNContainer generateSLNContainer();
 	
-	public boolean match(IAtom atom);
-	
-	public boolean match(IBond bond);
+	//public boolean match(IAtom atom);	
+	//public boolean match(IBond bond);
 }
