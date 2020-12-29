@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -32,6 +35,7 @@ import ambit2.sln.SLNParser;
 import ambit2.sln.io.SLN2ChemObject;
 import ambit2.sln.io.SLN2SMARTS;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
+import ambit2.sln.search.SLNSearchManager;
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
@@ -58,7 +62,8 @@ public class SLNCli {
 	public SLNHelper slnHelper = new SLNHelper();
 	public SLN2ChemObject slnConverter = new SLN2ChemObject();	
 	public IsomorphismTester isoTester = new IsomorphismTester();
-	public SmartsHelper smartsHelper = new SmartsHelper(SilentChemObjectBuilder.getInstance()); 
+	public SmartsHelper smartsHelper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
+	public SLNSearchManager man = new SLNSearchManager();
 	
 	public SLNContainer slnContainer = null;
 	public IAtomContainer inputMol = null;
@@ -687,9 +692,8 @@ public class SLNCli {
 					System.out.println("Empty chemical object #" + records_read);
 					continue;
 				}
-				
-				performTask(molecule, " " + records_read);
-				
+								
+				performTask(molecule, " " + records_read);				
 			}
 			
 		}
@@ -733,10 +737,11 @@ public class SLNCli {
 	}
 	
 	public boolean ssMatch(SLNContainer query, IAtomContainer mol) throws Exception
-	{
-		isoTester.setQuery(query);
+	{	
+		man.setQuerySLNContainer(query);
 		SmartsParser.prepareTargetForSMARTSSearch(true, true, true, true, true, true, mol); //flags are set temporary
-		return isoTester.hasIsomorphism(mol);
+		
+		return man.matches(mol);
 	}
 	
 	
@@ -776,5 +781,4 @@ public class SLNCli {
 	}
 	
 	
-
 }

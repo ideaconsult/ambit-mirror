@@ -214,6 +214,7 @@ public class SLNTestUtilities
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		SmartsHelper.preProcessStructure(mol, true, false);
+		SmartsParser.prepareTargetForSMARTSSearch(true, true, true, true, true, true, mol); //flags are set temporary
 		
 		//Setting molecule properties
 		if (propertyValuePairs != null) {
