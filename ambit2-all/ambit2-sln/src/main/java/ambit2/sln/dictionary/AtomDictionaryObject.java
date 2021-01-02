@@ -5,7 +5,8 @@ import ambit2.sln.SLNAtom;
 public class AtomDictionaryObject extends GenericDictionaryObject
 {
 	
-	public AtomDictionaryObject(String sln, SLNAtom atom) {
+	public AtomDictionaryObject(String name, String sln, SLNAtom atom) {
+		this.name = name;
 		this.sln = sln;
 		this.atom = atom;
 		makeContainerFromAtom();
@@ -15,6 +16,12 @@ public class AtomDictionaryObject extends GenericDictionaryObject
 	@Override
 	public Type getObjectType() {
 		return Type.ATOM;
-	}	
+	}
+
+
+	@Override
+	public int[] getValences() {		
+		return null;
+	}
 		
 }

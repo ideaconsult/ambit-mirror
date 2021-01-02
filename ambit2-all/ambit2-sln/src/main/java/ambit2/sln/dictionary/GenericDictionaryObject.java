@@ -9,10 +9,17 @@ import ambit2.sln.SLNContainer;
 
 public abstract class GenericDictionaryObject implements ISLNDictionaryObject
 {
+	String name = null;
 	String sln = null;
 	SLNAtom atom = null;
 	SLNBond bond = null;
 	SLNContainer container = null;
+	
+	
+	@Override
+	public String getObjectName() {
+		return name;
+	}
 	
 	@Override
 	public String getSLNString() {
