@@ -11,6 +11,12 @@ import ambit2.sln.dictionary.PredefinedSLNDictionary;
 import ambit2.sln.dictionary.SLNDictionary;
 
 public class SLNParser {
+	
+	public static class ParserState {
+		String sln = null;
+		SLNContainer container = null;
+	}
+	
 	private boolean FlagTolerateSpaces = false;
 	private boolean FlagLogExpressionInMolAttribute = false; // Preserved for
 																// future use
@@ -42,7 +48,7 @@ public class SLNParser {
 	String extractError = "";
 
 	public SLNParser() {
-		globalDictionary = PredefinedSLNDictionary.getDictionary();
+		globalDictionary = PredefinedSLNDictionary.getDictionary(this);
 	}
 
 	public SLNParser(SLNDictionary globalDictionary) {
@@ -97,11 +103,24 @@ public class SLNParser {
 		prevAtom = null;
 		curChar = 0;
 		brackets.clear();
-		curBond = null;
-		// indexes.clear();
-		// TODO ?
+		curBond = null;		
+	}
+	
+	ParserState saveState() {
+		ParserState state = new ParserState();
+		state.sln = sln;
+		state.container = container;
+		return state;
+	}
+	
+	void restoreState (ParserState state) {
+		sln = state.sln;
+		container = state.container;
 	}
 
+	/*
+	 * Basic parsing of a SLNContainer
+	 */
 	void parse() {
 		// default bond is set to be single bond
 		curBond = new SLNBond(SilentChemObjectBuilder.getInstance());
