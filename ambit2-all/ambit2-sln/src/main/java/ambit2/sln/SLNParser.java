@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.sln.dictionary.ISLNDictionaryObject;
+import ambit2.sln.dictionary.MacroAtomDictionaryObject;
 import ambit2.sln.dictionary.PredefinedSLNDictionary;
 import ambit2.sln.dictionary.SLNDictionary;
 
@@ -85,6 +86,7 @@ public class SLNParser {
 		//Handle local  dictionary objects
 		nChars = sln.length(); //simple init
 		findDictionaryObjectPositions();
+		parseLocalDictionaryObjects();
 				
 		init();
 		parse();
@@ -115,7 +117,7 @@ public class SLNParser {
 		curBond = null;		
 	}
 	
-	ParserState saveState() {
+	ParserState getState() {
 		ParserState state = new ParserState();
 		state.sln = sln;
 		state.container = container;
@@ -1802,6 +1804,92 @@ public class SLNParser {
 			newError("Missing closing bracket '{'", pos, "");
 			return;
 		}
+	}
+	
+	void parseLocalDictionaryObjects() {
+		
+		if (!errors.isEmpty())
+			return;
+		
+		for (int i = 0; i < localDictionaryObjectBeginPos.size(); i++)
+		{
+			int beginPos = localDictionaryObjectBeginPos.get(i)+1;
+			int endPos = localDictionaryObjectEndPos.get(i);
+			
+			String locDictObjStr = sln.substring(beginPos,endPos);
+			//System.out.println(locDictObjStr);
+			parseDictionaryObject(locDictObjStr);
+		}
+	}
+	
+		
+	ISLNDictionaryObject parseDictionaryObject(String dictObjectString)
+	{
+		if (dictObjectString.isEmpty())
+			return null;
+				
+		//Handle dictionary object name
+		int pos = 0;
+		if (Character.isUpperCase(dictObjectString.charAt(0)))
+			pos++;
+		else
+		{
+			newError("Incorrecr dictionary object: " + dictObjectString, pos, "");
+			return null;
+		}
+		
+		int n = dictObjectString.length();
+		
+		while ((pos < n) && 
+				(Character.isLowerCase(dictObjectString.charAt(pos)) 
+						|| Character.isDigit(dictObjectString.charAt(pos))
+						|| dictObjectString.charAt(pos) == '_')
+				)
+		{
+			pos++;
+		}
+		
+		if (pos == n)
+		{
+			newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
+			return null;
+		}
+		
+		String dictObjName = dictObjectString.substring(0,pos); 
+		
+		if (dictObjectString.charAt(pos) != ':')
+		{
+			newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
+			return null;
+		}
+		else
+			pos++;
+		
+		if (pos == n)
+		{
+			newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
+			return null;
+		}
+				
+		
+		ParserState state = getState();
+		
+		//Parsing a macro atom
+		//System.out.println("Parsing dict. object: " + sln);
+		sln = dictObjectString.substring(pos);
+		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
+		
+		init();
+		parse();
+		
+		ISLNDictionaryObject dictObj = null;
+		if (errors.isEmpty())
+		{
+			dictObj = new MacroAtomDictionaryObject(dictObjName, dictObjectString, container, null);
+		}
+		
+		restoreState(state);
+		return dictObj;
 	}
 
 }
