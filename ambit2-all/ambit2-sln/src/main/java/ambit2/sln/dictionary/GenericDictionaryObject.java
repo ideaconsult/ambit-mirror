@@ -14,7 +14,7 @@ public abstract class GenericDictionaryObject implements ISLNDictionaryObject
 	SLNAtom atom = null;
 	SLNBond bond = null;
 	SLNContainer container = null;
-	
+	int[] valences = null;
 	
 	@Override
 	public String getObjectName() {
@@ -41,8 +41,14 @@ public abstract class GenericDictionaryObject implements ISLNDictionaryObject
 		return bond;
 	}
 	
-	void makeContainerFromAtom() {
-		 container = new SLNContainer(SilentChemObjectBuilder.getInstance());
-		 container.addAtom(atom);
+	@Override
+	public int[] getValences() {		
+		return valences;
 	}
+	
+	void makeContainerFromAtom(SLNAtom at) {
+		 container = new SLNContainer(SilentChemObjectBuilder.getInstance());
+		 container.addAtom(at);
+	}
+	
 }

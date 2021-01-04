@@ -9,7 +9,7 @@ public class AtomDictionaryObject extends GenericDictionaryObject
 		this.name = name;
 		this.sln = sln;
 		this.atom = atom;
-		makeContainerFromAtom();
+		makeContainerFromAtom(atom);
 	}
 	
 	
@@ -18,10 +18,6 @@ public class AtomDictionaryObject extends GenericDictionaryObject
 		return Type.ATOM;
 	}
 
-
-	@Override
-	public int[] getValences() {		
-		return null;
-	}
+	
 		
 }
