@@ -81,6 +81,11 @@ public class SLNParser {
 		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
 		container.setGlobalDictionary(globalDictionary);
 		errors.clear();
+		
+		//Handle local  dictionary objects
+		nChars = sln.length(); //simple init
+		findDictionaryObjectPositions();
+				
 		init();
 		parse();
 		return container;
@@ -936,6 +941,12 @@ public class SLNParser {
 				curComponent = 0;
 			curChar++;
 			break;
+		
+		case '{':
+			//Simple handling: end of the parsing procedure
+			//and jumping to the end of sln string
+			curChar = nChars;
+			break;
 
 		default:
 			newError("Incorrect symbol '" + sln.charAt(curChar) + "'",
@@ -1752,7 +1763,7 @@ public class SLNParser {
 		
 		while (pos < nChars)
 		{
-			if (sln.charAt(curChar) == '{') 
+			if (sln.charAt(pos) == '{') 
 			{	
 				if (openBrackets >= 1)
 				{
@@ -1766,7 +1777,7 @@ public class SLNParser {
 				}	
 			}
 			
-			if (sln.charAt(curChar) == '}') 
+			if (sln.charAt(pos) == '}') 
 			{
 				if (openBrackets != 1)
 				{
@@ -1779,12 +1790,18 @@ public class SLNParser {
 					//Register new dictionary object substring
 					localDictionaryObjectBeginPos.add(beginPos);
 					localDictionaryObjectEndPos.add(pos);
+					//System.out.println(sln.substring(beginPos,pos+1));
 				}	
 			}
 			
 			pos++;
 		}
 		
+		if (openBrackets >= 1)
+		{
+			newError("Missing closing bracket '{'", pos, "");
+			return;
+		}
 	}
 
 }
