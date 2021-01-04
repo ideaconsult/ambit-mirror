@@ -29,6 +29,10 @@ public class SLNParser {
 	SLNDictionary globalDictionary = null;
 	Stack<SLNAtom> brackets = new Stack<SLNAtom>();
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
+	
+	ArrayList<Integer> localDictionaryObjectBeginPos = new ArrayList<Integer>();
+	ArrayList<Integer> localDictionaryObjectEndPos = new ArrayList<Integer>();
+	
 	// TreeMap<Integer,RingClosure> indexes = new
 	// TreeMap<Integer,RingClosure>();
 
@@ -1736,6 +1740,51 @@ public class SLNParser {
 			extractError = "Incorrect double value " + valueString;
 			return 0.0;
 		}
+	}
+	
+	void findDictionaryObjectPositions() {
+		localDictionaryObjectBeginPos.clear();
+		localDictionaryObjectEndPos.clear();
+		
+		int pos = 0;
+		int openBrackets = 0;
+		int beginPos = -1; 
+		
+		while (pos < nChars)
+		{
+			if (sln.charAt(curChar) == '{') 
+			{	
+				if (openBrackets >= 1)
+				{
+					newError("Incorrect opening bracket '{'", pos, "");
+					return;
+				}
+				else
+				{	
+					openBrackets++;
+					beginPos = pos;
+				}	
+			}
+			
+			if (sln.charAt(curChar) == '}') 
+			{
+				if (openBrackets != 1)
+				{
+					newError("Incorrect closing bracket '}'", pos, "");
+					return;
+				}
+				else
+				{
+					openBrackets--;
+					//Register new dictionary object substring
+					localDictionaryObjectBeginPos.add(beginPos);
+					localDictionaryObjectEndPos.add(pos);
+				}	
+			}
+			
+			pos++;
+		}
+		
 	}
 
 }
