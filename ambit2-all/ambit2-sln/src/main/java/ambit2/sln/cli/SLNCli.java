@@ -412,6 +412,7 @@ public class SLNCli {
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
+		slnConverter.getConversionConfig().FlagComparisonConversion = comparisonConversion;
 		
 		if (warnings == null)
 		{
@@ -553,7 +554,7 @@ public class SLNCli {
 				}
 				break;
 				
-			case smarts:
+			case smarts:				
 				IQueryAtomContainer query = slnConverter.slnContainerToQueryAtomContainer(container);
 				if (slnConverter.hasConversionErrors())
 				{	
