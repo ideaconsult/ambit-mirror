@@ -172,23 +172,25 @@ public class SLNParser {
 		String atomName = extractAtomName();
 		int atomType = -1;
 
-		// analyze atomName
-		if (globalDictionary.containsObject(atomName,
-				ISLNDictionaryObject.Type.ATOM)) {
+		//Analyze atomName
+		if (globalDictionary.containsObject(atomName)) 
+		{
 			atomType = SLNConst.GlobDictOffseet;
-		} else {
-			if (container.getLocalDictionary() != null) {
-				atomType = SLNConst.LocalDictOffseet;
-			} else {
-				//index 0 is included for "Any" atom support
-				for (int i = 0; i < SLNConst.elSymbols.length; i++)
-					if (atomName.equals(SLNConst.elSymbols[i]))
-						atomType = i;
-			}
+		} 
+		else if (container.getLocalDictionary() != null && 
+				container.getLocalDictionary().containsObject(atomName)) 
+		{				 
+			atomType = SLNConst.LocalDictOffseet;
+		} 
+		else {
+			//index 0 is included for "Any" atom support
+			for (int i = 0; i < SLNConst.elSymbols.length; i++)
+				if (atomName.equals(SLNConst.elSymbols[i]))
+					atomType = i;
 		}
 
 		if (atomType == -1)
-			newError("Incorrect atom name", curChar,"");
+			newError("Incorrect atom name " + atomName, curChar,"");
 
 		SLNAtom newAtom = new SLNAtom(SilentChemObjectBuilder.getInstance());
 		newAtom.atomType = atomType;

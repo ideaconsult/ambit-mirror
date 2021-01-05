@@ -85,7 +85,7 @@ public class SLNTestUtilities
 		//tu.testSLNMatch("CC<aa<5>", "CCC", new Object[] {"aa",4});
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;
-		tu.testSLN2SLN("C[7]CC@7{Aa:CCC<v=1,3>}");
+		tu.testSLN2SLN("C[7]CC@7Aa{Aa:CCC<v=1,3>}");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
