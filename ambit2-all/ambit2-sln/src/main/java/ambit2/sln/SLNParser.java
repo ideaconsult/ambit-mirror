@@ -1971,7 +1971,7 @@ public class SLNParser {
 		ISLNDictionaryObject dictObj = null;
 		if (errors.isEmpty())
 		{
-			dictObj = new MacroAtomDictionaryObject(dictObjName, dictObjectString, container, null);
+			dictObj = new MacroAtomDictionaryObject(dictObjName, dictObjectString, container);
 		}
 		
 		restoreState(state);

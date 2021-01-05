@@ -5,12 +5,11 @@ import ambit2.sln.SLNContainer;
 public class MacroAtomDictionaryObject extends GenericDictionaryObject 
 {
 
-	public MacroAtomDictionaryObject(String name, String sln, SLNContainer container, int[] valences) {
+	public MacroAtomDictionaryObject(String name, String sln, SLNContainer container) {
 		this.name = name;
 		this.sln = sln;
 		this.container = container;
-		this.valences = valences;
-		
+		this.valences = container.getAttributes().valences;
 	}
 	
 	@Override
