@@ -215,14 +215,28 @@ public class SLNParser {
 		// The SLN parser allows H atoms to be before or after atoms expression
 		// i.e. CH[S=R] and C[S=R]H are both correct variants
 		boolean ReadHAtoms = false;
-
+				
 		if (curChar < nChars)
-			if (sln.charAt(curChar) == 'H') {
+			if (sln.charAt(curChar) == 'H') 
+			{
+				//Check whether H symbol is the beginning 
+				//of a following atom name e.g. 'Hg' or 'Hev'
+				if ((curChar+1) < nChars)
+					if (Character.isLowerCase(sln.charAt(curChar+1)) || 
+							sln.charAt(curChar+1) == '_')
+					{							
+						addAtom(newAtom);
+						return;
+					}
+				
 				int nH = 1;
 				curChar++;
+				
 				if (curChar < nChars)
+				{	
 					if (Character.isDigit(sln.charAt(curChar)))
 						nH = getIntegerFromSequence(100);
+				}	
 				if (nH < -1)
 					newError("Incorrect number of H atoms", curChar,"");
 				newAtom.numHAtom = nH;
@@ -249,7 +263,18 @@ public class SLNParser {
 			}
 
 		if (curChar < nChars)
-			if (sln.charAt(curChar) == 'H') {
+			if (sln.charAt(curChar) == 'H') 
+			{
+				//Check whether H symbol is the beginning 
+				//of a following atom name e.g. 'Hg' or 'Hev'
+				if ((curChar+1) < nChars)
+					if (Character.isLowerCase(sln.charAt(curChar+1)) || 
+							sln.charAt(curChar+1) == '_')
+					{							
+						addAtom(newAtom);
+						return;
+					}
+				
 				if (ReadHAtoms)
 					newError(
 							"H atoms are specified before and after atom attributes",
