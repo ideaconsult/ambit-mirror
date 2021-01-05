@@ -57,19 +57,25 @@ public class SLNParser {
 	String errorContextPrefix = "";	
 
 	public SLNParser() {
-		globalDictionary = PredefinedSLNDictionary.getDictionary(this);
-				
-		if (!errors.isEmpty())
-		{	
-			//Store errors from global dictionary parsing
-			globalDictionaryErrors.addAll(errors);
-			errors.clear();
-		}	
 	}
 
 	public SLNParser(SLNDictionary globalDictionary) {
 		this.globalDictionary = globalDictionary;
 	}
+	
+	public int setPredefinedGlobalDictionary() {
+		globalDictionary = PredefinedSLNDictionary.getDictionary(this);
+		
+		if (!errors.isEmpty())
+		{	
+			//Store errors from global dictionary parsing
+			globalDictionaryErrors.addAll(errors);			
+			errors.clear();
+			System.out.println(getGlobalDictionaryErrorMessages());
+		}	
+		return globalDictionaryErrors.size();
+	}
+	
 
 	public boolean getFlagTolerateSpaces() {
 		return FlagTolerateSpaces;
@@ -183,7 +189,7 @@ public class SLNParser {
 		int atomType = -1;
 
 		//Analyze atomName
-		if (globalDictionary.containsObject(atomName)) 
+		if (globalDictionary != null && globalDictionary.containsObject(atomName)) 
 		{
 			atomType = SLNConst.GlobDictOffseet;
 		} 
