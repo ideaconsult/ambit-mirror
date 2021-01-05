@@ -58,6 +58,13 @@ public class SLNParser {
 
 	public SLNParser() {
 		globalDictionary = PredefinedSLNDictionary.getDictionary(this);
+				
+		if (!errors.isEmpty())
+		{	
+			//Store errors from global dictionary parsing
+			globalDictionaryErrors.addAll(errors);
+			errors.clear();
+		}	
 	}
 
 	public SLNParser(SLNDictionary globalDictionary) {

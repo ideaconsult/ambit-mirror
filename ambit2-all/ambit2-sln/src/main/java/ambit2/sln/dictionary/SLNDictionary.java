@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import ambit2.sln.SLNHelper;
+import ambit2.sln.SLNParser;
+import ambit2.sln.SLNParserError;
 
 
 public class SLNDictionary 
@@ -71,5 +73,34 @@ public class SLNDictionary
 		}
 		
 		return "";
+	}
+	
+	
+	public static SLNDictionary getDictionary(String dictionaryObjects[], SLNParser parser) 
+	{
+		if (dictionaryObjects == null)
+			return null;
+		if (parser == null)
+			return null;
+		
+		parser.getErrors().clear();
+		SLNDictionary dict = new SLNDictionary(); 
+		
+		for (int i = 0; i < dictionaryObjects.length; i++)
+		{
+			String s = dictionaryObjects[i];
+			if (s.isEmpty() || !s.startsWith("{") || !s.endsWith("}"))
+			{	
+				parser.getErrors().add(new SLNParserError(s, "Missing open or close brackets {}" , 0, ""));
+				continue;
+			}
+			
+			String dictObjStr = s.substring(1,s.length()-1);			
+			ISLNDictionaryObject dictObj = parser.parseDictionaryObject(dictObjStr);
+			if (dictObj != null)
+				dict.addDictionaryObject(dictObj);
+		}
+		
+		return dict;
 	}
 }
