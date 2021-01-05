@@ -446,7 +446,7 @@ public class SLNParser {
 					continue;
 				}
 
-				// Read attribute value (after comparson operation: '=', "<",...)
+				// Read attribute value (after comparison operation: '=', "<",...)
 				startPos = pos;
 				while (pos < atomExpr.length()) {
 					if (Character.isLetter(atomExpr.charAt(pos))
@@ -454,7 +454,8 @@ public class SLNParser {
 							|| (atomExpr.charAt(pos) == '+')
 							|| (atomExpr.charAt(pos) == '-')
 							|| (atomExpr.charAt(pos) == '.')
-							|| (atomExpr.charAt(pos) == '*'))
+							|| (atomExpr.charAt(pos) == '*')
+							|| (atomExpr.charAt(pos) == ','))
 						pos++;
 					else
 						break;
