@@ -1595,6 +1595,12 @@ public class SLNParser {
 			parser3DCoordinates(value);
 			return;
 		}
+		
+		//Handle attribute v for macro/markush atom valences"
+		if (name.equalsIgnoreCase("v")) {
+			parseValencesAttribute(value);
+			return;
+		}
 
 		// By default it is an user defined attribute
 		if (name.equals("")) {
@@ -1737,6 +1743,17 @@ public class SLNParser {
 				return;
 			}
 	}
+	
+	void parseValencesAttribute(String attrValue) {		
+		int v[] = extractIntegerList(attrValue);
+		if (extractError.equals("")) {			
+			container.getAttributes().valences = v;
+		} else {
+			newError("Incorrect v value " + attrValue, curChar, "");
+		}
+		return;
+	}
+
 
 	String extractBracketsFromPosition(String target, int pos) {
 		if (target.charAt(pos) == '(') {

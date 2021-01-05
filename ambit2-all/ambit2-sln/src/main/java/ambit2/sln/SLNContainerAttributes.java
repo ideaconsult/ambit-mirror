@@ -39,6 +39,8 @@ public class SLNContainerAttributes
 			n++;
 		if (coord3d != null)
 			n++;
+		if (valences != null)
+			n++;
 		return n;
 	}
 	
@@ -127,7 +129,22 @@ public class SLNContainerAttributes
 			String compOpStr = SLNConst.comparisonOperationToSLNString(compOp);
 			sb.append(entry.getKey() + compOpStr + entry.getValue());
 			
-		}	
+		}
+		
+		
+		if (valences != null)
+		{	
+			if (sb.length() > 1)
+				sb.append(";");
+			sb.append("v=");
+			for (int i = 0; i < valences.length; i++)
+			{	
+				if (i > 0)
+					sb.append(",");
+				sb.append(valences[i]);
+			}	
+		}
+		
 		sb.append(">");
 		
 		String attr = sb.toString();
