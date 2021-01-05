@@ -1,6 +1,7 @@
 package ambit2.sln;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -1748,6 +1749,33 @@ public class SLNParser {
 			extractError = "Incorrect integer value " + valueString;
 			return 0;
 		}
+	}
+	
+	int[] extractIntegerList(String valueString) {
+		extractError = "";
+		String tokens[] = valueString.split(",");
+		int x[] = new int[tokens.length];
+		
+		for (int i = 0; i < tokens.length; i++)
+		{
+			if (tokens[i].isEmpty())
+			{
+				extractError = "Empty value at pos " + (i+1) + " in integer list";
+				return null;
+			}
+			try {
+				int value;
+				if (tokens[i].charAt(0) == '+')
+					value = Integer.parseInt(tokens[i].substring(1));
+				else
+					value = Integer.parseInt(tokens[i]);
+				x[i] = value;
+			} catch (Exception e) {
+				extractError = "Incorrect integer value " + tokens[i];
+				return null;
+			}
+		}
+		return x;
 	}
 
 	double extractDouble(String valueString) {
