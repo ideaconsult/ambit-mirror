@@ -52,7 +52,7 @@ public class SLNParser {
 	SLNAtomExpression curAtExp;
 	SLNBondExpression curBondExp;
 	String extractError = "";
-	String errorContextPrefix = "";
+	String errorContextPrefix = "";	
 
 	public SLNParser() {
 		globalDictionary = PredefinedSLNDictionary.getDictionary(this);
@@ -196,7 +196,7 @@ public class SLNParser {
 		SLNAtom newAtom = new SLNAtom(SilentChemObjectBuilder.getInstance());
 		newAtom.atomType = atomType;
 		newAtom.atomName = atomName;
-
+		
 		// The SLN parser allows H atoms to be before or after atoms expression
 		// i.e. CH[S=R] and C[S=R]H are both correct variants
 		boolean ReadHAtoms = false;
@@ -218,7 +218,7 @@ public class SLNParser {
 			if (sln.charAt(curChar) == '[') {
 				String atomExpression = extractAtomExpression();
 				analyzeAtomExpression(atomExpression);
-				newAtom.atomExpression = curAtExp;
+				newAtom.atomExpression = curAtExp;				
 
 				// Transfer the id info from AtomExpression to SLNAtom object
 				// (this information is duplicated)
@@ -463,6 +463,20 @@ public class SLNParser {
 				}
 
 				String attrValue = atomExpr.substring(startPos, pos);
+				
+				//Handle attribute v for macro/markush atom valences"
+				if (attrName.equalsIgnoreCase("v"))
+				{
+					int v[] = extractIntegerList(attrValue);
+					if (extractError.equals("")) {
+						curAtExp.valences = v;
+					} else {
+						newError("Incorrect v value " + attrValue, curChar, "");
+					}					
+					//Attribute v is not registered as SLNExpressionToken
+					//It is directly stored in SLNAtomExpression object
+					return;
+				}
 
 				// Register attribute with a value
 				SLNExpressionToken newToken = analyzeAtomAttribute(attrName,
@@ -609,7 +623,7 @@ public class SLNParser {
 			}
 		}
 
-		// Handle query atom attribute "convered"- c
+		// Handle query atom attribute "covered"- c
 		if (name.equals("c")) {
 			if (value == null)
 			{
@@ -691,8 +705,11 @@ public class SLNParser {
                 return null;
             }
         }
+        
 
-
+        /*
+         * This is not done here
+         * 
 		// Handle query atom attribute v - Markush and macro atom valence
 		// information
 		if (name.equals("v")) {
@@ -706,6 +723,8 @@ public class SLNParser {
 				return null;
 			}
 		}
+		*/		
+		
 
 		// Handle atom attribute heavy atom count
 		if (name.equals("hac")) {

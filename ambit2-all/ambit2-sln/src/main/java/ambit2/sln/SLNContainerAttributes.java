@@ -24,6 +24,7 @@ public class SLNContainerAttributes
 	public String type = null;
 	public ArrayList<double[]> coord2d = null;
 	public ArrayList<double[]> coord3d = null;
+	public int valences[] = null; //used for macro and markush atoms
 	
 	public int getNumOfAttributes()
 	{

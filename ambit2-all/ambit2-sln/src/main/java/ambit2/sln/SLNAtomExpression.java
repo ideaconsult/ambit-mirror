@@ -18,6 +18,8 @@ import ambit2.smarts.CMLUtilities;
 public class SLNAtomExpression 
 {
 	public int atomID = -1;
+	public int valences[] = null; //used for macro and markush atoms
+	
 	public ArrayList<SLNExpressionToken> tokens = new ArrayList<SLNExpressionToken>(); 
 	//TODO handle brackets within expression
 
@@ -320,14 +322,30 @@ public class SLNAtomExpression
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
+		
 		if (atomID >= 0)
 		{	
 			sb.append(atomID);
 			if (!tokens.isEmpty())
 				sb.append(":");
 		}
+		
+		//expression tokens
 		for (int i=0; i < tokens.size(); i++)
 			sb.append(tokens.get(i).toString(true));
+		
+		//valences
+		if (valences != null)
+		{	
+			sb.append("v=");
+			for (int i = 0; i < valences.length; i++)
+			{	
+				if (i > 0)
+					sb.append(",");
+				sb.append(valences[i]);
+			}	
+		}
+		
 		sb.append("]");
 		return sb.toString();
 	}

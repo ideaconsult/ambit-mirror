@@ -24,9 +24,8 @@ public class SLNContainer extends QueryAtomContainer
 		
 
 	private SLNContainerAttributes attributes = new SLNContainerAttributes();
-	//private SLNAtomExpression atomExpression = new SLNAtomExpression();
-	//private SLNBondExpression bondExpression = new SLNBondExpression();
-
+	
+	
 	public SLNContainer(IChemObjectBuilder builder) {
 		super(builder);
 	}
