@@ -1950,7 +1950,7 @@ public class SLNParser {
 		
 		if (pos == n)
 		{
-			newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
+			newError("Incorrect dictionary object: " + dictObjectString, -1, "");
 			return null;
 		}
 				
@@ -1959,11 +1959,8 @@ public class SLNParser {
 		errorContextPrefix = "Parsing macro/markush atom: " + dictObjectString + ": ";
 		
 		//Parsing a macro atom
-		//System.out.println("Parsing dict. object: " + sln);
 		sln = dictObjectString.substring(pos);
 		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
-		
-		
 		
 		init();
 		parse();
