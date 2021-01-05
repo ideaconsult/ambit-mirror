@@ -97,7 +97,7 @@ public class SLNParser {
 		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
 		container.setGlobalDictionary(globalDictionary);
 		errors.clear();
-		
+				
 		handleLocalDictionary();
 		
 		init();
@@ -114,6 +114,7 @@ public class SLNParser {
 		nChars = sln.length(); //simple init
 		findDictionaryObjectPositions();
 		SLNDictionary locDictionary = parseLocalDictionaryObjects();
+		container.setLocalDictionary(locDictionary);
 	}
 	
 	void init() {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ambit2.sln.SLNHelper;
+
 
 public class SLNDictionary 
 {
@@ -43,4 +45,31 @@ public class SLNDictionary
 		return names;
 	}
 	
+	public String toSLN() {
+		StringBuffer sb = new StringBuffer();
+		SLNHelper slnHelper = new SLNHelper();
+		
+		for (int i = 0; i<names.size(); i++)
+		{
+			sb.append("{");
+			String name = names.get(i);
+			sb.append(name);
+			sb.append(":");
+			sb.append(toSLN(objects.get(name), slnHelper));
+			sb.append("}");
+		}
+		return sb.toString();
+	}
+	
+	
+	String toSLN(ISLNDictionaryObject dictObj, SLNHelper slnHelper) {
+		switch (dictObj.getObjectType())
+		{
+		case MACRO_ATOM:
+			MacroAtomDictionaryObject ma = (MacroAtomDictionaryObject) dictObj;
+			return slnHelper.toSLN(ma.container);
+		}
+		
+		return "";
+	}
 }

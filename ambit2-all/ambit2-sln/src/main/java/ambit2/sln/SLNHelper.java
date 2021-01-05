@@ -183,8 +183,15 @@ public class SLNHelper
 		node.atom = container.getAtom(0);
 		nodes.put(node.atom, node);
 		String attr = container.getAttributes().toString();
-		return(nodeToString(node.atom) + attr);
+		
+		//Another level of recursion
+		String locDictionary = "";
+		if (container.getLocalDictionary() != null)
+			locDictionary = container.getLocalDictionary().toSLN();
+		
+		return(nodeToString(node.atom) + attr + locDictionary);
 	}
+	
 	
 	String nodeToString(IAtom atom)
 	{
