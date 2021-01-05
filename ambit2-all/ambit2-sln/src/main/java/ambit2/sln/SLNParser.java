@@ -257,7 +257,8 @@ public class SLNParser {
 		curChar++;
 		while (curChar < nChars) {
 			if (Character.isLowerCase(sln.charAt(curChar))
-					|| Character.isDigit(sln.charAt(curChar)))
+					|| Character.isDigit(sln.charAt(curChar))
+					|| (sln.charAt(curChar)== '_'))
 				curChar++;
 			else
 				break;
