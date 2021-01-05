@@ -147,10 +147,9 @@ public class SLNParser {
 		while ((curChar < nChars) && (errors.size() == 0)) {
 
 			if (Character.isLowerCase(sln.charAt(curChar))
-					|| Character.isDigit(sln.charAt(curChar))) {
-				errors.add(new SLNParserError(sln,
-						"Incorrect begining of an atom!", curChar, ""));
-
+					|| Character.isDigit(sln.charAt(curChar))) 
+			{
+				newError("Incorrect begining of an atom!", curChar, "");
 				curChar++;
 				continue;
 			}
@@ -188,8 +187,7 @@ public class SLNParser {
 		}
 
 		if (atomType == -1)
-			errors.add(new SLNParserError(sln, "Incorrect atom name", curChar,
-					""));
+			newError("Incorrect atom name", curChar,"");
 
 		SLNAtom newAtom = new SLNAtom(SilentChemObjectBuilder.getInstance());
 		newAtom.atomType = atomType;
@@ -207,7 +205,7 @@ public class SLNParser {
 					if (Character.isDigit(sln.charAt(curChar)))
 						nH = getIntegerFromSequence(100);
 				if (nH < -1)
-					errors.add(new SLNParserError(sln, "Incorrect number of H atoms", curChar,""));
+					newError("Incorrect number of H atoms", curChar,"");
 				newAtom.numHAtom = nH;
 				ReadHAtoms = true;
 			}
@@ -244,7 +242,7 @@ public class SLNParser {
 						if (Character.isDigit(sln.charAt(curChar)))
 							nH = getIntegerFromSequence(9);
 					if (nH == -1)
-						errors.add(new SLNParserError(sln, "Incorrect number of H atoms", curChar,""));
+						newError("Incorrect number of H atoms", curChar,"");
 					newAtom.numHAtom = nH;
 				}
 			}
@@ -1889,7 +1887,7 @@ public class SLNParser {
 				
 		
 		ParserState state = getState();
-		errorContextPrefix = "Parsing macro/markush atom: " + dictObjectString;
+		errorContextPrefix = "Parsing macro/markush atom: " + dictObjectString + ": ";
 		
 		//Parsing a macro atom
 		//System.out.println("Parsing dict. object: " + sln);
