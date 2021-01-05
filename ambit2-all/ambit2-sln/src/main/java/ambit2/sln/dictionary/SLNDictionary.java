@@ -11,6 +11,12 @@ public class SLNDictionary
 	private List<String> names = new ArrayList<String>();
 	
 		
+	public void addDictionaryObject(ISLNDictionaryObject dictObj)
+	{
+		names.add(dictObj.getObjectName());
+		objects.put(dictObj.getObjectName(), dictObj);
+	}
+	
 	public ISLNDictionaryObject getDictionaryObject(String name)
 	{	
 		return objects.get(name);

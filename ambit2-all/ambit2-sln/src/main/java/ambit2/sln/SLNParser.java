@@ -51,6 +51,7 @@ public class SLNParser {
 	SLNAtomExpression curAtExp;
 	SLNBondExpression curBondExp;
 	String extractError = "";
+	String errorContextPrefix = "";
 
 	public SLNParser() {
 		globalDictionary = PredefinedSLNDictionary.getDictionary(this);
@@ -82,11 +83,8 @@ public class SLNParser {
 		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
 		container.setGlobalDictionary(globalDictionary);
 		errors.clear();
-		
-		//Handle local  dictionary objects
-		nChars = sln.length(); //simple init
-		findDictionaryObjectPositions();
-		parseLocalDictionaryObjects();
+				
+		handleLocalDictionary();
 				
 		init();
 		parse();
@@ -99,6 +97,9 @@ public class SLNParser {
 		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
 		container.setGlobalDictionary(globalDictionary);
 		errors.clear();
+		
+		handleLocalDictionary();
+		
 		init();
 		parse();
 		
@@ -107,6 +108,12 @@ public class SLNParser {
 		slnSubstance.containers.add(container);
 		
 		return slnSubstance;
+	}
+	
+	public void handleLocalDictionary() {
+		nChars = sln.length(); //simple init
+		findDictionaryObjectPositions();
+		SLNDictionary locDictionary = parseLocalDictionaryObjects();
 	}
 	
 	void init() {
@@ -858,7 +865,7 @@ public class SLNParser {
 	}
 
 	void newError(String msg, int pos, String param) {
-		SLNParserError error = new SLNParserError(sln, msg, pos, param);
+		SLNParserError error = new SLNParserError(sln, errorContextPrefix + msg, pos, param);
 		errors.add(error);
 	}
 
@@ -1806,10 +1813,15 @@ public class SLNParser {
 		}
 	}
 	
-	void parseLocalDictionaryObjects() {
+	SLNDictionary parseLocalDictionaryObjects() {
 		
 		if (!errors.isEmpty())
-			return;
+			return null;
+		
+		if (localDictionaryObjectBeginPos.isEmpty())
+			return null;
+		
+		SLNDictionary dict = new SLNDictionary(); 
 		
 		for (int i = 0; i < localDictionaryObjectBeginPos.size(); i++)
 		{
@@ -1818,12 +1830,16 @@ public class SLNParser {
 			
 			String locDictObjStr = sln.substring(beginPos,endPos);
 			//System.out.println(locDictObjStr);
-			parseDictionaryObject(locDictObjStr);
+			ISLNDictionaryObject dictObj = parseDictionaryObject(locDictObjStr);
+			if (dictObj != null)
+				dict.addDictionaryObject(dictObj);
 		}
+		
+		return dict;
 	}
 	
 		
-	ISLNDictionaryObject parseDictionaryObject(String dictObjectString)
+	public ISLNDictionaryObject parseDictionaryObject(String dictObjectString)
 	{
 		if (dictObjectString.isEmpty())
 			return null;
@@ -1873,11 +1889,14 @@ public class SLNParser {
 				
 		
 		ParserState state = getState();
+		errorContextPrefix = "Parsing macro/markush atom: " + dictObjectString;
 		
 		//Parsing a macro atom
 		//System.out.println("Parsing dict. object: " + sln);
 		sln = dictObjectString.substring(pos);
 		container = new SLNContainer(SilentChemObjectBuilder.getInstance());
+		
+		
 		
 		init();
 		parse();
@@ -1889,6 +1908,8 @@ public class SLNParser {
 		}
 		
 		restoreState(state);
+		errorContextPrefix = "";
+		
 		return dictObj;
 	}
 
