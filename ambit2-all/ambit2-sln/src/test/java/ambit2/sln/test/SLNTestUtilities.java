@@ -71,6 +71,8 @@ public class SLNTestUtilities
 		tu.testSLNIsomorphism("Het[charge>0]=C","[N+]=C");
 		//slnParser.setFlagUseTypeAsStandardAtomAttribute(false);
 		tu.testSLNIsomorphism("Any[type>7]","CNO");
+		tu.testSLNIsomorphism("HalC","[F]CCO");
+		
 		
 		
 		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
