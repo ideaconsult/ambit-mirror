@@ -14,7 +14,7 @@ public class SLNDictionary
 	private HashMap<String,ISLNDictionaryObject> objects = new HashMap<String,ISLNDictionaryObject>();
 	private List<String> names = new ArrayList<String>();
 	private ArrayList<SLNParserError> parserErrors = new ArrayList<SLNParserError>();
-	
+	private ArrayList<String> checkErrors = new ArrayList<String>();
 		
 	public void addDictionaryObject(ISLNDictionaryObject dictObj)
 	{
@@ -56,6 +56,19 @@ public class SLNDictionary
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < parserErrors.size(); i++) {
 			sb.append(parserErrors.get(i).getError() + "\n");
+		}
+		return (sb.toString());
+	}
+	
+	
+	public ArrayList<String> getCheckErrors() {
+		return checkErrors;
+	}
+	
+	public String getCheckErrorMessages() {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < checkErrors.size(); i++) {
+			sb.append(checkErrors.get(i) + "\n");
 		}
 		return (sb.toString());
 	}
@@ -125,5 +138,10 @@ public class SLNDictionary
 		}
 		
 		return dict;
+	}
+	
+	public void check() {
+		//TODO do semantic check
+		
 	}
 }
