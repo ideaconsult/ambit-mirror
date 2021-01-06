@@ -4,6 +4,10 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 
+import ambit2.sln.dictionary.AtomDictionaryObject;
+import ambit2.sln.dictionary.ISLNDictionaryObject;
+import ambit2.sln.dictionary.MacroAtomDictionaryObject;
+
 /**
  * Abstract sln atom.
  * 
@@ -20,6 +24,7 @@ public class SLNAtom extends SMARTSAtom {
 	public String atomName = null;
 	public int atomID = -1;
 	public int numHAtom = 0;
+	public ISLNDictionaryObject dictObj = null;
 	public SLNAtomExpression atomExpression = null;
 
 	public boolean matches(IAtom atom) {
@@ -33,14 +38,11 @@ public class SLNAtom extends SMARTSAtom {
 		{
 			FlagMatchAtomType = SLNConst.elSymbols[atomType].equals(atom
 					.getSymbol());
-		} else if (atomType < SLNConst.LocalDictOffseet) // It is a global
-															// dictionary
-															// definition
+		} else if (atomType == SLNConst.GlobalDictOffseet
+				|| atomType == SLNConst.LocalDictOffseet) 
 		{
-			// TODO
-		} else {
-			// It is a local dictionary definition
-			// TODO
+			// It is a global or local dictionary object
+			FlagMatchAtomType = matchDictionaryObject(atom); 
 		}
 
 		if (!FlagMatchAtomType)
@@ -72,6 +74,22 @@ public class SLNAtom extends SMARTSAtom {
 			return (atomName + getHString());
 		else
 			return (atomName + getHString() + atomExpression.toString());
+	}
+	
+	
+	boolean matchDictionaryObject(IAtom atom) 
+	{
+		switch (dictObj.getObjectType())
+		{
+		case ATOM:
+			AtomDictionaryObject atomDO = (AtomDictionaryObject) dictObj;
+			return atomDO.getSLNAtom().matches(atom);
+		case MACRO_ATOM:
+			//should not be matched here. SLNContaoner expansion is needed
+			break;
+		}
+		
+		return false;
 	}
 
 }

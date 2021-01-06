@@ -193,16 +193,19 @@ public class SLNParser {
 		// extract atom name
 		String atomName = extractAtomName();
 		int atomType = -1;
+		ISLNDictionaryObject dictObj = null;
 
 		//Analyze atomName
 		if (globalDictionary != null && globalDictionary.containsObject(atomName)) 
 		{
 			atomType = SLNConst.GlobalDictOffseet;
+			dictObj = globalDictionary.getDictionaryObject(atomName);
 		} 
 		else if (container.getLocalDictionary() != null && 
 				container.getLocalDictionary().containsObject(atomName)) 
 		{				 
 			atomType = SLNConst.LocalDictOffseet;
+			dictObj = container.getLocalDictionary().getDictionaryObject(atomName);
 		} 
 		else {
 			//index 0 is included for "Any" atom support
@@ -217,6 +220,8 @@ public class SLNParser {
 		SLNAtom newAtom = new SLNAtom(SilentChemObjectBuilder.getInstance());
 		newAtom.atomType = atomType;
 		newAtom.atomName = atomName;
+		if (dictObj!= null)
+			newAtom.dictObj = dictObj;
 		
 		// The SLN parser allows H atoms to be before or after atoms expression
 		// i.e. CH[S=R] and C[S=R]H are both correct variants
