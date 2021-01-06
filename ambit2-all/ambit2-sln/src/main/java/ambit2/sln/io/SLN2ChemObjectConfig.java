@@ -26,10 +26,25 @@ public class SLN2ChemObjectConfig
 	
 	//Limit values for atom/bond attributes 
 	//used for converting in equality expressions
-	public int maxCharge = 4;
-	public int minCharge = -4;
-	public int maxHCount = 4;
-	public int minHCount = 0;
+	public int min_charge = -4;
+	public int max_charge = 4;
+	public int min_hac = 0;
+	public int max_hac = 6;
+	public int min_hc = 0;
+	public int max_hc = 4;
+	public int min_htc = 0;
+	public int max_htc = 6;
+	public int min_ntc = 0;
+	public int max_ntc = 4;
+	public int min_tac = 0;
+	public int max_tac = 6;
+	public int min_tbo = 0;
+	public int max_tbo = 6;
+	public int min_rbc = 0;
+	public int max_rbc = 4;
+	public int min_src = 0;
+	public int max_src = 4;
+		
 	
 	//For SMARTS conversion
 	public boolean FlagSLNSingleBondToSingleOrAromaticBond = true;
