@@ -21,14 +21,17 @@ public class SLNContainer extends QueryAtomContainer
 	// Flags that determine what types of objects are stored in SLNContainer
 	private boolean IsStructureOnly = false;
 	private SLNObjectType slnObjectType =  SLNObjectType.QUERY;
-		
-
+	private boolean FlagHasDictionaryObjects = false;
+	private boolean FlagNeedsContainerExpansionForQueryMatch = false;
+	
+	
 	private SLNContainerAttributes attributes = new SLNContainerAttributes();
 	
 	
 	public SLNContainer(IChemObjectBuilder builder) {
 		super(builder);
 	}
+	
 	public SLNContainerAttributes getAttributes() {
 		return attributes;
 	}
@@ -76,12 +79,19 @@ public class SLNContainer extends QueryAtomContainer
 	public SLNObjectType getSlnObjectType() {
 		return slnObjectType;
 	}
-	
+		
+	public boolean isFlagHasDictionaryObjects() {
+		return FlagHasDictionaryObjects;
+	}
+
+	public boolean isFlagNeedsContainerExpansionForQueryMatch() {
+		return FlagNeedsContainerExpansionForQueryMatch;
+	}
+
 	public void recognizeSlnObjectType() {
 		//TODO 
 		//may be remove function checkIsStructureOnly()
 	}
-	
 	
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
 import ambit2.sln.SLNParserError;
@@ -11,6 +12,12 @@ import ambit2.sln.SLNParserError;
 
 public class SLNDictionary 
 {
+	public static class DictionaryObjectReferencesCheckResult {
+		public List<String> errors = new ArrayList<String>();
+		public List<String> warnings = new ArrayList<String>();
+	}
+	
+	
 	private HashMap<String,ISLNDictionaryObject> objects = new HashMap<String,ISLNDictionaryObject>();
 	private List<String> names = new ArrayList<String>();
 	private ArrayList<SLNParserError> parserErrors = new ArrayList<SLNParserError>();
@@ -140,8 +147,20 @@ public class SLNDictionary
 		return dict;
 	}
 	
-	public void check() {
-		//TODO do semantic check
+	public void checkDictiobary() {
 		
+		//Do semantic check: valences values
+		
+		//TODO 
+	}
+	
+	public static DictionaryObjectReferencesCheckResult checkContainer(SLNContainer container) {
+		
+		//Check whether the dictionary objects (e.g. ATOM, MACRO_ATOM, MARKUSH_ATOMS)
+		//are referenced properly  
+		
+		//TODO 
+		
+		return null;
 	}
 }
