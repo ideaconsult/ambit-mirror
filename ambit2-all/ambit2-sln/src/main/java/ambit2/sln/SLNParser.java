@@ -197,7 +197,7 @@ public class SLNParser {
 		//Analyze atomName
 		if (globalDictionary != null && globalDictionary.containsObject(atomName)) 
 		{
-			atomType = SLNConst.GlobDictOffseet;
+			atomType = SLNConst.GlobalDictOffseet;
 		} 
 		else if (container.getLocalDictionary() != null && 
 				container.getLocalDictionary().containsObject(atomName)) 

@@ -29,7 +29,7 @@ public class SLNAtom extends SMARTSAtom {
 
 		if (atomType == 0) // any atom
 			FlagMatchAtomType = true;
-		else if (atomType < SLNConst.GlobDictOffseet) // atomic symbol
+		else if (atomType < SLNConst.GlobalDictOffseet) // atomic symbol
 		{
 			FlagMatchAtomType = SLNConst.elSymbols[atomType].equals(atom
 					.getSymbol());

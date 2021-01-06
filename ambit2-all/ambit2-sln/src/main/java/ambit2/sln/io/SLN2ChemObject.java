@@ -331,7 +331,7 @@ public class SLN2ChemObject
             return null;
         }
         
-        if ((slnAt.atomType > 0)  && (slnAt.atomType < SLNConst.GlobDictOffseet))
+        if ((slnAt.atomType > 0)  && (slnAt.atomType < SLNConst.GlobalDictOffseet))
         {
         	if (slnAt.atomType < SLNConst.elSymbols.length)
         	{	
@@ -449,7 +449,7 @@ public class SLN2ChemObject
 		}
 		
 		//slnAt.atomType > 0
-		if (slnAt.atomType < SLNConst.GlobDictOffseet)
+		if (slnAt.atomType < SLNConst.GlobalDictOffseet)
 		{
 			if (slnAt.atomType < SLNConst.elSymbols.length)
 			{	

@@ -675,7 +675,7 @@ public class SLNConst
 		/* ; */  {-1,-1,-1, 0},
 	};
 
-	public static final int GlobDictOffseet = 1000;
+	public static final int GlobalDictOffseet = 1000;
 	public static final int LocalDictOffseet = 1000000;
 
 
