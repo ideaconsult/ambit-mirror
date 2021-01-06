@@ -707,6 +707,7 @@ public class SLNConst
 		"Cm","Bk","Cf","Es","Fm",    
 		"Md","No","Lr","Rf","Db",
 		"Sg","Bh","Hs","Mt","Ds", 
-		"Rg"  		//up to element #111
+		"Rg","Cn","Uut","Fl","Uup",
+		"Lv","Uus","Uuo" //up to element #118
 		};
 }
