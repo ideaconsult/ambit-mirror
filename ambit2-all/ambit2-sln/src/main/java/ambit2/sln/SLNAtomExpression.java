@@ -225,7 +225,21 @@ public class SLNAtomExpression
 				return(true);
 			else	
 				return(false);	
-		}	   		
+		}
+		
+		case SLNConst.QA_ATTR_type:
+		{
+			Integer atNum = atom.getAtomicNumber();
+			int a_num = 0;
+			if (atNum != null)
+				a_num = atNum.intValue();
+			
+			if (SLNConst.compare(a_num, tok.param, tok.comparisonOperation))
+				return(true);
+			else
+				return(false);
+		}
+		
 		}
 		return true; //by default
 	}

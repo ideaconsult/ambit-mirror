@@ -26,7 +26,8 @@ public class SLNParser {
 	private boolean FlagAllowBondExpressionInRingClosure = true;
 	private boolean FlagCheckTheNumberOfCoordinates = false;
 	
-	private boolean FlagUseSimpleMacroAtomsInDictionary = true; 
+	private boolean FlagUseSimpleMacroAtomsInDictionary = true;
+	private boolean FlagUseTypeAsStandardAtomAttribute = true; //e.g. Any[type=6|type=8]
 
 	String sln;
 	SLNContainer container;
@@ -72,8 +73,7 @@ public class SLNParser {
 			System.out.println("Global dictionary errors:" + globalDictionary.getParserErrors());
 		
 		return 0;
-	}
-	
+	}	
 
 	public boolean getFlagTolerateSpaces() {
 		return FlagTolerateSpaces;
@@ -98,6 +98,14 @@ public class SLNParser {
 
 	public void setFlagUseSimpleMacroAtomsInDictionary(boolean flagUseSimpleMacroAtomsInDictionary) {
 		FlagUseSimpleMacroAtomsInDictionary = flagUseSimpleMacroAtomsInDictionary;
+	}
+	
+	public boolean isFlagUseTypeAsStandardAtomAttribute() {
+		return FlagUseTypeAsStandardAtomAttribute;
+	}
+
+	public void setFlagUseTypeAsStandardAtomAttribute(boolean flagUseTypeAsStandardAtomAttribute) {
+		FlagUseTypeAsStandardAtomAttribute = flagUseTypeAsStandardAtomAttribute;
 	}
 
 	public SLNContainer parse(String sln) {
@@ -898,6 +906,23 @@ public class SLNParser {
 				newError("Incorrect tbo value " + value, curChar, "");
 				return null;
 			}
+		}
+		
+				
+		// Handle query atom attribute type
+		if (name.equals("type") && FlagUseTypeAsStandardAtomAttribute) 
+		{
+			//If FlagUseTypeAsStandardAtomAttribute = false it is treated as user defined
+			int type = extractInteger(value);
+			if (extractError.equals("")) {
+				SLNExpressionToken token = new SLNExpressionToken(
+						SLNConst.QA_ATTR_type, type);
+				return token;
+			} else {
+				newError("Incorrect atom type attribute value " + value,
+						curChar, "");
+				return null;
+			}			
 		}
 		
 		// By default it is an user defined attribute

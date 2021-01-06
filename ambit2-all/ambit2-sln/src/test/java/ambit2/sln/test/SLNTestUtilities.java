@@ -34,7 +34,8 @@ public class SLNTestUtilities
 		SLNTestUtilities tu = new SLNTestUtilities();
 		
 		//This flag is set TRUE in order to generate SLNs which are identical to the input SLNs
-		slnHelper.FlagPreserveOriginalAtomID = true; 
+		slnHelper.FlagPreserveOriginalAtomID = true;
+		slnParser.setPredefinedGlobalDictionary();
 		
 		//tu.testSLN("C[1:c=y]H2=[s=I;ftt=m]CH[5:ccor=z;!fcharge=-3.3](OCH(CH3)CH3)CH3[7]");
 		//tu.testSLN("CH2=C[1]HCH3[12]CH3=@1CCC@1CCCC@1");
@@ -67,6 +68,11 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("Any=C","C=N");
 		//tu.testSLNIsomorphism("N[charge=+1](=O)(O[charge=-1])","[N+](=O)[O-]");
 		
+		tu.testSLNIsomorphism("Het[charge>0]=C","[N+]=C");
+		//slnParser.setFlagUseTypeAsStandardAtomAttribute(false);
+		tu.testSLNIsomorphism("Any[type>7]","CNO");
+		
+		
 		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
 		//tu.testSLNIsomorphism("C[hc=2&charge<=0]", "[CH3-]CC"); 
 		
@@ -84,9 +90,8 @@ public class SLNTestUtilities
 		
 		//tu.testSLNMatch("CC<aa<5>", "CCC", new Object[] {"aa",4});
 		
-		//slnHelper.FlagPreserveOriginalAtomID = false;
-		slnParser.setPredefinedGlobalDictionary();
-		tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CCC<v=1,3>}");
+		//slnHelper.FlagPreserveOriginalAtomID = false;	
+		//tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CCC<v=1,3>}");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");

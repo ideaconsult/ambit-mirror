@@ -41,6 +41,7 @@ public class SLNConst
 	public static final int QA_ATTR_src = 116; // the smallest ring count "b"
 	public static final int QA_ATTR_mw = 117; // The molecular weight attribute is used with group atoms (R, X, and Rx)to specify the cumulative atomic weights that atoms that match the group atom to match the query "b"
 	
+	public static final int QA_ATTR_type = 200;
 
 	public static String atomAttributeToSLNString(int attr)
 	{
@@ -94,6 +95,8 @@ public class SLNConst
 			return "src";
 		case QA_ATTR_mw:
 			return "mw";
+		case QA_ATTR_type:
+			return "type";
 
 		default:
 			return "";
