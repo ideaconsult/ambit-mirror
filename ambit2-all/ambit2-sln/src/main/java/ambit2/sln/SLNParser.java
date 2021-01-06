@@ -7,6 +7,7 @@ import java.util.Stack;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.sln.dictionary.AtomDictionaryObject;
 import ambit2.sln.dictionary.ISLNDictionaryObject;
 import ambit2.sln.dictionary.MacroAtomDictionaryObject;
 import ambit2.sln.dictionary.PredefinedSLNDictionary;
@@ -24,6 +25,8 @@ public class SLNParser {
 																// future use
 	private boolean FlagAllowBondExpressionInRingClosure = true;
 	private boolean FlagCheckTheNumberOfCoordinates = false;
+	
+	private boolean FlagUseSimpleMacroAtomsInDictionary = true; 
 
 	String sln;
 	SLNContainer container;
@@ -87,6 +90,14 @@ public class SLNParser {
 
 	public boolean getFlagAllowBondExpressionInRingClosure() {
 		return FlagAllowBondExpressionInRingClosure;
+	}
+	
+	public boolean isFlagUseSimpleMacroAtomsInDictionary() {
+		return FlagUseSimpleMacroAtomsInDictionary;
+	}
+
+	public void setFlagUseSimpleMacroAtomsInDictionary(boolean flagUseSimpleMacroAtomsInDictionary) {
+		FlagUseSimpleMacroAtomsInDictionary = flagUseSimpleMacroAtomsInDictionary;
 	}
 
 	public SLNContainer parse(String sln) {
@@ -2002,8 +2013,11 @@ public class SLNParser {
 		
 		ISLNDictionaryObject dictObj = null;
 		if (errors.isEmpty())
-		{
-			dictObj = new MacroAtomDictionaryObject(dictObjName, dictObjectString, container);
+		{	
+			if (FlagUseSimpleMacroAtomsInDictionary && container.getAtomCount() == 1)
+				dictObj = new AtomDictionaryObject(dictObjName, dictObjectString, container);				
+			else
+				dictObj = new MacroAtomDictionaryObject(dictObjName, dictObjectString, container);
 		}
 		
 		restoreState(state);

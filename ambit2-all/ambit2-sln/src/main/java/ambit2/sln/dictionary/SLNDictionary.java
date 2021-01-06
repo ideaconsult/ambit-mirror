@@ -80,6 +80,9 @@ public class SLNDictionary
 	String toSLN(ISLNDictionaryObject dictObj, SLNHelper slnHelper) {
 		switch (dictObj.getObjectType())
 		{
+		case ATOM:
+			AtomDictionaryObject a = (AtomDictionaryObject) dictObj;
+			return slnHelper.toSLN(a.container);
 		case MACRO_ATOM:
 			MacroAtomDictionaryObject ma = (MacroAtomDictionaryObject) dictObj;
 			return slnHelper.toSLN(ma.container);
