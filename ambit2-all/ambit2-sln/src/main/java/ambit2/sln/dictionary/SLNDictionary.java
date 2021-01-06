@@ -13,6 +13,7 @@ public class SLNDictionary
 {
 	private HashMap<String,ISLNDictionaryObject> objects = new HashMap<String,ISLNDictionaryObject>();
 	private List<String> names = new ArrayList<String>();
+	private ArrayList<SLNParserError> parserErrors = new ArrayList<SLNParserError>();
 	
 		
 	public void addDictionaryObject(ISLNDictionaryObject dictObj)
@@ -46,7 +47,19 @@ public class SLNDictionary
 	{
 		return names;
 	}
+			
+	public ArrayList<SLNParserError> getParserErrors() {
+		return parserErrors;
+	}
 	
+	public String getParserErrorMessages() {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < parserErrors.size(); i++) {
+			sb.append(parserErrors.get(i).getError() + "\n");
+		}
+		return (sb.toString());
+	}
+
 	public String toSLN() {
 		StringBuffer sb = new StringBuffer();
 		SLNHelper slnHelper = new SLNHelper();
@@ -99,6 +112,13 @@ public class SLNDictionary
 			ISLNDictionaryObject dictObj = parser.parseDictionaryObject(dictObjStr);
 			if (dictObj != null)
 				dict.addDictionaryObject(dictObj);
+		}
+		
+		if (!parser.getErrors().isEmpty())
+		{	
+			//Store errors inside the dictionary
+			dict.parserErrors.addAll(parser.getErrors());			
+			parser.getErrors().clear();
 		}
 		
 		return dict;

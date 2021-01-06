@@ -86,7 +86,7 @@ public class SLNTestUtilities
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;
 		slnParser.setPredefinedGlobalDictionary();
-		tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHev{Aa:CCC<v=1,3>}");
+		tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CCC<v=1,3>}");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");

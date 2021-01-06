@@ -31,7 +31,6 @@ public class SLNParser {
 	SLNDictionary globalDictionary = null;
 	Stack<SLNAtom> brackets = new Stack<SLNAtom>();
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
-	ArrayList<SLNParserError> globalDictionaryErrors = new ArrayList<SLNParserError>();
 	
 	
 	ArrayList<Integer> localDictionaryObjectBeginPos = new ArrayList<Integer>();
@@ -66,14 +65,10 @@ public class SLNParser {
 	public int setPredefinedGlobalDictionary() {
 		globalDictionary = PredefinedSLNDictionary.getDictionary(this);
 		
-		if (!errors.isEmpty())
-		{	
-			//Store errors from global dictionary parsing
-			globalDictionaryErrors.addAll(errors);			
-			errors.clear();
-			System.out.println(getGlobalDictionaryErrorMessages());
-		}	
-		return globalDictionaryErrors.size();
+		if (!globalDictionary.getParserErrors().isEmpty())		
+			System.out.println("Global dictionary errors:" + globalDictionary.getParserErrors());
+		
+		return 0;
 	}
 	
 
@@ -944,18 +939,6 @@ public class SLNParser {
 		return (errors);
 	}
 	
-	public String getGlobalDictionaryErrorMessages() {
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < globalDictionaryErrors.size(); i++) {
-			sb.append(globalDictionaryErrors.get(i).getError() + "\n");
-		}
-		return (sb.toString());
-	}
-	
-	public ArrayList<SLNParserError> getGlobalDictionaryErrors() {
-		return (globalDictionaryErrors);
-	}
-
 	void addAtom(SLNAtom atom) {
 		container.addAtom(atom);
 		if (prevAtom != null) {
