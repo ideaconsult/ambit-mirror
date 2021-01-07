@@ -12,11 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Sleep for 10 minutes to allow Jenkins to build the necessary artifacts
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '10m'
-
     - name: Checkout Repository
       uses: actions/checkout@v2
 
