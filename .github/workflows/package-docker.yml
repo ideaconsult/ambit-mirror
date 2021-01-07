@@ -30,13 +30,32 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
 
-    - name: Build with Maven
+    - name: Build with Maven (ambit-all)
+      run: >-
+        mvn
+        -B
+        -f ambit2-all/pom.xml
+        clean
+        install
+        -DskipTests=true
+
+    - name: Build with Maven (ambit-apps)
+      run: >-
+        mvn
+        -B
+        -f ambit2-apps/pom.xml
+        clean
+        install
+        -P http
+        -P docker_generic
+        -DskipTests=true
+
+    - name: Build with Maven (ambit-www)
       run: >-
         mvn
         -B
         -f ambit2-apps/ambit2-www/pom.xml
         clean
-        buildnumber:create
         package
         -P http
         -P docker_generic
