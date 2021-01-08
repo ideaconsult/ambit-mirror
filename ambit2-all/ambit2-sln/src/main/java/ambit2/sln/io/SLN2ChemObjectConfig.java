@@ -1,5 +1,6 @@
 package ambit2.sln.io;
 
+import ambit2.sln.SLNConst;
 
 public class SLN2ChemObjectConfig 
 {
@@ -44,6 +45,10 @@ public class SLN2ChemObjectConfig
 	public int max_rbc = 4;
 	public int min_src = 0;
 	public int max_src = 4;
+	
+	public int[] allowedAtomAttributesForAlternativeValueList = {
+			SLNConst.A_ATTR_charge, SLNConst.QA_ATTR_hac, SLNConst.QA_ATTR_hc  	
+	};
 		
 	
 	//For SMARTS conversion
