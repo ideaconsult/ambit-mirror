@@ -39,7 +39,7 @@ public class SLNBondExpression
     	return true; //by default
     }
 		
-	boolean match_type(int param,  IBond bond)
+	public static boolean match_type(int param,  IBond bond)
 	{
 		switch (param)
 		{

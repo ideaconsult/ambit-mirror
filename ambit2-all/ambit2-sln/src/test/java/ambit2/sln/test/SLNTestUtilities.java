@@ -68,11 +68,13 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("Any=C","C=N");
 		//tu.testSLNIsomorphism("N[charge=+1](=O)(O[charge=-1])","[N+](=O)[O-]");
 		
-		tu.testSLNIsomorphism("Het[charge>0]=C","[N+]=C");
+		//tu.testSLNIsomorphism("Het[charge>0]=C","[N+]=C");
 		//slnParser.setFlagUseTypeAsStandardAtomAttribute(false);
-		tu.testSLNIsomorphism("Any[type>7]","CNO");
-		tu.testSLNIsomorphism("HalC","[F]CCO");
-		
+		//tu.testSLNIsomorphism("Any[type>7]","CNO");
+		//tu.testSLNIsomorphism("HalC","[F]CCO");
+		tu.testSLNIsomorphism("C:C","c1ccccc1");
+		tu.testSLNIsomorphism("C:C","C1=CC=CC=C1");
+		tu.testSLNIsomorphism("C:C","C1CCCCC1");
 		
 		
 		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
