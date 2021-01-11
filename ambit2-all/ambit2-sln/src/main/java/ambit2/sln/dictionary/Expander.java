@@ -104,6 +104,7 @@ public class Expander
 			SLNBond newBo = bo.clone();
 			
 			Object o = oldToNewAtoms.get(curNode.parent);
+			//IAtom newAt1 = getNewAtomWhichIsValenceConectionAtPos(int valencePos, Object newObj, SLNAtom originalAt)
 			
 		}
 		
@@ -126,6 +127,7 @@ public class Expander
 				newNode.parent = atom;
 				nodes.put(newNode.atom, newNode); 
 				
+				/*
 				if (at.dictObj == null)
 					expand(neighborAt);
 				else
@@ -144,6 +146,8 @@ public class Expander
 					//TODO link using vPos
 					
 				}	
+				
+				*/
 				
 			}
 			else
