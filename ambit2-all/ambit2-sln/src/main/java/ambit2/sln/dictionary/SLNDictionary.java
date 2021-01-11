@@ -238,8 +238,17 @@ public class SLNDictionary
 	}
 	
 	public void checkMacroAtom(MacroAtomDictionaryObject maDO) {
-		//Do semantic check: valences values
-		//TODO
+		//Do semantic check: valences values correctness
+		int valAtInd[] = maDO.getValenceAtomIndices();
+		if (valAtInd == null)
+			return;
+		
+		for (int i = 0; i < valAtInd.length; i++)
+			if (valAtInd[i] == -1)
+			{
+				String err = maDO.name + " Incorrect valence element [" + (i+1) + "]: " + maDO.getValences()[i];
+				checkErrors.add(err);
+			}
 	}
 	
 	public void checkMarkushAtom(MarkushAtomDictionaryObject maDO) {

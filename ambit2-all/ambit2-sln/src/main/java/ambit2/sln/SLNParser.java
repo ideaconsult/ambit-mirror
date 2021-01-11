@@ -71,6 +71,8 @@ public class SLNParser {
 		
 		if (!globalDictionary.getParserErrors().isEmpty())		
 			System.out.println("Global dictionary errors:" + globalDictionary.getParserErrors());
+		if (!globalDictionary.getCheckErrors().isEmpty())		
+			System.out.println("Global dictionary check errors:" + globalDictionary.getCheckErrors());
 		
 		return 0;
 	}	
@@ -1985,6 +1987,13 @@ public class SLNParser {
 			if (dictObj != null)
 				dict.addDictionaryObject(dictObj);
 		}
+		
+		dict.checkDictionary();
+		if (!dict.getCheckErrors().isEmpty()) {
+			for (int i = 0; i < dict.getCheckErrors().size(); i++ )
+			newError(dict.getCheckErrors().get(i), 0, "");
+		}
+			
 		
 		return dict;
 	}
