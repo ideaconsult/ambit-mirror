@@ -363,4 +363,14 @@ public class SLNAtomExpression
 		sb.append("]");
 		return sb.toString();
 	}
+	
+	public SLNAtomExpression clone() {
+		SLNAtomExpression atExp = new SLNAtomExpression();
+		atExp.atomID = atomID;
+		atExp.valences = valences; //TODO clone valences fully
+		
+		for (int i = 0; i < tokens.size(); i++)
+			atExp.tokens.add(tokens.get(i).clone()); 
+		return atExp;
+	}
 }

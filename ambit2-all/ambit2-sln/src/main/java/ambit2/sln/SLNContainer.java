@@ -125,5 +125,28 @@ public class SLNContainer extends QueryAtomContainer
 		}		
 		return ind;
 	}
+	
+	public SLNContainer getExpandedSLNContainer() {
+		//All dictionary objects SLNContainers atoms and bonds are added
+		//and linked to the this container
+		SLNContainer expContainer = new SLNContainer(this.getBuilder());
+		
+		List<SLNAtom> dictAtoms = getDictionaryAtoms();
+		
+		//TODO
+		
+		return expContainer;
+	}
+	
+	public List<SLNAtom> getDictionaryAtoms() {
+		List<SLNAtom> dictAtoms = new ArrayList<SLNAtom>();
+		for (int i = 0; i < getAtomCount(); i++)
+		{
+			SLNAtom at = (SLNAtom)getAtom(i);
+			if (at.dictObj != null)
+				dictAtoms.add(at);
+		}
+		return dictAtoms;
+	}
 
 }

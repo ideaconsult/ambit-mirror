@@ -239,5 +239,16 @@ public class SLNExpressionToken
 				return bondAttributeToString();
 		}	
 	}
+	
+	public SLNExpressionToken clone() 
+	{
+		SLNExpressionToken expTok = new SLNExpressionToken(type);
+		expTok.attrName = attrName;
+		expTok.comparisonOperation = comparisonOperation;
+		expTok.param = param;
+		expTok.doubleParam = doubleParam;
+		expTok.stringParam = stringParam; 
+		return expTok;
+	}	
 
 }

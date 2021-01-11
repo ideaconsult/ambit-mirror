@@ -91,5 +91,17 @@ public class SLNAtom extends SMARTSAtom {
 		
 		return false;
 	}
+	
+	
+	public SLNAtom clone() {
+		SLNAtom at = new SLNAtom(getBuilder()); 
+		at.atomType = atomType;
+		at.atomName = atomName;
+		at.atomID = atomID;
+		at.numHAtom = numHAtom;
+		at.dictObj = dictObj;
+		at.atomExpression = (atomExpression==null) ? null : atomExpression.clone();
+		return at;
+	}
 
 }
