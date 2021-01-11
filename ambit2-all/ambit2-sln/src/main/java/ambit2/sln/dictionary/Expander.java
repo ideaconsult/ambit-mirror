@@ -55,10 +55,45 @@ public class Expander
 		return getExpandedSLNContainer();
 	}
 	
+	
 	public SLNContainer getExpandedSLNContainer() 
 	{
 		//All dictionary objects SLNContainers atoms and bonds are added
 		//and linked to the atoms of the container
+		
+		expContainer = new SLNContainer(container.getBuilder());
+		oldToNewAtoms.clear();
+		
+		//TODO
+		
+		return expContainer;
+	}
+	
+	
+	public void handleAtom(IAtom atom) 
+	{	
+		//Cloning or expanding atom
+		SLNAtom at = (SLNAtom)atom;
+		List<IAtom> expandAtoms = null;
+		if (at.dictObj == null)
+		{
+			SLNAtom newAt = at.clone();
+			oldToNewAtoms.put(at, newAt);
+			expContainer.addAtom(newAt);
+		}
+		else
+		{	
+			expandAtoms = expandDictionaryAtom (at);
+			oldToNewAtoms.put(at, expandAtoms);
+		}
+	}
+	
+	
+	public SLNContainer getExpandedSLNContainer0() 
+	{
+		//All dictionary objects SLNContainers atoms and bonds are added
+		//and linked to the atoms of the container
+		//This is RECURSIVE procedure
 		
 		expContainer = new SLNContainer(container.getBuilder());
 		oldToNewAtoms.clear();
