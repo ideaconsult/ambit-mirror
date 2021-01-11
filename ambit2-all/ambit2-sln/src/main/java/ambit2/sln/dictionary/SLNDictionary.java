@@ -1,5 +1,9 @@
 package ambit2.sln.dictionary;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +113,77 @@ public class SLNDictionary
 		}
 		
 		return "";
+	}
+	
+	
+	public static SLNDictionary getDictionary(String fileName) throws Exception
+	{
+		SLNParser parser = new SLNParser();
+		return getDictionary(fileName, parser);
+	}
+	
+	public static SLNDictionary getDictionary(String fileName, SLNParser parser) throws Exception
+	{
+		if (fileName == null)
+			return null;
+		if (parser == null)
+			return null;
+				
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(fileName));
+		}
+		catch (FileNotFoundException e) {
+			throw e;
+		}
+		
+		parser.getErrors().clear();
+		SLNDictionary dict = new SLNDictionary(); 
+		
+		try {
+			int nLine = 0;
+			String line;
+			
+			while ( (line = br.readLine()) != null ) 
+			{
+				nLine++;
+				String s = line.trim();
+				
+				if (s.isEmpty())
+				{
+					//System.out.println("Empty SLN string in line #" + nLine);
+					continue;
+				}				
+				
+				if (s.isEmpty() || !s.startsWith("{") || !s.endsWith("}"))
+				{	
+					parser.getErrors().add(new SLNParserError("Line #" + nLine + "  " + 
+							s, "Missing open or close brackets {}" , 0, ""));
+					continue;
+				}
+				
+				String dictObjStr = s.substring(1,s.length()-1);			
+				ISLNDictionaryObject dictObj = parser.parseDictionaryObject(dictObjStr);
+				if (dictObj != null)
+					dict.addDictionaryObject(dictObj);
+			}	
+			
+			br.close();
+		}
+		catch (IOException e) {			
+			
+			throw e;
+		}
+		
+		
+		if (!parser.getErrors().isEmpty())
+		{	
+			//Store errors inside the dictionary
+			dict.parserErrors.addAll(parser.getErrors());			
+			parser.getErrors().clear();
+		}
+		
+		return dict;
 	}
 	
 	
