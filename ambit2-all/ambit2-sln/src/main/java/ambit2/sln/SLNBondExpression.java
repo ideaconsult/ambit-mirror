@@ -93,4 +93,14 @@ public class SLNBondExpression
 		// TODO 
 		return true;
 	}
+	
+	public SLNBondExpression clone() {
+		SLNBondExpression boExp = new SLNBondExpression(); 
+		
+		for (int i = 0; i < tokens.size(); i++)
+			boExp.tokens.add(tokens.get(i).clone()); 
+		
+		return boExp;
+	}
+	
 }

@@ -22,7 +22,7 @@ public class Expander
 	
 	SLNContainer container = null;
 	SLNContainer expContainer = null;
-	Map<IAtom,IAtom> oldToNewAtoms = new HashMap<IAtom,IAtom>();
+	Map<IAtom,Object> oldToNewAtoms = new HashMap<IAtom,Object>(); //Object could be IAtom or List<IAtom>
 		
 	HashMap<IAtom,ExpAtomNode> nodes = new HashMap<IAtom,ExpAtomNode>();
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
@@ -75,8 +75,10 @@ public class Expander
 		return expContainer;
 	}
 	
-	public void expand(IAtom atom, IAtom connectAt) 
+	
+	public void expand(IAtom atom, IAtom prevAt) 
 	{		
+		//Expanding atom
 		SLNAtom at = (SLNAtom)atom;
 		List<IAtom> expandAtoms = null;
 		if (at.dictObj == null)
@@ -86,9 +88,23 @@ public class Expander
 			expContainer.addAtom(newAt);
 		}
 		else
+		{	
 			expandAtoms = expandDictionaryAtom (at);
+		}
+		
+		//Connecting to the atom from previous recursion level - prevAt
+		if (prevAt != null)
+		{
+			Object o = oldToNewAtoms.get(prevAt);
+			if (o instanceof IAtom)
+			{
+				IAtom prevNewAt = (IAtom)o;
+				//SLNBond bo = container.getBond(atom1, atom2);
+			}
+		}
 		
 		
+		//Handling the neighbors of the atom (next recursion level)
 		TopLayer afs = firstSphere.get(atom);
 		ExpAtomNode curNode = nodes.get(atom);
 		
@@ -153,19 +169,25 @@ public class Expander
 			SLNAtom newAt = aDO.atom.clone();
 			oldToNewAtoms.put(at, newAt);
 			expContainer.addAtom(newAt);
+			List<IAtom> list = new ArrayList<IAtom>();
+			list.add(newAt);
+			return list;
 		}
 		else if (at.dictObj instanceof MacroAtomDictionaryObject)
 		{
-			expandMacroAtomDictionaryObject(at, (MacroAtomDictionaryObject) at.dictObj);
+			return expandMacroAtomDictionaryObject(at, (MacroAtomDictionaryObject) at.dictObj);
 		}
+		
 		//TODO handle other type of dictionary objects
 		
 		return null;
 	}
 	
-	public void expandMacroAtomDictionaryObject(SLNAtom at, MacroAtomDictionaryObject maDO)
+	public List<IAtom> expandMacroAtomDictionaryObject(SLNAtom at, MacroAtomDictionaryObject maDO)
 	{
 		//TODO
+		//bonds are also added
+		return null;
 	}
 	
 	void determineFirstSheres(SLNContainer container)

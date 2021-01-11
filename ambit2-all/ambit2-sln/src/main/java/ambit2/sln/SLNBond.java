@@ -42,4 +42,11 @@ public class SLNBond extends SMARTSBond {
 			return (SLNConst.bondTypeAttributeToSLNString(bondType) + bondExpression
 					.toString());
 	}
+	
+	public SLNBond clone() {
+		SLNBond bond = new SLNBond(getBuilder());
+		bond.bondType = bondType;
+		bond.bondExpression = (bondExpression==null) ? null : bondExpression.clone();
+		return bond;
+	}
 }
