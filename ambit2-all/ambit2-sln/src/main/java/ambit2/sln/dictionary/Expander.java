@@ -9,6 +9,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 
 import ambit2.sln.SLNAtom;
+import ambit2.sln.SLNBond;
 import ambit2.sln.SLNContainer;
 import ambit2.smarts.TopLayer;
 
@@ -90,6 +91,7 @@ public class Expander
 		else
 		{	
 			expandAtoms = expandDictionaryAtom (at);
+			oldToNewAtoms.put(at, expandAtoms);
 		}
 		
 		//Connecting to the atom from previous recursion level - prevAt
@@ -167,7 +169,6 @@ public class Expander
 		{
 			AtomDictionaryObject aDO = (AtomDictionaryObject)at.dictObj;
 			SLNAtom newAt = aDO.atom.clone();
-			oldToNewAtoms.put(at, newAt);
 			expContainer.addAtom(newAt);
 			List<IAtom> list = new ArrayList<IAtom>();
 			list.add(newAt);
@@ -175,7 +176,7 @@ public class Expander
 		}
 		else if (at.dictObj instanceof MacroAtomDictionaryObject)
 		{
-			return expandMacroAtomDictionaryObject(at, (MacroAtomDictionaryObject) at.dictObj);
+			return expandMacroAtomDictionaryObject((MacroAtomDictionaryObject) at.dictObj);
 		}
 		
 		//TODO handle other type of dictionary objects
@@ -183,11 +184,31 @@ public class Expander
 		return null;
 	}
 	
-	public List<IAtom> expandMacroAtomDictionaryObject(SLNAtom at, MacroAtomDictionaryObject maDO)
+	
+	public List<IAtom> expandMacroAtomDictionaryObject(MacroAtomDictionaryObject maDO)
 	{
-		//TODO
-		//bonds are also added
-		return null;
+		//Clone all atoms from maDO and add to the expanded container
+		List<IAtom> newAtoms = new ArrayList<IAtom>();
+		for (int i = 0; i < maDO.container.getAtomCount(); i++)
+		{
+			SLNAtom at = (SLNAtom) maDO.container.getAtom(i);
+			SLNAtom newAt = at.clone();
+			expContainer.addAtom(newAt);
+			newAtoms.add(newAt);
+		}
+		
+		//Also, clone all bonds from maDO and add to the expanded container 
+		for (int i = 0; i < maDO.container.getBondCount(); i++)
+		{
+			SLNBond bo = (SLNBond) maDO.container.getBond(i);
+			SLNBond newBo = bo.clone();
+			int index0 = maDO.container.indexOf(bo.getAtom(0));
+			int index1 = maDO.container.indexOf(bo.getAtom(1));
+			newBo.setAtoms(new IAtom[] {newAtoms.get(index0), newAtoms.get(index1)});	
+			expContainer.addBond(newBo);
+		}
+		
+		return newAtoms;
 	}
 	
 	void determineFirstSheres(SLNContainer container)
