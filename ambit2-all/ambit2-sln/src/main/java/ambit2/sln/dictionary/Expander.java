@@ -64,7 +64,12 @@ public class Expander
 		expContainer = new SLNContainer(container.getBuilder());
 		oldToNewAtoms.clear();
 		
-		//TODO
+		for (int i = 0; i < container.getAtomCount(); i++)
+			handleAtom(container.getAtom(i));
+		
+		for (int i = 0; i < container.getBondCount(); i++)
+			handleBond(container.getBond(i));
+		
 		
 		return expContainer;
 	}
@@ -87,6 +92,38 @@ public class Expander
 			oldToNewAtoms.put(at, expandAtoms);
 		}
 	}
+	
+	
+	public void handleBond(IBond bond) 
+	{
+		SLNBond bo = (SLNBond)bond;
+		SLNBond newBo = bo.clone();
+		
+		IAtom at0 = bo.getAtom(0);
+		IAtom at1 = bo.getAtom(1);
+		int conectionInd0 = getConnectionIndexOfTheBond(bond, at0);
+		int conectionInd1 = getConnectionIndexOfTheBond(bond, at1);
+		
+		//TODO improved valencePos handling taking into account attribute v if present
+		int valencePos0 = conectionInd0 + 1;
+		int valencePos1 = conectionInd1 + 1;
+				
+		Object newObj0 = oldToNewAtoms.get(at0);
+		Object newObj1 = oldToNewAtoms.get(at1);
+				
+		IAtom newAt0 = getNewAtomWhichIsValenceConectionAtPos(valencePos0, newObj0, (SLNAtom) at0);
+		IAtom newAt1 = getNewAtomWhichIsValenceConectionAtPos(valencePos1, newObj1, (SLNAtom) at1);
+		newBo.setAtoms(new IAtom[] {newAt0, newAt1});
+		
+		expContainer.addBond(newBo);
+	}
+	
+	int getConnectionIndexOfTheBond(IBond bo, IAtom at)
+	{
+		List<IBond> list = container.getConnectedBondsList(at);
+		return list.indexOf(bo);
+	}
+	
 	
 	
 	public SLNContainer getExpandedSLNContainer0() 
