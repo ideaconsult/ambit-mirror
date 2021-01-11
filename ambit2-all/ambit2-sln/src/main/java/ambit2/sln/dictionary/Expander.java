@@ -26,6 +26,7 @@ public class Expander
 		
 	HashMap<IAtom,ExpAtomNode> nodes = new HashMap<IAtom,ExpAtomNode>();
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
+	List<IBond> ringClosures = new ArrayList<IBond>();
 	
 	//boolean FlagClearMarkushInfo = true;
 	int markushTokensNumber[] = null;
@@ -60,49 +61,90 @@ public class Expander
 		
 		expContainer = new SLNContainer(container.getBuilder());
 		oldToNewAtoms.clear();
+		nodes.clear();
+		ringClosures.clear();
 		
 		ExpAtomNode node = new ExpAtomNode();
 		node.parent = null;
-		node.atom = container.getAtom(0);
+		node.atom = (SLNAtom)container.getAtom(0);
 		nodes.put(node.atom, node);
 		
-				
+		expand((SLNAtom)node.atom, null);
 		
-		/*	
-		//List<SLNAtom> dictAtoms = getDictionaryAtoms();		
-		//TopLayer.setAtomTopLayers(container, TopLayer.TLProp);
-
-		//Iterating all atoms and expanding the macro atoms
-		for (int i = 0; i < container.getAtomCount(); i++)
-		{
-			SLNAtom at = (SLNAtom)container.getAtom(i);
-			if (at.dictObj == null)
-			{
-				SLNAtom newAt = at.clone();
-				oldToNewAtoms.put(at, newAt);
-				expContainer.addAtom(newAt);
-			}
-			else
-				expandDictionaryAtom (at);
-		}
-		
-		//Iterating all bonds
-		for (int i = 0; i < container.getAtomCount(); i++)
-		{
-			
-		}
-		*/
 
 		return expContainer;
 	}
 	
-	public void expand(SLNAtom atom) 
-	{
+	public void expand(IAtom atom, IAtom connectAt) 
+	{		
+		SLNAtom at = (SLNAtom)atom;
+		List<IAtom> expandAtoms = null;
+		if (at.dictObj == null)
+		{
+			SLNAtom newAt = at.clone();
+			oldToNewAtoms.put(at, newAt);
+			expContainer.addAtom(newAt);
+		}
+		else
+			expandAtoms = expandDictionaryAtom (at);
+		
+		
 		TopLayer afs = firstSphere.get(atom);
 		ExpAtomNode curNode = nodes.get(atom);
+		
+		for (int i=0; i<afs.atoms.size(); i++)
+		{
+			IAtom neighborAt = afs.atoms.get(i);
+			if (neighborAt == curNode.parent)
+				continue;
+			
+			ExpAtomNode neighborNode = nodes.get(neighborAt);
+			if (neighborNode == null) // This node has not been registered yet
+			{
+				//Registering a new Node (a new branch)
+				ExpAtomNode newNode = new ExpAtomNode();
+				newNode.atom = neighborAt;
+				newNode.parent = atom;
+				nodes.put(newNode.atom, newNode); 
+				
+				if (at.dictObj == null)
+					expand(neighborAt, at);
+				else
+				{
+					int vPos = 0;
+					int valences[] = at.dictObj.getValences();
+					if (valences == null)
+					{
+						vPos = i;
+						if (vPos>= expandAtoms.size())
+							vPos= expandAtoms.size()-1;
+					}
+					else
+						vPos = valences[i];
+					
+					//TODO link using vPos
+					
+				}	
+				
+			}
+			else
+			{	
+				IBond neighborBo = afs.bonds.get(i);
+				//This check is needed. Otherwise the ring closure will be described twice (for both atoms of the bond)
+				if (ringClosures.contains(neighborBo))  
+					continue;
+				
+				ringClosures.add(neighborBo);
+				
+				//Handle a new ring closure
+				
+				//afs.bonds.get(i)
+				
+			}
+		}
 	}
 	
-	public void expandDictionaryAtom (SLNAtom at) 
+	public List<IAtom> expandDictionaryAtom (SLNAtom at) 
 	{
 		//Handle a dictionary object
 		if (at.dictObj instanceof AtomDictionaryObject)
@@ -117,6 +159,8 @@ public class Expander
 			expandMacroAtomDictionaryObject(at, (MacroAtomDictionaryObject) at.dictObj);
 		}
 		//TODO handle other type of dictionary objects
+		
+		return null;
 	}
 	
 	public void expandMacroAtomDictionaryObject(SLNAtom at, MacroAtomDictionaryObject maDO)
