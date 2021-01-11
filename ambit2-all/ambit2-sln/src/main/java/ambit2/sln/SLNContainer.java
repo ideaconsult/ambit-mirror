@@ -132,54 +132,6 @@ public class SLNContainer extends QueryAtomContainer
 		return ind;
 	}
 	
-	public SLNContainer getExpandedSLNContainer() {
-		//All dictionary objects SLNContainers atoms and bonds are added
-		//and linked to the this container
-		SLNContainer expContainer = new SLNContainer(this.getBuilder());
-		
-		Map<IAtom,IAtom> oldToNewAtom = new HashMap<IAtom,IAtom>();		
-		//List<SLNAtom> dictAtoms = getDictionaryAtoms();		
-		TopLayer.setAtomTopLayers(this, TopLayer.TLProp);
-		
-		for (int i = 0; i < getAtomCount(); i++)
-		{
-			SLNAtom at = (SLNAtom)getAtom(i);
-			if (at.dictObj == null)
-			{
-				SLNAtom newAt = at.clone();
-				oldToNewAtom.put(at, newAt);
-				expContainer.addAtom(newAt);
-			}
-			else
-			{
-				//Handle a dictionary object
-				if (at.dictObj instanceof AtomDictionaryObject)
-				{
-					
-				}
-				else if (at.dictObj instanceof MacroAtomDictionaryObject)
-				{
-					
-				}
-				//TODO handle other type of dict. objects
-				
-			}
-		}
-		
-		return expContainer;
-	}
 	
-	/*
-	public List<SLNAtom> getDictionaryAtoms() {
-		List<SLNAtom> dictAtoms = new ArrayList<SLNAtom>();
-		for (int i = 0; i < getAtomCount(); i++)
-		{
-			SLNAtom at = (SLNAtom)getAtom(i);
-			if (at.dictObj != null)
-				dictAtoms.add(at);
-		}
-		return dictAtoms;
-	}
-	*/
 
 }
