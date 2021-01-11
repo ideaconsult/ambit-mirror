@@ -1,13 +1,19 @@
 package ambit2.sln;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.sln.dictionary.AtomDictionaryObject;
+import ambit2.sln.dictionary.MacroAtomDictionaryObject;
 import ambit2.sln.dictionary.SLNDictionary;
+import ambit2.smarts.TopLayer;
 
 public class SLNContainer extends QueryAtomContainer 
 {
@@ -131,13 +137,39 @@ public class SLNContainer extends QueryAtomContainer
 		//and linked to the this container
 		SLNContainer expContainer = new SLNContainer(this.getBuilder());
 		
-		List<SLNAtom> dictAtoms = getDictionaryAtoms();
+		Map<IAtom,IAtom> oldToNewAtom = new HashMap<IAtom,IAtom>();		
+		//List<SLNAtom> dictAtoms = getDictionaryAtoms();		
+		TopLayer.setAtomTopLayers(this, TopLayer.TLProp);
 		
-		//TODO
+		for (int i = 0; i < getAtomCount(); i++)
+		{
+			SLNAtom at = (SLNAtom)getAtom(i);
+			if (at.dictObj == null)
+			{
+				SLNAtom newAt = at.clone();
+				oldToNewAtom.put(at, newAt);
+				expContainer.addAtom(newAt);
+			}
+			else
+			{
+				//Handle a dictionary object
+				if (at.dictObj instanceof AtomDictionaryObject)
+				{
+					
+				}
+				else if (at.dictObj instanceof MacroAtomDictionaryObject)
+				{
+					
+				}
+				//TODO handle other type of dict. objects
+				
+			}
+		}
 		
 		return expContainer;
 	}
 	
+	/*
 	public List<SLNAtom> getDictionaryAtoms() {
 		List<SLNAtom> dictAtoms = new ArrayList<SLNAtom>();
 		for (int i = 0; i < getAtomCount(); i++)
@@ -148,5 +180,6 @@ public class SLNContainer extends QueryAtomContainer
 		}
 		return dictAtoms;
 	}
+	*/
 
 }
