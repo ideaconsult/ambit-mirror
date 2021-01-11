@@ -141,7 +141,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 	private final String[][] study_headers_combined = new String[][] { { "id", "name_s", "publicname_s", "owner_name_s",
 			"content_hss", header_dbtag, "substanceType_s", "s_uuid_s", "name_hs", "publicname_hs", "owner_name_hs",
 			"substanceType_hs", "s_uuid_hs", "_childDocuments_", "type_s", header_component, "ChemicalName_s",
-			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s", "document_uuid_s",
+			"TradeName_s", "CASRN_s", "EINECS_s", "IUCLID5_UUID_s", "COMPOSITION_s", "SMILES_s","InChIKey_s","InChI_s", "document_uuid_s",
 			"investigation_uuid_s", "assay_uuid_s", "topcategory_s", "endpointcategory_s", "guidance_s",
 			"guidance_synonym_ss", FIELD_METHOD_SYNONYM, FIELD_CELLTYPE_SYNONYM, "endpoint_s", "effectendpoint_s",
 			"effectendpoint_type_s", "effectendpoint_synonym_ss", "effectendpoint_group_d", "reference_owner_s",

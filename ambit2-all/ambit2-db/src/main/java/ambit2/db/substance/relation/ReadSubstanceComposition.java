@@ -44,7 +44,7 @@ public class ReadSubstanceComposition
 		this.excludeHidden = excludeHidden;
 	}
 	private final static String _sql = "select cmp_prefix,hex(cmp_uuid) cmp_huuid,r.name as compositionname,idsubstance,r.idchemical,relation,`function`,proportion_typical,proportion_typical_value,proportion_typical_unit,proportion_real_lower,proportion_real_lower_value,proportion_real_upper,proportion_real_upper_value,proportion_real_unit,r.rs_prefix as refstruc,hex(r.rs_uuid) as refstrucuuid,hidden";
-	private final static String sql = _sql + " from substance_relation r ";
+	private final static String sql = _sql + ",inchi,smiles,formula,inchikey from substance_relation r join chemicals using(idchemical) ";
 
 	private static String q_idsubstance = "idsubstance=? ";
 	private static String q_uuid = "prefix=? and uuid=unhex(?) ";
@@ -56,7 +56,7 @@ public class ReadSubstanceComposition
 	private final static String sql_uuid = sql
 			+ " join substance using(idsubstance) where " + q_uuid;
 	private final static String sql_bundle = _sql
-			+ ",c.tag,c.remarks from substance_relation r join bundle_substance using(idsubstance) join bundle_chemicals c using(idbundle) where c.idchemical=r.idchemical and idbundle=? and "
+			+ ",c.tag,c.remarks,inchi,smiles,formula,inchikey from substance_relation r join chemicals using(idchemical) join bundle_substance using(idsubstance) join bundle_chemicals c using(idbundle) where c.idchemical=r.idchemical and idbundle=? and "
 			+ q_idsubstance;
 
 	protected SubstanceEndpointsBundle bundle;
@@ -156,6 +156,15 @@ public class ReadSubstanceComposition
 			}
 			record.getFirstStructure().setIdsubstance(rs.getInt("idsubstance"));
 			record.getSecondStructure().setIdchemical(rs.getInt("idchemical"));
+			try {
+			    record.getSecondStructure().setInchi(rs.getString("inchi"));
+			    record.getSecondStructure().setSmiles(rs.getString("smiles"));
+			    record.getSecondStructure().setInchiKey(rs.getString("inchikey"));
+			    record.getSecondStructure().setFormula(rs.getString("formula"));
+			} catch(Exception x) {
+			    x.printStackTrace();
+			}
+			
 			record.setRelationType(STRUCTURE_RELATION.valueOf(rs
 					.getString("relation")));
 			record.getRelation().setFunction(rs.getString("function"));
