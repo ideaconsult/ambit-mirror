@@ -46,7 +46,7 @@ public class Expander
 		return null;
 	}
 	
-	SLNContainer generateExpandedSLNContainer (SLNContainer container)
+	public SLNContainer generateExpandedSLNContainer (SLNContainer container)
 	{
 		this.container = container;
 		determineFirstSheres(container);
@@ -70,15 +70,18 @@ public class Expander
 		node.atom = (SLNAtom)container.getAtom(0);
 		nodes.put(node.atom, node);
 		
-		expand((SLNAtom)node.atom, null);
+		//recursive approach
+		expand(node.atom);
 		
 
 		return expContainer;
 	}
 	
 	
-	public void expand(IAtom atom, IAtom prevAt) 
+	public void expand(IAtom atom) 
 	{		
+		ExpAtomNode curNode = nodes.get(atom);
+		
 		//Expanding atom
 		SLNAtom at = (SLNAtom)atom;
 		List<IAtom> expandAtoms = null;
@@ -94,21 +97,19 @@ public class Expander
 			oldToNewAtoms.put(at, expandAtoms);
 		}
 		
-		//Connecting to the atom from previous recursion level - prevAt
-		if (prevAt != null)
+		//Generating connection to the atom from previous recursion level - curNode.parent
+		if (curNode.parent != null)
 		{
-			Object o = oldToNewAtoms.get(prevAt);
-			if (o instanceof IAtom)
-			{
-				IAtom prevNewAt = (IAtom)o;
-				//SLNBond bo = container.getBond(atom1, atom2);
-			}
+			SLNBond bo = (SLNBond)container.getBond(atom, curNode.parent);
+			SLNBond newBo = bo.clone();
+			
+			Object o = oldToNewAtoms.get(curNode.parent);
+			
 		}
 		
 		
 		//Handling the neighbors of the atom (next recursion level)
 		TopLayer afs = firstSphere.get(atom);
-		ExpAtomNode curNode = nodes.get(atom);
 		
 		for (int i=0; i<afs.atoms.size(); i++)
 		{
@@ -126,7 +127,7 @@ public class Expander
 				nodes.put(newNode.atom, newNode); 
 				
 				if (at.dictObj == null)
-					expand(neighborAt, at);
+					expand(neighborAt);
 				else
 				{
 					int vPos = 0;
@@ -160,6 +161,45 @@ public class Expander
 				
 			}
 		}
+	}
+	
+	/*
+	 * Input newObj is an atom generated from a dictionary object or an ordinary IAtom
+	 */
+	IAtom getNewAtomWhichIsValenceConectionAtPos(int valencePos, Object newObj, SLNAtom originalAt)
+	{
+		if (newObj instanceof IAtom)
+			return (IAtom)newObj;
+		else
+		{
+			List<IAtom> list = (List<IAtom>) newObj;
+			//Original atom (originalAt) is a dictionary object
+			//AtomDictionaryObject should not be handled here (i.e. newObj will be of IAtom type
+			
+			if (originalAt.dictObj instanceof MacroAtomDictionaryObject)
+			{
+				MacroAtomDictionaryObject maDO = (MacroAtomDictionaryObject)originalAt.dictObj; 
+				int atIndex;
+
+				int valenceAtomIndices[] = maDO.getValenceAtomIndices();
+				if (valenceAtomIndices == null)
+				{	
+					//list.size() should be same as originalAt.dictObj.getSLNContainer().getAtomCount()
+					if (valencePos >= list.size() ) 
+						atIndex = list.size()-1;
+					else
+						atIndex = valencePos;
+				}
+				else
+					atIndex = valenceAtomIndices[valencePos];
+				
+				return (list.get(atIndex));
+			}
+			
+		}
+		
+		
+		return null;
 	}
 	
 	public List<IAtom> expandDictionaryAtom (SLNAtom at) 
