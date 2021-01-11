@@ -222,12 +222,31 @@ public class SLNDictionary
 		return dict;
 	}
 	
-	public void checkDictiobary() {
+	public void checkDictionary() {
 		
-		//Do semantic check: valences values
+		for (String name:names)
+		{
+			ISLNDictionaryObject obj = getDictionaryObject(name);
+			
+			if (obj instanceof MacroAtomDictionaryObject)
+				checkMacroAtom((MacroAtomDictionaryObject) obj);
+			else if (obj instanceof MarkushAtomDictionaryObject)
+				checkMarkushAtom((MarkushAtomDictionaryObject) obj);
+		}
 		
-		//TODO 
+		 
 	}
+	
+	public void checkMacroAtom(MacroAtomDictionaryObject maDO) {
+		//Do semantic check: valences values
+		//TODO
+	}
+	
+	public void checkMarkushAtom(MarkushAtomDictionaryObject maDO) {
+		
+		//TODO
+	}
+	
 	
 	public static DictionaryObjectReferencesCheckResult checkContainer(SLNContainer container) {
 		

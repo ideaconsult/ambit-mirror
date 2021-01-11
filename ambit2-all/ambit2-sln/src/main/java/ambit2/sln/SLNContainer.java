@@ -1,5 +1,8 @@
 package ambit2.sln;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -93,5 +96,34 @@ public class SLNContainer extends QueryAtomContainer
 		//may be remove function checkIsStructureOnly()
 	}
 	
+	public int[] getValenceAtomIndices() {
+		if (getAttributes().valences == null)
+			return null;
+		
+		List<Integer> atNums1based = get1basedAtomIndicesCountingHAtoms();
+		int n = getAttributes().valences.length;		
+		int valAtInd[] = new int[n];
+		
+		for (int i = 0; i < n; i++)
+		{
+			Integer v = getAttributes().valences[i];
+			valAtInd[i] = atNums1based.indexOf(v);
+			//System.out.println("valAtInd = "  + valAtInd[i]);
+		}
+		return valAtInd;
+	}
+	
+	public List<Integer> get1basedAtomIndicesCountingHAtoms() {
+		int n = getAtomCount();
+		int curNum = 1;
+		List<Integer> ind = new ArrayList<Integer>();
+		
+		for (int i = 0; i<n; i++)
+		{
+			ind.add(curNum);
+			curNum = curNum + ((SLNAtom)getAtom(i)).numHAtom + 1;
+		}		
+		return ind;
+	}
 
 }

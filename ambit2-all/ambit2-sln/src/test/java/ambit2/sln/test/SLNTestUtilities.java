@@ -72,9 +72,9 @@ public class SLNTestUtilities
 		//slnParser.setFlagUseTypeAsStandardAtomAttribute(false);
 		//tu.testSLNIsomorphism("Any[type>7]","CNO");
 		//tu.testSLNIsomorphism("HalC","[F]CCO");
-		tu.testSLNIsomorphism("C:C","c1ccccc1");
-		tu.testSLNIsomorphism("C:C","C1=CC=CC=C1");
-		tu.testSLNIsomorphism("C:C","C1CCCCC1");
+		//tu.testSLNIsomorphism("C:C","c1ccccc1");
+		//tu.testSLNIsomorphism("C:C","C1=CC=CC=C1");
+		//tu.testSLNIsomorphism("C:C","C1CCCCC1");
 		
 		
 		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
@@ -95,7 +95,7 @@ public class SLNTestUtilities
 		//tu.testSLNMatch("CC<aa<5>", "CCC", new Object[] {"aa",4});
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;	
-		//tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CCC<v=1,3>}");
+		tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CH3CH2CH3<v=1,8>}");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
