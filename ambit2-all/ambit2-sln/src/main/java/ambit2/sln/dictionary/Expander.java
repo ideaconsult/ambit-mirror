@@ -27,33 +27,39 @@ public class Expander
 	HashMap<IAtom,ExpAtomNode> nodes = new HashMap<IAtom,ExpAtomNode>();
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
 	
-	boolean FlagClearMarkushInfo = true;
+	//boolean FlagClearMarkushInfo = true;
 	int markushTokensNumber[] = null;
 	int markushPos[] = null;
 		
 	public List<SLNContainer> generateMarkushCombinatorialList (SLNContainer container)
 	{
+		this.container = container;
+		determineFirstSheres(container);
 		List<SLNAtom> maList = getMarkushAtoms();
 		fillMarkushAtomsInfo(maList);
-		FlagClearMarkushInfo = false;
+		
 		
 		//TODO generate all combinations of markushPos combinations ...
 		
-		FlagClearMarkushInfo = true;	
 		return null;
 	}
 	
-	public SLNContainer generatedExpandedSLNContainer(SLNContainer container) 
+	SLNContainer generateExpandedSLNContainer (SLNContainer container)
+	{
+		this.container = container;
+		determineFirstSheres(container);
+		clearMarkushAtomsInfo();
+		
+		return getExpandedSLNContainer();
+	}
+	
+	public SLNContainer getExpandedSLNContainer() 
 	{
 		//All dictionary objects SLNContainers atoms and bonds are added
 		//and linked to the atoms of the container
-		this.container = container;
-		determineFirstSheres(container);
+		
 		expContainer = new SLNContainer(container.getBuilder());
 		oldToNewAtoms.clear();
-		
-		if (FlagClearMarkushInfo)
-			clearMarkushAtomsInfo();
 		
 		ExpAtomNode node = new ExpAtomNode();
 		node.parent = null;
@@ -90,9 +96,10 @@ public class Expander
 		return expContainer;
 	}
 	
-	public void expand(SLNAtom at) 
+	public void expand(SLNAtom atom) 
 	{
-		//TODO
+		TopLayer afs = firstSphere.get(atom);
+		ExpAtomNode curNode = nodes.get(atom);
 	}
 	
 	public void expandDictionaryAtom (SLNAtom at) 
