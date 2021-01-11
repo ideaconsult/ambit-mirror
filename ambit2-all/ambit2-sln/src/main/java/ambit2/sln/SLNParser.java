@@ -107,6 +107,14 @@ public class SLNParser {
 	public void setFlagUseTypeAsStandardAtomAttribute(boolean flagUseTypeAsStandardAtomAttribute) {
 		FlagUseTypeAsStandardAtomAttribute = flagUseTypeAsStandardAtomAttribute;
 	}
+	
+	public SLNDictionary getGlobalDictionary() {
+		return globalDictionary;
+	}
+
+	public void setGlobalDictionary(SLNDictionary globalDictionary) {
+		this.globalDictionary = globalDictionary;
+	}
 
 	public SLNContainer parse(String sln) {
 		this.sln = sln;

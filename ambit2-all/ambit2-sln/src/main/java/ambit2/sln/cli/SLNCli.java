@@ -32,6 +32,7 @@ import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
+import ambit2.sln.dictionary.SLNDictionary;
 import ambit2.sln.io.SLN2ChemObject;
 import ambit2.sln.io.SLN2SMARTS;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
@@ -47,6 +48,7 @@ public class SLNCli {
 
 	public String inputFileName = null;
 	public String outputFileName = null;
+	public String dictionaryFileName = null;
 	public String inputSmiles = null;
 	public String sln = null;
 	public String operationString = null;
@@ -196,6 +198,21 @@ public class SLNCli {
 			}
 		},
 		
+		dictionary {
+			@Override
+			public String getArgName() {
+				return "dict";
+			}
+			@Override
+			public String getDescription() {
+				return "A text file with SLN dictionary objects (e.g. macro atoms or Markush atoms)";
+			}
+			@Override
+			public String getShortName() {
+				return "d";
+			}
+		},
+		
 		warnings {
 			@Override
 			public String getArgName() {
@@ -306,6 +323,12 @@ public class SLNCli {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			outputFileName = argument;
+			break;
+		}
+		case dictionary: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			dictionaryFileName = argument;
 			break;
 		}
 		case operation: {
@@ -428,6 +451,29 @@ public class SLNCli {
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
+		
+		if (dictionaryFileName != null)
+		{
+			try {
+				SLNDictionary dict = SLNDictionary.getDictionary(dictionaryFileName);
+				if (dict.getParserErrors().isEmpty() && dict.getCheckErrors().isEmpty())
+					slnParser.setGlobalDictionary(dict);
+				else
+				{
+					System.out.println("Global SLN dictionary errors:");
+					System.out.println(dict.getParserErrorMessages());
+					System.out.println(dict.getCheckErrorMessages());
+					return -1;
+				}
+				System.out.println("Global SLN dictionary loaded sucessfully (" + dict.getNames().size() + " objects)");
+			}
+			catch (Exception x) {
+				System.out.println("Global SLN dictionary loading problem: " + x.getMessage());
+				return -1;
+			}
+		}
+		else
+			slnParser.setPredefinedGlobalDictionary();
 		
 				
 		if (inputSmiles != null) {
