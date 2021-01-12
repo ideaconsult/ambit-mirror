@@ -1998,8 +1998,13 @@ public class SLNParser {
 		return dict;
 	}
 	
-		
 	public ISLNDictionaryObject parseDictionaryObject(String dictObjectString)
+	{
+		return parseMacroAtomDictionaryObject(dictObjectString);
+	}
+	
+		
+	public ISLNDictionaryObject parseMacroAtomDictionaryObject(String dictObjectString)
 	{
 		if (dictObjectString.isEmpty())
 			return null;
@@ -2010,7 +2015,7 @@ public class SLNParser {
 			pos++;
 		else
 		{
-			newError("Incorrecr dictionary object: " + dictObjectString, pos, "");
+			newError("Incorrect dictionary object: " + dictObjectString, pos, "");
 			return null;
 		}
 		
@@ -2071,6 +2076,12 @@ public class SLNParser {
 		errorContextPrefix = "";
 		
 		return dictObj;
+	}
+	
+	public ISLNDictionaryObject parseMarkushDictionaryObject(String dictObjectString)
+	{
+		//
+		return null;
 	}
 
 }
