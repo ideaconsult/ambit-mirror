@@ -125,6 +125,7 @@ public class Expander
 	}
 	
 	
+	/*
 	
 	public SLNContainer getExpandedSLNContainer0() 
 	{
@@ -148,6 +149,7 @@ public class Expander
 
 		return expContainer;
 	}
+	
 	
 	
 	public void expand(IAtom atom) 
@@ -199,7 +201,7 @@ public class Expander
 				newNode.parent = atom;
 				nodes.put(newNode.atom, newNode); 
 				
-				/*
+				
 				if (at.dictObj == null)
 					expand(neighborAt);
 				else
@@ -219,7 +221,7 @@ public class Expander
 					
 				}	
 				
-				*/
+				
 				
 			}
 			else
@@ -238,6 +240,8 @@ public class Expander
 			}
 		}
 	}
+	
+	*/
 	
 	/*
 	 * Input newObj is an atom generated from a dictionary object or an ordinary IAtom
@@ -272,11 +276,11 @@ public class Expander
 				return (list.get(atIndex));
 			}
 			
-		}
-		
+		}		
 		
 		return null;
 	}
+	
 	
 	public List<IAtom> expandDictionaryAtom (SLNAtom at) 
 	{
