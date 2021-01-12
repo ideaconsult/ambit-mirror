@@ -9,6 +9,7 @@ import ambit2.base.relation.composition.CompositionRelation;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
+import ambit2.sln.dictionary.Expander;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
 import ambit2.sln.io.SLN2SMARTS;
 import ambit2.sln.io.SLN2Substance;
@@ -28,6 +29,7 @@ public class SLNTestUtilities
 	static SLNSearchManager man = new SLNSearchManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SLN2Substance sln2sub = new SLN2Substance();
+	static Expander expander = new Expander();
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -95,7 +97,10 @@ public class SLNTestUtilities
 		//tu.testSLNMatch("CC<aa<5>", "CCC", new Object[] {"aa",4});
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;	
-		tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CH3CH2CH3<v=1,8>}");
+		//tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CH3CH2CH3<v=1,8>}");
+		
+		//tu.testSLNExpander("CC[charge>-1]CCH3");
+		tu.testSLNExpander("HetCCCC{Aa:NSO<v=1,3>}");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
@@ -166,6 +171,22 @@ public class SLNTestUtilities
 		 
 		System.out.println("Input  sln: " + sln); 
 		System.out.println("Ouput  sln: " + slnHelper.toSLN(container));
+	}
+	
+	public void testSLNExpander(String sln)
+	{	
+		SLNContainer container = slnParser.parse(sln);
+		if (!slnParser.getErrorMessages().equals(""))
+		{
+			System.out.println("Original sln:    " + sln); 
+			System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+			return;
+		}
+		
+		SLNContainer container2 = expander.generateExpandedSLNContainer(container);
+		
+		System.out.println("Input  sln: " + sln); 
+		System.out.println("Ouput  sln: " + slnHelper.toSLN(container2));
 	}
 	
 	public void testSLN2Smiles(String sln) throws Exception
