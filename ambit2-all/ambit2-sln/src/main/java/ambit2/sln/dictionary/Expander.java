@@ -27,19 +27,18 @@ public class Expander
 		
 	HashMap<IAtom,ExpAtomNode> nodes = new HashMap<IAtom,ExpAtomNode>();
 	HashMap<IAtom,TopLayer> firstSphere = new HashMap<IAtom,TopLayer>();
-	List<IBond> ringClosures = new ArrayList<IBond>();
+	//List<IBond> ringClosures = new ArrayList<IBond>();
 	
-	//boolean FlagClearMarkushInfo = true;
-	int markushTokensNumber[] = null;
+	List<SLNAtom> markushAtoms = null;
+	int markushTokensCount[] = null;
 	int markushPos[] = null;
 		
 	public List<SLNContainer> generateMarkushCombinatorialList (SLNContainer container)
 	{
 		this.container = container;
 		determineFirstSheres(container);
-		List<SLNAtom> maList = getMarkushAtoms();
-		fillMarkushAtomsInfo(maList);
-		
+		markushAtoms = getMarkushAtoms();
+		fillMarkushAtomsInfo(markushAtoms);
 		
 		//TODO generate all combinations of markushPos combinations ...
 		
@@ -50,8 +49,10 @@ public class Expander
 	{
 		this.container = container;
 		determineFirstSheres(container);
-		clearMarkushAtomsInfo();
-		
+		//clearMarkushAtomsInfo();
+		markushAtoms = getMarkushAtoms();
+		fillMarkushAtomsInfo(markushAtoms);
+				
 		return getExpandedSLNContainer();
 	}
 	
@@ -69,7 +70,6 @@ public class Expander
 		
 		for (int i = 0; i < container.getBondCount(); i++)
 			handleBond(container.getBond(i));
-		
 		
 		return expContainer;
 	}
@@ -126,7 +126,6 @@ public class Expander
 	
 	
 	/*
-	
 	public SLNContainer getExpandedSLNContainer0() 
 	{
 		//All dictionary objects SLNContainers atoms and bonds are added
@@ -145,12 +144,9 @@ public class Expander
 		
 		//recursive approach
 		expand(node.atom);
-		
 
 		return expContainer;
 	}
-	
-	
 	
 	public void expand(IAtom atom) 
 	{		
@@ -181,7 +177,6 @@ public class Expander
 			//IAtom newAt1 = getNewAtomWhichIsValenceConectionAtPos(int valencePos, Object newObj, SLNAtom originalAt)
 			
 		}
-		
 		
 		//Handling the neighbors of the atom (next recursion level)
 		TopLayer afs = firstSphere.get(atom);
@@ -218,11 +213,7 @@ public class Expander
 						vPos = valences[i];
 					
 					//TODO link using vPos
-					
 				}	
-				
-				
-				
 			}
 			else
 			{	
@@ -231,17 +222,14 @@ public class Expander
 				if (ringClosures.contains(neighborBo))  
 					continue;
 				
-				ringClosures.add(neighborBo);
-				
+				ringClosures.add(neighborBo);				
 				//Handle a new ring closure
-				
 				//afs.bonds.get(i)
-				
 			}
 		}
 	}
-	
 	*/
+	
 	
 	/*
 	 * Input newObj is an atom generated from a dictionary object or an ordinary IAtom
@@ -389,11 +377,19 @@ public class Expander
 	}
 	
 	void fillMarkushAtomsInfo(List<SLNAtom> maList) {
-		//TODO
+		markushTokensCount = new int[maList.size()];
+		markushPos = new int[maList.size()];
+		
+		for (int i = 0; i < maList.size(); i++)
+		{
+			markushTokensCount[i] = ((MarkushAtomDictionaryObject)maList.get(i).dictObj).macroAtoms.size();
+			//Default initial position = 0
+			markushPos[i] = 0;
+		}
 	}
 	
 	void clearMarkushAtomsInfo() {
-		markushTokensNumber = null;
+		markushTokensCount = null;
 		markushPos = null;
 	}
 	
