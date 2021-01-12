@@ -254,7 +254,12 @@ public class Expander
 		{
 			List<IAtom> list = (List<IAtom>) newObj;
 			//Original atom (originalAt) is a dictionary object
-			//AtomDictionaryObject should not be handled here (i.e. newObj will be of IAtom type
+			
+			if (originalAt.dictObj instanceof AtomDictionaryObject)
+			{
+				//Only one atom in AtomDictionaryObject. Always return list.get(0)
+				return list.get(0);
+			}
 			
 			if (originalAt.dictObj instanceof MacroAtomDictionaryObject)
 			{
