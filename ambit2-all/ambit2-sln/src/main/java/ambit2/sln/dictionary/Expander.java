@@ -30,7 +30,7 @@ public class Expander
 	//List<IBond> ringClosures = new ArrayList<IBond>();
 	
 	List<SLNAtom> markushAtoms = null;
-	int markushTokensCount[] = null;
+	int markushMacroAtomsCount[] = null;
 	int markushPos[] = null;
 		
 	public List<SLNContainer> generateMarkushCombinatorialList (SLNContainer container)
@@ -38,7 +38,7 @@ public class Expander
 		this.container = container;
 		determineFirstSheres(container);
 		markushAtoms = getMarkushAtoms();
-		fillMarkushAtomsInfo(markushAtoms);
+		fillMarkushAtomsInfo();
 		
 		//TODO generate all combinations of markushPos combinations ...
 		
@@ -51,7 +51,7 @@ public class Expander
 		determineFirstSheres(container);
 		//clearMarkushAtomsInfo();
 		markushAtoms = getMarkushAtoms();
-		fillMarkushAtomsInfo(markushAtoms);
+		fillMarkushAtomsInfo();
 				
 		return getExpandedSLNContainer();
 	}
@@ -252,31 +252,43 @@ public class Expander
 				return list.get(0);
 			}
 			
+			MacroAtomDictionaryObject maDO = null;
+			
 			if (originalAt.dictObj instanceof MacroAtomDictionaryObject)
 			{
-				MacroAtomDictionaryObject maDO = (MacroAtomDictionaryObject)originalAt.dictObj; 
-				int atIndex;
-
-				int valenceAtomIndices[] = maDO.getValenceAtomIndices();
-				if (valenceAtomIndices == null)
-				{	
-					//list.size() should be same as originalAt.dictObj.getSLNContainer().getAtomCount()
-					if (valencePosIndex >= list.size() ) 
-						atIndex = list.size()-1;
-					else
-						atIndex = valencePosIndex;
-				}
-				else
-					atIndex = valenceAtomIndices[valencePosIndex];
-				
-				//System.out.println("getNewAtom... valencePos = " + valencePosIndex + "  atIndex = " + atIndex);
-				
-				return (list.get(atIndex));
+				maDO = (MacroAtomDictionaryObject)originalAt.dictObj;
+			}
+			else if (originalAt.dictObj instanceof MarkushAtomDictionaryObject)
+			{	
+				//Get the proper macro/atom component from the Markush atom
+				//according to the markushPos[...] value
+				//maObj is either AtomDictionaryObject or MacroAtomDictionaryObject
+				ISLNDictionaryObject maObj = getProperDictionaryObject(originalAt);
+							
+				if (maObj instanceof AtomDictionaryObject)
+					return list.get(0);				
+				else				
+					maDO = (MacroAtomDictionaryObject)maObj;				
 			}
 			
+			int atIndex;
+			int valenceAtomIndices[] = maDO.getValenceAtomIndices();
+			if (valenceAtomIndices == null)
+			{	
+				//list.size() should be same as originalAt.dictObj.getSLNContainer().getAtomCount()
+				if (valencePosIndex >= list.size() ) 
+					atIndex = list.size()-1;
+				else
+					atIndex = valencePosIndex;
+			}
+			else
+				atIndex = valenceAtomIndices[valencePosIndex];
+
+			//System.out.println("getNewAtom... valencePos = " + valencePosIndex + "  atIndex = " + atIndex);
+
+			return (list.get(atIndex));
 		}		
 		
-		return null;
 	}
 	
 	
@@ -296,8 +308,29 @@ public class Expander
 		{
 			return expandMacroAtomDictionaryObject((MacroAtomDictionaryObject) at.dictObj);
 		}
+		else if (at.dictObj instanceof MarkushAtomDictionaryObject)
+		{
+			//Get the proper macro/atom component from the Markush atom
+			//according to the markushPos[...] value
+			//maObj is either AtomDictionaryObject or MacroAtomDictionaryObject
+			ISLNDictionaryObject maObj = getProperDictionaryObject(at);
+						
+			if (maObj instanceof AtomDictionaryObject)
+			{
+				AtomDictionaryObject aDO = (AtomDictionaryObject)maObj;
+				SLNAtom newAt = aDO.atom.clone();
+				expContainer.addAtom(newAt);
+				List<IAtom> list = new ArrayList<IAtom>();
+				list.add(newAt);
+				return list;
+			}
+			else
+			{
+				return expandMacroAtomDictionaryObject((MacroAtomDictionaryObject) maObj);
+			}
+			
+		}
 		
-		//TODO handle other type of dictionary objects
 		
 		return null;
 	}
@@ -376,21 +409,29 @@ public class Expander
 		return dictAtoms;
 	}
 	
-	void fillMarkushAtomsInfo(List<SLNAtom> maList) {
-		markushTokensCount = new int[maList.size()];
-		markushPos = new int[maList.size()];
+	void fillMarkushAtomsInfo() {
+		markushMacroAtomsCount = new int[markushAtoms.size()];
+		markushPos = new int[markushAtoms.size()];
 		
-		for (int i = 0; i < maList.size(); i++)
+		for (int i = 0; i < markushAtoms.size(); i++)
 		{
-			markushTokensCount[i] = ((MarkushAtomDictionaryObject)maList.get(i).dictObj).macroAtoms.size();
+			markushMacroAtomsCount[i] = ((MarkushAtomDictionaryObject)markushAtoms.get(i).dictObj).macroAtoms.size();
 			//Default initial position = 0
 			markushPos[i] = 0;
 		}
 	}
 	
 	void clearMarkushAtomsInfo() {
-		markushTokensCount = null;
+		markushMacroAtomsCount = null;
 		markushPos = null;
+	}
+	
+	
+	ISLNDictionaryObject getProperDictionaryObject(SLNAtom at) {
+		int maIndex = markushAtoms.indexOf(at);
+		int curMADOIndex = markushPos[maIndex]; 
+		MarkushAtomDictionaryObject markushAtom = (MarkushAtomDictionaryObject) at.dictObj;
+		return (markushAtom.macroAtoms.get(curMADOIndex));
 	}
 	
 }
