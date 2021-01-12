@@ -10,6 +10,8 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import ambit2.sln.dictionary.AtomDictionaryObject;
 import ambit2.sln.dictionary.ISLNDictionaryObject;
 import ambit2.sln.dictionary.MacroAtomDictionaryObject;
+import ambit2.sln.dictionary.MarkushAtomDictionaryObject;
+import ambit2.sln.dictionary.MarkushHelper;
 import ambit2.sln.dictionary.PredefinedSLNDictionary;
 import ambit2.sln.dictionary.SLNDictionary;
 
@@ -35,6 +37,7 @@ public class SLNParser {
 	SLNDictionary globalDictionary = null;
 	Stack<SLNAtom> brackets = new Stack<SLNAtom>();
 	ArrayList<SLNParserError> errors = new ArrayList<SLNParserError>();
+	MarkushHelper markushHelper = new MarkushHelper();
 	
 	
 	ArrayList<Integer> localDictionaryObjectBeginPos = new ArrayList<Integer>();
@@ -2000,56 +2003,66 @@ public class SLNParser {
 	
 	public ISLNDictionaryObject parseDictionaryObject(String dictObjectString)
 	{
-		return parseMacroAtomDictionaryObject(dictObjectString);
+		//Check for Markush atom
+		markushHelper.setSLNString(dictObjectString);		
+		if (markushHelper.isMarkushAtomSLNString()) 
+			return (parseMarkushDictionaryObject(dictObjectString));
+		
+		return parseMacroAtomDictionaryObject(dictObjectString, true);
 	}
 	
 		
-	public ISLNDictionaryObject parseMacroAtomDictionaryObject(String dictObjectString)
+	public ISLNDictionaryObject parseMacroAtomDictionaryObject(String dictObjectString, boolean parseName)
 	{
 		if (dictObjectString.isEmpty())
 			return null;
-				
-		//Handle dictionary object name
+		
 		int pos = 0;
-		if (Character.isUpperCase(dictObjectString.charAt(0)))
-			pos++;
-		else
-		{
-			newError("Incorrect dictionary object: " + dictObjectString, pos, "");
-			return null;
-		}
-		
 		int n = dictObjectString.length();
+		String dictObjName = null;
 		
-		while ((pos < n) && 
-				(Character.isLowerCase(dictObjectString.charAt(pos)) 
-						|| Character.isDigit(dictObjectString.charAt(pos))
-						|| dictObjectString.charAt(pos) == '_')
-				)
-		{
-			pos++;
-		}
-		
-		if (pos == n)
-		{
-			newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
-			return null;
-		}
-		
-		String dictObjName = dictObjectString.substring(0,pos); 
-		
-		if (dictObjectString.charAt(pos) != ':')
-		{
-			newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
-			return null;
-		}
-		else
-			pos++;
-		
-		if (pos == n)
-		{
-			newError("Incorrect dictionary object: " + dictObjectString, -1, "");
-			return null;
+		if (parseName) 
+		{	
+			//Handle dictionary object name
+			
+			if (Character.isUpperCase(dictObjectString.charAt(0)))
+				pos++;
+			else
+			{
+				newError("Incorrect dictionary object: " + dictObjectString, pos, "");
+				return null;
+			}
+	
+			while ((pos < n) && 
+					(Character.isLowerCase(dictObjectString.charAt(pos)) 
+							|| Character.isDigit(dictObjectString.charAt(pos))
+							|| dictObjectString.charAt(pos) == '_')
+					)
+			{
+				pos++;
+			}
+
+			if (pos == n)
+			{
+				newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
+				return null;
+			}
+			
+			dictObjName = dictObjectString.substring(0,pos); 
+			
+			if (dictObjectString.charAt(pos) != ':')
+			{
+				newError("Incorrecr dictionary object: " + dictObjectString, -1, "");
+				return null;
+			}
+			else
+				pos++;
+			
+			if (pos == n)
+			{
+				newError("Incorrect dictionary object: " + dictObjectString, -1, "");
+				return null;
+			}
 		}
 				
 		
@@ -2079,9 +2092,32 @@ public class SLNParser {
 	}
 	
 	public ISLNDictionaryObject parseMarkushDictionaryObject(String dictObjectString)
-	{
-		//
-		return null;
+	{	
+		markushHelper.analyzeMarkushString();
+		
+		if (!markushHelper.getErrors().isEmpty())
+		{	
+			newError(markushHelper.getErrorMessages(), 0, dictObjectString);
+			return null;
+		}
+		
+		List<ISLNDictionaryObject>  macroAtoms = new ArrayList<ISLNDictionaryObject>();
+		List<String> components = markushHelper.getComponentList();
+		
+		for (int i = 0; i < components.size(); i++)
+		{	
+			//System.out.println("  " + components.get(i));
+			ISLNDictionaryObject dictObj = parseMacroAtomDictionaryObject(components.get(i), false);
+			
+			if (dictObj != null)
+				macroAtoms.add(dictObj);
+		}
+		
+		MarkushAtomDictionaryObject markushAtom = 
+				new MarkushAtomDictionaryObject(markushHelper.getMarkushAtomName(), 
+						dictObjectString, macroAtoms);
+		
+		return markushAtom;
 	}
 
 }
