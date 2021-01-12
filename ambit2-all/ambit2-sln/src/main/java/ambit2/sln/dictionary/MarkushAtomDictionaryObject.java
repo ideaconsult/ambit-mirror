@@ -3,6 +3,8 @@ package ambit2.sln.dictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+import ambit2.sln.SLNHelper;
+
 
 
 public class MarkushAtomDictionaryObject extends GenericDictionaryObject 
@@ -27,5 +29,20 @@ public class MarkushAtomDictionaryObject extends GenericDictionaryObject
 	public Type getObjectType() {
 		return Type.MARKUSH_ATOM;
 	}
+	
+	public String getContentString (SLNHelper slnHelper)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i <  macroAtoms.size(); i++)
+		{
+			//This is an ATOM or MACTRO_ATOM object
+			ISLNDictionaryObject obj = macroAtoms.get(i);
+			if (i > 0)
+				sb.append("|");
+			sb.append(slnHelper.toSLN(obj.getSLNContainer()));
+		}
+		return sb.toString();
+	}
+	
 	
 }

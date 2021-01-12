@@ -110,6 +110,9 @@ public class SLNDictionary
 		case MACRO_ATOM:
 			MacroAtomDictionaryObject ma = (MacroAtomDictionaryObject) dictObj;
 			return slnHelper.toSLN(ma.container);
+		case MARKUSH_ATOM:
+			MarkushAtomDictionaryObject markushAt = (MarkushAtomDictionaryObject) dictObj;
+			return markushAt.getContentString(slnHelper);
 		}
 		
 		return "";

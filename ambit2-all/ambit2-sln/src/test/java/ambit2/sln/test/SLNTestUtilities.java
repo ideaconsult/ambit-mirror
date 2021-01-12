@@ -103,7 +103,7 @@ public class SLNTestUtilities
 		
 		//slnHelper.FlagPreserveOriginalAtomID = false;	
 		//tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CH3CH2CH3<v=1,8>}");
-		tu.testSLN2SLN("CCCCAa{Aa:Cl|F|OH|CH3}");
+		tu.testSLN2SLN("CCCCAa{Aa:Cl|F|OH|CH3|CCC<v=1,3>}");
 		
 		
 		//tu.testSLNExpander("CC[charge>-1]CCH3");
