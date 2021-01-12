@@ -104,15 +104,15 @@ public class Expander
 		int conectionInd0 = getConnectionIndexOfTheBond(bond, at0);
 		int conectionInd1 = getConnectionIndexOfTheBond(bond, at1);
 		
-		//TODO improved valencePos handling taking into account attribute v if present
-		int valencePos0 = conectionInd0 + 1;
-		int valencePos1 = conectionInd1 + 1;
+		//TODO improved valencePos index handling taking into account attribute v if present
+		int valencePos0Index = conectionInd0;
+		int valencePos1Index = conectionInd1;
 				
 		Object newObj0 = oldToNewAtoms.get(at0);
 		Object newObj1 = oldToNewAtoms.get(at1);
 				
-		IAtom newAt0 = getNewAtomWhichIsValenceConectionAtPos(valencePos0, newObj0, (SLNAtom) at0);
-		IAtom newAt1 = getNewAtomWhichIsValenceConectionAtPos(valencePos1, newObj1, (SLNAtom) at1);
+		IAtom newAt0 = getNewAtomWhichIsValenceConection(valencePos0Index, newObj0, (SLNAtom) at0);
+		IAtom newAt1 = getNewAtomWhichIsValenceConection(valencePos1Index, newObj1, (SLNAtom) at1);
 		newBo.setAtoms(new IAtom[] {newAt0, newAt1});
 		
 		expContainer.addBond(newBo);
@@ -246,8 +246,11 @@ public class Expander
 	/*
 	 * Input newObj is an atom generated from a dictionary object or an ordinary IAtom
 	 */
-	IAtom getNewAtomWhichIsValenceConectionAtPos(int valencePos, Object newObj, SLNAtom originalAt)
+	IAtom getNewAtomWhichIsValenceConection(int valencePosIndex, Object newObj, SLNAtom originalAt)
 	{
+		//valencePosIndex is the 0-based index of the valence position
+		//e.g. for CH3CH2CH3<v=1,8>  valencePosIndex=0 for v=1 and valencePosIndex=1 for v=8 
+		
 		if (newObj instanceof IAtom)
 			return (IAtom)newObj;
 		else
@@ -270,13 +273,15 @@ public class Expander
 				if (valenceAtomIndices == null)
 				{	
 					//list.size() should be same as originalAt.dictObj.getSLNContainer().getAtomCount()
-					if (valencePos >= list.size() ) 
+					if (valencePosIndex >= list.size() ) 
 						atIndex = list.size()-1;
 					else
-						atIndex = valencePos;
+						atIndex = valencePosIndex;
 				}
 				else
-					atIndex = valenceAtomIndices[valencePos];
+					atIndex = valenceAtomIndices[valencePosIndex];
+				
+				//System.out.println("getNewAtom... valencePos = " + valencePosIndex + "  atIndex = " + atIndex);
 				
 				return (list.get(atIndex));
 			}

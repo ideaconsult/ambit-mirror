@@ -247,7 +247,7 @@ public class SLNDictionary
 			if (valAtInd[i] == -1)
 			{
 				String err = maDO.name + " Incorrect valence element [" + (i+1) + "]: " + maDO.getValences()[i];
-				checkErrors.add(err);
+				checkErrors.add(err);				
 			}
 	}
 	
