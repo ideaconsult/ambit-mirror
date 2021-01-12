@@ -1,5 +1,7 @@
 package ambit2.sln.test;
 
+import java.util.List;
+
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 import ambit2.base.data.Property;
@@ -10,6 +12,7 @@ import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
 import ambit2.sln.dictionary.Expander;
+import ambit2.sln.dictionary.MarkushHelper;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
 import ambit2.sln.io.SLN2SMARTS;
 import ambit2.sln.io.SLN2Substance;
@@ -30,6 +33,8 @@ public class SLNTestUtilities
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SLN2Substance sln2sub = new SLN2Substance();
 	static Expander expander = new Expander();
+	static MarkushHelper markushHelper = new MarkushHelper();
+	
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -101,9 +106,9 @@ public class SLNTestUtilities
 		
 		//tu.testSLNExpander("CC[charge>-1]CCH3");
 		//tu.testSLNExpander("AxCCCC{Aa:N[tt=3;charge<3]SO<v=1,3>}{Ax:Any[xx=45]}");
-		tu.testSLNExpander("CCAaCCAa{Aa:NSO<v=1,3>}");
+		//tu.testSLNExpander("CCAaCCAa{Aa:NSO<v=1,3>}");
 		
-		
+		tu.testMarkushHelper("Aa:CCC<v=1,3>|CC|CO<v=1,2>");
 		
 		//tu.testSLN("C[hac=3]");
 		//tu.testSLN("CC[s=R]H(O)C[rbc=3]C[s=S]H(O)N");
@@ -271,6 +276,28 @@ public class SLNTestUtilities
 		System.out.println("Match: " + sln  + "  in  " + smiles + 
 				"   " + res);
 	}
+	
+	public void testMarkushHelper(String sln)
+	{
+		System.out.println("SLN:  " + sln);
+		markushHelper.setSLNString(sln);
+		System.out.println("isMarkushAtomSLNString() = " + markushHelper.isMarkushAtomSLNString());
+		markushHelper.analyzeMarkushString();
+		
+		if (!markushHelper.getErrors().isEmpty())
+		{
+			System.out.println(markushHelper.getErrorMessages());
+			return;
+		}
+		
+		System.out.println("Name = " + markushHelper.getMarkushAtomName());
+		List<String> components = markushHelper.getComponentList();
+		System.out.println("Markush components = ");
+		for (int i = 0; i < components.size(); i++)
+			System.out.println("  " + components.get(i));
+		
+	}
+	
 	
 	public void testSLN2CompositionRelation(String sln)
 	{

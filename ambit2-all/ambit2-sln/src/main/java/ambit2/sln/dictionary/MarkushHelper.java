@@ -16,11 +16,12 @@ public class MarkushHelper
 		this.slnString = slnString;
 		errors.clear();
 		componentList.clear();
+		delimeterPositions.clear();
 		markushAtomName = "";
 		findSimpleMarkushAtomDelimiterPositions();
 	}
 	
-	boolean isMarkushAtomSLNString() {
+	public boolean isMarkushAtomSLNString() {
 		return (delimeterPositions.size() > 0);
 	}
 	
@@ -36,6 +37,14 @@ public class MarkushHelper
 		return errors;
 	}
 	
+	public String getErrorMessages() {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < errors.size(); i++) {
+			sb.append(errors.get(i) + "\n");
+		}
+		return (sb.toString());
+	}
+	
 	public List<String> getComponentList() {
 		return componentList;
 	}
@@ -49,14 +58,13 @@ public class MarkushHelper
 		//Simple recognition algorithm: searching  symbol '|' outside atom expression:
 		//e.g. [...] ... | ... [...]
 		
-		delimeterPositions.clear();
 		boolean withinAtomExpression = false;
 		int numOpenBrackets = 0;
 		int n = slnString.length();
 		
 		for (int pos = 0; pos < n; pos++)
 		{
-			if (slnString.charAt(pos) == '|' && withinAtomExpression)
+			if (slnString.charAt(pos) == '|' && !withinAtomExpression)
 			{	
 				delimeterPositions.add(pos);
 				continue;
@@ -104,7 +112,7 @@ public class MarkushHelper
 		if (n > 1)
 			for (int i = 0; i < n-1; i++)
 			{	
-				String comp = slnString.substring(0, delimeterPositions.get(0));
+				String comp = slnString.substring(delimeterPositions.get(i)+1, delimeterPositions.get(i+1));
 				componentList.add(comp);
 			}
 		
