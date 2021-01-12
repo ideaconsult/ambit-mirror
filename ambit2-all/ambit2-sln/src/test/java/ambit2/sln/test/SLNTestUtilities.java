@@ -108,7 +108,10 @@ public class SLNTestUtilities
 		
 		//tu.testSLNExpander("CC[charge>-1]CCH3");
 		//tu.testSLNExpander("AxCCCC{Aa:N[tt=3;charge<3]SO<v=1,3>}{Ax:Any[xx=45]}");
-		tu.testSLNExpander("CCAaCCAaAa{Aa:NSO<v=1,2>|CCC}");
+		//tu.testSLNExpander("CCAaCCAaAa{Aa:NSO<v=1,2>|CCC}");
+		//tu.expander.test();
+		
+		tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		
 		//tu.testMarkushHelper("Aa:CCC<v=1,3>|CC|CO<v=1,2>");
 		
@@ -198,6 +201,23 @@ public class SLNTestUtilities
 		
 		System.out.println("Input  sln: " + sln); 
 		System.out.println("Ouput  sln: " + slnHelper.toSLN(container2));
+	}
+	
+	public void testMarkushCombinatorialList(String sln)
+	{	
+		SLNContainer container = slnParser.parse(sln);
+		if (!slnParser.getErrorMessages().equals(""))
+		{
+			System.out.println("Original sln:    " + sln); 
+			System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+			return;
+		}
+		
+		System.out.println("Input  sln: " + sln);
+		System.out.println("Generating combinatorial library ...");
+		List<SLNContainer> list = expander.generateMarkushCombinatorialList(container);
+		for (int i = 0; i < list.size(); i++)
+			System.out.println("  " + slnHelper.toSLN(list.get(i)));
 	}
 	
 	public void testSLN2Smiles(String sln) throws Exception

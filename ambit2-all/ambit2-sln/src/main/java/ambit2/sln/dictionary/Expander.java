@@ -32,18 +32,42 @@ public class Expander
 	List<SLNAtom> markushAtoms = null;
 	int markushMacroAtomsCount[] = null;
 	int markushPos[] = null;
+	int numberOfMarkusPosCombinations = 0;
+	int maxNumberOfCombinations = 10000;
+	
 		
+	public int getMaxNumberOfCombinations() {
+		return maxNumberOfCombinations;
+	}
+
+	public void setMaxNumberOfCombinations(int maxNumberOfCombinations) {
+		this.maxNumberOfCombinations = maxNumberOfCombinations;
+	}
+
 	public List<SLNContainer> generateMarkushCombinatorialList (SLNContainer container)
 	{
 		this.container = container;
 		determineFirstSheres(container);
 		markushAtoms = getMarkushAtoms();
 		fillMarkushAtomsInfo();
+		List<SLNContainer> list = new ArrayList<SLNContainer>();
 		
-		//TODO generate all combinations of markushPos combinations ...
+		//Generate all combinations of markushPos combinations
+		calcMarkushPosCombinations();
+		int combNum = 0;
 		
-		return null;
+		while (combNum < numberOfMarkusPosCombinations &&
+				combNum < maxNumberOfCombinations)
+		{	
+			SLNContainer newContainer = getExpandedSLNContainer();	
+			list.add(newContainer);
+			combNum++;
+			nextCombination();
+		}
+		
+		return list;
 	}
+	
 	
 	public SLNContainer generateExpandedSLNContainer (SLNContainer container)
 	{
@@ -433,5 +457,51 @@ public class Expander
 		MarkushAtomDictionaryObject markushAtom = (MarkushAtomDictionaryObject) at.dictObj;
 		return (markushAtom.macroAtoms.get(curMADOIndex));
 	}
+	
+	void calcMarkushPosCombinations() {
+		numberOfMarkusPosCombinations = 1;
+		for (int i = 0; i < markushMacroAtomsCount.length; i++)
+			numberOfMarkusPosCombinations *= markushMacroAtomsCount[i];
+	}
+	
+	void nextCombination() {
+		increasePos(0);
+	}
+	
+	void increasePos(int n) {
+		if (n >= markushPos.length)
+			return; //reached last pos
+		
+		markushPos[n]++;
+		if (markushPos[n] == markushMacroAtomsCount[n])
+		{
+			markushPos[n]=0;
+			increasePos(n+1);
+		}
+	}
+	
+	/*
+	public void test() {
+		
+		markushMacroAtomsCount = new int[] {7,2,3};
+		markushPos = new int[] {0,0,3};
+		int n = markushPos.length;
+		
+		calcMarkushPosCombinations();
+		int k = 0;
+		while (k < numberOfMarkusPosCombinations) 
+		{
+			for (int i = n-1; i>=0; i--)
+				System.out.print(markushPos[i] + " ");
+			System.out.println();
+			
+			k++;
+			nextCombination();
+		}
+		
+	}
+	
+	*/
+	
 	
 }
