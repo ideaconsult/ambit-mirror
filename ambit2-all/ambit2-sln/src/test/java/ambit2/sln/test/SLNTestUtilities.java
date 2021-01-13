@@ -44,6 +44,7 @@ public class SLNTestUtilities
 		slnHelper.FlagPreserveOriginalAtomID = true;
 		slnParser.setPredefinedGlobalDictionary();
 		
+		
 		//tu.testSLN("C[1:c=y]H2=[s=I;ftt=m]CH[5:ccor=z;!fcharge=-3.3](OCH(CH3)CH3)CH3[7]");
 		//tu.testSLN("CH2=C[1]HCH3[12]CH3=@1CCC@1CCCC@1");
 		//tu.testSLN("CH3[1:I=13;is=2]CH(CH(CH3)CH3)CH2CH3");
@@ -105,13 +106,15 @@ public class SLNTestUtilities
 		//tu.testSLN2SLN("C[7]CC@7Aa[v=3,4]HgH3CCCHet{Aa:CH3CH2CH3<v=1,8>}");
 		//tu.testSLN2SLN("CCCCAa{Aa:Cl|F|OH|CH3|CCC<v=1,3>}");
 		
+		//slnParser.setFlagUseSimpleMacroAtomsInDictionary(true);
 		
 		//tu.testSLNExpander("CC[charge>-1]CCH3");
 		//tu.testSLNExpander("AxCCCC{Aa:N[tt=3;charge<3]SO<v=1,3>}{Ax:Any[xx=45]}");
-		//tu.testSLNExpander("CCAaCCAaAa{Aa:NSO<v=1,2>|CCC}");
+		tu.testSLNExpander("HetCCCCAa{Aa:NSO<v=1,2>}");
 		//tu.expander.test();
 		
-		tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
+		//tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
+		//tu.testMarkushCombinatorialList("AaCCCHet{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		
 		//tu.testMarkushHelper("Aa:CCC<v=1,3>|CC|CO<v=1,2>");
 		

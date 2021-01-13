@@ -186,7 +186,11 @@ public class SLNExpressionToken
 			return SLNConst.atomAttributeToSLNString(type) 
 					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
 					+ param;
-			
+		
+		case SLNConst.QA_ATTR_type:
+			return SLNConst.atomAttributeToSLNString(type) 
+					+ SLNConst.comparisonOperationToSLNString(comparisonOperation)
+					+ param;
 
 		case SLNConst.A_ATTR_USER_DEFINED:
 		{	
