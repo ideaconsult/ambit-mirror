@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
 import ambit2.sln.SLNParser;
+import ambit2.sln.dictionary.Expander;
 import ambit2.sln.dictionary.SLNDictionary;
 import ambit2.sln.io.SLN2ChemObject;
 import ambit2.sln.io.SLN2SMARTS;
@@ -64,7 +66,8 @@ public class SLNCli {
 	
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
-	public SLN2ChemObject slnConverter = new SLN2ChemObject();	
+	public SLN2ChemObject slnConverter = new SLN2ChemObject();
+	public Expander expander = new Expander();
 	public IsomorphismTester isoTester = new IsomorphismTester();
 	public SmartsHelper smartsHelper = new SmartsHelper(SilentChemObjectBuilder.getInstance());
 	public SLNSearchManager man = new SLNSearchManager();
@@ -562,6 +565,12 @@ public class SLNCli {
 					res = iterateInputMoleculesFile();
 				}
 				break;
+			case expand:
+				res = expandSLNContainer(slnContainer);
+				break;
+			case comb_library:
+				res = generateCombLibrary(slnContainer);
+				break;	
 			}
 		}
 		else
@@ -571,7 +580,7 @@ public class SLNCli {
 			case convert:
 				if (inputFileName == null)
 				{
-					//Working with input smiles
+					//Working with input smiles which is converted to SLN
 					System.out.println("Input  sln: " + sln); 
 					res = convertToSLN(inputMol);
 				}
@@ -589,8 +598,7 @@ public class SLNCli {
 			
 			case ss_match:
 				System.out.println("SLN is not specified. Can not perform substructure matching!");
-				return -1;
-				
+				return -1;				
 			}
 			
 			
@@ -660,6 +668,21 @@ public class SLNCli {
 				break;
 		}		
 		
+		return 0;
+	}
+	
+	public int expandSLNContainer(SLNContainer container) 
+	{
+		SLNContainer container2 = expander.generateExpandedSLNContainer(container);
+		System.out.println(slnHelper.toSLN(container2));
+		return 0;
+	}
+	
+	public int generateCombLibrary(SLNContainer container) 
+	{	
+		List<SLNContainer> list = expander.generateMarkushCombinatorialList(container);
+		for (int i = 0; i < list.size(); i++)
+			System.out.println(slnHelper.toSLN(list.get(i)));
 		return 0;
 	}
 	
