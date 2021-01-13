@@ -59,6 +59,8 @@ public class SLNCli {
 	public ComparisonConversion comparisonConversion = ComparisonConversion.convert_as_equal;
 	public String warningsString = null;
 	public Boolean warnings = true;
+	public String expandString = null;
+	public Boolean expand = false;
 	
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
@@ -126,7 +128,7 @@ public class SLNCli {
 		input {
 			@Override
 			public String getArgName() {
-				return "input";
+				return "file name";
 			}
 			@Override
 			public String getDescription() {
@@ -141,7 +143,7 @@ public class SLNCli {
 		output {
 			@Override
 			public String getArgName() {
-				return "output";
+				return "file name";
 			}
 			@Override
 			public String getDescription() {
@@ -160,7 +162,7 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Operation: convert, ss_match";
+				return "Operation: convert, ss_match, expand, comb_library. Default operation is convert";
 			}
 			@Override
 			public String getShortName() {
@@ -201,7 +203,7 @@ public class SLNCli {
 		dictionary {
 			@Override
 			public String getArgName() {
-				return "dict";
+				return "file name";
 			}
 			@Override
 			public String getDescription() {
@@ -227,6 +229,21 @@ public class SLNCli {
 				return "w";
 			}
 		},
+		
+		expand {
+			@Override
+			public String getArgName() {
+				return "on|off";
+			}
+			@Override
+			public String getDescription() {
+				return "Switch on/off SLN expansion for Macro/Markush atoms. By befault expand option is off";
+			}
+			@Override
+			public String getShortName() {
+				return "x";
+			}
+		},
 
 		help {
 			@Override
@@ -235,7 +252,7 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return title;
+				return "Prints this help";
 			}
 			@Override
 			public String getShortName() {
@@ -271,7 +288,7 @@ public class SLNCli {
 	}
 	
 	enum _operation {
-		convert, ss_match;
+		convert, ss_match, expand, comb_library;
 		
 		public static _operation fromString(String text) {
 	        for (_operation  x : _operation.values()) {
@@ -366,6 +383,19 @@ public class SLNCli {
 				warnings = null;
 			break;
 		}
+		
+		case expand: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			expandString = argument;
+			if (expandString.equalsIgnoreCase("on"))
+				expand = true;
+			else if (expandString.equalsIgnoreCase("off"))
+				expand = false;
+			else
+				expand = null;
+			break;
+		}
 
 		}	
 	}
@@ -440,6 +470,13 @@ public class SLNCli {
 		if (warnings == null)
 		{
 			System.out.println("Incorrect warnings option: " + warningsString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		
+		if (expand == null)
+		{
+			System.out.println("Incorrect expand option: " + expandString);
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
