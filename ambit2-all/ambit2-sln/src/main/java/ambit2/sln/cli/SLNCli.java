@@ -210,7 +210,7 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "A text file with SLN dictionary objects (e.g. macro atoms or Markush atoms)";
+				return "A text file with SLN dictionary objects (e.g. Macro or Markush atoms)";
 			}
 			@Override
 			public String getShortName() {
@@ -624,8 +624,12 @@ public class SLNCli {
 		return res;
 	}
 	
-	public int convert(SLNContainer container) 
+	public int convert(SLNContainer container0) 
 	{		 
+		SLNContainer container = container0; 
+		if (expand)
+			container = expander.generateExpandedSLNContainer(container0);
+				
 		switch (outFormat)
 		{
 			case ct:
