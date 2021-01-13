@@ -39,8 +39,8 @@ public class SLNHelper
 		{	
 			SLNAtom at = (SLNAtom)container.getAtom(i); 
 			sb.append("  #" + (i+1) + "  ");
-			sb.append(at.atomType + "  " + at.atomName + "  H" + at.numHAtom + "  " + at.toString());
-			//TODO print atom attributes 
+			sb.append( "" + ((at.atomType< SLNConst.GlobalDictOffseet)?at.atomType:0) 
+					+ "  " + at.atomName + "  H" + at.numHAtom + "  " + at.toString());
 			sb.append("\n");
 		}	
 		return(sb.toString());
