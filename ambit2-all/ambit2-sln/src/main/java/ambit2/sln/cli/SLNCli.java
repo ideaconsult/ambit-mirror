@@ -598,9 +598,26 @@ public class SLNCli {
 			
 			case ss_match:
 				System.out.println("SLN is not specified. Can not perform substructure matching!");
-				return -1;				
+				return -1;	
+				
+			case expand:
+			case comb_library:	
+				if (inputFileName != null)
+				{
+					if (inputFileName.endsWith("sln"))
+					{	
+						if (operation == _operation.expand)
+							System.out.println("Expanding Macro and Markush atoms in SLNs:");
+						else
+							System.out.println("Generating Markush combintations:");
+						
+						res = iterateInputFileWithSLNs(); //expand or comb_library operation is performed
+					}
+					else
+						System.out.println("Operations expand and comb_library are applicable only for SLN files!");
+				}
+				break;
 			}
-			
 			
 		}
 		
@@ -753,7 +770,19 @@ public class SLNCli {
 				}
 				
 				System.out.println("mol #" + nLine);
-				convert (slnContainer);				
+				switch (operation) {
+				case convert:	
+					convert (slnContainer);
+					break;
+				case expand:
+					System.out.print(slnString + " --> ");
+					expandSLNContainer(slnContainer);
+					break;
+				case comb_library:
+					System.out.println(slnString + " combinations:");
+					generateCombLibrary(slnContainer);
+					break;	
+				}
 			}	
 			
 			br.close();
