@@ -35,6 +35,8 @@ public class SLNTestUtilities
 	static Expander expander = new Expander();
 	static MarkushHelper markushHelper = new MarkushHelper();
 	
+	public boolean FlagPrintTargetMolInfo = false;
+	
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -65,11 +67,11 @@ public class SLNTestUtilities
 		
 		
 		//tu.testSLN2SLN("C-[type=#]C<aa=3;p=456>CCC<>");
-		
+		//tu.FlagPrintTargetMolInfo = true;
 		//tu.testSLNIsomorphism("C[r]N","C1CCCC1CCCCN");
 		//tu.testSLNIsomorphism("N[fcharge<0]","CC(C)CC[N-]");
 		//tu.testSLNIsomorphism("C[c=o1]","N[CH2]N");
-		//tu.testSLNIsomorphism("C[hc=0]","CC(C)CCC");
+		tu.testSLNIsomorphism("C[hc>=0]","CC(C)CCC");
 		//tu.testSLNIsomorphism("C[tbo=4]","NNS");
 		//tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");		
 		//tu.testSLNIsomorphism("C[tac=2]","C#C");
@@ -86,12 +88,14 @@ public class SLNTestUtilities
 		
 		
 		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
-		//tu.testSLNIsomorphism("C[hc=2&charge<=0]", "[CH3-]CC"); 
+		tu.testSLNIsomorphism("C[hc>2&charge<=0]", "[CH3-]CC"); 
 		
 		
 		//tu.testSLNIsomorphism("C[rbc=2]","C1CCCC1"); //partially fixed; not working for spiro atoms!!!
 		
 		//tu.testSLNIsomorphism("C~[type=2]CCCCC~[type=3]C","C=CCCCC#C"); 
+		//tu.testSLNIsomorphism("C[hc>=0]","CC[C-]"); 
+		
 		
 		//tu.testSLN2SLN("Br[type=Cl|type=I]C(C)CCH3<coord2d=(1,2),(3,4)>");
 		//tu.testSLN2SLN("C[1:tt=456]CCCCC@1");
@@ -109,12 +113,12 @@ public class SLNTestUtilities
 		//slnParser.setFlagUseSimpleMacroAtomsInDictionary(true);
 		
 		//tu.testSLNExpander("CC[charge>-1]CCH3");
-		//tu.testSLNExpander("AxCCCC{Aa:N[tt=3;charge<3]SO<v=1,3>}{Ax:Any[xx=45]}");
-		tu.testSLNExpander("HetCCCCAa{Aa:NSO<v=1,2>}");
-		tu.testSLNExpander("CH3AlaNH2<id=1234>{Ala:NHCH(CH3)C(=O)<v=1,9>}");
+		//tu.testSLNExpander("CAxCCCCAa{Aa:N[charge<1]SO<v=1,3>}{Ax:Any[charge>=1]O}");
+		//tu.testSLNExpander("HetCCCCAa{Aa:NSO<v=1,2>}");
+		//tu.testSLNExpander("CH3AlaNH2<id=1234>{Ala:NHCH(CH3)C(=O)<v=1,9>}");
 		//tu.expander.test();
 		
-		tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
+		//tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		//tu.testMarkushCombinatorialList("AaCCCHet{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		
 		//tu.testMarkushHelper("Aa:CCC<v=1,3>|CC|CO<v=1,2>");
@@ -262,6 +266,9 @@ public class SLNTestUtilities
 	{	
 		IAtomContainer mol = SmartsHelper.getMoleculeFromSmiles(smiles);	
 		SmartsHelper.preProcessStructure(mol, true, false);
+		if (FlagPrintTargetMolInfo)
+			printMolInfo(mol);
+			
 		SLNContainer query = slnParser.parse(sln);
 		if (!slnParser.getErrorMessages().equals(""))
 		{
@@ -424,6 +431,12 @@ public class SLNTestUtilities
 		cfg.jsonFlags.proportion = true;
 		
 		System.out.println(cfg.toJSONKeyWord(""));
+	}
+	
+	public void printMolInfo(IAtomContainer mol) 
+	{
+		System.out.println(SmartsHelper.getAtomsAttributes(mol));
+		System.out.println("implicitHAtomsVector = " + SmartsHelper.implicitHAtomsVector(mol));
 	}
 	
 }

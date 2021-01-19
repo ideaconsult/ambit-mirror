@@ -152,7 +152,8 @@ public class SLNAtomExpression
 				return(false);
 
 		case SLNConst.QA_ATTR_hac:  
-			if (tok.param == atom.getFormalNeighbourCount())
+			//if (tok.param == atom.getFormalNeighbourCount())
+			if(SLNConst.compare(atom.getFormalNeighbourCount(), tok.param, tok.comparisonOperation))	
 				return(true);
 			else	
 				return(false);
@@ -167,7 +168,9 @@ public class SLNAtomExpression
 			Integer explicitH = (Integer)atom.getProperty(CMLUtilities.ExplicitH);
 			if (explicitH != null)
 				totalH+=explicitH.intValue();
-			if (tok.param == totalH)
+			
+			//if (tok.param == totalH)
+			if(SLNConst.compare(totalH, tok.param, tok.comparisonOperation))
 				return(true);
 			else	
 				return(false);	
@@ -189,7 +192,10 @@ public class SLNAtomExpression
 			if (atom.getSymbol().equals('C'))
 				totalC++;
 			
-			if (tok.param == (atom.getFormalNeighbourCount() -(totalC + totalH)))
+			int heteroAtomCount = atom.getFormalNeighbourCount() -(totalC + totalH);
+			
+			//if (tok.param == (atom.getFormalNeighbourCount() -(totalC + totalH)))
+			if(SLNConst.compare(heteroAtomCount, tok.param, tok.comparisonOperation))	
 				return(true);
 			else	
 				return(false);
@@ -221,7 +227,8 @@ public class SLNAtomExpression
 			if (hci != null)
 				hc = hci.intValue();
 
-			if (tok.param == atom.getFormalNeighbourCount()  + hc)
+			//if (tok.param == atom.getFormalNeighbourCount()  + hc)
+			if(SLNConst.compare(atom.getFormalNeighbourCount()  + hc, tok.param, tok.comparisonOperation))
 				return(true);
 			else	
 				return(false);	
