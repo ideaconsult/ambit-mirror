@@ -111,9 +111,10 @@ public class SLNTestUtilities
 		//tu.testSLNExpander("CC[charge>-1]CCH3");
 		//tu.testSLNExpander("AxCCCC{Aa:N[tt=3;charge<3]SO<v=1,3>}{Ax:Any[xx=45]}");
 		tu.testSLNExpander("HetCCCCAa{Aa:NSO<v=1,2>}");
+		tu.testSLNExpander("CH3AlaNH2<id=1234>{Ala:NHCH(CH3)C(=O)<v=1,9>}");
 		//tu.expander.test();
 		
-		//tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
+		tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		//tu.testMarkushCombinatorialList("AaCCCHet{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		
 		//tu.testMarkushHelper("Aa:CCC<v=1,3>|CC|CO<v=1,2>");

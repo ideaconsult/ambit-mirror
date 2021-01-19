@@ -580,8 +580,7 @@ public class SLNCli {
 			case convert:
 				if (inputFileName == null)
 				{
-					//Working with input smiles which is converted to SLN
-					System.out.println("Input  sln: " + sln); 
+					//Working with input smiles which is converted to SLN					 
 					res = convertToSLN(inputMol);
 				}
 				else
