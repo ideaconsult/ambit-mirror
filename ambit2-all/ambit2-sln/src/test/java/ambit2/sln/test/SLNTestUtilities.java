@@ -121,6 +121,10 @@ public class SLNTestUtilities
 		//tu.testMarkushCombinatorialList("AaCCCAaAx{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		//tu.testMarkushCombinatorialList("AaCCCHet{Aa:O|S|CH3}{Ax:F|Cl|Br|C(=O)OH}");
 		
+		//tu.testSLN2SLN("AaAaAaAaAa{Aa:C(=O)CH2NH<v=6,1>|C(=O)CH(CH(CH3)CH3)NH<v=15,1>|C(=O)CH(CH3)NH<v=9,1>|NHCH(C=O)CH2C(=O)OH<v=1,5>}");
+		
+		
+		
 		//tu.testMarkushHelper("Aa:CCC<v=1,3>|CC|CO<v=1,2>");
 		
 		
@@ -132,10 +136,10 @@ public class SLNTestUtilities
 		
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal_if_not_nonequality;
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal;
-		sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal_if_eqaul_is_present;
+		sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal_if_equal_is_present;
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.omit;
 		
-		tu.testSLN2Smarts("CC=CCCS[charge>+3]");
+		tu.testSLN2Smarts("CC=CCCS[charge>+1]");
 		tu.testSLN2Smarts("Any[!type=1;!type=6;!r]");
 		tu.testSLN2Smarts("Any[!type=6;hac=3]");
 						

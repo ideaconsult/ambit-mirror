@@ -9,7 +9,7 @@ public class SLN2ChemObjectConfig
 		omit,
 		convert_as_equal,
 		convert_as_equal_if_not_nonequality,
-		convert_as_equal_if_eqaul_is_present,
+		convert_as_equal_if_equal_is_present,
 		convert_as_value_list;
 		
 		public static ComparisonConversion fromString(String text) {

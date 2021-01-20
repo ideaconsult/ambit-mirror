@@ -681,7 +681,7 @@ public class SLN2ChemObject
 				conversionStatus = 0;
 				warning = "logical primitive converted as equal comparison";
 				break;
-			case convert_as_equal_if_eqaul_is_present:
+			case convert_as_equal_if_equal_is_present:
 				conversionStatus = -1;
 				warning = "logical primitive is not converted";
 				break;
@@ -708,7 +708,7 @@ public class SLN2ChemObject
 				conversionStatus = 0;
 				warning = "logical primitive converted as equal comparison";
 				break;
-			case convert_as_equal_if_eqaul_is_present:
+			case convert_as_equal_if_equal_is_present:
 				conversionStatus = 0;
 				warning = "logical primitive converted as equal comparison";
 				break;
@@ -734,7 +734,7 @@ public class SLN2ChemObject
 				conversionStatus = 0;
 				warning = "logical primitive converted as equal comparison";
 				break;
-			case convert_as_equal_if_eqaul_is_present:
+			case convert_as_equal_if_equal_is_present:
 				conversionStatus = -1;
 				warning = "logical primitive is not converted";
 				break;
