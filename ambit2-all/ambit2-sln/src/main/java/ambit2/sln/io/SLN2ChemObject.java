@@ -791,6 +791,8 @@ public class SLN2ChemObject
     		return new SmartsExpressionToken(SmartsConst.AP_v, slnTok.param);
     	case SLNConst.QA_ATTR_src:
     		return new SmartsExpressionToken(SmartsConst.AP_R, slnTok.param);
+    	case SLNConst.QA_ATTR_type:
+    		return new SmartsExpressionToken(SmartsConst.AP_AtNum, slnTok.param);
     	
     	}
     	

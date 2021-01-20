@@ -71,7 +71,7 @@ public class SLNTestUtilities
 		//tu.testSLNIsomorphism("C[r]N","C1CCCC1CCCCN");
 		//tu.testSLNIsomorphism("N[fcharge<0]","CC(C)CC[N-]");
 		//tu.testSLNIsomorphism("C[c=o1]","N[CH2]N");
-		tu.testSLNIsomorphism("C[hc>=0]","CC(C)CCC");
+		//tu.testSLNIsomorphism("C[hc>=0]","CC(C)CCC");
 		//tu.testSLNIsomorphism("C[tbo=4]","NNS");
 		//tu.testSLNIsomorphism("C[src=3]","C1CCC1CC2CC2");		
 		//tu.testSLNIsomorphism("C[tac=2]","C#C");
@@ -88,7 +88,7 @@ public class SLNTestUtilities
 		
 		
 		//tu.testSLNIsomorphism("C[1]C=C@1C", "C1C=C1CCC"); 
-		tu.testSLNIsomorphism("C[hc>2&charge<=0]", "[CH3-]CC"); 
+		//tu.testSLNIsomorphism("C[hc>2&charge<=0]", "[CH3-]CC"); 
 		
 		
 		//tu.testSLNIsomorphism("C[rbc=2]","C1CCCC1"); //partially fixed; not working for spiro atoms!!!
@@ -135,16 +135,21 @@ public class SLNTestUtilities
 		sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal_if_eqaul_is_present;
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.omit;
 		
-		//tu.testSLN2Smarts("CC=CCCS[charge>+3]");
+		tu.testSLN2Smarts("CC=CCCS[charge>+3]");
+		tu.testSLN2Smarts("Any[!type=1;!type=6;!r]");
+		tu.testSLN2Smarts("Any[!type=6;hac=3]");
+						
 		//tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]");
 		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]", "NCc1cnc(O)c(O)c1");
 		
 		//tu.testSLN2Smarts("C[1:charge=-1]C=CC[src=3]CCC[tbo=4]C[r;!hac=3;tac=4]CH3Any@1");
 		
 		//tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[r]");
-		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[r]", "NCc1cnc(O)c(O)c1"); 
+		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[r]", "NCc1cnc(O)c(O)c1");		
+		//tu.testSLNIsomorphism("Any[!type=1;!type=6;!r]", "C1CCCCN1"); 
+		//tu.testSLNIsomorphism("Any[!type=1;!type=6;!r]", "C1CCC1CN");
+		//tu.testSLNIsomorphism("Any[!type=6;hac<3]", "C1CCN1CN(C)");
 		
-
 				
 		//tu.sln2sub.config.FlagAddImplicitHAtomsOnSLNAtomConversion = true;
 		//tu.testSLN2CompositionRelation("CC<compositionUUID=id-0001;name=test>");
