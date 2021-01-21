@@ -136,12 +136,15 @@ public class SLNTestUtilities
 		
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal_if_not_nonequality;
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal;
-		sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal_if_equal_is_present;
+		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_equal_if_equal_is_present;
 		//sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.omit;
+		sln2Smarts.getConversionConfig().FlagComparisonConversion = ComparisonConversion.convert_as_value_list;
 		
+		
+		//tu.testSLN2Smarts("CC=CCCS[charge>+1]");
+		//tu.testSLN2Smarts("Any[!type=1;!type=6;!r]");
+		//tu.testSLN2Smarts("Any[!type=6;hac=3]");
 		tu.testSLN2Smarts("CC=CCCS[charge>+1]");
-		tu.testSLN2Smarts("Any[!type=1;!type=6;!r]");
-		tu.testSLN2Smarts("Any[!type=6;hac=3]");
 						
 		//tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]");
 		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]", "NCc1cnc(O)c(O)c1");

@@ -764,6 +764,7 @@ public class SLN2ChemObject
     	else
     	{
     		//Generate an array of tokens based on the alternative values;
+    		int altValues[] = getSmartsTokenAlternativeValues(slnTok);
     		//TODO
     	}
     	
@@ -802,9 +803,49 @@ public class SLN2ChemObject
     	return null;
     }
     
-    public int[] getSmartsTokenAlternativeValues()
+    public int[] getSmartsTokenAlternativeValues(SLNExpressionToken slnTok)
     {
-    	//TODO
+    	//Set min and max values;
+    	int minValue=0;
+    	int maxValue=0;
+    	
+    	switch (slnTok.type)
+    	{
+    	case SLNConst.A_ATTR_charge:
+    		minValue = conversionConfig.min_charge;
+    		maxValue = conversionConfig.max_charge;
+    		break;    		
+    	//case SLNConst.QA_ATTR_r:
+    	//not handled here
+    	case SLNConst.QA_ATTR_hac:
+    		minValue = conversionConfig.min_hac;
+    		maxValue = conversionConfig.max_hac;
+    		break;
+    	case SLNConst.QA_ATTR_hc:
+    		minValue = conversionConfig.min_hc;
+    		maxValue = conversionConfig.max_hc;
+    		break;	
+    	case SLNConst.QA_ATTR_tac:
+    		minValue = conversionConfig.min_tac;
+    		maxValue = conversionConfig.max_tac;
+    		break;
+    	case SLNConst.QA_ATTR_tbo:
+    		minValue = conversionConfig.min_tbo;
+    		maxValue = conversionConfig.max_tbo;
+    		break;
+    	case SLNConst.QA_ATTR_src:
+    		minValue = conversionConfig.min_tbo;
+    		maxValue = conversionConfig.max_tbo;
+    		break;
+    	
+    	case SLNConst.QA_ATTR_type:
+    		//TODO
+    		break;
+    	default:
+    		//This token type is not handled
+    		return null;	
+    	}    	
+    	
     	return null;
     }
     
