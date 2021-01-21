@@ -908,6 +908,38 @@ public class SLN2ChemObject
     	return values;
     }
     
+    public SmartsExpressionToken getAlternativeSmartsToken(SLNExpressionToken slnTok, int altValue)
+    {
+    	//htc, ntc and rbc cannot be converted
+    	
+    	switch (slnTok.type)
+    	{
+    	case SLNConst.A_ATTR_charge:
+    		return new SmartsExpressionToken(SmartsConst.AP_Charge, altValue);
+    		
+    	//case SLNConst.QA_ATTR_r:
+    	//	return new SmartsExpressionToken(SmartsConst.AP_R, 1); - Not needed
+    		
+    	case SLNConst.QA_ATTR_hac:
+    		return new SmartsExpressionToken(SmartsConst.AP_D, altValue);	
+    	case SLNConst.QA_ATTR_hc:
+    		return new SmartsExpressionToken(SmartsConst.AP_H, altValue);	
+    	case SLNConst.QA_ATTR_tac:
+    		return new SmartsExpressionToken(SmartsConst.AP_X, altValue);
+    	case SLNConst.QA_ATTR_tbo:
+    		return new SmartsExpressionToken(SmartsConst.AP_v, altValue);
+    	case SLNConst.QA_ATTR_src:
+    		return new SmartsExpressionToken(SmartsConst.AP_R, altValue);
+    	case SLNConst.QA_ATTR_type:
+    		return new SmartsExpressionToken(SmartsConst.AP_AtNum, altValue);
+    	
+    	}
+    	
+    	//No error is generated.
+    	
+    	return null;
+    }
+    
     public static ExpressionAtomInfo extractSimpleAtomInfoFromExprresion(SLNAtomExpression slnAE)
     {
     	ExpressionAtomInfo eai = new ExpressionAtomInfo();
