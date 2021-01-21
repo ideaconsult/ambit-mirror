@@ -844,9 +844,68 @@ public class SLN2ChemObject
     	default:
     		//This token type is not handled
     		return null;	
-    	}    	
+    	} 
+    	    	
+    	//Set start and end values according to the
+    	//param value and comparison operation
+    	int startVal = minValue;
+    	int endVal = maxValue;
+    	Integer excludeVal = null;
+    	    	
+    	switch(slnTok.comparisonOperation)
+		{
+		case SLNConst.CO_EQUALS:
+			startVal = slnTok.param;
+			endVal = slnTok.param;
+			break;
+		case SLNConst.CO_LESS_THAN:
+			endVal = slnTok.param-1;
+			break;
+		case SLNConst.CO_LESS_OR_EQUALS:
+			endVal = slnTok.param;
+			break;	
+		case SLNConst.CO_GREATER_THAN:	
+			startVal = slnTok.param+1;
+			break;
+		case SLNConst.CO_GREATER_OR_EQUALS:	
+			startVal = slnTok.param;
+		case SLNConst.CO_DIFFERS:			
+			excludeVal = slnTok.param;
+			break;
+		}
     	
-    	return null;
+    	int n = endVal - startVal + 1;
+    	
+    	if (excludeVal != null)
+    		if ( (excludeVal >= startVal) &&
+    				(excludeVal <= endVal) )
+    			n--;
+    	
+    	if (n <= 0)
+    		return null;
+    	
+    	int values[] = new int[n];
+    	
+    	
+    	if (excludeVal == null)
+    	{	
+    		for (int i = 0; i <n; i++)
+    			values[i] = startVal + i;
+    	}
+    	else
+    	{	
+    		int curIndex = 0;
+    		for (int i = 0; i <n; i++)
+    		{	
+    			int val = startVal + i;
+    			if (val == excludeVal)
+    				continue;
+    			values[curIndex] = startVal + i;
+    			curIndex++;
+    		}	
+    	}
+    	
+    	return values;
     }
     
     public static ExpressionAtomInfo extractSimpleAtomInfoFromExprresion(SLNAtomExpression slnAE)
