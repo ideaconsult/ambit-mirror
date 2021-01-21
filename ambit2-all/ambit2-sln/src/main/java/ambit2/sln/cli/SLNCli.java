@@ -195,7 +195,8 @@ public class SLNCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Comparison conversion modes: omit, convert_as_equal (default), convert_as_equal_if_eqaul_is_present";
+				return "Comparison conversion modes: omit, convert_as_equal (default), "
+						+ "convert_as_equal_if_eqaul_is_present, convert_as_value_list";
 			}
 			@Override
 			public String getShortName() {
