@@ -45,6 +45,9 @@ public class SLN2ChemObjectConfig
 	public int max_rbc = 4;
 	public int min_src = 0;
 	public int max_src = 4;
+	public int min_type = 1;
+	public int max_type = 110;
+	
 	
 	public int[] allowedAtomAttributesForAlternativeValueList = {
 			SLNConst.A_ATTR_charge, SLNConst.QA_ATTR_hac, SLNConst.QA_ATTR_hc  	

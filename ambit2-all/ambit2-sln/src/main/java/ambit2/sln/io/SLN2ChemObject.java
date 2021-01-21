@@ -836,10 +836,10 @@ public class SLN2ChemObject
     	case SLNConst.QA_ATTR_src:
     		minValue = conversionConfig.min_tbo;
     		maxValue = conversionConfig.max_tbo;
-    		break;
-    	
+    		break;    	
     	case SLNConst.QA_ATTR_type:
-    		//TODO
+    		minValue = conversionConfig.min_type;
+    		maxValue = conversionConfig.max_type;
     		break;
     	default:
     		//This token type is not handled
