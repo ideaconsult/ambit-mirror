@@ -765,7 +765,25 @@ public class SLN2ChemObject
     	{
     		//Generate an array of tokens based on the alternative values;
     		int altValues[] = getSmartsTokenAlternativeValues(slnTok);
-    		//TODO
+    		
+    		
+    		
+    		if (altValues == null || altValues.length == 0)
+    		{
+    			addToCurrentConversionWarning(slnTok.toString(true) + " Error on creating alternative values list.");
+    			return null;
+    		}
+    		
+    		SmartsExpressionToken[] altTokens = new SmartsExpressionToken[altValues.length + altValues.length - 1];
+    		for (int i = 0; i < altValues.length; i++)
+    		{
+    			//System.out.println("alt value --> " + altValues[i]);
+    			SmartsExpressionToken tok = getAlternativeSmartsToken(slnTok, altValues[i]);
+    			altTokens[2*i] = tok;
+    			if (i > 0)
+    				altTokens[2*i-1] = new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_ANDLO, 0);
+    		}
+    		return altTokens;
     	}
     	
     	return null;
@@ -869,6 +887,7 @@ public class SLN2ChemObject
 			break;
 		case SLNConst.CO_GREATER_OR_EQUALS:	
 			startVal = slnTok.param;
+			break;
 		case SLNConst.CO_DIFFERS:			
 			excludeVal = slnTok.param;
 			break;
@@ -876,23 +895,22 @@ public class SLN2ChemObject
     	
     	int n = endVal - startVal + 1;
     	
+    	boolean FlagExcludeVal = false;
+    	
     	if (excludeVal != null)
     		if ( (excludeVal >= startVal) &&
     				(excludeVal <= endVal) )
-    			n--;
+    			FlagExcludeVal = true;
     	
-    	if (n <= 0)
+    	if ((FlagExcludeVal && n <= 1) || 
+    			(!FlagExcludeVal && n <= 0))
     		return null;
     	
-    	int values[] = new int[n];
+    	int n0 = FlagExcludeVal?(n-1):n;
+    	int values[] = new int[n0];
     	
     	
-    	if (excludeVal == null)
-    	{	
-    		for (int i = 0; i <n; i++)
-    			values[i] = startVal + i;
-    	}
-    	else
+    	if (FlagExcludeVal)    	
     	{	
     		int curIndex = 0;
     		for (int i = 0; i <n; i++)
@@ -900,9 +918,14 @@ public class SLN2ChemObject
     			int val = startVal + i;
     			if (val == excludeVal)
     				continue;
-    			values[curIndex] = startVal + i;
+    			values[curIndex] = val;
     			curIndex++;
     		}	
+    	}
+    	else
+    	{	
+    		for (int i = 0; i <n; i++)
+    			values[i] = startVal + i;
     	}
     	
     	return values;
