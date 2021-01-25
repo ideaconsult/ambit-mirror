@@ -28,7 +28,7 @@
 	</distributionManagement>
 	<properties>
 		<net.idea.loom.version>2.0.0-SNAPSHOT</net.idea.loom.version>
-		<nmparser.version>1.4.0-SNAPSHOT</nmparser.version>
+		<nmparser.version>1.4.1-SNAPSHOT</nmparser.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<toxtree.version>4.0.0-SNAPSHOT</toxtree.version>
 		<ambit.version>4.1.0-SNAPSHOT</ambit.version>
