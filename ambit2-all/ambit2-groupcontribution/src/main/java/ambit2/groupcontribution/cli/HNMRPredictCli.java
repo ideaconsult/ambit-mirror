@@ -27,6 +27,8 @@ public class HNMRPredictCli {
 	public String inputSmiles = null;
 	public String printLogString = null;
 	public Boolean printLog = false;
+	public String printExplanationString = null;
+	public Boolean printExplanation = true;
 	
 	HNMRShifts hnmrShifts = null;
 
@@ -97,6 +99,22 @@ public class HNMRPredictCli {
 				return "l";
 			}
 		},
+		
+		explanation {
+			@Override
+			public String getArgName() {
+				return "on|off";
+			}
+			@Override
+			public String getDescription() {
+				return "Switch on/off H shift calculation explanation. Deafult log is on";
+			}
+			@Override
+			public String getShortName() {
+				return "e";
+			}
+		},
+		
 		/*
 		input {
 			@Override
@@ -200,6 +218,15 @@ public class HNMRPredictCli {
 			else
 				printLog = null;
 		}
+		case explanation: {
+			printExplanationString = argument;
+			if (printExplanationString.equalsIgnoreCase("on"))
+				printExplanation = true;
+			else if (printExplanationString.equalsIgnoreCase("off"))
+				printExplanation = false;
+			else
+				printExplanation = null;
+		}
 		
 		/*
 		case input: {
@@ -259,6 +286,12 @@ public class HNMRPredictCli {
 		if (printLog == null)
 		{
 			System.out.println("Incorrect log option: " + printLogString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		if (printExplanation == null)
+		{
+			System.out.println("Incorrect explanation option: " + printExplanationString);
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
@@ -329,7 +362,7 @@ public class HNMRPredictCli {
 		}
 		
 		for (HShift hs : hnmrShifts.getHShifts())
-			System.out.println(hs.toString());
+			System.out.println(hs.toString(printExplanation));
 		
 		return 0;
 	}

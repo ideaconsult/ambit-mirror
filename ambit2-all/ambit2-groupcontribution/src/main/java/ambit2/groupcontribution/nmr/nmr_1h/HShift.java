@@ -20,4 +20,17 @@ public class HShift
 		sb.append("  " + explanationInfo);
 		return sb.toString();
 	}
+	
+	public String toString(boolean explanation)
+	{
+		StringBuffer sb = new StringBuffer();
+		DecimalFormat df = new DecimalFormat("###.###");
+		sb.append(df.format(value));
+		sb.append(" H" + imlicitHAtomsNumbers);
+		sb.append(" atom " + (atomIndex + 1));
+		if (explanation)
+			sb.append("  " + explanationInfo);
+		return sb.toString();
+	}
+	
 }
