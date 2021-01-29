@@ -1,6 +1,9 @@
 package ambit2.groupcontribution.cli;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -9,9 +12,17 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
+import org.openscience.cdk.io.IChemObjectReader.Mode;
+import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import ambit2.base.exceptions.AmbitIOException;
+import ambit2.core.io.FileInputState;
+import ambit2.core.io.InteractiveIteratingMDLReader;
 import ambit2.groupcontribution.nmr.HNMRShifts;
 import ambit2.groupcontribution.nmr.nmr_1h.HShift;
 import ambit2.smarts.SmartsHelper;
@@ -114,8 +125,7 @@ public class HNMRPredictCli {
 				return "e";
 			}
 		},
-		
-		/*
+				
 		input {
 			@Override
 			public String getArgName() {
@@ -131,6 +141,7 @@ public class HNMRPredictCli {
 			}
 		},
 		
+		/*
 		output {
 			@Override
 			public String getArgName() {
@@ -228,15 +239,14 @@ public class HNMRPredictCli {
 			else
 				printExplanation = null;
 			break;
-		}
-		
-		/*
+		}		
 		case input: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			inputFileName = argument;
 			break;
 		}
+		/*
 		case output: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -298,10 +308,10 @@ public class HNMRPredictCli {
 			return -1;
 		}
 		
-		if (/*(inputFileName == null) && */ (inputSmiles == null))
+		if ((inputFileName == null) && (inputSmiles == null))
 		{
 			System.out.println("No input is given! \n"
-					+ "Please assign input SMILES!");
+					+ "Please assign input SMILES or input molecule file!");
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
@@ -325,9 +335,11 @@ public class HNMRPredictCli {
 		
 		
 		if (inputSmiles != null)
-			return runForInputSmiles();		
+			return runForInputSmiles();	
+		else
+			return iterateInputMoleculesFile();
 		
-		return 0;
+		//return 0;
 	}
 	
 	
@@ -368,4 +380,95 @@ public class HNMRPredictCli {
 		
 		return 0;
 	}
+	
+	public void performTask(IAtomContainer mol, String info)
+	{	
+		System.out.println("Molecule " + info); 
+		predictForMolecule(mol);
+	}
+	
+	public int iterateInputMoleculesFile() throws Exception
+	{
+		int records_read = 0;
+		int records_error = 0;
+		
+		File file = new File(inputFileName);
+		
+		if (!file.exists()) 
+			throw new FileNotFoundException(file.getAbsolutePath());
+		
+		InputStream in = new FileInputStream(file);
+		IIteratingChemObjectReader<IAtomContainer> reader = null;
+		try 
+		{
+			reader = getReader(in,file.getName());
+			while (reader.hasNext()) 
+			{
+				IAtomContainer molecule  = reader.next();
+				records_read++;
+				
+				if (molecule==null) {
+					records_error++;
+					System.out.println("Unable to read chemical object #" + records_read);
+					continue;
+				}
+				
+				if (molecule.getAtomCount() == 0)
+				{
+					records_error++;
+					System.out.println("Empty chemical object #" + records_read);
+					continue;
+				}
+								
+				performTask(molecule, " " + records_read);				
+			}
+			
+		}
+		catch (Exception x1) {
+			System.out.println("Error: " + x1.getMessage());
+		} 
+		finally {
+			try { reader.close(); } catch (Exception x) {}
+		}
+		
+		return records_error;
+	}
+	
+	
+	public IIteratingChemObjectReader<IAtomContainer> getReader(InputStream in, String extension) throws CDKException, AmbitIOException {
+		FileInputState instate = new FileInputState();
+		IIteratingChemObjectReader<IAtomContainer> reader ;
+		if (extension.endsWith(FileInputState._FILE_TYPE.SDF_INDEX.getExtension())) {
+			reader = new InteractiveIteratingMDLReader(in,SilentChemObjectBuilder.getInstance());
+			((InteractiveIteratingMDLReader) reader).setSkip(true);
+		} else reader = instate.getReader(in,extension);
+		
+		reader.setReaderMode(Mode.RELAXED);
+		reader.setErrorHandler(new IChemObjectReaderErrorHandler() {
+			
+			@Override
+			public void handleError(String message, int row, int colStart, int colEnd,
+					Exception exception) {
+				exception.printStackTrace();
+			}
+			
+			@Override
+			public void handleError(String message, int row, int colStart, int colEnd) {
+				System.out.println(message);
+			}
+			
+			@Override
+			public void handleError(String message, Exception exception) {
+				exception.printStackTrace();				
+			}
+			
+			@Override
+			public void handleError(String message) {
+				System.out.println(message);
+			}
+		});
+		return reader;
+	}
+		
+	
 }
