@@ -107,7 +107,7 @@ public class HNMRPredictCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Switch on/off H shift calculation explanation. Deafult log is on";
+				return "Switch on/off H shift calculation explanation. Deafult explanation is on";
 			}
 			@Override
 			public String getShortName() {
@@ -217,6 +217,7 @@ public class HNMRPredictCli {
 				printLog = false;
 			else
 				printLog = null;
+			break;
 		}
 		case explanation: {
 			printExplanationString = argument;
@@ -226,6 +227,7 @@ public class HNMRPredictCli {
 				printExplanation = false;
 			else
 				printExplanation = null;
+			break;
 		}
 		
 		/*
