@@ -1,5 +1,7 @@
 package ambit2.groupcontribution.cli;
 
+import java.io.File;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -7,20 +9,31 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import ambit2.groupcontribution.nmr.HNMRShifts;
+import ambit2.groupcontribution.nmr.nmr_1h.HShift;
+import ambit2.smarts.SmartsHelper;
 
 
 public class HNMRPredictCli {
 
-	private static final String title = "HNMR predict";
+	private static final String title = "HNMR shifts predict";
+	public String defaultConfigFile = "./hnmr-knowledgebase.txt";
 	public String configFile = null;
 	public String inputFileName = null;
 	public String outputFileName = null;
 	public String inputSmiles = null;
+	public String printLogString = null;
+	public Boolean printLog = false;
+	
+	HNMRShifts hnmrShifts = null;
 
 	public static void main(String[] args) 
 	{
-
-
+		HNMRPredictCli hnmrCli = new HNMRPredictCli();
+		hnmrCli.run(args);
 	}
 
 	protected static Options createOptions() {
@@ -47,7 +60,7 @@ public class HNMRPredictCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Input HNMR configuration (.ini or .json) file";
+				return "HNMR database configuration file";
 			}
 			@Override
 			public String getShortName() {
@@ -70,6 +83,21 @@ public class HNMRPredictCli {
 			}
 		},
 		
+		log {
+			@Override
+			public String getArgName() {
+				return "on|off";
+			}
+			@Override
+			public String getDescription() {
+				return "Switch on/off log printing. Deafult log is off";
+			}
+			@Override
+			public String getShortName() {
+				return "l";
+			}
+		},
+		/*
 		input {
 			@Override
 			public String getArgName() {
@@ -99,6 +127,7 @@ public class HNMRPredictCli {
 				return "o";
 			}
 		},
+		*/
 
 		help {
 			@Override
@@ -107,7 +136,7 @@ public class HNMRPredictCli {
 			}
 			@Override
 			public String getDescription() {
-				return title;
+				return "Shows this help info";
 			}
 			@Override
 			public String getShortName() {
@@ -162,6 +191,17 @@ public class HNMRPredictCli {
 			inputSmiles = argument;
 			break;
 		}
+		case log: {
+			printLogString = argument;
+			if (printLogString.equalsIgnoreCase("on"))
+				printLog = true;
+			else if (printLogString.equalsIgnoreCase("off"))
+				printLog = false;
+			else
+				printLog = null;
+		}
+		
+		/*
 		case input: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -174,6 +214,7 @@ public class HNMRPredictCli {
 			outputFileName = argument;
 			break;
 		}
+		*/
 		}
 
 	}
@@ -215,25 +256,81 @@ public class HNMRPredictCli {
 	
 	protected int runHNMR() throws Exception
 	{
-		if ((inputFileName == null) && (inputSmiles == null))
+		if (printLog == null)
 		{
-			System.out.println("No input is given! \n"
-					+ "Please assign input SMILES or input molecules file)!");
+			System.out.println("Incorrect log option: " + printLogString);
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
 		
-		if (configFile == null)
-		{	
-			System.out.println("GCM configuration file not assigned!");
+		if (/*(inputFileName == null) && */ (inputSmiles == null))
+		{
+			System.out.println("No input is given! \n"
+					+ "Please assign input SMILES!");
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
-		else
-		{
-			//TODO
+		
+		
+		String knowledgeBaseFileName = configFile;
+		if (knowledgeBaseFileName == null)
+		{	
+			knowledgeBaseFileName = defaultConfigFile;
+			System.out.println("Using default HNMR database: " + defaultConfigFile);
 		}
-			
+		
+		
+		try {
+			hnmrShifts = new HNMRShifts(new  File(knowledgeBaseFileName));
+		}
+		catch (Exception x) {
+			System.out.println(x.getMessage());
+			return -1;
+		}
+		
+		
+		if (inputSmiles != null)
+			return runForInputSmiles();		
+		
 		return 0;
-	}	
+	}
+	
+	
+	public int runForInputSmiles() {
+		System.out.println("Input smiles: " + inputSmiles);
+		IAtomContainer mol = null;
+		
+		try {
+			mol = SmartsHelper.getMoleculeFromSmiles(inputSmiles);
+			AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+		}
+		catch (Exception e) {
+			System.out.println("Error on creating molecule from SMILES:\n" + e.getMessage());
+			return -1;
+		}
+		
+		return predictForMolecule(mol);		
+	}
+	
+	public int predictForMolecule(IAtomContainer mol) {
+		
+		try {
+			hnmrShifts.setStructure(mol);
+			hnmrShifts.calculateHShifts();
+		}
+		catch(Exception x) {
+			System.out.println("Calculation error:\n" + x.getMessage());
+			return -1;
+		}
+		
+		if (printLog) {
+			System.out.println("Log:\n" + hnmrShifts.getCalcLog());
+			System.out.println();
+		}
+		
+		for (HShift hs : hnmrShifts.getHShifts())
+			System.out.println(hs.toString());
+		
+		return 0;
+	}
 }
