@@ -8,6 +8,7 @@ public class HShift
 	public int binNumber = 0;
 	public int atomIndex = 0; //It might be explicit H atom index or a heavy atom index with implicit H atoms
 	public int imlicitHAtomsNumbers = 0;
+	public SpinSplitting spinSplit = null;
 	public String explanationInfo = null;
 	
 	public String toString()

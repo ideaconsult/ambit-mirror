@@ -90,7 +90,7 @@ public class HNMRShifts
 		
 		generateHShifts();
 		
-		spinSplitMan.setup(molecule, hAtEnvInstances);
+		spinSplitMan.setup(molecule, atomHShifts);
 		spinSplitMan.caclulateSplits();
 	}
 	
