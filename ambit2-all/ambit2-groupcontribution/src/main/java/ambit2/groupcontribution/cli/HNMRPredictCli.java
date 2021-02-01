@@ -61,7 +61,7 @@ public class HNMRPredictCli {
 		if (message!=null) System.out.println(message);
 		System.out.println(title);
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp( GroupContributionCli.class.getName(), options );
+		formatter.printHelp( HNMRPredictCli.class.getName(), options );
 	}
 
 	enum _option {
