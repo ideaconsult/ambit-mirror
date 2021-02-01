@@ -32,6 +32,7 @@ public class HNMRShifts
 	private HNMRKnowledgeBase knowledgeBase = null;
 	//private boolean implicitHAtomsWorkingMode = true;
 	private double resolutionStep = 0.01;
+	private boolean FlagSpinSplitting = false;
 	
 	private IAtomContainer molecule = null;
 	private int distMatrix[][] = null;
@@ -90,8 +91,10 @@ public class HNMRShifts
 		
 		generateHShifts();
 		
-		spinSplitMan.setup(molecule, atomHShifts);
-		spinSplitMan.caclulateSplits();
+		if (FlagSpinSplitting) {
+			spinSplitMan.setup(molecule, atomHShifts);
+			spinSplitMan.caclulateSplits();
+		}
 	}
 	
 	 
@@ -673,6 +676,16 @@ public class HNMRShifts
 
 	public IAtomContainer getMolecule() {
 		return molecule;
-	}	
+	}
+
+	public boolean isFlagSpinSplitting() {
+		return FlagSpinSplitting;
+	}
+
+	public void setFlagSpinSplitting(boolean flagSpinSplitting) {
+		FlagSpinSplitting = flagSpinSplitting;
+	}
+	
+	
 	
 }
