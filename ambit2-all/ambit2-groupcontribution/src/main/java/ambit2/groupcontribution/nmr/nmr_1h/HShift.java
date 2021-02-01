@@ -18,6 +18,10 @@ public class HShift
 		sb.append(df.format(value));
 		sb.append(" H" + imlicitHAtomsNumbers);
 		sb.append(" atom " + (atomIndex + 1));
+		
+		if (spinSplit != null)
+			sb.append(" " + spinSplit.toString());	
+		
 		sb.append("  " + explanationInfo);
 		return sb.toString();
 	}
@@ -29,6 +33,11 @@ public class HShift
 		sb.append(df.format(value));
 		sb.append(" H" + imlicitHAtomsNumbers);
 		sb.append(" atom " + (atomIndex + 1));
+		
+		if (spinSplit != null)
+			sb.append(" " + spinSplit.toString());	
+		
+		
 		if (explanation)
 			sb.append("  " + explanationInfo);
 		return sb.toString();

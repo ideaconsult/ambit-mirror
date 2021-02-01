@@ -38,7 +38,7 @@ public class HNMRShifts
 	private int distMatrix[][] = null;
 	private List<HShift> hShifts = new ArrayList<HShift>();
 	private Map<Integer, Set<HShift>> binHShifts = new TreeMap<Integer, Set<HShift>>();
-	private Map<IAtom, HShift> atomHShifts = new HashMap<IAtom, HShift>();
+	//private Map<IAtom, HShift> atomHShifts = new HashMap<IAtom, HShift>();
 	private List<HAtomEnvironmentInstance> hAtEnvInstances = new ArrayList<HAtomEnvironmentInstance>();
 	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new HashMap<IAtom, List<HAtomEnvironmentInstance>>();
 	private Map<IAtom, HAtomEnvironmentInstance> atomHAtEnvInstance = new HashMap<IAtom, HAtomEnvironmentInstance>();
@@ -73,7 +73,7 @@ public class HNMRShifts
 	{
 		hShifts.clear();
 		binHShifts.clear();
-		atomHShifts.clear();
+		//atomHShifts.clear();
 		hAtEnvInstances.clear();
 		atomHAtEnvInstanceSet.clear();
 		atomHAtEnvInstance.clear();
@@ -91,8 +91,8 @@ public class HNMRShifts
 		
 		generateHShifts();
 		
-		if (FlagSpinSplitting) {
-			spinSplitMan.setup(molecule, atomHShifts);
+		if (FlagSpinSplitting) {			
+			spinSplitMan.setup(molecule, hShifts);
 			spinSplitMan.caclulateSplits();
 			//System.out.println(spinSplitMan.getEquivalenceAtomsInfo());
 		}
