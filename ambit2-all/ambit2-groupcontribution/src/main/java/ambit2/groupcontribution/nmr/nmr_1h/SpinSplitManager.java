@@ -15,7 +15,7 @@ public class SpinSplitManager
 	IAtomContainer molecule = null;
 	//List<HAtomEnvironmentInstance> hAtEnvInstances = null;
 	Map<IAtom, HShift> atomHShifts = null;
-	Map<IAtom,Integer> atEqClasses = new HashMap<IAtom,Integer>();	
+	int atomClasses[] = null;	
 	Map<String, Integer> codeClasses = new HashMap<String, Integer>();
 	//String eqAtCodes[] = null;
 	
@@ -42,7 +42,7 @@ public class SpinSplitManager
 	
 	void calcAtomEquivalenceClasses()
 	{
-		atEqClasses.clear(); 
+		atomClasses = new int[molecule.getAtomCount()]; 
 		codeClasses.clear();
 		//eqAtCodes = new String[molecule.getAtomCount()];
 		int curNumOfClasses = 0;
@@ -63,8 +63,9 @@ public class SpinSplitManager
 				curNumOfClasses++;
 				codeClasses.put(eqAtCode, classNum);
 			}
+			
+			atomClasses[i] = classNum;
 		}
-		
 		
 	}
 	
@@ -72,6 +73,18 @@ public class SpinSplitManager
 	{
 		//TODO
 		return null;
+	}
+	
+	public String getEquivalenceAtomsInfo() 
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < molecule.getAtomCount(); i++)
+		{
+			IAtom at = molecule.getAtom(i);
+			sb.append("#" + (i+1) + "  " + at.getSymbol() + "  " + atomClasses[i]);
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 	
 	
