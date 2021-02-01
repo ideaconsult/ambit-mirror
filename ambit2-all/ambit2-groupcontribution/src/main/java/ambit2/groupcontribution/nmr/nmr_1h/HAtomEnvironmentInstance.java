@@ -11,6 +11,7 @@ public class HAtomEnvironmentInstance
 	public IAtom atoms[] = null;
 	public HAtomEnvironment hEnvironment = null; 
 	public List<List<SubstituentInstance>> substituentInstances = null; 
+	public SpinSplitting spinSplit = null; 
 	
 	public HAtomEnvironmentInstance() {
 	}

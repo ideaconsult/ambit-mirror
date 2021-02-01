@@ -21,6 +21,7 @@ import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HShift;
+import ambit2.groupcontribution.nmr.nmr_1h.SpinSplitManager;
 import ambit2.smarts.StereoChemUtils;
 import ambit2.smarts.groups.GroupMatch;
 
@@ -41,6 +42,7 @@ public class HNMRShifts
 	private Map<IAtom, List<HAtomEnvironmentInstance>> atomHAtEnvInstanceSet = new HashMap<IAtom, List<HAtomEnvironmentInstance>>();
 	private Map<IAtom, HAtomEnvironmentInstance> atomHAtEnvInstance = new HashMap<IAtom, HAtomEnvironmentInstance>();
 	private Map<String, List<List<IAtom>>> groupMappings = new HashMap<String, List<List<IAtom>>>();
+	private SpinSplitManager spinSplitMan = new SpinSplitManager();
 	
 	public HNMRShifts() throws Exception
 	{
@@ -87,6 +89,9 @@ public class HNMRShifts
 		findAllSubstituents();
 		
 		generateHShifts();
+		
+		spinSplitMan.setup(molecule, hAtEnvInstances);
+		spinSplitMan.caclulateSplits();
 	}
 	
 	 
