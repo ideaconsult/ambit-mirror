@@ -8,9 +8,10 @@ public class SpinSplitting
 	
 	public String toString() 
 	{	
-		String s = "split:";
-		for (int i = 0; i < numSplitLevels; i++)
-			s = s + (" " + splits[i]);
+		String s = "split ";
+		for (int i = 0; i < numSplitLevels; i++)			
+			s = s + ( ((i==0)?"":"x")  + splits[i]);
+			
 		return s;
 	}
 }

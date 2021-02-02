@@ -40,6 +40,10 @@ public class HNMRPredictCli {
 	public Boolean printLog = false;
 	public String printExplanationString = null;
 	public Boolean printExplanation = true;
+	public String spinSplitString = null;
+	public Boolean spinSplit = true;
+	
+	
 	
 	HNMRShifts hnmrShifts = null;
 
@@ -103,7 +107,7 @@ public class HNMRPredictCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Switch on/off log printing. Deafult log is off";
+				return "Switch on/off log printing. Default log is off";
 			}
 			@Override
 			public String getShortName() {
@@ -118,11 +122,26 @@ public class HNMRPredictCli {
 			}
 			@Override
 			public String getDescription() {
-				return "Switch on/off H shift calculation explanation. Deafult explanation is on";
+				return "Switch on/off H shift calculation explanation. Default explanation is on";
 			}
 			@Override
 			public String getShortName() {
 				return "e";
+			}
+		},
+		
+		spin_split {
+			@Override
+			public String getArgName() {
+				return "on|off";
+			}
+			@Override
+			public String getDescription() {
+				return "Switch on/off H spin splitting feature. Default  is on";
+			}
+			@Override
+			public String getShortName() {
+				return "p";
 			}
 		},
 				
@@ -239,7 +258,17 @@ public class HNMRPredictCli {
 			else
 				printExplanation = null;
 			break;
-		}		
+		}
+		case spin_split: {
+			spinSplitString = argument;
+			if (spinSplitString.equalsIgnoreCase("on"))
+				spinSplit = true;
+			else if (spinSplitString.equalsIgnoreCase("off"))
+				spinSplit = false;
+			else
+				spinSplit = null;
+			break;
+		}
 		case input: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -307,6 +336,12 @@ public class HNMRPredictCli {
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
+		if (spinSplit == null)
+		{
+			System.out.println("Incorrect spin_split option: " + spinSplitString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
 		
 		if ((inputFileName == null) && (inputSmiles == null))
 		{
@@ -327,6 +362,7 @@ public class HNMRPredictCli {
 		
 		try {
 			hnmrShifts = new HNMRShifts(new  File(knowledgeBaseFileName));
+			hnmrShifts.setFlagSpinSplitting(spinSplit);
 		}
 		catch (Exception x) {
 			System.out.println(x.getMessage());
