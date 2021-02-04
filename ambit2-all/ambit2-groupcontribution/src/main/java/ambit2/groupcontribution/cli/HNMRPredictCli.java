@@ -363,6 +363,7 @@ public class HNMRPredictCli {
 		try {
 			hnmrShifts = new HNMRShifts(new  File(knowledgeBaseFileName));
 			hnmrShifts.setFlagSpinSplitting(spinSplit);
+			hnmrShifts.getSpinSplitManager().setFlagReportEquivalenceAtomCodes(true);
 		}
 		catch (Exception x) {
 			System.out.println(x.getMessage());

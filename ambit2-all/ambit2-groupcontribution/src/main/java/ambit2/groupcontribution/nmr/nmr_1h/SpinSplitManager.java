@@ -21,8 +21,9 @@ public class SpinSplitManager
 	List<HShift> hShifts = null;
 	int atomClasses[] = null;	
 	Map<String, Integer> codeClasses = new HashMap<String, Integer>();
-	//String eqAtCodes[] = null;
+	String eqAtCodes[] = null;	
 	
+	boolean FlagReportEquivalenceAtomCodes = false;
 	int numLayers = 2;
 	
 	public void setup(IAtomContainer molecule, List<HShift> hShifts) {
@@ -46,9 +47,13 @@ public class SpinSplitManager
 	void calcAtomEquivalenceClasses()
 	{
 		atomClasses = new int[molecule.getAtomCount()]; 
-		codeClasses.clear();
-		//eqAtCodes = new String[molecule.getAtomCount()];
+		codeClasses.clear();		
 		int curNumOfClasses = 0;
+		
+		if (FlagReportEquivalenceAtomCodes)
+			eqAtCodes = new String[molecule.getAtomCount()];
+		else
+			eqAtCodes = null;
 		
 		for (int i = 0; i < molecule.getAtomCount(); i++)
 		{
@@ -56,7 +61,8 @@ public class SpinSplitManager
 			AtomEquivalenceInfo atEqInfo = new AtomEquivalenceInfo();
 			atEqInfo.initialize(at, numLayers, molecule);
 			String eqAtCode = atEqInfo.toString();
-			//eqAtCodes[i] = eqAtCode;
+			if (FlagReportEquivalenceAtomCodes)
+				eqAtCodes[i] = eqAtCode;
 			
 			//Get code class number or register new class number
 			Integer classNum = codeClasses.get(eqAtCode);
@@ -123,9 +129,27 @@ public class SpinSplitManager
 		{
 			IAtom at = molecule.getAtom(i);
 			sb.append("#" + (i+1) + "  " + at.getSymbol() + "  " + atomClasses[i]);
+			if (FlagReportEquivalenceAtomCodes)
+				sb.append("    " + eqAtCodes[i]);
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	public boolean isFlagReportEquivalenceAtomCodes() {
+		return FlagReportEquivalenceAtomCodes;
+	}
+
+	public void setFlagReportEquivalenceAtomCodes(boolean flagReportEquivalenceAtomCodes) {
+		FlagReportEquivalenceAtomCodes = flagReportEquivalenceAtomCodes;
+	}
+
+	public int getNumLayers() {
+		return numLayers;
+	}
+
+	public void setNumLayers(int numLayers) {
+		this.numLayers = numLayers;
 	}
 	
 	

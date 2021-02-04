@@ -630,6 +630,13 @@ public class HNMRShifts
 				}
 			}
 		}
+		
+		if (FlagSpinSplitting)
+		{
+			sb.append("\n");
+			sb.append("Atom equivalence classes:\n");
+			sb.append(spinSplitMan.getEquivalenceAtomsInfo());
+		}
 
 		return sb.toString();
 	}
@@ -686,7 +693,10 @@ public class HNMRShifts
 	public void setFlagSpinSplitting(boolean flagSpinSplitting) {
 		FlagSpinSplitting = flagSpinSplitting;
 	}
+
+	public SpinSplitManager getSpinSplitManager() {
+		return spinSplitMan;
+	}
 	
-	
-	
+		
 }

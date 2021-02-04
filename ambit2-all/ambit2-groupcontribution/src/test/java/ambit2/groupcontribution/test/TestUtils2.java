@@ -181,6 +181,8 @@ public class TestUtils2
 	{	
 		System.out.println("Configuring knowledge base ...");
 		HNMRShifts hnmrShifts = new HNMRShifts(new  File(knowledgeBaseFileName));
+		hnmrShifts.getSpinSplitManager().setFlagReportEquivalenceAtomCodes(true);
+		//hnmrShifts.getSpinSplitManager().setNumLayers(4);
 		
 		System.out.println("Testing HNMR with molecule: " + smiles);
 		IAtomContainer mol = TestUtils.moleculeBuilder(smiles);
