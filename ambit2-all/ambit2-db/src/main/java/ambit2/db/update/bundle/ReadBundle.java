@@ -42,7 +42,7 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
 		idbundle {
 			@Override
 			public String getSQL() {
-				return "where idbundle=?";
+				return " idbundle=?";
 			}
 			
 			
@@ -50,14 +50,14 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
 		name {
 			@Override
 			public String getSQL() {
-				return "where name like ?";
+				return " name like ?";
 			}
 			
 		}, 
 		bundle_number  {
 			@Override
 			public String getSQL() {
-				return "where bundle_number=unhex(?)";
+				return " bundle_number=unhex(?)";
 			}
 						
 		}
@@ -131,19 +131,34 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
 	}
 
 	public String getSQL() throws AmbitException {
-		StringBuilder p = new StringBuilder();
-		String d = "where published_status in (";
-		for (_published_status s : getStatus()) {
-			p.append(d);
-			p.append("'");
-			p.append(s.name());
-			p.append("'");
-			d = ",";
-		}
-		p.append(") ");
-		String sql = String.format(select_datasets,_idmode.getSQL(),
-				//getValue() == null ? p.toString() : getValue().getID() > 0 ? "where idbundle=?" : "where name like ?",
-				(getFieldname() == null) ? "" : String.format("%s user_name=?","".equals(_idmode.getSQL())?" where ":" and "));
+	    String delimiter = " where ";
+	    StringBuilder p = new StringBuilder();
+	    switch (_idmode) {
+	    case all: {
+	        p.append(delimiter);
+	        String d = " published_status in (";
+	        for (_published_status s : getStatus()) {
+	            p.append(d);
+	            p.append("'");
+	            p.append(s.name());
+	            p.append("'");
+	            d = ",";
+	        }
+	        p.append(") ");
+	        delimiter = " and ";
+	        break;
+	    }
+	    default: {
+	      p.append(delimiter);
+	      p.append(_idmode.getSQL());
+	    }
+	    }
+	    if (getFieldname()!=null) {
+	      p.append(delimiter);  
+	      p.append("user_name =?");
+	    }
+	    
+		String sql = String.format(select_datasets,p.toString(),"");
 		return sql;
 
 	}
