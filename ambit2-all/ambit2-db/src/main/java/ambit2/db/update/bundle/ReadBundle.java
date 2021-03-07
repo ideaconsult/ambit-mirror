@@ -143,7 +143,7 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
 		p.append(") ");
 		String sql = String.format(select_datasets,_idmode.getSQL(),
 				//getValue() == null ? p.toString() : getValue().getID() > 0 ? "where idbundle=?" : "where name like ?",
-				(getFieldname() == null) ? "" : " and user_name=?");
+				(getFieldname() == null) ? "" : String.format("%s user_name=?","".equals(_idmode.getSQL())?" where ":" and "));
 		return sql;
 
 	}
