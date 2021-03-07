@@ -151,6 +151,7 @@ public class ReadBundle extends AbstractReadDataset<String, SubstanceEndpointsBu
 	    default: {
 	      p.append(delimiter);
 	      p.append(_idmode.getSQL());
+	      delimiter = " and ";
 	    }
 	    }
 	    if (getFieldname()!=null) {
