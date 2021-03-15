@@ -1,0 +1,19 @@
+name: Invoke building of the AMBIT Docker images
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  invoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch event to the ambit-docker repository
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ideaconsult/ambit-docker
+          event-type: ambit-repo-push
+          client-payload: '{"sha": "${{ github.sha }}"}'
