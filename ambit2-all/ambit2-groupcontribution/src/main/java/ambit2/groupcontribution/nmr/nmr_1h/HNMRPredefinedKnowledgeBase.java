@@ -85,7 +85,7 @@ public class HNMRPredefinedKnowledgeBase
 						if (haEnv == null)
 						{	
 							//This is a file line outside H_ATOM_ENVIRONMENT sections
-							//(before, between or after H_ATOM_ENVIRONMENT sections) used for
+							//(before, between or after H_ATOM_ENVIRONMENT sections)S
 							//It is an empty line or a line with JJ coupling rules
 							if (line.contains("$$2JJ"))
 								parseRule2JLine(line, "", knowledgeBase);
@@ -106,7 +106,7 @@ public class HNMRPredefinedKnowledgeBase
 				
 				if (haEnv != null)
 				{	
-					//Register HAtomEnvironment
+					//Register last HAtomEnvironment
 					postProcess (haEnv, errorPrefix0, knowledgeBase.errors);
 					knowledgeBase.hAtomEnvironments.add(haEnv);
 				}
