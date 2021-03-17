@@ -62,7 +62,7 @@ public class TestUtils2
 		//testLocalDescriptorsParsing("FC,HeN,A,H,Val");
 		
 		//testHNMRKnowledgeBase();
-		testHNMRKnowledgeBase("/Projects/HNMR/hnmr-knowledgebase.txt");
+		testHNMRKnowledgeBase("/Projects/HNMR/hnmr-knowledgebase-v04_NK.txt");
 	}
 	
 	public static void testGroupCount(String smiles, GroupContributionModel model) throws Exception

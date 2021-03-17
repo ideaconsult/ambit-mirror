@@ -253,6 +253,23 @@ public class HNMRPredefinedKnowledgeBase
 			return;
 		}
 		
+		if (key.equals("H_POS_ATOM_INDICES"))	
+		{	
+			String tokens[] = keyValue.split("\\s+");
+			haEnv.hPosAtomIndices = new int[tokens.length];
+			for (int i = 0; i < tokens.length; i++)
+			{
+				try {
+					int ival = Integer.parseInt(tokens[i]);
+					haEnv.hPosAtomIndices[i] = ival;
+				}
+				catch (Exception e) {
+					errors.add(errorPrefix + " incorrect H_POS_ATOM_INDICES[" + (i+1) + "] : " + e.getMessage());
+				}
+			}
+			return;
+		}
+		
 		if (key.equals("POSITION_DISTANCES"))	
 		{	
 			String tokens[] = keyValue.split("\\s+");

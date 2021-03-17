@@ -22,6 +22,7 @@ public class HAtomEnvironment
 	public String shiftDesignations[] = null;
 	public int substituentPosAtomIndices[] = null; //it is not needed for SMARTS with one atom
 	public int positionDistances[] = null; //it is not needed when only alpha positions are considered	
+	public int hPosAtomIndices[] = null;
 	public String higherPriorityEnvironments[] = null;
 	
 	public ShiftAssociation shiftsAssociation = null;
@@ -86,6 +87,14 @@ public class HAtomEnvironment
 			sb.append("Substituent posistion atom indices:");
 			for (int i = 0; i < substituentPosAtomIndices.length; i++)
 				sb.append(" " + substituentPosAtomIndices[i]);
+			sb.append("\n");
+		}
+		
+		if (hPosAtomIndices != null)
+		{
+			sb.append("H posistion atom indices:");
+			for (int i = 0; i < hPosAtomIndices.length; i++)
+				sb.append(" " + hPosAtomIndices[i]);
 			sb.append("\n");
 		}
 		
