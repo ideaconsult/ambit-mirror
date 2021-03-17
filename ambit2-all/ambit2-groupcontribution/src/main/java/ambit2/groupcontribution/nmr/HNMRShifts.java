@@ -17,6 +17,7 @@ import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.descriptors.utils.GraphMatrices;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment;
+import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironment.ShiftAssociation;
 import ambit2.groupcontribution.nmr.nmr_1h.HAtomEnvironmentInstance;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRKnowledgeBase;
 import ambit2.groupcontribution.nmr.nmr_1h.HNMRPredefinedKnowledgeBase;
@@ -200,8 +201,12 @@ public class HNMRShifts
 		switch (haeInst.hEnvironment.shiftsAssociation)
 		{
 		case H_ATOM_POSITION:
-			//TODO
-			break;
+			//In this case number of possible positions is typically 1 and 
+			//it is different from shiftDesignations.length
+			if (haeInst.hEnvironment.positionDistances != null)
+				n = haeInst.hEnvironment.positionDistances.length;
+			else
+				n = 1;
 			
 		case SUBSTITUENT_POSITION:
 			for (int pos = 0; pos < n; pos++)
@@ -335,8 +340,16 @@ public class HNMRShifts
 				continue;
 			}
 			
-			HShift hs = calcHShift(inst);
-			hShifts.add(hs);
+			if (inst.hEnvironment.shiftsAssociation == ShiftAssociation.SUBSTITUENT_POSITION) {
+				HShift hs = calcHShift(inst);
+				hShifts.add(hs);
+			}
+			else {
+				//inst.hEnvironment.shiftsAssociation == ShiftAssociation.H_ATOM_POSITION
+				List<HShift> hsList = calcHShiftsForHPositions(inst);
+				for (HShift hs: hsList)
+					hShifts.add(hs);
+			}
 		}	
 	}
 	
@@ -355,7 +368,7 @@ public class HNMRShifts
 		switch (haeInst.hEnvironment.shiftsAssociation)
 		{
 		case H_ATOM_POSITION:
-			//TODO
+			//This case should not be reached here
 			break;
 		case SUBSTITUENT_POSITION:
 			//Iterate all shift positions
@@ -377,6 +390,55 @@ public class HNMRShifts
 		
 		hs.explanationInfo = sb.toString();
 		return hs;
+	}
+	
+	public List<HShift> calcHShiftsForHPositions(HAtomEnvironmentInstance haeInst)
+	{	
+		List<HShift> hsList = new ArrayList<HShift>();
+		
+		if (haeInst.substituentInstances.isEmpty())
+		{	
+			//TODO
+		}
+		else
+		{	
+			//H_ATOM_POSITION association mode works for one substituent at one position 
+			SubstituentInstance si = null;
+			List<SubstituentInstance> siList = haeInst.substituentInstances.get(0);
+			if (siList != null && (!siList.isEmpty()))
+				si = siList.get(0);
+			
+			if (si != null)
+			{
+				for (int i = 0; i< haeInst.hEnvironment.hPosAtomIndices.length; i++)
+				{
+					//A new HShift is generated for each H position
+					HShift hs = new HShift();
+					StringBuffer sb = new StringBuffer();
+					int atIndex1 =  haeInst.hEnvironment.hPosAtomIndices[i];
+					int atIndex0 = atIndex1 - 1; //0-base index
+					
+					hs.value = haeInst.hEnvironment.chemShift0;
+					if (haeInst.hEnvironment.implicitHAtomsNumber != null)
+						hs.imlicitHAtomsNumbers = haeInst.hEnvironment.implicitHAtomsNumber;
+					
+					hs.atomIndex = molecule.indexOf(haeInst.atoms[atIndex0]);
+					sb.append(haeInst.hEnvironment.name + "/pos " + atIndex1 + " ");
+					sb.append(haeInst.hEnvironment.chemShift0);
+					
+					//The chemical shift index from the substituent is the same index as i (i.e.the position) 
+					hs.value += si.substituent.chemShifts[i];
+					sb.append(" + " + si.substituent.chemShifts[i]);
+					sb.append(" (" + haeInst.hEnvironment.shiftDesignations[i]);
+					sb.append(", " + si.substituent.name + ")");
+					
+					hs.explanationInfo = sb.toString();
+					hsList.add(hs);
+				}
+			}
+		}
+		
+		return hsList;
 	}
 	
 	
@@ -596,8 +658,24 @@ public class HNMRShifts
 				switch (inst.hEnvironment.shiftsAssociation)
 				{
 				case H_ATOM_POSITION:
-					//TODO
-					break;
+					for (int i = 0; i < inst.substituentInstances.size(); i++)
+					{	
+						List<SubstituentInstance> siList = inst.substituentInstances.get(i);
+						if (siList == null)
+							continue;
+
+						int pos = inst.hEnvironment.getSubstituentPosAtomIndicex(i);
+						//int distance = inst.hEnvironment.getPositionDistance(i);
+
+						sb.append("    pos=" + (pos+1) );
+						for (SubstituentInstance si : siList)
+						{
+							sb.append(" " + si.substituent.name);
+							for (int k = 0; k < si.atoms.length; k++)
+								sb.append(" " + /*si.atoms[k].getSymbol()*/ (molecule.indexOf(si.atoms[k])+1));
+						}
+						sb.append("\n");
+					}
 				case SUBSTITUENT_POSITION:
 					//Iterate all shift positions
 					for (int i = 0; i < inst.substituentInstances.size(); i++)
