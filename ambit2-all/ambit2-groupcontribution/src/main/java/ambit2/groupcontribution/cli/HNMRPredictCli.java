@@ -352,13 +352,27 @@ public class HNMRPredictCli {
 		}
 		
 		
+		int initRes = initHNMR();
+		if (initRes != 0)
+			return initRes;
+		
+		
+		if (inputSmiles != null)
+			return runForInputSmiles();	
+		else
+			return iterateInputMoleculesFile();
+		
+		//return 0;
+	}
+	
+	public int initHNMR() 
+	{
 		String knowledgeBaseFileName = configFile;
 		if (knowledgeBaseFileName == null)
 		{	
 			knowledgeBaseFileName = defaultConfigFile;
 			System.out.println("Using default HNMR database: " + defaultConfigFile);
-		}
-		
+		}		
 		
 		try {
 			hnmrShifts = new HNMRShifts(new  File(knowledgeBaseFileName));
@@ -370,13 +384,7 @@ public class HNMRPredictCli {
 			return -1;
 		}
 		
-		
-		if (inputSmiles != null)
-			return runForInputSmiles();	
-		else
-			return iterateInputMoleculesFile();
-		
-		//return 0;
+		return 0;
 	}
 	
 	
@@ -421,6 +429,14 @@ public class HNMRPredictCli {
 	public void performTask(IAtomContainer mol, String info)
 	{	
 		System.out.println("Molecule " + info); 
+		
+		//This is a temporary hack to avoid unresolved bug
+		//For cyclic compounds, a calculation error is generated for the 
+		//second calculations thus initHNMR is called before each prediction
+		int initRes = initHNMR();
+		if (initRes != 0)
+			return;
+		
 		predictForMolecule(mol);
 	}
 	
