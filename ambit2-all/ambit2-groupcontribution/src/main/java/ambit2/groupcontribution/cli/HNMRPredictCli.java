@@ -130,14 +130,14 @@ public class HNMRPredictCli {
 			}
 		},
 		
-		spin_split {
+		multiplicity {
 			@Override
 			public String getArgName() {
 				return "on|off";
 			}
 			@Override
 			public String getDescription() {
-				return "Switch on/off H spin splitting feature. Default  is on";
+				return "Switch on/off H multiplicity feature. Default is on";
 			}
 			@Override
 			public String getShortName() {
@@ -259,7 +259,7 @@ public class HNMRPredictCli {
 				printExplanation = null;
 			break;
 		}
-		case spin_split: {
+		case multiplicity: {
 			spinSplitString = argument;
 			if (spinSplitString.equalsIgnoreCase("on"))
 				spinSplit = true;

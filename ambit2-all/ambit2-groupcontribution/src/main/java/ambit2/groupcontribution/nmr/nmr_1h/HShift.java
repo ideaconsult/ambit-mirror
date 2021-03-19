@@ -16,7 +16,7 @@ public class HShift
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
-		DecimalFormat df = new DecimalFormat("###.00", new DecimalFormatSymbols(new Locale("en-US")));
+		DecimalFormat df = new DecimalFormat("##0.00", new DecimalFormatSymbols(new Locale("en-US")));
 		sb.append(df.format(value));
 		sb.append(" H" + imlicitHAtomsNumbers);
 		sb.append(" atom " + (atomIndex + 1));
@@ -31,7 +31,7 @@ public class HShift
 	public String toString(boolean explanation)
 	{
 		StringBuffer sb = new StringBuffer();
-		DecimalFormat df = new DecimalFormat("###.00", new DecimalFormatSymbols(new Locale("en-US")));
+		DecimalFormat df = new DecimalFormat("##0.00", new DecimalFormatSymbols(new Locale("en-US")));
 		sb.append(df.format(value));
 		sb.append(" H" + imlicitHAtomsNumbers);
 		sb.append(" atom " + (atomIndex + 1));
