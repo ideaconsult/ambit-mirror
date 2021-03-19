@@ -16,7 +16,7 @@ public class HShift
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();
-		DecimalFormat df = new DecimalFormat("###.###");
+		DecimalFormat df = new DecimalFormat("###.00", new DecimalFormatSymbols(new Locale("en-US")));
 		sb.append(df.format(value));
 		sb.append(" H" + imlicitHAtomsNumbers);
 		sb.append(" atom " + (atomIndex + 1));
