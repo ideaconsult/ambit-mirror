@@ -1,0 +1,13 @@
+Manifest-version: 1.0
+Package: ambit2.notation.substance
+
+Name: ambit2/smarts/
+Specification-Title: TBD
+Specification-Version: ${project.version}
+Specification-Vendor: Ideaconsult LTD
+Implementation-Title: TBD
+Implementation-Version: ${project.version}-${buildNumber}-${timestamp}
+Implementation-Vendor: Ideaconsult Ltd.
+Package-Title: ambit2.notation.substance
+Package-Version: ${project.version}
+Package-Vendor: Ideaconsult Ltd.
