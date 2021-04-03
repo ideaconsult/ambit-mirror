@@ -326,6 +326,7 @@
 		<module>ambit2-poi</module>
 		<module>ambit2-fp</module>
 		<module>ambit2-ml</module>
+		<module>ambit2-notation</module>
 	</modules>
 	<distributionManagement>
 		<!-- <repository> <id>dev_web_sourceforge</id> <url>scp://web.sourceforge.net/home/groups/a/am/ambit/htdocs/jars</url> 
