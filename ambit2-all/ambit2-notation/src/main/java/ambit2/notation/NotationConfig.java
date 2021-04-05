@@ -1,4 +1,4 @@
-package ambit2.notation.substance;
+package ambit2.notation;
 
 import java.io.File;
 import java.io.FileInputStream;
