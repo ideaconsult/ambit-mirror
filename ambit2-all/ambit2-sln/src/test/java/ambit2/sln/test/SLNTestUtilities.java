@@ -285,31 +285,19 @@ public class SLNTestUtilities
 	public void testSmarts2SLN(String smarts) throws Exception
 	{	
 		System.out.println("Input smarts: " + smarts);
+		String sln = sln2Smarts.smartsToSLN(smarts);
 		
-		IQueryAtomContainer query = smartsParser.parse(smarts);		
-		String error = smartsParser.getErrorMessages();
-		if (!error.equals(""))
-		{
-			System.out.println("Smarts Parser errors:\n" + error);	
-			return;
-		}
-				
-		SLNContainer slnCon = slnConverter.QueryAtomContainerToSLNContainer(query);
-		
-		if (slnCon == null)			
-			System.out.println("Conversion errors: " + slnConverter.getAllErrors());
+		if (sln == null)
+			System.out.println("Conversion errors: " + sln2Smarts.getAllErrors());
 		else
-			System.out.println("Output sln: " + slnHelper.toSLN(slnCon));
+			System.out.println("Ouput sln: " + sln);
 		
-		if (!slnConverter.getConversionWarnings().isEmpty())
+		if (!sln2Smarts.getConversionWarnings().isEmpty())
 		{
 			System.out.println("Conversion warnings: ");
-			for (String w: slnConverter.getConversionWarnings())
+			for (String w: sln2Smarts.getConversionWarnings())
 				System.out.println(w);
 		}
-		
-		
-		
 	}
 	
 	public void testSLNIsomorphism(String sln, String smiles) throws Exception
