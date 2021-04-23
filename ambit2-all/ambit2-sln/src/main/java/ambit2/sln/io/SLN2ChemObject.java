@@ -258,8 +258,32 @@ public class SLN2ChemObject
 	public SLNContainer QueryAtomContainerToSLNContainer(IQueryAtomContainer query)
 	{
 		clearAllErrorsAndWarnings();
+		SLNContainer slnCon = new SLNContainer(SilentChemObjectBuilder.getInstance());
+		//Map<IQueryAtom,SLNAtom> convertedAtoms = new HashMap<IQueryAtom,SLNAtom>();
+
+		for (int i = 0; i < query.getAtomCount(); i++)
+		{
+			//SLNAtom slnAtom = (SLNAtom) slnContainer.getAtom(i);
+			//IQueryAtom atom = slnAtomToQueryAtom(slnAtom);
+			
+			IQueryAtom atom = (IQueryAtom) query.getAtom(i);
+			SLNAtom slnAtom = queryAtomToSLNAtom(atom);
+
+			if (currentConversionWarning != null)
+				conversionWarnings.add(currentConversionWarning + " for atom: " + (i+1));
+			if (slnAtom == null)
+			{
+				conversionErrors.add(currentConversionError + " for atom: " + (i+1));
+				continue;
+			}
+			slnCon.addAtom(slnAtom);
+			//convertedAtoms.put(slnAtom, atom);		
+			
+		}
+		
 		//TODO
-		return null;
+
+		return slnCon;
 	}
 	
 	public SMIRKSReaction slnContainerToSMIRKSReaction(SLNContainer container)

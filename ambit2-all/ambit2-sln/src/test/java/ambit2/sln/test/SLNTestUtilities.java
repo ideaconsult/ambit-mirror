@@ -3,6 +3,7 @@ package ambit2.sln.test;
 import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 
 import ambit2.base.data.Property;
 import ambit2.base.data.StructureRecord;
@@ -14,6 +15,7 @@ import ambit2.sln.SLNParser;
 import ambit2.sln.dictionary.Expander;
 import ambit2.sln.dictionary.MarkushHelper;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
+import ambit2.sln.io.SLN2ChemObject;
 import ambit2.sln.io.SLN2SMARTS;
 import ambit2.sln.io.SLN2Substance;
 import ambit2.sln.io.SLN2SubstanceConfig;
@@ -29,11 +31,13 @@ public class SLNTestUtilities
 	static SLNParser slnParser = new SLNParser();
 	static SLNHelper slnHelper = new SLNHelper();
 	static SLN2SMARTS sln2Smarts = new SLN2SMARTS();
+	static SLN2ChemObject slnConverter = new SLN2ChemObject();
 	static SLNSearchManager man = new SLNSearchManager();
 	static IsomorphismTester isoTester = new IsomorphismTester();
 	static SLN2Substance sln2sub = new SLN2Substance();
 	static Expander expander = new Expander();
 	static MarkushHelper markushHelper = new MarkushHelper();
+	static SmartsParser smartsParser = new SmartsParser();
 	
 	public boolean FlagPrintTargetMolInfo = false;
 	
@@ -144,7 +148,7 @@ public class SLNTestUtilities
 		//tu.testSLN2Smarts("CC=CCCS[charge>+1]");
 		//tu.testSLN2Smarts("Any[!type=1;!type=6;!r]");
 		//tu.testSLN2Smarts("Any[!type=6;hac=3]");
-		tu.testSLN2Smarts("CC=CCCS[charge!=-1;hc>=3]");
+		//tu.testSLN2Smarts("CC=CCCS[charge!=-1;hc>=3]");
 						
 		//tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]");
 		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[src>=1|charge=+1]", "NCc1cnc(O)c(O)c1");
@@ -152,6 +156,10 @@ public class SLNTestUtilities
 		//tu.testSLN2Smarts("C[1:charge=-1]C=CC[src=3]CCC[tbo=4]C[r;!hac=3;tac=4]CH3Any@1");
 		
 		//tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[r]");
+		
+		tu.testSmarts2SLN("CCCC");
+		
+		
 		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[r]", "NCc1cnc(O)c(O)c1");		
 		//tu.testSLNIsomorphism("Any[!type=1;!type=6;!r]", "C1CCCCN1"); 
 		//tu.testSLNIsomorphism("Any[!type=1;!type=6;!r]", "C1CCC1CN");
@@ -272,6 +280,36 @@ public class SLNTestUtilities
 			for (String w: sln2Smarts.getConversionWarnings())
 				System.out.println(w);
 		}
+	}
+	
+	public void testSmarts2SLN(String smarts) throws Exception
+	{	
+		System.out.println("Input smarts: " + smarts);
+		
+		IQueryAtomContainer query = smartsParser.parse(smarts);		
+		String error = smartsParser.getErrorMessages();
+		if (!error.equals(""))
+		{
+			System.out.println("Smarts Parser errors:\n" + error);	
+			return;
+		}
+				
+		SLNContainer slnCon = slnConverter.QueryAtomContainerToSLNContainer(query);
+		
+		if (slnCon == null)			
+			System.out.println("Conversion errors: " + slnConverter.getAllErrors());
+		else
+			System.out.println("Output sln: " + slnHelper.toSLN(slnCon));
+		
+		if (!slnConverter.getConversionWarnings().isEmpty())
+		{
+			System.out.println("Conversion warnings: ");
+			for (String w: slnConverter.getConversionWarnings())
+				System.out.println(w);
+		}
+		
+		
+		
 	}
 	
 	public void testSLNIsomorphism(String sln, String smiles) throws Exception
