@@ -157,7 +157,7 @@ public class SLNTestUtilities
 		
 		//tu.testSLN2Smarts("N[hc=1|hc=2]C[!r]C[r]");
 		
-		tu.testSmarts2SLN("CCCC");
+		tu.testSmarts2SLN("*CCCC**");
 		
 		
 		//tu.testSLNIsomorphism("N[hc=1|hc=2]C[!r]C[r]", "NCc1cnc(O)c(O)c1");		

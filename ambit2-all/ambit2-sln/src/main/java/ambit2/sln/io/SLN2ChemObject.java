@@ -16,8 +16,10 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
+import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -33,6 +35,7 @@ import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNExpressionToken;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
 import ambit2.smarts.AliphaticSymbolQueryAtom;
+import ambit2.smarts.AromaticSymbolQueryAtom;
 import ambit2.smarts.DoubleBondAromaticityNotSpecified;
 import ambit2.smarts.DoubleNonAromaticBond;
 import ambit2.smarts.SMIRKSReaction;
@@ -429,10 +432,62 @@ public class SLN2ChemObject
 	public SLNAtom queryAtomToSLNAtom(IQueryAtom queryAtom)
     {
         currentConversionError = null;
-        currentConversionWarning = null;
-        //TODO
-        return null;
+        currentConversionWarning = null;        
+        
+        if (queryAtom == null)
+		{	
+			currentConversionError = "Atom is null";
+			return null;
+		}
+        
+        if (queryAtom instanceof SmartsAtomExpression)
+        {
+        	//TODO
+        }
+        
+        boolean FlagKnownAtomType = false;        
+        SLNAtom slnAt = new SLNAtom(builder);
+        
+        if (queryAtom instanceof AnyAtom)
+        {	
+        	slnAt.atomType = 0;
+        	slnAt.atomName = "Any";
+        	FlagKnownAtomType = true;
+        }
+        
+        
+        if (FlagKnownAtomType)	
+        	return slnAt;
+        else
+        	return null;
+        
+        
+        /*
+         * SLNAtom slnAt = new SLNAtom(builder);		
+			String atomName = atom.getSymbol();
+			for (int i = 0; i < SLNConst.elSymbols.length; i++)
+			if (atomName.equals(SLNConst.elSymbols[i]))
+			{	
+				slnAt.atomType = i;
+				break;
+			}	
+		    slnAt.atomName = atomName;         
+         
+		if (a instanceof AliphaticSymbolQueryAtom)
+			return (a.getSymbol());
+
+		if (a instanceof AromaticSymbolQueryAtom)
+			return (a.getSymbol().toLowerCase());
+
+		if (a instanceof AliphaticAtom)
+			return ("A");
+
+		if (a instanceof AromaticAtom)
+			return ("a");		
+         */ 
+       
     }
+	
 	
 	/*
 	 * Converts only the bond type/expression info
