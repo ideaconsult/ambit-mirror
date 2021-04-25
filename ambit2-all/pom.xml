@@ -147,7 +147,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.0</version>
+					<version>3.8.1</version>
 					<configuration>
 						<source>${sourceVersion}</source>
 						<target>${sourceVersion}</target>
@@ -423,7 +423,7 @@
 						<version>5.6.6</version>
 					</docletArtifact>
 					<additionalparam>-all</additionalparam>
-					>
+					
 					<additionalOptions>
 						<!-- <additionalOption>-views</additionalOption> -->
 						<additionalOption>-attributes</additionalOption>
@@ -449,7 +449,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.8.0</version>
+						<version>3.8.1</version>
 						<configuration>
 							<debug>true</debug>
 							<optimize>false</optimize>
@@ -467,7 +467,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.8.0</version>
+						<version>3.8.1</version>
 						<configuration>
 							<debug>false</debug>
 							<optimize>true</optimize>
@@ -479,15 +479,7 @@
 			</build>
 		</profile>
 
-		<profile>
-			<id>JRE7</id>
-			<activation>
-				<jdk>1.7</jdk>
-			</activation>
-			<properties>
-				<sourceVersion>1.7</sourceVersion>
-			</properties>
-		</profile>
+
 		<profile>
 			<id>JRE8</id>
 			<activation>
