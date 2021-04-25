@@ -16,7 +16,7 @@
     <repository>
       <id>ebi-repo</id>
       <name>EBI Repository</name>
-      <url>http://www.ebi.ac.uk/~maven/m2repo/</url>
+      <url>https://www.ebi.ac.uk/~maven/m2repo/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
