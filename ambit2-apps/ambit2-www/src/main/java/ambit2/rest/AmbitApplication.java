@@ -73,7 +73,6 @@ import ambit2.rest.loom.LoomResource;
 import ambit2.rest.loom.LoomRouter;
 import ambit2.rest.property.PropertyResource;
 import ambit2.rest.pubchem.CSLSResource;
-import ambit2.rest.pubchem.ChEBIResource;
 import ambit2.rest.pubchem.PubchemResource;
 import ambit2.rest.query.ConsensusLabelQueryResource;
 import ambit2.rest.query.ExactStructureQueryResource;
@@ -143,7 +142,6 @@ import ambit2.user.rest.resource.PwdForgottenResource;
 import ambit2.user.rest.resource.RegistrationConfirmResource;
 import ambit2.user.rest.resource.RegistrationResource;
 import ambit2.user.rest.resource.Resources;
-import net.idea.modbcum.i.config.ConfigProperties;
 import net.idea.restnet.aa.local.UserLoginPOSTResource;
 import net.idea.restnet.aa.local.UserLogoutPOSTResource;
 import net.idea.restnet.db.aalocal.ChallengeAuthenticatorTokenLocal;
@@ -736,13 +734,6 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		cir.attach(CSLSResource.resourceID, CSLSResource.class);
 		cir.attach(CSLSResource.resourceID + CSLSResource.representationID, CSLSResource.class);
 
-		/**
-		 * ChEBI query
-		 */
-		Router chebi = new MyRouter(getContext());
-		queryRouter.attach(ChEBIResource.resource, chebi);
-		chebi.attachDefault(ChEBIResource.class);
-		chebi.attach(ChEBIResource.resourceID, ChEBIResource.class);
 
 		/**
 		 * Compound search /query/compound/lookup

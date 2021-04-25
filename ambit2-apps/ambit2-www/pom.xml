@@ -504,13 +504,14 @@
 			<scope>runtime</scope> </dependency> -->
 		<!-- <dependency> <groupId>jmol</groupId> <artifactId>jmol</artifactId> 
 			<version>11.8.23</version> </dependency> -->
-
+<!-- 
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-chebi</artifactId>
 			<version>${ambit.version}</version>
 			<scope>compile</scope>
 		</dependency>
+ -->		
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-some</artifactId>
@@ -557,7 +558,12 @@
 					<artifactId>iuclid_5_common</artifactId>
 				</exclusion>
 			</exclusions>			
-		</dependency>		
+		</dependency>	
+			<dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.1.17</version>
+        </dependency>
 		<dependency>
 			<groupId>net.enanomapper</groupId>
 			<artifactId>enmexcelparser</artifactId>

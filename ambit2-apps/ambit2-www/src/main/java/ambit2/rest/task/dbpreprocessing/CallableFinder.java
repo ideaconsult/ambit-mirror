@@ -17,7 +17,6 @@ import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.processors.search.AbstractFinder;
 import ambit2.base.processors.search.AbstractFinder.MODE;
 import ambit2.base.processors.search.AbstractFinder.SITE;
-import ambit2.chebi.ChebiFinder;
 import ambit2.core.data.model.Algorithm;
 import ambit2.core.processors.structure.key.NoneKey;
 import ambit2.db.DbReaderStructure;
@@ -178,11 +177,7 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 			le = new LiteratureEntry(searchSite.getTitle(), searchSite.getURI());
 			break;
 		}
-		case CHEBI: {
-			p.add(new ChebiFinder(profile, mode));
-			le = new LiteratureEntry("ChEBI", "http://www.ebi.ac.uk/chebi");
-			break;
-		}
+
 		/*
 		 * case CHEMBL: { p.add(new ChemBLFinder(profile,mode)); le = new
 		 * LiteratureEntry(searchSite.name(),"https://www.ebi.ac.uk/chemblws"); break; }
