@@ -123,6 +123,7 @@ import ambit2.rest.substance.templates.AssayTemplatesFacetResource;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.WarmupTask;
 import ambit2.rest.ui.API2docsResource;
+import ambit2.rest.ui.InfoResource;
 import ambit2.rest.ui.UIResource;
 import ambit2.rest.wrapper.WrappedService;
 import ambit2.user.aa.AMBITLoginFormResource;
@@ -460,6 +461,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 		router.attach("/chelp", HelpResource.class);
 		router.attach("/chelp/{key}", HelpResource.class);
+		
+		//router.attach("/info", InfoResource.class);
 
 		router.setDefaultMatchingMode(Template.MODE_STARTS_WITH);
 		router.setRoutingMode(Router.MODE_BEST_MATCH);
