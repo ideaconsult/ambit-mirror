@@ -143,6 +143,16 @@ public class I5ZImportTest extends DbUnitTest {
 	public void testi6(File file , int expected_structures, boolean checkstructures, Properties expected_endpoints) throws Exception {
 		Assert.assertTrue(file.exists());
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
+
+		String resource_i6 = "net/idea/i6/_5/substance/i6z/f63698f5-6751-4bca-9ca8-8388de4fdea9.i6z"; //formaldehyde
+	
+		
+		InputStream in = net.idea.i6._5.ambit2.I6AmbitProcessor.class
+				.getClassLoader().getResourceAsStream(resource_i6);
+		Assert.assertNotNull(in);
+		File file = fromResourcestream(in, ".i6z");
+		file.deleteOnExit();
+
 		System.out.println(file);
 
 		String resource_config = "ambit2/db/conf/test.properties";
