@@ -96,15 +96,53 @@ public class I5ZImportTest extends DbUnitTest {
 		
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 		//formaldehyde
-		String resource_i5 = "net/idea/i6/_2/substance/i6z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i6z";
-		//String resource_i5 = "net/idea/i6/_2/substance/i6z/IUC5-541ccdba-0033-45ee-8136-406478deb0f4.i6z";
-		//String resource_i5 = "net/idea/i6/_2/substance/i6z/IUC5-a438545b-3c6c-403f-83e6-5cd2756d77d6.i6z";
-		//String resource_i5 = "net/idea/i6/_2/substance/i6z/IUC5-eb8957ab-538b-48b6-a024-e9875fbd48b1.i6z";
-		//MWCNT
-		//String resource_i5 = "net/idea/i6/_2/substance/i6z/IUC5-5f313d1f-4129-499c-abbe-ac18642e2471.i6z";
+		//String resource_i5 = "net/idea/i6/_2/substance/i6z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i6z";
+		String resource_i6 = "net/idea/i6/_5/substance/i6z/f63698f5-6751-4bca-9ca8-8388de4fdea9.i6z"; //formaldehyde
 		
-		InputStream in = net.idea.i5._5.ambit2.I5AmbitProcessor.class
-				.getClassLoader().getResourceAsStream(resource_i5);
+		/*
+		  
+		       
+		       
+		      
+		    
+        		      
+		    */
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/aa571fe6-f4d7-464e-a828-9b4fba6ac14b.i6z";
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/aa4f54b5-e5ad-41ab-8ee0-2562f3437b69.i6z";
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/a11de82b-716d-4334-b92f-16188669c6b2.i6z";
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/8eff8c73-7f19-4f04-9ca3-b76be96f2e1d.i6z";
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/5c5ef19c-816f-4e97-96c4-a9cb90d893bf.i6z";
+/*
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ToxicityToAquaticAlgae
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ToxicityReproduction
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ToxicityReproduction
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_SkinSensitisation
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ShortTermToxicityToFish
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_RepeatedDoseToxicityOral
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_RepeatedDoseToxicityInhalation
+WARNING null
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_DevelopmentalToxicityTeratogenicity
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_DevelopmentalToxicityTeratogenicity
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_Carcinogenicity
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_BioaccumulationTerrestrial
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_BioaccumulationAquaticSediment
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_AcuteToxicityOral
+WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_AcuteToxicityInhalation		
+ */
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/36a0caaa-272b-48ae-9c5d-6516c1d36f9a.i6z";
+		//
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/306f1166-e1b1-4300-bade-8f3729c6c638.i6z"; //formaldehyde
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/0696f47c-1385-4251-a18a-df01f2b122ae.i6z";
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/aa9235ab-74b2-4c26-b884-0bf48dac293f.i6z";   //Tripropylamine
+		//https://echa.europa.eu/registration-dossier/-/registered-dossier/13454/4/6/?documentUUID=fe448eb5-5487-4133-8c16-1a9e40cc5155
+		//resource_i6 = "net/idea/i6/_5/substance/i6z/8543e1cf-2238-4b47-8117-0bcfbb1e187d.i6z";   //MWCNT
+		resource_i6 = "net/idea/i6/_5/substance/i6z/5c5ef19c-816f-4e97-96c4-a9cb90d893bf.i6z"; //Bisphenol A, largest dossier
+		// resource_i6 = "net/idea/i6/_5/substance/i6z/9716e347-6da6-47cf-88b9-48bce9347e5a.i6z"; //smaller dossiers, nothing in there
+		resource_i6 = "net/idea/i6/_5/substance/i6z/0000b4f2-e1f2-4e6a-9b4b-4f7185ba841d.i6z"; //should have smiles
+		
+		
+		InputStream in = net.idea.i6._5.ambit2.I6AmbitProcessor.class
+				.getClassLoader().getResourceAsStream(resource_i6);
 		Assert.assertNotNull(in);
 		File file = fromResourcestream(in, ".i6z");
 		file.deleteOnExit();
