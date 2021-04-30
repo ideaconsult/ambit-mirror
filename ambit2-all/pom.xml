@@ -479,11 +479,11 @@
 			</build>
 		</profile>
 
-
+<!-- 
 		<profile>
 			<id>JRE8</id>
 			<activation>
-				<jdk>1.8</jdk>
+				<jdk>[1.8,)</jdk>
 			</activation>
 			<properties>
 				<sourceVersion>1.8</sourceVersion>
@@ -492,12 +492,13 @@
 		<profile>
 			<id>JRE9</id>
 			<activation>
-				<jdk>1.9</jdk>
+				<jdk>[1.9,)</jdk>
 			</activation>
 			<properties>
 				<sourceVersion>1.9</sourceVersion>
 			</properties>
 		</profile>
+		 -->
 		<profile>
 			<!-- http://stackoverflow.com/questions/15886209/maven-is-not-working-in-java-8-when-javadoc-tags-are-incomplete -->
 			<id>disable-java8-doclint</id>
@@ -535,5 +536,8 @@
 		<javadoc.plugin.version>3.1.1</javadoc.plugin.version>
 		<additionalparam>-Xdoclint:none</additionalparam>
 		<doclint>none</doclint>
+		<sourceVersion>1.8</sourceVersion>
+		<maven.compiler.source>${sourceVersion}</maven.compiler.source>
+        <maven.compiler.target>${sourceVersion}</maven.compiler.target>
 	</properties>
 </project>
