@@ -33,7 +33,7 @@
 		<toxtree.version>4.0.0-SNAPSHOT</toxtree.version>
 		<ambit.version>4.0.1-SNAPSHOT</ambit.version>
 		<cdk.version>2.1.1</cdk.version>
-		<junit.version>4.8.1</junit.version>
+		<junit.version>[4.13.1,)</junit.version>
 		<!-- https://github.com/ideaconsult/i5 -->
 		<i5.version>2.1.0-SNAPSHOT</i5.version>
 		<restnet.version>1.1.5-SNAPSHOT</restnet.version>
