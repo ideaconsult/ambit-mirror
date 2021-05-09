@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ambit2.rules.json.JSONParsingUtils;
+import net.enanomapper.parser.KEYWORD;
 
 
 
@@ -42,8 +43,23 @@ public class NotationConfig
 			}
 		}
 		
-		JSONParsingUtils jsonUtils = new JSONParsingUtils(); 
+		//JSONParsingUtils jsonUtils = new JSONParsingUtils();		
 		NotationConfig notCfg = new NotationConfig(); 
+		JsonNode curNode;
+		
+		// INFO
+		curNode = root.path("INFO");
+		if (!curNode.isMissingNode()) {
+			try {
+				String keyword = JSONParsingUtils.extractStringKeyword(root, "INFO", false);
+				if (keyword != null)
+					notCfg.info = keyword;
+			}
+			catch (Exception x) {
+				notCfg.errors.add(x.getMessage());
+			}
+		}
+
 		
 		//TODO
 		
