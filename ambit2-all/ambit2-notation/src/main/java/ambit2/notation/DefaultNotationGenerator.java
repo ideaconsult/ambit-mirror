@@ -2,11 +2,11 @@ package ambit2.notation;
 
 public class DefaultNotationGenerator 
 {
-	public enum NotationType {
+	public enum DefaultNotationType {
 		PLAIN_TEXT, JSON
 	}
 		
-	public NotationType notationType = NotationType.PLAIN_TEXT;
+	public DefaultNotationType notationType = DefaultNotationType.PLAIN_TEXT;
 	public String sectionDelimeter = ";";
 	public String elementDelimeter = ",";
 	public boolean FlagSectionName = true;
