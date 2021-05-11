@@ -75,7 +75,10 @@ public class NotationConfig
 			sb.append("\t\"INFO\" : \"" + info + "\"");
 			nFields++;
 		}
-			
+		
+		
+		sb.append("\n");
+		
 		sb.append("}\n"); // end of JSON
 		return sb.toString();
 	}

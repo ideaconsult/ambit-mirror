@@ -9,6 +9,6 @@ public class TestUtils
 	public static void testNotationConfigFromJSONFile(String fileName) throws Exception 
 	{
 		NotationConfig notCfg = NotationConfig.loadFromJSON(new File (fileName));
-		System.out.println(notCfg.toString());
+		System.out.println(notCfg.toJSONString());
 	}
 }
