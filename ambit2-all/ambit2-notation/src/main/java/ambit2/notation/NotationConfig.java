@@ -19,7 +19,7 @@ public class NotationConfig
 {
 	public String info = null;
 	public String type = null;
-	public List<NotationSection> dataElements = new ArrayList<NotationSection>();
+	public List<NotationSection> seections = new ArrayList<NotationSection>();
 		
 	public List<String> errors = new ArrayList<String>();
 	
