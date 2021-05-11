@@ -63,5 +63,21 @@ public class NotationConfig
 		//TODO
 		
 		return notCfg;
-	}	
+	}
+	
+	
+	public String toJSONString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("{\n");
+		int nFields = 0;
+		
+		if (info != null) {
+			sb.append("\t\"INFO\" : \"" + info + "\"");
+			nFields++;
+		}
+			
+		sb.append("}\n"); // end of JSON
+		return sb.toString();
+	}
+	
 }
