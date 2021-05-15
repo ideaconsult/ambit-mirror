@@ -27,6 +27,19 @@ The transformations can be applied on various sites of the target molecule in se
 
 [Maven arfifacts search](https://nexus.ideaconsult.net/#nexus-search;quick~ambit2-smarts)
 
+* Depends on [The CDK](http://cdk.sf.net) 2.1.1
+ 
+````
+    <dependency>
+      <groupId>ambit</groupId>
+      <artifactId>ambit2-smarts</artifactId>
+      <version>4.0.1-SNAPSHOT</version>
+    </dependency>
+    <repository>
+		<id>nexus-idea-snapshots</id>
+		<url>https://nexus.ideaconsult.net/content/repositories/snapshots</url>
+    </repository>
+    
 * Depends on [The CDK](http://cdk.sf.net) 1.5.13 
  
 ````
@@ -108,13 +121,15 @@ You could [download the application](http://toxtree.sourceforge.net/download.htm
 
 ### Publications 
 
+ * Kochev N, Avramova S, Jeliazkova N: Ambit-SMIRKS: a software module for reaction representation, reaction search and structure transformation. J Cheminform 2018, 10:42. [DOI:10.1186/s13321-018-0295-6](https://jcheminf.springeropen.com/articles/10.1186/s13321-018-0295-6)
+ 
  * Best poster award at [OpenTox Euro 2013](https://www.slideshare.net/jeliazkova_nina/bx37-ambit-smirksmainzseptember2013) 
  
  * AMBIT SMARTS Publication [N. Jeliazkova and N. Kochev, AMBIT-SMARTS: Efficient Searching of Chemical Structures and Fragments, Mol. Inform., vol. 30, no. 8, pp. 707-720, 2011.](http://onlinelibrary.wiley.com/doi/10.1002/minf.201100028/abstract) 
  
 ### Social
 
- * [Ambit at Google+](https://plus.google.com/b/116849658963631645389/116849658963631645389/posts) | <a href="https://twitter.com/share" class="twitter-share-button" data-via="10705013" data-related="10705013" data-count="none" data-hashtags="ambit,smirks,metabolism,oteu13,opentox">Tweet</a>
+ * <a href="https://twitter.com/share" class="twitter-share-button" data-via="10705013" data-related="10705013" data-count="none" data-hashtags="ambit,smirks,metabolism,oteu13,opentox">Tweet</a>
 
 
 
