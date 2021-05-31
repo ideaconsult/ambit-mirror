@@ -47,6 +47,33 @@
 						<skip>false</skip>
 					</configuration>
 				</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.2.0</version>
+
+				<configuration>
+					<doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+
+					<!-- https://issues.apache.org/jira/browse/MJAVADOC-453?page=com.atlassian.jira.plugin.system.issuetabpanels%3Aall-tabpanel -->
+					<docletArtifact>
+						<groupId>org.umlgraph</groupId>
+						<artifactId>umlgraph</artifactId>
+						<version>5.6.6</version>
+					</docletArtifact>
+					<additionalparam>-all</additionalparam>
+					<additionalOptions>
+						<!-- <additionalOption>-views</additionalOption> -->
+						<additionalOption>-attributes</additionalOption>
+						<additionalOption>-types</additionalOption>
+
+						<additionalparam>-inferdepinpackage</additionalparam>
+					</additionalOptions>
+
+					<useStandardDocletOptions>true</useStandardDocletOptions>
+
+				</configuration>
+			</plugin>				
 			</plugins>
 		</pluginManagement>
 	</build>
