@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.cli.CommandLine;
@@ -19,6 +20,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.apache.log4j.PropertyConfigurator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.IChemObjectReaderErrorHandler;
@@ -78,9 +80,18 @@ public class SLNCli {
 	
 	
 	public static void main(String[] args) 
-	{
+	{		
+		setupLogging();
 		SLNCli sclCli = new SLNCli();
 		sclCli.run(args);
+	}
+	
+	public static void setupLogging()
+	{	
+		//Suppress INCHI logging on the console 
+		Properties prop = new Properties();
+		prop.put("log4j.logger.net.sf.jnati", "ERROR");
+		PropertyConfigurator.configure(prop);
 	}
 
 	protected static Options createOptions() {
