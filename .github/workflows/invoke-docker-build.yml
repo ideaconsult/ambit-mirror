@@ -13,7 +13,7 @@ jobs:
       - name: Dispatch event to the ambit-docker repository
         uses: peter-evans/repository-dispatch@v1
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_R_FA }}
           repository: ideaconsult/ambit-docker
           event-type: ambit-repo-push
           client-payload: '{"sha": "${{ github.sha }}"}'
