@@ -163,7 +163,7 @@ public abstract class DbUnitTest {
 		String noAccessToProcedureBodiesQ = noAccessToProcedureBodies ? "&noAccessToProcedureBodies=true" : "";
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection jdbcConnection = DriverManager.getConnection(String.format(
-				"jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s%s%s&useSSL=false",
+				"jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF8&characterSetResults=UTF-8&profileSQL=%s%s%s&useSSL=false&allowPublicKeyRetrieval=true",
 				host, port, db, Boolean.toString(isProfileSQL()), (debug ? debugConnection : ""),
 				noAccessToProcedureBodiesQ), user, pass);
 		// SET NAMES utf8
