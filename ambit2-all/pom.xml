@@ -500,28 +500,28 @@
                                 </property>
                         </activation>
                         <build>
-                        <plugins>
-                                <plugin>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>build-helper-maven-plugin</artifactId>
-                                        <version>3.2.0</version>
-                                        <executions>
-                                                <execution>
-                                                        <id>regex-property</id>
-                                                        <goals>
-                                                                <goal>regex-property</goal>
-                                                        </goals>
-                                                        <configuration>
-                                                                <name>maven.test.skip</name>
-                                                                <value>${project.artifactId}</value>
-                                                                <regex>^ambit2-smi23d$</regex>
-                                                                <replacement>true</replacement>
-                                                                <failIfNoMatch>false</failIfNoMatch>
-                                                        </configuration>
-                                                </execution>
-                                        </executions>
-                                </plugin>
-                        </plugins>
+                                <plugins>
+                                        <plugin>
+                                                <groupId>org.codehaus.mojo</groupId>
+                                                <artifactId>build-helper-maven-plugin</artifactId>
+                                                <version>3.2.0</version>
+                                                <executions>
+                                                        <execution>
+                                                                <id>regex-property</id>
+                                                                <goals>
+                                                                        <goal>regex-property</goal>
+                                                                </goals>
+                                                                <configuration>
+                                                                        <name>maven.test.skip</name>
+                                                                        <value>${project.artifactId}</value>
+                                                                        <regex>^ambit2-smi23d$</regex>
+                                                                        <replacement>true</replacement>
+                                                                        <failIfNoMatch>false</failIfNoMatch>
+                                                                </configuration>
+                                                        </execution>
+                                                </executions>
+                                        </plugin>
+                                </plugins>
                         </build>
                 </profile>
 
