@@ -5,3 +5,7 @@
 **/.factorypath
 **/.project
 **/dependency-reduced-pom.xml
+
+ambit2-all/ambit2-db/ambit2.pref
+ambit2-all/ambit2-rendering/depict.png
+ambit2-all/ambit2-rendering/test.png
