@@ -514,7 +514,7 @@
                                                                 <configuration>
                                                                         <name>maven.test.skip</name>
                                                                         <value>${project.artifactId}</value>
-                                                                        <regex>^ambit2-smi23d$</regex>
+                                                                        <regex>^$</regex>
                                                                         <replacement>true</replacement>
                                                                         <failIfNoMatch>false</failIfNoMatch>
                                                                 </configuration>
