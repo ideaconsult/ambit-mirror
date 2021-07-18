@@ -69,7 +69,8 @@ public abstract class CommandShell<INPUT, OUTPUT> implements IProcessor<INPUT, O
 	public static final String os_LINUX = "Linux";
 	public static final String os_LINUX64 = "Linux64";
 	public static final String os_FreeBSD = "FreeBSD";
-	private final static String msgEmptyMolecule = "Empty molecule after %s processing";
+	private static final String msgEmptyMolecule = "Empty molecule after %s processing";
+	private static final String MSG_FAILED_SET_EXEC = "Could not set the owner's execute permission on ";
 	protected String workFolder;
 
 	public String getWorkFolder() {
@@ -161,15 +162,12 @@ public abstract class CommandShell<INPUT, OUTPUT> implements IProcessor<INPUT, O
 	public synchronized String getExecutable(String osname, String osarch) throws Exception {
 
 		// ambit2/
-		boolean runChmod = osname.startsWith(os_LINUX);
 		Command command = executables.get(osname);
-		if (osarch != null) {
-			if (os_LINUX.equals(osname) && osarch.endsWith("64")) {
-				Command newCommand = executables.get(os_LINUX64);
-				if (newCommand != null) {
-					command = newCommand;
-					osname = os_LINUX64;
-				}
+		if (osarch != null && os_LINUX.equals(osname) && osarch.endsWith("64")) {
+			Command newCommand = executables.get(os_LINUX64);
+			if (newCommand != null) {
+				command = newCommand;
+				osname = os_LINUX64;
 			}
 		}
 		String exe = command.getExe();
@@ -182,13 +180,17 @@ public abstract class CommandShell<INPUT, OUTPUT> implements IProcessor<INPUT, O
 				logger.fine("Writing " + exe + " to " + file);
 				DownloadTool.download(prefix + exe, file);
 				command.setExe(file.getAbsolutePath());
-				// trying chmod +x
-				if (runChmod)
-					try {
-						Runtime.getRuntime().exec(String.format("chmod +x %s", file.getAbsolutePath()));
-					} catch (Exception x) {
-						logger.log(Level.WARNING, "Error when executing chmod on " + file.getAbsolutePath(), x);
+			}
+			if (!file.canExecute()) {
+				try {
+					// Attempt to set the owner's execute permission.
+					if (!file.setExecutable(true)) {
+						logger.log(Level.WARNING, MSG_FAILED_SET_EXEC + file.getAbsolutePath());
 					}
+				} catch (SecurityException x) {
+					logger.log(Level.WARNING, MSG_FAILED_SET_EXEC + file.getAbsolutePath()
+						+ ". A security manager exists and denies write access.", x);
+				}
 			}
 			if (command.getAdditionalFiles() != null)
 				for (String lib : command.getAdditionalFiles()) {
