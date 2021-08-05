@@ -29,6 +29,7 @@ public class I5CONSTANTS {
     public static final String methodType = "Method type";
     public static final String pH = "pH";
     public static final String cTemperature = "Temperature";
+    public static final String cConc = "Concentration";
     public static final String Remark = "Remark";
     public static final String cSolvent = "Solvent";
     public static final String Pressure = "Pressure";
@@ -147,6 +148,9 @@ public class I5CONSTANTS {
     public static final String eSPECIFIC_PORE_VOLUME = "SPECIFIC_PORE_VOLUME";
     public static final String eMODAL_PORE_VOLUME = "MODAL_PORE_VOLUME";
     public static final String ePOUR_DENSITY = "POUR DENSITY";
+    public static final String eDENSITY = "DENSITY";
+    public static final String eVISCOSITY = "VISCOSITY";
+    public static final String eSURFACE_TENSION = "SURFACE_TENSION";
     public static final String eCATALYTIC_ACTIVITY = "CATALYTIC_ACTIVITY";
     public static final String ePHOTOCATALYTIC_ACTIVITY = "PHOTOCATALYTIC_ACTIVITY";
     public static final String eTURNOVERFREQUENCY = "TURN_OVER_FREQUENCY";
