@@ -3,12 +3,11 @@ package ambit2.dbsubstance.test;
 import java.io.File;
 import java.io.InputStream;
 import java.math.BigInteger;
-
-import junit.framework.Assert;
-import net.idea.i5.io.I5_ROOT_OBJECTS;
+import java.util.Properties;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
+import org.junit.Assert;
 import org.junit.Test;
 
 import ambit2.base.io.DownloadTool;
@@ -36,6 +35,7 @@ import ambit2.dbsubstance.DBSubstanceImport;
  * 
  */
 public class I5ZImportTest extends DbUnitTest {
+	final String i66_ironore = "net/idea/i6/_6/substance/i6z/56e49ed8-0bec-49a2-8050-f8e87844b2e8";
 	@Test
 	public void testi5() throws Exception {
 
@@ -90,59 +90,31 @@ public class I5ZImportTest extends DbUnitTest {
 		}
 
 	}
+	protected Properties getTestProperties(String resource) {
+		Properties properties = new Properties();
+		try (InputStream in = I5ZImportTest.class.getClassLoader().getResourceAsStream(resource)) {
+			properties.load(in);	
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		return properties;
+	}
+	@Test
+	public void testProperties() {
+		
+		Properties endpoints = getTestProperties(i66_ironore+".properties");
+		Assert.assertNotNull(endpoints);
 
+	}
 	@Test
 	public void testi6() throws Exception {
 		
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
-		//formaldehyde
-		//String resource_i5 = "net/idea/i6/_2/substance/i6z/IUC4-efdb21bb-e79f-3286-a988-b6f6944d3734.i6z";
-		String resource_i6 = "net/idea/i6/_5/substance/i6z/f63698f5-6751-4bca-9ca8-8388de4fdea9.i6z"; //formaldehyde
-		
-		/*
-		  
-		       
-		       
-		      
-		    
-        		      
-		    */
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/aa571fe6-f4d7-464e-a828-9b4fba6ac14b.i6z";
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/aa4f54b5-e5ad-41ab-8ee0-2562f3437b69.i6z";
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/a11de82b-716d-4334-b92f-16188669c6b2.i6z";
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/8eff8c73-7f19-4f04-9ca3-b76be96f2e1d.i6z";
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/5c5ef19c-816f-4e97-96c4-a9cb90d893bf.i6z";
-/*
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ToxicityToAquaticAlgae
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ToxicityReproduction
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ToxicityReproduction
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_SkinSensitisation
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_ShortTermToxicityToFish
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_RepeatedDoseToxicityOral
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_RepeatedDoseToxicityInhalation
-WARNING null
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_DevelopmentalToxicityTeratogenicity
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_DevelopmentalToxicityTeratogenicity
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_Carcinogenicity
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_BioaccumulationTerrestrial
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_BioaccumulationAquaticSediment
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_AcuteToxicityOral
-WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_AcuteToxicityInhalation		
- */
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/36a0caaa-272b-48ae-9c5d-6516c1d36f9a.i6z";
-		//
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/306f1166-e1b1-4300-bade-8f3729c6c638.i6z"; //formaldehyde
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/0696f47c-1385-4251-a18a-df01f2b122ae.i6z";
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/aa9235ab-74b2-4c26-b884-0bf48dac293f.i6z";   //Tripropylamine
-		//https://echa.europa.eu/registration-dossier/-/registered-dossier/13454/4/6/?documentUUID=fe448eb5-5487-4133-8c16-1a9e40cc5155
-		//resource_i6 = "net/idea/i6/_5/substance/i6z/8543e1cf-2238-4b47-8117-0bcfbb1e187d.i6z";   //MWCNT
-		resource_i6 = "net/idea/i6/_5/substance/i6z/5c5ef19c-816f-4e97-96c4-a9cb90d893bf.i6z"; //Bisphenol A, largest dossier
-		// resource_i6 = "net/idea/i6/_5/substance/i6z/9716e347-6da6-47cf-88b9-48bce9347e5a.i6z"; //smaller dossiers, nothing in there
-		resource_i6 = "net/idea/i6/_5/substance/i6z/0000b4f2-e1f2-4e6a-9b4b-4f7185ba841d.i6z"; //should have smiles
-		
-		
-		InputStream in = net.idea.i6._5.ambit2.I6AmbitProcessor.class
-				.getClassLoader().getResourceAsStream(resource_i6);
+
+		String resource_i6 = i66_ironore; //iron ore
+	
+		InputStream in = net.idea.i6._6.ambit2.I6AmbitProcessor.class
+				.getClassLoader().getResourceAsStream(resource_i6+".i6z");
 		Assert.assertNotNull(in);
 		File file = fromResourcestream(in, ".i6z");
 		file.deleteOnExit();
@@ -173,8 +145,25 @@ WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_AcuteToxicityInha
 					"SELECT * FROM structure ");
 			//why one more structure compared to I5?
 			//Assert.assertEquals(6, values.getRowCount());
-			Assert.assertEquals(7, values.getRowCount());
+			Assert.assertEquals(35, values.getRowCount());
+			Properties endpoints = getTestProperties(resource_i6+".properties");
+			endpoints.forEach((type, value) -> {
+				String sql = "SELECT endpointcategory,COUNT(*) as c from substance_protocolapplication WHERE endpointcategory='%s' GROUP BY topcategory,endpointcategory".formatted(type);
+				
+				try {
+					final ITable t = c.createQueryTable("ENDPOINT_STUDYRECORD",sql);
+				
+				Assert.assertEquals(BigInteger.valueOf(Long.parseLong(value.toString())),t.getValue(0, "c"));
+									
+				} catch (Exception x) {
+					x.printStackTrace();
+				}
+			});
+					
+	
+
 			//structures should not be empty
+			/*
 			values = c.createQueryTable("EXPECTED_STRUCTURES",
 					"SELECT count(*) as c FROM structure where format='SDF' and type_structure!='NA' and uncompress(structure) regexp 'M  END' ");
 			Assert.assertEquals(BigInteger.valueOf(4),values.getValue(0, "c"));
@@ -187,6 +176,7 @@ WARNING No materials and methods record! ENDPOINT_STUDY_RECORD_AcuteToxicityInha
 							"EXPECTED_ref_subst_uuids",
 							"SELECT * FROM properties join catalog_references using(idreference) where name='I5UUID'");
 			Assert.assertEquals(7, values.getRowCount());
+			*/
 		} finally {
 			c.close();
 		}
