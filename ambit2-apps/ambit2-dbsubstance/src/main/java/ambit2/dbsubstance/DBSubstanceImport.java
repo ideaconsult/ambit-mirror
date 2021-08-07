@@ -211,6 +211,7 @@ public class DBSubstanceImport {
 	public void setInputFile(File inputFile) {
 		this.inputFile = inputFile;
 		if (inputFile != null && inputFile.toString().toLowerCase().endsWith(".gz"))
+
 			gzipped = true;
 		else
 			gzipped = false;
@@ -556,7 +557,11 @@ public class DBSubstanceImport {
 			if (line.hasOption("h")) {
 				printHelp(options, null);
 				return false;
+<<<<<<< HEAD
 			}
+=======
+			}			
+>>>>>>> eb62f8a31 (better cmdline option handling)
 			setParserType(getParserType(line));
 			try {
 				matchByKey = getStructureMatchMode(line).getKey();
