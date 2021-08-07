@@ -210,7 +210,7 @@ public class DBSubstanceImport {
 
 	public void setInputFile(File inputFile) {
 		this.inputFile = inputFile;
-		if (inputFile.toString().toLowerCase().endsWith(".gz"))
+		if (inputFile !=null && inputFile.toString().toLowerCase().endsWith(".gz"))
 			gzipped = true;
 		else
 			gzipped = false;
@@ -553,6 +553,10 @@ public class DBSubstanceImport {
 		CommandLineParser parser = new PosixParser();
 		try {
 			CommandLine line = parser.parse(options, args, false);
+			if (line.hasOption("h")) {
+				printHelp(options, null);
+				return false;
+			}			
 			setParserType(getParserType(line));
 			try {
 				matchByKey = getStructureMatchMode(line).getKey();
@@ -586,10 +590,7 @@ public class DBSubstanceImport {
 			setUpdated(timestamp_release(line));
 			setExpandMap(getExpandMap(line));
 			maxRefSubstances = getMaxRefSubstances(line);
-			if (line.hasOption("h")) {
-				printHelp(options, null);
-				return false;
-			}
+
 			return true;
 		} catch (Exception x) {
 			x.printStackTrace();
