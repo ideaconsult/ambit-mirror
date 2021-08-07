@@ -143,6 +143,7 @@ public class I5ZImportTest extends DbUnitTest {
 	public void testi6(File file , int expected_structures, boolean checkstructures, Properties expected_endpoints) throws Exception {
 		Assert.assertTrue(file.exists());
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
+<<<<<<< HEAD
 
 		String resource_i6 = "net/idea/i6/_5/substance/i6z/f63698f5-6751-4bca-9ca8-8388de4fdea9.i6z"; //formaldehyde
 	
@@ -181,10 +182,12 @@ public class I5ZImportTest extends DbUnitTest {
 			//why one more structure compared to I5?
 			//Assert.assertEquals(6, values.getRowCount());
 			Assert.assertEquals(expected_structures, values.getRowCount());
+
 			values = c.createQueryTable("release",
 					"SELECT updated from substance_protocolapplication  GROUP BY updated ");
 			Assert.assertEquals(1, values.getRowCount());
 			Assert.assertEquals(release_tag,values.getValue(0, "updated").toString());
+
 			if (expected_endpoints!=null)
 				expected_endpoints.forEach((type, value) -> {
 					String sql = String.format("SELECT endpointcategory,COUNT(*) as c from substance_protocolapplication WHERE endpointcategory='%s' GROUP BY topcategory,endpointcategory",type);
