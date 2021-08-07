@@ -210,7 +210,7 @@ public class DBSubstanceImport {
 
 	public void setInputFile(File inputFile) {
 		this.inputFile = inputFile;
-		if (inputFile !=null && inputFile.toString().toLowerCase().endsWith(".gz"))
+		if (inputFile != null && inputFile.toString().toLowerCase().endsWith(".gz"))
 			gzipped = true;
 		else
 			gzipped = false;
@@ -556,7 +556,7 @@ public class DBSubstanceImport {
 			if (line.hasOption("h")) {
 				printHelp(options, null);
 				return false;
-			}			
+			}
 			setParserType(getParserType(line));
 			try {
 				matchByKey = getStructureMatchMode(line).getKey();
@@ -666,6 +666,35 @@ public class DBSubstanceImport {
 	}
 
 	protected int importI5Z(IStructureKey keytomatch, boolean i6) throws Exception {
+		StructureRecordValidator validator = new StructureRecordValidator() {
+			@Override
+			public IStructureRecord validate(SubstanceRecord record) throws Exception {
+				
+				if (record.getMeasurements() != null)
+					for (ProtocolApplication papp : record.getMeasurements()) {
+						papp.setUpdated(getUpdated());
+					}
+				return record;
+			};
+			@Override
+			public IStructureRecord validate(SubstanceRecord record, CompositionRelation rel) throws Exception {
+				return record;
+			};
+			@Override
+			public IStructureRecord validate(SubstanceRecord record,
+					ambit2.base.data.study.ProtocolApplication<Protocol, IParams, String, IParams, String> papp)
+					throws Exception {
+
+				return record;
+			};
+		};
+		
+		return importI5Z(keytomatch, i6, validator);
+	}
+
+	protected int importI5Z(IStructureKey keytomatch, boolean i6, StructureRecordValidator validator) throws Exception {
+		//validator uses parsertype
+		setParserType(i6?_parsertype.i6z:_parsertype.i5z);
 		logger_cli.log(Level.INFO, "MSG_IMPORT",
 				new Object[] { String.format("i%sz", i6 ? "6" : "5"), inputFile.getAbsolutePath() });
 		IZReader reader = null;
@@ -690,7 +719,8 @@ public class DBSubstanceImport {
 			reader.setQASettings(qa);
 
 			matchByKey = keytomatch == null ? new CASKey() : keytomatch;
-			return write(reader, c, matchByKey, true, clearMeasurements, clearComposition, null, null, true, false);
+			return write(reader, c, matchByKey, true, clearMeasurements, clearComposition, validator, null, true,
+					false);
 		} catch (Exception x) {
 			throw x;
 		} finally {
@@ -894,9 +924,13 @@ public class DBSubstanceImport {
 				} else
 					switch (mode) {
 					case i5z: {
+						if (validator != null)
+							validator.process((IStructureRecord) record);
 						break;
 					}
 					case i6z: {
+						if (validator != null)
+							validator.process((IStructureRecord) record);
 						break;
 					}
 					case xlsx: {
