@@ -143,7 +143,7 @@ public class I5ZImportTest extends DbUnitTest {
 	public void testi6(File file , int expected_structures, boolean checkstructures, Properties expected_endpoints) throws Exception {
 		Assert.assertTrue(file.exists());
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
-<<<<<<< HEAD
+
 
 		String resource_i6 = "net/idea/i6/_5/substance/i6z/f63698f5-6751-4bca-9ca8-8388de4fdea9.i6z"; //formaldehyde
 	

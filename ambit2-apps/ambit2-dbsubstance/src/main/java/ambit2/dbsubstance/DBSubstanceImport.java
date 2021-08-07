@@ -557,11 +557,9 @@ public class DBSubstanceImport {
 			if (line.hasOption("h")) {
 				printHelp(options, null);
 				return false;
-<<<<<<< HEAD
+
 			}
-=======
-			}			
->>>>>>> eb62f8a31 (better cmdline option handling)
+
 			setParserType(getParserType(line));
 			try {
 				matchByKey = getStructureMatchMode(line).getKey();
