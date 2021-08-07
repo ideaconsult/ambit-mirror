@@ -36,6 +36,9 @@ import ambit2.dbsubstance.DBSubstanceImport;
  */
 public class I5ZImportTest extends DbUnitTest {
 	final String i66_ironore = "net/idea/i6/_6/substance/i6z/56e49ed8-0bec-49a2-8050-f8e87844b2e8";
+	final String i66_formaldehyde = "net/idea/i6/_6/substance/i6z/04e6dcc1-42bf-4e24-8be2-7f23ba7d3fb5";
+	final String i66_mwcnt = "net/idea/i6/_6/substance/i6z/366325e3-c0e8-4381-a1ab-c7d2ae2c298e";
+	
 	@Test
 	public void testi5() throws Exception {
 
@@ -107,27 +110,48 @@ public class I5ZImportTest extends DbUnitTest {
 
 	}
 	@Test
-	public void testi6() throws Exception {
+	public void testi6_ironore() throws Exception {
+		testi6(i66_ironore,35,false);
+	}
+	@Test
+	public void testi6_formaldehyde() throws Exception {
+		testi6(i66_formaldehyde,3,true);
+	}	
+	@Test
+	public void testi6_mwcnt() throws Exception {
+		testi6(i66_mwcnt,4,false);
+	}	
 		
+	@Test
+	public void testi6_formaldehyde2() throws Exception {
+		testi6("net/idea/i6/_6/substance/i6z/afd3c0dd-b398-4a4d-864e-afeefc324cf5",1,false);
+	}	
+	public void testi6(String resource_i6, int expected_structures, boolean checkstructures) throws Exception {
+		try (InputStream in = net.idea.i6._6.ambit2.I6AmbitProcessor.class
+				.getClassLoader().getResourceAsStream(resource_i6+".i6z")) {
+			Assert.assertNotNull(in);
+			File file = fromResourcestream(in, ".i6z");
+			file.deleteOnExit();
+			Properties endpoints = getTestProperties(resource_i6+".properties");
+			Assert.assertTrue(endpoints.size()>0);
+			testi6(file,expected_structures,checkstructures,endpoints);
+		} catch (Exception x) {
+			throw x;
+		}
+	}
+	public void testi6(File file , int expected_structures, boolean checkstructures, Properties expected_endpoints) throws Exception {
+		Assert.assertTrue(file.exists());
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
-
-		String resource_i6 = i66_ironore; //iron ore
-	
-		InputStream in = net.idea.i6._6.ambit2.I6AmbitProcessor.class
-				.getClassLoader().getResourceAsStream(resource_i6+".i6z");
-		Assert.assertNotNull(in);
-		File file = fromResourcestream(in, ".i6z");
-		file.deleteOnExit();
 		System.out.println(file);
 
 		String resource_config = "ambit2/db/conf/test.properties";
-
-		in = DbUnitTest.class.getClassLoader().getResourceAsStream(
-				resource_config);
-		File fileconfig = fromResourcestream(in, ".properties");
-		fileconfig.deleteOnExit();
-		System.out.println(fileconfig);
-
+		File fileconfig = null;
+		try (InputStream in = DbUnitTest.class.getClassLoader().getResourceAsStream(
+				resource_config)) {
+			fileconfig = fromResourcestream(in, ".properties");
+			fileconfig.deleteOnExit();
+			System.out.println(fileconfig);
+		}
 		String[] args = new String[] { "-i", file.getAbsolutePath(), "-c",
 				fileconfig.getAbsolutePath(), "-m", "true", "-t", "true", "-r",
 				"-1", "x", "einecs" };
@@ -145,25 +169,25 @@ public class I5ZImportTest extends DbUnitTest {
 					"SELECT * FROM structure ");
 			//why one more structure compared to I5?
 			//Assert.assertEquals(6, values.getRowCount());
-			Assert.assertEquals(35, values.getRowCount());
-			Properties endpoints = getTestProperties(resource_i6+".properties");
-			endpoints.forEach((type, value) -> {
-				String sql = "SELECT endpointcategory,COUNT(*) as c from substance_protocolapplication WHERE endpointcategory='%s' GROUP BY topcategory,endpointcategory".formatted(type);
-				
-				try {
-					final ITable t = c.createQueryTable("ENDPOINT_STUDYRECORD",sql);
-				
-				Assert.assertEquals(BigInteger.valueOf(Long.parseLong(value.toString())),t.getValue(0, "c"));
-									
-				} catch (Exception x) {
-					x.printStackTrace();
-				}
-			});
+			Assert.assertEquals(expected_structures, values.getRowCount());
+			if (expected_endpoints!=null)
+				expected_endpoints.forEach((type, value) -> {
+					String sql = String.format("SELECT endpointcategory,COUNT(*) as c from substance_protocolapplication WHERE endpointcategory='%s' GROUP BY topcategory,endpointcategory",type);
+					
+					try {
+						final ITable t = c.createQueryTable("ENDPOINT_STUDYRECORD",sql);
+					
+					Assert.assertEquals(BigInteger.valueOf(Long.parseLong(value.toString())),t.getValue(0, "c"));
+										
+					} catch (Exception x) {
+						x.printStackTrace();
+					}
+				});
 					
 	
 
 			//structures should not be empty
-			/*
+			if (checkstructures) {
 			values = c.createQueryTable("EXPECTED_STRUCTURES",
 					"SELECT count(*) as c FROM structure where format='SDF' and type_structure!='NA' and uncompress(structure) regexp 'M  END' ");
 			Assert.assertEquals(BigInteger.valueOf(4),values.getValue(0, "c"));
@@ -176,7 +200,8 @@ public class I5ZImportTest extends DbUnitTest {
 							"EXPECTED_ref_subst_uuids",
 							"SELECT * FROM properties join catalog_references using(idreference) where name='I5UUID'");
 			Assert.assertEquals(7, values.getRowCount());
-			*/
+			}
+			
 		} finally {
 			c.close();
 		}
