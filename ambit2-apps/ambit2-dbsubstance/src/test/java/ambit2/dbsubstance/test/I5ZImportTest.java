@@ -38,7 +38,8 @@ public class I5ZImportTest extends DbUnitTest {
 	final String i66_ironore = "net/idea/i6/_6/substance/i6z/56e49ed8-0bec-49a2-8050-f8e87844b2e8";
 	final String i66_formaldehyde = "net/idea/i6/_6/substance/i6z/04e6dcc1-42bf-4e24-8be2-7f23ba7d3fb5";
 	final String i66_mwcnt = "net/idea/i6/_6/substance/i6z/366325e3-c0e8-4381-a1ab-c7d2ae2c298e";
-	
+	final String release_tag = "2021-02-19 00:00:00.0";
+
 	@Test
 	public void testi5() throws Exception {
 
@@ -154,7 +155,7 @@ public class I5ZImportTest extends DbUnitTest {
 		}
 		String[] args = new String[] { "-i", file.getAbsolutePath(), "-c",
 				fileconfig.getAbsolutePath(), "-m", "true", "-t", "true", "-r",
-				"-1", "x", "einecs" };
+				"-1", "x", "einecs","-d","false", "-a",release_tag };
 		
 		DBSubstanceImport.main(args);
 
@@ -170,6 +171,10 @@ public class I5ZImportTest extends DbUnitTest {
 			//why one more structure compared to I5?
 			//Assert.assertEquals(6, values.getRowCount());
 			Assert.assertEquals(expected_structures, values.getRowCount());
+			values = c.createQueryTable("release",
+					"SELECT updated from substance_protocolapplication  GROUP BY updated ");
+			Assert.assertEquals(1, values.getRowCount());
+			Assert.assertEquals(release_tag,values.getValue(0, "updated").toString());
 			if (expected_endpoints!=null)
 				expected_endpoints.forEach((type, value) -> {
 					String sql = String.format("SELECT endpointcategory,COUNT(*) as c from substance_protocolapplication WHERE endpointcategory='%s' GROUP BY topcategory,endpointcategory",type);
