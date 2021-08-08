@@ -295,7 +295,9 @@
 	<modules>
 		<module>ambit2-balloon</module>
 		<module>ambit2-base</module>
+		<!--
 		<module>ambit2-chebi</module>
+		-->
 		<module>ambit2-core</module>
 		<module>ambit2-db</module>
 		<module>ambit2-dbext</module>
