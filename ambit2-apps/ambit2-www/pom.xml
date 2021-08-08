@@ -715,11 +715,13 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<!-- 
 		<repository>
 			<id>github</id>
 			<name>GitHub Packages</name>
 			<url>https://maven.pkg.github.com/ideaconsult/ambit-mirror</url>
 		</repository>
+		 -->
 		<!-- <repository> <id>glassfish</id> <name>javamelody is here</name> <url>http://maven.glassfish.org/content/groups/public</url> 
 			<releases><enabled>true</enabled></releases> </repository> -->
 	</repositories>
