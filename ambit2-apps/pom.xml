@@ -423,7 +423,6 @@
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
 			<url>https://maven.restlet.com</url>
-			<blocked>false</blocked>
 		</repository>
 		<repository>
 			<id>repo1.maven.org</id>
