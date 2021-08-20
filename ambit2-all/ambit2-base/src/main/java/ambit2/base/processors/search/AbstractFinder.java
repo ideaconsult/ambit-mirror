@@ -169,13 +169,27 @@ public abstract class AbstractFinder<REQUEST,RESULT> extends DefaultAmbitProcess
 			}
 			@Override
 			public String getURI() {
-				return "http://apps.ideaconsult.net:8080/ambit2";
+				return "https://apps.ideaconsult.net/ambit2";
 			}
 			@Override
 			public boolean isEnabled() {
 				return true;
 			}
 		},
+		AMBITLRI {
+			@Override
+			public String getTitle() {
+				return "AMBIT LRI";
+			}
+			@Override
+			public String getURI() {
+				return "https://ambitlri.ideaconsult.net/tool2";
+			}
+			@Override
+			public boolean isEnabled() {
+				return true;
+			}
+		},		
 		TBWIKI {
 			@Override
 			public String getTitle() {

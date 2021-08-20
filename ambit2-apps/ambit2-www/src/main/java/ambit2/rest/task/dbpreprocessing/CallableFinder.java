@@ -172,6 +172,12 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
 		}
+		case AMBITLRI: {
+			request = new OpenToxRequest(searchSite.getURI());
+			p.add(new AllSourcesFinder(profile, request, mode));
+			le = new LiteratureEntry(request.toString(), request.toString());
+			break;
+		}		
 		case NAME2STRUCTURE: {
 			p.add(new Name2StructureFinder(profile, mode));
 			le = new LiteratureEntry(searchSite.getTitle(), searchSite.getURI());
