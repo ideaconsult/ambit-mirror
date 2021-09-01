@@ -49,9 +49,9 @@ public class UpdateSubstanceStudy
 	private static final String[] create_sql = {
 			"INSERT INTO substance_protocolapplication (document_prefix,document_uuid,topcategory,endpointcategory,endpoint,guidance,"
 					+ "substance_prefix,substance_uuid,params,interpretation_result,interpretation_criteria,reference,reference_year,reference_owner,"
-					+ "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,investigation_uuid,assay_uuid,updated)\n"
-					+ "values(?,unhex(replace(?,'-','')),?,?,?,?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),unhex(replace(?,'-','')),?) on duplicate key update\n"
-					+ "substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid),topcategory=values(topcategory),\n"
+					+ "reliability,isRobustStudy,isUsedforClassification,isUsedforMSDS,purposeFlag,studyResultType,investigation_uuid,assay_uuid,updated) "
+					+ "values(?,unhex(replace(?,'-','')),?,?,?,?,?,unhex(replace(?,'-','')),?,?,?,?,?,?,?,?,?,?,?,?,unhex(replace(?,'-','')),unhex(replace(?,'-','')),?) on duplicate key update "
+					+ "substance_prefix=values(substance_prefix),substance_uuid=values(substance_uuid),topcategory=values(topcategory), "
 					+ "endpointcategory=values(endpointcategory),endpoint=values(endpoint),guidance=values(guidance),params=values(params),"
 					+ "interpretation_result=values(interpretation_result),interpretation_criteria=values(interpretation_criteria),"
 					+ "reference=values(reference),reference_year=values(reference_year),reference_owner=values(reference_owner),reliability=values(reliability),"
