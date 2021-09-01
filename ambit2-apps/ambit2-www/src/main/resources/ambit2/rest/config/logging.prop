@@ -31,7 +31,7 @@ mutant.level = WARNING
 #Inchi
 org.openscience.cdk.level = WARNING
 #c3p0
-#com.mchange.level = DEBUG
+com.mchange.level = INFO
 uk.ac.cam.ch.wwmm.opsin.level = SEVERE
 #http
 org.apache.http.level = SEVERE
