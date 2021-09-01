@@ -38,6 +38,8 @@ public class I5ZImportTest extends DbUnitTest {
 	final String i66_ironore = "net/idea/i6/_6/substance/i6z/56e49ed8-0bec-49a2-8050-f8e87844b2e8";
 	final String i66_formaldehyde = "net/idea/i6/_6/substance/i6z/04e6dcc1-42bf-4e24-8be2-7f23ba7d3fb5";
 	final String i66_mwcnt = "net/idea/i6/_6/substance/i6z/366325e3-c0e8-4381-a1ab-c7d2ae2c298e";
+	final  String i66_cresol = "net/idea/i6/_6/substance/i6z/f201b076-bb72-4a71-a86d-19c17804e82b";
+	final  String i66_pcresol = "net/idea/i6/_6/substance/i6z/7f790aa9-89fa-46ef-8000-77feb8748c29";
 	final String release_tag = "2021-02-19 00:00:00.0";
 
 	@Test
@@ -50,7 +52,7 @@ public class I5ZImportTest extends DbUnitTest {
 		Assert.assertNotNull(in);
 		File file = fromResourcestream(in, ".i5z");
 		file.deleteOnExit();
-		System.out.println(file);
+		//System.out.println(file);
 
 		String resource_config = "ambit2/db/conf/test.properties";
 
@@ -58,11 +60,11 @@ public class I5ZImportTest extends DbUnitTest {
 				resource_config);
 		File fileconfig = fromResourcestream(in, ".properties");
 		fileconfig.deleteOnExit();
-		System.out.println(fileconfig);
+		//System.out.println(fileconfig);
 
 		String[] args = new String[] { "-i", file.getAbsolutePath(), "-c",
 				fileconfig.getAbsolutePath(), "-m", "true", "-t", "true", "-r",
-				"-1", "x", "einecs" };
+				"-1" };
 		
 		DBSubstanceImport.main(args);
 
@@ -77,18 +79,21 @@ public class I5ZImportTest extends DbUnitTest {
 					"SELECT * FROM structure ");
 			Assert.assertEquals(6, values.getRowCount());
 			//structures should not be empty
+			/*
 			values = c.createQueryTable("EXPECTED_STRUCTURES",
 					"SELECT count(*) as c FROM structure where format='SDF' and type_structure!='NA' and uncompress(structure) regexp 'M  END' ");
 			Assert.assertEquals(BigInteger.valueOf(4),values.getValue(0, "c"));
-
+			*/
 			values = c.createQueryTable("EXPECTED_CHEMICALS",
 					"SELECT * FROM chemicals");
 			Assert.assertEquals(6, values.getRowCount());
+			/*
 			values = c
 					.createQueryTable(
 							"EXPECTED_ref_subst_uuids",
 							"SELECT * FROM properties join catalog_references using(idreference) where name='I5UUID'");
 			Assert.assertEquals(7, values.getRowCount());
+			*/
 		} finally {
 			c.close();
 		}
@@ -112,75 +117,110 @@ public class I5ZImportTest extends DbUnitTest {
 	}
 	@Test
 	public void testi6_ironore() throws Exception {
-		testi6(i66_ironore,35,false);
+		testi6(new String[] {i66_ironore},1,32,false);
 	}
 	@Test
 	public void testi6_formaldehyde() throws Exception {
-		testi6(i66_formaldehyde,3,true);
+		testi6(new String[] {i66_formaldehyde},1,2,false);
 	}	
 	@Test
 	public void testi6_mwcnt() throws Exception {
-		testi6(i66_mwcnt,4,false);
+		testi6(new String[] {i66_mwcnt},1,1,false);
 	}	
-		
 	@Test
-	public void testi6_formaldehyde2() throws Exception {
-		testi6("net/idea/i6/_6/substance/i6z/afd3c0dd-b398-4a4d-864e-afeefc324cf5",1,false);
+	public void testi6_methyloxirane() throws Exception {
+		testi6(new String[] {"net/idea/i6/_6/substance/i6z/00cc666a-489d-4d7f-87d9-4084cdb0563a"},1,9,false);
+	}		
+	
+	public void testi6_Terpineol() throws Exception {
+		testi6(new String[] {"net/idea/i6/_6/substance/i6z/0148a4fe-c32d-4c24-b600-d159550e6681"},1,25,false);
+	}		
+	
+	@Test
+	public void testi6_cresol() throws Exception {
+		//8 unique structures with EINECS
+		//6 impurities important for CLP
+		testi6(new String[] {i66_cresol,i66_pcresol},2,8,false);
 	}	
-	public void testi6(String resource_i6, int expected_structures, boolean checkstructures) throws Exception {
-		try (InputStream in = net.idea.i6._6.ambit2.I6AmbitProcessor.class
-				.getClassLoader().getResourceAsStream(resource_i6+".i6z")) {
-			Assert.assertNotNull(in);
-			File file = fromResourcestream(in, ".i6z");
-			file.deleteOnExit();
-			Properties endpoints = getTestProperties(resource_i6+".properties");
-			Assert.assertTrue(endpoints.size()>0);
-			testi6(file,expected_structures,checkstructures,endpoints);
-		} catch (Exception x) {
-			throw x;
+
+	public void testi6(String[] resources_i6,int expected_substances, int expected_structures, boolean checkstructures) throws Exception {
+		File[] files = new File[resources_i6.length];
+		Properties endpoints = null;
+		int i = 0;
+		for (String resource_i6 : resources_i6) {
+			
+			try (InputStream in = net.idea.i6._6.ambit2.I6AmbitProcessor.class
+					
+					.getClassLoader().getResourceAsStream(resource_i6+".i6z")) {
+				//System.out.println(resource_i6);
+				Assert.assertNotNull(in);
+				files[i] = fromResourcestream(in, ".i6z");
+				files[i].deleteOnExit();
+			} catch (Exception x) {
+				throw x;
+			}				
+			try {
+				Properties p = getTestProperties(resource_i6+".properties");
+				if (endpoints==null) endpoints = p;
+				else 
+					for (Object key : p.keySet()) {
+						if (endpoints.containsKey(key)) {
+							endpoints.put(key, Integer.parseInt(endpoints.get(key).toString())+ Integer.parseInt(p.get(key).toString()));
+						} else 
+							endpoints.put(key, p.get(key));
+						
+					}
+				Assert.assertTrue(p.size()>0);
+			} catch (Exception x) {
+				x.printStackTrace();
+			}
+			i++;
 		}
+		testi6(files,expected_substances,expected_structures,checkstructures,endpoints);
+		
 	}
-	public void testi6(File file , int expected_structures, boolean checkstructures, Properties expected_endpoints) throws Exception {
-		Assert.assertTrue(file.exists());
+	public void testi6(File[] files ,  int expected_structures, boolean checkstructures, Properties expected_endpoints) throws Exception {
+		testi6(files, 1, expected_structures, checkstructures, expected_endpoints);
+	}
+	public void testi6(File[] files ,int expected_substances, int expected_structures, boolean checkstructures, Properties expected_endpoints) throws Exception {
+		Assert.assertTrue(files.length>0);
+		for (File file : files)
+			Assert.assertTrue(file.exists());
 		setUpDatabaseFromResource("ambit2/db/processors/test/empty-datasets.xml");
 
-
-		String resource_i6 = "net/idea/i6/_5/substance/i6z/f63698f5-6751-4bca-9ca8-8388de4fdea9.i6z"; //formaldehyde
+		int i = 0;
+		for (File file : files) {
+			//System.out.println(file);
 	
-		
-		InputStream in = net.idea.i6._5.ambit2.I6AmbitProcessor.class
-				.getClassLoader().getResourceAsStream(resource_i6);
-		Assert.assertNotNull(in);
-		File file = fromResourcestream(in, ".i6z");
-		file.deleteOnExit();
+			String resource_config = "ambit2/db/conf/test.properties";
+			File fileconfig = null;
+			try (InputStream in = DbUnitTest.class.getClassLoader().getResourceAsStream(
+					resource_config)) {
+				fileconfig = fromResourcestream(in, ".properties");
+				fileconfig.deleteOnExit();
+				
+			}
+			String[] args = new String[] { "-i", file.getAbsolutePath(), "-c",
+					fileconfig.getAbsolutePath(), "-m", "true", "-t", "true", "-r",
+					"-1", "-x", "einecs","-d","false", "-a",release_tag };
+			
+			DBSubstanceImport.main(args);
+			i++;
 
-		System.out.println(file);
-
-		String resource_config = "ambit2/db/conf/test.properties";
-		File fileconfig = null;
-		try (InputStream in = DbUnitTest.class.getClassLoader().getResourceAsStream(
-				resource_config)) {
-			fileconfig = fromResourcestream(in, ".properties");
-			fileconfig.deleteOnExit();
-			System.out.println(fileconfig);
 		}
-		String[] args = new String[] { "-i", file.getAbsolutePath(), "-c",
-				fileconfig.getAbsolutePath(), "-m", "true", "-t", "true", "-r",
-				"-1", "x", "einecs","-d","false", "-a",release_tag };
-		
-		DBSubstanceImport.main(args);
 
 		IDatabaseConnection c = getConnection();
 		try {
 			ITable table = c.createQueryTable("EXPECTED_SUBSTANCES",
 					"SELECT prefix,hex(uuid) as huuid,rs_prefix,hex(rs_uuid) as rs_huuid FROM substance");
-			Assert.assertEquals(1, table.getRowCount());
+			Assert.assertEquals(expected_substances, table.getRowCount());
 			Assert.assertNotNull(table.getValue(0,"huuid"));
 			Assert.assertNotNull(table.getValue(0,"rs_huuid"));
 			ITable values = c.createQueryTable("EXPECTED_STRUCTURES",
 					"SELECT * FROM structure ");
-			//why one more structure compared to I5?
-			//Assert.assertEquals(6, values.getRowCount());
+
+			Assert.assertEquals(expected_structures, values.getRowCount());
+			values = c.createQueryTable("EINECS", "SELECT NAME,VALUE,idstructure,idchemical from properties JOIN property_values join property_string using(idvalue_string) USING(idproperty) WHERE NAME='EC'");
 			Assert.assertEquals(expected_structures, values.getRowCount());
 
 			values = c.createQueryTable("release",
