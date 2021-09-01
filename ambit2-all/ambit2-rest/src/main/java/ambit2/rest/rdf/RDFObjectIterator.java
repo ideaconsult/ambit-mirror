@@ -32,7 +32,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
  *
  * @param <Item>
  */
-public abstract class RDFObjectIterator<Item> implements Iterator<Item> {
+public abstract class RDFObjectIterator<Item> implements Iterator<Item>, AutoCloseable {
 	protected String referer;
 	protected boolean forceReadRDFLocalObjects = false;
 	public boolean isForceReadRDFLocalObjects() {
