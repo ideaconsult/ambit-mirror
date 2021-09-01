@@ -7,7 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `ausers`;
 CREATE TABLE `ausers` (
-  `user_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `user_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `email` varchar(45) NOT NULL,
   `title` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
   `firstname` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '""',
@@ -251,7 +251,7 @@ DROP TABLE IF EXISTS `bundle`;
 CREATE TABLE `bundle` (
   `idbundle` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'default',
-  `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `user_name` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `idreference` int(11) unsigned NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `licenseURI` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT 'Unknown',
@@ -511,7 +511,7 @@ CREATE TABLE `structure` (
   `structure` blob NOT NULL,
   `format` enum('SDF','CML','MOL','INC','NANO','PDB','CIF') COLLATE utf8_bin NOT NULL DEFAULT 'SDF',
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `user_name` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `type_structure` enum('NA','MARKUSH','SMILES','2D no H','2D with H','3D no H','3D with H','optimized','experimental','NANO') COLLATE utf8_bin NOT NULL DEFAULT 'NA',
   `label` enum('OK','UNKNOWN','ERROR') COLLATE utf8_bin NOT NULL DEFAULT 'UNKNOWN' COMMENT 'quality label',
   `atomproperties` blob,
@@ -547,14 +547,6 @@ CREATE TABLE `ontobucket` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- DELIMITER $
--- CREATE TRIGGER copy_history BEFORE UPDATE ON structure
--- FOR EACH ROW BEGIN
---   INSERT INTO history (idstructure,structure,format,updated,user_name,type_structure,label)
---        SELECT idstructure,structure,format,updated,user_name,type_structure,label FROM structure
---        WHERE structure.idstructure = OLD.idstructure;
---  END $
--- DELIMITER ;
 
 -- -----------------------------------------------------
 -- Procedure to move structures from one chemical to another
@@ -705,7 +697,7 @@ CREATE TABLE  `models` (
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
   `creator` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT 'guest',
   `dataset` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT 'dataset uri',
-  `user_name` varchar(16) COLLATE utf8_bin NOT NULL DEFAULT 'guest',
+  `user_name` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT 'guest',
   `stars` int(10) unsigned NOT NULL DEFAULT '5' COMMENT 'stars rating',
   PRIMARY KEY (`idmodel`),
   UNIQUE KEY `Index_5` (`name`) USING BTREE,
@@ -749,7 +741,7 @@ CREATE TABLE `property_values` (
   `idproperty` int(10) unsigned NOT NULL,
   `idstructure` int(10) unsigned NOT NULL,
   `idchemical` int(10) unsigned NOT NULL,
-  `user_name` varchar(16) COLLATE utf8_bin NOT NULL,
+  `user_name` varchar(32) COLLATE utf8_bin NOT NULL,
   `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') COLLATE utf8_bin NOT NULL DEFAULT 'UNKNOWN',
   `text` text COLLATE utf8_bin,
   `idvalue_string` int(10) unsigned DEFAULT NULL,
@@ -778,7 +770,7 @@ CREATE TABLE  `property_pairstruc` (
   `idstructure1` int(10) unsigned NOT NULL auto_increment COMMENT 'First structure id',
   `idstructure2` int(10) unsigned NOT NULL COMMENT 'Second structure id',
   `idproperty` int(10) unsigned NOT NULL COMMENT 'Property id',
-  `user_name` varchar(16) collate utf8_bin NOT NULL COMMENT 'User',
+  `user_name` varchar(32) collate utf8_bin NOT NULL COMMENT 'User',
   `status` enum('OK','UNKNOWN','ERROR','TRUNCATED') collate utf8_bin NOT NULL,
   `text` text collate utf8_bin COMMENT 'Text value, if longer than allowed by property_string',
   `idvalue_string` int(10) unsigned NOT NULL COMMENT 'link to property_string',
@@ -883,7 +875,7 @@ CREATE TABLE  `quality_pair` (
   `idchemical` int(10) unsigned NOT NULL auto_increment,
   `idstructure` int(10) unsigned NOT NULL,
   `rel` int(10) unsigned NOT NULL default '0' COMMENT 'number of same structures',
-  `user_name` varchar(16) collate utf8_bin NOT NULL,
+  `user_name` varchar(32) collate utf8_bin NOT NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `TEXT` text collate utf8_bin,
   PRIMARY KEY  (`idchemical`,`idstructure`),
@@ -915,7 +907,7 @@ CREATE TABLE  `quality_chemicals` (
 DROP TABLE IF EXISTS `quality_structure`;
 CREATE TABLE  `quality_structure` (
   `idstructure` int(10) unsigned NOT NULL,
-  `user_name` varchar(16) collate utf8_bin NOT NULL,
+  `user_name` varchar(32) collate utf8_bin NOT NULL,
   `label` enum('OK','ProbablyOK','Unknown','ProbablyERROR','ERROR') collate utf8_bin NOT NULL default 'Unknown',
   `text` text collate utf8_bin,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP,
@@ -946,7 +938,7 @@ DROP TABLE IF EXISTS `src_dataset`;
 CREATE TABLE  `src_dataset` (
   `id_srcdataset` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'default',
-  `user_name` varchar(16) COLLATE utf8_bin DEFAULT NULL,
+  `user_name` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `idreference` int(11) unsigned NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `idtemplate` int(10) unsigned DEFAULT NULL,
@@ -1035,7 +1027,7 @@ CREATE TABLE IF NOT EXISTS  `struc_dataset` (
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE  `sessions` (
   `idsessions` int(10) unsigned NOT NULL auto_increment,
-  `user_name` varchar(16) collate utf8_bin NOT NULL,
+  `user_name` varchar(32) collate utf8_bin NOT NULL,
   `started` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `completed` timestamp NOT NULL DEFAULT '2010-01-01 01:01:01',
   `title` varchar(45) collate utf8_bin NOT NULL default 'temp',
@@ -1092,7 +1084,7 @@ CREATE TABLE  `funcgroups` (
   `idfuncgroup` int(10) unsigned NOT NULL,
   `name` varchar(45) collate utf8_bin NOT NULL,
   `smarts` blob NOT NULL,
-  `user_name` varchar(16) collate utf8_bin default NULL,
+  `user_name` varchar(32) collate utf8_bin default NULL,
   PRIMARY KEY  (`idfuncgroup`),
   UNIQUE KEY `Index_2` (`name`),
   KEY `FK_funcgroups_1` (`user_name`)
@@ -1532,7 +1524,7 @@ CREATE TABLE  `version` (
   `comment` varchar(45),
   PRIMARY KEY  (`idmajor`,`idminor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-insert into version (idmajor,idminor,comment) values (10,5,"AMBIT2 schema");
+insert into version (idmajor,idminor,comment) values (10,6,"AMBIT2 schema");
 
 -- -----------------------------------------------------
 -- Sorts comma separated strings
