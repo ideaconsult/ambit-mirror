@@ -61,7 +61,15 @@ import net.idea.modbcum.p.batch.AbstractBatchProcessor;
  */
 public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 
-	protected Template profile;
+	private Template profile;
+	public Template getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Template profile) {
+		this.profile = profile;
+	}
+
 	protected AbstractFinder.SITE searchSite;
 	protected AbstractFinder.MODE mode;
 
@@ -99,7 +107,7 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 		String[] xvars = OpenTox.params.feature_uris.getValuesArray(form);
 		if (xvars != null)
 			try {
-				profile = new Template();
+				Template _profile = new Template();
 
 				OTDataset ds = OTDataset.dataset(dataset.toString());
 				for (String xvar : xvars) {
@@ -109,13 +117,13 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 							ds = ds.addColumns(OTFeature.feature(x, referer));
 							Property key = createPropertyFromReference(x, null);
 							key.setEnabled(true);
-							profile.add(key);
+							_profile.add(key);
 						}
 				}
 				dataset = ds.getUri().toString();
-
+				setProfile(_profile);
 			} catch (Exception x) {
-
+				x.printStackTrace();
 			}
 
 		this.sourceReference = dataset == null ? null : new Reference(dataset.toString().trim());
@@ -141,23 +149,23 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 
 		switch (searchSite) {
 		case PUBCHEM_CID: {
-			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.cid));
+			p.add(new PubChemRestFinder(getProfile(), mode, COMPOUND_DOMAIN_INPUT.cid));
 			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
 		}
 		case PUBCHEM_SID: {
-			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.sid));
+			p.add(new PubChemRestFinder(getProfile(), mode, COMPOUND_DOMAIN_INPUT.sid));
 			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
 		}
 		case PUBCHEM_NAME: {
-			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.name));
+			p.add(new PubChemRestFinder(getProfile(), mode, COMPOUND_DOMAIN_INPUT.name));
 			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
 
 		}
 		case PUBCHEM_INCHIKEY: {
-			p.add(new PubChemRestFinder(profile, mode, COMPOUND_DOMAIN_INPUT.inchikey));
+			p.add(new PubChemRestFinder(getProfile(), mode, COMPOUND_DOMAIN_INPUT.inchikey));
 			le = new LiteratureEntry(PUGRestRequest.PUGREST_URL, PUGRestRequest.PUGREST_COMPOUND_URL);
 			break;
 
@@ -168,18 +176,18 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 		 */
 		case OPENTOX: {
 			request = new OpenToxRequest(searchSite.getURI());
-			p.add(new AllSourcesFinder(profile, request, mode));
+			p.add(new AllSourcesFinder(getProfile(), request, mode));
 			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
 		}
 		case AMBITLRI: {
 			request = new OpenToxRequest(searchSite.getURI());
-			p.add(new AllSourcesFinder(profile, request, mode));
+			p.add(new AllSourcesFinder(getProfile(), request, mode));
 			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
-		}		
+		}
 		case NAME2STRUCTURE: {
-			p.add(new Name2StructureFinder(profile, mode));
+			p.add(new Name2StructureFinder(getProfile(), mode));
 			le = new LiteratureEntry(searchSite.getTitle(), searchSite.getURI());
 			break;
 		}
@@ -190,7 +198,7 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 		 */
 		case CHEMIDPLUS: {
 			request = new ChemIdPlusRequest();
-			p.add(new AllSourcesFinder(profile, request, mode));
+			p.add(new AllSourcesFinder(getProfile(), request, mode));
 			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
 		}
@@ -201,7 +209,7 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 		 */
 		default: {
 			request = new CSLSStringRequest();
-			p.add(new AllSourcesFinder(profile, request, mode));
+			p.add(new AllSourcesFinder(getProfile(), request, mode));
 			le = new LiteratureEntry(request.toString(), request.toString());
 			break;
 		}
@@ -311,15 +319,13 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 
 	@Override
 	protected Object createTarget(Reference reference) throws Exception {
-		if (profile.size() == 0)
+		if (getProfile().size() == 0)
 			throw new Exception("No columns to search!");
 		return super.createTarget(reference);
 	}
 
 	protected Property createPropertyFromReference(String attribute, LiteratureEntry le) {
-		RDFPropertyIterator reader = null;
-		try {
-			reader = new RDFPropertyIterator(new Reference(attribute), referer);
+		try (RDFPropertyIterator reader = new RDFPropertyIterator(new Reference(attribute), referer)) {
 			reader.setBaseReference(applicationRootReference);
 			while (reader.hasNext()) {
 				return reader.next();
@@ -328,15 +334,12 @@ public class CallableFinder<USERID> extends CallableDBProcessing<USERID> {
 		} catch (Exception x) {
 			return new Property(attribute.toString(), le);
 		} finally {
-			try {
-				reader.close();
-			} catch (Exception x) {
-			}
+			
 		}
 	}
 
 	protected IProcessor<IStructureRecord, IStructureRecord> getValuesReader() {
-		if (profile.size() > 0) {
+		if (getProfile().size() > 0) {
 			ValuesReader readProfile = new ValuesReader(null); // no reader
 																// necessary
 			RetrieveProfile propertyQuery = new RetrieveProfile(QueryMode.idproperty);

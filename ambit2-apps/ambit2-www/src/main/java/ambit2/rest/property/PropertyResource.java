@@ -168,8 +168,7 @@ public class PropertyResource extends
 				String condition = form.getFirstValue(QueryResource.condition);
 				if (key != null) {
 					key = Reference.decode(key.toString());
-					if (!key.toString().startsWith("http://")
-							&& !key.toString().startsWith("https://"))
+					if (!key.toString().startsWith("http"))
 						key = String.format("%s%s", OT.NS, key);
 					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(
 							key.toString());
@@ -188,6 +187,8 @@ public class PropertyResource extends
 				}
 				key = form.getFirstValue(QueryResource.search_param);
 				if (key != null) {
+					if (key.toString().startsWith("http"))
+						return null;
 					RetrieveFieldNamesByAlias q = new RetrieveFieldNamesByAlias(
 							Reference.decode(key.toString()));
 					q.setSearchByAlias(false);
