@@ -11,20 +11,7 @@
 	<artifactId>ambit2-core</artifactId>
 	<packaging>jar</packaging>
 	<name>ambit2-core</name>
-	<!-- 
-	<repositories>
-		<repository>
-			<id>UCC-repo</id>
-			<name>UCC repositories</name>
-			<url>https://maven.ch.cam.ac.uk/content/groups/ucc/</url>
-		</repository>
-		<repository>
-			<id>UCC-repo-proxy</id>
-			<name>UCC repositories proxy</name>
-			<url>https://nexus.ideaconsult.net/content/repositories/ucc-repo/</url>
-		</repository>
-	</repositories>
-	 -->
+
 	<dependencies>
 
 		<dependency>
