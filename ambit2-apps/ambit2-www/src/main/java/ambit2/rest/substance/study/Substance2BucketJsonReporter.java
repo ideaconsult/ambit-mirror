@@ -123,7 +123,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					"_CONDITION_concentration_d",
 					"_CONDITION_exposure_time_UNIT_s",
 					"_CONDITION_exposure_time_d",
-					"_CONDITION_replicate_s"
+					"_CONDITION_replicate_s",
+					"_CONDITION_material_s"
 			},
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
@@ -161,7 +162,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"_CONDITION_concentration_d",
 			"_CONDITION_exposure_time_UNIT_s",
 			"_CONDITION_exposure_time_d",
-			"_CONDITION_replicate_s","" 
+			"_CONDITION_replicate_s",
+			"_CONDITION_material_s","" 
 			} };
 
 	@Override
