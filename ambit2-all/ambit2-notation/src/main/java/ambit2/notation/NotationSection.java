@@ -10,5 +10,5 @@ public class NotationSection
 	public boolean flagActive = true; 
 	public int order = -1;
 	
-	public List<NotationElement> dataElements = new ArrayList<NotationElement>();
+	public List<NotationElement> sectionElements = new ArrayList<NotationElement>();
 }
