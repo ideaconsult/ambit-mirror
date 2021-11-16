@@ -70,13 +70,13 @@
 		</dependency>
 		<dependency>
 			<groupId>net.ideaconsult</groupId>
-			<artifactId>loom-i5ws</artifactId>
-			<version>${net.idea.loom.version}</version>
+			<artifactId>iuclid-i5ws</artifactId>
+			<version>${i5.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.ideaconsult</groupId>
-			<artifactId>loom-i6ws</artifactId>
-			<version>${net.idea.loom.version}</version>
+			<artifactId>iuclid-i6ws</artifactId>
+			<version>${i5.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

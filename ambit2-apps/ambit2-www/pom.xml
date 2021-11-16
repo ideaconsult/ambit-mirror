@@ -600,13 +600,7 @@
 			<artifactId>ambit2-user</artifactId>
 			<version>${ambit.version}</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-loom</artifactId>
-			<version>${ambit.version}</version>
-		</dependency>
-		 -->
+
 		<!-- Toxtree -->
 		<dependency>
 			<groupId>toxtree</groupId>
