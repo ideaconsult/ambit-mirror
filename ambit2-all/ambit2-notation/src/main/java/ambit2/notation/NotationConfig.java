@@ -19,7 +19,7 @@ public class NotationConfig
 {
 	public String info = null;
 	public String type = null;
-	public List<NotationSection> seections = new ArrayList<NotationSection>();
+	public List<NotationSection> sections = new ArrayList<NotationSection>();
 		
 	public List<String> errors = new ArrayList<String>();
 	
@@ -58,8 +58,20 @@ public class NotationConfig
 				notCfg.errors.add(x.getMessage());
 			}
 		}
-
 		
+		//SECTIONS
+		curNode = root.path("SECTIONS");
+		if (!curNode.isArray())
+			notCfg.errors.add("SECTIONS is an array!");
+		else {
+			for (int i = 0; i < curNode.size(); i++)
+			{
+				NotationSection section = 
+						NotationSection.extractNotationSection(curNode.get(i), i, notCfg.errors);
+				notCfg.sections.add(section);
+			}
+		}
+			
 		//TODO
 		
 		return notCfg;

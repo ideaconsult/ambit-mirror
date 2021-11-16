@@ -118,7 +118,14 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					"effectendpoint", "effectendpoint_type", "effectendpoint_synonym", "effectendpoint_group",
 					"reference_owner", "reference_year", "reference", "loQualifier", "loValue", "upQualifier",
 					"upValue", "err", "errQualifier", "conditions", "params", "textValue", "interpretation_result",
-					"unit", "category", "idresult", "updated", "r_value", "r_purposeFlag", "r_studyResultType" },
+					"unit", "category", "idresult", "updated", "r_value", "r_purposeFlag", "r_studyResultType",
+					"_CONDITION_concentration_UNIT_s",
+					"_CONDITION_concentration_d",
+					"_CONDITION_exposure_time_UNIT_s",
+					"_CONDITION_exposure_time_d",
+					"_CONDITION_replicate_s",
+					"_CONDITION_material_s"
+			},
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
 	};
@@ -150,7 +157,14 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			"unit_s", "category_s", "idresult", "nmcode_hs", "nmcode_s", "substance_annotation_hss",
 			"substance_annotation_ss", "updated_s", FIELD_METHOD, FIELD_CELLTYPE, header_reliability,
 			header_studyResultType, header_purposeFlag, header_summary_results, header_summary_refs,
-			header_summary_refowner, "" } };
+			header_summary_refowner, 
+			"_CONDITION_concentration_UNIT_s",
+			"_CONDITION_concentration_d",
+			"_CONDITION_exposure_time_UNIT_s",
+			"_CONDITION_exposure_time_d",
+			"_CONDITION_replicate_s",
+			"_CONDITION_material_s","" 
+			} };
 
 	@Override
 	public void setConnection(Connection conn) throws DbAmbitException {
@@ -429,6 +443,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 							reference2Bucket(papp, study, suffix);
 							effectrecord2bucket(papp, e, study, suffix);
 
+							
 							if (e.getConditions() != null) {
 								IParams prmc = null;
 								if (e.getConditions() instanceof IParams)
@@ -438,6 +453,17 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 								if (prmc.size() > 0) {
 									prmc = solarize(prmc);
 									if (prmc.size() > 0) {
+										
+										Iterator i = prmc.keySet().iterator();
+										while (i.hasNext()) {
+											Object key = i.next();
+											if (key!="type_s") {
+												String tag = String.format("_CONDITION_%s",key.toString().replace("E.",""));
+												study.put(tag, prmc.get(key));
+											}
+										}
+										
+										
 										prmc.put("type_s", "conditions");
 										prmc.put("id",
 												String.format("%s/%d/cn", papp.getDocumentUUID(), e.getIdresult()));
@@ -457,6 +483,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 											}
 										}
 										_childParams_.add(prmc);
+										
+									
 									}
 								}
 							}
@@ -789,6 +817,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			}
 		}
 
+		//condition2bucket(e,bucket,"condition.");
 	}
 
 	protected void params2Bucket(ProtocolApplication<Protocol, Object, String, Object, String> papp, Bucket bucket,

@@ -59,6 +59,8 @@ auth_cookie_path=${auth_cookie_path}
 #The eMail server is used to send confirmation emails to newly registered 
 #users,as well as confirmations for password resets.
 #Please define a valid SMTP server, the values below are just examples.
+mail.smtp.ssl.protocols=${notification.mail.smtp.ssl.protocols}
+mail.smtp.ssl.ciphersuites=${notification.mail.smtp.ssl.ciphersuites}
 mail.smtp.starttls.enable=${notification.mail.smtp.starttls.enable}
 mail.smtp.auth=${notification.mail.smtp.auth}
 mail.transport.protocol=${notification.mail.transport.protocol}

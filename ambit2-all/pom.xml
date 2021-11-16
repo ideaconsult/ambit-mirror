@@ -62,6 +62,7 @@
 			<id>maven-restlet</id>
 			<name>Public online Restlet repository</name>
 			<url>https://maven.restlet.com</url>
+			
 		</repository>
 	</repositories>
 	<dependencies>
@@ -295,7 +296,9 @@
 	<modules>
 		<module>ambit2-balloon</module>
 		<module>ambit2-base</module>
+		<!--
 		<module>ambit2-chebi</module>
+		-->
 		<module>ambit2-core</module>
 		<module>ambit2-db</module>
 		<module>ambit2-dbext</module>

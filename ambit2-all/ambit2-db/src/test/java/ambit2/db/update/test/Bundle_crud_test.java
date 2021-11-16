@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import junit.framework.Assert;
 import net.idea.modbcum.i.query.IQueryUpdate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.ITable;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class Bundle_crud_test extends
 		adataset.setURL("new_url");
 		adataset.setDescription("description");
 		adataset.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
-		adataset.setUserName("testuser");
+		adataset.setUserName(StringUtils.repeat("t",32));
 		adataset.setVersion(1);
 		CreateBundle user = new CreateBundle();
 		user.setObject(adataset);
@@ -67,7 +68,7 @@ public class Bundle_crud_test extends
 		Assert.assertNotNull(idbundle);
 		Assert.assertNotNull(table.getValue(0, "bn"));
 		Assert.assertEquals("description", table.getValue(0, "description"));
-		Assert.assertEquals("testuser", table.getValue(0, "user_name"));
+		Assert.assertEquals(StringUtils.repeat("t",32), table.getValue(0, "user_name"));
 		Assert.assertEquals(1, table.getValue(0, "version"));
 		Assert.assertEquals("draft", table.getValue(0, "published_status"));
 		Assert.assertNotNull(table.getValue(0, "created"));
@@ -107,7 +108,7 @@ public class Bundle_crud_test extends
 			throws Exception {
 		SubstanceEndpointsBundle adataset = new SubstanceEndpointsBundle();
 		adataset.setID(1);
-		adataset.setName("nina");
+		adataset.setName(StringUtils.repeat("t",32));
 		adataset.setTitle("EURAS.BE");
 		adataset.setDescription("description");
 		adataset.setLicenseURI(ISourceDataset.license.CC0_1_0.getURI());
@@ -122,7 +123,7 @@ public class Bundle_crud_test extends
 		ITable table = c
 				.createQueryTable(
 						"EXPECTED",
-						"SELECT licenseURI,title,url,type,description FROM bundle join catalog_references using(idreference) where name='nina'");
+						String.format("SELECT licenseURI,title,url,type,description FROM bundle join catalog_references using(idreference) where name='%s'",StringUtils.repeat("t",32)));
 		Assert.assertEquals(1, table.getRowCount());
 		Assert.assertEquals("description", table.getValue(0, "description"));
 		Assert.assertEquals(ISourceDataset.license.CC0_1_0.getURI(),
