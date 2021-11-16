@@ -69,12 +69,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.ideaconsult</groupId>
+			<groupId>net.idea</groupId>
 			<artifactId>iuclid-i5ws</artifactId>
 			<version>${i5.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>net.ideaconsult</groupId>
+			<groupId>net.idea</groupId>
 			<artifactId>iuclid-i6ws</artifactId>
 			<version>${i5.version}</version>
 		</dependency>
