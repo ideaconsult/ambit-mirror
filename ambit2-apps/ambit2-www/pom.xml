@@ -741,7 +741,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<restlet.version>2.0-M6</restlet.version>
-		<junit.version>4.8.1</junit.version>
+		<junit.version>[4.13.1,)</junit.version>
 		 <tomcat7-version>7.0.93</tomcat7-version>
 		 <jaxb.api.version>2.3.1</jaxb.api.version>
 	</properties>
