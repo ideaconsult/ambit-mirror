@@ -27,10 +27,10 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<properties>
-		<net.idea.loom.version>2.0.0-SNAPSHOT</net.idea.loom.version>
+		<net.idea.loom.version>3.0.0-SNAPSHOT</net.idea.loom.version>
 		<nmparser.version>1.4.1-SNAPSHOT</nmparser.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<toxtree.version>4.0.0-SNAPSHOT</toxtree.version>
+		<toxtree.version>4.1.0-SNAPSHOT</toxtree.version>
 		<ambit.version>4.1.0-SNAPSHOT</ambit.version>
 		<cdk.version>2.1.1</cdk.version>
 		<junit.version>[4.13.1,)</junit.version>
