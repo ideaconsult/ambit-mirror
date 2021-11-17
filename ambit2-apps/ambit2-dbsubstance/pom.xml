@@ -64,8 +64,7 @@
 			<artifactId>enmnanowiki</artifactId>
 			<version>${nmparser.version}</version>
 		</dependency>				
-		<!-- <dependency> <groupId>net.ideaconsult</groupId> <artifactId>loom-tox21</artifactId> 
-			<version>${net.idea.loom.version}</version> <type>jar</type> </dependency> -->
+
 		<dependency>
 			<groupId>net.ideaconsult</groupId>
 			<artifactId>loom-pubchemrest-cli</artifactId>
