@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpHeaders;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -71,10 +74,8 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 			@Override
 			public void write(OutputStream stream) throws IOException {
 
-				final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-				credentialsProvider.setCredentials(AuthScope.ANY, query.getCredentials());
-				CloseableHttpClient httpclient = HttpClientBuilder.create()
-						.setDefaultCredentialsProvider(credentialsProvider).build();
+
+				CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 
 				HttpRequestBase httprequest;
 				// try {
@@ -92,7 +93,13 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 				}
 
 				httprequest.setHeader("Accept", media.getName());
-
+				
+				String auth = String.format("%s:%s",query.getCredentials().getUserName(),query.getCredentials().getPassword());
+				byte[] encodedAuth = Base64.encodeBase64(
+				  auth.getBytes(StandardCharsets.ISO_8859_1));
+				String authHeader = "Basic " + new String(encodedAuth);
+				httprequest.setHeader(HttpHeaders.AUTHORIZATION, authHeader);		
+				
 				try (CloseableHttpResponse response1 = httpclient.execute(httprequest)) {
 					if (200 == response1.getStatusLine().getStatusCode())
 						processStream(response1.getEntity().getContent(), stream);
