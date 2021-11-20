@@ -11,7 +11,16 @@ public class WrappedService<C extends Credentials> {
 	protected String name;
 	protected String idkey;
 	protected String propertykey;
+	protected String valueKey;
 	
+	public String getValueKey() {
+		return valueKey;
+	}
+
+	public void setValueKey(String valueKey) {
+		this.valueKey = valueKey;
+	}
+
 	public String getIdkey() {
 		return idkey;
 	}
@@ -92,7 +101,11 @@ public class WrappedService<C extends Credentials> {
 			if (getPropertykey() != null) {
 				b.append("/");
 				b.append(getPropertykey());
-			}			
+			}	
+			if (getValueKey() != null) {
+				b.append("/");
+				b.append(getValueKey());
+			}							
 			if (getQuery() != null) {
 				b.append("?");
 				b.append(getQuery());
