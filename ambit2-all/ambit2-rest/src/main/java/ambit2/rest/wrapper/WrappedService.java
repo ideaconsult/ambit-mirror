@@ -9,7 +9,25 @@ public class WrappedService<C extends Credentials> {
 	protected String query;
 	protected String filterConfig;
 	protected String name;
+	protected String idkey;
+	protected String propertykey;
 	
+	public String getIdkey() {
+		return idkey;
+	}
+
+	public void setIdkey(String idkey) {
+		this.idkey = idkey;
+	}
+
+	public String getPropertykey() {
+		return propertykey;
+	}
+
+	public void setPropertykey(String propertykey) {
+		this.propertykey = propertykey;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -67,6 +85,14 @@ public class WrappedService<C extends Credentials> {
 			b.append(getURI());
 			if (getHandler() != null)
 				b.append(getHandler());
+			if (getIdkey() != null) {
+				b.append("/");
+				b.append(getIdkey());
+			}
+			if (getPropertykey() != null) {
+				b.append("/");
+				b.append(getPropertykey());
+			}			
 			if (getQuery() != null) {
 				b.append("?");
 				b.append(getQuery());

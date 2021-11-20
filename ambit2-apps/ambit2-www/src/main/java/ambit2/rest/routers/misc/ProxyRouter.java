@@ -11,6 +11,8 @@ public class ProxyRouter extends MyRouter {
 		super(context);
 		attachDefault(ProxyResource.class);
 		attach(String.format("/{%s}/{%s}", ProxyResource.servicekey, ProxyResource.resourcekey), ProxyResource.class);
+		attach(String.format("/{%s}/{%s}/{%s}/{%s}", 
+				ProxyResource.servicekey, ProxyResource.resourcekey, ProxyResource.idkey, ProxyResource.propertykey), ProxyResource.class);
 	}
 
 }

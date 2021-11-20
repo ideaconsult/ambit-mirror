@@ -47,6 +47,8 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 
 	public static final String resourcekey = "handler";
 	public static final String servicekey = "servicekey";
+	public static final String idkey = "idkey";
+	public static final String propertykey = "propertykey";
 	protected Map<String, WrappedService<UsernamePasswordCredentials>> solrServices;
 	protected WrappedService<UsernamePasswordCredentials> solrService;
 	protected boolean json2tsv = false;
@@ -149,6 +151,20 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 			} catch (Exception x) {
 				solrService.setHandler(null);
 			}
+			
+			try {
+				Object handler = request.getAttributes().get(idkey);
+				solrService.setIdkey(handler.toString());
+			} catch (Exception x) {
+				solrService.setIdkey(null);
+			}
+			try {
+				Object handler = request.getAttributes().get(propertykey);
+				solrService.setPropertykey(handler.toString());
+			} catch (Exception x) {
+				solrService.setPropertykey(null);
+			}			
+			
 			Form query = request.getResourceRef().getQueryAsForm();
 			try {
 				String prm = query.getFirstValue("json2tsv");
