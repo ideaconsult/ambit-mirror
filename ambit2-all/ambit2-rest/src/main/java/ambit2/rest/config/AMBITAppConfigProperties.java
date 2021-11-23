@@ -47,6 +47,7 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	protected static final String solr_url = "solr.url.%d";
 	protected static final String solr_basic_user = "solr.basic.user.%d";
 	protected static final String solr_basic_password = "solr.basic.password.%d";
+	protected static final String solr_toplevel = "solr.toplevel.%d";
 	protected static final String solr_filter = "solr.filter";
 
 	protected static final String map_folder = "map.folder";
@@ -267,6 +268,12 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 						getPropertyWithDefault(String.format(solr_basic_user, i), ambitProperties, null),
 						getPropertyWithDefault(String.format(solr_basic_password, i), ambitProperties,
 								null)));
+				try {
+					solr.setDummyTopLevel(
+						getPropertyWithDefault(String.format(solr_toplevel, i), ambitProperties, null));
+				} catch (Exception x) {
+					solr.setDummyTopLevel(null);
+				}
 				solr.setFilterConfig(getPropertyWithDefault(solr_filter, ambitProperties, null));
 
 				services.put(name, solr);

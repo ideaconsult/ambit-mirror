@@ -10,6 +10,7 @@ public class ProxyRouter extends MyRouter {
 	public ProxyRouter(Context context) {
 		super(context);
 		attachDefault(ProxyResource.class);
+		
 		attach(String.format("/{%s}/{%s}", ProxyResource.servicekey, ProxyResource.resourcekey), ProxyResource.class);
 		attach(String.format("/{%s}/{%s}/{%s}", 
 				ProxyResource.servicekey, ProxyResource.resourcekey, ProxyResource.idkey), ProxyResource.class);
