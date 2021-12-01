@@ -19,3 +19,9 @@
 - applicability domain [Ambit Discovery](http://ambit.sourceforge.net/download_ambitdiscovery.html) and [more recent command line application](https://github.com/ideaconsult/appdomain)
 
 - More applications using AMBIT and examples how to call AMBIT modules at https://github.com/ideaconsult/apps-ambit
+
+# Quick Start
+[ambit-docker](https://github.com/ideaconsult/ambit-docker) provides [Docker](https://en.wikipedia.org/wiki/Docker_(software)) images and configurations for testing AMBIT on your machine or deploying it inside your organization. It also contains examples with the freely available NANoREG and NANoREG II data.
+
+# Development
+See the [Contributor Guide](CONTRIBUTING.md).
