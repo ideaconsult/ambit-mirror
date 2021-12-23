@@ -253,7 +253,7 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 		try {
 			Map<String, WrappedService<UsernamePasswordCredentials>> services = null;
 
-			for (int i = 1; i < 10; i++) {
+			for (int i = 0; i < 19; i++) {
 				String name = getPropertyWithDefault(String.format(solr_service, i), ambitProperties, null);
 				if (name == null)
 					continue;
