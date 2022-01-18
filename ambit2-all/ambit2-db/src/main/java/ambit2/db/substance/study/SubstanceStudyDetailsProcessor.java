@@ -42,5 +42,6 @@ public class SubstanceStudyDetailsProcessor
 			throws AmbitException {
 		((ReadSubstanceStudyFlat) query).setRecord(target.getMeasurements());
 		((ReadSubstanceStudyFlat) query).setFieldname(target);
+		((ReadSubstanceStudyFlat) query).setPageSize(1000000);
 	}
 }
