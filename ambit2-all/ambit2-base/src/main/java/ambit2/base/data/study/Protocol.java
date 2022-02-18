@@ -658,7 +658,31 @@ public class Protocol {
 				return "http://purl.enanomapper.org/onto/ENM_0000020";
 			}
 		},
+		TO_ACUTE_PULMONARY_INSTILLATION_SECTION {
+			@Override
+			public String toString() {
+				return "Acute toxicity - pulmonary instillation";
+			}
 
+			@Override
+			public String getNumber() {
+				return "";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 7029;
+			}
+
+			public String getTopCategory() {
+				return "TOX";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "";
+			}
+		},
 		TO_ACUTE_INHAL_SECTION {
 			@Override
 			public String toString() {
