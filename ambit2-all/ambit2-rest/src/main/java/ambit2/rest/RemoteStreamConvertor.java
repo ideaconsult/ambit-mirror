@@ -88,7 +88,11 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 					}
 				} else {
 					httprequest = new HttpPost(query.getService());
-					httprequest.setHeader("Content-Type", String.format("%s; charset=utf-8",entityType.getName()));
+					//System.out.println(entityType.getName());
+					//System.out.println(entityType.getDescription());
+					//System.out.println(entityType.getSubType());
+					//System.out.println(entityType.getMainType());
+					httprequest.setHeader("Content-Type", String.format("%s; charset=utf-8",entityType.toString()));
 					((HttpPost) httprequest).setEntity(new ByteArrayEntity(entity.toByteArray()));
 				}
 
