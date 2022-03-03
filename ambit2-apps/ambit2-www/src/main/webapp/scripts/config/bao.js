@@ -267,6 +267,12 @@ var config_bao = {
 			"inMatrix" : true,
 			"sTitle" : "Material"
 		},
+		"treatment_condition" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Treatment condition"
+		},		
 		"concentration" : {
 			"iOrder" : -7,
 			"bVisible" : true,

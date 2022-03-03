@@ -217,6 +217,12 @@ var config_npo = {
 	},
 	"conditions" : {
 		"bVisible" : false,
+		"treatment_condition" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Treatment condition"
+		},		
 		"concentration" : {
 			"iOrder" : -7,
 			"bVisible" : true,
