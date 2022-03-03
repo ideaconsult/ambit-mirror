@@ -661,7 +661,7 @@ public class Protocol {
 		TO_ACUTE_PULMONARY_INSTILLATION_SECTION {
 			@Override
 			public String toString() {
-				return "Acute toxicity - pulmonary instillation";
+				return "Acute and sub-chronic toxicity - pulmonary instillation";
 			}
 
 			@Override
@@ -3803,8 +3803,28 @@ public class Protocol {
 			public int getSortingOrder() {
 				return 3560;
 			}
-		};
+		},
+		CHEMINF_000513 {
+			@Override
+			public String getNumber() {
+				return "";
+			}
 
+			@Override
+			public String getTopCategory() {
+				return "P-CHEM";
+			}
+
+			@Override
+			public String toString() {
+				return "Chemical substance descriptor";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 8888;
+			}			
+		};
 		public boolean deprecated() {
 			return false;
 		}
