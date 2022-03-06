@@ -255,12 +255,34 @@ public class ProxyResource<T> extends AbstractResource<ByteArrayOutputStream, T,
 		getResponse().setServerInfo(si);
 		return proxy(entity, variant);
 	}
-
+	
+	@Override
+	protected Representation put(Representation entity, Variant variant) throws ResourceException {
+		/*
+		 * Form headers = (Form)
+		 * getResponse().getAttributes().get("org.restlet.http.headers"); if
+		 * (headers == null) { headers = new Form();
+		 * getResponse().getAttributes().put("org.restlet.http.headers",
+		 * headers); } headers.removeAll("X-Frame-Options");
+		 * headers.add("X-Frame-Options", "SAMEORIGIN");
+		 * getResponse().getCacheDirectives().add(CacheDirective.
+		 * proxyMustRevalidate());
+		 */
+		ServerInfo si = getResponse().getServerInfo();
+		si.setAgent(getApplication().getName());
+		getResponse().setServerInfo(si);
+		return proxy(entity, variant);
+	}	
+	@Override
+	protected Representation put(Representation entity) throws ResourceException {
+		return put(entity, new Variant(MediaType.APPLICATION_JSON));
+	}
 	@Override
 	protected Representation post(Representation entity) throws ResourceException {
 		return post(entity, new Variant(MediaType.APPLICATION_JSON));
 	}
 
+	
 	protected Representation proxy(Representation entity, Variant variant) throws ResourceException {
 		try {
 			setXHeaders();

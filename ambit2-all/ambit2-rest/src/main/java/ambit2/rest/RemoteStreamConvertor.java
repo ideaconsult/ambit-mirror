@@ -10,16 +10,15 @@ import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHeaders;
-import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.restlet.Context;
@@ -59,21 +58,20 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 			setFileExtension("txt");
 		else
 			setFileExtension(null);
-		setFileNamePrefix(String.format("%s_%s", query.getName(),UUID.randomUUID()));
+		setFileNamePrefix(String.format("%s_%s", query.getName(), UUID.randomUUID()));
 	}
 
 	protected void processStream(InputStream in, OutputStream stream) throws IOException {
 		DownloadTool.download(in, stream);
 	}
 
-	@Override 
+	@Override
 	public Representation process(final ByteArrayOutputStream form) throws Exception {
 		// we don't want to proxy everything ;)
 
 		OutputRepresentation rep = new OutputRepresentation(media) {
 			@Override
 			public void write(OutputStream stream) throws IOException {
-
 
 				CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 
@@ -86,24 +84,30 @@ public class RemoteStreamConvertor extends DefaultAmbitProcessor<ByteArrayOutput
 					} catch (URISyntaxException x) {
 						throw new IOException(x);
 					}
+
 				} else {
-					httprequest = new HttpPost(query.getService());
-					//System.out.println(entityType.getName());
-					//System.out.println(entityType.getDescription());
-					//System.out.println(entityType.getSubType());
-					//System.out.println(entityType.getMainType());
-					httprequest.setHeader("Content-Type", String.format("%s; charset=utf-8",entityType.toString()));
-					((HttpPost) httprequest).setEntity(new ByteArrayEntity(entity.toByteArray()));
+					HttpEntityEnclosingRequestBase prequest;
+					if (Method.PUT.equals(method)) 
+						prequest = new HttpPut(query.getService());
+					else 
+						prequest = new HttpPost(query.getService());
+					
+					if (entityType != null)
+						prequest.setHeader("Content-Type",
+								String.format("%s; charset=utf-8", entityType.toString()));
+					if (entity != null)
+						prequest.setEntity(new ByteArrayEntity(entity.toByteArray()));
+					httprequest = prequest;
 				}
 
 				httprequest.setHeader("Accept", media.getName());
-				
-				String auth = String.format("%s:%s",query.getCredentials().getUserName(),query.getCredentials().getPassword());
-				byte[] encodedAuth = Base64.encodeBase64(
-				  auth.getBytes(StandardCharsets.ISO_8859_1));
+
+				String auth = String.format("%s:%s", query.getCredentials().getUserName(),
+						query.getCredentials().getPassword());
+				byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.ISO_8859_1));
 				String authHeader = "Basic " + new String(encodedAuth);
-				httprequest.setHeader(HttpHeaders.AUTHORIZATION, authHeader);		
-				
+				httprequest.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+
 				try (CloseableHttpResponse response1 = httpclient.execute(httprequest)) {
 					if (200 == response1.getStatusLine().getStatusCode())
 						processStream(response1.getEntity().getContent(), stream);
