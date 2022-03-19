@@ -135,6 +135,7 @@
 {
     "@context": "http://schema.org",
     "@type": "Dataset",
+    "http://purl.org/dc/terms/conformsTo": { "@type": "CreativeWork", "@id": "https://bioschemas.org/profiles/Dataset/0.4-DRAFT" },
     "@id": "${ambit_request}",
     "url": "${ambit_request}",
     "version": "1",
