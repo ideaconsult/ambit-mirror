@@ -411,7 +411,16 @@ var config_bao = {
 		},
 		"exposure" : {
 			"bVisible" : true
-		}
+		},
+		"sampling_time" : {
+			"visible" : true
+		},
+		"temperature" : {
+			"visible" : true
+		},
+		"total dose" : {
+			"visible" : true
+		}	
 	},
 	"interpretation" : {
 		"result" : {

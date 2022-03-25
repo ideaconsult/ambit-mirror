@@ -1101,6 +1101,20 @@ var config_study = {
 			"protocol" : config_toxcast["protocol"],
 			"interpretation" : config_toxcast["interpretation"]
 		},
+		"MESOCOSM_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+		},
+		"CHEMINF_000513" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
+		},		
 		"EXPOSURE_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
