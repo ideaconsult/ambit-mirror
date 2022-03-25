@@ -630,6 +630,31 @@ public class Protocol {
 			}
 		},
 
+		MESOCOSM_SECTION {
+			@Override
+			public String toString() {
+				return "MESOCOSM";
+			}
+
+			@Override
+			public String getNumber() {
+				return "";
+			}
+
+			@Override
+			public int getSortingOrder() {
+				return 5099;
+			}
+
+			public String getTopCategory() {
+				return "ENV FATE";
+			}
+
+			@Override
+			public String getOntologyURI() {
+				return "http://purl.obolibrary.org/obo/ENVO_01000620";
+			}
+		},
 		/**
 		 * Toxicity
 		 */

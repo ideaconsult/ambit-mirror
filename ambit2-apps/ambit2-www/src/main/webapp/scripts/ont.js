@@ -6822,7 +6822,7 @@ var ontlookup = {
 	"EXPOSURE_INDUSTRIAL_SITES_SECTION" : "Use and exposure information. Uses at industrial sites",
 	"EXPOSURE_PROFESSIONAL_WORKERS_SECTION" : "Use and exposure information. Widespread use by industrial workers",
 	"EXPOSURE_CONSUMER_USE_SECTION" : "Use and exposure information. Consumer use",
-	"EXPOSURE_SERVICE_LIFE_SECTION" : "Use and exposure information. Service Life"
-	
+	"EXPOSURE_SERVICE_LIFE_SECTION" : "Use and exposure information. Service Life",
+	"MESOCOSM_SECTION" : "Mesocosm studies"	
 	
 }
