@@ -50,13 +50,18 @@ public abstract class AbstractAnnotator<U, V> extends DefaultAmbitProcessor<U, V
 		if (lookup == null)
 			return null;
 		if (endpoint==null) return null;
-		String[] terms = lookup.getProperty(endpoint.toUpperCase().replaceAll(" ", "_")).split(";");
-		if (terms ==null) return null;
-		if (!fulllinks)
-			for (int i = 0; i < terms.length; i++)
-				terms[i] = ontolink2id(terms[i]);
-
-		return terms;
+		try {
+			String[] terms = lookup.getProperty(endpoint.toUpperCase().replaceAll(" ", "_")).split(";");
+			if (terms ==null) return null;
+			if (!fulllinks)
+				for (int i = 0; i < terms.length; i++)
+					terms[i] = ontolink2id(terms[i]);
+			return terms;
+		} catch (Exception x) {
+			//x.printStackTrace();
+		}
+		return null;
+		
 	}
 
 	public static String ontolink2id(String ontolink) {
