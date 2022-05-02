@@ -424,10 +424,14 @@ public class SubstanceRecord extends StructureRecord {
 		if (with_measurement) {
 			builder.append(String.format("\n\t,%s:[\n",
 					JSONUtils.jsonQuote("study")));
+			String sdelimiter = "";
 			for (ProtocolApplication papp : getMeasurements()) {
+				builder.append(sdelimiter);
 				builder.append(papp.toString());
 				builder.append("\n");
+				sdelimiter=",";
 			}
+			
 			builder.append("\t]");
 		}
 			
