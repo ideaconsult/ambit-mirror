@@ -112,6 +112,7 @@ import ambit2.rest.structure.CompoundLookup;
 import ambit2.rest.structure.diagram.DepictionResource;
 import ambit2.rest.structure.tautomers.QueryStructureRelationResource;
 import ambit2.rest.structure.tautomers.QueryTautomersResource;
+import ambit2.rest.substance.NMParserResource;
 import ambit2.rest.substance.SubstanceLookup;
 import ambit2.rest.substance.SubstanceResource;
 import ambit2.rest.substance.owner.OwnerSubstanceFacetResource;
@@ -454,6 +455,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		router.attach(AssayTemplatesFacetResource.assaytemplate_filter, AssayTemplateResource.class);
 		router.attach(AssayTemplatesFacetResource.assaytemplate_facet, AssayTemplatesFacetResource.class);
 
+		router.attach(NMParserResource.resource,NMParserResource.class);
 		/**
 		 * Images, styles, favicons, applets
 		 */
