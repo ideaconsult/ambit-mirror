@@ -1,6 +1,8 @@
 package ambit2.rest.substance;
 
+import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,20 +55,22 @@ public class NMParserResource extends CatalogResource<String> {
 				RestletFileUpload upload = new RestletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(getRequest());
 				FileItem xlsxfile = null;
-				FileItem jsonfile = null;
+				InputStream json_inputstream = null;
 				FileItem expandfile = null;
 				String prefix = "XLSX";
 				for (FileItem file : items) {
 					if (file.isFormField()) {
 						if ("prefix".equals(file.getFieldName()))
 							prefix= file.getString().toUpperCase();
-						
+						else if ("jsonconfig".equals(file.getFieldName())) {
+							json_inputstream = new URL(file.getString()).openStream();
+						}
 					} else {
 						String ext = file.getName().toLowerCase().trim();
 						
 						if (ext.endsWith(".json")) {
 							if ("jsonconfig".equals(file.getFieldName()))
-								jsonfile = file;
+								json_inputstream = file.getInputStream();
 							else if ("expandconfig".equals(file.getFieldName()))
 								expandfile = file;
 						} else if (ext.endsWith(".xlsx")) {
@@ -74,14 +78,12 @@ public class NMParserResource extends CatalogResource<String> {
 						}
 						
 					}
-					if (xlsxfile != null && jsonfile !=null) 
-						break;
 				}
-				if (xlsxfile != null && jsonfile !=null)  {
+				if (xlsxfile != null && json_inputstream !=null)  {
 				
 					try {
 						
-						ExcelParserConfigurator config = ExcelParserConfigurator.loadFromJSON(jsonfile.getInputStream());
+						ExcelParserConfigurator config = ExcelParserConfigurator.loadFromJSON(json_inputstream);
 						GenericExcelParser parser = new GenericExcelParser(xlsxfile.getInputStream(), config, true, prefix.substring(0,3));
 						try (StringWriter writer = new StringWriter()) {
 							StructureRecordValidator validator = new StructureRecordValidator();
@@ -106,7 +108,10 @@ public class NMParserResource extends CatalogResource<String> {
 
 					}
 					
-				} else throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"xlsx or json files missing");
+				} else {
+					if (json_inputstream != null) json_inputstream.close();
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"xlsx or json files missing");
+				}
 			} catch (FileUploadException x) {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,x.getMessage());
 			} catch (Exception x) {
@@ -175,7 +180,7 @@ public class NMParserResource extends CatalogResource<String> {
 					String tmp = ((SubstanceRecord) record).toJSON("http://localhost/ambit2", true);
 					writer.write(delimiter);
 					writer.write(tmp);
-					writer.flush();
+					//writer.flush();
 					delimiter = ",";
 				} catch (Exception x) {
 					x.printStackTrace();
