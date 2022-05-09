@@ -22,7 +22,7 @@ public class HelpResource extends CatalogResource<String> {
 	protected List<String> topics = new ArrayList<String>();
 
 	protected enum categories {
-		createstruc, uploadstruc, uploadprops, predict, query, compound, dataset, algorithm, model, feature, task, dataprep, qmap, substance, users, login, register, myprofile, pwd_forgotten, toxtree, policy, ra, ontobucket, nanomaterial, bundle, endpoint_search, openam, enmindex, excapeindex, datatemplate, uploadsubstance, uploadenm, study, apps, investigation
+		createstruc, uploadstruc, uploadprops, predict, query, compound, dataset, algorithm, model, feature, task, dataprep, qmap, substance, users, login, register, myprofile, pwd_forgotten, toxtree, policy, ra, ontobucket, nanomaterial, bundle, endpoint_search, openam, enmindex, excapeindex, datatemplate, uploadsubstance, uploadenm, study, apps, investigation, nmparser
 	}
 
 	public HelpResource() {
