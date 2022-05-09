@@ -206,11 +206,11 @@ public class NMParserResource extends CatalogResource<String> {
 				}
 				records++;
 			}
-			writer.write("\n]}");
+			
 		} catch (Exception x) {
 			// logger_cli.log(Level.WARNING, x.getMessage(), x);
 		} finally {
-
+			writer.write("\n]}");
 			// logger_cli.log(Level.INFO, "MSG_IMPORTED", new Object[] { records });
 		}
 		return records;
