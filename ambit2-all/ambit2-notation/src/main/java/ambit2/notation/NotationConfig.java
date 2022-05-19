@@ -17,8 +17,10 @@ import ambit2.rules.json.JSONParsingUtils;
 
 public class NotationConfig 
 {
-	public String info = null;
 	public String type = null;
+	public String info = null;
+	public String version = null;
+	
 	public List<NotationSection> sections = new ArrayList<NotationSection>();
 		
 	public List<String> errors = new ArrayList<String>();
@@ -83,11 +85,24 @@ public class NotationConfig
 		sb.append("{\n");
 		int nFields = 0;
 		
+		if (type != null) {
+			if (nFields > 0)
+				sb.append(",\n");
+			sb.append("\t\"TYPE\" : \"" + info + "\"");
+			nFields++;
+		}		
 		if (info != null) {
+			if (nFields > 0)
+				sb.append(",\n");
 			sb.append("\t\"INFO\" : \"" + info + "\"");
 			nFields++;
 		}
-		
+		if (version != null) {
+			if (nFields > 0)
+				sb.append(",\n");
+			sb.append("\t\"VERSION\" : \"" + info + "\"");
+			nFields++;
+		}
 		
 		sb.append("\n");
 		
