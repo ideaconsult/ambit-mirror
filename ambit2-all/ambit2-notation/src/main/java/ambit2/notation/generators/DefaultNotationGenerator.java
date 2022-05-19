@@ -1,4 +1,6 @@
-package ambit2.notation;
+package ambit2.notation.generators;
+
+import ambit2.notation.NotationData;
 
 public class DefaultNotationGenerator 
 {
