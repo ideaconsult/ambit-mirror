@@ -51,6 +51,19 @@ public class NotationConfig
 		NotationConfig notCfg = new NotationConfig(); 
 		JsonNode curNode;
 		
+		// TYPE
+		curNode = root.path("TYPE");
+		if (!curNode.isMissingNode()) {
+			try {
+				String keyword = JSONParsingUtils.extractStringKeyword(root, "TYPE", false);
+				if (keyword != null)
+					notCfg.type = keyword;
+			}
+			catch (Exception x) {
+				notCfg.errors.add(x.getMessage());
+			}
+		}
+		
 		// INFO
 		curNode = root.path("INFO");
 		if (!curNode.isMissingNode()) {
@@ -58,6 +71,19 @@ public class NotationConfig
 				String keyword = JSONParsingUtils.extractStringKeyword(root, "INFO", false);
 				if (keyword != null)
 					notCfg.info = keyword;
+			}
+			catch (Exception x) {
+				notCfg.errors.add(x.getMessage());
+			}
+		}
+		
+		// VERSION
+		curNode = root.path("VERSION");
+		if (!curNode.isMissingNode()) {
+			try {
+				String keyword = JSONParsingUtils.extractStringKeyword(root, "VERSION", false);
+				if (keyword != null)
+					notCfg.version = keyword;
 			}
 			catch (Exception x) {
 				notCfg.errors.add(x.getMessage());
@@ -76,8 +102,6 @@ public class NotationConfig
 				notCfg.sections.add(section);
 			}
 		}
-			
-		//TODO
 		
 		return notCfg;
 	}
@@ -106,6 +130,18 @@ public class NotationConfig
 			sb.append("\t\"VERSION\" : \"" + info + "\"");
 			nFields++;
 		}
+		
+		if (nFields > 0)
+			sb.append(",\n");
+		sb.append("\t\"SECTIONS\":\n");
+		sb.append("\t[\n");
+		for (int i = 0; i < sections.size(); i++) {
+			sb.append(sections.get(i).toJSONString("\t\t"));
+			if (i < sections.size() - 1)
+				sb.append(",\n");
+			sb.append("\n");
+		}
+		sb.append("\t]\n");
 		
 		sb.append("\n");
 		
