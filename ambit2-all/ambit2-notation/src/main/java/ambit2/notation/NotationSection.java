@@ -14,6 +14,15 @@ public class NotationSection
 	
 	public List<NotationElement> sectionElements = new ArrayList<NotationElement>();
 	
+	public NotationSection() {
+	}
+	
+	public NotationSection(String name, String info, int order) {
+		this.name = name;
+		this.info = info;
+		this.order = order;
+	}
+	
 	public static NotationSection extractNotationSection(JsonNode node, int notSecIndex, List<String> errors)
 	{
 		NotationSection notSection = new NotationSection();

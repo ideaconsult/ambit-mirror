@@ -20,11 +20,19 @@ public class NotationConfig
 {
 	public String type = null;
 	public String info = null;
-	public String version = null;
-	
+	public String version = null;	
 	public List<NotationSection> sections = new ArrayList<NotationSection>();
 		
 	public List<String> errors = new ArrayList<String>();
+	
+	public NotationConfig() {
+	}
+	
+	public NotationConfig(String type, String info, String version) {
+		this.type = type;
+		this.info = info;
+		this.version = version;
+	}
 	
 	public static NotationConfig loadFromJSON(File jsonConfig) throws FileNotFoundException, IOException, JsonProcessingException {
 		return loadFromJSON(new FileInputStream(jsonConfig));

@@ -18,6 +18,22 @@ public class NotationElement
 	//public Object dataObj = null;
 	
 	
+	public NotationElement() {		
+	}
+	
+	public NotationElement(String name, String info, int order) {
+		this.name = name;
+		this.info = info;
+		this.order = order;
+	}
+	
+	public NotationElement(String name, String info, int order, NotationElementType elementType) {
+		this.name = name;
+		this.info = info;
+		this.order = order;
+		this.elementType = elementType; 
+	}
+	
 	public static NotationElement extractNotationElement(JsonNode node, int notSecIndex, List<String> errors)
 	{
 		NotationElement notElement = new NotationElement();
