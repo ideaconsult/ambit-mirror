@@ -33,6 +33,7 @@ public class NotationSection
 	{
 		NotationSection notSection = new NotationSection();
 		JsonNode curNode;
+		String errContext = "SECTIONS [" + (notSecIndex +1) + "]";
 
 		// NAME
 		curNode = node.path("NAME");
@@ -43,7 +44,7 @@ public class NotationSection
 					notSection.name = keyword;
 			}
 			catch (Exception x) {
-				errors.add(x.getMessage());
+				errors.add(errContext + ": " + x.getMessage());
 			}
 		}
 
@@ -56,7 +57,7 @@ public class NotationSection
 					notSection.info = keyword;
 			}
 			catch (Exception x) {
-				errors.add(x.getMessage());
+				errors.add(errContext + ": " + x.getMessage());
 			}
 		}
 
@@ -71,7 +72,7 @@ public class NotationSection
 				}	
 			}
 			catch (Exception x) {
-				errors.add(x.getMessage());
+				errors.add(errContext + ": " + x.getMessage());
 			}
 		}
 
@@ -86,7 +87,7 @@ public class NotationSection
 				}
 			}
 			catch (Exception x) {
-				errors.add(x.getMessage());
+				errors.add(errContext + ": " + x.getMessage());
 			}
 		}
 		
@@ -100,7 +101,7 @@ public class NotationSection
 				for (int i = 0; i < curNode.size(); i++)
 				{
 					NotationElement element = 
-							NotationElement.extractNotationElement(curNode.get(i), i, errors);
+							NotationElement.extractNotationElement(curNode.get(i), i, errContext, errors);
 					notSection.elements.add(element);
 				}
 			}
