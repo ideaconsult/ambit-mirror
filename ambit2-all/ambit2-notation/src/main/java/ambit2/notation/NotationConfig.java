@@ -92,14 +92,16 @@ public class NotationConfig
 		
 		//SECTIONS
 		curNode = root.path("SECTIONS");
-		if (!curNode.isArray())
-			notCfg.errors.add("SECTIONS is an array!");
-		else {
-			for (int i = 0; i < curNode.size(); i++)
-			{
-				NotationSection section = 
-						NotationSection.extractNotationSection(curNode.get(i), i, notCfg.errors);
-				notCfg.sections.add(section);
+		if (!curNode.isMissingNode()) {
+			if (!curNode.isArray())
+				notCfg.errors.add("SECTIONS is an array!");
+			else {
+				for (int i = 0; i < curNode.size(); i++)
+				{
+					NotationSection section = 
+							NotationSection.extractNotationSection(curNode.get(i), i, notCfg.errors);
+					notCfg.sections.add(section);
+				}
 			}
 		}
 		
@@ -115,7 +117,7 @@ public class NotationConfig
 		if (type != null) {
 			if (nFields > 0)
 				sb.append(",\n");
-			sb.append("\t\"TYPE\" : \"" + info + "\"");
+			sb.append("\t\"TYPE\" : \"" + type + "\"");
 			nFields++;
 		}		
 		if (info != null) {
@@ -127,7 +129,7 @@ public class NotationConfig
 		if (version != null) {
 			if (nFields > 0)
 				sb.append(",\n");
-			sb.append("\t\"VERSION\" : \"" + info + "\"");
+			sb.append("\t\"VERSION\" : \"" + version + "\"");
 			nFields++;
 		}
 		
