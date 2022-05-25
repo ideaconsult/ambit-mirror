@@ -12,11 +12,15 @@ public class NotationElement
 	
 	public String name = null;
 	public String info = null;
-	public boolean flagActive = true; 
-	public int order = -1;
-	public NotationElementType elementType = NotationElementType.STRING; 
-	//public Object dataObj = null;
 	
+	public boolean flagIsActive = false; //indicates weather it is present in JSON
+	public boolean isActive = true; 
+	
+	public boolean flagOrder = false; //indicates weather it is present in JSON
+	public int order = -1;
+	
+	public boolean flagType = false; //indicates weather it is present in JSON
+	public NotationElementType type = NotationElementType.STRING; 
 	
 	public NotationElement() {		
 	}
@@ -27,11 +31,11 @@ public class NotationElement
 		this.order = order;
 	}
 	
-	public NotationElement(String name, String info, int order, NotationElementType elementType) {
+	public NotationElement(String name, String info, int order, NotationElementType type) {
 		this.name = name;
 		this.info = info;
 		this.order = order;
-		this.elementType = elementType; 
+		this.type = type; 
 	}
 	
 	public static NotationElement extractNotationElement(JsonNode node, int notSecIndex, List<String> errors)
