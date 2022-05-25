@@ -113,7 +113,22 @@ public class NotationConfig
 			}
 		}
 		
+		notCfg.validate();
+		
 		return notCfg;
+	}
+	
+	
+	public int validate() {
+		int nValidationErrors = 0;
+		//TODO check section order correctness 
+		
+		for (int i = 0; i < sections.size(); i++) {
+			NotationSection section = sections.get(i);
+			section.validate();
+		}	
+		
+		return nValidationErrors;
 	}
 	
 	

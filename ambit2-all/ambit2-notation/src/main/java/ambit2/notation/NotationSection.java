@@ -110,6 +110,12 @@ public class NotationSection
 		return notSection;
 	}
 
+	public int validate() {
+		int nValidationErrors = 0;
+		//TODO check element order correctness
+		
+		return nValidationErrors;
+	}
 	
 	public String toJSONString(String offset) 
 	{
