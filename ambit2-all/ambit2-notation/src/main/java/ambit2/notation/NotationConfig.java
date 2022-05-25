@@ -143,6 +143,7 @@ public class NotationConfig
 		
 		if (nFields > 0)
 			sb.append(",\n");
+		sb.append("\n");
 		sb.append("\t\"SECTIONS\":\n");
 		sb.append("\t[\n");
 		for (int i = 0; i < sections.size(); i++) {
