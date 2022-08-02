@@ -151,6 +151,11 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>		
+		<dependency>
 			<groupId>org.openscience.cdk</groupId>
 			<artifactId>cdk-legacy</artifactId>
 			<version>${cdk.version}</version>

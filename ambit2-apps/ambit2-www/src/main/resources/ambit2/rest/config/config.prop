@@ -31,6 +31,9 @@ aa.local.enabled=${aa.local.enabled}
 aa.local.admin.name=${aa.local.admin.name}
 aa.local.admin.pass=${aa.local.admin.pass}
 ############################################################
+aa.oidc.enabled=${aa.oidc.enabled}
+aa.oidc.realm=${aa.oidc.realm}
+############################################################
 guard.enabled=${guard.enabled}
 guard.list=${guard.list}
 warmup.enabled=${warmup.enabled}

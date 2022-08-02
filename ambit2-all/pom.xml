@@ -581,7 +581,10 @@
 		<modbcum.version>1.0.10-SNAPSHOT</modbcum.version>
 		<dbunit.version>2.6.0</dbunit.version>
 		<slf4j.version>1.7.12</slf4j.version>
+		<!-- 
 		<jackson.version>2.4.2</jackson.version>
+		 -->
+		<jackson.version>2.13.3</jackson.version>
 		<javadoc.plugin.version>3.1.1</javadoc.plugin.version>
 		<additionalparam>-Xdoclint:none</additionalparam>
 		<doclint>none</doclint>

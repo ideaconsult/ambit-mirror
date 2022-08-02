@@ -57,6 +57,8 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	protected static final String dataset_members_prefix = "dataset.members.prefix";
 	protected static final String service_ontology = "service.ontology";
 	
+	protected static final String aa_oidc_realm = "aa.oidc.realm";
+	
 	public AMBITAppConfigProperties() {
 		super(null);
 	}
@@ -65,6 +67,10 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	public AMBITAppConfigProperties(File overridePath) {
 		super(overridePath);
 	}
+	public synchronized String getOIDCrealm() {
+		return getPropertyWithDefault(aa_oidc_realm, configProperties,null);
+	}
+
 	
 	public synchronized String getDBNameUsers() {
 		return getPropertyWithDefault(AMBITConfig.Database.name(), configProperties, "ambit_users");

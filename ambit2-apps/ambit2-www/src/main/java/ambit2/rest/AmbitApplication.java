@@ -34,6 +34,7 @@ import ambit2.base.config.AMBITConfig;
 import ambit2.base.config.Preferences;
 import ambit2.rest.aa.basic.UIBasicResource;
 import ambit2.rest.aa.basic.UINoAAResource;
+import ambit2.rest.aa.oidc.ChallengeAuthenticatorBearer;
 import ambit2.rest.aa.opensso.BookmarksAuthorizer;
 import ambit2.rest.aa.opensso.OpenSSOAuthenticator;
 import ambit2.rest.aa.opensso.OpenSSOAuthorizer;
@@ -124,7 +125,6 @@ import ambit2.rest.substance.templates.AssayTemplatesFacetResource;
 import ambit2.rest.task.TaskResource;
 import ambit2.rest.task.WarmupTask;
 import ambit2.rest.ui.API2docsResource;
-import ambit2.rest.ui.InfoResource;
 import ambit2.rest.ui.UIResource;
 import ambit2.rest.wrapper.WrappedService;
 import ambit2.user.aa.AMBITLoginFormResource;
@@ -163,7 +163,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 	public AmbitApplication(boolean standalone) {
 		super(standalone);
-		//getContext().getAttributes().put(ConfigProperties.class.getName(),properties_overridable);
+		// getContext().getAttributes().put(ConfigProperties.class.getName(),properties_overridable);
 	}
 
 	@Override
@@ -233,8 +233,9 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 		Restlet adminRouter = createAdminRouter();
 		if (getProperties_internal().isOpenToxAAEnabled()) {
-			router.attach(String.format("/%s", AdminResource.resource), getProperties_internal().protectAdminResource()
-					? createProtectedResource(adminRouter, "admin") : adminRouter);
+			router.attach(String.format("/%s", AdminResource.resource),
+					getProperties_internal().protectAdminResource() ? createProtectedResource(adminRouter, "admin")
+							: adminRouter);
 		} else
 			router.attach(String.format("/%s", AdminResource.resource), adminRouter);
 
@@ -419,14 +420,13 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		 */
 		queryRouter.attach(QueryStructureRelationResource.resource, createRelationsRouter());
 
-
 		/**
 		 * API extensions from this point on
 		 */
 
 		/**
-		 * Dataset reporting /report Practically same as /dataset , but allows
-		 * POST , so that long URIs with features could be send
+		 * Dataset reporting /report Practically same as /dataset , but allows POST , so
+		 * that long URIs with features could be send
 		 */
 		router.attach(ReportDatasetResource.resource, ReportDatasetResource.class);
 		/** /bookmark */
@@ -455,7 +455,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		router.attach(AssayTemplatesFacetResource.assaytemplate_filter, AssayTemplateResource.class);
 		router.attach(AssayTemplatesFacetResource.assaytemplate_facet, AssayTemplatesFacetResource.class);
 
-		router.attach(NMParserResource.resource,NMParserResource.class);
+		router.attach(NMParserResource.resource, NMParserResource.class);
 		/**
 		 * Images, styles, favicons, applets
 		 */
@@ -463,8 +463,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 		router.attach("/chelp", HelpResource.class);
 		router.attach("/chelp/{key}", HelpResource.class);
-		
-		//router.attach("/info", InfoResource.class);
+
+		// router.attach("/info", InfoResource.class);
 
 		router.setDefaultMatchingMode(Template.MODE_STARTS_WITH);
 		router.setRoutingMode(Router.MODE_BEST_MATCH);
@@ -555,8 +555,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 						ambit2.user.rest.resource.Resources.notify), AMBITRegistrationNotifyResource.class);
 
 				/*
-				 * /forgotten /forgotten/confirm /forgotten/notify
-				 * /forgotten/failed
+				 * /forgotten /forgotten/confirm /forgotten/notify /forgotten/failed
 				 */
 				router.attach(ambit2.user.rest.resource.Resources.forgotten, PwdForgottenResource.class);
 				router.attach(String.format("%s%s", ambit2.user.rest.resource.Resources.forgotten,
@@ -579,16 +578,12 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				router.attach("/provider", protectedRouter);
 
 				// optional challenge authenticator
+
 				ChallengeAuthenticatorTokenLocal tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true,
 						usersdbname, AMBITAppConfigProperties.configProperties);
 
 				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), getProperties(),
 						AMBITAppConfigProperties.configProperties, true);
-
-				// Filter dbAuth =
-				// UserRouter.createCookieAuthenticator(getContext(),
-				// usersdbname, AMBITAppConfigProperties.configProperties,
-				// secret, sessionLength, true);
 
 				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
 						AMBITAppConfigProperties.configProperties, getProperties().getBaseURLDepth());
@@ -596,6 +591,17 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				dbAuth.setNext(authz);
 				authz.setNext(router);
 				// dbAuth.setNext(router);
+
+				if (getProperties_internal().isOIDC_AA_Enabled())
+					try {
+						ChallengeAuthenticatorBearer bearerAuth = new ChallengeAuthenticatorBearer(getContext(), true,
+								getProperties().getOIDCrealm());
+						bearerAuth.setNext(tokenAuth);
+						return addOriginFilter(bearerAuth);
+					} catch (Exception err) {
+						err.printStackTrace();
+					}
+
 				return addOriginFilter(tokenAuth);
 
 			} else if (getProperties_internal().isSimpleSecretAAEnabled()) {
@@ -628,7 +634,9 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				getLogger().warning("Warning: No AA protection! All resources are open for GET, POST, PUT and DELETE!");
 			}
 
-		} else {
+		} else
+
+		{
 
 			// attach login
 
@@ -651,7 +659,9 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 		} // OK, AA is already there
 
-		return addOriginFilter(router);
+		return
+
+		addOriginFilter(router);
 	}
 
 	protected Router createSimilaritySearchRouter() {
@@ -706,8 +716,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		queryRouter.attach(StudySearchResource.resource, StudySearchResource.class);
 
 		/**
-		 * Missing features /missingValues - there is /filter now, may be this
-		 * is redundant ?
+		 * Missing features /missingValues - there is /filter now, may be this is
+		 * redundant ?
 		 */
 		queryRouter.attach(MissingFeatureValuesResource.resource, MissingFeatureValuesResource.class);
 
@@ -739,7 +749,6 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		cir.attach(CSLSResource.resourceID, CSLSResource.class);
 		cir.attach(CSLSResource.resourceID + CSLSResource.representationID, CSLSResource.class);
 
-
 		/**
 		 * Compound search /query/compound/lookup
 		 */
@@ -763,8 +772,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 	}
 
 	/**
-	 * Check for OpenSSO token and set the user, if available but don't verify
-	 * the policy
+	 * Check for OpenSSO token and set the user, if available but don't verify the
+	 * policy
 	 * 
 	 * @return
 	 */
@@ -872,8 +881,8 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 	}
 
 	/*
-	 * @Override public ApplicationInfo getApplicationInfo(Request request,
-	 * Response response) {
+	 * @Override public ApplicationInfo getApplicationInfo(Request request, Response
+	 * response) {
 	 * 
 	 * ApplicationInfo result = super.getApplicationInfo(request, response);
 	 * 

@@ -15,6 +15,7 @@ public class AMBITAppConfigInternal extends AMBITAppConfigProperties {
 	public static final String OPENTOX_AA_ENABLED = "aa.enabled";
 	public static final String LOCAL_AA_ENABLED = "aa.local.enabled";
 	public static final String DB_AA_ENABLED = "aa.db.enabled";
+	public static final String OIDC_AA_ENABLED = "aa.oidc.enabled";
 	
 	public static final String WARMUP_ENABLED = "warmup.enabled";
 
@@ -60,6 +61,10 @@ public class AMBITAppConfigInternal extends AMBITAppConfigProperties {
 	public synchronized boolean isSimpleSecretAAEnabled() {
 		return getBooleanPropertyWithDefault(LOCAL_AA_ENABLED,configProperties,false);
 	}
+	
+	public synchronized boolean isOIDC_AA_Enabled() {
+		return getBooleanPropertyWithDefault(OIDC_AA_ENABLED,configProperties,false);
+	}	
 
 	public synchronized boolean isWarmupEnabled() {
 		return getBooleanPropertyWithDefault(WARMUP_ENABLED,configProperties,false);

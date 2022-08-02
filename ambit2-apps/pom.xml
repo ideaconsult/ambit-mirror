@@ -45,7 +45,7 @@
 		<m2st-gatc-id>UA-25223944-1</m2st-gatc-id>
 		<m2st-gatc-config>_setDetectFlash(true),_setDetectTitle(false)</m2st-gatc-config>
 		<slf4j.version>1.7.12</slf4j.version>
-		<jackson.version>2.4.2</jackson.version>
+		<jackson.version>2.13.3</jackson.version>
 		<additionalparam>-Xdoclint:none</additionalparam>
 		<doclint>none</doclint>
 		<maven.compiler.source>1.8</maven.compiler.source>
