@@ -58,6 +58,8 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	protected static final String service_ontology = "service.ontology";
 	
 	protected static final String aa_oidc_realm = "aa.oidc.realm";
+	protected static final String aa_oidc_keyid = "aa.oidc.keyid";
+	
 	
 	public AMBITAppConfigProperties() {
 		super(null);
@@ -70,7 +72,9 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	public synchronized String getOIDCrealm() {
 		return getPropertyWithDefault(aa_oidc_realm, configProperties,null);
 	}
-
+	public synchronized String getOIDCkeyid() {
+		return getPropertyWithDefault(aa_oidc_keyid, configProperties,null);
+	}
 	
 	public synchronized String getDBNameUsers() {
 		return getPropertyWithDefault(AMBITConfig.Database.name(), configProperties, "ambit_users");

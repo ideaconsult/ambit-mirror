@@ -33,6 +33,7 @@ aa.local.admin.pass=${aa.local.admin.pass}
 ############################################################
 aa.oidc.enabled=${aa.oidc.enabled}
 aa.oidc.realm=${aa.oidc.realm}
+aa.oidc.keyid=${aa.oidc.keyid}
 ############################################################
 guard.enabled=${guard.enabled}
 guard.list=${guard.list}

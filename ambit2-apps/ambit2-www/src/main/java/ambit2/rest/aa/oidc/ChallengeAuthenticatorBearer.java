@@ -29,12 +29,13 @@ import com.google.common.io.ByteStreams;
 public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 	 public static final ChallengeScheme HTTP_BEARER = new ChallengeScheme(
 	            "HTTP_BEARER", "Bearer", "Bearer HTTP authentication");
+	 
 	public ChallengeAuthenticatorBearer(Context context, boolean optional, 
-			String realm) throws Exception {
+			String realm, String keyid) throws Exception {
 		super(context, optional, HTTP_BEARER, realm);
 		
 		Map<String, Object> discoveryPayload = ChallengeAuthenticatorBearer.getConfig(realm);
-		setVerifier(new BearerVerifier(createJWTVerifier(discoveryPayload, "nmy4hlyI6d6snwBlFD3HWJnfGOpg4xw41wQiiHDvI4I")));
+		setVerifier(new BearerVerifier(createJWTVerifier(discoveryPayload, keyid)));
 
 		//setEnroler(new BearerEnroller(context, realm));
 		setRechallenging(false);

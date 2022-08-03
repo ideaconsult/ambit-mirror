@@ -594,7 +594,7 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 				if (getProperties_internal().isOIDC_AA_Enabled())
 					try {
 						bearerAuth = new ChallengeAuthenticatorBearer(getContext(), true,
-								getProperties().getOIDCrealm());
+								getProperties().getOIDCrealm(),getProperties().getOIDCkeyid());
 					} catch (Exception err) {
 						err.printStackTrace();
 						bearerAuth = null;
