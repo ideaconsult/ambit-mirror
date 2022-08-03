@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
+import org.restlet.Restlet;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.security.ChallengeAuthenticator;
@@ -31,11 +32,12 @@ public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 	public ChallengeAuthenticatorBearer(Context context, boolean optional, 
 			String realm) throws Exception {
 		super(context, optional, HTTP_BEARER, realm);
+		
 		Map<String, Object> discoveryPayload = ChallengeAuthenticatorBearer.getConfig(realm);
 		setVerifier(new BearerVerifier(createJWTVerifier(discoveryPayload, "nmy4hlyI6d6snwBlFD3HWJnfGOpg4xw41wQiiHDvI4I")));
 
 		//setEnroler(new BearerEnroller(context, realm));
-		setRechallenging(true);
+		setRechallenging(false);
 	}
 	public static Map<String, Object> getConfig(String domain) throws Exception {
 		URL url = new URI(domain + "/.well-known/openid-configuration").normalize().toURL();
@@ -64,12 +66,14 @@ public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 	
 	@Override
 	protected int unauthenticated(Request request, Response response) {
+		
 		if (isOptional()) {
 			//if we got here because of wrong token, stop
 			if (request.getClientInfo() != null && request.getClientInfo().getUser() != null
 					&& request.getClientInfo().getUser().getIdentifier() == null && "Bearer"
 							.equals(String.valueOf(request.getClientInfo().getUser().getSecret()))) {
 				//that's it
+				//getLogger().fine(request.getClientInfo().getUser().toString());
 			} else
 				return CONTINUE;
 		}
@@ -89,7 +93,7 @@ public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 	}
 
 	/**
-	 * Missing APIKEY will be handled by the next authenticator, otherwise stop
+	 * Missing Bearer token will be handled by the next authenticator, otherwise stop
 	 * 
 	 * @param verifier_result
 	 * @return
@@ -119,11 +123,13 @@ public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 						getLogger().fine("Authentication succeeded. Valid credentials provided.");
 					}
 				}
+				//this is to avoid messing up with the buggy auth filters down the chain
+				request.setChallengeResponse(null);
 				break;
 			case Verifier.RESULT_MISSING:
 				// No credentials provided
 				if (loggable) {
-					getLogger().fine("Authentication failed. No credentials provided.");
+					getLogger().fine("Authentication failed. No token provided.");
 				}
 
 				if (!isOptional(Verifier.RESULT_MISSING)) {
@@ -133,7 +139,7 @@ public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 			case Verifier.RESULT_INVALID:
 				// Invalid credentials provided
 				if (loggable) {
-					getLogger().fine("Authentication failed. Invalid credentials provided.");
+					getLogger().fine("Authentication failed. Invalid token provided.");
 				}
 
 				if (!isOptional(Verifier.RESULT_INVALID)) {
@@ -160,5 +166,6 @@ public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 
 		return result;
 	}
+	
 
 }

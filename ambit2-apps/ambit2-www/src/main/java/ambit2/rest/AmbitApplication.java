@@ -579,30 +579,40 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 
 				// optional challenge authenticator
 
-				ChallengeAuthenticatorTokenLocal tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true,
-						usersdbname, AMBITAppConfigProperties.configProperties);
 
 				Filter dbAuth = UserRouter.createCookieAuthenticator(getContext(), getProperties(),
 						AMBITAppConfigProperties.configProperties, true);
 
 				Filter authz = UserRouter.createPolicyAuthorizer(getContext(), usersdbname,
 						AMBITAppConfigProperties.configProperties, getProperties().getBaseURLDepth());
-				tokenAuth.setNext(dbAuth);
+				
 				dbAuth.setNext(authz);
 				authz.setNext(router);
 				// dbAuth.setNext(router);
 
+				ChallengeAuthenticatorBearer bearerAuth = null;
 				if (getProperties_internal().isOIDC_AA_Enabled())
 					try {
-						ChallengeAuthenticatorBearer bearerAuth = new ChallengeAuthenticatorBearer(getContext(), true,
+						bearerAuth = new ChallengeAuthenticatorBearer(getContext(), true,
 								getProperties().getOIDCrealm());
-						bearerAuth.setNext(tokenAuth);
-						return addOriginFilter(bearerAuth);
 					} catch (Exception err) {
 						err.printStackTrace();
+						bearerAuth = null;
 					}
-
-				return addOriginFilter(tokenAuth);
+				
+				ChallengeAuthenticatorTokenLocal tokenAuth = new ChallengeAuthenticatorTokenLocal(getContext(), true,
+							usersdbname, AMBITAppConfigProperties.configProperties);
+				
+				tokenAuth.setNext(dbAuth);
+				if (bearerAuth== null) {
+					return addOriginFilter(tokenAuth);
+				} else {
+					bearerAuth.setNext(tokenAuth);
+					return addOriginFilter(bearerAuth);
+				}
+				
+				
+				
 
 			} else if (getProperties_internal().isSimpleSecretAAEnabled()) {
 
