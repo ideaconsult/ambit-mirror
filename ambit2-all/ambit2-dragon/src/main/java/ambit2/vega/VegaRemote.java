@@ -9,11 +9,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -36,6 +38,8 @@ import net.idea.modbcum.i.exceptions.AmbitException;
 public class VegaRemote {
     protected Logger logger = Logger.getLogger(getClass().getName());
     public static final String VEGA_REMOTE = "VEGA_REMOTE";
+    public static final String VEGA_REMOTE_USER = "VEGA_REMOTE_USER";
+    public static final String VEGA_REMOTE_PASS = "VEGA_REMOTE_PASS";
     protected String config;
     protected String URL;
 
@@ -56,10 +60,10 @@ public class VegaRemote {
             throw new ShellException(null, x);
         }
     }    
-    protected String getURL() throws ShellException {
-        String home = System.getenv(VEGA_REMOTE);
+    protected String getParam(String key) throws ShellException {
+        String home = System.getenv(key);
         if (home == null && config != null)
-            home = getURLFromConfig(config, VegaRemote.VEGA_REMOTE);
+            home = getURLFromConfig(config, key);
         return home;
     }
     
@@ -78,7 +82,7 @@ public class VegaRemote {
     public VegaRemote(String config) throws ShellException {
         super();
         this.config = config;   
-        this.URL = getURL();
+        this.URL = getParam(VEGA_REMOTE);
     }    
 
     protected Property getProperty(String model, String version) {
@@ -113,8 +117,10 @@ public class VegaRemote {
             throw new AmbitException(x);
         }
         try (CloseableHttpClient httpclient = HttpClientBuilder.create().build()) {
+            UsernamePasswordCredentials creds = new UsernamePasswordCredentials(getParam(VegaRemote.VEGA_REMOTE_USER),getParam(VegaRemote.VEGA_REMOTE_PASS));
             URI uri = new URIBuilder(String.format("%s/vega", this.URL)).build();
             HttpPost httprequest = new HttpPost(String.format("%s;id=ALL", uri));
+            httprequest.addHeader(new BasicScheme().authenticate(creds, httprequest, null));
             httprequest.setEntity(new StringEntity(String.format("[\"%s\"]", smiles)));
             httprequest.setHeader("Content-type", "application/json");
             try (CloseableHttpResponse response = httpclient.execute(httprequest)) {
@@ -139,6 +145,8 @@ public class VegaRemote {
         try (CloseableHttpClient httpclient = HttpClientBuilder.create().build()) {
             URI uri = new URIBuilder(this.URL).build();
             HttpGet httprequest = new HttpGet(String.format("%s", uri));
+            UsernamePasswordCredentials creds = new UsernamePasswordCredentials(getParam(VegaRemote.VEGA_REMOTE_USER),getParam(VegaRemote.VEGA_REMOTE_PASS));
+            httprequest.addHeader(new BasicScheme().authenticate(creds, httprequest, null));            
             httprequest.setHeader("Content-type", "application/json");
             try (CloseableHttpResponse response = httpclient.execute(httprequest)) {
                 if (200 == response.getStatusLine().getStatusCode()) {

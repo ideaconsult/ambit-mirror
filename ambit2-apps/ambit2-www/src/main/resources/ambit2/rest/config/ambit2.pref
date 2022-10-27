@@ -54,6 +54,8 @@ DRAGON_HOME=${DRAGON_HOME}
 #Path to Vega jar executable https://www.vegahub.eu/  
 VEGA_HOME=${VEGA_HOME}
 VEGA_REMOTE=${VEGA_REMOTE}
+VEGA_REMOTE_USER=${VEGA_REMOTE_USER}
+VEGA_REMOTE_PASS=${VEGA_REMOTE_PASS}
 JAVA_BIN=${JAVA_BIN}
 #Path to balloon executable http://users.abo.fi/mivainio/balloon/ 
 BALLOON_HOME=${BALLOON_HOME}
