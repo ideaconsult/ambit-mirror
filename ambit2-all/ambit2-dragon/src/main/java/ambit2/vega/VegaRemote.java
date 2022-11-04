@@ -35,7 +35,7 @@ import ambit2.base.data.PropertyAnnotations;
 import ambit2.base.external.ShellException;
 import net.idea.modbcum.i.exceptions.AmbitException;
 
-public class VegaRemote {
+public class VegaRemote implements VegaWrapper  {
     protected Logger logger = Logger.getLogger(getClass().getName());
     public static final String VEGA_REMOTE = "VEGA_REMOTE";
     public static final String VEGA_REMOTE_USER = "VEGA_REMOTE_USER";

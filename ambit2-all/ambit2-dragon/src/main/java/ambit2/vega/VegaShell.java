@@ -43,7 +43,7 @@ import net.idea.modbcum.i.exceptions.AmbitException;
  * @author nina
  *
  */
-public class VegaShell extends AbstractDescriptorShell {
+public class VegaShell extends AbstractDescriptorShell implements VegaWrapper {
 	/**
 	 * 
 	 */
