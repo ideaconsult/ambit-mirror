@@ -390,7 +390,7 @@ function parsePrediction(result, algoId, index) {
       }
       return true;
     });
-
+	console.log(mapRes);
     // Make the combined categories in any case for the table mode
     if (catFeatures.length > 1) 
       mapRes.categories = mergeCategories(mapRes.data, catFeatures);

@@ -118,8 +118,8 @@ public class VegaRemote implements VegaWrapper  {
         }
         try (CloseableHttpClient httpclient = HttpClientBuilder.create().build()) {
             UsernamePasswordCredentials creds = new UsernamePasswordCredentials(getParam(VegaRemote.VEGA_REMOTE_USER),getParam(VegaRemote.VEGA_REMOTE_PASS));
-            URI uri = new URIBuilder(String.format("%s/vega", this.URL)).build();
-            HttpPost httprequest = new HttpPost(String.format("%s;id=ALL", uri));
+            URI uri = new URIBuilder(String.format("%s/vega;id=PREFERRED", this.URL)).build();
+            HttpPost httprequest = new HttpPost(String.format("%s", uri));
             httprequest.addHeader(new BasicScheme().authenticate(creds, httprequest, null));
             httprequest.setEntity(new StringEntity(String.format("[\"%s\"]", smiles)));
             httprequest.setHeader("Content-type", "application/json");
@@ -131,10 +131,13 @@ public class VegaRemote implements VegaWrapper  {
                     VegaRemote.parse_remotevega(mol, root);
                     return mol;
                 } else
-                    throw new AmbitException();
+                    throw new AmbitException(response.getStatusLine().toString());
             } catch (Exception x) {
+                x.printStackTrace();
                 throw x;
             }
+        } catch (AmbitException x) {
+            throw x;
         } catch (Exception x) {
             throw new AmbitException(x);
         }
@@ -144,7 +147,7 @@ public class VegaRemote implements VegaWrapper  {
         
         try (CloseableHttpClient httpclient = HttpClientBuilder.create().build()) {
             URI uri = new URIBuilder(this.URL).build();
-            HttpGet httprequest = new HttpGet(String.format("%s", uri));
+            HttpGet httprequest = new HttpGet(String.format("%s;id=PREFERRED", uri));
             UsernamePasswordCredentials creds = new UsernamePasswordCredentials(getParam(VegaRemote.VEGA_REMOTE_USER),getParam(VegaRemote.VEGA_REMOTE_PASS));
             httprequest.addHeader(new BasicScheme().authenticate(creds, httprequest, null));            
             httprequest.setHeader("Content-type", "application/json");
@@ -177,12 +180,17 @@ public class VegaRemote implements VegaWrapper  {
     public static void parse_predictions(Iterator<Map.Entry<String, JsonNode>> pi, Map<String, Property> features,
             IAtomContainer mol) {
         while (pi.hasNext()) {
+            
             Map.Entry<String, JsonNode> p = pi.next();
             Iterator<Map.Entry<String, JsonNode>> values = p.getValue().fields();
             while (values.hasNext()) {
-                Map.Entry<String, JsonNode> v = values.next();
-                if (mol != null)
-                    mol.setProperty(features.get(v.getKey()), v.getValue().asText());
+                try {
+                    Map.Entry<String, JsonNode> v = values.next();
+                    if (mol != null)
+                        mol.setProperty(features.get(v.getKey()), v.getValue().asText());
+                } catch (Exception x) {
+                    System.err.println(x);
+                }
             }
         }
     }
