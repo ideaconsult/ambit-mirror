@@ -70,7 +70,7 @@ public class ChallengeAuthenticatorBearer extends ChallengeAuthenticator {
 		
 		if (isOptional()) {
 			//if we got here because of wrong token, stop
-			if (request.getClientInfo() != null && request.getClientInfo().getUser() != null
+			if (request.getClientInfo() != null && request.getClientInfo().getUser() != null && request.getClientInfo().getUser().getSecret() != null
 					&& request.getClientInfo().getUser().getIdentifier() == null && "Bearer"
 							.equals(String.valueOf(request.getClientInfo().getUser().getSecret()))) {
 				//that's it
