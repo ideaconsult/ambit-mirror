@@ -14,6 +14,11 @@ import ambit2.base.data.LiteratureEntry;
 import ambit2.base.data.Property;
 import ambit2.core.io.IteratingXLSReader;
 
+@Deprecated 
+/** TODO change to use with nmdataparser
+  * @author jelia
+ *
+ */
 public class EurasBCFReader extends IteratingXLSReader {
 	protected Hashtable<Double, LiteratureEntry> references;
 	public EurasBCFReader(InputStream input, int sheetIndex)

@@ -57,6 +57,8 @@ import ambit2.db.processors.RepositoryWriter;
 
 public class RepositoryWriterTest extends DbUnitTest {
 
+    @Deprecated 
+  //TODO change to use with nmdataparser
 	@Test
 	public void testWriteBCFFormat() throws Exception {
 
