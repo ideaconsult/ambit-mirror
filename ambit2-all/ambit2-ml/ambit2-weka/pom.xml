@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>ambit</groupId>
 		<artifactId>ambit2-ml</artifactId>
-		<version>4.1.0-SNAPSHOT</version>
+		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>ambit2-weka</artifactId>
 	<dependencies>

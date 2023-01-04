@@ -5,7 +5,7 @@ CDK descriptors, listed at http://qsar.sourceforge.net/dicts/qsar-descriptors/in
 	<parent>
 		<artifactId>ambit2-all</artifactId>
 		<groupId>ambit</groupId>
-		<version>4.1.0-SNAPSHOT</version>
+		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ambit2-descriptors</artifactId>
