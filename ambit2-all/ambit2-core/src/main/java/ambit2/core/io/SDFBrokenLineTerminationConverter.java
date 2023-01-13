@@ -32,10 +32,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 public class SDFBrokenLineTerminationConverter  {
-	static LoggingTool logger = new LoggingTool(SDFBrokenLineTerminationConverter.class);
+	static ILoggingTool logger = LoggingToolFactory.createLoggingTool(SDFBrokenLineTerminationConverter.class);
 	/**
 	 *  In Java, a line is considered terminated by any one of the following: a line feed \n, a carriage return \r, or a carriage return followed immediately by a line feed. 
 	 *
