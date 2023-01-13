@@ -1,7 +1,8 @@
 package ambit2.groupcontribution.test;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
@@ -16,14 +17,14 @@ import junit.framework.TestSuite;
 
 public class TestCorrectionFactors extends TestCase
 {
-	public LoggingTool logger;	
+	public ILoggingTool logger;	
 	public SmartsParser sp = new SmartsParser();
 	public IsomorphismTester isoTester = new IsomorphismTester();
 	public GCMParser gcmParser = new GCMParser(sp, isoTester);
 	
 	public TestCorrectionFactors()
 	{
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(TestCorrectionFactors.class);
 	}
 	
 	public static Test suite() 

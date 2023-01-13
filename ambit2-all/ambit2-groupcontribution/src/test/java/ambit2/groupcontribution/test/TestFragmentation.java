@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
@@ -20,11 +21,11 @@ import junit.framework.TestSuite;
 
 public class TestFragmentation extends TestCase
 {
-	public LoggingTool logger;
+	public ILoggingTool logger;
 	
 	public TestFragmentation() 
 	{   
-		logger = new LoggingTool(this);		
+		logger = LoggingToolFactory.createLoggingTool(TestFragmentation.class);		
 	}	
 	
 	public static Test suite() {

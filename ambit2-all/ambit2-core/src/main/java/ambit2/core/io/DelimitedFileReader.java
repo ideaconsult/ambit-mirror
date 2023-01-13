@@ -43,7 +43,8 @@ import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.silent.AtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.core.data.MoleculeTools;
 
@@ -56,7 +57,7 @@ public class DelimitedFileReader extends DefaultChemObjectReader implements
 		IChemObjectReader {
 	protected DelimitedFileFormat format;
 	private BufferedReader input = null;
-	private static LoggingTool logger = new LoggingTool(
+	private static ILoggingTool logger = LoggingToolFactory.createLoggingTool(
 			DelimitedFileReader.class);
 
 	/**
@@ -64,7 +65,7 @@ public class DelimitedFileReader extends DefaultChemObjectReader implements
 	 */
 	// TODO make use of IOSettings to recognise fields in the header
 	public DelimitedFileReader(Reader input, DelimitedFileFormat format) {
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(DelimitedFileReader.class);
 		this.input = new BufferedReader(input);
 		this.format = format;
 	}
