@@ -5,7 +5,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNHelper;
@@ -16,14 +17,14 @@ import ambit2.smarts.SmartsParser;
 
 public class TestSLNIsomorphism extends TestCase
 {	
-	public LoggingTool logger;
+	public ILoggingTool logger;
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
 	public IsomorphismTester isoTester = new IsomorphismTester();
 
 	public TestSLNIsomorphism() 
 	{   
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(TestSLNIsomorphism.class);
 	}
 
 	public static Test suite() {

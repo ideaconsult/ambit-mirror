@@ -46,7 +46,8 @@ import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.DefaultChemObjectReader;
 import org.openscience.cdk.io.formats.IResourceFormat;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 
 
@@ -60,7 +61,7 @@ import org.openscience.cdk.tools.LoggingTool;
  */
 public class Mopac7Reader extends DefaultChemObjectReader {
     BufferedReader input = null;
-    protected static LoggingTool logger = new LoggingTool(Mopac7Reader.class);
+    protected static ILoggingTool logger = LoggingToolFactory.createLoggingTool(Mopac7Reader.class);
     public static String[] parameters = {
     		"NO. OF FILLED LEVELS",
         	"TOTAL ENERGY",

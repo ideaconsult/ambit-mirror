@@ -5,7 +5,8 @@ import java.util.List;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.smarts.SmartsHelper;
 import ambit2.tautomers.TautomerConst;
@@ -20,11 +21,11 @@ public class CanonicTautomerTestCases extends TestCase
 	InChIGeneratorFactory igf;	
 	TautomerManager tman;
 	boolean FlagPrintTautomers = false;
-	public LoggingTool logger;
+	public ILoggingTool logger;
 	
 	public CanonicTautomerTestCases() throws Exception
 	{
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(CanonicTautomerTestCases.class);
 		igf = InChIGeneratorFactory.getInstance();
 
 		// Initialization

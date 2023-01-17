@@ -5,18 +5,19 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.smarts.SmartsManager;
 
 public class TestSmartsSearchCLG extends TestCase
 {
-	public LoggingTool logger;
+	public ILoggingTool logger;
 	SmartsManager man = new SmartsManager(SilentChemObjectBuilder.getInstance());
 	
 	public TestSmartsSearchCLG() 
 	{   
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(TestSmartsSearchCLG.class);
 		//TestUtilities.man is used by function boolSearch()
 		TestUtilities.man.setUseCDKIsomorphismTester(false); //by default it is true
 	}

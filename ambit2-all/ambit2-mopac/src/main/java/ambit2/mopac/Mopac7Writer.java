@@ -25,7 +25,8 @@ import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.DefaultChemObjectWriter;
 import org.openscience.cdk.io.formats.IResourceFormat;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.core.config.AmbitCONSTANTS;
@@ -41,7 +42,7 @@ import ambit2.smi23d.ShellMengine;
  */
 public class Mopac7Writer extends DefaultChemObjectWriter {
     private BufferedWriter writer;
-    private static LoggingTool logger = new LoggingTool(Mopac7Writer.class);
+    private static ILoggingTool logger = LoggingToolFactory.createLoggingTool(Mopac7Writer.class);
    // protected String mopac_commands = "EF GNORM=0.100 MMOK GEO-OK AM1 LET XYZ";
     //protected String mopac_commands = "AM1 NOINTER NOMM BONDS PRECISE MULLIK XYZ"; 
     protected String default_mopac_commands[] =	{
