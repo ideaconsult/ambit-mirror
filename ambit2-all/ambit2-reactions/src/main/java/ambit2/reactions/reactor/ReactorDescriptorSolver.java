@@ -2,7 +2,6 @@ package ambit2.reactions.reactor;
 
 import java.util.logging.Logger;
 
-import org.openscience.cdk.tools.LoggingTool;
 
 import ambit2.rules.conditions.AbstractDescriptorSolver;
 

@@ -10,14 +10,15 @@ import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.smarts.SmartsFingerprinter;
 import ambit2.smarts.SmartsHelper;
 import ambit2.smarts.SmartsParser;
 
 public class TestSmartsFingerprinter extends TestCase {
-	public LoggingTool logger;
+	public ILoggingTool logger;
 	public SmartsFingerprinter sfp = new SmartsFingerprinter(
 			SilentChemObjectBuilder.getInstance());
 	public Fingerprinter fp = new Fingerprinter();
@@ -26,7 +27,7 @@ public class TestSmartsFingerprinter extends TestCase {
 	String smiles[] = { "c1ccccc1", "CNNNN", "CCCCCC(CCCCC)CCCC1CCNCC1CC" };
 
 	public TestSmartsFingerprinter() {
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(TestSmartsFingerprinter.class);
 	}
 
 	public static Test suite() {

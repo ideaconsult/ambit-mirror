@@ -8,7 +8,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.reactions.ReactionDataBase;
 import ambit2.reactions.reactor.Reactor;
@@ -19,12 +20,12 @@ import ambit2.smarts.SmartsHelper;
 
 public class ReactorMetabolismTest extends TestCase
 {
-	public LoggingTool logger;
+	public ILoggingTool logger;
 	protected Reactor reactor;
 	
 	public ReactorMetabolismTest() throws Exception
 	{
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(ReactorMetabolismTest.class);
 		setupReactor();
 	}
 	

@@ -1,6 +1,7 @@
 package ambit2.tautomers.test;
 
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.tautomers.TautomerConst;
 
@@ -11,11 +12,11 @@ public class TestEnergyRanks extends TestCase
 	TestTautomers tt;
 	double eps = 0.0001;
 	boolean FlagPrintTautomers = false;
-	public LoggingTool logger;
+	public ILoggingTool logger;
 
 	public TestEnergyRanks() 
 	{
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(TestEnergyRanks.class);
 
 		// Initialization
 		tt = new TestTautomers();

@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.smarts.SmartsHelper;
 import ambit2.tautomers.zwitterion.AminoGroup;
@@ -20,11 +21,11 @@ import junit.framework.TestSuite;
 
 public class TestAcidBaseGroups extends TestCase
 {
-	public LoggingTool logger;
+	public ILoggingTool logger;
 	
 	public TestAcidBaseGroups() 
 	{   
-		logger = new LoggingTool(this);		
+		logger = LoggingToolFactory.createLoggingTool(TestAcidBaseGroups.class);		
 	}	
 	
 	public static Test suite() {

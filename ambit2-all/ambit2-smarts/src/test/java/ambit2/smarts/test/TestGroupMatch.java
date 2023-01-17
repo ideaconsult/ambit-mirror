@@ -5,7 +5,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.LoggingTool;
+import org.openscience.cdk.tools.ILoggingTool;
+import org.openscience.cdk.tools.LoggingToolFactory;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.SmartsHelper;
@@ -15,13 +16,13 @@ import ambit2.smarts.groups.GroupMatch;
 
 public class TestGroupMatch extends TestCase
 {
-	public LoggingTool logger;	
+	public ILoggingTool logger;	
 	public SmartsParser sp = new SmartsParser();
 	public IsomorphismTester isoTester = new IsomorphismTester();
 	
 	public TestGroupMatch()
 	{
-		logger = new LoggingTool(this);
+		logger = LoggingToolFactory.createLoggingTool(TestGroupMatch.class);
 	}
 	
 	public static Test suite() 
