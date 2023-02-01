@@ -51,16 +51,22 @@ public enum STRUCTURE_RELATION {
 			return COATING_OF;
 		}
 	},		
+    HAS_SHELL {
+        @Override
+        public STRUCTURE_RELATION inverseOf() {
+            return SHELL_OF;
+        }
+    },  	
 	HAS_FUNCTIONALISATION {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
 			return FUNCTIONALISATION_OF;
 		}
 	},	
-	HAS_DOPING {
+	HAS_DOPANT {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
-			return DOPING_OF;
+			return DOPANT_OF;
 		}
 	},	
 	HAS_SUBSTANCE {
@@ -112,6 +118,12 @@ public enum STRUCTURE_RELATION {
 			return HAS_COATING;
 		}
 	},
+    SHELL_OF {
+        @Override
+        public STRUCTURE_RELATION inverseOf() {
+            return HAS_COATING;
+        }
+    },	
 	CORE_OF {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
@@ -124,10 +136,10 @@ public enum STRUCTURE_RELATION {
 			return HAS_FUNCTIONALISATION;
 		}
 	},
-	DOPING_OF {
+	DOPANT_OF {
 		@Override
 		public STRUCTURE_RELATION inverseOf() {
-			return HAS_DOPING;
+			return HAS_DOPANT;
 		}
 	},	
 	HAS_STRUCTURE {
