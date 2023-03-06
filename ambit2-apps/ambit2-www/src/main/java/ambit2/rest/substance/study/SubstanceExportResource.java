@@ -144,6 +144,7 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 	protected void getCompositionProcessors(ProcessorsChain chain) {
 		final SubstanceEndpointsBundle bundle = null;
 		final ReadSubstanceComposition q = new ReadSubstanceComposition();
+		q.setExcludeHidden(true);
 		MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition> compositionReader = new MasterDetailsProcessor<SubstanceRecord, CompositionRelation, IQueryCondition>(
 				q) {
 			/**
@@ -163,8 +164,10 @@ public class SubstanceExportResource<Q extends IQueryRetrieval<SubstanceRecord>,
 
 			protected SubstanceRecord processDetail(SubstanceRecord target, CompositionRelation detail)
 					throws Exception {
+				
 				target.addStructureRelation(detail);
 				q.setRecord(null);
+				
 				return target;
 			};
 		};
