@@ -121,8 +121,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					"unit", "category", "idresult", "updated", "r_value", "r_purposeFlag", "r_studyResultType",
 					"_CONDITION_concentration_UNIT_s",
 					"_CONDITION_concentration_d",
-					"_CONDITION_Dose_UNIT_s",
-					"_CONDITION_Dose_d",					
+					"_CONDITION_dose_UNIT_s",
+					"_CONDITION_dose_d",					
 					"_CONDITION_exposure_time_UNIT_s",
 					"_CONDITION_exposure_time_d",
 					"_CONDITION_replicate_s",
@@ -162,8 +162,8 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			header_summary_refowner, 
 			"_CONDITION_concentration_UNIT_s",
 			"_CONDITION_concentration_d",
-			"_CONDITION_Dose_UNIT_s",
-			"_CONDITION_Dose_d",			
+			"_CONDITION_dose_UNIT_s",
+			"_CONDITION_dose_d",			
 			"_CONDITION_exposure_time_UNIT_s",
 			"_CONDITION_exposure_time_d",
 			"_CONDITION_replicate_s",
@@ -462,7 +462,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 										while (i.hasNext()) {
 											Object key = i.next();
 											if (key!="type_s") {
-												String tag = String.format("_CONDITION_%s",key.toString().replace("E.",""));
+												String tag = String.format("_CONDITION_%s",key.toString().replace("E.","").toLowerCase());
 												study.put(tag, prmc.get(key));
 											}
 										}
