@@ -120,13 +120,17 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 					"upValue", "err", "errQualifier", "conditions", "params", "textValue", "interpretation_result",
 					"unit", "category", "idresult", "updated", "r_value", "r_purposeFlag", "r_studyResultType",
 					"_CONDITION_concentration_UNIT_s",
+					"_CONDITION_concentration_unit_s",
 					"_CONDITION_concentration_d",
 					"_CONDITION_dose_UNIT_s",
-					"_CONDITION_dose_d",					
+					"_CONDITION_dose_unit_s",
+					"_CONDITION_dose_d",			
 					"_CONDITION_exposure_time_UNIT_s",
+					"_CONDITION_exposure_time_unit_s",
 					"_CONDITION_exposure_time_d",
+					"_CONDITION_exposure_time_s",
 					"_CONDITION_replicate_s",
-					"_CONDITION_material_s"
+					"_CONDITION_material_s","" 					
 			},
 			{ "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE" }
 
@@ -161,11 +165,15 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 			header_studyResultType, header_purposeFlag, header_summary_results, header_summary_refs,
 			header_summary_refowner, 
 			"_CONDITION_concentration_UNIT_s",
+			"_CONDITION_concentration_unit_s",
 			"_CONDITION_concentration_d",
 			"_CONDITION_dose_UNIT_s",
+			"_CONDITION_dose_unit_s",
 			"_CONDITION_dose_d",			
 			"_CONDITION_exposure_time_UNIT_s",
+			"_CONDITION_exposure_time_unit_s",
 			"_CONDITION_exposure_time_d",
+			"_CONDITION_exposure_time_s",
 			"_CONDITION_replicate_s",
 			"_CONDITION_material_s","" 
 			} };
@@ -461,6 +469,7 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 										Iterator i = prmc.keySet().iterator();
 										while (i.hasNext()) {
 											Object key = i.next();
+											if ("".equals(prmc.get(key)) || ("none".equals(prmc.get(key)))) continue;
 											if (key!="type_s") {
 												String tag = String.format("_CONDITION_%s",key.toString().replace("E.","").toLowerCase());
 												study.put(tag, prmc.get(key));
