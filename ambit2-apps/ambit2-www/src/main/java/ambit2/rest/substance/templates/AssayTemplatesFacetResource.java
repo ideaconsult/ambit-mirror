@@ -25,7 +25,7 @@ public class AssayTemplatesFacetResource<Q extends IQueryRetrieval<AssayTemplate
 	}
 	@Override
 	public String getTemplateName() {
-		return "facets/assaytemplates.ftl";
+		return "redirect.ftl";
 	}
 	
 

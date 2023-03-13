@@ -31,7 +31,7 @@
 			<li ><a href="${ambit_root}/ui/uploadsubstance1" title='Excel template with JSON configuration upload'>Spreadsheet upload</a>
 			<li ><a href="${ambit_root}/ui/uploadsubstance" title='Upload of several *.i5z , *.rdf or *.csv file'>Multiple files upload</a>
 			<li ><a href="${ambit_root}/ui/updatesubstancei5">Retrieve substance(s) from IUCLID5 server</a>
-			<li ><a href="${ambit_root}/datatemplate">Download data entry templates</a>		
+			
 		</ul>
 </li>
 <li>

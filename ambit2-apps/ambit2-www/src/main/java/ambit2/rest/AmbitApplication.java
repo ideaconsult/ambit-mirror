@@ -451,9 +451,9 @@ public class AmbitApplication extends AmbitFreeMarkerApplication<Object> {
 		// router.attach("/datatemplate", InputTemplatesResource.class);
 		// router.attach("/datatemplate/{idtemplate}",
 		// InputTemplatesResource.class);
-		router.attach(AssayTemplatesFacetResource.assaytemplate_key, AssayTemplateResource.class);
-		router.attach(AssayTemplatesFacetResource.assaytemplate_filter, AssayTemplateResource.class);
-		router.attach(AssayTemplatesFacetResource.assaytemplate_facet, AssayTemplatesFacetResource.class);
+		router.attach(AssayTemplatesFacetResource.assaytemplate_facet, AssayTemplateResource.class);
+		//router.attach(AssayTemplatesFacetResource.assaytemplate_filter, AssayTemplateResource.class);
+		//router.attach(AssayTemplatesFacetResource.assaytemplate_facet, AssayTemplatesFacetResource.class);
 
 		router.attach(NMParserResource.resource, NMParserResource.class);
 		/**

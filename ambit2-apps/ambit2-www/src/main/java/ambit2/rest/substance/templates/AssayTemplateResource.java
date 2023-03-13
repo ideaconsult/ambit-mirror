@@ -44,7 +44,7 @@ public class AssayTemplateResource<Q extends IQueryRetrieval<TR>> extends AmbitD
 
 	@Override
 	public String getTemplateName() {
-		return "jsonplaceholder.ftl";
+		return "redirect.ftl";
 	}
 
 	@Override
