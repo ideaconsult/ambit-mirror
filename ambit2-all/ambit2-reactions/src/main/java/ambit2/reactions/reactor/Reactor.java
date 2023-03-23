@@ -19,6 +19,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainerSet;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import ambit2.base.data.StructureRecord;
 import ambit2.base.exceptions.EmptyMoleculeException;
@@ -46,7 +47,9 @@ public class Reactor
 	protected Stack<ReactorNode> reactorNodes = new Stack<ReactorNode>();
 	protected TreeSet<String> nodeHashCodes = new TreeSet<String>();
 	protected InChIGeneratorFactory igf = null;
-	List<INCHI_OPTION> igf_options = null;
+	//List<INCHI_OPTION> igf_options = null;
+	String igf_options_string = null;
+	
 	
 	protected IDescriptorSolver descriptorSolver = null;
 	
@@ -64,14 +67,17 @@ public class Reactor
 	
 	protected void setupInchiGenerator() throws Exception
 	{
+		igf_options_string = "FixedH";
+		/*
 		igf_options = new ArrayList<INCHI_OPTION>();
 		igf_options.add(INCHI_OPTION.FixedH);
 		igf_options.add(INCHI_OPTION.SAbs);
 		igf_options.add(INCHI_OPTION.SAsXYZ);
 		igf_options.add(INCHI_OPTION.SPXYZ);
 		igf_options.add(INCHI_OPTION.FixSp3Bug);
-		
+		*/
 		igf = InChIGeneratorFactory.getInstance();
+		
 	}
 	
 	protected void setupDescriptoSolver()
@@ -390,12 +396,22 @@ public class Reactor
 		if (strategy.FlagCalcProductInchiKey)
 		{
 			try{
-				InChIGenerator ig = igf.getInChIGenerator(mol, igf_options);
+				System.out.println("Mol nAtoms: " + mol.getAtomCount() + "  " + SmartsHelper.moleculeToSMILES(mol, true));
+				//MoleculeTools.convertExplicitHAtomsToImplicit(mol);
+				//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+				//System.out.println(SmartsHelper.getAtomsAttributes(mol));
+				//System.out.println(InChIGeneratorFactory.getInstance().getInChIGenerator(mol, "FixedH").getInchi());
+				
+				InChIGenerator ig = igf.getInChIGenerator(mol, igf_options_string);
+				//System.out.println("--->" + ig.getInchiKey());
+								
 				mol.setProperty(PropertyInchiKey, ig.getInchiKey());
+				//mol.setProperty(PropertyInchiKey, InChIGeneratorFactory.getInstance().getInChIGenerator(mol, "FixedH").getInchi());
 			}
 			catch(Exception e){};
 		}
 		
+		 		
 		if (strategy.FlagRemoveReagentIfAllowedProduct)
 		{
 			String inchiKey = mol.getProperty(PropertyInchiKey);
