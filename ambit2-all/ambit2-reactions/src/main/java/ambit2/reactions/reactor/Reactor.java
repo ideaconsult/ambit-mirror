@@ -34,6 +34,7 @@ import ambit2.rules.conditions.IDescriptorSolver;
 import ambit2.rules.conditions.INeedsDescriptorSolver;
 import ambit2.smarts.SMIRKSManager;
 import ambit2.smarts.SmartsHelper;
+import io.github.dan2097.jnainchi.InchiStatus;
 
 public class Reactor 
 {	
@@ -396,17 +397,19 @@ public class Reactor
 		if (strategy.FlagCalcProductInchiKey)
 		{
 			try{
-				System.out.println("Mol nAtoms: " + mol.getAtomCount() + "  " + SmartsHelper.moleculeToSMILES(mol, true));
+				//System.out.println("Mol nAtoms: " + mol.getAtomCount() + "  " + SmartsHelper.moleculeToSMILES(mol, true));
 				//MoleculeTools.convertExplicitHAtomsToImplicit(mol);
 				//AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-				//System.out.println(SmartsHelper.getAtomsAttributes(mol));
-				//System.out.println(InChIGeneratorFactory.getInstance().getInChIGenerator(mol, "FixedH").getInchi());
+				//System.out.println(SmartsHelper.getAtomsAttributes(mol));				
 				
-				InChIGenerator ig = igf.getInChIGenerator(mol, igf_options_string);
-				//System.out.println("--->" + ig.getInchiKey());
-								
-				mol.setProperty(PropertyInchiKey, ig.getInchiKey());
-				//mol.setProperty(PropertyInchiKey, InChIGeneratorFactory.getInstance().getInChIGenerator(mol, "FixedH").getInchi());
+				InChIGenerator ig = igf.getInChIGenerator(mol, igf_options_string);				
+				if (ig.getStatus() != InchiStatus.SUCCESS) {
+					logger.severe("Undable to generated InChIKey for node molecule: "
+							+ SmartsHelper.moleculeToSMILES(mol, true) + " Node: " + node.calcNodeHash());
+					mol.setProperty(PropertyInchiKey, "dummy-inchikey");
+				}	
+				else
+					mol.setProperty(PropertyInchiKey, ig.getInchiKey());
 			}
 			catch(Exception e){};
 		}
