@@ -65,6 +65,6 @@ http://sourceforge.net/projects/oscar3-chem/files/</description>
 	</build>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<opsin.version>2.5.0</opsin.version>
+		<opsin.version>2.7.0</opsin.version>
 	</properties>
 </project>
