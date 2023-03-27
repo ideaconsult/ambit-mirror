@@ -38,6 +38,19 @@ public class EffectRecordTest {
 		value.setUpValue("6.28");
 		System.out.println(value.toString());
 	}
+	
+    @Test
+    public void testValueErr() throws Exception {
+        Value value = new Value();
+        value.setUnits("mg");
+        value.setLoValue(3.14);
+        value.setLoQualifier("ca.");
+        value.setUpQualifier("<=");
+        value.setUpValue("6.28");
+        value.setErrQualifier("SD");
+        value.setErrValue(0.314);
+        System.out.println(value.toString());
+    }	
 
 	@Test
 	public void testEndpointHash() throws Exception {
@@ -129,7 +142,8 @@ public class EffectRecordTest {
 		for (Protocol._categories c : Protocol._categories.values() ) {
 			if (c.toString().toLowerCase().indexOf("assay")>=0) continue;
 			
-			System.out.println(String.format("// comment\t%s\n{\"PROTOCOL_TOP_CATEGORY\"=\"%s\",\t\"PROTOCOL_CATEGORY_CODE\":\"%s\"}\t",c.toString(),c.getTopCategory(),c.name()));
+			//System.out.println(String.format("// comment\t%s\n{\"PROTOCOL_TOP_CATEGORY\"=\"%s\",\t\"PROTOCOL_CATEGORY_CODE\":\"%s\"}\t",c.toString(),c.getTopCategory(),c.name()));
+			System.out.println(String.format("\t%s\t%s\t%s",c.getSortingOrder(),c.getTopCategory(),c.name()));
 		}
 	}
 	

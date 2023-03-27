@@ -469,6 +469,8 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 				rvalue.setLoValue(null);
 				rvalue.setUpValue(null);
 				rvalue.setUnits(null);
+				rvalue.setErrQualifier(null);
+				rvalue.setErrValue(null);
 
 				JsonNode jn = range.get(EffectRecord._fields.textValue.name());
 				if (jn != null && !"".equals(jn.textValue()))
@@ -484,7 +486,6 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 						rvalue.setLoValue(jn.asDouble());
 
 					jn = range.get(EffectRecord._fields.upQualifier.name());
-
 					if (jn != null) {
 						if (!"".equals(jn.textValue()))
 							rvalue.setUpQualifier(jn.textValue());
@@ -499,6 +500,16 @@ public class SubstanceStudyParser extends DefaultIteratingChemObjectReader
 						rvalue.setUnits(jn.textValue());
 					}
 
+                    jn = range.get(EffectRecord._fields.errQualifier.name());
+                    if (jn != null) {
+                        if (!"".equals(jn.textValue()))
+                            rvalue.setErrQualifier(jn.textValue());
+                    }
+					
+                    jn = range.get(EffectRecord._fields.errorValue.name());
+                    if (jn != null && !"".equals(jn.textValue()))
+                        rvalue.setErrValue(jn.asDouble());
+                    
 					params.put(val.getKey(), rvalue);
 
 				}

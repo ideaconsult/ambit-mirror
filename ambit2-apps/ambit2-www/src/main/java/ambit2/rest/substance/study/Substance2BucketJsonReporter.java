@@ -585,9 +585,16 @@ public class Substance2BucketJsonReporter extends AbstractBucketJsonReporter<Sub
 						newprm.put(String.format("%s_LOVALUE_d", key.toString()), v.getLoValue());
 						if (v.getLoQualifier() != null && !"".equals(v.getLoQualifier().trim()))
 							newprm.put(String.format("%s_LOQUALIFIER_s", key.toString()), v.getLoQualifier());
+						
 						newprm.put(String.format("%s_UPVALUE_d", key.toString()), v.getUpValue());
 						if (v.getUpQualifier() != null && !"".equals(v.getUpQualifier().trim()))
 							newprm.put(String.format("%s_UPQUALIFIER_s", key.toString()), v.getUpQualifier());
+						
+						if (v.getErrQualifier() != null && !"".equals(v.getErrQualifier()))
+							newprm.put(String.format("%s_ERRQUALIFIER_s", key.toString()), v.getErrQualifier());
+						if (v.getErrValue()!=null)
+							newprm.put(String.format("%s_ERRVALUE_d", key.toString()), v.getErrValue());
+						
 					} else if (v.getLoValue() != null) {
 						newprm.put(String.format("%s_d", key.toString()), v.getLoValue());
 					}

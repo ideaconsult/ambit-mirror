@@ -1,5 +1,6 @@
 package ambit2.base.data.study;
 
+import ambit2.base.data.study.EffectRecord._fields;
 import ambit2.base.json.JSONUtils;
 
 /**
@@ -31,7 +32,25 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 	protected String loQualifier;
 	protected String upQualifier;
 	protected String annotation;
+    protected String errQualifier;
+    public String getErrQualifier() {
+        return errQualifier;
+    }
 
+    public void setErrQualifier(String errQualifier) {
+        this.errQualifier = errQualifier;
+    }
+
+    public Double getErrValue() {
+        return errValue;
+    }
+
+    public void setErrValue(Double errValue) {
+        this.errValue = errValue;
+    }
+
+    protected Double errValue = null;
+    
 	public Value() {
 	}
 
@@ -143,6 +162,20 @@ public class Value<VALUE> implements IValue<VALUE, String, String> {
 			serialize(getUpValue(), b);
 			comma = ", ";
 		}
+        if (getErrQualifier() != null) {
+            b.append(comma);
+            b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.errQualifier.name())));
+            b.append(":\t");
+            b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(getErrQualifier())));
+            comma = ", ";
+        }
+        if (getErrValue() != null) {
+            b.append(comma);
+            b.append(JSONUtils.jsonQuote(JSONUtils.jsonEscape(_fields.errorValue.name())));
+            b.append(":\t");
+            b.append(JSONUtils.jsonNumber(getErrValue()));
+            comma = ", ";
+        }		
 		if (getAnnotation() != null) {
 			b.append(comma);
 			b.append("\t\"annotation\":");
