@@ -36,6 +36,7 @@ public class TestSMIRKS {
 	// All tests fail , if hydrogens are explicit!
 	boolean explicitH = true;
 	boolean FlagApplyStereoTransformation = false;
+	boolean FlagLogoutProductSmiles = false;
 
 	SMIRKSManager smrkMan = new SMIRKSManager(
 			SilentChemObjectBuilder.getInstance());
@@ -82,6 +83,9 @@ public class TestSMIRKS {
 
 			for (int k = 0; k < ms.getAtomContainerCount(); k++) {
 				IAtomContainer ac = ms.getAtomContainer(k);
+				if (FlagLogoutProductSmiles) 
+					logger.info("Product "  + k + ": " + smigen.createSMILES(ac));
+				
 				if (ac.getAtomCount() == query.getAtomCount()) {
 					isoTester.setQuery(query);
 					smartsParser.setSMARTSData(ac);
