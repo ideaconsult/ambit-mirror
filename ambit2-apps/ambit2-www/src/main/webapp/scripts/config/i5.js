@@ -3424,6 +3424,20 @@ var config_i5 = {
 			}
 		}
 	},
+		"ORE_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},
+		"ECR_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},		
 	"EXPOSURE_SECTION" : {
 		"parameters" : config_exposure["parameters"],
 		"effects" : config_exposure["effects"],
