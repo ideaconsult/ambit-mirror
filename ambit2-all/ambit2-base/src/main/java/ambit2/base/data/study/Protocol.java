@@ -3715,7 +3715,7 @@ public class Protocol {
 
 			@Override
 			public String toString() {
-				return "ORE- Occupational Release";
+				return "Occupational Release";
 			}
 
 			@Override
@@ -3737,7 +3737,7 @@ public class Protocol {
 
             @Override
             public String toString() {
-                return "ECR- Environmental Consumer Release";
+                return "Environmental Consumer Release";
             }
 
             @Override
