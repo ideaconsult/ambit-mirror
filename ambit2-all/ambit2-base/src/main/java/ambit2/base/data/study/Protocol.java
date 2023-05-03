@@ -3702,10 +3702,10 @@ public class Protocol {
 			}
 
 		},
-		EXPOSURE_MANUFACTURE_SECTION {
+		ORE_SECTION {
 			@Override
 			public String getNumber() {
-				return "3.5.1";
+				return "ORE";
 			}
 
 			@Override
@@ -3715,7 +3715,7 @@ public class Protocol {
 
 			@Override
 			public String toString() {
-				return "Use and exposure information. Manufacture";
+				return "ORE- Occupational Release";
 			}
 
 			@Override
@@ -3724,6 +3724,28 @@ public class Protocol {
 			}
 
 		},
+        ECR_SECTION {
+            @Override
+            public String getNumber() {
+                return "ECR";
+            }
+
+            @Override
+            public String getTopCategory() {
+                return "EXPOSURE";
+            }
+
+            @Override
+            public String toString() {
+                return "ECR- Environmental Consumer Release";
+            }
+
+            @Override
+            public int getSortingOrder() {
+                return 3510;
+            }
+
+        },		
 		EXPOSURE_FORMULATION_REPACKAGING_SECTION {
 			@Override
 			public String getNumber() {

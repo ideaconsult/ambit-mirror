@@ -1122,6 +1122,20 @@ var config_study = {
 			"protocol" : config_bao["protocol"],
 			"interpretation" : config_bao["interpretation"]
 		},
+		"ORE_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},
+		"ECR_SECTION" : {
+			"parameters" : config_exposure["parameters"],
+			"effects" : config_exposure["effects"],
+			"conditions" : config_exposure["conditions"],
+			"protocol" : config_exposure["protocol"],
+			"interpretation" : config_exposure["interpretation"]
+		},				
 		"EXPOSURE_MANUFACTURE_SECTION" : {
 			"parameters" : config_exposure["parameters"],
 			"effects" : config_exposure["effects"],
