@@ -527,6 +527,18 @@
 		"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreeverhaar2"
 	},
 	{
+		"id": "toxtreefuncgroups",
+		"name": "ToxTree:ISS Functional groups",
+		"class": "toxtree.plugins.func.FuncRules",
+		"inputparam": null,
+		"type": [
+			"http://www.opentox.org/algorithmTypes.owl#Rules"
+		],
+		"endpoint": "http://www.opentox.org/echaEndpoints.owl#FunctionalGroups",
+		"requires": "structure",
+		"implementationof": "http://ambit.sourceforge.net/descriptors.owl#toxtreefuncgroups"
+	},	
+	{
 		"id": "toxtreeeye",
 		"name": "ToxTree: Eye irritation",
 		"class": "eye.EyeIrritationRules",

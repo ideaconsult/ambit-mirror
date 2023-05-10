@@ -714,6 +714,11 @@
 			<version>${toxtree.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>toxtree</groupId>
+			<artifactId>toxtree-functional_groups</artifactId>
+			<version>${toxtree.version}</version>
+		</dependency>		
+		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>ambit2-dragon</artifactId>
 			<version>${ambit.version}</version>
