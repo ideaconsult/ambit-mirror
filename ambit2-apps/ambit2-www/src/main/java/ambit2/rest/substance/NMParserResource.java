@@ -252,8 +252,10 @@ public class NMParserResource extends CatalogResource<String> {
 		} finally {
 			writer.write("\n],");
 			writer.write("\"annotations\" : {\n");
+			String comma = "";
 			try {
 				for (Map.Entry<String,String[]> e : annotations.entrySet()) {
+					writer.write(comma);
 					writer.write(String.format("%s : [\n",JSONUtils.jsonQuote(JSONUtils.jsonEscape(e.getKey()))));
 					String d = "";
 					for (String t : e.getValue()) {
@@ -261,6 +263,7 @@ public class NMParserResource extends CatalogResource<String> {
 						d=",";
 					}
 					writer.write("\n]");
+					comma=",";
 				}
 			} catch (Exception x) {}
 			writer.write("\n}");
