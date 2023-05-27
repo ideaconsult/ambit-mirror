@@ -108,6 +108,14 @@ public class NMParserResource extends CatalogResource<String> {
 								prefix.substring(0, 3));
 						try (StringWriter writer = new StringWriter()) {
 							//StructureRecordValidator validator = new StructureRecordValidator();
+							SubstanceRecordAnnotationProcessor annotator = null;
+							try {
+								annotator = new SubstanceRecordAnnotationProcessor(
+										new File(((AmbitFreeMarkerApplication) getApplication()).getProperties().getMapFolder()), false);
+							} catch (Exception x) {
+								Logger.getGlobal().log(Level.WARNING, x.getMessage());
+								annotator = null;
+							}							
 							DictionaryConfig _dict = new DictionaryConfigPropertyRB(((AmbitFreeMarkerApplication) getApplication()).getProperties().getNMParserDictFolder());
 									
 							final String file_name = xlsxfile.getName();
@@ -135,7 +143,7 @@ public class NMParserResource extends CatalogResource<String> {
 									|| outmedia.equals(ChemicalMediaType.APPLICATION_JSONLD))
 								return writeAsRDF(parser, validator, expandmapper, outmedia);
 							else {
-								writeAsJSON(parser, validator, expandmapper, writer);
+								writeAsJSON(parser, validator, expandmapper, annotator, writer);
 								return new StringRepresentation(writer.toString(), MediaType.APPLICATION_JSON);
 							}
 						} catch (Exception x) {
@@ -198,7 +206,9 @@ public class NMParserResource extends CatalogResource<String> {
 	 * (parser != null) parser.close(); } }
 	 */
 	public int writeAsJSON(IRawReader<IStructureRecord> reader, StructureRecordValidator validator,
-			SubstanceRecordMapper mapper, StringWriter writer) throws Exception {
+			SubstanceRecordMapper mapper, 
+			SubstanceRecordAnnotationProcessor annotator,
+			StringWriter writer) throws Exception {
 		int records = 0;
 		try {
 			writer.write("{ \"substance\" : [\n");
@@ -212,6 +222,8 @@ public class NMParserResource extends CatalogResource<String> {
 						validator.process((IStructureRecord) record);
 					if (mapper != null)
 						record = mapper.process((IStructureRecord) record);
+					if ((annotator != null) && (record instanceof SubstanceRecord))
+						record = annotator.process((SubstanceRecord)record);
 					String tmp = ((SubstanceRecord) record).toJSON("http://localhost/ambit2", true);
 					writer.write(delimiter);
 					writer.write(tmp);
