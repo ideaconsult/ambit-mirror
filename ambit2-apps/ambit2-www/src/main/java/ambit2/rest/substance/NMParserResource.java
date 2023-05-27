@@ -7,8 +7,10 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +40,7 @@ import ambit2.base.data.lookup.DictionaryConfigPropertyRB;
 import ambit2.base.data.lookup.SubstanceStudyValidator;
 import ambit2.base.data.study.StructureRecordValidator;
 import ambit2.base.interfaces.IStructureRecord;
+import ambit2.base.json.JSONUtils;
 import ambit2.base.ro.SubstanceRecordAnnotationProcessor;
 import ambit2.core.io.IRawReader;
 import ambit2.rest.AmbitFreeMarkerApplication;
@@ -107,28 +110,34 @@ public class NMParserResource extends CatalogResource<String> {
 						GenericExcelParser parser = new GenericExcelParser(xlsxfile.getInputStream(), config, true,
 								prefix.substring(0, 3));
 						try (StringWriter writer = new StringWriter()) {
-							//StructureRecordValidator validator = new StructureRecordValidator();
+							// StructureRecordValidator validator = new StructureRecordValidator();
 							SubstanceRecordAnnotationProcessor annotator = null;
 							try {
-								annotator = new SubstanceRecordAnnotationProcessor(
-										new File(((AmbitFreeMarkerApplication) getApplication()).getProperties().getMapFolder()), false);
+								annotator = new SubstanceRecordAnnotationProcessor(new File(
+										((AmbitFreeMarkerApplication) getApplication()).getProperties().getMapFolder()),
+										false);
 							} catch (Exception x) {
 								Logger.getGlobal().log(Level.WARNING, x.getMessage());
 								annotator = null;
-							}							
-							DictionaryConfig _dict = new DictionaryConfigPropertyRB(((AmbitFreeMarkerApplication) getApplication()).getProperties().getNMParserDictFolder());
-									
+							}
+							DictionaryConfig _dict = new DictionaryConfigPropertyRB(
+									((AmbitFreeMarkerApplication) getApplication()).getProperties()
+											.getNMParserDictFolder());
+
 							final String file_name = xlsxfile.getName();
-							SubstanceStudyValidator validator =  new SubstanceStudyValidator(_dict,file_name, true, prefix) {
+							SubstanceStudyValidator validator = new SubstanceStudyValidator(_dict, file_name, true,
+									prefix) {
 								public boolean isAddDefaultComposition() {
 									return true;
 								}
+
 								@Override
 								public IStructureRecord validate(SubstanceRecord record) throws Exception {
-									record = StructureRecordValidator.basic_validation(record,file_name, file_name.toLowerCase().endsWith(".xlsx"), new Date());
+									record = StructureRecordValidator.basic_validation(record, file_name,
+											file_name.toLowerCase().endsWith(".xlsx"), new Date());
 									return super.validate(record);
 								}
-							};							
+							};
 							validator.setPrefix(prefix);
 							validator.setFixErrors(true);
 							SubstanceRecordMapper expandmapper = null;
@@ -206,10 +215,10 @@ public class NMParserResource extends CatalogResource<String> {
 	 * (parser != null) parser.close(); } }
 	 */
 	public int writeAsJSON(IRawReader<IStructureRecord> reader, StructureRecordValidator validator,
-			SubstanceRecordMapper mapper, 
-			SubstanceRecordAnnotationProcessor annotator,
-			StringWriter writer) throws Exception {
+			SubstanceRecordMapper mapper, SubstanceRecordAnnotationProcessor annotator, StringWriter writer)
+			throws Exception {
 		int records = 0;
+		Map<String, String[]> annotations = new HashMap<String, String[]>();
 		try {
 			writer.write("{ \"substance\" : [\n");
 			String delimiter = "";
@@ -222,8 +231,10 @@ public class NMParserResource extends CatalogResource<String> {
 						validator.process((IStructureRecord) record);
 					if (mapper != null)
 						record = mapper.process((IStructureRecord) record);
-					if ((annotator != null) && (record instanceof SubstanceRecord))
-						record = annotator.process((SubstanceRecord)record);
+					if ((annotator != null) && (record instanceof SubstanceRecord)) {
+						record = annotator.process((SubstanceRecord) record);
+						annotator.annotate_all((SubstanceRecord) record, annotations);
+					}
 					String tmp = ((SubstanceRecord) record).toJSON("http://localhost/ambit2", true);
 					writer.write(delimiter);
 					writer.write(tmp);
@@ -235,11 +246,25 @@ public class NMParserResource extends CatalogResource<String> {
 				}
 				records++;
 			}
-			
+
 		} catch (Exception x) {
 			// logger_cli.log(Level.WARNING, x.getMessage(), x);
 		} finally {
-			writer.write("\n]}");
+			writer.write("\n],");
+			writer.write("\"annotations\" : {\n");
+			try {
+				for (Map.Entry<String,String[]> e : annotations.entrySet()) {
+					writer.write(String.format("%s : [\n",JSONUtils.jsonQuote(JSONUtils.jsonEscape(e.getKey()))));
+					String d = "";
+					for (String t : e.getValue()) {
+						writer.write(String.format("%s%s",d,JSONUtils.jsonQuote(JSONUtils.jsonEscape(t))));
+						d=",";
+					}
+					writer.write("\n]");
+				}
+			} catch (Exception x) {}
+			writer.write("\n}");
+			writer.write("\n}");
 			// logger_cli.log(Level.INFO, "MSG_IMPORTED", new Object[] { records });
 		}
 		return records;
@@ -260,7 +285,7 @@ public class NMParserResource extends CatalogResource<String> {
 		Request hack = new Request();
 		hack.setRootRef(new Reference("http://localhost/ambit2"));
 
-		SubstanceRDFReporter exporter = new SubstanceRDFReporter(hack, outmedia,annotator);
+		SubstanceRDFReporter exporter = new SubstanceRDFReporter(hack, outmedia, annotator);
 		Model model = ModelFactory.createDefaultModel();
 		exporter.header(model, null);
 		exporter.setOutput(model);
