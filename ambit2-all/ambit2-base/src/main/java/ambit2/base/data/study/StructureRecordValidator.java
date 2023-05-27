@@ -1,13 +1,16 @@
 package ambit2.base.data.study;
 
+import java.io.File;
+import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import net.idea.modbcum.p.DefaultAmbitProcessor;
 import ambit2.base.data.Property;
 import ambit2.base.data.SubstanceRecord;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.relation.composition.CompositionRelation;
+import net.idea.modbcum.p.DefaultAmbitProcessor;
 
 public class StructureRecordValidator extends
 		DefaultAmbitProcessor<IStructureRecord, IStructureRecord> {
@@ -15,6 +18,7 @@ public class StructureRecordValidator extends
 	/**
      * 
      */
+    protected static Logger logger_cli = Logger.getLogger(StructureRecordValidator.class.getName());
 	private static final long serialVersionUID = 201323883830157691L;
 	protected boolean fixErrors = false;
 	protected String prefix = "XLSX";
@@ -62,6 +66,31 @@ public class StructureRecordValidator extends
 		return record;
 	}
 
+	public static SubstanceRecord basic_validation(SubstanceRecord record, String content, boolean xlsx, Date updated ) throws Exception {
+        record.setContent(content);
+        record.setFormat(xlsx ? "xlsx" : "xls");
+        if (record.getRelatedStructures() != null && !record.getRelatedStructures().isEmpty()) {
+
+            for (int i = record.getRelatedStructures().size() - 1; i >= 0; i--) {
+                CompositionRelation rel = record.getRelatedStructures().get(i);
+                int props = 0;
+                for (Property p : rel.getSecondStructure().getRecordProperties()) {
+                    Object val = rel.getSecondStructure().getRecordProperty(p);
+                    if (val != null && !"".equals(val.toString()))
+                        props++;
+                }
+                if ((rel.getContent() == null || "".equals(rel.getContent())) && (props == 0))
+                    record.getRelatedStructures().remove(i);
+
+            }
+
+        }
+        if (record.getMeasurements() != null)
+            for (ProtocolApplication papp : record.getMeasurements()) {
+                papp.setUpdated(updated);
+            }
+        return record;
+    }
 	public IStructureRecord validate(SubstanceRecord record) throws Exception {
 		if (record.getOwnerName() == null) {
 			logger.log(Level.WARNING, "Missing substance owner name");

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,6 +33,9 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFWriter;
 
 import ambit2.base.data.SubstanceRecord;
+import ambit2.base.data.lookup.DictionaryConfig;
+import ambit2.base.data.lookup.DictionaryConfigPropertyRB;
+import ambit2.base.data.lookup.SubstanceStudyValidator;
 import ambit2.base.data.study.StructureRecordValidator;
 import ambit2.base.interfaces.IStructureRecord;
 import ambit2.base.ro.SubstanceRecordAnnotationProcessor;
@@ -103,7 +107,20 @@ public class NMParserResource extends CatalogResource<String> {
 						GenericExcelParser parser = new GenericExcelParser(xlsxfile.getInputStream(), config, true,
 								prefix.substring(0, 3));
 						try (StringWriter writer = new StringWriter()) {
-							StructureRecordValidator validator = new StructureRecordValidator();
+							//StructureRecordValidator validator = new StructureRecordValidator();
+							DictionaryConfig _dict = new DictionaryConfigPropertyRB(((AmbitFreeMarkerApplication) getApplication()).getProperties().getNMParserDictFolder());
+									
+							final String file_name = xlsxfile.getName();
+							SubstanceStudyValidator validator =  new SubstanceStudyValidator(_dict,file_name, true, prefix) {
+								public boolean isAddDefaultComposition() {
+									return true;
+								}
+								@Override
+								public IStructureRecord validate(SubstanceRecord record) throws Exception {
+									record = StructureRecordValidator.basic_validation(record,file_name, file_name.toLowerCase().endsWith(".xlsx"), new Date());
+									return super.validate(record);
+								}
+							};							
 							validator.setPrefix(prefix);
 							validator.setFixErrors(true);
 							SubstanceRecordMapper expandmapper = null;

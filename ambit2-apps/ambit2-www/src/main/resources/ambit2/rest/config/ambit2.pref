@@ -201,3 +201,4 @@ solr.basic.password.9=${solr.basic.password.9}
 solr.filter=${solr.filter}
 ##############################################################
 map.folder=${map.folder}
+nmparser_dict.folder=${nmparser_dict.folder}

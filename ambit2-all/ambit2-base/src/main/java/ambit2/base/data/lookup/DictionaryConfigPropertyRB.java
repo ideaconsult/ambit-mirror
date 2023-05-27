@@ -1,4 +1,4 @@
-package ambit2.dbsubstance;
+package ambit2.base.data.lookup;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +23,7 @@ public class DictionaryConfigPropertyRB extends DictionaryConfig<PropertyResourc
 		try (InputStream pstream = new FileInputStream(file)) {
 			return new PropertyResourceBundle(pstream);
 		} catch (Exception err) {
-			logger_cli.log(Level.WARNING, String.format("Not found\t%s\t%s", file.getAbsoluteFile()));
+			logger_cli.log(Level.WARNING, String.format("Not found\t%s", file.getAbsoluteFile()));
 			return null;
 		}
 		  

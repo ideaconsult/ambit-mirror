@@ -1,4 +1,4 @@
-package ambit2.dbsubstance;
+package ambit2.base.data.lookup;
 
 
 public enum _DICT {

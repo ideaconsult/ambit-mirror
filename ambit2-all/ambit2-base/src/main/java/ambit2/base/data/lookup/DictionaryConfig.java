@@ -1,4 +1,4 @@
-package ambit2.dbsubstance;
+package ambit2.base.data.lookup;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class DictionaryConfig<RB extends ResourceBundle> {
-	protected static Logger logger_cli = Logger.getLogger(DBSubstanceImport.class.getName());
+	protected static Logger logger_cli = Logger.getLogger(DictionaryConfig.class.getName());
 	protected String root;
 	protected Map<_DICT,RB> bundles = new HashMap<_DICT,RB>();
 
@@ -35,7 +35,7 @@ public class DictionaryConfig<RB extends ResourceBundle> {
 	public String getPath(_DICT dict) {
 		return String.format("%s/%s",getRoot(),dict.getResource());
 	}
-	protected String getMappedString(String key,  _DICT dict) {
+	public String getMappedString(String key,  _DICT dict) {
 		return getMappedString(key, dict, key);
 	}
 

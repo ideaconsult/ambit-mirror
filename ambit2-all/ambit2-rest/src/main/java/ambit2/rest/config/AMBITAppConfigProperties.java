@@ -51,6 +51,7 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 	protected static final String solr_filter = "solr.filter";
 
 	protected static final String map_folder = "map.folder";
+	protected static final String nmparser_dict = "nmparser_dict.folder";
 	protected static final String jsonp = "jsonp";
 	protected static final String database_create = "database.create";
 	protected static final String rdf_writer = "rdf.writer";
@@ -185,6 +186,25 @@ public class AMBITAppConfigProperties extends AMBITConfigProperties {
 			return null;
 		}
 	}
+	
+
+    public synchronized String getNMParserDictFolder() {
+        String v = null;
+        try {
+            v = getProperty(nmparser_dict, ambitProperties);
+            if ((v != null) && !"".equals(v) && !v.startsWith("${")) 
+                    return v;
+            else v = null; 
+            
+        } catch (Exception x) {
+            
+        }
+        if (v == null)  {
+            v = getMapFolder();
+            return v.replace("annotation","nanodata");
+        }   
+        return null;
+    }
 
 	public synchronized String getAllowedOrigins() {
 		try {
