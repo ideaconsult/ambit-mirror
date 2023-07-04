@@ -547,13 +547,15 @@ public class SMIRKSManager {
     				applied = true;
     			}
     		}
-
+    		
+    		/* This is not needed and causes problems for atoms with incorrect number of H neighbors
     		AtomConfigurator cfg = new AtomConfigurator();
     		try {
     			cfg.process(target);
     		} catch (AmbitException e) {
     			throw e;
-    		}
+    		} 
+    		*/
 
     		if (FlagProcessResultStructures)
     			processProduct(target);
@@ -577,13 +579,15 @@ public class SMIRKSManager {
     				applyTransformAtLocation(target, rMaps.get(i), reaction);
     				applied = true;
     				// The first acceptable is found and stopped
-
+    				
+    				/* This is not needed and causes problems for atoms with incorrect number of H neighbors
     				AtomConfigurator cfg = new AtomConfigurator();
     				try {
     					cfg.process(target);
     				} catch (AmbitException e) {
     					throw e;
     				}
+    				*/
 
     				if (FlagProcessResultStructures)
     					processProduct(target);
@@ -611,9 +615,11 @@ public class SMIRKSManager {
     				applied = true;
     			}
     		}
-
+    		
+    		/* This is not needed and causes problems for atoms with incorrect number of H neighbors
     		AtomConfigurator cfg = new AtomConfigurator();
     		cfg.process(target);
+    		*/
 
     		if (FlagProcessResultStructures)
     			processProduct(target);
@@ -1062,10 +1068,11 @@ public class SMIRKSManager {
     	// Apply transformation
     	for (int i = 0; i < cloneMaps.size(); i++)
     		this.applyTransformAtLocation(clone, cloneMaps.get(i), reaction);
-
+    	
+    	/* This is not needed and causes problems for atoms with incorrect number of H neighbors
     	AtomConfigurator cfg = new AtomConfigurator();
     	cfg.process(clone);
-
+    	*/
     	return clone;
     }
 
