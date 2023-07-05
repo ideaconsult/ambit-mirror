@@ -925,8 +925,7 @@ public class SMIRKSReaction
 				 "         pIndex = " + pIndex
 				 + "\n");
 		}
-		
-		
+				
 		for (int i = 0; i <  prodBo.size(); i++)
 		{
 			String bo;
@@ -947,9 +946,25 @@ public class SMIRKSReaction
 				bo = prodBo.get(i).toString();
 			sb.append(bo.toString() + ")" );
 			sb.append("\n");
+		}		
+				
+		if (!steroDBTransformations.isEmpty()) {
+			sb.append("SteroDBTransformations:\n");
+			for (int i = 0; i < steroDBTransformations.size(); i++) {
+				sb.append("steroDBTransform: " + steroDBTransformations.get(i).toString());
+				sb.append("\n");
+			}				
 		}
-		return(sb.toString());
 		
+		if (!chiralAtTransformations.isEmpty()) {
+			sb.append("ChiralAtTransformations:\n");
+			for (int i = 0; i < chiralAtTransformations.size(); i++) {
+				sb.append("chiralAtTransform: " + chiralAtTransformations.get(i).toString());
+				sb.append("\n");
+			}	
+		}		
+		
+		return(sb.toString());		
 	}
 	
 }
