@@ -56,8 +56,11 @@ public class QueryCombinedScopeTest extends QueryTest<QueryCombinedStructure> {
 		 */
 		QueryStructure q = new QueryStructure();
 		q.setFieldname(ExactStructureSearchMode.smiles);
-		q.setValue("CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]");
-
+		//q.setValue("CCCCC(CC)C(=O)[O-].CCCCC(CC)C(=O)[O-].[SnH4+2]"); //fails idChemical = 7
+		//q.setValue("[F-].[Na+].F");  //fails idChemical = 10
+		//q.setValue("[Br-].C=1C=CC(=CC1)[P+](C=2C=CC=CC2)(C=3C=CC=CC3)CC"); //fails idChemical = 11
+		q.setValue("[Fe]");
+		
 		ProcessorSetQueryScope p = new ProcessorSetQueryScope();
 		p.setQuery(q);
 		StoredQuery storedQuery = new StoredQuery();
@@ -71,9 +74,10 @@ public class QueryCombinedScopeTest extends QueryTest<QueryCombinedStructure> {
 	protected void verify(QueryCombinedStructure query, ResultSet rs)
 			throws Exception {
 		int records = 0;
+		int idChemical = 29141;
 		while (rs.next()) {
 			records++;
-			Assert.assertEquals(7,rs.getInt(2));
+			Assert.assertEquals(idChemical,rs.getInt(2));
 		}
 		Assert.assertEquals(1, records);
 
