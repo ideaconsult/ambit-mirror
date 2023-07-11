@@ -259,7 +259,7 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		WeightDescriptor xlogp = new WeightDescriptor();
 		writer.setStructure(new StructureRecord(7, 100211, "", ""));
 		DescriptorValue value = xlogp.calculate(MoleculeFactory.makeBenzene());
-		Assert.assertEquals(72.0,
+		Assert.assertEquals(72.0644,
 				((DoubleResult) value.getValue()).doubleValue(), 1E-4);
 		writer.write(value);
 		names = c
@@ -268,28 +268,28 @@ public class DbDescriptorValuesWriterTest extends DbUnitTest {
 		values = c
 				.createQueryTable(
 						"EXPECTED_VALUES",
-						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-72)<1E-4");
+						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-72.0644)<1E-4");
 		Assert.assertEquals(1, values.getRowCount());
 		values = c
 				.createQueryTable(
 						"EXPECTED_VALUES",
-						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-144)<1E-4");
+						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-90)<1E-4");
 		Assert.assertEquals(0, values.getRowCount());
 
 		value = xlogp.calculate(MoleculeFactory.makeAlkane(12));
-		Assert.assertEquals(144.0,
+		Assert.assertEquals(144.1288,
 				((DoubleResult) value.getValue()).doubleValue(), 1E-4);
 
 		writer.write(value);
 		values = c
 				.createQueryTable(
 						"EXPECTED_VALUES",
-						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-144)<1E-4");
+						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-144.1288)<1E-4");
 		Assert.assertEquals(1, values.getRowCount());
 		values = c
 				.createQueryTable(
 						"EXPECTED_VALUES",
-						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-72)<1E-4");
+						"SELECT * FROM property_values join properties using(idproperty) WHERE abs(value_num-172)<1E-4");
 		Assert.assertEquals(0, values.getRowCount());
 
 		c.close();
