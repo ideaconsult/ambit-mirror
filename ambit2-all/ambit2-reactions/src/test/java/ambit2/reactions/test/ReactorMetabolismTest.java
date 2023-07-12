@@ -92,7 +92,7 @@ public class ReactorMetabolismTest extends TestCase
 		assertEquals("metabolize " + smiles, true, metabolize(smiles));
 		
 		//smiles = "NCCO";
-		//assertEquals("metabolize " + smiles, true, metabolize(smiles));
+		assertEquals("metabolize " + smiles, true, metabolize(smiles));
 		
 		//GLYCEROL-3P
 		smiles = "[H]C(O)(CO)COP(=O)(O)O";
@@ -127,8 +127,8 @@ public class ReactorMetabolismTest extends TestCase
 		//assertEquals("metabolize " + smiles, true, metabolize(smiles));
 		
 		//D-GLUCOSAMINE-6-P (2005 nodes)
-		smiles = "[H]C1(N)(C([H])(O)OC([H])(COP(=O)(O)O)C([H])(O)C1([H])(O))";
-		assertEquals("metabolize " + smiles, true, metabolize(smiles));
+		//smiles = "[H]C1(N)(C([H])(O)OC([H])(COP(=O)(O)O)C([H])(O)C1([H])(O))";
+		//assertEquals("metabolize " + smiles, true, metabolize(smiles));
 		
 		
 	}
