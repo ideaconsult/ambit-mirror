@@ -900,7 +900,7 @@ public class DBSubstanceImport {
 				if (mode == null) {
 					cleanReferenceStructure(srecord);
 					List<ProtocolApplication> m = srecord.getMeasurements();
-					cleanupEmptyRecords(srecord, m);
+					//cleanupEmptyRecords(srecord, m);
 					validator.process((IStructureRecord) record);
 				} else
 					switch (mode) {
@@ -917,14 +917,14 @@ public class DBSubstanceImport {
 					case xlsx: {
 						cleanReferenceStructure(srecord);
 						List<ProtocolApplication> m = srecord.getMeasurements();
-						cleanupEmptyRecords(srecord, m);
+						//validator.cleanupEmptyRecords(srecord, m);
 						validator.process((IStructureRecord) record);
 						break;
 					}
 					case xls: {
 						cleanReferenceStructure(srecord);
 						List<ProtocolApplication> m = srecord.getMeasurements();
-						cleanupEmptyRecords(srecord, m);
+						//validator.cleanupEmptyRecords(srecord, m);
 						validator.process((IStructureRecord) record);
 						break;
 					}
@@ -935,7 +935,7 @@ public class DBSubstanceImport {
 					default: {
 						cleanReferenceStructure(srecord);
 						List<ProtocolApplication> m = srecord.getMeasurements();
-						cleanupEmptyRecords(srecord, m);
+						//validator.cleanupEmptyRecords(srecord, m);
 						validator.process((IStructureRecord) record);
 						break;
 					}
@@ -971,11 +971,11 @@ public class DBSubstanceImport {
 				}
 		}
 
-		List<ProtocolApplication> m = srecord.getMeasurements();
-		cleanupEmptyRecords(srecord, m);
+		//List<ProtocolApplication> m = srecord.getMeasurements();
+		//cleanupEmptyRecords(srecord, m);
 	}
 
-	protected void cleanupEmptyRecords(SubstanceRecord srecord, List<ProtocolApplication> m) {
+	protected void _cleanupEmptyRecords(SubstanceRecord srecord, List<ProtocolApplication> m) {
 		if (m == null)
 			return;
 		for (int i = m.size() - 1; i >= 0; i--) {
