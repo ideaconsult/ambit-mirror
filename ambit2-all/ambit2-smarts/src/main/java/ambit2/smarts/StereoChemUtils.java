@@ -2,6 +2,8 @@ package ambit2.smarts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -526,6 +528,23 @@ public class StereoChemUtils
 		if (element instanceof ExtendedTetrahedral)
 			return extendedTetrahedral2String((ExtendedTetrahedral) element, mol);
 		return null;
+	}
+	
+	public static String getStereoChangesAsString(Map<IStereoElement, StereoChange> stereoChanges, IAtomContainer mol) {
+		StringBuffer sb = new StringBuffer();
+		Set<IStereoElement> keys = stereoChanges.keySet();
+		for (IStereoElement stEl : keys) {
+			sb.append(stereoElement2String (stEl, mol));
+			sb.append(" -> ");
+			StereoChange stChange = stereoChanges.get(stEl);
+			if (stChange == null) 
+				sb.append("null");	
+			else
+				sb.append(stChange.toString(mol));
+			//sb.append("  " + stChange);
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 	
 	public static void cloneAndCheckStereo(IAtomContainer cloneMol, IAtomContainer originalMol)
