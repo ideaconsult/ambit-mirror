@@ -856,9 +856,9 @@ public class SMIRKSManager {
     			stChange.setStereoElementType(el);
     			stereoChanges.put(el, stChange);
     		}	
-    	
-    	
-    	//System.out.println("Initial \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    	    	
+    	//System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    	//System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
     	
     	// Create Non Existing Atoms
     	List<IAtom> newAtoms = new ArrayList<IAtom>();
@@ -919,7 +919,9 @@ public class SMIRKSManager {
     		
     		//System.out.println("Atom change " + (i+1) + "\n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
     	}
-
+    	
+    	 	
+    	
     	// Bond Transformations
     	for (int i = 0; i < reaction.reactBo.size(); i++) 
     	{
@@ -1456,8 +1458,7 @@ public class SMIRKSManager {
     		IBond.Order initialBondOrder, IBond.Order updatedBondOrder, 
     		IAtomContainer target, 
     		List<IStereoElement> invalidatedStereoElements, Map<IStereoElement, StereoChange> stereoChanges)
-    {
-    	
+    {	
     	List<IStereoElement> newElements = new ArrayList<IStereoElement>();
     	List<IStereoElement> newInvalidEl = new ArrayList<IStereoElement>();
     	
@@ -1482,7 +1483,8 @@ public class SMIRKSManager {
 			{		
     			StereoChange stChange = stereoChanges.get(element);
 				stereoChanges.remove(element);
-				
+				//System.out.println(StereoChemUtils.stereoElement2String (element, target));
+				//System.out.println("stChange : " + stChange);
     			DoubleBondStereochemistry dbsc = 
     					StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
     							updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
