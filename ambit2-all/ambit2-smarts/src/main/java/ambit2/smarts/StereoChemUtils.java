@@ -534,7 +534,7 @@ public class StereoChemUtils
 		StringBuffer sb = new StringBuffer();
 		Set<IStereoElement> keys = stereoChanges.keySet();
 		for (IStereoElement stEl : keys) {
-			sb.append(stereoElement2String (stEl, mol));
+			sb.append(stereoElement2String (stEl, mol) + "  " + stEl + " ");
 			sb.append(" -> ");
 			StereoChange stChange = stereoChanges.get(stEl);
 			if (stChange == null) 
