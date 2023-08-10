@@ -1481,10 +1481,13 @@ public class SMIRKSManager {
 			
     		if (element instanceof DoubleBondStereochemistry)
 			{		
+    			System.out.print("===> Stereo changes list: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+    			System.out.println("===>");
+    			
     			StereoChange stChange = stereoChanges.get(element);
 				stereoChanges.remove(element);
-				//System.out.println(StereoChemUtils.stereoElement2String (element, target));
-				//System.out.println("stChange : " + stChange);
+				System.out.println(StereoChemUtils.stereoElement2String (element, target) + "  " + element);
+				System.out.println("stChange : " + stChange);
     			DoubleBondStereochemistry dbsc = 
     					StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
     							updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
