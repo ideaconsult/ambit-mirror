@@ -164,13 +164,28 @@ var config_npo = {
 			"inMatrix" : true,
 			"sTitle" : "Treatment condition"
 		},
+		"amount_of_material" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true
+		},
 		"concentration" : {
 			"iOrder" : -7,
 			"bVisible" : true,
 			"inMatrix" : true
 		},
+		"concentration_surface" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true
+		},		
 		"concentration_ml" : {
 			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true
+		},		
+		"sampling_time" : {
+			"iOrder" : -6,
 			"bVisible" : true,
 			"inMatrix" : true
 		},		

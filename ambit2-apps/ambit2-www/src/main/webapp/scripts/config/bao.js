@@ -283,6 +283,16 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true
 		},		
+		"concentration_surface" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true
+		},			
+		"amount_of_material" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true
+		},				
 		"time point" : {
 			"iOrder" : -6,
 			"bVisible" : true,
@@ -293,6 +303,11 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true
 		},
+		"sampling_time" : {
+			"iOrder" : -6,
+			"bVisible" : true,
+			"inMatrix" : true
+		},		
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,

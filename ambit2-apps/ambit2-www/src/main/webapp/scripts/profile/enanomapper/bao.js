@@ -320,7 +320,18 @@ var config_bao = {
 			"bVisible" : true,
 			"inMatrix" : true,
 			"sTitle" : "Concentration"
-		},		
+		},	
+		"concentration_surface" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Concentration"
+		},			
+		"amount_of_material" : {
+			"iOrder" : -7,
+			"bVisible" : true,
+			"inMatrix" : true
+		},	
 		"time point" : {
 			"iOrder" : -6,
 			"bVisible" : true,
@@ -338,6 +349,12 @@ var config_bao = {
 			"inMatrix" : true,
 			"sTitle" : "Exposure time"
 		},
+		"sampling_time" : {
+			"iOrder" : -4,
+			"bVisible" : true,
+			"inMatrix" : true,
+			"sTitle" : "Sampling time"
+		},		
 		"replicate" : {
 			"iOrder" : -5,
 			"bVisible" : true,
@@ -412,14 +429,11 @@ var config_bao = {
 		"exposure" : {
 			"bVisible" : true
 		},
-		"sampling_time" : {
-			"visible" : true
-		},
 		"temperature" : {
-			"visible" : true
+			"bVisible" : true
 		},
 		"total dose" : {
-			"visible" : true
+			"bVisible" : true
 		}	
 	},
 	"interpretation" : {
