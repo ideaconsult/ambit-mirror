@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.AtomContainerSet;
@@ -848,6 +849,10 @@ public class SMIRKSManager {
     	List<IStereoElement> invalidatedStereoElements = new ArrayList<IStereoElement>();
     	Map<IStereoElement, StereoChange> stereoChanges = new HashMap<IStereoElement, StereoChange>();
     	
+    	//The code bellow causes exception: DoubleBondStereochemistry cannot be cast to java.lang.Comparable 
+    	//Map<IStereoElement, StereoChange> stereoChanges = new TreeMap<IStereoElement, StereoChange>();
+    	
+    	
     	//Register initial (empty) stereo changes
     	if (FlagApplyStereoTransformation)
     		for (IStereoElement el: target.stereoElements())
@@ -857,8 +862,8 @@ public class SMIRKSManager {
     			stereoChanges.put(el, stChange);
     		}	
     	    	
-    	//System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
-    	//System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+    	System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    	System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
     	
     	// Create Non Existing Atoms
     	List<IAtom> newAtoms = new ArrayList<IAtom>();
@@ -1486,8 +1491,8 @@ public class SMIRKSManager {
     			
     			StereoChange stChange = stereoChanges.get(element);
 				stereoChanges.remove(element);
-				System.out.println(StereoChemUtils.stereoElement2String (element, target) + "  " + element);
-				System.out.println("stChange : " + stChange);
+				System.out.println("--- " + StereoChemUtils.stereoElement2String (element, target) + "  " + element);
+				System.out.println("--- stChange : " + stChange);
     			DoubleBondStereochemistry dbsc = 
     					StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
     							updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
