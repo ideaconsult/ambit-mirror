@@ -925,11 +925,18 @@ public class SMIRKSManager {
     		//System.out.println("Atom change " + (i+1) + "\n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
     	}
     	
-    	 	
+    	System.out.println("After atom transformation: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    	System.out.println("After atom transformation stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+    	
+    	System.out.println("Number of bond transformations = " + reaction.reactBo.size());
+    	System.out.println();
     	
     	// Bond Transformations
     	for (int i = 0; i < reaction.reactBo.size(); i++) 
     	{
+    		System.out.println("Bond-transform #" + (i+1) +  " pre: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+        	System.out.println("Bond-transform #" + (i+1) +  " pre stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+        	 
     		int nrAt1 = reaction.reactAt1.get(i).intValue();
     		int nrAt2 = reaction.reactAt2.get(i).intValue();
 
@@ -1037,8 +1044,11 @@ public class SMIRKSManager {
     			// Some other possible cases if needed.
     		}
     		
-    		//System.out.println("Bond change " + (i+1) + "\n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
-
+    		System.out.println("Bond change " + (i+1) + "\n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    		
+    		System.out.println("Bond-transform #" + (i+1) +  " post: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+        	System.out.println("Bond-transform #" + (i+1) +  " post stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+        	
     	}
     	
     	 
@@ -1486,13 +1496,13 @@ public class SMIRKSManager {
 			
     		if (element instanceof DoubleBondStereochemistry)
 			{		
-    			System.out.print("===> Stereo changes list: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
-    			System.out.println("===>");
+    			System.out.print("  ===> Stereo changes list: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+    			System.out.println("  ===>");
     			
     			StereoChange stChange = stereoChanges.get(element);
 				stereoChanges.remove(element);
-				System.out.println("--- " + StereoChemUtils.stereoElement2String (element, target) + "  " + element);
-				System.out.println("--- stChange : " + stChange);
+				System.out.println("  --- " + StereoChemUtils.stereoElement2String (element, target) + "  " + element);
+				System.out.println("  --- stChange : " + stChange);
     			DoubleBondStereochemistry dbsc = 
     					StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
     							updatedBondOrder, target, (DoubleBondStereochemistry)element, stChange);
