@@ -1499,7 +1499,7 @@ public class SMIRKSManager {
     			System.out.print("  ===> Stereo changes list: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
     			System.out.println("  ===>");
     			
-    			StereoChange stChange = stereoChanges.get(element);
+    			StereoChange stChange = stereoChanges.get(element);    			
 				stereoChanges.remove(element);
 				System.out.println("  --- " + StereoChemUtils.stereoElement2String (element, target) + "  " + element);
 				System.out.println("  --- stChange : " + stChange);
@@ -1662,10 +1662,20 @@ public class SMIRKSManager {
 			}
 		}
     	
+    	System.out.println("\n**** New stereo elements to be added to target at the and of handleStereoOnBondChange():");
+    	for (IStereoElement element : newElements)
+    		System.out.println(StereoChemUtils.stereoElement2String (element, target) + "  " + element);
+    	
     	//Update the stereo element lists
     	target.setStereoElements(newElements);
     	invalidatedStereoElements.clear();
     	invalidatedStereoElements.addAll(newInvalidEl);
+    	
+    	
+    	System.out.println("\n**** Target stereo elements after handleStereoOnBondChange():");
+    	for (IStereoElement element : target.stereoElements())
+    		System.out.println(StereoChemUtils.stereoElement2String (element, target) + "  " + element);
+    		
     }
     
     public void checkInvalidatedDBStereo(IAtomContainer target, 
