@@ -698,7 +698,7 @@ public class StereoChemUtils
 		return sb.toString();
 	}
 	
-	static public void setSteroElementsAsProperties(IAtomContainer container){
+	static public void setSteroElementsAsAtomAndBondProperties(IAtomContainer container){
 
 		for (IStereoElement element : container.stereoElements())
 		{
@@ -719,7 +719,6 @@ public class StereoChemUtils
 					atom.setProperty("StereoElement", element);
 				continue;
 			}
-
 
 			if (element instanceof ExtendedTetrahedral)
 			{
