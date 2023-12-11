@@ -184,6 +184,40 @@ public class StereoChemUtils
 		mol.setStereoElements(okElements);
 	}
 	
+	public static void checkStereoElementsProperty(IAtomContainer mol)
+	{	
+		List<IStereoElement> okElements = new ArrayList<IStereoElement>();
+		List<IStereoElement> molStereoElements = mol.getProperty(STEREO_ELEMENTS_PROPERTY);
+		
+		for (IStereoElement element : molStereoElements)
+		{
+			if (element instanceof DoubleBondStereochemistry)
+			{
+				int status = checkDoubleBondStereochemistry((DoubleBondStereochemistry) element, mol);
+				if (status == 0)
+					okElements.add(element);
+				//System.out.println("DBStereo status = " + status);
+				continue;
+			}			
+			
+			if (element instanceof TetrahedralChirality)
+			{
+				int status = checkTetrahedralChirality((TetrahedralChirality) element, mol);
+				if (status == 0)
+					okElements.add(element);
+				//System.out.println("Chiral atom status = " + status);
+				continue;
+			}
+			
+			//System.out.println(element.getClass().getName());
+			//TODO handle ExtendedTetrahedral stereo elements
+			
+			okElements.add(element);
+		}
+				
+		setStereoElementsListAsProperty(mol, okElements);
+	}
+	
 	/**
 	 *  
 	 * @param dbs - DoubleBondStereochemistry object to checked
