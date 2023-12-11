@@ -19,6 +19,8 @@ import org.openscience.cdk.stereo.TetrahedralChirality;
 
 public class StereoChemUtils 
 {
+	public static final String STEREO_ELEMENTS_PROPERTY = "AMBIT_STEREO_PROPERTY";
+	
 	/**
 	 * 
 	 * @param originalDBS - the stereo element from the original molecule that will be cloned
@@ -1473,7 +1475,23 @@ public class StereoChemUtils
 		
 		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newLigandBonds, stereo);
     }
-
 	
+	public static void storeStereoElementsAsProperty(IAtomContainer target) 
+	{
+		List<IStereoElement> elements = new ArrayList<IStereoElement>();
+		for (IStereoElement el : target.stereoElements())
+			elements.add(el);
+		
+		target.setProperty(STEREO_ELEMENTS_PROPERTY, elements);
+	}
+	
+	public static void getStereoElementsFromProperty(IAtomContainer target) 
+	{
+		List<IStereoElement> elements = target.getProperty(STEREO_ELEMENTS_PROPERTY);
+		if (elements != null ) {
+			target.setStereoElements(elements);			
+			target.removeProperty(STEREO_ELEMENTS_PROPERTY);
+		}
+	}
 	
 }	
