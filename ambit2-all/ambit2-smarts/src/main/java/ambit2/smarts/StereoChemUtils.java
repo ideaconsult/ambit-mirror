@@ -627,8 +627,8 @@ public class StereoChemUtils
 	public static String getStereoElementsStatus(IAtomContainer mol)
 	{
 		StringBuffer sb = new StringBuffer();
-		List<IStereoElement> okElements = new ArrayList<IStereoElement>();
-		for (IStereoElement element : mol.stereoElements())
+		List<IStereoElement> molStereoElements = mol.getProperty(STEREO_ELEMENTS_PROPERTY);
+		for (IStereoElement element : molStereoElements)
 		{
 			if (element instanceof DoubleBondStereochemistry)
 			{
@@ -636,8 +636,7 @@ public class StereoChemUtils
 				sb.append("DBStereo status = " + status + "   " 
 						+ doubleBondStereochemistry2String((DoubleBondStereochemistry) element, mol) + "\n");
 				continue;
-			}
-			
+			}			
 			
 			if (element instanceof TetrahedralChirality)
 			{
@@ -656,7 +655,8 @@ public class StereoChemUtils
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append(" Normal elements \n");
-		for (IStereoElement element : mol.stereoElements())
+		List<IStereoElement> molStereoElements = mol.getProperty(STEREO_ELEMENTS_PROPERTY);
+		for (IStereoElement element : molStereoElements)
 		{
 			if (element instanceof DoubleBondStereochemistry)
 			{
@@ -664,8 +664,7 @@ public class StereoChemUtils
 				sb.append("    DBStereo status = " + status + "   " 
 						+ doubleBondStereochemistry2String((DoubleBondStereochemistry) element, mol) + "\n");
 				continue;
-			}
-			
+			}			
 			
 			if (element instanceof TetrahedralChirality)
 			{
@@ -685,8 +684,7 @@ public class StereoChemUtils
 				sb.append("   DBStereo status = " + status + "   " 
 						+ doubleBondStereochemistry2String((DoubleBondStereochemistry) element, mol) + "\n");
 				continue;
-			}
-			
+			}			
 			
 			if (element instanceof TetrahedralChirality)
 			{
@@ -768,7 +766,6 @@ public class StereoChemUtils
 	*/
 	
 		
-	
 	
 	public static TetrahedralChirality deleteAtom(IAtom at, 
 			//IAtomContainer target, 
@@ -1419,7 +1416,8 @@ public class StereoChemUtils
 	
 	public static DoubleBondStereochemistry findDBStereoElementByStereoBond(IBond stereoBond, IAtomContainer container)
 	{
-		for (IStereoElement element : container.stereoElements())
+		List<IStereoElement> molStereoElements = container.getProperty(STEREO_ELEMENTS_PROPERTY);
+		for (IStereoElement element : molStereoElements)
 		{
 			if (element instanceof DoubleBondStereochemistry)
 			{
@@ -1434,7 +1432,8 @@ public class StereoChemUtils
 	
 	public static TetrahedralChirality findTetrahedralChiralityByChiralCenter(IAtom chirCenter, IAtomContainer container)
 	{
-		for (IStereoElement element : container.stereoElements())
+		List<IStereoElement> molStereoElements = container.getProperty(STEREO_ELEMENTS_PROPERTY);
+		for (IStereoElement element : molStereoElements)
 		{
 			if (element instanceof TetrahedralChirality)
 			{
@@ -1448,7 +1447,8 @@ public class StereoChemUtils
 	
 	public static ExtendedTetrahedral findExtendedTetrahedralByChiralCenter(IAtom chirCenter, IAtomContainer container)
 	{
-		for (IStereoElement element : container.stereoElements())
+		List<IStereoElement> molStereoElements = container.getProperty(STEREO_ELEMENTS_PROPERTY);
+		for (IStereoElement element : molStereoElements)
 		{
 			if (element instanceof ExtendedTetrahedral)
 			{
