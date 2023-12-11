@@ -1485,7 +1485,7 @@ public class StereoChemUtils
 		target.setProperty(STEREO_ELEMENTS_PROPERTY, elements);
 	}
 	
-	public static void getStereoElementsFromProperty(IAtomContainer target) 
+	public static void extractStereoElementsFromProperty(IAtomContainer target) 
 	{
 		List<IStereoElement> elements = target.getProperty(STEREO_ELEMENTS_PROPERTY);
 		if (elements != null ) {
@@ -1494,6 +1494,11 @@ public class StereoChemUtils
 		}
 		else
 			target.setStereoElements(new ArrayList<IStereoElement>()); //set empty list
+	}
+	
+	public static void setStereoElementsListAsProperty(IAtomContainer target, List<IStereoElement> elements) 
+	{
+		target.setProperty(STEREO_ELEMENTS_PROPERTY, elements);
 	}
 	
 }	
