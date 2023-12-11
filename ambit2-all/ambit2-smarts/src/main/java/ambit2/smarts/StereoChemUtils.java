@@ -1492,6 +1492,8 @@ public class StereoChemUtils
 			target.setStereoElements(elements);			
 			target.removeProperty(STEREO_ELEMENTS_PROPERTY);
 		}
+		else
+			target.setStereoElements(new ArrayList<IStereoElement>()); //set empty list
 	}
 	
 }	
