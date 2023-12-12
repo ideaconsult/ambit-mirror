@@ -561,7 +561,7 @@ public class SMIRKSManager {
     			processProduct(target);
     		
     		if (FlagCheckResultStereo)
-    			StereoChemUtils.checkStereoElements(target);
+    			StereoChemUtils.checkStereoElements(target); //CDK stereoElements() iterator is used 
 
     		return applied;
     	}
@@ -593,7 +593,7 @@ public class SMIRKSManager {
     					processProduct(target);
     				
     				if (FlagCheckResultStereo)
-    	    			StereoChemUtils.checkStereoElements(target);
+    	    			StereoChemUtils.checkStereoElements(target); //CDK stereoElements() iterator is used
 
     				return applied;
     			}
@@ -625,7 +625,7 @@ public class SMIRKSManager {
     			processProduct(target);
     		
     		if (FlagCheckResultStereo)
-    			StereoChemUtils.checkStereoElements(target);
+    			StereoChemUtils.checkStereoElements(target);  //CDK stereoElements() iterator is used 
 
     		return applied;
     	}
@@ -719,7 +719,7 @@ public class SMIRKSManager {
     		if (FlagProcessResultStructures)
     			processProduct(product);
     		if (FlagCheckResultStereo)
-    			StereoChemUtils.checkStereoElements(product);
+    			StereoChemUtils.checkStereoElements(product); //CDK stereoElements() iterator is used
     		resSet.addAtomContainer(product);
 
     		// Generation of next combination
@@ -807,7 +807,7 @@ public class SMIRKSManager {
     		if (FlagProcessResultStructures)
     			processProduct(product);
     		if (FlagCheckResultStereo)
-    			StereoChemUtils.checkStereoElements(product);
+    			StereoChemUtils.checkStereoElements(product); //CDK stereoElements() iterator is used
     		resSet.addAtomContainer(product);
     	}
 
