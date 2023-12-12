@@ -687,7 +687,7 @@ public class SMIRKSManager {
     		if (FlagProcessResultStructures)
     			processProduct(product);
     		if (FlagCheckResultStereo)
-    			StereoChemUtils.checkStereoElements(product);
+    			StereoChemUtils.checkStereoElements(product); //CDK stereoElements() iterator is used
     		resSet.addAtomContainer(product);
     		return (resSet);
     	}
