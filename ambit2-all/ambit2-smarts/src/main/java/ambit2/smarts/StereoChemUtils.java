@@ -151,6 +151,9 @@ public class StereoChemUtils
 		return thc;
 	}
 	
+	/*
+	 * The function works with the immutable IAtomContainer list of stereo elements
+	 */
 	public static void checkStereoElements(IAtomContainer mol)
 	{	
 		List<IStereoElement> okElements = new ArrayList<IStereoElement>();
@@ -184,7 +187,10 @@ public class StereoChemUtils
 		mol.setStereoElements(okElements);
 	}
 	
-	public static void checkStereoElementsProperty(IAtomContainer mol)
+	/*
+	 * The function check the stereo elements stored as molecule property 
+	 */
+	public static void checkStereoElementsStoredAsProperty(IAtomContainer mol)
 	{	
 		List<IStereoElement> okElements = new ArrayList<IStereoElement>();
 		List<IStereoElement> molStereoElements = mol.getProperty(STEREO_ELEMENTS_PROPERTY);
