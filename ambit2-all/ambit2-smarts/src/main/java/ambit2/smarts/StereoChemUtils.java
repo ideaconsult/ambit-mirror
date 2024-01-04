@@ -704,7 +704,7 @@ public class StereoChemUtils
 		return sb.toString();
 	}
 	
-	static public void setSteroElementsAsAtomAndBondProperties(IAtomContainer container){
+	static public void setStereoElementsAsAtomAndBondProperties(IAtomContainer container){
 
 		for (IStereoElement element : container.stereoElements())
 		{
