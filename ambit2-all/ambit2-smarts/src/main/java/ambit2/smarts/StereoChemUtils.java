@@ -583,7 +583,7 @@ public class StereoChemUtils
 		return sb.toString();
 	}
 	
-	/*
+	
 	public static void cloneAndCheckStereo(IAtomContainer cloneMol, IAtomContainer originalMol)
 	{
 		for (IStereoElement element : originalMol.stereoElements() )
@@ -622,7 +622,7 @@ public class StereoChemUtils
 		
 		
 	}
-	*/
+	
 	
 	public static String getStereoElementsStatus(IAtomContainer mol)
 	{
