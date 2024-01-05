@@ -848,14 +848,19 @@ public class SMIRKSManager {
     	List<IStereoElement> invalidatedStereoElements = new ArrayList<IStereoElement>();
     	Map<IStereoElement, StereoChange> stereoChanges = new HashMap<IStereoElement, StereoChange>();
     	
-    	//Register initial (empty) stereo changes
-    	if (FlagApplyStereoTransformation)
-    		for (IStereoElement el: target.stereoElements())
+    	//Store original stereo elements as property and register initial (empty) stereo changes
+    	if (FlagApplyStereoTransformation) 
+    	{
+    		StereoChemUtils.storeStereoElementsAsProperty(target);
+    		List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
+    		
+    		for (IStereoElement el: elements)
     		{	
     			StereoChange stChange = new StereoChange();
     			stChange.setStereoElementType(el);
     			stereoChanges.put(el, stChange);
-    		}	
+    		}
+    	}	
     	    	
     	//System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
     	//System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
@@ -1055,6 +1060,11 @@ public class SMIRKSManager {
     	{
     		applyAromaticityTransformAtLocation(target, rMap, newAtoms, reaction);
     	}
+    	
+    	if (FlagApplyStereoTransformation) 
+    	{
+    		StereoChemUtils.extractStereoElementsFromProperty(target);
+    	}	
     }
 
     public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, List<List<IAtom>> rMaps,
@@ -1112,7 +1122,7 @@ public class SMIRKSManager {
     	}
 
 
-    	//Clone stereo elements
+    	//Clone stereo elements (info is taken from CDK iterator)
     	for (IStereoElement element : target.stereoElements() )
     	{
     		if (element instanceof DoubleBondStereochemistry)
@@ -1426,8 +1436,9 @@ public class SMIRKSManager {
     
     List<IStereoElement> getStereoElementsToBeRemoved (IAtom deletedAt, IAtomContainer target)
  	{
-    	List<IStereoElement> list = new ArrayList<IStereoElement>(); 
-    	for (IStereoElement element : target.stereoElements())
+    	List<IStereoElement> list = new ArrayList<IStereoElement>();
+    	List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
+    	for (IStereoElement element : elements)
     	{
     		if (element.contains(deletedAt))
     			list.add(element);
@@ -1462,7 +1473,8 @@ public class SMIRKSManager {
     	List<IStereoElement> newElements = new ArrayList<IStereoElement>();
     	List<IStereoElement> newInvalidEl = new ArrayList<IStereoElement>();
     	
-    	for (IStereoElement element : target.stereoElements())
+    	List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
+    	for (IStereoElement element : elements)
 		{
 			int n = 0;
 			if (targetAt1 != null)
@@ -1644,8 +1656,8 @@ public class SMIRKSManager {
 			}
 		}
     	
-    	//Update the stereo element lists
-    	target.setStereoElements(newElements);
+    	//Update the stereo element lists    	
+    	target.setProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY, newElements);   //target.setStereoElements(newElements);
     	invalidatedStereoElements.clear();
     	invalidatedStereoElements.addAll(newInvalidEl);
     }
@@ -1676,11 +1688,15 @@ public class SMIRKSManager {
     	
     	if (!restoredElements.isEmpty())
     	{
+    		List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
+    		elements.addAll(restoredElements);
+    		/*
     		List<IStereoElement> newStereo = new ArrayList<IStereoElement>();
     		for (IStereoElement element : target.stereoElements())
     			newStereo.add(element);
     		newStereo.addAll(restoredElements);
     		target.setStereoElements(newStereo);
+    		*/
     	}
     }
     
@@ -1872,7 +1888,8 @@ public class SMIRKSManager {
     	
     	//Set new stereo according to the removeList and addList info
     	List<IStereoElement> newStereo = new ArrayList<IStereoElement>();
-    	for (IStereoElement el : target.stereoElements())
+    	List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
+    	for (IStereoElement el : elements)
     	{
     		if (removeList.contains(el))
     			continue;
@@ -1883,7 +1900,7 @@ public class SMIRKSManager {
     	for (IStereoElement el : addList)
     		newStereo.add(el);
     	
-    	target.setStereoElements(newStereo);
+    	target.setProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY, newStereo); //target.setStereoElements(newStereo);
     }
     
     
