@@ -3577,6 +3577,32 @@ public class Protocol {
 				return true;
 			}
 		},
+		BAO_0003006_SECTION {
+		    @Override
+            public String toString() {
+                return "Reporter gene assay";
+            }
+
+            @Override
+            public String getNumber() {
+                return "BAO_0003006";
+            }
+
+            @Override
+            public String getTopCategory() {
+                return "TOX";
+            }
+
+            @Override
+            public int getSortingOrder() {
+                return 1013;
+            }
+
+            public String getOntologyURI() {
+                return "http://purl.obolibrary.org/obo/BAO_0003006";
+            }
+		    
+		},
 		// Immunotoxicity
 		NPO_1339_SECTION {
 			@Override
@@ -3680,6 +3706,28 @@ public class Protocol {
 			}
 
 		},
+		PROCESS_SECTION {
+            @Override
+            public String getNumber() {
+                return "99.0.0";
+            }
+
+            @Override
+            public String getTopCategory() {
+                return "MANUFACTURE";
+            }
+
+            @Override
+            public String toString() {
+                return "Manufacturing Process";
+            }
+
+            @Override
+            public int getSortingOrder() {
+                return 990000;
+            }
+
+        },		
 		EXPOSURE_SECTION {
 			@Override
 			public String getNumber() {

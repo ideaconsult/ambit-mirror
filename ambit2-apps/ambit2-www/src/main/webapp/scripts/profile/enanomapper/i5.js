@@ -821,6 +821,19 @@ var config_i5 = {
 		"conditions" : config_exposure["conditions"],
 		"protocol" : config_exposure["protocol"],
 		"interpretation" : config_exposure["interpretation"]
+	},
+	"PROCESS_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"effects" : config_bao["effects"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"]
+	},
+		"TO_ACUTE_PULMONARY_INSTILLATION_SECTION" : {
+		"parameters" : config_bao["parameters"],
+		"effects" : config_bao["effects"],
+		"conditions" : config_bao["conditions"],
+		"protocol" : config_bao["protocol"],
+		"interpretation" : config_bao["interpretation"]
 	}
-
 }

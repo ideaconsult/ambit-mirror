@@ -233,6 +233,13 @@ var config_study = {
 			"protocol" : config_npo["protocol"],
 			"interpretation" : config_npo["interpretation"]
 		},
+		"BAO_0003006_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : config_bao["effects"],
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]			
+		},
 		"BAO_0002189_SECTION" : {
 			"parameters" : config_bao["parameters"],
 			"effects" : config_bao["effects"],
@@ -1177,6 +1184,30 @@ var config_study = {
 			"conditions" : config_exposure["conditions"],
 			"protocol" : config_exposure["protocol"],
 			"interpretation" : config_exposure["interpretation"]
+		},
+		"PROCESS_SECTION" : {
+			"parameters" : config_bao["parameters"],
+			"effects" : {
+				"endpoint" : {
+					"iOrder" : -9,
+					"bVisible" : false,
+					"inMatrix" : false
+				},
+				"result" : {
+					"inMatrix" : false,
+					"bVisible" : false,					
+				},
+				"text" : {
+					"sTitle" : "Result",
+					"inMatrix" : false,
+					"bVisible" : false,
+					"iOrder" : -7
+				}
+		
+			},			
+			"conditions" : config_bao["conditions"],
+			"protocol" : config_bao["protocol"],
+			"interpretation" : config_bao["interpretation"]
 		}		
 		
 	}

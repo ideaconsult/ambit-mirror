@@ -434,7 +434,16 @@ var config_bao = {
 		},
 		"total dose" : {
 			"bVisible" : true
-		}	
+		},
+
+		"activity_type" : {
+			"bVisible" : true,
+			"sTitle" : "Activity type"
+		},
+		"temperature_range" : {
+			"bVisible" : true,
+			"sTitle" : "Temperature range"
+		}
 	},
 	"interpretation" : {
 		"result" : {
