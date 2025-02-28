@@ -300,13 +300,19 @@ public class Expander
 			if (valenceAtomIndices == null)
 			{	
 				//list.size() should be same as originalAt.dictObj.getSLNContainer().getAtomCount()
-				if (valencePosIndex >= list.size() ) 
-					atIndex = list.size()-1;
+				if (valencePosIndex >= list.size())
+					//If more valence points are referenced, the last one is used multiple times
+					atIndex = list.size()-1;  
 				else
 					atIndex = valencePosIndex;
 			}
-			else
-				atIndex = valenceAtomIndices[valencePosIndex];
+			else {
+				if (valencePosIndex >= valenceAtomIndices.length)
+					//If more valence points are referenced, the last one is used multiple times
+					atIndex = valenceAtomIndices.length-1;
+				else
+					atIndex = valenceAtomIndices[valencePosIndex];
+			}	
 
 			//System.out.println("getNewAtom... valencePos = " + valencePosIndex + "  atIndex = " + atIndex);
 
