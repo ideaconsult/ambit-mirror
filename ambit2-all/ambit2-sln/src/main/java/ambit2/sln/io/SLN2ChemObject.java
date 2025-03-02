@@ -860,7 +860,7 @@ public class SLN2ChemObject
     			SmartsExpressionToken tok = getAlternativeSmartsToken(slnTok, altValues[i]);
     			altTokens[2*i] = tok;
     			if (i > 0)
-    				altTokens[2*i-1] = new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_ANDLO, 0);
+    				altTokens[2*i-1] = new SmartsExpressionToken(SmartsConst.LO + SmartsConst.LO_OR, 0);
     		}
     		return altTokens;
     	}
