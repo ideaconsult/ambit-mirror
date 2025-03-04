@@ -30,6 +30,8 @@ public class SLNParser {
 	
 	private boolean FlagUseSimpleMacroAtomsInDictionary = true;
 	private boolean FlagUseTypeAsStandardAtomAttribute = true; //e.g. Any[type=6|type=8]
+	
+	private boolean FlagSLNContainerValidation = true;
 
 	String sln;
 	SLNContainer container;
@@ -119,6 +121,15 @@ public class SLNParser {
 
 	public void setGlobalDictionary(SLNDictionary globalDictionary) {
 		this.globalDictionary = globalDictionary;
+	}
+	
+	
+	public boolean isFlagSLNContainerValidation() {
+		return FlagSLNContainerValidation;
+	}
+
+	public void setFlagSLNContainerValidation(boolean flagSLNContainerValidation) {
+		FlagSLNContainerValidation = flagSLNContainerValidation;
 	}
 
 	public SLNContainer parse(String sln) {
@@ -2119,5 +2130,7 @@ public class SLNParser {
 		
 		return markushAtom;
 	}
+	
+	
 
 }
