@@ -323,7 +323,7 @@ public class Expander
 			else {
 				if (valencePosIndex >= valenceAtomIndices.length)
 					//If more valence points are referenced, the last one is used multiple times
-					atIndex = valenceAtomIndices.length-1;
+					atIndex = valenceAtomIndices[valenceAtomIndices.length-1];
 				else
 					atIndex = valenceAtomIndices[valencePosIndex];
 			}	
