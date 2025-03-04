@@ -123,14 +123,15 @@ public class Expander
 		SLNBond bo = (SLNBond)bond;
 		SLNBond newBo = bo.clone();
 		
-		IAtom at0 = bo.getAtom(0);
-		IAtom at1 = bo.getAtom(1);
+		SLNAtom at0 = (SLNAtom)bo.getAtom(0);
+		SLNAtom at1 = (SLNAtom)bo.getAtom(1);
 		int conectionInd0 = getConnectionIndexOfTheBond(bond, at0);
 		int conectionInd1 = getConnectionIndexOfTheBond(bond, at1);
 		
-		//TODO improved valencePos index handling taking into account attribute v if present
-		int valencePos0Index = conectionInd0;
-		int valencePos1Index = conectionInd1;
+		//Use either original conectionInd0/conectionInd1
+		//or changed valence positions specified by atom attribute [v=v1,v2,...]
+		int valencePos0Index = getValencePosIndex(at0, conectionInd0);
+		int valencePos1Index = getValencePosIndex(at1, conectionInd1);
 				
 		Object newObj0 = oldToNewAtoms.get(at0);
 		Object newObj1 = oldToNewAtoms.get(at1);
@@ -148,6 +149,19 @@ public class Expander
 		return list.indexOf(bo);
 	}
 	
+	int getValencePosIndex(SLNAtom at, int conectionInd) {
+		if (at.atomExpression != null)
+			if (at.atomExpression.valences != null) {
+				//Changed valencePos index taking into account atom attribute "v" if present
+				//"v" atom attribute is with 1-based values and
+				//correct valence values are expected (otherwise SLNParser raises an error)
+				int valPos = at.atomExpression.valences[conectionInd]-1;
+				return valPos;
+			}
+		//Original valence position is used
+		return conectionInd;
+	}
+
 	
 	/*
 	public SLNContainer getExpandedSLNContainer0() 
