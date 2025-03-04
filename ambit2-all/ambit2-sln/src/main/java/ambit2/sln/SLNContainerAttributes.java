@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 
@@ -167,7 +166,8 @@ public class SLNContainerAttributes
 			String value = entry.getValue();
 			
 			//Get comparison operation
-			Integer compOp = userDefiendAttrComparisonOperation.get(entry.getKey());			
+			Integer compOp = userDefiendAttrComparisonOperation.get(entry.getKey());
+			
 			//Get molecule property
 			Object prop = mol.getProperty(attrib);
 			
@@ -185,7 +185,36 @@ public class SLNContainerAttributes
 			}
 			
 			String propVal = prop.toString();
-			boolean res = SLNConst.compare(propVal, value, compOp);
+			boolean res;
+			
+			//Handling property values as numbers (if possible)
+			Double attrDoubleValue = null;
+			try {
+				attrDoubleValue = new Double(value);
+			} catch(Exception e) {}
+			
+			Double molPropDoubleValue = null;
+			if (prop instanceof Double)
+				molPropDoubleValue = (Double)prop;
+			else if (prop instanceof Integer)
+				molPropDoubleValue = ((Integer)prop).doubleValue();
+			else {
+				try {
+					molPropDoubleValue = new Double(propVal);
+				} catch(Exception e) {}
+			}
+			
+			if (attrDoubleValue != null && molPropDoubleValue!= null) {
+				//System.out.println("---> comparing numbers: " + attrDoubleValue + "  " + molPropDoubleValue);
+				//Number comparison
+				res = SLNConst.compare(molPropDoubleValue.doubleValue(), attrDoubleValue.doubleValue(), compOp);
+			}
+			else {
+				//String comparison
+				res = SLNConst.compare(propVal, value, compOp);
+			}
+
+			//TODO complicated case of array of values comparison
 			
 			if (!res)
 				return false;
