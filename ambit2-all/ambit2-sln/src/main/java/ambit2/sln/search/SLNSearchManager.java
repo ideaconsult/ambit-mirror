@@ -95,7 +95,7 @@ public class SLNSearchManager
 		isoTester.setQuery(query);
 		boolean isoRes = isoTester.hasIsomorphism(target);
 		
-		if (FlagAutoResetErrors)
+		if (FlagMatchMolecularProperties)
 			return (isoRes && matchMolecularProperties(target));
 		else
 			return (isoRes);
