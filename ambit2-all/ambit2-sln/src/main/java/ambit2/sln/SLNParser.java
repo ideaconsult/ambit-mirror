@@ -142,6 +142,10 @@ public class SLNParser {
 				
 		init();
 		parse();
+		
+		if (FlagSLNContainerValidation)
+			validateSLNContainer(container);
+		
 		return container;
 	}
 	
@@ -156,6 +160,9 @@ public class SLNParser {
 		
 		init();
 		parse();
+		
+		if (FlagSLNContainerValidation)
+			validateSLNContainer(container);
 		
 		//If the slnSubstance contains more than one container, 
 		//previous containers are already added 
@@ -2131,6 +2138,42 @@ public class SLNParser {
 		return markushAtom;
 	}
 	
-	
+	void validateSLNContainer(SLNContainer slnCon) 
+	{
+		//Additional checks are performed on top of the basic SLN syntax
+		
+		int nAtom =  slnCon.getAtomCount();
+		//int nBond =  snCon.getBondCount();
+		
+		for (int i = 0; i < nAtom; i++)
+		{				
+			SLNAtom at = (SLNAtom)slnCon.getAtom(i);
+			
+			//Checking valence attribute "v=..." values
+			if (at.atomExpression != null)
+				if (at.atomExpression.valences != null) 
+				{
+					int nConnAtoms = slnCon.getConnectedAtomsCount(at);
+					if (nConnAtoms > at.atomExpression.valences.length)
+						newError("Insufficient number of valence values for atom: " + at.toString(), 0, "");
+					
+					boolean FlagValErr = false;
+					for (int k = 0; k < at.atomExpression.valences.length; k++) {
+						int val = at.atomExpression.valences[k];
+						if (val < 1 || val > nConnAtoms) {
+							FlagValErr = true;
+							break;
+						}	
+					}
+					if (FlagValErr)
+						newError("Incorrect valence values for atom: " + at.toString() + 
+								" Values must be in range: [1,"+nConnAtoms+"]!", 0, "");
+					
+					//TODO check for warning when the number of valence points exceeds the number of
+					//valence points defined in the Macro atom
+					
+				}
+		};		
+	}
 
 }
