@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
@@ -76,6 +77,8 @@ public class SLNCli {
 	
 	public SLNContainer slnContainer = null;
 	public IAtomContainer inputMol = null;
+	
+	public FileWriter outWriter = null;
 	
 	
 	
@@ -538,6 +541,12 @@ public class SLNCli {
 			}
 		}
 		
+		if (outputFileName != null) {
+			int fileRes = openFileWriter();
+			if (fileRes != 0)
+				return -1;
+		}
+		
 		int res = 0;
 				
 		
@@ -631,6 +640,10 @@ public class SLNCli {
 			}
 			
 		}
+		
+		if (outWriter != null) {
+			closeFileWriter();
+		}	
 		
 		return res;
 	}
@@ -930,6 +943,29 @@ public class SLNCli {
 		});
 		return reader;
 	}
-	
+
+	public int openFileWriter() {
+		try {
+			outWriter = new FileWriter(outputFileName);
+		}
+		catch (Exception x) {
+			System.out.println("Unable to create output file: " + outputFileName 
+					+ " error: " + x.getMessage());
+			return -1;
+		}
+		return 0;
+	}
+
+	public int closeFileWriter() {
+		try {
+			outWriter.close();
+		}
+		catch (Exception x) {
+			System.out.println("Error on closing output file: " + outputFileName
+					+ ": " + x.getMessage());
+			return -1;
+		}
+		return 0;
+	}
 	
 }
