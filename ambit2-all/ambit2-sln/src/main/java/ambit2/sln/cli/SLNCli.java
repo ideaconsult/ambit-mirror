@@ -79,6 +79,7 @@ public class SLNCli {
 	public IAtomContainer inputMol = null;
 	
 	public FileWriter outWriter = null;
+	public String endLine = System.getProperty("line.separator");
 	
 	
 	
@@ -444,7 +445,7 @@ public class SLNCli {
 					return -1;
 				}
 
-			return runSLN();	
+			return runSLNApp();	
 
 		} catch (Exception x ) {
 			System.out.println("**********" + x.getMessage());
@@ -461,7 +462,7 @@ public class SLNCli {
 	}
 	
 	
-	protected int runSLN() throws Exception
+	protected int runSLNApp() throws Exception
 	{		
 		if (operation == null)
 		{
@@ -966,6 +967,24 @@ public class SLNCli {
 			return -1;
 		}
 		return 0;
+	}
+	
+	public void output(String s) throws Exception 
+	{
+		System.out.print(s);
+		if (outWriter != null)
+			outWriter.write(s);
+	}
+	
+	public void outputLine(String s) throws Exception
+	{
+		System.out.println(s);
+		if (outWriter != null) 
+		{
+			outWriter.write(s);
+			outWriter.write(endLine);
+			outWriter.flush();
+		}
 	}
 	
 }
