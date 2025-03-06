@@ -557,8 +557,8 @@ public class SLNCli {
 			slnContainer = slnParser.parse(sln);
 			if (!slnParser.getErrorMessages().equals(""))
 			{
-				System.out.println("Original sln:    " + sln); 
-				System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+				outputLine("Original sln:    " + sln); 
+				outputLine("SLN Parser errors:\n" + slnParser.getErrorMessages());			
 				return -1;
 			}
 
@@ -578,12 +578,12 @@ public class SLNCli {
 					else
 					{
 						boolean ssRes = ssMatch(slnContainer, inputMol);
-						System.out.println("Matching " + sln + " against " + inputSmiles + "  " + ssRes);
+						outputLine("Matching " + sln + " against " + inputSmiles + "  " + ssRes);
 					}
 				}
 				else
 				{
-					System.out.println("Matching " + sln + " against:");
+					outputLine("Matching " + sln + " against:");
 					res = iterateInputMoleculesFile();
 				}
 				break;
@@ -611,7 +611,7 @@ public class SLNCli {
 						res = iterateInputFileWithSLNs(); //SLN --> Molecule format
 					else
 					{	
-						System.out.println("Converting molecules to SLN:");
+						outputLine("Converting molecules to SLN:");
 						res = iterateInputMoleculesFile(); //Molecules --> SLN
 					}	
 				}
@@ -628,9 +628,9 @@ public class SLNCli {
 					if (inputFileName.endsWith("sln"))
 					{	
 						if (operation == _operation.expand)
-							System.out.println("Expanding Macro and Markush atoms in SLNs:");
+							outputLine("Expanding Macro and Markush atoms in SLNs:");
 						else
-							System.out.println("Generating Markush combintations:");
+							outputLine("Generating Markush combintations:");
 						
 						res = iterateInputFileWithSLNs(); //expand or comb_library operation is performed
 					}
@@ -649,7 +649,7 @@ public class SLNCli {
 		return res;
 	}
 	
-	public int convert(SLNContainer container0) 
+	public int convert(SLNContainer container0) throws Exception
 	{		 
 		SLNContainer container = container0; 
 		if (expand)
@@ -658,7 +658,7 @@ public class SLNCli {
 		switch (outFormat)
 		{
 			case ct:
-				System.out.println(SLNHelper.getCTString(container));
+				outputLine(SLNHelper.getCTString(container));
 				break;
 			case extended_ct:
 				printExtendedCT(container);
@@ -668,22 +668,23 @@ public class SLNCli {
 				IAtomContainer mol = slnConverter.slnContainerToAtomContainer(container);
 				if (slnConverter.hasConversionErrors())
 				{	
-					System.out.println("Conversion errors:");
-					System.out.println(slnConverter.getAllErrors());
+					outputLine("Conversion errors:");
+					outputLine(slnConverter.getAllErrors());
 				}	
 				else
 				{	
 					try {
 						String smiles = SmartsHelper.moleculeToSMILES(mol, true);
-						System.out.println(smiles);
+						outputLine(smiles);
 					}
 					catch (Exception x) {
-						System.out.println("Error generating SMILES: " + x.getMessage());
+						outputLine("Error generating SMILES: " + x.getMessage());
 					}
 					
 					if (warnings)
 						if (!slnConverter.getConversionWarnings().isEmpty())
 						{
+							//Warning are output only to the console
 							System.out.println("Conversion warnings: ");
 							for (String w: slnConverter.getConversionWarnings())
 								System.out.println(w);
@@ -695,17 +696,18 @@ public class SLNCli {
 				IQueryAtomContainer query = slnConverter.slnContainerToQueryAtomContainer(container);
 				if (slnConverter.hasConversionErrors())
 				{	
-					System.out.println("Conversion errors:");
-					System.out.println(slnConverter.getAllErrors());
+					outputLine("Conversion errors:");
+					outputLine(slnConverter.getAllErrors());
 				}	
 				else
 				{	
 					String smarts = smartsHelper.toSmarts(query);
-					System.out.println(smarts);
+					outputLine(smarts);
 					
 					if (warnings)
 						if (!slnConverter.getConversionWarnings().isEmpty())
 						{
+							//Warning are output only to the console
 							System.out.println("Conversion warnings: ");
 							for (String w: slnConverter.getConversionWarnings())
 								System.out.println(w);
@@ -717,56 +719,58 @@ public class SLNCli {
 		return 0;
 	}
 	
-	public int expandSLNContainer(SLNContainer container) 
+	public int expandSLNContainer(SLNContainer container) throws Exception
 	{
 		SLNContainer container2 = expander.generateExpandedSLNContainer(container);
-		System.out.println(slnHelper.toSLN(container2));
+		outputLine(slnHelper.toSLN(container2));
 		return 0;
 	}
 	
-	public int generateCombLibrary(SLNContainer container) 
+	public int generateCombLibrary(SLNContainer container) throws Exception
 	{	
 		List<SLNContainer> list = expander.generateMarkushCombinatorialList(container);
 		for (int i = 0; i < list.size(); i++)
-			System.out.println(slnHelper.toSLN(list.get(i)));
+			outputLine(slnHelper.toSLN(list.get(i)));
 		return 0;
 	}
 	
 
-	public int convertToSLN(IAtomContainer container) 
+	public int convertToSLN(IAtomContainer container) throws Exception
 	{	
 		SLNContainer slnCon = slnConverter.atomContainerToSLNContainer(container);
 		if (slnConverter.hasConversionErrors())
 		{	
-			System.out.println("Conversion errors:");
-			System.out.println(slnConverter.getAllErrors());
+			outputLine("Conversion errors:");
+			outputLine(slnConverter.getAllErrors());
 			return -1;
 		}
 		
-		System.out.println("Input  smiles: " + inputSmiles); 
-		System.out.println(slnHelper.toSLN(slnCon));
+		outputLine("Input  smiles: " + inputSmiles); 
+		outputLine(slnHelper.toSLN(slnCon));
 		
 		return 0;
 	}
 	
 	
-	public void printExtendedCT(SLNContainer container)
+	public void printExtendedCT(SLNContainer container) throws Exception
 	{	 
-		System.out.println("Atom list:");		
-		System.out.print(SLNHelper.getAtomsAttributes(container));
-		System.out.println("Bond list:");
-		System.out.println(SLNHelper.getBondsAttributes(container));
+		outputLine("Atom list:");		
+		outputLine(SLNHelper.getAtomsAttributes(container));
+		outputLine("Bond list:");
+		outputLine(SLNHelper.getBondsAttributes(container));
 		if (container.getAttributes().getNumOfAttributes() > 0)
 		{
-			System.out.println("Molecule attributes:");
-			System.out.println(SLNHelper.getMolAttributes(container));
+			outputLine("Molecule attributes:");
+			outputLine(SLNHelper.getMolAttributes(container));
 		}
 	}
 	
 	
-	public int iterateInputFileWithSLNs() 
+	public int iterateInputFileWithSLNs()
 	{
+		int res = 0;
 		BufferedReader br = null;
+		
 		try {
 			br = new BufferedReader(new FileReader(inputFileName));
 		}
@@ -786,15 +790,15 @@ public class SLNCli {
 				
 				if (slnString.isEmpty())
 				{
-					System.out.println("Empty SLN string in line #" + nLine);
+					outputLine("Empty SLN string in line #" + nLine);
 					continue;
 				}				
 				
 				slnContainer = slnParser.parse(slnString);
 				if (!slnParser.getErrorMessages().equals(""))
 				{
-					System.out.println("SLN: " + slnString); 
-					System.out.println("SLN Parser errors:\n" + slnParser.getErrorMessages());			
+					outputLine("SLN: " + slnString); 
+					outputLine("SLN Parser errors:\n" + slnParser.getErrorMessages());			
 					return -1;
 				}
 				
@@ -804,24 +808,32 @@ public class SLNCli {
 					convert (slnContainer);
 					break;
 				case expand:
-					System.out.print(slnString + " --> ");
+					outputLine(slnString + " --> ");
 					expandSLNContainer(slnContainer);
 					break;
 				case comb_library:
-					System.out.println(slnString + " combinations:");
+					outputLine(slnString + " combinations:");
 					generateCombLibrary(slnContainer);
 					break;	
 				}
 			}	
 			
+			
+		}
+		catch (Exception e) {			
+			System.out.println(e.getMessage());
+			res = -1;
+		}
+		
+		try {
 			br.close();
 		}
-		catch (IOException e) {			
+		catch (IOException e) {
 			System.out.println(e.getMessage());
-			return -1;
-		}		
+			res = -1;
+		}
 		
-		return 0;
+		return res;
 	}
 	
 	
@@ -847,14 +859,14 @@ public class SLNCli {
 				
 				if (molecule==null) {
 					records_error++;
-					System.out.println("Unable to read chemical object #" + records_read);
+					outputLine("Unable to read chemical object #" + records_read);
 					continue;
 				}
 				
 				if (molecule.getAtomCount() == 0)
 				{
 					records_error++;
-					System.out.println("Empty chemical object #" + records_read);
+					outputLine("Empty chemical object #" + records_read);
 					continue;
 				}
 								
@@ -873,29 +885,29 @@ public class SLNCli {
 	}
 	
 	
-	public void performTask(IAtomContainer mol, String info)
+	public void performTask(IAtomContainer mol, String info) throws Exception
 	{	
 		switch (operation) {
 		case convert:
 			SLNContainer slnCon = slnConverter.atomContainerToSLNContainer(mol);
 			if (slnConverter.hasConversionErrors())
 			{	
-				System.out.println(info + " conversion errors:");
-				System.out.println(slnConverter.getAllErrors());
+				outputLine(info + " conversion errors:");
+				outputLine(slnConverter.getAllErrors());
 				return;
 			}
 			
-			System.out.println(info + "  " + slnHelper.toSLN(slnCon));
+			outputLine(info + "  " + slnHelper.toSLN(slnCon));
 			break;
 		
 		case ss_match:
 			try {
 				boolean ssRes = ssMatch(slnContainer, mol);
 				String smi = SmartsHelper.moleculeToSMILES(mol, true);
-				System.out.println(info + "  " + smi + "  " + ssRes);
+				outputLine(info + "  " + smi + "  " + ssRes);
 			}
 			catch(Exception x) {
-				System.out.println(info + "  Error: " + x.getMessage()); 
+				outputLine(info + "  Error: " + x.getMessage()); 
 			}
 			break;
 		}	
