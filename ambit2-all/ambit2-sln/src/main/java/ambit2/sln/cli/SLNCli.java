@@ -971,14 +971,28 @@ public class SLNCli {
 	
 	public void output(String s) throws Exception 
 	{
-		System.out.print(s);
+		output(s, true);
+	}
+	
+	public void output(String s, boolean consoleOutput) throws Exception 
+	{
+		if (consoleOutput)
+			System.out.print(s);
+		
 		if (outWriter != null)
 			outWriter.write(s);
 	}
 	
 	public void outputLine(String s) throws Exception
 	{
-		System.out.println(s);
+		outputLine(s,true);
+	}
+	
+	public void outputLine(String s, boolean consoleOutput) throws Exception
+	{
+		if (consoleOutput)
+			System.out.println(s);
+		
 		if (outWriter != null) 
 		{
 			outWriter.write(s);
