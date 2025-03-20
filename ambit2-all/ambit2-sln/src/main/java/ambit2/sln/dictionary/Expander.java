@@ -33,7 +33,7 @@ public class Expander
 	int markushMacroAtomsCount[] = null;
 	int markushPos[] = null;
 	int numberOfMarkusPosCombinations = 0;
-	int maxNumberOfCombinations = 10000;
+	int maxNumberOfCombinations = 100000;
 	
 		
 	public int getMaxNumberOfCombinations() {

@@ -66,6 +66,8 @@ public class SLNCli {
 	public Boolean warnings = true;
 	public String expandString = null;
 	public Boolean expand = false;
+	public String expanderMaxNumberOfCombinationsString = null;
+	public Integer expanderMaxNumberOfCombinations = new Integer(-1);
 	
 	public SLNParser slnParser = new SLNParser();
 	public SLNHelper slnHelper = new SLNHelper();
@@ -263,6 +265,21 @@ public class SLNCli {
 				return "x";
 			}
 		},
+		
+		max_combinations {
+			@Override
+			public String getArgName() {
+				return "integer number";
+			}
+			@Override
+			public String getDescription() {
+				return "Maximal number of generated Markush based combinations";
+			}
+			@Override
+			public String getShortName() {
+				return "M";
+			}
+		},
 
 		help {
 			@Override
@@ -380,16 +397,14 @@ public class SLNCli {
 			outFormatString = argument;
 			outFormat = _out_format.fromString(outFormatString);
 			break;
-		}
-		
+		}		
 		case comparison_convert: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
 			comparisonConversionString = argument;
 			comparisonConversion = ComparisonConversion.fromString(comparisonConversionString);
 			break;
-		}
-		
+		}		
 		case warnings: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -401,8 +416,7 @@ public class SLNCli {
 			else
 				warnings = null;
 			break;
-		}
-		
+		}		
 		case expand: {
 			if ((argument == null) || "".equals(argument.trim()))
 				return;
@@ -413,6 +427,21 @@ public class SLNCli {
 				expand = false;
 			else
 				expand = null;
+			break;
+		}
+		case max_combinations: {
+			if ((argument == null) || "".equals(argument.trim()))
+				return;
+			expanderMaxNumberOfCombinationsString = argument;
+			try {
+				int v = Integer.parseInt(expanderMaxNumberOfCombinationsString);
+				if (v <= 0)
+					expanderMaxNumberOfCombinations = null;
+				else
+					expanderMaxNumberOfCombinations = new Integer(v);
+			} catch (Exception x ) {
+				expanderMaxNumberOfCombinations = null;
+			}
 			break;
 		}
 
@@ -499,6 +528,17 @@ public class SLNCli {
 			System.out.println("Use option '-h' for help.");
 			return -1;
 		}
+		
+		if (expanderMaxNumberOfCombinations == null)
+		{
+			System.out.println("Incorrect value for max_combination option: " + expanderMaxNumberOfCombinationsString);
+			System.out.println("Use option '-h' for help.");
+			return -1;
+		}
+		else {
+			if (expanderMaxNumberOfCombinations > 0)
+				expander.setMaxNumberOfCombinations(expanderMaxNumberOfCombinations);
+		}			
 		
 		if (sln == null && inputFileName == null && inputSmiles == null)
 		{
