@@ -18,6 +18,7 @@ import ambit2.groupcontribution.Calculator;
 import ambit2.groupcontribution.GCMParser;
 import ambit2.groupcontribution.GroupContributionModel;
 import ambit2.groupcontribution.correctionfactors.DescriptorInfo;
+import ambit2.groupcontribution.correctionfactors.ICorrectionFactor;
 import ambit2.groupcontribution.dataset.DataSet;
 import ambit2.groupcontribution.dataset.DataSetObject;
 import ambit2.groupcontribution.descriptors.ILocalDescriptor;
@@ -34,7 +35,8 @@ public class GCMPredictCli {
 	public String gcmConfigFile = null;
 	public String inputFileName = null;
 	public String outputFileName = null;
-	public String inputSmiles = null;	
+	public String inputSmiles = null;
+	public boolean flagVerbose = false;
 	
 	public static void main(String[] args) {
 		GCMPredictCli gcmPredict = new GCMPredictCli();
@@ -119,6 +121,21 @@ public class GCMPredictCli {
 			}
 		},
 		
+		verbose {
+			@Override
+			public String getArgName() {
+				return null;
+			}
+			@Override
+			public String getDescription() {
+				return "Show verbose information";
+			}
+			@Override
+			public String getShortName() {
+				return "v";
+			}
+		},
+		
 		help {
 			@Override
 			public String getArgName() {
@@ -190,7 +207,16 @@ public class GCMPredictCli {
 			outputFileName = argument;
 			break;
 		}
-		
+		case verbose: {			
+			if (argument.equalsIgnoreCase("on"))
+				flagVerbose = true;
+			else if (argument.equalsIgnoreCase("off"))
+				flagVerbose = false;
+			else {
+				//error
+			}
+			break;
+		}
 		}	
 	}
 	
@@ -314,9 +340,23 @@ public class GCMPredictCli {
 			}
 			
 			//This is critical to be set false.
-			gcm.setAllowGroupRegistration(false);
-			
+			gcm.setAllowGroupRegistration(false);			
 			double modelVal = gcm.calcModelValue(mol);
+			
+			if (flagVerbose) {
+				System.out.println("Correction factors:");
+				
+				DataSetObject dso = gcm.getCurrentCalculationObject();
+				List<ICorrectionFactor> correctionFactors = gcm.getCorrectionFactors();
+				for (int i = 0; i < correctionFactors.size(); i++)
+				{	
+					String cfStr = correctionFactors.get(i).getDesignation();
+					double cfVal = dso.fragmentation.correctionFactors.get(i);
+					if (cfVal != 0.0)
+						System.out.println("  " + cfStr + "  " + cfVal);
+				}
+			}
+			
 			System.out.println("GCM value (" + gcm.getTargetProperty()+") for " 
 					+ inputSmiles +  " is " +  modelVal);
 			return 0;
