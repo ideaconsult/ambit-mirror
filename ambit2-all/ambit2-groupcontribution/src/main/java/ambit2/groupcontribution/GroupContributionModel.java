@@ -63,6 +63,7 @@ public class GroupContributionModel
 	private boolean allowGroupRegistration = true;
 	
 	private List<String> calculationErrors = new ArrayList<String>();
+	private DataSetObject currentCaclObj = null;
 	
 	//TODO add group rules and LocalDescriptor rules
 	
@@ -362,14 +363,20 @@ public class GroupContributionModel
 	public double calcModelValue(IAtomContainer mol,  boolean missingMolDescrError)
 	{
 		DataSetObject dso = new DataSetObject(mol);
+		currentCaclObj = dso;
 		return calcModelValue(dso, missingMolDescrError);
 	}
 	
 	public double calcModelValue(IAtomContainer mol)
 	{
 		DataSetObject dso = new DataSetObject(mol);
+		currentCaclObj = dso;
 		return calcModelValue(dso, true);
 	}
+	
+	public DataSetObject getCurrentCalculationObject() {
+		return currentCaclObj;
+	}	
 	
 	public double calcModelValue(DataSetObject dso, boolean missingMolDescrError)
 	{
