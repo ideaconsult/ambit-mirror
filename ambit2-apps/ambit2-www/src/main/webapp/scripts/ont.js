@@ -264,6 +264,7 @@ var ontlookup = {
 	"BAO_0002774" : "CL(hepatic)",
 	"BAO_0002995" : "transcriptional response profiling assay",
 	"BAO_0003006" : "reporter gene assay",
+	"BAO_0003006_SECTION" : "reporter gene assay",
 	"BAO_0002584" : "mitotic cell cycle state assay",
 	"BAO_0002585" : "meiotic cell cycle state assay",
 	"BAO_0010004" : "mitosis/apoptosis assay",
@@ -6823,6 +6824,8 @@ var ontlookup = {
 	"EXPOSURE_PROFESSIONAL_WORKERS_SECTION" : "Use and exposure information. Widespread use by industrial workers",
 	"EXPOSURE_CONSUMER_USE_SECTION" : "Use and exposure information. Consumer use",
 	"EXPOSURE_SERVICE_LIFE_SECTION" : "Use and exposure information. Service Life",
-	"MESOCOSM_SECTION" : "Mesocosm studies"	
-	
+	"MESOCOSM_SECTION" : "Mesocosm studies",	
+	"PROCESS_SECTION" : "Manufacturing process",
+		"ENVO_02000001" : "Manufactured product/textile",
+	"ENVO_00003895" : "Manufactured product/paper product"
 }
