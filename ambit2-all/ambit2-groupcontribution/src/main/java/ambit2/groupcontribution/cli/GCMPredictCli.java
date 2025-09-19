@@ -37,6 +37,7 @@ public class GCMPredictCli {
 	public String outputFileName = null;
 	public String inputSmiles = null;
 	public boolean flagVerbose = false;
+	public boolean flagQuiet = false;
 	
 	public static void main(String[] args) {
 		GCMPredictCli gcmPredict = new GCMPredictCli();
@@ -134,6 +135,35 @@ public class GCMPredictCli {
 			public String getShortName() {
 				return "v";
 			}
+			//This is needed of options without argument
+			public Option createOption() {
+		    	Option option   = OptionBuilder.withLongOpt(name())
+		        .withDescription(getDescription())
+		        .create(getShortName());
+		    	return option;
+			}
+		},
+		
+		quiet {
+			@Override
+			public String getArgName() {
+				return null;
+			}
+			@Override
+			public String getDescription() {
+				return "Quiet/clean/ - only calulated value is output";
+			}
+			@Override
+			public String getShortName() {
+				return "q";
+			}
+			//This is needed of options without argument
+			public Option createOption() {
+		    	Option option   = OptionBuilder.withLongOpt(name())
+		        .withDescription(getDescription())
+		        .create(getShortName());
+		    	return option;
+			}
 		},
 		
 		help {
@@ -207,14 +237,12 @@ public class GCMPredictCli {
 			outputFileName = argument;
 			break;
 		}
-		case verbose: {			
-			if (argument.equalsIgnoreCase("on"))
-				flagVerbose = true;
-			else if (argument.equalsIgnoreCase("off"))
-				flagVerbose = false;
-			else {
-				//error
-			}
+		case verbose: {
+			flagVerbose = true;
+			break;
+		}
+		case quiet: {
+			flagQuiet = true;
 			break;
 		}
 		}	
@@ -357,7 +385,10 @@ public class GCMPredictCli {
 				}
 			}
 			
-			System.out.println("GCM value (" + gcm.getTargetProperty()+") for " 
+			if (flagQuiet)
+				System.out.println(modelVal);
+			else	
+				System.out.println("GCM value (" + gcm.getTargetProperty()+") for " 
 					+ inputSmiles +  " is " +  modelVal);
 			return 0;
 		}
