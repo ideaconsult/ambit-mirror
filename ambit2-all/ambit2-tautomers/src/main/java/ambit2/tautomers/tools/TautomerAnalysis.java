@@ -216,6 +216,26 @@ public class TautomerAnalysis
 			public void handleError(String message) {
 				System.out.println(message);
 			}
+
+			@Override
+			public void handleFatalError(String message) {
+				System.out.println(message);
+			}
+
+			@Override
+			public void handleFatalError(String message, Exception exception) {
+				exception.printStackTrace();
+			}
+
+			@Override
+			public void handleFatalError(String arg0, int arg1, int arg2, int arg3) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void handleFatalError(String arg0, int arg1, int arg2, int arg3, Exception arg4) {
+				// TODO Auto-generated method stub
+			}
 		});
 		return reader;
 	}	
