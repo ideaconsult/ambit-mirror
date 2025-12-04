@@ -140,16 +140,17 @@ public class DataSet
 			public void handleFatalError(String message, Exception exception) {
 				exception.printStackTrace();
 			}
-
+			
 			@Override
-			public void handleFatalError(String arg0, int arg1, int arg2, int arg3) {
-				// TODO Auto-generated method stub
+			public void handleFatalError(String message, int row, int colStart, int colEnd) {
+				System.out.println(String.format("%s [row %d colStart %d colEnd %d]", message, row, colStart, colEnd));
 			}
 
 			@Override
-			public void handleFatalError(String arg0, int arg1, int arg2, int arg3, Exception arg4) {
-				// TODO Auto-generated method stub
-			}
+			public void handleFatalError(String message, int row, int colStart, int colEnd, Exception exception) {
+				System.out.println(String.format("%s [row %d colStart %d colEnd %d] %s", message, row,
+						colStart, colEnd, exception.getMessage()));
+			}			
 		});
 		return reader;
 	}

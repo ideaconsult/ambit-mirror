@@ -572,7 +572,6 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 				localLogger.log(Level.SEVERE, String.format("%s [row %d colStart %d colEnd %d] %s", message, row,
 						colStart, colEnd, exception.getMessage()));
 			}
-
 		};
 		IZReader reader = iuclidversion.getReader(i5z, errhandler);
 		reader.setErrorHandler(errhandler);

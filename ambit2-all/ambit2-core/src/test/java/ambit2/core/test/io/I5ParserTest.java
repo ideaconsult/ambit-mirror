@@ -71,8 +71,7 @@ public class I5ParserTest {
 			}
 			
 			@Override
-			public void handleFatalError(String message) {
-				
+			public void handleFatalError(String message) {				
 			}
 
 			@Override
