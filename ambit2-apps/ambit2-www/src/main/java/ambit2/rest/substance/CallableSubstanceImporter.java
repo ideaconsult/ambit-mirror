@@ -322,6 +322,24 @@ public class CallableSubstanceImporter<USERID> extends CallableQueryProcessor<Fi
 						@Override
 						public void handleError(String message) {
 						}
+						
+						@Override
+						public void handleFatalError(String message) {
+							
+						}
+
+						@Override
+						public void handleFatalError(String message, Exception exception) {
+						}
+
+						@Override
+						public void handleFatalError(String message, int row, int colStart, int colEnd) {
+						}
+
+						@Override
+						public void handleFatalError(String message, int row, int colStart, int colEnd, 
+								Exception exception) {							
+						}
 					});
 					return reader;
 				} catch (AmbitException x) {

@@ -5,6 +5,7 @@ import java.io.FileFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.logging.Level;
 
 import junit.framework.Assert;
 
@@ -68,6 +69,25 @@ public class I5ParserTest {
 			@Override
 			public void handleError(String message) {
 			}
+			
+			@Override
+			public void handleFatalError(String message) {
+				
+			}
+
+			@Override
+			public void handleFatalError(String message, Exception exception) {
+				exception.printStackTrace();
+			}
+
+			@Override
+			public void handleFatalError(String message, int row, int colStart, int colEnd) {
+			}
+
+			@Override
+			public void handleFatalError(String message, int row, int colStart, int colEnd, Exception exception) {
+				exception.printStackTrace();
+			}			
 		});
 		int count = 0;
 		int foundCas=0;

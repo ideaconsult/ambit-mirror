@@ -550,6 +550,29 @@ public class CallableSubstanceI5Query<USERID> extends CallableQueryProcessor<Fil
 			public void handleError(String message) {
 				localLogger.log(Level.WARNING, message);
 			}
+			
+			@Override
+			public void handleFatalError(String message) {				
+				localLogger.log(Level.SEVERE, message);
+			}
+
+			@Override
+			public void handleFatalError(String message, Exception exception) {
+				localLogger.log(Level.SEVERE, exception.getMessage());
+			}
+
+			@Override
+			public void handleFatalError(String message, int row, int colStart, int colEnd) {
+				localLogger.log(Level.SEVERE,
+						String.format("%s [row %d colStart %d colEnd %d]", message, row, colStart, colEnd));
+			}
+
+			@Override
+			public void handleFatalError(String message, int row, int colStart, int colEnd, Exception exception) {
+				localLogger.log(Level.SEVERE, String.format("%s [row %d colStart %d colEnd %d] %s", message, row,
+						colStart, colEnd, exception.getMessage()));
+			}
+
 		};
 		IZReader reader = iuclidversion.getReader(i5z, errhandler);
 		reader.setErrorHandler(errhandler);
