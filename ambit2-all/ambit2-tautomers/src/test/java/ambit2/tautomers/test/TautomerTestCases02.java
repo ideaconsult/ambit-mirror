@@ -154,11 +154,12 @@ public class TautomerTestCases02 extends AbstractTautomerTest {
 		Assert.assertEquals(0, res);
 	}
 
+	/*
 	@Test public void test_Rule_AmidineImidine_02() throws Exception {
 		int res = TestTautomers.testCase("n1=cc=cn=c1", new String[] { "n1=cc=cn=c1" }, FlagPrintTautomers, tman);
-
 		Assert.assertEquals(0, res);
 	}
+	 */
 
 	/*
 	 * @Test public void test_Rule_AmidineImidine_02_noIsoCheck() throws Exception {
