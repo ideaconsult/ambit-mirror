@@ -26,6 +26,7 @@ public class TestSMIRKSStereo extends TestCase
 			.getName());
 	
 	boolean FlagApplyStereoTransformation = true;
+	boolean FlagPrintProducts = true;
 
 	SMIRKSManager smrkMan = new SMIRKSManager(SilentChemObjectBuilder.getInstance());
 	SmilesParser smiParser = new SmilesParser(SilentChemObjectBuilder.getInstance());
@@ -82,14 +83,19 @@ public class TestSMIRKSStereo extends TestCase
 	void checkReactionResult(IAtomContainer resultProduct, String expectedProductsSmiles[]) throws Exception
 	{
 		String expAbsSmi[] = new String[expectedProductsSmiles.length];
-		for (int i = 0; i < expAbsSmi.length; i++)
+		for (int i = 0; i < expAbsSmi.length; i++) {
 			expAbsSmi[i] = getAbsoluteSmiles(expectedProductsSmiles[i]);
-							
+			if (FlagPrintProducts)
+				System.out.println("expected product: " + expAbsSmi[i]);
+		}	
+		
 		IAtomContainerSet products = ConnectivityChecker.partitionIntoMolecules(resultProduct);
 		for (int i = 0; i < products.getAtomContainerCount(); i++)
 		{
 			IAtomContainer product = products.getAtomContainer(i);
 			String prodSmi = SmilesGenerator.absolute().create(product);
+			if (FlagPrintProducts)
+				System.out.println("result product: " + prodSmi);
 			boolean expectedProd = false;
 			for (int k = 0; k < expAbsSmi.length; k++)
 				if (prodSmi.equals(expAbsSmi[k]))
