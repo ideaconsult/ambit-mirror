@@ -857,8 +857,8 @@ public class SMIRKSManager {
     			stereoChanges.put(el, stChange);
     		}	
     	    	
-    	//System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
-    	//System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+    	System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    	System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
     	
     	// Create Non Existing Atoms
     	List<IAtom> newAtoms = new ArrayList<IAtom>();
@@ -1408,7 +1408,8 @@ public class SMIRKSManager {
 				StereoChange stChange = stereoChanges.get(stEl); 
 				stereoChanges.remove(stEl);
 				
-				//System.out.println("  >> handleStereoOnAtomDeletion");
+				System.out.println("  >> handleStereoOnAtomDeletion");
+				System.out.println("  >> pointers:\n      stEl: " + stEl + "\n      target: " + target + "\n      stChange: " + stChange );
 				//System.out.println("  >> " + StereoChemUtils.stereoElement2String(stEl, target));
 				//System.out.println("  >> StereoChange: " + stChange.toString(target));
 				
@@ -1439,6 +1440,10 @@ public class SMIRKSManager {
     IStereoElement handleStereoOnAtomDeletion(IAtom deletedAt, IAtomContainer target, 
     			IStereoElement element, StereoChange stereoChange)
     {
+    	//check for debug purposes
+    	//if (stereoChange == null)
+    	//	return null;
+    	
     	if (element instanceof DoubleBondStereochemistry)
     		return StereoTransformation.deleteAtom(deletedAt, (DoubleBondStereochemistry)element, stereoChange);
     	
