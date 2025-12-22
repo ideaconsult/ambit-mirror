@@ -1521,7 +1521,8 @@ public class StereoChemUtils
 	{
 		List<IStereoElement> elements = new ArrayList<IStereoElement>();
 		for (IStereoElement el : target.stereoElements())
-			elements.add(el);
+			elements.add(dublicateStereoElement(el));
+			//elements.add(el);
 		
 		target.setProperty(STEREO_ELEMENTS_PROPERTY, elements);
 	}
@@ -1540,6 +1541,28 @@ public class StereoChemUtils
 	public static void setStereoElementsListAsProperty(IAtomContainer target, List<IStereoElement> elements) 
 	{
 		target.setProperty(STEREO_ELEMENTS_PROPERTY, elements);
+	}
+	
+	/*
+	 * This is different from cloning. 
+	 * Just another instance of the stereo element is created with the same atoms
+	 */
+	public static IStereoElement dublicateStereoElement(IStereoElement el)
+	{
+		if (el instanceof TetrahedralChirality) {
+			TetrahedralChirality oldThc = (TetrahedralChirality)el;
+			TetrahedralChirality thc = new TetrahedralChirality(oldThc.getChiralAtom(), oldThc.getLigands(), oldThc.getConfig());
+			return thc;
+		}
+		
+		if (el instanceof DoubleBondStereochemistry) {
+			DoubleBondStereochemistry oldDBS = (DoubleBondStereochemistry) el;
+			DoubleBondStereochemistry dbs = new DoubleBondStereochemistry (oldDBS.getFocus(), oldDBS.getBonds(), oldDBS.getConfig());
+			return dbs;
+		}
+		
+		return null;
+		
 	}
 	
 }	
