@@ -1375,6 +1375,7 @@ public class SMIRKSManager {
     void deleteAtomAndDoStereoTransformation(IAtom tAt, IAtomContainer target, 
     		List<IStereoElement> invalidatedStereoElements, Map<IStereoElement, StereoChange> stereoChanges)
     {
+    	System.out.println("  >> deleteAtomAndDoStereoTransformation");
     	//Preliminary store the elements that are to be changed by the atom deletion
 		//and hence to be removed from the IAtomContainer object 
 		//by function removeAtomAndConnectedElectronContainers()
@@ -1418,9 +1419,10 @@ public class SMIRKSManager {
 				StereoChange stChange = stereoChanges.get(stEl); 
 				stereoChanges.remove(stEl);
 				
-				//System.out.println("  >> handleStereoOnAtomDeletion");
-				//System.out.println("  >> " + StereoChemUtils.stereoElement2String(stEl, target));
-				//System.out.println("  >> StereoChange: " + stChange.toString(target));
+				System.out.println("  >> handleStereoOnAtomDeletion");
+				System.out.println("  >> " + StereoChemUtils.stereoElement2String(stEl, target));
+				System.out.println("  >> StereoChange (pointer): " + stChange);
+				System.out.println("  >> StereoChange: " + stChange.toString(target));
 				
 				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 				//if el = null then the stereo element is for 'total removal'
