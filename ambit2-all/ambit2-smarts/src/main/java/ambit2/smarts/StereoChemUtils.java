@@ -1561,8 +1561,16 @@ public class StereoChemUtils
 			return dbs;
 		}
 		
-		return null;
-		
+		return null;		
+	}
+	
+	public static void replaceStereoElementInPropertyList(IAtomContainer target, IStereoElement oldEl, IStereoElement newEl) 
+	{
+		List<IStereoElement> elements = target.getProperty(STEREO_ELEMENTS_PROPERTY);
+		if (elements != null ) {
+			elements.remove(oldEl);
+			elements.add(newEl);
+		}
 	}
 	
 }	

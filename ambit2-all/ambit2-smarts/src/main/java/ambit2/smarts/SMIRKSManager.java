@@ -862,8 +862,8 @@ public class SMIRKSManager {
     		}
     	}	
     	    	
-    	System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
-    	System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
+    	//System.out.println("Initial: \n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
+    	//System.out.println("Initial stereo changes: \n" + StereoChemUtils.getStereoChangesAsString(stereoChanges, target));
     	
     	// Create Non Existing Atoms
     	List<IAtom> newAtoms = new ArrayList<IAtom>();
@@ -880,12 +880,13 @@ public class SMIRKSManager {
     	
     	//Debug code
     	List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
-    	for (IStereoElement element : elements)
-		{
-    		StereoChange stChange0 = stereoChanges.get(element);
-			System.out.println("  00---- element:" + element);
-			System.out.println("  00---- stChange:" + stChange0);
-		}	
+    	if (elements != null)
+    		for (IStereoElement element : elements)
+    		{
+    			StereoChange stChange0 = stereoChanges.get(element);
+    			System.out.println("  00---- element:" + element);
+    			System.out.println("  00---- stChange:" + stChange0);
+    		}	
 
     	// Atom Transformation
     	// Setting atom charges for 'SMIRKS' mapped atoms and deleting unmapped
@@ -936,12 +937,13 @@ public class SMIRKSManager {
     	
     	//Debug code
     	elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
-    	for (IStereoElement element : elements)
-		{
-    		StereoChange stChange0 = stereoChanges.get(element);
-			System.out.println("  01---- element:" + element);
-			System.out.println("  01---- stChange:" + stChange0);
-		}	
+    	if (elements != null)
+    		for (IStereoElement element : elements)
+    		{
+    			StereoChange stChange0 = stereoChanges.get(element);
+    			System.out.println("  01---- element:" + element);
+    			System.out.println("  01---- stChange:" + stChange0);
+    		}	
     	    	
     	// Bond Transformations
     	for (int i = 0; i < reaction.reactBo.size(); i++) 
@@ -1397,6 +1399,12 @@ public class SMIRKSManager {
 		//by function removeAtomAndConnectedElectronContainers()
 		List<IStereoElement> listSE = getStereoElementsToBeRemoved(tAt, target);
 		
+		List<IStereoElement> stereo_elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
+		List<IStereoElement> newValidEl = new ArrayList<IStereoElement>();
+		for (IStereoElement element : stereo_elements)
+			if (!listSE.contains(element))
+				newValidEl.add(element);
+				
 		//Debug code
     	List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
     	for (IStereoElement element : elements)
@@ -1426,6 +1434,9 @@ public class SMIRKSManager {
 					{	
 						newInvEl.add(el);
 						stereoChanges.put(el, stChange);
+						//?? fix
+						//if (el != stEl)
+						//	StereoChemUtils.replaceStereoElementInPropertyList(target, stEl, el);
 					}
 				}
 				else
@@ -1463,8 +1474,21 @@ public class SMIRKSManager {
 				//if el = null then the stereo element is for 'total removal'
 				if (el != null)
 				{	
-					invalidatedStereoElements.add(el);
-					stereoChanges.put(el, stChange);
+					//invalidatedStereoElements.add(el);
+					//stereoChanges.put(el, stChange);
+					
+					if (stChange.isValidStereoElement()) {						
+						newValidEl.add(el);
+						stereoChanges.put(el, stChange);
+					}
+					else {
+						invalidatedStereoElements.add(el);
+						stereoChanges.put(el, stChange);
+					}
+					
+					//?? fix
+					//if (el != stEl)
+					//	StereoChemUtils.replaceStereoElementInPropertyList(target, stEl, el);
 				}
 			}
 		}
@@ -1478,6 +1502,7 @@ public class SMIRKSManager {
 			System.out.println("  00-3--- stChange:" + stChange0);
 		}
 		
+    	target.setProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY, newValidEl);   //target.setStereoElements(newValidEl);
     }
     
     List<IStereoElement> getStereoElementsToBeRemoved (IAtom deletedAt, IAtomContainer target)
