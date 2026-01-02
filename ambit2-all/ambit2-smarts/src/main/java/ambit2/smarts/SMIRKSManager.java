@@ -1370,6 +1370,11 @@ public class SMIRKSManager {
 		//by function removeAtomAndConnectedElectronContainers()
 		List<IStereoElement> listSE = getStereoElementsToBeRemoved(tAt, target);
 		
+		List<IStereoElement> newValidEl = new ArrayList<IStereoElement>();		
+		for (IStereoElement element : target.stereoElements())
+			if (!listSE.contains(element))
+				newValidEl.add(element);
+		
 		target.removeAtomAndConnectedElectronContainers(tAt);
 		
 		//Check previously invalidated stereo elements
@@ -1417,11 +1422,22 @@ public class SMIRKSManager {
 				//if el = null then the stereo element is for 'total removal'
 				if (el != null)
 				{	
-					invalidatedStereoElements.add(el);
-					stereoChanges.put(el, stChange);
+					//invalidatedStereoElements.add(el);
+					//stereoChanges.put(el, stChange);
+					
+					if (stChange.isValidStereoElement()) {						
+						newValidEl.add(el);
+						stereoChanges.put(el, stChange);
+					}
+					else {
+						invalidatedStereoElements.add(el);
+						stereoChanges.put(el, stChange);
+					}
 				}
 			}
 		}
+		
+		target.setStereoElements(newValidEl);
 		
     }
     
