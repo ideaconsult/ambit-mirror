@@ -1428,9 +1428,18 @@ public class SMIRKSManager {
 				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 				//if el = null then the stereo element is for 'total removal'
 				if (el != null)
-				{	
-					invalidatedStereoElements.add(el);
-					stereoChanges.put(el, stChange);
+				{						
+					if (stChange.isValidStereoElement()) {
+						newValidEl.add(el);
+						stereoChanges.put(el, stChange);
+					}
+					else {
+						invalidatedStereoElements.add(el);
+						stereoChanges.put(el, stChange);
+					}
+					
+					//invalidatedStereoElements.add(el);
+					//stereoChanges.put(el, stChange);
 				}
 			}
 		}
