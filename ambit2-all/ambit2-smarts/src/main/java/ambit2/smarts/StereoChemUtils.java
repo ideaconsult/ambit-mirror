@@ -19,6 +19,8 @@ import org.openscience.cdk.stereo.TetrahedralChirality;
 
 public class StereoChemUtils 
 {
+	public static final String STEREO_ELEMENTS_PROPERTY = "AMBIT_STEREO_PROPERTY";
+	
 	/**
 	 * 
 	 * @param originalDBS - the stereo element from the original molecule that will be cloned
@@ -1474,6 +1476,59 @@ public class StereoChemUtils
 		return new DoubleBondStereochemistry(dbsc.getStereoBond(), newLigandBonds, stereo);
     }
 
+	public static void storeStereoElementsAsProperty(IAtomContainer target) 
+	{
+		List<IStereoElement> elements = new ArrayList<IStereoElement>();
+		for (IStereoElement el : target.stereoElements())
+			elements.add(dublicateStereoElement(el));
+					
+		target.setProperty(STEREO_ELEMENTS_PROPERTY, elements);
+	}
 	
+	public static void extractStereoElementsFromProperty(IAtomContainer target) 
+	{
+		List<IStereoElement> elements = target.getProperty(STEREO_ELEMENTS_PROPERTY);
+		if (elements != null ) {
+			target.setStereoElements(elements);			
+			target.removeProperty(STEREO_ELEMENTS_PROPERTY);
+		}
+		else
+			target.setStereoElements(new ArrayList<IStereoElement>()); //set empty list
+	}
+	
+	public static void setStereoElementsListAsProperty(IAtomContainer target, List<IStereoElement> elements) 
+	{
+		target.setProperty(STEREO_ELEMENTS_PROPERTY, elements);
+	}
+	
+	/*
+	 * This is different from cloning. 
+	 * It is a shallow copy - another instance of the stereo element is created with the same atoms
+	 */
+	public static IStereoElement dublicateStereoElement(IStereoElement el)
+	{
+		if (el instanceof TetrahedralChirality) {
+			TetrahedralChirality oldThc = (TetrahedralChirality)el;
+			TetrahedralChirality thc = new TetrahedralChirality(oldThc.getChiralAtom(), oldThc.getLigands(), oldThc.getConfig());
+			return thc;
+		}
+		
+		if (el instanceof DoubleBondStereochemistry) {
+			DoubleBondStereochemistry oldDBS = (DoubleBondStereochemistry) el;
+			DoubleBondStereochemistry dbs = new DoubleBondStereochemistry (oldDBS.getFocus(), oldDBS.getBonds(), oldDBS.getConfig());
+			return dbs;
+		}
+		
+		return null;		
+	}
+	
+	public static void replaceStereoElementInPropertyList(IAtomContainer target, IStereoElement oldEl, IStereoElement newEl) 
+	{
+		List<IStereoElement> elements = target.getProperty(STEREO_ELEMENTS_PROPERTY);
+		if (elements != null ) {
+			elements.remove(oldEl);
+			elements.add(newEl);
+		}
+	}
 	
 }	
