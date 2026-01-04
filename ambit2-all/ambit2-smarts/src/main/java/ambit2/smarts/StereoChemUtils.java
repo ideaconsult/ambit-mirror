@@ -665,6 +665,7 @@ public class StereoChemUtils
 		return sb.toString();
 	}
 	
+	/*
 	static public void setSteroElementsAsProperties(IAtomContainer container){
 
 		for (IStereoElement element : container.stereoElements())
@@ -690,16 +691,17 @@ public class StereoChemUtils
 
 			if (element instanceof ExtendedTetrahedral)
 			{
-				/*
-				ExtendedTetrahedral et = (ExtendedTetrahedral)element;
-				IAtom atom = et.focus();
-				if (atom != null)
-					atom.setProperty("StereoElement", element);
-				*/	
+				
+				//ExtendedTetrahedral et = (ExtendedTetrahedral)element;
+				//IAtom atom = et.focus();
+				//if (atom != null)
+				//	atom.setProperty("StereoElement", element);
+					
 				continue;
 			}
 		}
 	}
+	*/
 	
 	
 	//---------------Utilities for manipulation(update) of stereo elements------------------
