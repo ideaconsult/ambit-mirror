@@ -48,7 +48,7 @@ public class StereoTransformation
 		
 		if (n == -1) //Atom is not found between the ligands
 			return ligands;
-		System.out.println("stereoChange: " + stereoChange);
+		//System.out.println("stereoChange: " + stereoChange);
 		if (stereoChange.addLigandsAtoms.isEmpty())
 		{
 			//Set the new ligands where ligand n is set to be PseudoAtom (i.e. it marked deleted) 

@@ -878,6 +878,7 @@ public class SMIRKSManager {
     		target.addAtom(a0);
     	}
     	
+    	/*
     	//Debug code
     	List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
     	if (elements != null)
@@ -886,7 +887,8 @@ public class SMIRKSManager {
     			StereoChange stChange0 = stereoChanges.get(element);
     			System.out.println("  00---- element:" + element);
     			System.out.println("  00---- stChange:" + stChange0);
-    		}	
+    		}
+    	*/		
 
     	// Atom Transformation
     	// Setting atom charges for 'SMIRKS' mapped atoms and deleting unmapped
@@ -935,6 +937,7 @@ public class SMIRKSManager {
     		//System.out.println("Atom change " + (i+1) + "\n" + StereoChemUtils.getAllStereoElementsStatus(target, invalidatedStereoElements));
     	}
     	
+    	/*
     	//Debug code
     	elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
     	if (elements != null)
@@ -944,7 +947,8 @@ public class SMIRKSManager {
     			System.out.println("  01---- element:" + element);
     			System.out.println("  01---- stChange:" + stChange0);
     		}	
-    	    	
+    	*/
+    	
     	// Bond Transformations
     	for (int i = 0; i < reaction.reactBo.size(); i++) 
     	{
@@ -1393,7 +1397,7 @@ public class SMIRKSManager {
     void deleteAtomAndDoStereoTransformation(IAtom tAt, IAtomContainer target, 
     		List<IStereoElement> invalidatedStereoElements, Map<IStereoElement, StereoChange> stereoChanges)
     {
-    	System.out.println("  >> deleteAtomAndDoStereoTransformation");
+    	//System.out.println("  >> deleteAtomAndDoStereoTransformation");
     	//Preliminary store the elements that are to be changed by the atom deletion
 		//and hence to be removed from the IAtomContainer object 
 		//by function removeAtomAndConnectedElectronContainers()
@@ -1404,7 +1408,8 @@ public class SMIRKSManager {
 		for (IStereoElement element : stereo_elements)
 			if (!listSE.contains(element))
 				newValidEl.add(element);
-				
+		
+		/*
 		//Debug code
     	List<IStereoElement> elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
     	for (IStereoElement element : elements)
@@ -1412,7 +1417,8 @@ public class SMIRKSManager {
     		StereoChange stChange0 = stereoChanges.get(element);
 			System.out.println("  00-1--- element:" + element);
 			System.out.println("  00-1--- stChange:" + stChange0);
-		}	
+		}
+		*/	
     	
 		target.removeAtomAndConnectedElectronContainers(tAt);
 		
@@ -1447,13 +1453,16 @@ public class SMIRKSManager {
 			invalidatedStereoElements.addAll(newInvEl);
 		}
 		
+		/*
+		//Debug code
 		elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
     	for (IStereoElement element : elements)
 		{
     		StereoChange stChange0 = stereoChanges.get(element);
 			System.out.println("  00-2--- element:" + element);
 			System.out.println("  00-2--- stChange:" + stChange0);
-		}	
+		}
+		*/	
 		
 		//Handle newly invalidated stereo elements
 		if (!listSE.isEmpty())
@@ -1463,12 +1472,12 @@ public class SMIRKSManager {
 				StereoChange stChange = stereoChanges.get(stEl); 
 				stereoChanges.remove(stEl);
 				
-				System.out.println("  >> handleStereoOnAtomDeletion");
-				System.out.println("  >> " + stEl);
-				System.out.println("  >> " + StereoChemUtils.stereoElement2String(stEl, target));
-				System.out.println("  >> StereoChange (pointer): " + stChange);
-				if (stChange != null)
-					System.out.println("  >> StereoChange: " + stChange.toString(target));
+				//System.out.println("  >> handleStereoOnAtomDeletion");
+				//System.out.println("  >> " + stEl);
+				//System.out.println("  >> " + StereoChemUtils.stereoElement2String(stEl, target));
+				//System.out.println("  >> StereoChange (pointer): " + stChange);
+				//if (stChange != null)
+				//	System.out.println("  >> StereoChange: " + stChange.toString(target));
 				
 				IStereoElement el = handleStereoOnAtomDeletion(tAt, target, stEl, stChange);
 				//if el = null then the stereo element is for 'total removal'
@@ -1493,6 +1502,7 @@ public class SMIRKSManager {
 			}
 		}
 		
+		/*
 		//Debug code
     	elements = target.getProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY);
     	for (IStereoElement element : elements)
@@ -1501,6 +1511,7 @@ public class SMIRKSManager {
 			System.out.println("  00-3--- element:" + element);
 			System.out.println("  00-3--- stChange:" + stChange0);
 		}
+		*/
 		
     	target.setProperty(StereoChemUtils.STEREO_ELEMENTS_PROPERTY, newValidEl);   //target.setStereoElements(newValidEl);
     }
@@ -1548,8 +1559,8 @@ public class SMIRKSManager {
     	for (IStereoElement element : elements)
 		{
     		StereoChange stChange0 = stereoChanges.get(element);
-			System.out.println("  02---- element:" + element);
-			System.out.println("  02---- stChange:" + stChange0);
+			//System.out.println("  02---- element:" + element);
+			//System.out.println("  02---- stChange:" + stChange0);
     		
     		int n = 0;
 			if (targetAt1 != null)
@@ -1607,8 +1618,8 @@ public class SMIRKSManager {
 				StereoChange stChange = stereoChanges.get(element);
 				stereoChanges.remove(element);
 				
-				System.out.println("  ---- element:" + element);
-				System.out.println("  ---- stChange:" + stChange);
+				//System.out.println("  ---- element:" + element);
+				//System.out.println("  ---- stChange:" + stChange);
 				
 				TetrahedralChirality thc = 
 						StereoTransformation.bondChange(targetAt1, targetAt2, initialBondOrder, 
