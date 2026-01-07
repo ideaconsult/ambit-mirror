@@ -1058,8 +1058,12 @@ public class SMIRKSManager {
     	
     	if (FlagAromaticityTransformation)
     	{
-    		applyAromaticityTransformAtLocation(target, rMap, newAtoms, reaction);
-    		//Returning back the stereo element from property to the target.stereoElements() container
+    		applyAromaticityTransformAtLocation(target, rMap, newAtoms, reaction);    		
+    	}
+    	
+    	if (FlagApplyStereoTransformation) 
+    	{
+    		//Returning back the stereo elements from target property to the target.stereoElements() container
     		StereoChemUtils.extractStereoElementsFromProperty(target);
     	}
     }
