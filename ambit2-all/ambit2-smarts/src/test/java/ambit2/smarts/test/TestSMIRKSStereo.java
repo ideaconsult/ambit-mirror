@@ -114,6 +114,12 @@ public class TestSMIRKSStereo extends TestCase
 		return SmilesGenerator.absolute().create(mol);
 	}
 	
+	String getIsomericSmiles(String smi) throws Exception
+	{
+		IAtomContainer mol = smiParser.parseSmiles(smi);
+		return SmilesGenerator.isomeric().create(mol);
+	}
+
 	//Transformations with SMIRKS containing stereo
 	
 	public void test01A() throws Exception 
