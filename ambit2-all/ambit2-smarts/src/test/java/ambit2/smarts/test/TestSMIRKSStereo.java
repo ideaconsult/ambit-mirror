@@ -82,12 +82,21 @@ public class TestSMIRKSStereo extends TestCase
 	
 	void checkReactionResult(IAtomContainer resultProduct, String expectedProductsSmiles[]) throws Exception
 	{
+		if (resultProduct == null) {
+			System.out.println("Reaction is not applicable");
+			if (expectedProductsSmiles == null) {
+				System.out.println("   but it is expected");
+			}
+			else
+				assertEquals("Expected product: " + expectedProductsSmiles[0] , true, false);
+		}
+
 		String expAbsSmi[] = new String[expectedProductsSmiles.length];
 		for (int i = 0; i < expAbsSmi.length; i++) {
 			expAbsSmi[i] = getAbsoluteSmiles(expectedProductsSmiles[i]);
 			if (FlagPrintProducts)
 				System.out.println("expected product: " + expAbsSmi[i]);
-		}	
+		}
 		
 		IAtomContainerSet products = ConnectivityChecker.partitionIntoMolecules(resultProduct);
 		for (int i = 0; i < products.getAtomContainerCount(); i++)
