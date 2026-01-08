@@ -89,6 +89,7 @@ public class TestSMIRKSStereo extends TestCase
 			}
 			else
 				assertEquals("Expected product: " + expectedProductsSmiles[0] , true, false);
+			return;
 		}
 
 		String expAbsSmi[] = new String[expectedProductsSmiles.length];
@@ -244,6 +245,17 @@ public class TestSMIRKSStereo extends TestCase
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	
+	public void test101B() throws Exception
+	{
+		String smirks = "O[C:1]>>N[C:1]";
+		String target = "C[C@](N)(CC)Cl";
+		String expectedProducts[] = null;
+		boolean FlagExplicitH = false;
+
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
+
 	public void test102() throws Exception 
 	{
 		String smirks = "O[C:1]>>N[C:1]";
