@@ -231,11 +231,6 @@ public class TestSMIRKSStereo extends TestCase
 	
 	
 	
-	
-	
-	
-	
-	
 	//Transformation on chemical objects with stereo elements
 	
 	public void test101() throws Exception 
@@ -304,30 +299,42 @@ public class TestSMIRKSStereo extends TestCase
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	
-	/*
-	 * Exception is thrown
-	 * 
-	 * java.lang.IllegalArgumentException: expected two ligand bonds
-	at org.openscience.cdk.stereo.DoubleBondStereochemistry.<init>(DoubleBondStereochemistry.java:53)
-	at ambit2.smarts.StereoChemUtils.bondChange(StereoChemUtils.java:845)
-	
+		
 	public void test104() throws Exception 
 	{
-		//This one does not need FlagApplyStereoTransformation
-		
+		//This one does not need FlagApplyStereoTransformation		
 		String smirks = "[C:1]N>>[C:1]Cl";
-		String target = "O/C=C(N)/C";
+		String target = "O/C=C(N)/C";		
 		String expectedProducts[] = new String[] {"O/C=C(Cl)/C"};
 		boolean FlagExplicitH = false;
 		
 		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
 		checkReactionResult(resultProduct, expectedProducts);
 	}
-	*/
 	
+	public void test104B() throws Exception 
+	{
+		//This one does not need FlagApplyStereoTransformation
+		String smirks = "[C:1]N>>[C:1]Cl";
+		String target = "O/C=C(\\N)C";
+		String expectedProducts[] = new String[] {"O/C=C(Cl)/C"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
 	
-	//tu.testSMIRKS("[C:1]N>>[C:1]Cl", "O/C=C(\\N)C");  //This is not so clear what should happen
-	
+	public void test104C() throws Exception 
+	{
+		//This one does not need FlagApplyStereoTransformation
+		String smirks = "[C:1]N>>[C:1]Cl";
+		String target = "O/C=C(\\N)C";
+		String expectedProducts[] = new String[] {"O/C=C(\\Cl)C"};
+		boolean FlagExplicitH = false;
+		
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		checkReactionResult(resultProduct, expectedProducts);
+	}
 	
 	public void test105() throws Exception 
 	{
