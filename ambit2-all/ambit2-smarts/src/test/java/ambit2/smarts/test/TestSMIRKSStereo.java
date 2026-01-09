@@ -98,7 +98,7 @@ public class TestSMIRKSStereo extends TestCase
 			if (FlagPrintProducts)
 				System.out.println("expected product: " + expAbsSmi[i]);
 		}
-		
+				
 		IAtomContainerSet products = ConnectivityChecker.partitionIntoMolecules(resultProduct);
 		for (int i = 0; i < products.getAtomContainerCount(); i++)
 		{
@@ -430,7 +430,7 @@ public class TestSMIRKSStereo extends TestCase
 		String expectedProducts[] = new String[] {"[O-]C(=O)\\C=C1\\CC=CC=CO1"};
 		boolean FlagExplicitH = true;
 		
-		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);
+		IAtomContainer resultProduct = applySMIRKSReaction(smirks, target, FlagExplicitH);		
 		checkReactionResult(resultProduct, expectedProducts);
 	}
 	

@@ -557,7 +557,7 @@ public class SMIRKSManager {
     			throw e;
     		} 
     		*/
-
+    		
     		if (FlagProcessResultStructures)
     			processProduct(target);
     		
@@ -621,12 +621,21 @@ public class SMIRKSManager {
     		AtomConfigurator cfg = new AtomConfigurator();
     		cfg.process(target);
     		*/
+    		
+    		System.out.println(" ------>1 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(target));
+    		System.out.println(" ------>1 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(target));
 
     		if (FlagProcessResultStructures)
     			processProduct(target);
     		
+    		System.out.println(" ------>2 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(target));
+    		System.out.println(" ------>2 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(target));
+    		
     		if (FlagCheckResultStereo)
     			StereoChemUtils.checkStereoElements(target);
+    		
+    		System.out.println(" ------>3 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(target));
+    		System.out.println(" ------>3 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(target));
 
     		return applied;
     	}
@@ -1335,11 +1344,14 @@ public class SMIRKSManager {
 
     public void processProduct(IAtomContainer mol) throws Exception 
     {
-
+    	    	
     	if (FlagClearHybridizationBeforeResultProcess)
     		for (IAtom atom : mol.atoms())
     			atom.setHybridization((IAtomType.Hybridization) CDKConstants.UNSET);
-
+    	
+    	System.out.println(" ------>1-1 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		System.out.println(" ------>1-1 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
+    	
     	if (FlagClearAromaticityBeforeResultProcess) {
     		for (IAtom atom : mol.atoms())
     			if (atom.getFlag(CDKConstants.ISAROMATIC))
@@ -1348,10 +1360,16 @@ public class SMIRKSManager {
     			if (bond.getFlag(CDKConstants.ISAROMATIC))
     				bond.setFlag(CDKConstants.ISAROMATIC, false);
     	}
+    	
+    	System.out.println(" ------>1-2 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		System.out.println(" ------>1-2 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
 
     	if (FlagClearImplicitHAtomsBeforeResultProcess)
     		for (IAtom atom : mol.atoms())
     			atom.setImplicitHydrogenCount(null);
+    	
+    	//System.out.println(" ------>1-3 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		//System.out.println(" ------>1-3 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
 
     	if (FlagClearExcplicitHAtomsBeforeResultProcess)
     	{
@@ -1359,7 +1377,10 @@ public class SMIRKSManager {
     	}
 
     	AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
-
+    	
+    	//System.out.println(" ------>1-4 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		//System.out.println(" ------>1-4 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
+    	
     	if (isFlagAddImplicitHAtomsOnResultProcess()) {
     		CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance());
     		adder.addImplicitHydrogens(mol);
@@ -1367,6 +1388,9 @@ public class SMIRKSManager {
     		if (FlagConvertAddedImplicitHToExplicitOnResultProcess)
     			MoleculeTools.convertImplicitToExplicitHydrogens(mol);
     	}
+    	
+    	System.out.println(" ------>1-5 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		System.out.println(" ------>1-5 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
 
     	//The newly added atoms may stay with unset implicit H count 
     	for (IAtom atom : mol.atoms())
@@ -1374,12 +1398,23 @@ public class SMIRKSManager {
     		if (atom.getImplicitHydrogenCount() == null)
     			atom.setImplicitHydrogenCount(new Integer(0));
     	}
-
+    	
+    	System.out.println(" ------>1-6 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		System.out.println(" ------>1-6 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
+    	
     	if (FlagCheckAromaticityOnResultProcess)
     		CDKHueckelAromaticityDetector.detectAromaticity(mol);
-
+    	
+    	System.out.println(" ------>1-7 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		System.out.println(" ------>1-7 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
+		
+		
+		//Here the stereo double bond info is lost
     	if (FlagConvertExplicitHToImplicitOnResultProcess)
     		MoleculeTools.convertExplicitHAtomsToImplicit(mol);
+    	    	    	
+    	System.out.println(" ------>1-8 ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(mol));
+		System.out.println(" ------>1-8 ISOMERIC_SMILES: " + SmilesGenerator.isomeric().create(mol));
     }
     
     void deleteAtomAndDoStereoTransformation(IAtom tAt, IAtomContainer target, 
