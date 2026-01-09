@@ -20,6 +20,7 @@ import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.ITetrahedralChirality.Stereo;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
@@ -1043,7 +1044,7 @@ public class SMIRKSManager {
     	
     	 
     	if (FlagApplyStereoTransformation)
-    	{	
+    	{	    		
     		checkInvalidatedDBStereo(target, invalidatedStereoElements, stereoChanges);
     		
     		//handle stereo transformation defined in the SMIRKS
@@ -1066,6 +1067,14 @@ public class SMIRKSManager {
     		//Returning back the stereo elements from target property to the target.stereoElements() container
     		StereoChemUtils.extractStereoElementsFromProperty(target);
     	}
+    	
+    	try {
+    		System.out.println(" ****** ISO_SMILES: " + SmilesGenerator.isomeric().create(target));
+    		System.out.println(" ****** ABSOLUTE_SMILES: " + SmilesGenerator.absolute().create(target));
+    		System.out.println(" ****** UNIQUE_SMILES: " + SmilesGenerator.unique().create(target));
+    		System.out.println(" ****** GENERIC_SMILES: " + SmilesGenerator.generic().create(target));    		
+    	}
+    	catch (Exception e) {System.out.println(e.getMessage());}
     }
 
     public IAtomContainer applyTransformationsAtLocationsWithCloning(IAtomContainer target, List<List<IAtom>> rMaps,
