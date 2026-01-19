@@ -36,6 +36,7 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemSequence;
+import org.openscience.cdk.interfaces.IDoubleBondStereochemistry;
 import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.ILonePair;
 import org.openscience.cdk.interfaces.IMolecularFormula;
@@ -54,6 +55,7 @@ import org.openscience.cdk.io.setting.IOSetting;
 import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
+import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.TetrahedralChirality;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -745,15 +747,36 @@ public class MoleculeTools {
 					newStereo.add(tc1);
 				} else
 					newStereo.add(se);
-			} else
-				newStereo.add(se); // non tetrahedral
+			} else if (se instanceof IDoubleBondStereochemistry) {
+				IDoubleBondStereochemistry dbsc = (IDoubleBondStereochemistry) se;				
+				IBond stBo = dbsc.getStereoBond();
+				boolean explicitHNeighbours = false;
+				for (IAtom a: stBo.atoms()) {
+					List<IAtom> neighbAts = mol.getConnectedAtomsList(a);
+					for (IAtom neighb : neighbAts)
+						if (neighb.getSymbol().equals("H")) {
+							explicitHNeighbours = true;
+							break;
+						}
+					if (explicitHNeighbours)
+						break;
+				}
+				if (explicitHNeighbours) {
+					//new stereo element is created since the old one will be invalidated
+					IDoubleBondStereochemistry dbsc1 = 
+							new DoubleBondStereochemistry(dbsc.getStereoBond(), dbsc.getBonds(), dbsc.getConfig());
+					newStereo.add(dbsc1);
+				}
+				else
+					newStereo.add(se); //the stereo double bond will be not affected deleting explicit H
+			}
+			else
+				newStereo.add(se); // non tetrahedral and non double bond stereo
 
 			// TODO handle Extended Tetrahedral Chirality
 		}
 
-		if (!newStereo.isEmpty())
-			mol.setStereoElements(newStereo);
-
+		
 		List<IAtom> removeAtoms = new ArrayList<IAtom>();
 
 		for (IAtom atom : mol.atoms()) {
@@ -766,6 +789,11 @@ public class MoleculeTools {
 
 		for (IAtom atom : removeAtoms)
 			mol.removeAtom(atom);
+		
+		//Adding new stereo element is after atom/bond manipulations
+		//since AtomContainer invalidates the stereo elements upon molecule update
+		if (!newStereo.isEmpty())
+			mol.setStereoElements(newStereo);
 	}
 
 	public static void add1ImplicitHAtom(IAtom atom) {
