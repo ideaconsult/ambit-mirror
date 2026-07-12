@@ -114,12 +114,24 @@ public class QueryExecutor<Q extends IQueryObject> extends
 				logger.log(Level.SEVERE,x.getMessage() + " " + sresults);
 			} catch (Exception xx) {
 			}
+			closeResultsQuietly(rs);
 			throw new ProcessorException(this, x);
 		} catch (Throwable x) {
+			closeResultsQuietly(rs);
 			throw new ProcessorException(this, x.getMessage());
-		} finally {
 		}
 		return rs;
+	}
+
+	/**
+	 * The caller only closes the results on success; on failure the just-prepared
+	 * statement would otherwise stay open until the connection is closed.
+	 */
+	protected void closeResultsQuietly(ResultSet rs) {
+		try {
+			closeResults(rs);
+		} catch (Exception x) {
+		}
 	}
 
 	@Override
