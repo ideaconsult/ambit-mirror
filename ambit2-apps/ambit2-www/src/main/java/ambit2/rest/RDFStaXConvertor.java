@@ -52,10 +52,22 @@ public class RDFStaXConvertor<T,Q extends IQueryRetrieval<T>>  extends QueryRepr
 				} catch (Exception  x) {
 					throw new IOException(x);
 				} finally {
+					// the reporter was never closed here before; it releases
+					// its own connection only if process() is reached, so a
+					// failure in setOutput()/writer creation leaked it
+					try { getReporter().close(); } catch (Exception x) {}
 					try { out.close();} catch (Exception x) {}
-					
+
 				}
-				
+
+			}
+
+			@Override
+			public void release() {
+				// backstop: if the entity is discarded without write() ever
+				// running, still return the reporter's connection to the pool
+				try { getReporter().close(); } catch (Exception x) {}
+				super.release();
 			}
 		 };
 		 setDisposition(rep);

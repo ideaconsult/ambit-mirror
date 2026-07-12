@@ -156,6 +156,7 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 
 				IProcessor<Q, Representation> convertor = null;
 				Connection connection = null;
+				Reporter reporter = null;
 				int retry = 0;
 				while (retry < maxRetry) {
 					try {
@@ -170,21 +171,32 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 							((RepresentationConvertor) convertor).setLicenseURI(getLicenseURI());
 
 						connection = dbc.getConnection();
-						Reporter reporter = ((RepresentationConvertor) convertor).getReporter();
+						reporter = ((RepresentationConvertor) convertor).getReporter();
 						if (reporter instanceof IDBProcessor)
 							((IDBProcessor) reporter).setConnection(connection);
 						Representation r = convertor.process(queryObject);
 						r.setCharacterSet(CharacterSet.UTF_8);
+						// on success the connection is released by the
+						// convertor/reporter (write() or release())
 						return r;
 
 					} catch (ResourceException x) {
+						releaseQuietly(reporter, connection);
+						reporter = null;
+						connection = null;
 						throw x;
 					} catch (NotFoundException x) {
+						releaseQuietly(reporter, connection);
+						reporter = null;
+						connection = null;
 						Representation r = processNotFound(x, retry);
 						retry++;
 						if (r != null)
 							return r;
 					} catch (BatchProcessingException x) {
+						releaseQuietly(reporter, connection);
+						reporter = null;
+						connection = null;
 						if (x.getCause() instanceof NotFoundException) {
 							Representation r = processNotFound((NotFoundException) x.getCause(), retry);
 							retry++;
@@ -195,6 +207,9 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 							throw new RResourceException(Status.SERVER_ERROR_INTERNAL, x, variant);
 						}
 					} catch (SQLException x) {
+						releaseQuietly(reporter, connection);
+						reporter = null;
+						connection = null;
 						Representation r = processSQLError(x, retry, variant);
 						retry++;
 						if (r == null)
@@ -202,17 +217,12 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 						else
 							return r;
 					} catch (Exception x) {
+						releaseQuietly(reporter, connection);
+						reporter = null;
+						connection = null;
 						Context.getCurrentLogger().severe(x.getMessage());
 						throw new RResourceException(Status.SERVER_ERROR_INTERNAL, x, variant);
 
-					} finally {
-
-						// try { if (connection !=null) connection.close(); }
-						// catch (Exception x) {};
-						// try { if ((convertor !=null) &&
-						// (convertor.getReporter() !=null))
-						// convertor.getReporter().close(); } catch (Exception
-						// x) {}
 					}
 				}
 				return null;
@@ -237,6 +247,25 @@ public abstract class QueryResource<Q extends IQueryRetrieval<T>, T extends Seri
 			throw new RResourceException(x.getStatus(), x, variant);
 		} catch (Exception x) {
 			throw new RResourceException(Status.SERVER_ERROR_INTERNAL, x, variant);
+		}
+	}
+
+	/**
+	 * A failed request will never reach the convertor/reporter cleanup that
+	 * runs on the success path, so the checked-out connection must be
+	 * returned to the pool here (c3p0 unreturnedConnectionTimeout is disabled,
+	 * nothing else will reclaim it).
+	 */
+	protected void releaseQuietly(Reporter reporter, Connection connection) {
+		try {
+			if (reporter != null)
+				reporter.close();
+		} catch (Exception x) {
+		}
+		try {
+			if (connection != null)
+				connection.close();
+		} catch (Exception x) {
 		}
 	}
 

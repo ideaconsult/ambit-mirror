@@ -65,10 +65,19 @@ public class PDFConvertor<T,Q extends IQueryRetrieval<T>,R extends Reporter<Q,Do
 	            	} finally {
 	            		try {getReporter().close(); } catch (Exception x) { }
 	            		try {if (stream !=null) stream.flush(); } catch (Exception x) { }
-	            		pdfWriter.close();
+	            		if (pdfWriter != null)
+	            			pdfWriter.close();
 	            	}
 	            }
-	        };		
+
+	            @Override
+	            public void release() {
+	            	// backstop: if the entity is discarded without write() ever
+	            	// running, still return the reporter's connection to the pool
+	            	try { getReporter().close(); } catch (Exception x) { }
+	            	super.release();
+	            }
+	        };
 	        setDisposition(rep);
 	        return rep;
 	};	

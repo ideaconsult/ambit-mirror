@@ -54,7 +54,16 @@ public class OutputStreamConvertor <T,Q extends IQueryRetrieval<T>>  extends Que
 	            		try {getReporter().close(); } catch (Exception x) { x.printStackTrace();}
 	            	}
 	            }
-	        };		
+
+	            @Override
+	            public void release() {
+	            	// backstop: if the entity is discarded without write() ever
+	            	// running (client gone, HEAD, 304), still return the
+	            	// reporter's connection to the pool; close() is idempotent
+	            	try { getReporter().close(); } catch (Exception x) { }
+	            	super.release();
+	            }
+	        };
 	        setDisposition(rep);
 	        return rep;
 	};	
