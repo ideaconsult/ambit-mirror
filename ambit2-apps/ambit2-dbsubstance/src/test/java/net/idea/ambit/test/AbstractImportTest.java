@@ -259,6 +259,7 @@ public abstract class AbstractImportTest extends DbUnitTest {
 
 	protected void testConditions(IDatabaseConnection c, String prmname, int expected, boolean numeric)
 			throws Exception {
+		//turns out it can be simplified SELECT JSON_EXTRACT(params, '$."E.method"') !
 		String query = String.format(
 				"SELECT count(*) c,JSON_EXTRACT(replace(conditions,'E.','E_'),'$.%s') ref FROM substance_experiment e group by ref",
 				prmname.replace("E.", "E_"));

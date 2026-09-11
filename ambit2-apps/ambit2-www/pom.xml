@@ -415,11 +415,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-export</artifactId>
-			<version>${ambit.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
@@ -450,11 +445,6 @@
 					<artifactId>poi-ooxml-schemas</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-pubchem</artifactId>
-			<version>${ambit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
@@ -519,12 +509,6 @@
 			<version>11.8.23</version> </dependency> -->
 		<!-- <dependency> <groupId>ambit</groupId> <artifactId>ambit2-chebi</artifactId> 
 			<version>${ambit.version}</version> <scope>compile</scope> </dependency> -->
-		<dependency>
-			<groupId>ambit</groupId>
-			<artifactId>ambit2-some</artifactId>
-			<version>${ambit.version}</version>
-			<scope>compile</scope>
-		</dependency>
 		<dependency>
 			<groupId>ambit</groupId>
 			<artifactId>opentox-opensso</artifactId>
