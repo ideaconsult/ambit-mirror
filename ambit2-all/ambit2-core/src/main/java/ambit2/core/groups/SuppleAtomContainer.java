@@ -41,6 +41,7 @@ import org.openscience.cdk.ChemObject;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IBond.Display;
 import org.openscience.cdk.interfaces.IBond.Order;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
@@ -887,6 +888,13 @@ public class SuppleAtomContainer extends ChemObject implements IAtomContainer, I
 
 	@Override
 	public void setTitle(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void addBond(int arg0, int arg1, Order arg2, Display arg3) {
 		// TODO Auto-generated method stub
 		
 	}
