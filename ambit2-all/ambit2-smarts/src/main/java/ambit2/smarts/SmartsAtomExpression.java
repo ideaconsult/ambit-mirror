@@ -33,14 +33,14 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class SmartsAtomExpression extends SMARTSAtom {
+public class SmartsAtomExpression extends QueryAtom {
 	public List<SmartsExpressionToken> tokens = new ArrayList<SmartsExpressionToken>();
 	// Each recursive Smarts is represented with a string and a separate
 	// QueryAtomContainer

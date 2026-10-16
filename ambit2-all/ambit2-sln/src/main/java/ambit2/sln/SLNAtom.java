@@ -2,7 +2,7 @@ package ambit2.sln;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 
 import ambit2.sln.dictionary.AtomDictionaryObject;
 import ambit2.sln.dictionary.ISLNDictionaryObject;
@@ -13,7 +13,7 @@ import ambit2.sln.dictionary.MacroAtomDictionaryObject;
  * 
  */
 
-public class SLNAtom extends SMARTSAtom {
+public class SLNAtom extends QueryAtom {
 	static final long serialVersionUID = 5327582562834894L;
 
 	public SLNAtom(IChemObjectBuilder builder) {

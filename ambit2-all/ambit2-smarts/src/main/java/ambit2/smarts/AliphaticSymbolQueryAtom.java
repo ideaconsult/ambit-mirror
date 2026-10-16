@@ -27,13 +27,13 @@ package ambit2.smarts;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class AliphaticSymbolQueryAtom extends SMARTSAtom {
+public class AliphaticSymbolQueryAtom extends QueryAtom {
 
 	private static final long serialVersionUID = -18004315234561145L;
 

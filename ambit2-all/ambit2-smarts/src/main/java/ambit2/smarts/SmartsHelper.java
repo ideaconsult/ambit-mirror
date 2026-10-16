@@ -38,6 +38,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
@@ -45,7 +46,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -84,7 +85,7 @@ public class SmartsHelper {
 		StringBuffer sb = new StringBuffer();
 
 		for (int i = 0; i < query.getAtomCount(); i++) {
-			sb.append(atomToString((SMARTSAtom) query.getAtom(i)) + " ");
+			sb.append(atomToString((QueryAtom) query.getAtom(i)) + " ");
 		}
 		return (sb.toString());
 	}
@@ -113,7 +114,7 @@ public class SmartsHelper {
 						+ getAtomExpressionTokens((SmartsAtomExpression) query
 								.getAtom(i)) + "] ");
 			else
-				sb.append(atomToString((SMARTSAtom) query.getAtom(i)) + " ");
+				sb.append(atomToString((QueryAtom) query.getAtom(i)) + " ");
 		}
 		return (sb.toString());
 	}
@@ -600,7 +601,7 @@ public class SmartsHelper {
 			}
 		}
 		// Add atom from the current node
-		sb.append(atomToString((SMARTSAtom) atom));
+		sb.append(atomToString((QueryAtom) atom));
 
 		// Add indexes
 		if (atomIndexes.containsKey(atom))

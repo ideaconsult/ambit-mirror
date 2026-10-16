@@ -37,11 +37,12 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -875,7 +876,7 @@ public class SmartsManager {
 
 	List<IAtom> getAtomMappingsFor1AtomQuery(IAtomContainer target,
 			IAtomContainer recQuery) {
-		SMARTSAtom qAtom = (SMARTSAtom) recQuery.getAtom(0);
+		QueryAtom qAtom = (QueryAtom) recQuery.getAtom(0);
 		List<IAtom> atomMaps = new ArrayList<IAtom>();
 		for (int i = 0; i < target.getAtomCount(); i++)
 			if (qAtom.matches(target.getAtom(i)))
@@ -890,8 +891,8 @@ public class SmartsManager {
 			return (atomMaps); // The two atoms must be connected otherwise
 								// substr. search returns no matches
 
-		SMARTSAtom qAtom0 = (SMARTSAtom) recQuery.getAtom(0);
-		SMARTSAtom qAtom1 = (SMARTSAtom) recQuery.getAtom(1);
+		QueryAtom qAtom0 = (QueryAtom) recQuery.getAtom(0);
+		QueryAtom qAtom1 = (QueryAtom) recQuery.getAtom(1);
 		SMARTSBond qBond = (SMARTSBond) recQuery.getBond(0);
 
 		for (int i = 0; i < target.getAtomCount(); i++) {
@@ -924,8 +925,8 @@ public class SmartsManager {
 			return (s); // The two atoms must be connected otherwise substr.
 						// search returns no matches
 
-		SMARTSAtom qAtom0 = (SMARTSAtom) recQuery.getAtom(0);
-		SMARTSAtom qAtom1 = (SMARTSAtom) recQuery.getAtom(1);
+		QueryAtom qAtom0 = (QueryAtom) recQuery.getAtom(0);
+		QueryAtom qAtom1 = (QueryAtom) recQuery.getAtom(1);
 		SMARTSBond qBond = (SMARTSBond) recQuery.getBond(0);
 
 		for (int i = 0; i < target.getAtomCount(); i++) {
@@ -977,8 +978,8 @@ public class SmartsManager {
 		SMARTSBond qBond1 = (SMARTSBond) recQuery.getBond(1);
 		int qID0 = recQuery.getBondNumber(qBond0);
 		int qID1 = recQuery.getBondNumber(qBond1);
-		SMARTSAtom qAtom0 = (SMARTSAtom) recQuery.getAtom(0);
-		SMARTSAtom qAtom1 = (SMARTSAtom) recQuery.getAtom(1);
+		QueryAtom qAtom0 = (QueryAtom) recQuery.getAtom(0);
+		QueryAtom qAtom1 = (QueryAtom) recQuery.getAtom(1);
 		IAtom commonQAt = getBondsCommonAtom(qBond0, qBond1);
 
 		if ((commonQAt != qAtom0) && (commonQAt != qAtom1))
@@ -1218,7 +1219,7 @@ public class SmartsManager {
 			System.out.print(" " + " : ");
 			for (int j = 0; j < tl.atoms.size(); j++)
 				System.out.print(SmartsHelper
-						.atomToString((SMARTSAtom) tl.atoms.get(j))
+						.atomToString((QueryAtom) tl.atoms.get(j))
 						+ " "
 						+ ((IBond) tl.bonds.get(j)).getOrder() + "   ");
 			System.out.println();

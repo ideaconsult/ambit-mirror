@@ -26,13 +26,13 @@ package ambit2.smarts;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class AromaticSymbolQueryAtom extends SMARTSAtom {
+public class AromaticSymbolQueryAtom extends QueryAtom {
 
 	public AromaticSymbolQueryAtom(IChemObjectBuilder builder) {
 		super(builder);

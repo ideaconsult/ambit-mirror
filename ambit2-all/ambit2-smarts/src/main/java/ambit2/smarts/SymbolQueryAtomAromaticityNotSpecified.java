@@ -2,9 +2,10 @@ package ambit2.smarts;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 
-public class SymbolQueryAtomAromaticityNotSpecified extends SMARTSAtom {
+
+public class SymbolQueryAtomAromaticityNotSpecified extends QueryAtom {
 
 	public SymbolQueryAtomAromaticityNotSpecified(IChemObjectBuilder builder) {
 		super(builder);

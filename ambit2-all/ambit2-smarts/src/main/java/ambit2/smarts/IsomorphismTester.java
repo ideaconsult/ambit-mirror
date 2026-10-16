@@ -36,7 +36,7 @@ import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.ExtendedTetrahedral;
@@ -253,7 +253,7 @@ public class IsomorphismTester {
 
 		List<Integer> v = new ArrayList<Integer>();
 		if (query.getAtomCount() == 1) {
-			SMARTSAtom qa = (SMARTSAtom) query.getAtom(0);
+			QueryAtom qa = (QueryAtom) query.getAtom(0);
 			for (int i = 0; i < target.getAtomCount(); i++) {
 				if (qa.matches(target.getAtom(i)))
 					v.add(new Integer(i));
@@ -279,7 +279,7 @@ public class IsomorphismTester {
 		isomorphismNodes.clear();
 
 		if (query.getAtomCount() == 1) {
-			SMARTSAtom qa = (SMARTSAtom) query.getAtom(0);
+			QueryAtom qa = (QueryAtom) query.getAtom(0);
 			return qa.matches(target.getAtom(atomNum));
 		}
 
@@ -306,7 +306,7 @@ public class IsomorphismTester {
 		isomorphismNodes.clear();
 
 		if (query.getAtomCount() == 1) {
-			SMARTSAtom qa = (SMARTSAtom) query.getAtom(0);
+			QueryAtom qa = (QueryAtom) query.getAtom(0);
 			for (int i = 0; i < target.getAtomCount(); i++) {
 				if (qa.matches(target.getAtom(i))) {
 					List<IAtom> v = new ArrayList<IAtom>();
@@ -364,7 +364,7 @@ public class IsomorphismTester {
 		List<List<IAtom>> result = new ArrayList<List<IAtom>>();
 
 		if (query.getAtomCount() == 1) {
-			SMARTSAtom qa = (SMARTSAtom) query.getAtom(0);
+			QueryAtom qa = (QueryAtom) query.getAtom(0);
 			for (int i = 0; i < target.getAtomCount(); i++) {
 				if (qa.matches(target.getAtom(i))) {
 					List<IAtom> v = new ArrayList<IAtom>();
@@ -523,7 +523,7 @@ public class IsomorphismTester {
 	}
 
 	boolean singleAtomIsomorphism() {
-		SMARTSAtom qa = (SMARTSAtom) query.getAtom(0);
+		QueryAtom qa = (QueryAtom) query.getAtom(0);
 		isomorphismFound = false;
 		for (int i = 0; i < target.getAtomCount(); i++) {
 			if (qa.matches(target.getAtom(i))) {
