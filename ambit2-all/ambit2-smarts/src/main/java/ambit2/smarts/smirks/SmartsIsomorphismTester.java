@@ -10,7 +10,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSAtom;
+import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 
 import ambit2.smarts.IsomorphismTester;
 import ambit2.smarts.MappingUtils;
@@ -232,7 +232,7 @@ public class SmartsIsomorphismTester
 	
 	boolean singleAtomSmartsIsomorphism()
 	{	
-		SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
+		QueryAtom qa = (QueryAtom)query.getAtom(0);
 		isomorphismFound = false;
 		for (int i = 0; i < target.getAtomCount(); i++)
 		{	
@@ -268,7 +268,7 @@ public class SmartsIsomorphismTester
 		List<Integer> v = new ArrayList<Integer>(); 
 		if (query.getAtomCount() == 1)
 		{	
-			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			QueryAtom qa = (QueryAtom)query.getAtom(0);			
 			for (int i = 0; i < target.getAtomCount(); i++)
 			{	
 				if (smartsMatch.match(qa, target.getAtom(i)))
@@ -298,7 +298,7 @@ public class SmartsIsomorphismTester
 		
 		if (query.getAtomCount() == 1)
 		{
-			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
+			QueryAtom qa = (QueryAtom)query.getAtom(0);
 			return smartsMatch.match(qa, target.getAtom(atomNum));
 		}
 			
@@ -326,7 +326,7 @@ public class SmartsIsomorphismTester
 		
 		if (query.getAtomCount() == 1)
 		{	
-			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			QueryAtom qa = (QueryAtom)query.getAtom(0);			
 			for (int i = 0; i < target.getAtomCount(); i++)
 			{	
 				if (smartsMatch.match(qa, target.getAtom(i)))
@@ -392,7 +392,7 @@ public class SmartsIsomorphismTester
 		
 		if (query.getAtomCount() == 1)
 		{	
-			SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);			
+			QueryAtom qa = (QueryAtom)query.getAtom(0);			
 			for (int i = 0; i < target.getAtomCount(); i++)
 			{	
 				if (smartsMatch.match(qa, target.getAtom(i)))
@@ -440,7 +440,7 @@ public class SmartsIsomorphismTester
 	
 	boolean singleAtomIsomorphism()
 	{	
-		SMARTSAtom qa = (SMARTSAtom)query.getAtom(0);
+		QueryAtom qa = (QueryAtom)query.getAtom(0);
 		isomorphismFound = false;
 		for (int i = 0; i < target.getAtomCount(); i++)
 		{	
