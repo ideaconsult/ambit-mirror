@@ -40,12 +40,6 @@ import org.openscience.cdk.interfaces.ITetrahedralChirality;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
 import org.openscience.cdk.isomorphism.matchers.QueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -354,13 +348,13 @@ public class SmartsHelper {
 		if (a instanceof AromaticSymbolQueryAtom)
 			return (a.getSymbol().toLowerCase());
 
-		if (a instanceof AliphaticAtom)
+		if (a instanceof AliphaticQueryAtom)
 			return ("A");
 
-		if (a instanceof AromaticAtom)
+		if (a instanceof AromaticQueryAtom)
 			return ("a");
 
-		if (a instanceof AnyAtom)
+		if (a instanceof AnyQueryAtom)
 			return ("*");
 
 		// This is a default exit. Generally it should not happen.
@@ -397,13 +391,13 @@ public class SmartsHelper {
 		if (b instanceof RingQueryBond)
 			return ("@");
 
-		if (b instanceof AnyOrderQueryBond)
+		if (b instanceof AmbitAnyOrderQueryBond)
 			return ("~");
 
-		if (b instanceof AromaticQueryBond)
+		if (b instanceof AmbitAromaticQueryBond)
 			return (":");
 
-		if (b instanceof OrderQueryBond) {
+		if (b instanceof AmbitOrderQueryBond) {
 			if (b.getOrder() == IBond.Order.SINGLE)
 				return ("-");
 			if (b.getOrder() == IBond.Order.DOUBLE)
@@ -433,7 +427,7 @@ public class SmartsHelper {
 		if (bond  instanceof DoubleBondAromaticityNotSpecified)
 			return true;
 		
-		if (bond instanceof OrderQueryBond)
+		if (bond instanceof AmbitOrderQueryBond)
 			if (bond.getOrder() == IBond.Order.DOUBLE)
 				return true;
 		
@@ -457,16 +451,16 @@ public class SmartsHelper {
 		if (b instanceof RingQueryBond)
 			return (true);
 
-		if (b instanceof AnyOrderQueryBond)
+		if (b instanceof AmbitAnyOrderQueryBond)
 			return (true);
 		
-		if (b instanceof AromaticQueryBond)
+		if (b instanceof AmbitAromaticQueryBond)
 			return (true); 
 		
 		if (b instanceof SingleBondAromaticityNotSpecified)
 			return (true);
 		
-		if (b instanceof OrderQueryBond) 
+		if (b instanceof AmbitOrderQueryBond) 
 			if (b.getOrder() == IBond.Order.SINGLE)
 				return (true);
 		

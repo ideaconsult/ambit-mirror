@@ -39,9 +39,6 @@ import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtom;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
 import org.openscience.cdk.isomorphism.matchers.QueryBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
@@ -646,13 +643,13 @@ public class SmartsManager {
 	void addBond(IQueryAtomContainer container, IAtom atom0, IAtom atom1,
 			IBond bond) {
 		IBond newBond = null;
-		if (bond instanceof AnyOrderQueryBond)
-			newBond = new AnyOrderQueryBond(bond.getBuilder());
-		else if (bond instanceof OrderQueryBond) {
-			newBond = new AnyOrderQueryBond(bond.getBuilder());
+		if (bond instanceof AmbitAnyOrderQueryBond)
+			newBond = new AmbitAnyOrderQueryBond(bond.getBuilder());
+		else if (bond instanceof AmbitOrderQueryBond) {
+			newBond = new AmbitAnyOrderQueryBond(bond.getBuilder());
 			newBond.setOrder(bond.getOrder());
-		} else if (bond instanceof AromaticQueryBond)
-			newBond = new AromaticQueryBond(bond.getBuilder());
+		} else if (bond instanceof AmbitAromaticQueryBond)
+			newBond = new AmbitAromaticQueryBond(bond.getBuilder());
 		else if (bond instanceof RingQueryBond)
 			newBond = new RingQueryBond(bond.getBuilder());
 		else if (bond instanceof SmartsBondExpression) {
@@ -660,7 +657,7 @@ public class SmartsManager {
 			((SmartsBondExpression) newBond).tokens = ((SmartsBondExpression) bond).tokens;
 		} else {
 			// by default single bond. Any way this should not be called
-			newBond = new AnyOrderQueryBond(bond.getBuilder());
+			newBond = new AmbitAnyOrderQueryBond(bond.getBuilder());
 			newBond.setOrder(IBond.Order.SINGLE);
 		}
 

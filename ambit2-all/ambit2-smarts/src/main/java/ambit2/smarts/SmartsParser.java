@@ -39,12 +39,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
+
 import org.openscience.cdk.isomorphism.matchers.QueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
@@ -376,7 +371,7 @@ public class SmartsParser {
 		if (curBond == null) {
 			switch (curBondType) {
 			case SmartsConst.BT_ANY:
-				curBond = new AnyOrderQueryBond(atom0.getBuilder());
+				curBond = new AmbitAnyOrderQueryBond(atom0.getBuilder());
 				break;
 			case SmartsConst.BT_SINGLE:
 				if (mSupportSingleBondAromaticityNotSpecified)
@@ -391,14 +386,14 @@ public class SmartsParser {
 					curBond = new DoubleNonAromaticBond(atom0.getBuilder());
 				break;
 			case SmartsConst.BT_TRIPLE:
-				curBond = new OrderQueryBond(IBond.Order.TRIPLE, atom0.getBuilder());
+				curBond = new AmbitOrderQueryBond(IBond.Order.TRIPLE, atom0.getBuilder());
 				break;
 			/*
 			 * case SmartsConst.BT_DOUBLE: curBond = new DoubleStereoBond();
 			 * break;
 			 */
 			case SmartsConst.BT_AROMATIC:
-				curBond = new AromaticQueryBond(atom0.getBuilder());
+				curBond = new AmbitAromaticQueryBond(atom0.getBuilder());
 				break;
 			case SmartsConst.BT_RING:
 				curBond = new RingQueryBond(atom0.getBuilder());
@@ -410,7 +405,7 @@ public class SmartsParser {
 				// Directional bond is treated as a single bond.
 				// Additionally this bond is stored in contaner directionaBonds
 				// for further processing
-				curBond = new OrderQueryBond(IBond.Order.SINGLE, atom0.getBuilder());
+				curBond = new AmbitOrderQueryBond(IBond.Order.SINGLE, atom0.getBuilder());
 				directionalBonds.add(curBond);
 				directions.add(new Integer(curBondType));
 				break;
@@ -439,7 +434,7 @@ public class SmartsParser {
 		switch (smarts.charAt(curChar)) {
 		// Aromatic atoms
 		case 'a':
-			curAtom = new AromaticAtom(SilentChemObjectBuilder.getInstance());
+			curAtom = new AromaticQueryAtom(SilentChemObjectBuilder.getInstance());
 			curChar++;
 			break;
 		case 'c':
@@ -483,7 +478,7 @@ public class SmartsParser {
 			break;
 
 		case 'A':
-			curAtom = new AliphaticAtom(SilentChemObjectBuilder.getInstance());
+			curAtom = new AliphaticQueryAtom(SilentChemObjectBuilder.getInstance());
 			curChar++;
 			break;
 		case 'O':
@@ -664,7 +659,7 @@ public class SmartsParser {
 	void parseSpecialSymbol() {
 		switch (smarts.charAt(curChar)) {
 		case '*': // Any atom
-			IQueryAtom curAtom = new AnyAtom(SilentChemObjectBuilder.getInstance());
+			IQueryAtom curAtom = new AnyQueryAtom(SilentChemObjectBuilder.getInstance());
 			curChar++;
 			addAtom(curAtom);
 			break;
@@ -1515,7 +1510,7 @@ public class SmartsParser {
 	}
 
 	int getBondType(IBond bond) {
-		if (bond instanceof OrderQueryBond)
+		if (bond instanceof AmbitOrderQueryBond)
 			return (getBondType(bond.getOrder()));
 		if (bond instanceof SingleOrAromaticBond)
 			return (1);
