@@ -47,7 +47,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
@@ -297,7 +297,7 @@ public class SmartsHelper {
 			int index0 = ac.getAtomNumber(at0);
 			int index1 = ac.getAtomNumber(at1);
 
-			SMARTSBond newBo;
+			QueryBond newBo;
 
 			if (b.getOrder() == IBond.Order.TRIPLE)
 				newBo = new TripleBondAromaticityNotSpecified(ac.getBuilder());

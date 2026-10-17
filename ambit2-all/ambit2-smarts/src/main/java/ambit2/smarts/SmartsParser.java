@@ -45,7 +45,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
@@ -61,10 +61,10 @@ public class SmartsParser {
 	IQueryAtomContainer container;
 	List<SmartsParserError> errors = new ArrayList<SmartsParserError>();
 	Stack<IQueryAtom> brackets = new Stack<IQueryAtom>();
-	List<SMARTSBond> directionalBonds = new ArrayList<SMARTSBond>();
+	List<QueryBond> directionalBonds = new ArrayList<QueryBond>();
 	List<Integer> directions = new ArrayList<Integer>();
-	List<SMARTSBond> processedDirBonds = new ArrayList<SMARTSBond>();
-	List<SMARTSBond> processedDoubleBonds = new ArrayList<SMARTSBond>();
+	List<QueryBond> processedDirBonds = new ArrayList<QueryBond>();
+	List<QueryBond> processedDoubleBonds = new ArrayList<QueryBond>();
 	TreeMap<Integer, RingClosure> indexes = new TreeMap<Integer, RingClosure>();
 
 	boolean mNeedNeighbourData;
@@ -101,7 +101,7 @@ public class SmartsParser {
 	// Basic work variables
 	int curChar;
 	IQueryAtom prevAtom;
-	SMARTSBond curBond;
+	QueryBond curBond;
 	SmartsAtomExpression curAtExpr;
 	int curBondType;
 	int nChars;
@@ -1777,7 +1777,7 @@ public class SmartsParser {
 		processedDoubleBonds.clear();
 
 		for (int i = 0; i < directionalBonds.size(); i++) {
-			SMARTSBond dirBond = directionalBonds.get(i);
+			QueryBond dirBond = directionalBonds.get(i);
 
 			// System.out.println("Dir: "+
 			// SmartsHelper.bondAtomNumbersToString(container, dirBond) + " "
@@ -1789,7 +1789,7 @@ public class SmartsParser {
 			IAtom at0 = dirBond.getAtom(0);
 			IAtom at1 = dirBond.getAtom(1);
 
-			SMARTSBond dBo = getNeighborDoubleBond(dirBond, 0);
+			QueryBond dBo = getNeighborDoubleBond(dirBond, 0);
 			if (dBo != null) {
 				if (!isBondProcessed(dBo, processedDoubleBonds))
 					setDoubleBondStereoElement(dBo, at0, at1, dirBond, directions.get(i).intValue(), 0);
@@ -1804,13 +1804,13 @@ public class SmartsParser {
 		}
 
 		if (!processedDoubleBonds.isEmpty()) {
-			List<SMARTSBond> dbList = new ArrayList<SMARTSBond>();
+			List<QueryBond> dbList = new ArrayList<QueryBond>();
 			dbList.addAll(processedDoubleBonds);
 			container.setProperty("StereoDoubleBonds", dbList);
 		}
 	}
 
-	boolean isDirectionalBond(SMARTSBond bond) {
+	boolean isDirectionalBond(QueryBond bond) {
 		for (int i = 0; i < directionalBonds.size(); i++)
 			if (directionalBonds.get(i) == bond)
 				return (true);
@@ -1829,7 +1829,7 @@ public class SmartsParser {
 	 * (atom.getSymbol().equals("Si")) return true; return false; }
 	 */
 
-	boolean isBondProcessed(SMARTSBond bond, List<SMARTSBond> processedBonds) {
+	boolean isBondProcessed(QueryBond bond, List<QueryBond> processedBonds) {
 		for (IQueryBond bo : processedBonds) {
 			if (bo == bond)
 				return (true);
@@ -1837,7 +1837,7 @@ public class SmartsParser {
 		return (false);
 	}
 
-	SMARTSBond getNeighborDoubleBond(SMARTSBond bond, int atNum) {
+	QueryBond getNeighborDoubleBond(QueryBond bond, int atNum) {
 		// bond is a directional single bond
 		// the neighbor double is search among the "atNum" neighbors
 		IAtom at = bond.getAtom(atNum);
@@ -1846,22 +1846,22 @@ public class SmartsParser {
 			IBond bo = container.getBond(at, (IAtom) ca.get(k));
 			if (bo != bond) {
 				if (bo instanceof DoubleNonAromaticBond)
-					return (SMARTSBond) bo;
+					return (QueryBond) bo;
 				if (bo instanceof DoubleBondAromaticityNotSpecified)
-					return (SMARTSBond) bo;
+					return (QueryBond) bo;
 				if (bo instanceof SmartsBondExpression) {
 					SmartsToChemObject stco = new SmartsToChemObject(SilentChemObjectBuilder.getInstance());
 					IBond bondFromExpr = stco.smartsExpressionToBond((SmartsBondExpression) bo);
 					if (bondFromExpr != null)
 						if (bondFromExpr.getOrder() == IBond.Order.DOUBLE)
-							return (SMARTSBond) bo;
+							return (QueryBond) bo;
 				}
 			}
 		}
 		return (null);
 	}
 
-	void setDoubleBondStereoElement(SMARTSBond doubleBond, IAtom atom, IAtom at0, SMARTSBond dirBond, int direction,
+	void setDoubleBondStereoElement(QueryBond doubleBond, IAtom atom, IAtom at0, QueryBond dirBond, int direction,
 			int atomPos) {
 		// Input defines a fragment of the type "a0--atom=="
 		// Direction of bond "a0--atom" is defined by parameters: direction and
@@ -1899,7 +1899,7 @@ public class SmartsParser {
 				continue;
 			IBond bo = container.getBond(atom1, otherAt);
 			if (at2 == null) {
-				if (isDirectionalBond((SMARTSBond) bo)) {
+				if (isDirectionalBond((QueryBond) bo)) {
 					at2 = otherAt;
 					dirBond2 = bo;
 					break;
@@ -1948,18 +1948,18 @@ public class SmartsParser {
 			DoubleNonAromaticBond db = (DoubleNonAromaticBond) doubleBond;
 			db.setStereoInfo(dbsi);
 			processedDoubleBonds.add(doubleBond);
-			processedDirBonds.add((SMARTSBond) dirBond2);
+			processedDirBonds.add((QueryBond) dirBond2);
 		} else {
 			if (doubleBond instanceof DoubleBondAromaticityNotSpecified) {
 				DoubleBondAromaticityNotSpecified db = (DoubleBondAromaticityNotSpecified) doubleBond;
 				db.setStereoInfo(dbsi);
 				processedDoubleBonds.add(doubleBond);
-				processedDirBonds.add((SMARTSBond) dirBond2);
+				processedDirBonds.add((QueryBond) dirBond2);
 			} else if (doubleBond instanceof SmartsBondExpression) {
 				SmartsBondExpression db = (SmartsBondExpression) doubleBond;
 				db.setStereoInfo(dbsi);
 				processedDoubleBonds.add(doubleBond);
-				processedDirBonds.add((SMARTSBond) dirBond2);
+				processedDirBonds.add((QueryBond) dirBond2);
 			}
 		}
 	}
@@ -1996,7 +1996,7 @@ public class SmartsParser {
 		return direction;
 	}
 
-	void setDoubleStereoBond0(SMARTSBond doubleBond, IAtom atom, IAtom at0, SMARTSBond dirBond, int direction,
+	void setDoubleStereoBond0(QueryBond doubleBond, IAtom atom, IAtom at0, QueryBond dirBond, int direction,
 			int atomPos) {
 		// Input defines a fragment of the type "a0--atom=="
 		// Direction of bond "a0--atom" is defined by parameters: direction and
@@ -2061,11 +2061,11 @@ public class SmartsParser {
 				continue;
 			IBond bo = container.getBond(atom1, otherAt);
 			if (at2 == null) {
-				FlagDir2 = isDirectionalBond((SMARTSBond) bo);
+				FlagDir2 = isDirectionalBond((QueryBond) bo);
 				at2 = otherAt;
 			} else {
 				if (at3 == null) {
-					FlagDir3 = isDirectionalBond((SMARTSBond) bo);
+					FlagDir3 = isDirectionalBond((QueryBond) bo);
 					at3 = otherAt;
 				} else
 					break; // Already found two atoms connected to atom1
@@ -2117,12 +2117,12 @@ public class SmartsParser {
 		boolean isUnspecified;
 		boolean isCis;
 		int direction2 = 0;
-		SMARTSBond dirBond2;
+		QueryBond dirBond2;
 
 		if (FlagDir2) // Getting the second directional bond and its direction
-			dirBond2 = (SMARTSBond) container.getBond(atom1, at2);
+			dirBond2 = (QueryBond) container.getBond(atom1, at2);
 		else
-			dirBond2 = (SMARTSBond) container.getBond(atom1, at3);
+			dirBond2 = (QueryBond) container.getBond(atom1, at3);
 		for (int i = 0; i < directions.size(); i++) {
 			if (directionalBonds.get(i) == dirBond2) {
 				direction2 = directions.get(i).intValue();

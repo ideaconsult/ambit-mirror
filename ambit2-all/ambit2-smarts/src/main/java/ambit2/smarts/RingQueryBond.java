@@ -26,13 +26,13 @@ package ambit2.smarts;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class RingQueryBond extends SMARTSBond {
+public class RingQueryBond extends QueryBond {
 	private static final long serialVersionUID = -90236069308675679L;
 
 	public RingQueryBond(IChemObjectBuilder builder) {

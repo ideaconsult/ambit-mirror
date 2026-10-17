@@ -2,9 +2,9 @@ package ambit2.sln;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 
-public class SLNBond extends SMARTSBond {
+public class SLNBond extends QueryBond {
 	public SLNBond(IChemObjectBuilder builder) {
 		super(builder);
 	}

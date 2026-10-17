@@ -2,10 +2,11 @@ package ambit2.smarts;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 
 
-public class DoubleBondAromaticityNotSpecified extends SMARTSBond {
+
+public class DoubleBondAromaticityNotSpecified extends QueryBond {
 
 	private DoubleBondStereoInfo stereoInfo = null;
 	

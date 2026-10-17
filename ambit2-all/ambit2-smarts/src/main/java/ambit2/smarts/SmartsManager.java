@@ -43,7 +43,7 @@ import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
 import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
@@ -893,7 +893,7 @@ public class SmartsManager {
 
 		QueryAtom qAtom0 = (QueryAtom) recQuery.getAtom(0);
 		QueryAtom qAtom1 = (QueryAtom) recQuery.getAtom(1);
-		SMARTSBond qBond = (SMARTSBond) recQuery.getBond(0);
+		QueryBond qBond = (QueryBond) recQuery.getBond(0);
 
 		for (int i = 0; i < target.getAtomCount(); i++) {
 			IAtom at = target.getAtom(i);
@@ -927,7 +927,7 @@ public class SmartsManager {
 
 		QueryAtom qAtom0 = (QueryAtom) recQuery.getAtom(0);
 		QueryAtom qAtom1 = (QueryAtom) recQuery.getAtom(1);
-		SMARTSBond qBond = (SMARTSBond) recQuery.getBond(0);
+		QueryBond qBond = (QueryBond) recQuery.getBond(0);
 
 		for (int i = 0; i < target.getAtomCount(); i++) {
 			IAtom at = target.getAtom(i);
@@ -974,8 +974,8 @@ public class SmartsManager {
 		if (recQuery.getBondCount() < 2)
 			return (atomMaps);
 
-		SMARTSBond qBond0 = (SMARTSBond) recQuery.getBond(0);
-		SMARTSBond qBond1 = (SMARTSBond) recQuery.getBond(1);
+		QueryBond qBond0 = (QueryBond) recQuery.getBond(0);
+		QueryBond qBond1 = (QueryBond) recQuery.getBond(1);
 		int qID0 = recQuery.getBondNumber(qBond0);
 		int qID1 = recQuery.getBondNumber(qBond1);
 		QueryAtom qAtom0 = (QueryAtom) recQuery.getAtom(0);

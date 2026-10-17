@@ -3,13 +3,13 @@ package ambit2.smarts;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class SingleNonAromaticBond extends SMARTSBond {
+public class SingleNonAromaticBond extends QueryBond {
 
 	public SingleNonAromaticBond(IChemObjectBuilder builder) {
 		super(builder);

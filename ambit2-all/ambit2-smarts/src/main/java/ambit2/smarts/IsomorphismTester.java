@@ -37,7 +37,7 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 import org.openscience.cdk.stereo.DoubleBondStereochemistry;
 import org.openscience.cdk.stereo.ExtendedTetrahedral;
 import org.openscience.cdk.stereo.TetrahedralChirality;
@@ -808,9 +808,9 @@ public class IsomorphismTester {
 
 	boolean checkStereoMatching(Node node) {
 		// Check double bond stereo
-		List<SMARTSBond> dbList = query.getProperty("StereoDoubleBonds");
+		List<QueryBond> dbList = query.getProperty("StereoDoubleBonds");
 		if (dbList != null)
-			for (SMARTSBond b : dbList) {
+			for (QueryBond b : dbList) {
 				if (!matchDoubleBondStereo(b, node))
 					return false;
 			}
@@ -826,7 +826,7 @@ public class IsomorphismTester {
 		return true;
 	}
 
-	boolean matchDoubleBondStereo(SMARTSBond bond, Node node) {
+	boolean matchDoubleBondStereo(QueryBond bond, Node node) {
 		DoubleBondStereoInfo dbsi = null;
 		if (bond instanceof DoubleNonAromaticBond)
 			dbsi = ((DoubleNonAromaticBond) bond).getStereoInfo();

@@ -26,13 +26,13 @@ package ambit2.smarts;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class SingleOrAromaticBond extends SMARTSBond {
+public class SingleOrAromaticBond extends QueryBond {
 	private static final long serialVersionUID = -93436889077894679L;
 
 	public SingleOrAromaticBond(IChemObjectBuilder builder) {

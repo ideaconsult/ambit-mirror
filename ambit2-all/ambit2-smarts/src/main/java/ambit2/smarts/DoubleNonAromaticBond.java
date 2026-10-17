@@ -3,9 +3,9 @@ package ambit2.smarts;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 
-public class DoubleNonAromaticBond extends SMARTSBond {
+public class DoubleNonAromaticBond extends QueryBond {
 
 	private DoubleBondStereoInfo stereoInfo = null;
 	

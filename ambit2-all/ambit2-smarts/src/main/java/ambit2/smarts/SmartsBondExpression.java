@@ -30,13 +30,13 @@ import java.util.List;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.isomorphism.matchers.smarts.SMARTSBond;
+import org.openscience.cdk.isomorphism.matchers.QueryBond;
 
 /**
  * 
  * @author Nikolay Kochev nick@uni-plovdiv.bg
  */
-public class SmartsBondExpression extends SMARTSBond {
+public class SmartsBondExpression extends QueryBond {
 
 	private DoubleBondStereoInfo stereoInfo = null;
 	
