@@ -17,8 +17,7 @@ import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
+
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.periodictable.PeriodicTable;
 
@@ -586,7 +585,7 @@ public class SmartsToChemObject extends
 			return (bond);
 		}
 
-		if (b instanceof AromaticQueryBond) // This case returns a bond with
+		if (b instanceof AmbitAromaticQueryBond) // This case returns a bond with
 											// order null!! Must be handled carefully!
 		{
 			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder
@@ -596,7 +595,7 @@ public class SmartsToChemObject extends
 			return (bond);
 		}
 
-		if (b instanceof OrderQueryBond) {
+		if (b instanceof AmbitOrderQueryBond) {
 			IBond bond = MoleculeTools.newBond(SilentChemObjectBuilder
 					.getInstance());
 			bond.setOrder(b.getOrder());

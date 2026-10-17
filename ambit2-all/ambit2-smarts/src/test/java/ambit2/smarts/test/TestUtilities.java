@@ -43,8 +43,6 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticSymbolAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.isomorphism.mcss.RMap;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -61,6 +59,8 @@ import org.openscience.cdk.validate.ValidatorEngine;
 import ambit2.base.exceptions.EmptyMoleculeException;
 import ambit2.core.data.MoleculeTools;
 import ambit2.core.helper.CDKHueckelAromaticityDetector;
+import ambit2.smarts.AmbitOrderQueryBond;
+import ambit2.smarts.AnyQueryAtom;
 import ambit2.smarts.BinaryCombinations;
 import ambit2.smarts.CMLUtilities;
 import ambit2.smarts.ChemObjectFactory;
@@ -2097,20 +2097,20 @@ public class TestUtilities {
 		// setting atoms
 		IQueryAtom a0 = new AliphaticSymbolAtom("C",q.getBuilder());
 		q.addAtom(a0);
-		IQueryAtom a1 = new AnyAtom(q.getBuilder());
+		IQueryAtom a1 = new AnyQueryAtom(q.getBuilder());
 		q.addAtom(a1);
-		IQueryAtom a2 = new AnyAtom(q.getBuilder());
+		IQueryAtom a2 = new AnyQueryAtom(q.getBuilder());
 		q.addAtom(a2);
 		IQueryAtom a3 = new AliphaticSymbolAtom("C",q.getBuilder());
 		q.addAtom(a3);
 		// setting bonds
-		OrderQueryBond b0 = new OrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
+		AmbitOrderQueryBond b0 = new AmbitOrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
 		b0.setAtoms(new IAtom[] { a0, a1 });
 		q.addBond(b0);
-		OrderQueryBond b1 = new OrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
+		AmbitOrderQueryBond b1 = new AmbitOrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
 		b1.setAtoms(new IAtom[] { a1, a2 });
 		q.addBond(b1);
-		OrderQueryBond b2 = new OrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
+		AmbitOrderQueryBond b2 = new AmbitOrderQueryBond(IBond.Order.SINGLE,q.getBuilder());
 		b2.setAtoms(new IAtom[] { a2, a3 });
 		q.addBond(b2);
 
