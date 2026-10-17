@@ -6,17 +6,18 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
+
 
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 import ambit2.core.data.MoleculeTools;
+import ambit2.smarts.AliphaticQueryAtom;
 import ambit2.smarts.AliphaticSymbolQueryAtom;
+import ambit2.smarts.AmbitAnyOrderQueryBond;
+import ambit2.smarts.AmbitAromaticQueryBond;
+import ambit2.smarts.AmbitOrderQueryBond;
+import ambit2.smarts.AnyQueryAtom;
+import ambit2.smarts.AromaticQueryAtom;
 import ambit2.smarts.AromaticSymbolQueryAtom;
 import ambit2.smarts.DoubleBondAromaticityNotSpecified;
 import ambit2.smarts.DoubleNonAromaticBond;
@@ -65,14 +66,14 @@ public class SmartsMatch
 		if (qa instanceof SmartsAtomExpression)
 			return matchSmartsAtomExpression((SmartsAtomExpression)qa, ta);
 		
-		if (qa instanceof AliphaticAtom)
-			return matchAliphaticAtom((AliphaticAtom)qa, ta);
+		if (qa instanceof AliphaticQueryAtom)
+			return matchAliphaticAtom((AliphaticQueryAtom)qa, ta);
 		
-		if (qa instanceof AromaticAtom)
-			return matchAromaticAtom((AromaticAtom)qa, ta);
+		if (qa instanceof AromaticQueryAtom)
+			return matchAromaticAtom((AromaticQueryAtom)qa, ta);
 		
-		if (qa instanceof AnyAtom)
-			return matchAnyAtom((AnyAtom)qa, ta);
+		if (qa instanceof AnyQueryAtom)
+			return matchAnyAtom((AnyQueryAtom)qa, ta);
 		
 		return false;
 	}
@@ -91,11 +92,11 @@ public class SmartsMatch
 		if (qb instanceof SingleOrAromaticBond)
 			return matchSingleOrAromaticBond((SingleOrAromaticBond)qb, tb);
 		
-		if (qb instanceof AromaticQueryBond)
-			return matchAromaticQueryBond((AromaticQueryBond)qb, tb);
+		if (qb instanceof AmbitAromaticQueryBond)
+			return matchAromaticQueryBond((AmbitAromaticQueryBond)qb, tb);
 		
-		if (qb instanceof OrderQueryBond)
-			return matchOrderQueryBond((OrderQueryBond)qb, tb);
+		if (qb instanceof AmbitOrderQueryBond)
+			return matchOrderQueryBond((AmbitOrderQueryBond)qb, tb);
 		
 		if (qb instanceof SingleNonAromaticBond)
 			return matchSingleNonAromaticBond((SingleNonAromaticBond)qb, tb);
@@ -109,8 +110,8 @@ public class SmartsMatch
 		if (qb instanceof DoubleBondAromaticityNotSpecified)
 			return matchDoubleBondAromaticityNotSpecified((DoubleBondAromaticityNotSpecified)qb, tb);
 		
-		if (qb instanceof AnyOrderQueryBond)
-			return matchAnyOrderQueryBond((AnyOrderQueryBond)qb, tb);
+		if (qb instanceof AmbitAnyOrderQueryBond)
+			return matchAnyOrderQueryBond((AmbitAnyOrderQueryBond)qb, tb);
 		
 		if (qb instanceof RingQueryBond)
 			return matchRingQueryBond((RingQueryBond)qb, tb);
@@ -170,12 +171,12 @@ public class SmartsMatch
 		return false;
 	}
 	
-	boolean matchAliphaticAtom (AliphaticAtom qa, IAtom ta)
+	boolean matchAliphaticAtom (AliphaticQueryAtom qa, IAtom ta)
 	{
 		switch (mode)
 		{
 		case EXACT:
-			if (ta instanceof AliphaticAtom)
+			if (ta instanceof AliphaticQueryAtom)
 				return true;
 			break;
 		}
@@ -184,12 +185,12 @@ public class SmartsMatch
 		return false;
 	}
 	
-	boolean matchAromaticAtom (AromaticAtom qa, IAtom ta)
+	boolean matchAromaticAtom (AromaticQueryAtom qa, IAtom ta)
 	{
 		switch (mode)
 		{
 		case EXACT:
-			if (ta instanceof AromaticAtom)
+			if (ta instanceof AromaticQueryAtom)
 				return true;
 			break;
 		}
@@ -198,12 +199,12 @@ public class SmartsMatch
 		return false;
 	}
 	
-	boolean matchAnyAtom (AnyAtom qa, IAtom ta)
+	boolean matchAnyAtom (AnyQueryAtom qa, IAtom ta)
 	{
 		switch (mode)
 		{
 		case EXACT:
-			if (ta instanceof AnyAtom)
+			if (ta instanceof AnyQueryAtom)
 				return true;
 			break;
 		}
@@ -244,12 +245,12 @@ public class SmartsMatch
 		return false;
 	}
 	
-	boolean matchAromaticQueryBond(AromaticQueryBond qb, IBond tb)
+	boolean matchAromaticQueryBond(AmbitAromaticQueryBond qb, IBond tb)
 	{
 		switch (mode)
 		{
 		case EXACT:
-			if (tb instanceof AromaticQueryBond)
+			if (tb instanceof AmbitAromaticQueryBond)
 				return true;
 			break;
 		}
@@ -258,14 +259,14 @@ public class SmartsMatch
 		return false;
 	}
 	
-	boolean matchOrderQueryBond(OrderQueryBond qb, IBond tb)
+	boolean matchOrderQueryBond(AmbitOrderQueryBond qb, IBond tb)
 	{
 		switch (mode)
 		{
 		case EXACT:
-			if (tb instanceof OrderQueryBond)
+			if (tb instanceof AmbitOrderQueryBond)
 			{	
-				OrderQueryBond bond = (OrderQueryBond)tb;
+				AmbitOrderQueryBond bond = (AmbitOrderQueryBond)tb;
 				if (qb.getOrder() == bond.getOrder())
 					return true;
 				else
@@ -334,12 +335,12 @@ public class SmartsMatch
 		return false;
 	}
 	
-	boolean matchAnyOrderQueryBond(AnyOrderQueryBond qb, IBond tb)
+	boolean matchAnyOrderQueryBond(AmbitAnyOrderQueryBond qb, IBond tb)
 	{
 		switch (mode)
 		{
 		case EXACT:
-			if (tb instanceof AnyOrderQueryBond)
+			if (tb instanceof AmbitAnyOrderQueryBond)
 				return true;
 			break;
 		}
