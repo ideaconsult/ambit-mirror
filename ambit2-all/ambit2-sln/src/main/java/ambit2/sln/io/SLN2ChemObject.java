@@ -16,11 +16,6 @@ import org.openscience.cdk.isomorphism.matchers.IQueryAtom;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.isomorphism.matchers.IQueryBond;
 import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.AliphaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.AnyOrderQueryBond;
-import org.openscience.cdk.isomorphism.matchers.smarts.AromaticAtom;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -35,6 +30,9 @@ import ambit2.sln.SLNContainer;
 import ambit2.sln.SLNExpressionToken;
 import ambit2.sln.io.SLN2ChemObjectConfig.ComparisonConversion;
 import ambit2.smarts.AliphaticSymbolQueryAtom;
+import ambit2.smarts.AmbitAnyOrderQueryBond;
+import ambit2.smarts.AmbitOrderQueryBond;
+import ambit2.smarts.AnyQueryAtom;
 import ambit2.smarts.AromaticSymbolQueryAtom;
 import ambit2.smarts.DoubleBondAromaticityNotSpecified;
 import ambit2.smarts.DoubleNonAromaticBond;
@@ -448,7 +446,7 @@ public class SLN2ChemObject
         boolean FlagKnownAtomType = false;        
         SLNAtom slnAt = new SLNAtom(builder);
         
-        if (queryAtom instanceof AnyAtom)
+        if (queryAtom instanceof AnyQueryAtom)
         {	
         	slnAt.atomType = 0;
         	slnAt.atomName = "Any";
@@ -517,7 +515,7 @@ public class SLN2ChemObject
 			if (slnAt.atomExpression == null || slnAt.atomExpression.tokens.isEmpty())
 			{	
 				if (slnAt.numHAtom == 0)
-					return new AnyAtom(SilentChemObjectBuilder.getInstance());
+					return new AnyQueryAtom(SilentChemObjectBuilder.getInstance());
 			}	
 			
 			//Handle Any atom as an expression
@@ -584,7 +582,7 @@ public class SLN2ChemObject
 		if (slnBo.bondType == 0)
 		{
 			if (slnBo.bondExpression == null)
-				return new AnyOrderQueryBond(SilentChemObjectBuilder.getInstance());
+				return new AmbitAnyOrderQueryBond(SilentChemObjectBuilder.getInstance());
 			
 			//TODO handle bond expression
 		}
@@ -612,7 +610,7 @@ public class SLN2ChemObject
 						bond = new DoubleNonAromaticBond(SilentChemObjectBuilder.getInstance());
 					break;
 				case 3:
-					bond = new OrderQueryBond(IBond.Order.TRIPLE, SilentChemObjectBuilder.getInstance());
+					bond = new AmbitOrderQueryBond(IBond.Order.TRIPLE, SilentChemObjectBuilder.getInstance());
 					break;	
 				}
 				

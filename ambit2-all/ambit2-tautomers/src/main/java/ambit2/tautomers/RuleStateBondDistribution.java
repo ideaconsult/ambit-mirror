@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.smarts.OrderQueryBond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
+import ambit2.smarts.AmbitOrderQueryBond;
 import ambit2.smarts.DoubleBondAromaticityNotSpecified;
 import ambit2.smarts.DoubleNonAromaticBond;
 import ambit2.smarts.SmartsBondExpression;
@@ -51,9 +51,9 @@ public class RuleStateBondDistribution
 				continue;
 			}
 			
-			if (statePattern.getBond(i) instanceof OrderQueryBond)
+			if (statePattern.getBond(i) instanceof AmbitOrderQueryBond)
 			{	
-				OrderQueryBond bo = (OrderQueryBond)statePattern.getBond(i);
+				AmbitOrderQueryBond bo = (AmbitOrderQueryBond)statePattern.getBond(i);
 				if (bo.getOrder() == IBond.Order.DOUBLE)
 					v2.add(new Integer(i));
 				
